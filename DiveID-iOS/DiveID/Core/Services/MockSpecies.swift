@@ -15,7 +15,7 @@ enum MockSpecies {
             ("Spotted Eagle Ray", "Aetobatus narinari", "A broad ray with pale spots and a long whip-like tail.", ["Dark back with white spots", "Pointed wing tips", "Long tail"], "Coastal reefs and sandy flats", "Warm Atlantic waters")
         ]
         return rows.enumerated().map { index, row in
-            Species(id: UUID(uuid: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, UInt8(index + 1))), commonName: row.0, scientificName: row.1, summary: row.2, visualCharacteristics: row.3, habitat: row.4, geographicRange: row.5, imageAssetName: nil)
+            Species(id: UUID(uuid: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, UInt8(index + 1))), commonName: row.0, scientificName: row.1, summary: row.2, visualCharacteristics: row.3, habitat: row.4, geographicRange: row.5, imageAssetName: nil)
         }
     }()
 }
