@@ -16,7 +16,7 @@ struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var
 
 struct SpeciesArtwork: View {
     let species: Species
-    var body: some View { ZStack { RoundedRectangle(cornerRadius: 14).fill(Color.appPrimary.opacity(0.13)); Image(systemName: species.commonName.contains("Turtle") ? "tortoise.fill" : "fish.fill").font(.largeTitle).foregroundStyle(.appPrimary) }.accessibilityLabel("Placeholder image of \(species.commonName)") }
+    var body: some View { ZStack { RoundedRectangle(cornerRadius: 14).fill(Color.appPrimary.opacity(0.13)); Image(systemName: species.commonName.contains("Turtle") ? "tortoise.fill" : "fish.fill").font(.largeTitle).foregroundStyle(Color.appPrimary) }.accessibilityLabel("Placeholder image of \(species.commonName)") }
 }
 
 struct SpeciesResultCard: View {
