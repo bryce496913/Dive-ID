@@ -29,9 +29,22 @@
 		P3 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E1 /* Exceptions for "DiveID" folder in "DiveID" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B1 /* DiveID */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		G2 /* DiveID */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E1 /* Exceptions for "DiveID" folder in "DiveID" target */,
+			);
 			path = DiveID;
 			sourceTree = "<group>";
 		};
