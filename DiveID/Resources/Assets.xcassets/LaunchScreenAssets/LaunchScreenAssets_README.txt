@@ -17,15 +17,11 @@ LaunchAccent.colorset
 LaunchHighlight.colorset
   Supporting theme colors matching the SwiftUI palette.
 
-Recommended Xcode setup
------------------------
-1. Drag LaunchScreenAssets.xcassets into the Xcode project.
-2. In the target settings, set Launch Screen File to your LaunchScreen storyboard.
-3. Add a full-screen UIImageView using LaunchScreen, or compose the screen with
-   LaunchBackground plus a centered UIImageView using LaunchLogo.
-4. Set the image view content mode to Aspect Fill for LaunchScreen or Aspect Fit
-   for LaunchLogo.
-5. Do not add dynamic text, timers, or animations to the launch storyboard.
+Xcode setup
+-----------
+The launch assets live directly in the app's Assets.xcassets catalog. Info.plist
+uses the UILaunchScreen dictionary to display LaunchScreen over LaunchBackground;
+no launch storyboard or runtime code is required.
 
 Palette
 -------
