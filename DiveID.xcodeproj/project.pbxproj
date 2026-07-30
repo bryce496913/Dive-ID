@@ -1,28 +1,482 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	classes = {};
+	classes = {
+	};
 	objectVersion = 77;
 	objects = {
-		A1 = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 1600; LastUpgradeCheck = 1600; TargetAttributes = {B1 = {CreatedOnToolsVersion = 16.0;}; B2 = {CreatedOnToolsVersion = 16.0; TestTargetID = B1;}; B3 = {CreatedOnToolsVersion = 16.0; TestTargetID = B1;};};}; buildConfigurationList = C1; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = G1; minimizedProjectReferenceProxies = 1; preferredProjectObjectVersion = 77; productRefGroup = G5; projectDirPath = ""; projectRoot = ""; targets = (B1, B2, B3);};
-		G1 = {isa = PBXGroup; children = (G2, G3, G4, G5); sourceTree = "<group>";};
-		G2 = {isa = PBXFileSystemSynchronizedRootGroup; path = DiveID; sourceTree = "<group>";};
-		G3 = {isa = PBXFileSystemSynchronizedRootGroup; path = DiveIDTests; sourceTree = "<group>";};
-		G4 = {isa = PBXFileSystemSynchronizedRootGroup; path = DiveIDUITests; sourceTree = "<group>";};
-		G5 = {isa = PBXGroup; children = (P1, P2, P3); name = Products; sourceTree = "<group>";};
-		P1 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiveID.app; sourceTree = BUILT_PRODUCTS_DIR;}; P2 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR;}; P3 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR;};
-		B1 = {isa = PBXNativeTarget; buildConfigurationList = C2; buildPhases = (S1, F1, R1); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (G2); name = DiveID; packageProductDependencies = (); productName = DiveID; productReference = P1; productType = "com.apple.product-type.application";};
-		B2 = {isa = PBXNativeTarget; buildConfigurationList = C3; buildPhases = (S2, F2, R2); buildRules = (); dependencies = (D2); fileSystemSynchronizedGroups = (G3); name = DiveIDTests; productName = DiveIDTests; productReference = P2; productType = "com.apple.product-type.bundle.unit-test";};
-		B3 = {isa = PBXNativeTarget; buildConfigurationList = C4; buildPhases = (S3, F3, R3); buildRules = (); dependencies = (D3); fileSystemSynchronizedGroups = (G4); name = DiveIDUITests; productName = DiveIDUITests; productReference = P3; productType = "com.apple.product-type.bundle.ui-testing";};
-		S1 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; F1 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; R1 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
-		S2 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; F2 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; R2 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
-		S3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; F3 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;}; R3 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
-		D2 = {isa = PBXTargetDependency; target = B1; targetProxy = X2;}; X2 = {isa = PBXContainerItemProxy; containerPortal = A1; proxyType = 1; remoteGlobalIDString = B1; remoteInfo = DiveID;}; D3 = {isa = PBXTargetDependency; target = B1; targetProxy = X3;}; X3 = {isa = PBXContainerItemProxy; containerPortal = A1; proxyType = 1; remoteGlobalIDString = B1; remoteInfo = DiveID;};
-		C1 = {isa = XCConfigurationList; buildConfigurations = (Q1, Q2); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;}; C2 = {isa = XCConfigurationList; buildConfigurations = (Q3, Q4); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;}; C3 = {isa = XCConfigurationList; buildConfigurations = (Q5, Q6); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;}; C4 = {isa = XCConfigurationList; buildConfigurations = (Q7, Q8); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
-		Q1 = {isa = XCBuildConfiguration; buildSettings = {SWIFT_VERSION = 6.0;}; name = Debug;}; Q2 = {isa = XCBuildConfiguration; buildSettings = {SWIFT_VERSION = 6.0;}; name = Release;};
-		Q3 = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "Dive ID"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MARKETING_VERSION = 0.1; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveID; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Debug;};
-		Q4 = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "Dive ID"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MARKETING_VERSION = 0.1; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveID; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Release;};
-		Q5 = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDTests; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiveID.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiveID";}; name = Debug;}; Q6 = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDTests; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiveID.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiveID";}; name = Release;};
-		Q7 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDUITests; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; TEST_TARGET_NAME = DiveID;}; name = Debug;}; Q8 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDUITests; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; TEST_TARGET_NAME = DiveID;}; name = Release;};
-	}; rootObject = A1;
+
+/* Begin PBXContainerItemProxy section */
+		X2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1;
+			remoteInfo = DiveID;
+		};
+		X3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1;
+			remoteInfo = DiveID;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		P1 /* DiveID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiveID.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		P2 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		P3 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		G2 /* DiveID */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DiveID;
+			sourceTree = "<group>";
+		};
+		G3 /* DiveIDTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DiveIDTests;
+			sourceTree = "<group>";
+		};
+		G4 /* DiveIDUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DiveIDUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		G1 = {
+			isa = PBXGroup;
+			children = (
+				G2 /* DiveID */,
+				G3 /* DiveIDTests */,
+				G4 /* DiveIDUITests */,
+				G5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		G5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				P1 /* DiveID.app */,
+				P2 /* .xctest */,
+				P3 /* .xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B1 /* DiveID */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2 /* Build configuration list for PBXNativeTarget "DiveID" */;
+			buildPhases = (
+				S1 /* Sources */,
+				F1 /* Frameworks */,
+				R1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				G2 /* DiveID */,
+			);
+			name = DiveID;
+			packageProductDependencies = (
+			);
+			productName = DiveID;
+			productReference = P1 /* DiveID.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B2 /* DiveIDTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3 /* Build configuration list for PBXNativeTarget "DiveIDTests" */;
+			buildPhases = (
+				S2 /* Sources */,
+				F2 /* Frameworks */,
+				R2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				G3 /* DiveIDTests */,
+			);
+			name = DiveIDTests;
+			productName = DiveIDTests;
+			productReference = P2 /* .xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B3 /* DiveIDUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4 /* Build configuration list for PBXNativeTarget "DiveIDUITests" */;
+			buildPhases = (
+				S3 /* Sources */,
+				F3 /* Frameworks */,
+				R3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				G4 /* DiveIDUITests */,
+			);
+			name = DiveIDUITests;
+			productName = DiveIDUITests;
+			productReference = P3 /* .xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					B1 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					B2 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = B1;
+					};
+					B3 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = B1;
+					};
+				};
+			};
+			buildConfigurationList = C1 /* Build configuration list for PBXProject "DiveID" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = G1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = G5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B1 /* DiveID */,
+				B2 /* DiveIDTests */,
+				B3 /* DiveIDUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		R1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		S1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1 /* DiveID */;
+			targetProxy = X2 /* PBXContainerItemProxy */;
+		};
+		D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1 /* DiveID */;
+			targetProxy = X3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		Q1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		Q2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		Q3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dive ID";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveID;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		Q4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZAXQ2686Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dive ID";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveID;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		Q5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiveID.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiveID";
+			};
+			name = Debug;
+		};
+		Q6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiveID.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiveID";
+			};
+			name = Release;
+		};
+		Q7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = DiveID;
+			};
+			name = Debug;
+		};
+		Q8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DiveIDUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = DiveID;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C1 /* Build configuration list for PBXProject "DiveID" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				Q1 /* Debug */,
+				Q2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C2 /* Build configuration list for PBXNativeTarget "DiveID" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				Q3 /* Debug */,
+				Q4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3 /* Build configuration list for PBXNativeTarget "DiveIDTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				Q5 /* Debug */,
+				Q6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C4 /* Build configuration list for PBXNativeTarget "DiveIDUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				Q7 /* Debug */,
+				Q8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1 /* Project object */;
 }
