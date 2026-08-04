@@ -20,7 +20,13 @@ struct DiveIDApp: App {
         } else {
             mode = .success
         }
-        identificationService = MockMarineLifeIdentificationService(delay: arguments.contains("-uiTesting") ? .zero : .milliseconds(450), mode: mode)
+        if arguments.contains("-uiTesting") || arguments.contains("-useMockIdentification") {
+            identificationService = MockMarineLifeIdentificationService(delay: arguments.contains("-uiTesting") ? .zero : .milliseconds(450), mode: mode)
+        } else if let configuration = try? DiveIDAPIConfiguration.bundled() {
+            identificationService = RemoteMarineLifeIdentificationService(client: DiveIDAPIClient(configuration: configuration))
+        } else {
+            identificationService = UnconfiguredMarineLifeIdentificationService()
+        }
         savedRepository = (try? JSONSavedSpeciesRepository()) ?? InMemorySavedSpeciesRepository()
     }
 
@@ -36,4 +42,8 @@ struct DiveIDApp: App {
             .preferredColorScheme(.dark)
         }
     }
+}
+
+private struct UnconfiguredMarineLifeIdentificationService: MarineLifeIdentificationService {
+    func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] { throw IdentificationServiceError.invalidConfiguration }
 }

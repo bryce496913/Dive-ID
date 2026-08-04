@@ -16,11 +16,10 @@ enum MatchScoreKind: String, Codable, Sendable {
     case calibratedProbability
 }
 
-enum MatchStrength: String, CaseIterable, Sendable {
-    case strong = "Strong match"
-    case good = "Good match"
-    case possible = "Possible match"
-    case weak = "Weak match"
+enum MatchStrength: String, Codable, CaseIterable, Sendable {
+    case strong, good, possible, weak
+
+    var displayName: String { rawValue.capitalized + " match" }
 
     static func band(for score: Double) -> Self {
         switch score {
@@ -32,13 +31,21 @@ enum MatchStrength: String, CaseIterable, Sendable {
     }
 }
 
-struct IdentificationMatch: Identifiable, Hashable, Sendable {
+enum TaxonomicResolution: String, Codable, Sendable { case species, genus, family, group }
+
+struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     let id: UUID
     let species: Species
+    var rank: Int = 1
     let score: Double
     let scoreKind: MatchScoreKind
+    var strength: MatchStrength? = nil
+    var explanation: String = ""
+    var distinguishingFeatures: [String] = []
+    var cautions: [String] = []
+    var taxonomicResolution: TaxonomicResolution = .species
 
-    var matchStrength: MatchStrength { .band(for: score) }
+    var matchStrength: MatchStrength { strength ?? .band(for: score) }
 }
 
 enum WaterType: String, Codable, CaseIterable, Sendable {
