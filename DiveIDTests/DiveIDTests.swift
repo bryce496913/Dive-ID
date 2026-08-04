@@ -170,10 +170,11 @@ final class DiveIDTests: XCTestCase {
         var firstMatch = IdentificationMatch(id: first.id, species: first, score: 0.8, scoreKind: .relativeMatch); firstMatch.sourceSessionID = UUID()
         var secondMatch = IdentificationMatch(id: second.id, species: second, score: 0.7, scoreKind: .relativeMatch); secondMatch.sourceSessionID = UUID()
         let firstSaved = SavedIdentification(match: firstMatch); let secondSaved = SavedIdentification(match: secondMatch)
-        try await repository.save(firstSaved); try await repository.save(firstSaved); try await repository.save(secondSaved)
+        _ = try await repository.save(firstSaved); _ = try await repository.save(firstSaved); _ = try await repository.save(secondSaved)
         XCTAssertEqual(try await repository.fetchAll().count, 2)
         let recreated = try JSONSavedIdentificationRepository(fileURL: url)
-        XCTAssertTrue(try await recreated.contains(sourceSessionID: firstSaved.sourceSessionID!))
+        let firstSessionID = try XCTUnwrap(firstSaved.sourceSessionID)
+        XCTAssertEqual(try await recreated.savedIdentification(sourceSessionID: firstSessionID, speciesID: first.id)?.id, firstSaved.id)
         try await recreated.remove(id: firstSaved.id)
         let final = try JSONSavedIdentificationRepository(fileURL: url)
         XCTAssertEqual(try await final.fetchAll().map(\.species), [second])
@@ -188,8 +189,42 @@ final class DiveIDTests: XCTestCase {
         try corrupt.write(to: url)
         let repository = try JSONSavedIdentificationRepository(fileURL: url)
         let saved = SavedIdentification(match: IdentificationMatch(id: MockSpecies.all[0].id, species: MockSpecies.all[0], score: 0.5, scoreKind: .relativeMatch))
-        do { try await repository.save(saved); XCTFail("Expected corrupt data error") }
+        do { _ = try await repository.save(saved); XCTFail("Expected corrupt data error") }
         catch { XCTAssertEqual(try Data(contentsOf: url), corrupt) }
+    }
+
+    @MainActor
+    func testSaveThenRemoveWithoutLeavingDetail() async throws {
+        let repository = InMemorySavedIdentificationRepository()
+        var match = makeMatch(score: 0.8); match.sourceSessionID = UUID()
+        let viewModel = SpeciesDetailViewModel(species: match.species, match: match, repository: repository)
+        await viewModel.load()
+        XCTAssertFalse(viewModel.isSaved)
+        await viewModel.toggleSaved()
+        let savedID = try XCTUnwrap(viewModel.savedIdentificationID)
+        XCTAssertTrue(viewModel.isSaved)
+        XCTAssertEqual(try await repository.savedIdentification(sourceSessionID: try XCTUnwrap(match.sourceSessionID), speciesID: match.species.id)?.id, savedID)
+        await viewModel.toggleSaved()
+        XCTAssertFalse(viewModel.isSaved)
+        XCTAssertNil(viewModel.savedIdentificationID)
+        XCTAssertNil(try await repository.savedIdentification(sourceSessionID: try XCTUnwrap(match.sourceSessionID), speciesID: match.species.id))
+    }
+
+    @MainActor
+    func testSavedStateIsCandidateSpecificWithinSession() async throws {
+        let repository = InMemorySavedIdentificationRepository()
+        let session = UUID()
+        var first = makeMatch(score: 0.9); first.sourceSessionID = session
+        var second = IdentificationMatch(id: MockSpecies.all[1].id, species: MockSpecies.all[1], score: 0.7, scoreKind: .relativeMatch); second.sourceSessionID = session
+        let firstViewModel = SpeciesDetailViewModel(species: first.species, match: first, repository: repository)
+        await firstViewModel.toggleSaved()
+        let secondViewModel = SpeciesDetailViewModel(species: second.species, match: second, repository: repository)
+        await secondViewModel.load()
+        XCTAssertFalse(secondViewModel.isSaved)
+        await secondViewModel.toggleSaved()
+        XCTAssertNotEqual(firstViewModel.savedIdentificationID, secondViewModel.savedIdentificationID)
+        await firstViewModel.toggleSaved()
+        XCTAssertTrue(secondViewModel.isSaved)
     }
 
     private func makeMatch(score: Double) -> IdentificationMatch {

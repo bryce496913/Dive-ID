@@ -25,6 +25,22 @@ describe("configuration validation", () => {
     expect(() => loadConfig({ ...valid, RATE_LIMIT_STORE: "redis" })).toThrow(
       "REDIS_URL",
     ));
+  it.each([
+    "http://redis.example.com",
+    "https://redis.example.com",
+    "file:///tmp/redis",
+  ])("rejects a non-Redis REDIS_URL: %s", (REDIS_URL) =>
+    expect(() =>
+      loadConfig({ ...valid, RATE_LIMIT_STORE: "redis", REDIS_URL }),
+    ).toThrow("REDIS_URL"),
+  );
+  it.each(["redis://localhost:6379", "rediss://redis.example.com:6380"])(
+    "accepts a supported Redis URL: %s",
+    (REDIS_URL) =>
+      expect(
+        loadConfig({ ...valid, RATE_LIMIT_STORE: "redis", REDIS_URL }).redisURL,
+      ).toBe(REDIS_URL),
+  );
   it("returns immutable typed values", () => {
     const config = loadConfig(valid);
     expect(config.port).toBe(8080);
