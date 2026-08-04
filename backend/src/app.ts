@@ -5,32 +5,66 @@ import { requestSchema } from "./domain.js";
 import { AppError, publicMessage, type ErrorCode } from "./errors.js";
 import type { MarineIdentificationProvider } from "./provider.js";
 import { identify } from "./service.js";
+import type { QuotaEnforcer } from "./rate-limit.js";
 
 export interface AppOptions {
   provider: MarineIdentificationProvider;
   timeoutMs: number;
   maxDescriptionLength: number;
   rateLimitMax: number;
+  rateLimitWindowMs?: number;
+  quotaEnforcer?: QuotaEnforcer;
+  trustProxy?: false | "loopback" | "linklocal" | "uniquelocal";
   modelVersion: string;
   logger?: (event: Record<string, unknown>) => void;
 }
 export function createApp(options: AppOptions) {
   const app = express();
   app.disable("x-powered-by");
+  if (options.trustProxy) app.set("trust proxy", options.trustProxy);
   app.use(express.json({ limit: "16kb", strict: true }));
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
-  const limiter = rateLimit({
-    windowMs: 60_000,
+  const ipLimiter = rateLimit({
+    windowMs: options.rateLimitWindowMs ?? 60_000,
     limit: options.rateLimitMax,
     standardHeaders: "draft-8",
     legacyHeaders: false,
     handler: (req, res) =>
       sendError(res, "RATE_LIMITED", 429, requestId(req.body)),
   });
-  app.post("/v1/identifications/description", limiter, async (req, res) => {
+  app.post("/v1/identifications/description", ipLimiter, async (req, res) => {
     const started = Date.now();
     let id = requestId(req.body);
     try {
+      const installation =
+        req.header("x-dive-id-installation") ??
+        "00000000-0000-4000-8000-000000000000";
+      if (!zUUID.safeParse(installation).success) {
+        sendError(res, "INVALID_CLIENT_IDENTIFIER", 400, id);
+        return;
+      }
+      if (options.quotaEnforcer) {
+        let failure;
+        try {
+          failure = await options.quotaEnforcer.check(installation);
+        } catch {
+          failure = "SERVER_CAPACITY_REACHED" as const;
+        }
+        if (failure) {
+          options.logger?.({
+            requestId: id,
+            status: "rejected",
+            errorCode: failure,
+          });
+          sendError(
+            res,
+            failure,
+            failure === "CLIENT_RATE_LIMITED" ? 429 : 503,
+            id,
+          );
+          return;
+        }
+      }
       const request = requestSchema(options.maxDescriptionLength).parse(
         req.body,
       );
@@ -80,6 +114,14 @@ export function createApp(options: AppOptions) {
   );
   return app;
 }
+const zUUID = {
+  safeParse: (value: string) => ({
+    success:
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        value,
+      ),
+  }),
+};
 function requestId(body: unknown): string {
   return typeof body === "object" &&
     body !== null &&

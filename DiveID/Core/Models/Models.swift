@@ -44,8 +44,39 @@ struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     var distinguishingFeatures: [String] = []
     var cautions: [String] = []
     var taxonomicResolution: TaxonomicResolution = .species
+    var observationDescription: String = ""
+    var sourceSessionID: UUID? = nil
 
     var matchStrength: MatchStrength { strength ?? .band(for: score) }
+}
+
+struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
+    let id: UUID
+    let species: Species
+    let matchRank: Int
+    let matchStrength: MatchStrength
+    let relativeScore: Double?
+    let explanation: String
+    let distinguishingFeatures: [String]
+    let cautions: [String]
+    let taxonomicResolution: TaxonomicResolution
+    let observationDescription: String
+    let identifiedAt: Date
+    var diveNotes: String?
+    let sourceSessionID: UUID?
+
+    init(id: UUID = UUID(), match: IdentificationMatch, identifiedAt: Date = Date(), diveNotes: String? = nil) {
+        self.id = id; species = match.species; matchRank = match.rank; matchStrength = match.matchStrength
+        relativeScore = match.scoreKind == .relativeMatch ? match.score : nil; explanation = match.explanation
+        distinguishingFeatures = match.distinguishingFeatures; cautions = match.cautions
+        taxonomicResolution = match.taxonomicResolution; observationDescription = match.observationDescription
+        self.identifiedAt = identifiedAt; self.diveNotes = diveNotes; sourceSessionID = match.sourceSessionID
+    }
+
+    var match: IdentificationMatch {
+        var value = IdentificationMatch(id: species.id, species: species, rank: matchRank, score: relativeScore ?? 0, scoreKind: .relativeMatch, strength: matchStrength, explanation: explanation, distinguishingFeatures: distinguishingFeatures, cautions: cautions, taxonomicResolution: taxonomicResolution)
+        value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; return value
+    }
 }
 
 enum WaterType: String, Codable, CaseIterable, Sendable {
@@ -106,5 +137,5 @@ struct IdentificationSessionResult: Sendable {
 }
 
 enum LoadState<Value> {
-    case idle, loading, loaded(Value), empty, failed(String)
+    case idle, loading, loaded(Value), empty, failed(String, retryable: Bool)
 }

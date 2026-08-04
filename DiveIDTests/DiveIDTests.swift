@@ -166,19 +166,17 @@ final class DiveIDTests: XCTestCase {
         let url = directory.appendingPathComponent("saved.json")
         let first = MockSpecies.all[0]
         let second = MockSpecies.all[1]
-        let repository = try JSONSavedSpeciesRepository(fileURL: url)
-        try await repository.save(first)
-        try await repository.save(first)
-        try await repository.save(second)
-        let saved = try await repository.fetchSavedSpecies()
-        XCTAssertEqual(saved.count, 2)
-        let recreated = try JSONSavedSpeciesRepository(fileURL: url)
-        let firstIsSaved = try await recreated.isSaved(first)
-        XCTAssertTrue(firstIsSaved)
-        try await recreated.remove(first)
-        let final = try JSONSavedSpeciesRepository(fileURL: url)
-        let remaining = try await final.fetchSavedSpecies()
-        XCTAssertEqual(remaining, [second])
+        let repository = try JSONSavedIdentificationRepository(fileURL: url)
+        var firstMatch = IdentificationMatch(id: first.id, species: first, score: 0.8, scoreKind: .relativeMatch); firstMatch.sourceSessionID = UUID()
+        var secondMatch = IdentificationMatch(id: second.id, species: second, score: 0.7, scoreKind: .relativeMatch); secondMatch.sourceSessionID = UUID()
+        let firstSaved = SavedIdentification(match: firstMatch); let secondSaved = SavedIdentification(match: secondMatch)
+        try await repository.save(firstSaved); try await repository.save(firstSaved); try await repository.save(secondSaved)
+        XCTAssertEqual(try await repository.fetchAll().count, 2)
+        let recreated = try JSONSavedIdentificationRepository(fileURL: url)
+        XCTAssertTrue(try await recreated.contains(sourceSessionID: firstSaved.sourceSessionID!))
+        try await recreated.remove(id: firstSaved.id)
+        let final = try JSONSavedIdentificationRepository(fileURL: url)
+        XCTAssertEqual(try await final.fetchAll().map(\.species), [second])
     }
 
     func testCorruptPersistenceIsReportedWithoutOverwrite() async throws {
@@ -188,8 +186,9 @@ final class DiveIDTests: XCTestCase {
         let url = directory.appendingPathComponent("saved.json")
         let corrupt = Data("not json".utf8)
         try corrupt.write(to: url)
-        let repository = try JSONSavedSpeciesRepository(fileURL: url)
-        do { try await repository.save(MockSpecies.all[0]); XCTFail("Expected corrupt data error") }
+        let repository = try JSONSavedIdentificationRepository(fileURL: url)
+        let saved = SavedIdentification(match: IdentificationMatch(id: MockSpecies.all[0].id, species: MockSpecies.all[0], score: 0.5, scoreKind: .relativeMatch))
+        do { try await repository.save(saved); XCTFail("Expected corrupt data error") }
         catch { XCTAssertEqual(try Data(contentsOf: url), corrupt) }
     }
 

@@ -3,13 +3,14 @@ import SwiftUI
 struct RootView: View {
     @Bindable var router: AppRouter
     let identificationService: any MarineLifeIdentificationService
-    let savedRepository: any SavedSpeciesRepository
+    let savedRepository: any SavedIdentificationRepository
     let sessionStore: any IdentificationSessionStore
     let photoProcessor: any PhotoProcessingService
+    let features: FeatureAvailability
 
     var body: some View {
         NavigationStack(path: $router.path) {
-            HomeView(router: router)
+            HomeView(router: router, features: features)
                 .navigationDestination(for: AppRoute.self) { route in destination(for: route) }
         }
         .tint(.appAccent)
@@ -32,6 +33,8 @@ struct RootView: View {
             )
         case .speciesDetail(let species, let match):
             SpeciesDetailView(viewModel: .init(species: species, match: match, repository: savedRepository))
+        case .savedIdentification(let saved):
+            SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
         case .savedSpecies:
             SavedSpeciesView(viewModel: .init(repository: savedRepository), router: router)
         }
@@ -42,8 +45,9 @@ struct RootView: View {
     RootView(
         router: AppRouter(),
         identificationService: MockMarineLifeIdentificationService(delay: .zero),
-        savedRepository: InMemorySavedSpeciesRepository(),
+        savedRepository: InMemorySavedIdentificationRepository(),
         sessionStore: InMemoryIdentificationSessionStore(),
         photoProcessor: DefaultPhotoProcessingService()
+        , features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false)
     )
 }
