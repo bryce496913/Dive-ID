@@ -1,17 +1,23 @@
 import Foundation
 
 enum IdentificationServiceError: Error, Equatable {
-    case invalidConfiguration, unsupportedSource, noConnection, rateLimited, timeout, invalidResponse, unavailable, invalidRequest
+    case invalidConfiguration, unsupportedSource, noConnection, rateLimited, timeout, invalidResponse, unavailable, invalidRequest, cancelled, capacityReached
 
     var userMessage: String {
         switch self {
+        case .invalidConfiguration: "Dive ID’s backend URL is not configured for this build."
+        case .unsupportedSource: "Photo identification is not available in this version."
         case .noConnection: "Dive ID could not connect. Check your internet connection and try again."
         case .rateLimited: "Dive ID is receiving too many requests right now. Please try again shortly."
         case .timeout: "Identification took too long. Please try again."
         case .invalidResponse: "Dive ID received an unexpected response. Please try again."
+        case .capacityReached: "Identification is temporarily at capacity. Please try again later."
+        case .cancelled: ""
         default: "Identification is temporarily unavailable. Please try again."
         }
     }
+
+    var isRetryable: Bool { switch self { case .noConnection, .rateLimited, .timeout, .invalidResponse, .unavailable: true; default: false } }
 }
 
 struct DiveIDAPIConfiguration: Sendable {
@@ -29,23 +35,38 @@ struct DiveIDAPIConfiguration: Sendable {
 protocol HTTPTransport: Sendable { func data(for request: URLRequest) async throws -> (Data, URLResponse) }
 extension URLSession: HTTPTransport {}
 
+protocol InstallationIdentifierProviding: Sendable { func identifier() async throws -> UUID }
+actor LocalInstallationIdentifierProvider: InstallationIdentifierProviding {
+    private let defaults: UserDefaults; private let key = "DiveIDInstallationIdentifier"
+    init(defaults: UserDefaults = .standard) { self.defaults = defaults }
+    func identifier() -> UUID {
+        if let stored = defaults.string(forKey: key), let identifier = UUID(uuidString: stored) { return identifier }
+        let identifier = UUID(); defaults.set(identifier.uuidString, forKey: key); return identifier
+    }
+}
+struct FixedInstallationIdentifierProvider: InstallationIdentifierProviding {
+    let value: UUID; func identifier() async throws -> UUID { value }
+}
+
 struct DiveIDAPIClient: Sendable {
     let configuration: DiveIDAPIConfiguration
     let transport: any HTTPTransport
-    init(configuration: DiveIDAPIConfiguration, transport: any HTTPTransport = URLSession.shared) { self.configuration = configuration; self.transport = transport }
+    let installationIdentifierProvider: any InstallationIdentifierProviding
+    init(configuration: DiveIDAPIConfiguration, transport: any HTTPTransport = URLSession.shared, installationIdentifierProvider: any InstallationIdentifierProviding = LocalInstallationIdentifierProvider()) { self.configuration = configuration; self.transport = transport; self.installationIdentifierProvider = installationIdentifierProvider }
 
     func identify(request: IdentificationRequest) async throws -> [IdentificationMatch] {
         guard case .description(let text) = request.source else { throw IdentificationServiceError.unsupportedSource }
         let endpoint = configuration.baseURL.appending(path: "v1/identifications/description")
         var urlRequest = URLRequest(url: endpoint); urlRequest.httpMethod = "POST"; urlRequest.timeoutInterval = 35
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type"); urlRequest.setValue(request.id.uuidString, forHTTPHeaderField: "X-Request-ID")
+        urlRequest.setValue(try await installationIdentifierProvider.identifier().uuidString, forHTTPHeaderField: "X-Dive-ID-Installation")
         urlRequest.httpBody = try JSONEncoder.api.encode(APIRequest(requestId: request.id, description: text.trimmingCharacters(in: .whitespacesAndNewlines), context: request.context))
         let data: Data; let response: URLResponse
         do { (data, response) = try await transport.data(for: urlRequest) } catch is CancellationError { throw CancellationError() } catch let error as URLError { if error.code == .timedOut { throw IdentificationServiceError.timeout }; if error.code == .cancelled { throw CancellationError() }; throw IdentificationServiceError.noConnection }
         guard let http = response as? HTTPURLResponse else { throw IdentificationServiceError.invalidResponse }
         guard (200..<300).contains(http.statusCode) else {
             let code = (try? JSONDecoder.api.decode(APIErrorEnvelope.self, from: data))?.error.code
-            switch code { case "RATE_LIMITED": throw IdentificationServiceError.rateLimited; case "IDENTIFICATION_TIMEOUT": throw IdentificationServiceError.timeout; case "INVALID_REQUEST", "DESCRIPTION_TOO_SHORT", "DESCRIPTION_TOO_LONG": throw IdentificationServiceError.invalidRequest; case "INVALID_PROVIDER_RESPONSE": throw IdentificationServiceError.invalidResponse; default: throw IdentificationServiceError.unavailable }
+            switch code { case "RATE_LIMITED", "CLIENT_RATE_LIMITED": throw IdentificationServiceError.rateLimited; case "SERVER_CAPACITY_REACHED", "DAILY_QUOTA_EXCEEDED": throw IdentificationServiceError.capacityReached; case "IDENTIFICATION_TIMEOUT": throw IdentificationServiceError.timeout; case "INVALID_REQUEST", "DESCRIPTION_TOO_SHORT", "DESCRIPTION_TOO_LONG", "INVALID_CLIENT_IDENTIFIER": throw IdentificationServiceError.invalidRequest; case "INVALID_PROVIDER_RESPONSE": throw IdentificationServiceError.invalidResponse; default: throw IdentificationServiceError.unavailable }
         }
         let decoded: APIResponse
         do { decoded = try JSONDecoder.api.decode(APIResponse.self, from: data) } catch { throw IdentificationServiceError.invalidResponse }

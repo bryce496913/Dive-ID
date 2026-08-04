@@ -4,6 +4,8 @@
 <dict>
 	<key>DIVE_ID_API_BASE_URL</key>
 	<string>$(DIVE_ID_API_BASE_URL)</string>
+	<key>DIVE_ID_IDENTIFICATION_MODE</key>
+	<string>$(DIVE_ID_IDENTIFICATION_MODE)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

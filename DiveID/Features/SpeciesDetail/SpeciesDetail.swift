@@ -7,22 +7,27 @@ final class SpeciesDetailViewModel {
     let match: IdentificationMatch?
     var isSaved = false
     var errorMessage: String?
-    private let repository: any SavedSpeciesRepository
+    private let repository: any SavedIdentificationRepository
+    private let existingSavedID: UUID?
 
-    init(species: Species, match: IdentificationMatch?, repository: any SavedSpeciesRepository) {
+    init(species: Species, match: IdentificationMatch?, repository: any SavedIdentificationRepository) {
         self.species = species
         self.match = match
         self.repository = repository
+        existingSavedID = nil
     }
 
+    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) { species = saved.species; match = saved.match; self.repository = repository; existingSavedID = saved.id; isSaved = true }
+
     func load() async {
-        do { isSaved = try await repository.isSaved(species) }
+        do { if let session = match?.sourceSessionID { isSaved = try await repository.contains(sourceSessionID: session) } }
         catch { errorMessage = "Saved status could not be loaded." }
     }
 
     func toggleSaved() async {
         do {
-            if isSaved { try await repository.remove(species) } else { try await repository.save(species) }
+            if isSaved, let id = existingSavedID { try await repository.remove(id: id) }
+            else if !isSaved, let match { try await repository.save(SavedIdentification(match: match)) }
             isSaved.toggle()
             errorMessage = nil
         } catch {
@@ -56,6 +61,7 @@ struct SpeciesDetailView: View {
                 DetailSection(title: "Typical habitat", text: viewModel.species.habitat)
                 DetailSection(title: "General geographic range", text: viewModel.species.geographicRange)
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
+                if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
                 if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
                 DetailSection(title: "Accuracy", text: "AI-generated suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
             }

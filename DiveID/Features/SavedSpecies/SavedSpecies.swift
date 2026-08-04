@@ -2,14 +2,14 @@ import Observation
 import SwiftUI
 
 @MainActor @Observable final class SavedSpeciesViewModel {
-    var species: [Species] = []; var isLoading = true; var errorMessage: String?
-    private let repository: any SavedSpeciesRepository
-    init(repository: any SavedSpeciesRepository) { self.repository = repository }
-    func load() async { do { species = try await repository.fetchSavedSpecies(); isLoading = false } catch { errorMessage = "Saved species could not be loaded."; isLoading = false } }
-    func remove(_ item: Species) async { do { try await repository.remove(item); await load() } catch { errorMessage = "The species could not be removed." } }
+    var identifications: [SavedIdentification] = []; var isLoading = true; var errorMessage: String?
+    private let repository: any SavedIdentificationRepository
+    init(repository: any SavedIdentificationRepository) { self.repository = repository }
+    func load() async { do { identifications = try await repository.fetchAll(); isLoading = false } catch { errorMessage = "Saved identifications could not be loaded."; isLoading = false } }
+    func remove(_ item: SavedIdentification) async { do { try await repository.remove(id: item.id); await load() } catch { errorMessage = "The identification could not be removed." } }
 }
 
 struct SavedSpeciesView: View {
     @State var viewModel: SavedSpeciesViewModel; let router: AppRouter
-    var body: some View { Group { if viewModel.isLoading { LoadingStateView() } else if let error = viewModel.errorMessage { ErrorStateView(message: error) } else if viewModel.species.isEmpty { EmptyStateView(title: "No saved species", message: "You have not saved any species yet. Save a possible match to review it later.") } else { List { ForEach(viewModel.species) { species in Button { router.navigate(to: .speciesDetail(species, nil)) } label: { HStack { SpeciesArtwork(species: species).frame(width: 58, height: 58); VStack(alignment: .leading) { Text(species.commonName); Text(species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary) } } }.buttonStyle(.plain).listRowBackground(Color.appSurface).swipeActions { Button("Remove", role: .destructive) { Task { await viewModel.remove(species) } } } } }.scrollContentBackground(.hidden) } }.appScreenBackground().navigationTitle("Saved Species").task { await viewModel.load() } }
+    var body: some View { Group { if viewModel.isLoading { LoadingStateView() } else if let error = viewModel.errorMessage { ErrorStateView(message: error) } else if viewModel.identifications.isEmpty { EmptyStateView(title: "No saved identifications", message: "Save a possible match to retain why it matched.") } else { List { ForEach(viewModel.identifications) { item in Button { router.navigate(to: .savedIdentification(item)) } label: { HStack { SpeciesArtwork(species: item.species).frame(width: 58, height: 58); VStack(alignment: .leading) { Text(item.species.commonName); Text(item.species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary); Text("\(item.matchStrength.displayName) · \(item.identifiedAt.formatted(date: .abbreviated, time: .omitted))").font(.caption); Text(item.explanation.isEmpty ? item.observationDescription : item.explanation).lineLimit(2).font(.caption).foregroundStyle(Color.appTextSecondary) } } }.buttonStyle(.plain).listRowBackground(Color.appSurface).swipeActions { Button("Remove", role: .destructive) { Task { await viewModel.remove(item) } } } } }.scrollContentBackground(.hidden) } }.appScreenBackground().navigationTitle("Saved Identifications").task { await viewModel.load() } }
 }

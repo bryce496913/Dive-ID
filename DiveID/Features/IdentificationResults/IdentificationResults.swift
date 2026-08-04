@@ -43,15 +43,19 @@ final class IdentificationResultsViewModel {
                 }
                 let matches = try await service.identify(request: request, processedPhoto: photo)
                 try Task.checkCancellation()
-                let displayed = normalized(matches)
+                let displayed = normalized(matches).map { value in
+                    var value = value; value.sourceSessionID = sessionID
+                    if case .description(let description) = request.source { value.observationDescription = description }
+                    return value
+                }
                 try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date()), for: sessionID)
                 apply(displayed)
             } catch is CancellationError {
                 state = .idle
             } catch let error as IdentificationServiceError {
-                state = .failed(error.userMessage)
+                state = .failed(error.userMessage, retryable: error.isRetryable)
             } catch {
-                state = .failed("Identification is temporarily unavailable. Please try again.")
+                state = .failed("Identification is temporarily unavailable. Please try again.", retryable: true)
             }
         }
         loadTask = task
@@ -88,8 +92,8 @@ struct IdentificationResultsView: View {
             case .empty:
                 EmptyStateView(title: "No useful matches", message: "We could not find a useful match from that description. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
-            case .failed(let message):
-                ErrorStateView(message: message) { Task { await viewModel.retry() } }
+            case .failed(let message, let retryable):
+                ErrorStateView(message: message, retry: retryable ? { Task { await viewModel.retry() } } : nil)
                     .accessibilityIdentifier("resultsFailure")
             case .loaded(let matches):
                 ScrollView {

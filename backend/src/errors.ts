@@ -3,6 +3,10 @@ export type ErrorCode =
   | "DESCRIPTION_TOO_SHORT"
   | "DESCRIPTION_TOO_LONG"
   | "RATE_LIMITED"
+  | "INVALID_CLIENT_IDENTIFIER"
+  | "CLIENT_RATE_LIMITED"
+  | "DAILY_QUOTA_EXCEEDED"
+  | "SERVER_CAPACITY_REACHED"
   | "IDENTIFICATION_TIMEOUT"
   | "IDENTIFICATION_UNAVAILABLE"
   | "INVALID_PROVIDER_RESPONSE"
@@ -25,6 +29,13 @@ export const publicMessage = (code: ErrorCode): string =>
     DESCRIPTION_TOO_LONG: "The description is too long.",
     RATE_LIMITED:
       "Dive ID is receiving too many requests right now. Please try again shortly.",
+    INVALID_CLIENT_IDENTIFIER: "A valid installation identifier is required.",
+    CLIENT_RATE_LIMITED:
+      "Dive ID is receiving too many requests from this installation. Please try again later.",
+    DAILY_QUOTA_EXCEEDED:
+      "This installation has reached its daily identification limit.",
+    SERVER_CAPACITY_REACHED:
+      "Identification is temporarily at capacity. Please try again later.",
     IDENTIFICATION_TIMEOUT: "Identification took too long. Please try again.",
     IDENTIFICATION_UNAVAILABLE:
       "Identification is temporarily unavailable. Please try again.",
