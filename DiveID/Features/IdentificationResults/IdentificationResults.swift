@@ -43,13 +43,15 @@ final class IdentificationResultsViewModel {
                 }
                 let matches = try await service.identify(request: request, processedPhoto: photo)
                 try Task.checkCancellation()
-                let displayed = Array(matches.sorted { $0.score > $1.score }.prefix(10))
+                let displayed = normalized(matches)
                 try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date()), for: sessionID)
                 apply(displayed)
             } catch is CancellationError {
                 state = .idle
+            } catch let error as IdentificationServiceError {
+                state = .failed(error.userMessage)
             } catch {
-                state = .failed("Demo matches could not be loaded. Please try again.")
+                state = .failed("Identification is temporarily unavailable. Please try again.")
             }
         }
         loadTask = task
@@ -58,8 +60,13 @@ final class IdentificationResultsViewModel {
     }
 
     private func apply(_ matches: [IdentificationMatch]) {
-        let displayed = Array(matches.sorted { $0.score > $1.score }.prefix(10))
+        let displayed = normalized(matches)
         state = displayed.isEmpty ? .empty : .loaded(displayed)
+    }
+
+    private func normalized(_ matches: [IdentificationMatch]) -> [IdentificationMatch] {
+        var seen = Set<UUID>()
+        return Array(matches.sorted { $0.rank == $1.rank ? $0.score > $1.score : $0.rank < $1.rank }.filter { seen.insert($0.species.id).inserted }.prefix(10))
     }
 
     func cancel() {
@@ -79,7 +86,7 @@ struct IdentificationResultsView: View {
             case .idle, .loading:
                 LoadingStateView().accessibilityIdentifier("resultsLoading")
             case .empty:
-                EmptyStateView(title: "No demo matches", message: "Try adding more visual details or using another photo.")
+                EmptyStateView(title: "No useful matches", message: "We could not find a useful match from that description. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
             case .failed(let message):
                 ErrorStateView(message: message) { Task { await viewModel.retry() } }
@@ -87,7 +94,7 @@ struct IdentificationResultsView: View {
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        Text("Match strength is relative demo data, not measured identification certainty.")
+                        Text("Match strength is a ranking aid, not measured identification certainty.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         ForEach(matches) { match in
                             Button { router.navigate(to: .speciesDetail(match.species, match)) } label: {
@@ -96,7 +103,7 @@ struct IdentificationResultsView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("result_\(match.species.id)")
                         }
-                        Text("Identification suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
+                        Text("AI-generated suggestions may be inaccurate. Compare distinguishing features and confirm important sightings with a qualified local guide or trusted reference.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary).padding(.top)
                     }
                     .padding()

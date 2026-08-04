@@ -11,7 +11,7 @@ final class DescriptionSearchViewModel {
     init(sessionStore: any IdentificationSessionStore) { self.sessionStore = sessionStore }
 
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
-    var canSubmit: Bool { !normalizedDescription.isEmpty && !isCreatingSession }
+    var canSubmit: Bool { (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
 
     func submit() async -> UUID? {
         guard canSubmit else { return nil }
@@ -37,11 +37,11 @@ struct DescriptionSearchView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Describe color, shape, markings, size, and where you saw the animal.")
+                Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
                     .foregroundStyle(Color.appTextSecondary)
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
-                        Text("Example: Small silver fish with yellow fins, a dark stripe through its eye, and a pointed nose.")
+                        Text("Example: Small blue fish with a yellow tail, approximately 20 cm, seen on a shallow reef in Fiji.")
                             .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(12)
                     }
                     TextEditor(text: $viewModel.descriptionText)
@@ -52,7 +52,7 @@ struct DescriptionSearchView: View {
                 Text("\(viewModel.descriptionText.count) characters")
                     .font(.caption).frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(Color.appTextSecondary)
-                Label("Demo results are generated from local mock data.", systemImage: "hammer")
+                Label("Dive ID will send this description securely to generate possible matches. Suggestions may be inaccurate.", systemImage: "lock.shield")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {

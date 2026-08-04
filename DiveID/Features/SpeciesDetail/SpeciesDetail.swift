@@ -42,7 +42,8 @@ struct SpeciesDetailView: View {
                     Text(viewModel.species.commonName).font(.largeTitle.bold())
                     Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextSecondary)
                     if let match = viewModel.match {
-                        Text(match.matchStrength.rawValue).font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                        Text(match.matchStrength.displayName).font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                        if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
                     }
                 }
                 PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved" : "Save Species") {
@@ -54,6 +55,9 @@ struct SpeciesDetailView: View {
                 DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))
                 DetailSection(title: "Typical habitat", text: viewModel.species.habitat)
                 DetailSection(title: "General geographic range", text: viewModel.species.geographicRange)
+                if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
+                if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
+                DetailSection(title: "Accuracy", text: "AI-generated suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
             }
             .padding()
         }
