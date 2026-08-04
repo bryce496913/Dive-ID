@@ -16,6 +16,7 @@ export interface AppOptions {
   quotaEnforcer?: QuotaEnforcer;
   trustProxy?: false | "loopback" | "linklocal" | "uniquelocal";
   modelVersion: string;
+  identificationEnabled?: boolean;
   logger?: (event: Record<string, unknown>) => void;
 }
 export function createApp(options: AppOptions) {
@@ -36,6 +37,19 @@ export function createApp(options: AppOptions) {
     const started = Date.now();
     let id = requestId(req.body);
     try {
+      if (options.identificationEnabled === false) {
+        options.logger?.({
+          requestId: id,
+          event: "identification_rejected",
+          reason: "kill_switch",
+        });
+        sendError(res, "IDENTIFICATION_DISABLED", 503, id);
+        return;
+      }
+      const parsedRequest = requestSchema(options.maxDescriptionLength).parse(
+        req.body,
+      );
+      id = parsedRequest.requestId;
       const installation =
         req.header("x-dive-id-installation") ??
         "00000000-0000-4000-8000-000000000000";
@@ -46,13 +60,19 @@ export function createApp(options: AppOptions) {
       if (options.quotaEnforcer) {
         let failure;
         try {
-          failure = await options.quotaEnforcer.check(installation);
+          failure = await options.quotaEnforcer.check(installation, req.ip);
         } catch {
+          options.logger?.({
+            requestId: id,
+            event: "quota_store_failure",
+            status: "rejected",
+          });
           failure = "SERVER_CAPACITY_REACHED" as const;
         }
         if (failure) {
           options.logger?.({
             requestId: id,
+            event: "identification_rejected",
             status: "rejected",
             errorCode: failure,
           });
@@ -65,10 +85,8 @@ export function createApp(options: AppOptions) {
           return;
         }
       }
-      const request = requestSchema(options.maxDescriptionLength).parse(
-        req.body,
-      );
-      id = request.requestId;
+      const request = parsedRequest;
+      options.logger?.({ requestId: id, event: "provider_call_started" });
       const result = await identify(
         options.provider,
         request,
@@ -78,6 +96,7 @@ export function createApp(options: AppOptions) {
       options.logger?.({
         requestId: id,
         status: "success",
+        event: "provider_call_completed",
         durationMs: Date.now() - started,
         matchCount: result.matches.length,
       });
@@ -87,6 +106,7 @@ export function createApp(options: AppOptions) {
       options.logger?.({
         requestId: id,
         status: "error",
+        event: "provider_call_failed",
         durationMs: Date.now() - started,
         errorCode: mapped.code,
       });

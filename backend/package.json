@@ -12,11 +12,13 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:redis": "vitest run tests/redis.integration.test.ts",
     "build": "tsc"
   },
   "dependencies": {
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
+    "redis": "^5.8.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {

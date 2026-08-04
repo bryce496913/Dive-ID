@@ -7,31 +7,44 @@ final class SpeciesDetailViewModel {
     let match: IdentificationMatch?
     var isSaved = false
     var errorMessage: String?
+    private(set) var savedIdentificationID: UUID?
+    private(set) var isUpdatingSavedState = false
     private let repository: any SavedIdentificationRepository
-    private let existingSavedID: UUID?
 
     init(species: Species, match: IdentificationMatch?, repository: any SavedIdentificationRepository) {
         self.species = species
         self.match = match
         self.repository = repository
-        existingSavedID = nil
+        savedIdentificationID = nil
     }
 
-    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) { species = saved.species; match = saved.match; self.repository = repository; existingSavedID = saved.id; isSaved = true }
+    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) { species = saved.species; match = saved.match; self.repository = repository; savedIdentificationID = saved.id; isSaved = true }
 
     func load() async {
-        do { if let session = match?.sourceSessionID { isSaved = try await repository.contains(sourceSessionID: session) } }
+        guard savedIdentificationID == nil else { return }
+        do { if let session = match?.sourceSessionID { let saved = try await repository.savedIdentification(sourceSessionID: session, speciesID: species.id); savedIdentificationID = saved?.id; isSaved = saved != nil } }
         catch { errorMessage = "Saved status could not be loaded." }
     }
 
     func toggleSaved() async {
+        guard !isUpdatingSavedState else { return }
+        isUpdatingSavedState = true
+        defer { isUpdatingSavedState = false }
         do {
-            if isSaved, let id = existingSavedID { try await repository.remove(id: id) }
-            else if !isSaved, let match { try await repository.save(SavedIdentification(match: match)) }
-            isSaved.toggle()
+            if isSaved {
+                if savedIdentificationID == nil, let session = match?.sourceSessionID { savedIdentificationID = try await repository.savedIdentification(sourceSessionID: session, speciesID: species.id)?.id }
+                guard let id = savedIdentificationID else { errorMessage = "The saved identification could not be found."; return }
+                try await repository.remove(id: id)
+                savedIdentificationID = nil
+                isSaved = false
+            } else if let match {
+                let persisted = try await repository.save(SavedIdentification(match: match))
+                savedIdentificationID = persisted.id
+                isSaved = true
+            }
             errorMessage = nil
         } catch {
-            errorMessage = "Saved species could not be updated. Your previous saved state was kept."
+            errorMessage = "The saved identification could not be updated. Your previous saved state was kept."
         }
     }
 }
@@ -51,10 +64,11 @@ struct SpeciesDetailView: View {
                         if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
                     }
                 }
-                PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved" : "Save Species") {
+                PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved" : "Save Identification") {
                     Task { await viewModel.toggleSaved() }
                 }
                 .accessibilityIdentifier("toggleSaved")
+                .disabled(viewModel.isUpdatingSavedState)
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 DetailSection(title: "Identification summary", text: viewModel.species.summary)
                 DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))

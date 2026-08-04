@@ -18,7 +18,9 @@ Identification input screens create temporary sessions only. A lightweight sessi
 
 Photos are decoded and orientation-corrected with Image I/O away from the main actor, then newly encoded as metadata-free JPEG data. Preview images are bounded to 1,200 pixels and identification uploads to 2,048 pixels at 0.8 quality. The in-memory session store owns these bytes; neither `UIImage` nor image data enters navigation state.
 
-Saved identifications retain species, rank, match evidence, original observation, date, and optional notes in a versioned JSON envelope. Actor-isolated atomic writes remain; version-1 species records migrate with an explicit legacy-evidence note, while corrupt data is preserved.
+**Saved Identifications** retain species, rank, match evidence, original observation, date, and optional notes in a versioned JSON envelope. Multiple observations of the same species may be saved from different sessions. Actor-isolated atomic writes remain; version-1 records and the legacy `saved-species.json` filename migrate to `saved-identifications.json` only after an atomic new-file write succeeds, while corrupt data is preserved.
+
+Production requires an HTTPS iOS backend URL, backend-only provider credentials, a real `redis://` or `rediss://` store, reviewed trusted-proxy configuration, monitoring, provider budget alerts/limits, and the `IDENTIFICATION_ENABLED` emergency switch. The client-supplied installation identifier groups quota usage but is not authentication and can be rotated; the service is not abuse-proof. App Attest or server-issued credentials are future hardening options.
 
 The initial V0.1 target is intentionally iPhone-only. The existing app requires full screen and the major screens have not yet received an iPad layout validation pass. Camera capture remains visibly unavailable and does not request permission.
 

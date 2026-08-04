@@ -9,7 +9,7 @@ struct HomeView: View {
             .disabled(!features.photoIdentificationEnabled)
             .accessibilityHint(features.photoIdentificationEnabled ? "Opens the mock photo identification flow." : "Photo identification is not yet available.")
             .accessibilityIdentifier("photoAction")
-        Button { router.navigate(to: .savedSpecies) } label: { Label("Saved Species", systemImage: "bookmark.fill").frame(minHeight: 44) }.accessibilityIdentifier("savedAction")
+        Button { router.navigate(to: .savedSpecies) } label: { Label("Saved Identifications", systemImage: "bookmark.fill").frame(minHeight: 44) }.accessibilityIdentifier("savedAction")
     }.padding() }.appScreenBackground().navigationTitle("Home") }
 }
 #Preview { NavigationStack { HomeView(router: AppRouter(), features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false)) } }

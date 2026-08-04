@@ -58,6 +58,24 @@ describe("description identification API", () => {
     });
     expect(fake.calls).toBe(0);
   });
+  it("keeps health available while the emergency switch blocks provider calls", async () => {
+    const fake = new FakeProvider();
+    const target = createApp({
+      provider: fake,
+      timeoutMs: 1000,
+      maxDescriptionLength: 2000,
+      rateLimitMax: 30,
+      modelVersion: "test",
+      identificationEnabled: false,
+    });
+    await request(target).get("/health").expect(200);
+    const response = await request(target)
+      .post("/v1/identifications/description")
+      .send(body)
+      .expect(503);
+    expect(response.body.error.code).toBe("IDENTIFICATION_DISABLED");
+    expect(fake.calls).toBe(0);
+  });
   it("returns a validated structured response and propagates request ID", async () => {
     const response = await request(app())
       .post("/v1/identifications/description")

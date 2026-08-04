@@ -7,6 +7,7 @@ export type ErrorCode =
   | "CLIENT_RATE_LIMITED"
   | "DAILY_QUOTA_EXCEEDED"
   | "SERVER_CAPACITY_REACHED"
+  | "IDENTIFICATION_DISABLED"
   | "IDENTIFICATION_TIMEOUT"
   | "IDENTIFICATION_UNAVAILABLE"
   | "INVALID_PROVIDER_RESPONSE"
@@ -36,6 +37,8 @@ export const publicMessage = (code: ErrorCode): string =>
       "This installation has reached its daily identification limit.",
     SERVER_CAPACITY_REACHED:
       "Identification is temporarily at capacity. Please try again later.",
+    IDENTIFICATION_DISABLED:
+      "Identification is temporarily unavailable for maintenance.",
     IDENTIFICATION_TIMEOUT: "Identification took too long. Please try again.",
     IDENTIFICATION_UNAVAILABLE:
       "Identification is temporarily unavailable. Please try again.",

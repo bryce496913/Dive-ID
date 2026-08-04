@@ -28,6 +28,7 @@ const schema = z.object({
     .min(1, "AI_MODEL must not be empty")
     .default("dive-id-fixture"),
   AI_API_KEY: z.string().trim().optional(),
+  IDENTIFICATION_ENABLED: z.enum(["true", "false"]).default("true"),
   REQUEST_TIMEOUT_MS: integer("REQUEST_TIMEOUT_MS", 1, 120_000).default(
     "30000",
   ),
@@ -50,6 +51,13 @@ const schema = z.object({
   ).default("10000"),
   RATE_LIMIT_STORE: z.enum(["memory", "redis"]).default("memory"),
   REDIS_URL: z.string().url("REDIS_URL must be a valid URL").optional(),
+  REDIS_PREFIX: z
+    .string()
+    .trim()
+    .min(1)
+    .max(64)
+    .regex(/^[a-zA-Z0-9_-]+$/)
+    .default("dive-id"),
   TRUST_PROXY: z
     .enum(["none", "loopback", "linklocal", "uniquelocal"])
     .default("none"),
@@ -61,6 +69,7 @@ export interface Config {
   readonly provider: "openai" | "fake";
   readonly model: string;
   readonly apiKey?: string;
+  readonly identificationEnabled: boolean;
   readonly timeoutMs: number;
   readonly maxDescriptionLength: number;
   readonly rateLimitWindowMs: number;
@@ -69,6 +78,7 @@ export interface Config {
   readonly globalDailyRequestLimit: number;
   readonly rateLimitStore: "memory" | "redis";
   readonly redisURL?: string;
+  readonly redisPrefix: string;
   readonly trustProxy: false | "loopback" | "linklocal" | "uniquelocal";
 }
 
@@ -91,6 +101,13 @@ export function loadConfig(
     throw new Error(
       "Invalid configuration: REDIS_URL is required for RATE_LIMIT_STORE=redis",
     );
+  if (
+    value.REDIS_URL &&
+    !["redis:", "rediss:"].includes(new URL(value.REDIS_URL).protocol)
+  )
+    throw new Error(
+      "Invalid configuration: REDIS_URL must use redis: or rediss:",
+    );
   if (value.NODE_ENV === "production" && value.RATE_LIMIT_STORE !== "redis")
     throw new Error(
       "Invalid configuration: RATE_LIMIT_STORE must be redis in production",
@@ -101,6 +118,7 @@ export function loadConfig(
     provider: value.AI_PROVIDER,
     model: value.AI_MODEL,
     apiKey: value.AI_API_KEY,
+    identificationEnabled: value.IDENTIFICATION_ENABLED === "true",
     timeoutMs: value.REQUEST_TIMEOUT_MS,
     maxDescriptionLength: value.MAX_DESCRIPTION_LENGTH,
     rateLimitWindowMs: value.RATE_LIMIT_WINDOW_MS,
@@ -109,6 +127,7 @@ export function loadConfig(
     globalDailyRequestLimit: value.GLOBAL_DAILY_REQUEST_LIMIT,
     rateLimitStore: value.RATE_LIMIT_STORE,
     redisURL: value.REDIS_URL,
+    redisPrefix: value.REDIS_PREFIX,
     trustProxy: value.TRUST_PROXY === "none" ? false : value.TRUST_PROXY,
   });
 }
