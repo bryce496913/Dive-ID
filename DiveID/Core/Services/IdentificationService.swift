@@ -1,24 +1,37 @@
 import Foundation
 
 protocol MarineLifeIdentificationService: Sendable {
-    func identify(from description: String) async throws -> [IdentificationMatch]
-    func identify(from imageData: Data) async throws -> [IdentificationMatch]
+    func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch]
 }
 
 enum MockServiceError: Error { case demonstrationFailure }
 
 struct MockMarineLifeIdentificationService: MarineLifeIdentificationService {
+    enum Mode: Sendable { case success, empty, failure }
+
     let delay: Duration
-    let shouldFail: Bool
-    init(delay: Duration = .milliseconds(450), shouldFail: Bool = false) { self.delay = delay; self.shouldFail = shouldFail }
-    func identify(from description: String) async throws -> [IdentificationMatch] { try await results() }
-    func identify(from imageData: Data) async throws -> [IdentificationMatch] { try await results() }
-    private func results() async throws -> [IdentificationMatch] {
+    let mode: Mode
+
+    init(delay: Duration = .milliseconds(450), shouldFail: Bool = false) {
+        self.delay = delay
+        mode = shouldFail ? .failure : .success
+    }
+
+    init(delay: Duration = .milliseconds(450), mode: Mode) {
+        self.delay = delay
+        self.mode = mode
+    }
+
+    func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] {
+        if case .processedPhoto = request.source, processedPhoto == nil {
+            throw IdentificationSessionStoreError.photoNotFound
+        }
         try await Task.sleep(for: delay)
         try Task.checkCancellation()
-        if shouldFail { throw MockServiceError.demonstrationFailure }
+        if mode == .failure { throw MockServiceError.demonstrationFailure }
+        if mode == .empty { return [] }
         return zip(MockSpecies.all, stride(from: 0.94, through: 0.49, by: -0.05)).map {
-            IdentificationMatch(id: $0.id, species: $0, confidence: $1)
-        }.prefix(10).sorted { $0.confidence > $1.confidence }
+            IdentificationMatch(id: $0.id, species: $0, score: $1, scoreKind: .relativeMatch)
+        }
     }
 }

@@ -4,8 +4,8 @@ import SwiftUI
 enum AppRoute: Hashable {
     case descriptionSearch
     case photoIdentification
-    case identificationResults(IdentificationSource)
-    case speciesDetail(Species, Double?)
+    case identificationResults(sessionID: UUID)
+    case speciesDetail(Species, IdentificationMatch?)
     case savedSpecies
 }
 
