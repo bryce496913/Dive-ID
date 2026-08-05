@@ -52,7 +52,9 @@ struct DescriptionSearchView: View {
                 Text("\(viewModel.descriptionText.count) characters")
                     .font(.caption).frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(Color.appTextSecondary)
-                Label("Dive ID will send this description securely to generate possible matches. Suggestions may be inaccurate.", systemImage: "lock.shield")
+                Label("Your description is processed on this device using Dive ID’s offline marine-life catalogue.", systemImage: "iphone")
+                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                Label("Offline results are limited to species currently included with this version of Dive ID.", systemImage: "tray.full")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {

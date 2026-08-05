@@ -231,3 +231,124 @@ final class DiveIDTests: XCTestCase {
         IdentificationMatch(id: MockSpecies.all[0].id, species: MockSpecies.all[0], score: score, scoreKind: .relativeMatch)
     }
 }
+
+final class LocalOfflineIdentificationTests: XCTestCase {
+    private let parser = LocalObservationParser()
+
+    func testCatalogJSONExistsAndDecodesWithValidProfiles() throws {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
+        let data = try Data(contentsOf: url)
+        let profiles = try JSONDecoder().decode([LocalSpeciesProfile].self, from: data)
+        XCTAssertEqual(profiles.count, 10)
+        XCTAssertEqual(Set(profiles.map(\.id)).count, profiles.count)
+        XCTAssertEqual(Set(profiles.map { $0.scientificName.lowercased() }).count, profiles.count)
+        XCTAssertTrue(profiles.allSatisfy { !$0.commonName.isEmpty && !$0.scientificName.isEmpty && !$0.distinguishingFeatures.isEmpty && !$0.typicalHabitat.isEmpty && !$0.geographicRange.isEmpty })
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(profiles))
+    }
+
+    func testCatalogRepositoryCachesAndReportsMissingOrInvalidResources() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".bundle", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
+        let target = directory.appendingPathComponent("MarineSpeciesCatalog.json")
+        try Data(contentsOf: source).write(to: target)
+        let bundle = try XCTUnwrap(Bundle(url: directory))
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: bundle)
+        let first = try await repository.loadProfiles()
+        try Data("not json".utf8).write(to: target)
+        let second = try await repository.loadProfiles()
+        XCTAssertEqual(first, second)
+
+        let missing = BundleMarineSpeciesCatalogRepository(bundle: bundle, resourceName: "MissingCatalog")
+        do { _ = try await missing.loadProfiles(); XCTFail("Expected missing resource") }
+        catch { XCTAssertEqual(error as? LocalCatalogError, .resourceMissing) }
+
+        let invalid = BundleMarineSpeciesCatalogRepository(bundle: bundle)
+        do { _ = try await invalid.loadProfiles(); XCTFail("Expected invalid JSON") }
+        catch { XCTAssertEqual(error as? LocalCatalogError, .invalidData) }
+    }
+
+    func testCatalogValidationRejectsDuplicates() throws {
+        let profile = MockSpecies.all[0]
+        let local = LocalSpeciesProfile(id: profile.id, commonName: profile.commonName, scientificName: profile.scientificName, aliases: [], categories: ["fish"], colors: ["yellow"], markings: [], bodyShapes: [], habitats: ["reef"], regions: [], behaviors: [], keywords: [], minimumSizeCentimeters: nil, maximumSizeCentimeters: nil, minimumDepthMeters: nil, maximumDepthMeters: nil, summary: profile.summary, distinguishingFeatures: profile.visualCharacteristics, typicalHabitat: profile.habitat, geographicRange: profile.geographicRange, cautions: [], imageAssetName: nil)
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([local, local])) { XCTAssertEqual($0 as? LocalCatalogError, .duplicateIdentifier) }
+        var other = local
+        other = LocalSpeciesProfile(id: UUID(), commonName: "Other", scientificName: local.scientificName, aliases: [], categories: [], colors: [], markings: [], bodyShapes: [], habitats: [], regions: [], behaviors: [], keywords: [], minimumSizeCentimeters: nil, maximumSizeCentimeters: nil, minimumDepthMeters: nil, maximumDepthMeters: nil, summary: "", distinguishingFeatures: ["feature"], typicalHabitat: "habitat", geographicRange: "range", cautions: [], imageAssetName: nil)
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([local, other])) { XCTAssertEqual($0 as? LocalCatalogError, .duplicateScientificName) }
+    }
+
+    func testParserCoversSynonymsMeasurementsDepthRegionsAndBehaviors() async {
+        let parsed = await parser.parse("Small BLUE fish, dotted and striped, 20cm at 5 m deep on coral reef in Fiji, hovering near sand.")
+        XCTAssertTrue(parsed.colors.contains("blue"))
+        XCTAssertTrue(parsed.markings.contains("spots"))
+        XCTAssertTrue(parsed.markings.contains("stripes"))
+        XCTAssertTrue(parsed.habitats.contains("reef"))
+        XCTAssertTrue(parsed.regions.contains("fiji"))
+        XCTAssertTrue(parsed.behaviors.contains("hovering"))
+        XCTAssertEqual(parsed.approximateSizeCentimeters, 20)
+        XCTAssertEqual(parsed.approximateDepthMeters, 5)
+        XCTAssertTrue(parsed.tokens.contains("20cm") || parsed.normalizedText.contains("20cm"))
+    }
+
+    func testParserTextSizesAndNonMarineInput() async {
+        let halfMeter = await parser.parse("half a meter large turtle in shallow water")
+        XCTAssertEqual(halfMeter.approximateSizeCentimeters, 50)
+        XCTAssertEqual(halfMeter.approximateDepthMeters, 3)
+        XCTAssertTrue(halfMeter.categories.contains("turtle"))
+        let unrelated = await parser.parse("A red bird sitting in a tree")
+        XCTAssertTrue(unrelated.categories.isEmpty)
+    }
+
+    func testRealisticDescriptionsRankExpectedSpeciesFirst() async throws {
+        let profiles = try catalogProfiles()
+        let cases: [(String, String, [String])] = [
+            ("Small blue fish with a yellow tail, about 20 cm, seen on a shallow reef in Fiji.", "Blue Tang", ["blue", "yellow", "reef", "fiji"]),
+            ("Striped red and white fish with long spines, hovering near a reef wall.", "Red Lionfish", ["stripes", "spines"]),
+            ("Large turtle with a smooth shell feeding on seagrass in shallow water.", "Green Sea Turtle", ["turtle", "shell", "seagrass"]),
+            ("Large flat ray with white spots and a long thin tail swimming above sand.", "Spotted Eagle Ray", ["flat", "spots", "tail"]),
+            ("Long silver fish with a pointed head and large teeth swimming alone.", "Great Barracuda", ["silver", "pointed", "teeth"])
+        ]
+        for item in cases {
+            let observation = await parser.parse(item.0)
+            let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: profiles)
+            XCTAssertEqual(ranked.first?.profile.commonName, item.1)
+            XCTAssertTrue(item.2.contains { ranked.first?.matchedClues.contains($0) == true })
+        }
+    }
+
+    func testRankingInvariantsVagueAndUnrelatedDescriptions() async throws {
+        let profiles = try catalogProfiles()
+        let ranker = LocalSpeciesRanker()
+        let vague = try await ranker.rank(observation: await parser.parse("A fish on the reef."), profiles: profiles)
+        XCTAssertFalse(vague.isEmpty)
+        XCTAssertTrue(vague.allSatisfy { $0.score < 0.65 })
+        XCTAssertEqual(vague.map(\.score), vague.map(\.score).sorted(by: >))
+        XCTAssertLessThanOrEqual(vague.count, 10)
+        let repeatVague = try await ranker.rank(observation: await parser.parse("A fish on the reef."), profiles: profiles)
+        XCTAssertEqual(vague.map { $0.profile.id }, repeatVague.map { $0.profile.id })
+        let unrelated = try await ranker.rank(observation: await parser.parse("A red bird sitting in a tree."), profiles: profiles)
+        XCTAssertTrue(unrelated.isEmpty)
+    }
+
+    func testLocalServiceReturnsRelativeMatchesAndRejectsPhoto() async throws {
+        let service = LocalMarineLifeIdentificationService(catalogRepository: StaticCatalogRepository(profiles: try catalogProfiles()), parser: parser, ranker: LocalSpeciesRanker())
+        let matches = try await service.identify(request: IdentificationRequest(source: .description("Long silver fish with large teeth swimming alone.")), processedPhoto: nil)
+        XCTAssertEqual(matches.first?.species.commonName, "Great Barracuda")
+        XCTAssertTrue(matches.allSatisfy { (0...1).contains($0.score) && $0.scoreKind == .relativeMatch && !$0.explanation.isEmpty })
+        do {
+            _ = try await service.identify(request: IdentificationRequest(source: .processedPhoto(ProcessedPhotoReference(id: UUID()))), processedPhoto: nil)
+            XCTFail("Expected unsupported photo source")
+        } catch { XCTAssertEqual(error as? LocalIdentificationError, .unsupportedSource) }
+    }
+
+    private func catalogProfiles() throws -> [LocalSpeciesProfile] {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
+        return try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
+    }
+}
+
+struct StaticCatalogRepository: MarineSpeciesCatalogRepository {
+    let profiles: [LocalSpeciesProfile]
+    func loadProfiles() async throws -> [LocalSpeciesProfile] { profiles }
+}

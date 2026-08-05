@@ -4,9 +4,3 @@ build/
 *.xcuserstate
 xcuserdata/
 *.moved-aside
-.env
-.env.*
-!.env.example
-backend/node_modules/
-backend/dist/
-DiveID/Configuration/Local.xcconfig

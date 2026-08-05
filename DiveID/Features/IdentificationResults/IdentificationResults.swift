@@ -52,15 +52,26 @@ final class IdentificationResultsViewModel {
                 apply(displayed)
             } catch is CancellationError {
                 state = .idle
-            } catch let error as IdentificationServiceError {
-                state = .failed(error.userMessage, retryable: error.isRetryable)
+            } catch let error as LocalIdentificationError {
+                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource)
             } catch {
-                state = .failed("Identification is temporarily unavailable. Please try again.", retryable: true)
+                state = .failed("Identification could not be completed locally. Please try again.", retryable: true)
             }
         }
         loadTask = task
         await task.value
         loadTask = nil
+    }
+
+    private static func message(for error: LocalIdentificationError) -> String {
+        switch error {
+        case .invalidDescription:
+            "Add more detail about the animal before trying again."
+        case .catalogUnavailable:
+            "The offline species catalogue could not be loaded."
+        case .unsupportedSource:
+            "Photo identification is not available in this offline version yet."
+        }
     }
 
     private func apply(_ matches: [IdentificationMatch]) {
@@ -88,9 +99,9 @@ struct IdentificationResultsView: View {
         Group {
             switch viewModel.state {
             case .idle, .loading:
-                LoadingStateView().accessibilityIdentifier("resultsLoading")
+                LoadingStateView(message: "Comparing your description with the offline species catalogue…").accessibilityIdentifier("resultsLoading")
             case .empty:
-                EmptyStateView(title: "No useful matches", message: "We could not find a useful match from that description. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
+                EmptyStateView(title: "No useful matches", message: "No useful match was found in the current offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
             case .failed(let message, let retryable):
                 ErrorStateView(message: message, retry: retryable ? { Task { await viewModel.retry() } } : nil)
@@ -98,7 +109,7 @@ struct IdentificationResultsView: View {
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        Text("Match strength is a ranking aid, not measured identification certainty.")
+                        Text("Match strength reflects similarity to the clues in your description. It is not scientific certainty.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         ForEach(matches) { match in
                             Button { router.navigate(to: .speciesDetail(match.species, match)) } label: {
@@ -107,7 +118,7 @@ struct IdentificationResultsView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("result_\(match.species.id)")
                         }
-                        Text("AI-generated suggestions may be inaccurate. Compare distinguishing features and confirm important sightings with a qualified local guide or trusted reference.")
+                        Text("These are offline match suggestions, not confirmed identifications. Compare distinguishing features and confirm important sightings with a qualified local guide or trusted reference.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary).padding(.top)
                     }
                     .padding()
