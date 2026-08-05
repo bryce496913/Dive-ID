@@ -113,7 +113,7 @@ struct PhotoIdentificationView: View {
                     }
                 }
                 Button("Take Photo (coming later)", systemImage: "camera") {}.buttonStyle(.bordered).disabled(true)
-                Text("Demo identification uses local mock results; no image is uploaded.")
+                Text("Photo identification is not available yet. Photo selection and on-device preparation are retained for future development.")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 if let error = viewModel.selectionError { Text(error.message).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Identify Photo", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {

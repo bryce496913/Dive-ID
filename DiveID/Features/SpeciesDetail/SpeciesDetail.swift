@@ -82,7 +82,7 @@ struct SpeciesDetailView: View {
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
                 if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
-                DetailSection(title: "Accuracy", text: "AI-generated suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
+                DetailSection(title: "Accuracy", text: "Offline match suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
             }
             .padding()
         }
