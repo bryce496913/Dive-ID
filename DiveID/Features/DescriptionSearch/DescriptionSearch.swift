@@ -6,9 +6,14 @@ final class DescriptionSearchViewModel {
     var descriptionText = ""
     var isCreatingSession = false
     var errorMessage: String?
+    var pack: OfflineIdentificationPackMetadata?
     private let sessionStore: any IdentificationSessionStore
+    private let catalog: any MarineSpeciesCatalogRepository
+    private let regionRepository: any SelectedDiveRegionRepository
 
-    init(sessionStore: any IdentificationSessionStore) { self.sessionStore = sessionStore }
+    init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.sessionStore = sessionStore; self.catalog = catalog; self.regionRepository = regionRepository }
+
+    func load() async { pack = try? await catalog.availablePacks().first }
 
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
     var canSubmit: Bool { (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
@@ -19,7 +24,8 @@ final class DescriptionSearchViewModel {
         errorMessage = nil
         defer { isCreatingSession = false }
         do {
-            let request = IdentificationRequest(source: .description(normalizedDescription))
+            let region = await regionRepository.selectedRegion()
+            let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: region))
             return try await sessionStore.createSession(for: request, photo: nil)
         } catch is CancellationError {
             return nil
@@ -39,6 +45,7 @@ struct DescriptionSearchView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
                     .foregroundStyle(Color.appTextSecondary)
+                if let pack = viewModel.pack { HStack { VStack(alignment: .leading) { Text("Dive region: \(pack.displayName)").font(.headline); Text("\(pack.speciesCount) species available offline") } ; Spacer(); Button("Change") { router.navigate(to: .offlineRegions) } }.padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
                         Text("Example: Small blue fish with a yellow tail, approximately 20 cm, seen on a shallow reef in Fiji.")
@@ -70,5 +77,6 @@ struct DescriptionSearchView: View {
         }
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
+        .task { await viewModel.load() }
     }
 }

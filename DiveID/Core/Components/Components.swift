@@ -24,7 +24,25 @@ struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var
 
 struct SpeciesArtwork: View {
     let species: Species
-    var body: some View { ZStack { RoundedRectangle(cornerRadius: 14).fill(Color.appAccent.opacity(0.2)); Image(systemName: species.commonName.contains("Turtle") ? "tortoise.fill" : "fish.fill").font(.largeTitle).foregroundStyle(Color.appHighlight) }.accessibilityLabel("Placeholder image of \(species.commonName)") }
+    @State private var hasBundledVector = false
+    private let loader = BundleSpeciesImageLoader()
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 14).fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
+            Image(systemName: symbolName)
+                .font(.system(size: 54, weight: .semibold))
+                .foregroundStyle(hasBundledVector ? Color.appHighlight : Color.appTextSecondary)
+            VStack { Spacer(); Text(species.commonName).font(.caption.bold()).lineLimit(1).padding(8).frame(maxWidth: .infinity).background(Color.black.opacity(0.35)) }
+        }
+        .accessibilityLabel(species.bundledImage?.alternativeText ?? "Placeholder image of \(species.commonName)")
+        .task { if let image = species.bundledImage { hasBundledVector = (try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .caribbean)) != nil } }
+    }
+    private var symbolName: String {
+        if species.commonName.contains("Turtle") { return "tortoise.fill" }
+        if species.commonName.contains("Ray") { return "skateboard.fill" }
+        if species.commonName.contains("Shark") { return "fish.fill" }
+        return "fish.fill"
+    }
 }
 
 struct SpeciesResultCard: View {

@@ -7,10 +7,14 @@ struct DiveIDApp: App {
     private let savedRepository: any SavedIdentificationRepository
     private let sessionStore: any IdentificationSessionStore
     private let photoProcessor: any PhotoProcessingService
+    private let catalogRepository: any MarineSpeciesCatalogRepository
+    private let regionRepository: any SelectedDiveRegionRepository
     private let features = FeatureAvailability.current
 
     init() {
         let catalogRepository = BundleMarineSpeciesCatalogRepository()
+        self.catalogRepository = catalogRepository
+        self.regionRepository = UserDefaultsSelectedDiveRegionRepository()
         let parser = LocalObservationParser()
         let ranker = LocalSpeciesRanker()
         identificationService = LocalMarineLifeIdentificationService(
@@ -31,6 +35,8 @@ struct DiveIDApp: App {
                 savedRepository: savedRepository,
                 sessionStore: sessionStore,
                 photoProcessor: photoProcessor,
+                catalogRepository: catalogRepository,
+                regionRepository: regionRepository,
                 features: features
             )
             .preferredColorScheme(.dark)

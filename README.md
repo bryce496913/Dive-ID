@@ -1,40 +1,45 @@
 # Dive ID
 
-Dive ID helps divers and instructors identify marine life from imperfect post-dive descriptions, especially after dives where internet access may be unavailable, unreliable, expensive, or inappropriate.
+Dive ID is an offline-first iOS prototype for written marine-life identification. The app processes text descriptions on device, ranks locally bundled species profiles, and stores saved identifications locally.
 
-## Offline-first design
+## Included Pack
 
-Dive ID is currently an offline-first native iOS prototype:
+### Caribbean Offline Identification Pack
 
-- Description processing runs on the device.
-- The species catalogue is bundled with the app.
-- No account is required.
-- No backend is required.
-- No internet connection is required for description identification.
-- Descriptions are not uploaded.
-- Selected photos remain on the device.
-- Saved identifications remain local and persistent.
+* Pack ID: `caribbean`
+* Pack version: 1
+* 78 locally bundled species
+* Species data and reference-image files ship in `DiveID/Resources/IdentificationPacks/Caribbean`.
+* The pack focuses on common recreational-dive encounters in the broader Caribbean Sea and related tropical western Atlantic dive areas.
 
-## Current identification method
+## Offline Behavior
 
-Version 0.1 uses an explainable local matcher rather than a trained AI model. The app extracts local clues from the description, compares them with structured bundled species profiles, applies deterministic weighted ranking, and returns up to 10 likely matches when there is meaningful evidence. Explanations are generated from matched and conflicting catalogue traits.
+* Species data ships with the app.
+* Text-based vector reference markers ship with the app; binary image assets are intentionally not required by this repository.
+* Descriptions stay on-device.
+* Results require no internet.
+* Saved identifications stay local.
+* No account is required.
+* Photo identification remains disabled and labelled as coming later.
 
-The displayed match strength is derived from a deterministic local clue-match score. It is not a probability, calibrated confidence value, scientific certainty, or confirmed identification. The ranker adds fixed weights for matched canonical names, animal groups, regions, habitats, markings, colors, body shapes, behavior, keyword, size, and depth clues; subtracts fixed penalties for some conflicting clues; filters profiles below a raw threshold; then clamps `rawScore / 40.0` into the `0...1` display range so scores are repeatable and comparable during catalogue growth. The UI must continue to present this as relative match strength rather than calibrated identification confidence.
+## Catalogue Scope
 
-## Current catalogue limitation
+The Caribbean pack is not a complete inventory of Caribbean marine life. It is a curated offline identification set for common diver and snorkeler encounters. Geographic occurrence varies by island, season, habitat, and subregion. Match strength is descriptive similarity against catalogue clues, not certainty, confirmation, probability, or scientific validation.
 
-The initial bundled catalogue intentionally contains a small set of species so the offline feature flow can be validated before expanding coverage. Results are limited to species included with this version of Dive ID.
+## Data and Image Sources
 
-## On-device AI roadmap
+Species records include data-source metadata fields for taxonomy, range, size, depth, habitat, and visual-characteristic review. The current committed catalogue records source metadata in each profile. Image attribution is displayed from the bundled image metadata on species detail screens.
 
-Future work may evaluate Apple Natural Language, `NLEmbedding`, Create ML, Core ML, Vision, bundled text-ranking models, and bundled photo-classification models. Future models should remain usable offline and fit behind the existing parser/ranker and identification-service boundaries.
+The repository intentionally avoids binary image files. Bundled artwork is stored as text SVG vector markers with visible attribution metadata; these are offline visual markers, not verified species photographs. If photographic references are added later, use public domain, CC0, or CC BY assets and verify licensing per image before shipping.
 
-## Development
+## Pack Versioning
 
-Open `DiveID.xcodeproj` in Xcode 16 or newer. Build the `DiveID` scheme. Run `DiveIDTests` locally. Run `DiveIDUITests` locally when needed.
+Each pack has a JSON manifest with a stable machine-readable ID, schema version, pack version, display metadata, species count, species resource name, and image subdirectory. The bundle repository validates that the decoded species count matches the manifest count.
 
-Automated GitHub Actions checks are intentionally not configured during the current step-by-step prototype phase. Build and test verification is performed locally in Xcode.
+## Benchmark
 
-## Recommended next feature
+A local Caribbean benchmark fixture contains 100 description cases with an approximate 70 development / 30 holdout split. It includes insufficient descriptions, out-of-region descriptions, ambiguous descriptions, juvenile/color clues, size clues, habitat clues, and common diver language. Full benchmark thresholds were not verified in this execution environment because Xcode was unavailable.
 
-Expand and validate the offline species catalogue and description-ranking quality with a repeatable set of diver descriptions. Measure whether the intended species appears in the top 10 and top 3, whether explanations are useful, which vocabulary is missing, and which species are commonly confused.
+## Future Packs
+
+The repository now uses a pack-oriented catalogue boundary and selected-region repository so future regional packs can be added. No downloadable pack system exists yet, and the app does not include download controls or remote pack updates.

@@ -11,16 +11,16 @@ enum LocalObservationVocabulary {
         "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"],
         "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
         "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"],
-        "fish": ["fish"], "ray": ["ray", "eagle ray"], "turtle": ["turtle"], "shark": ["shark"],
+        "fish": ["fish"], "ray": ["ray", "eagle ray", "flat thing"], "turtle": ["turtle"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
         "schooling": ["school", "schooling"], "solitary": ["alone", "solitary"], "hovering": ["hovering", "hover"], "bottom-swimming": ["bottom", "sand"], "feeding": ["feeding", "grazing"], "swimming": ["swimming", "cruising"]
     ]
     static let colors = Set(["blue", "yellow", "red", "white", "black", "orange", "silver", "green", "gray"])
-    static let markings = Set(["spots", "stripes", "spines", "tail", "shell", "teeth"])
-    static let habitats = Set(["reef", "sand", "seagrass", "lagoon", "surface", "deep", "shallow"])
-    static let bodyShapes = Set(["flat", "elongated", "compressed", "pointed"])
-    static let categories = Set(["fish", "ray", "turtle", "shark"])
-    static let behaviors = Set(["schooling", "solitary", "hovering", "bottom-swimming", "feeding", "swimming"])
-    static let regions: Set<String> = ["fiji", "pacific", "atlantic", "caribbean", "indo-pacific", "hawaii", "indian"]
+    static let markings = Set(["spots", "stripes", "spines", "tail", "shell", "teeth", "patches", "saddles", "eye stripe", "fin edge", "beak", "barbels"])
+    static let habitats = Set(["reef", "sand", "seagrass", "lagoon", "surface", "deep", "shallow", "rubble", "wall", "wreck", "mangrove", "open water", "anemone"])
+    static let bodyShapes = Set(["flat", "elongated", "compressed", "pointed", "round", "oval", "torpedo", "serpentine", "disk"])
+    static let categories = Set(["fish", "ray", "turtle", "shark", "eel", "octopus", "squid", "crustacean", "mollusk", "seahorse"])
+    static let behaviors = Set(["schooling", "solitary", "hovering", "bottom-swimming", "feeding", "swimming", "grazing", "burrowing", "hiding", "cleaning", "resting", "open-water cruising", "anemone association"])
+    static let regions: Set<String> = ["fiji", "pacific", "atlantic", "western atlantic", "caribbean", "indo-pacific", "hawaii", "indian", "florida", "bahamas", "bermuda", "gulf of mexico", "belize", "cayman islands", "cozumel", "bonaire", "curaçao", "curacao", "aruba", "turks and caicos", "puerto rico", "us virgin islands", "british virgin islands", "dominican republic", "jamaica"]
 }
 
 struct LocalObservationParser: ObservationParsing {

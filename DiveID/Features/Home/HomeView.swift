@@ -1,15 +1,23 @@
+import Observation
 import SwiftUI
+
+@MainActor @Observable
+final class HomeViewModel {
+    var pack: OfflineIdentificationPackMetadata?
+    private let catalog: any MarineSpeciesCatalogRepository
+    init(catalog: any MarineSpeciesCatalogRepository) { self.catalog = catalog }
+    func load() async { pack = try? await catalog.availablePacks().first }
+}
 
 struct HomeView: View {
     let router: AppRouter
     let features: FeatureAvailability
+    @State var viewModel: HomeViewModel
     var body: some View { ScrollView { VStack(alignment: .leading, spacing: 24) { VStack(alignment: .leading, spacing: 8) { Image(systemName: "water.waves").font(.system(size: 48)).foregroundStyle(Color.appPrimary); Text("Dive ID").font(.largeTitle.bold()); Text("Describe or photograph the marine life you saw and review the most likely matches.").foregroundStyle(.secondary) }
+        if let pack = viewModel.pack { Button { router.navigate(to: .offlineRegions) } label: { VStack(alignment: .leading, spacing: 6) { Text("Offline Identification Pack").font(.headline); Text(pack.displayName).font(.title3.bold()); Text("\(pack.speciesCount) species available offline for the \(pack.displayName)"); Text("Included with Dive ID").font(.caption).foregroundStyle(.secondary) }.frame(maxWidth: .infinity, alignment: .leading).padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }.buttonStyle(.plain).accessibilityIdentifier("offlinePackSummary") }
         FeatureActionCard(title: "Describe What You Saw", subtitle: "Use color, shape, size, and habitat clues", symbol: "text.alignleft") { router.navigate(to: .descriptionSearch) }.accessibilityIdentifier("describeAction")
-        FeatureActionCard(title: "Identify From Photo", subtitle: features.photoIdentificationEnabled ? "Mock-only development flow" : "Coming later", symbol: "photo") { if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) } }
-            .disabled(!features.photoIdentificationEnabled)
-            .accessibilityHint(features.photoIdentificationEnabled ? "Opens the mock photo identification flow." : "Photo identification is not yet available.")
-            .accessibilityIdentifier("photoAction")
+        FeatureActionCard(title: "Identify From Photo", subtitle: features.photoIdentificationEnabled ? "Mock-only development flow" : "Coming later", symbol: "photo") { if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) } }.disabled(!features.photoIdentificationEnabled).accessibilityHint(features.photoIdentificationEnabled ? "Opens the mock photo identification flow." : "Photo identification is not yet available.").accessibilityIdentifier("photoAction")
         Button { router.navigate(to: .savedSpecies) } label: { Label("Saved Identifications", systemImage: "bookmark.fill").frame(minHeight: 44) }.accessibilityIdentifier("savedAction")
-    }.padding() }.appScreenBackground().navigationTitle("Home") }
+    }.padding() }.appScreenBackground().navigationTitle("Home").task { await viewModel.load() } }
 }
-#Preview { NavigationStack { HomeView(router: AppRouter(), features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false)) } }
+#Preview { NavigationStack { HomeView(router: AppRouter(), features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false), viewModel: .init(catalog: BundleMarineSpeciesCatalogRepository())) } }
