@@ -1,0 +1,1272 @@
+[
+  {
+    "id": "caribbean-001",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-002",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-003",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-004",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-005",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-006",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-007",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-008",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-009",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-010",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-011",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-012",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-013",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-014",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-015",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-016",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-017",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "5cf89070-1261-5022-80bf-b48c9b7568d2"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-018",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-019",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-020",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-021",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-022",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-023",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-024",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-025",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-026",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-027",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "acebd8ee-9e16-5049-9af3-96ad2589a263"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-028",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-029",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-030",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-031",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-032",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-033",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-034",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-035",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-036",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-037",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "4c22be20-3558-55b2-8d3e-bd510bdf6191"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-038",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-039",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-040",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-041",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-042",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-043",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-044",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-045",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-046",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-047",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "131c828b-0eeb-5163-a6a4-43975a9e2897"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-048",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-049",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-050",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-051",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-052",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-053",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-054",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-055",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-056",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-057",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "1a9a4718-b346-577f-8835-9fc3231d965b"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-058",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-059",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-060",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-061",
+    "split": "development",
+    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-062",
+    "split": "development",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-063",
+    "split": "development",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-064",
+    "split": "development",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-065",
+    "split": "development",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-066",
+    "split": "development",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-067",
+    "split": "development",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "2e38db3c-a4b5-5007-a015-1ddfa7332d70"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-068",
+    "split": "development",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-069",
+    "split": "development",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-070",
+    "split": "development",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-071",
+    "split": "holdout",
+    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-072",
+    "split": "holdout",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-073",
+    "split": "holdout",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-074",
+    "split": "holdout",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-075",
+    "split": "holdout",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-076",
+    "split": "holdout",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-077",
+    "split": "holdout",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "45c76f60-fdb3-5849-a36c-03c1c3618659"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-078",
+    "split": "holdout",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-079",
+    "split": "holdout",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-080",
+    "split": "holdout",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-081",
+    "split": "holdout",
+    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-082",
+    "split": "holdout",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-083",
+    "split": "holdout",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-084",
+    "split": "holdout",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-085",
+    "split": "holdout",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-086",
+    "split": "holdout",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-087",
+    "split": "holdout",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "9efd5e4e-e856-5f87-8e01-e7a4ce9da5fb"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-088",
+    "split": "holdout",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-089",
+    "split": "holdout",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-090",
+    "split": "holdout",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-091",
+    "split": "holdout",
+    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-092",
+    "split": "holdout",
+    "description": "Black flat ray with white spots and a long tail over sand.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-093",
+    "split": "holdout",
+    "description": "Round yellow fish near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-094",
+    "split": "holdout",
+    "description": "Small orange fish hiding in an anemone.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-095",
+    "split": "holdout",
+    "description": "A fish.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-096",
+    "split": "holdout",
+    "description": "Blue oval fish grazing on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-097",
+    "split": "holdout",
+    "description": "Striped grunt under ledge on reef.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "69a3fe15-61ac-51e0-8af9-8ef6ec30ee3a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-098",
+    "split": "holdout",
+    "description": "Large turtle resting near coral.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-099",
+    "split": "holdout",
+    "description": "Green moray eel hiding in rocks.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "872925e4-85fe-5c2c-821b-8a951e60529a"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  },
+  {
+    "id": "caribbean-100",
+    "split": "holdout",
+    "description": "Spotted lobster walking on sand at night.",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+  }
+]

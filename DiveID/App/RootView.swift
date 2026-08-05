@@ -6,11 +6,13 @@ struct RootView: View {
     let savedRepository: any SavedIdentificationRepository
     let sessionStore: any IdentificationSessionStore
     let photoProcessor: any PhotoProcessingService
+    let catalogRepository: any MarineSpeciesCatalogRepository
+    let regionRepository: any SelectedDiveRegionRepository
     let features: FeatureAvailability
 
     var body: some View {
         NavigationStack(path: $router.path) {
-            HomeView(router: router, features: features)
+            HomeView(router: router, features: features, viewModel: .init(catalog: catalogRepository))
                 .navigationDestination(for: AppRoute.self) { route in destination(for: route) }
         }
         .tint(.appAccent)
@@ -20,7 +22,7 @@ struct RootView: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .descriptionSearch:
-            DescriptionSearchView(viewModel: .init(sessionStore: sessionStore), router: router)
+            DescriptionSearchView(viewModel: .init(sessionStore: sessionStore, catalog: catalogRepository, regionRepository: regionRepository), router: router)
         case .photoIdentification:
             PhotoIdentificationView(
                 viewModel: .init(sessionStore: sessionStore, photoProcessor: photoProcessor),
@@ -37,6 +39,8 @@ struct RootView: View {
             SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
         case .savedSpecies:
             SavedSpeciesView(viewModel: .init(repository: savedRepository), router: router)
+        case .offlineRegions:
+            OfflineRegionsView(viewModel: .init(catalog: catalogRepository, selection: regionRepository))
         }
     }
 }
@@ -47,7 +51,9 @@ struct RootView: View {
         identificationService: MockMarineLifeIdentificationService(delay: .zero),
         savedRepository: InMemorySavedIdentificationRepository(),
         sessionStore: InMemoryIdentificationSessionStore(),
-        photoProcessor: DefaultPhotoProcessingService()
+        photoProcessor: DefaultPhotoProcessingService(),
+        catalogRepository: BundleMarineSpeciesCatalogRepository(),
+        regionRepository: UserDefaultsSelectedDiveRegionRepository()
         , features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false)
     )
 }

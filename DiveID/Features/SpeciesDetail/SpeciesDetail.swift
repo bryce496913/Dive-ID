@@ -74,6 +74,11 @@ struct SpeciesDetailView: View {
                 DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))
                 DetailSection(title: "Typical habitat", text: viewModel.species.habitat)
                 DetailSection(title: "General geographic range", text: viewModel.species.geographicRange)
+                if let occurrence = viewModel.species.regionalOccurrence { DetailSection(title: "Regional occurrence", text: occurrence.capitalized) }
+                if !viewModel.species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: viewModel.species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
+                if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
+                if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
+                if let pack = viewModel.species.packContext { DetailSection(title: "Offline pack", text: pack.displayName) }
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
                 if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }

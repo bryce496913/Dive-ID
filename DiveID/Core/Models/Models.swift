@@ -9,6 +9,11 @@ struct Species: Identifiable, Hashable, Codable, Sendable {
     let habitat: String
     let geographicRange: String
     let imageAssetName: String?
+    var bundledImage: BundledSpeciesImage? = nil
+    var packContext: PackContext? = nil
+    var regionalOccurrence: String? = nil
+    var appearanceVariants: [SpeciesAppearanceVariant] = []
+    var similarSpecies: [SimilarSpeciesComparison] = []
 }
 
 enum MatchScoreKind: String, Codable, Sendable {
@@ -46,6 +51,9 @@ struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     var taxonomicResolution: TaxonomicResolution = .species
     var observationDescription: String = ""
     var sourceSessionID: UUID? = nil
+    var packContext: PackContext? = nil
+    var matchedLifeStage: SpeciesLifeStage? = nil
+    var informationLevel: ObservationInformationLevel? = nil
 
     var matchStrength: MatchStrength { strength ?? .band(for: score) }
 }
@@ -64,18 +72,20 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
     let identifiedAt: Date
     var diveNotes: String?
     let sourceSessionID: UUID?
+    let packContext: PackContext?
+    let matchedLifeStage: SpeciesLifeStage?
 
     init(id: UUID = UUID(), match: IdentificationMatch, identifiedAt: Date = Date(), diveNotes: String? = nil) {
         self.id = id; species = match.species; matchRank = match.rank; matchStrength = match.matchStrength
         relativeScore = match.scoreKind == .relativeMatch ? match.score : nil; explanation = match.explanation
         distinguishingFeatures = match.distinguishingFeatures; cautions = match.cautions
         taxonomicResolution = match.taxonomicResolution; observationDescription = match.observationDescription
-        self.identifiedAt = identifiedAt; self.diveNotes = diveNotes; sourceSessionID = match.sourceSessionID
+        self.identifiedAt = identifiedAt; self.diveNotes = diveNotes; sourceSessionID = match.sourceSessionID; packContext = match.packContext; matchedLifeStage = match.matchedLifeStage
     }
 
     var match: IdentificationMatch {
         var value = IdentificationMatch(id: species.id, species: species, rank: matchRank, score: relativeScore ?? 0, scoreKind: .relativeMatch, strength: matchStrength, explanation: explanation, distinguishingFeatures: distinguishingFeatures, cautions: cautions, taxonomicResolution: taxonomicResolution)
-        value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; return value
+        value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; value.packContext = packContext; value.matchedLifeStage = matchedLifeStage; return value
     }
 }
 
@@ -84,7 +94,7 @@ enum WaterType: String, Codable, CaseIterable, Sendable {
 }
 
 struct IdentificationContext: Hashable, Codable, Sendable {
-    var region: String?
+    var region: OfflineIdentificationPackID?
     var waterType: WaterType?
     var approximateDepthMeters: Double?
     var habitat: String?
@@ -138,4 +148,12 @@ struct IdentificationSessionResult: Sendable {
 
 enum LoadState<Value> {
     case idle, loading, loaded(Value), empty, failed(String, retryable: Bool)
+}
+
+extension SavedIdentification {
+    enum CodingKeys: String, CodingKey { case id, species, matchRank, matchStrength, relativeScore, explanation, distinguishingFeatures, cautions, taxonomicResolution, observationDescription, identifiedAt, diveNotes, sourceSessionID, packContext, matchedLifeStage }
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id); species = try c.decode(Species.self, forKey: .species); matchRank = try c.decode(Int.self, forKey: .matchRank); matchStrength = try c.decode(MatchStrength.self, forKey: .matchStrength); relativeScore = try c.decodeIfPresent(Double.self, forKey: .relativeScore); explanation = try c.decode(String.self, forKey: .explanation); distinguishingFeatures = try c.decodeIfPresent([String].self, forKey: .distinguishingFeatures) ?? []; cautions = try c.decodeIfPresent([String].self, forKey: .cautions) ?? []; taxonomicResolution = try c.decodeIfPresent(TaxonomicResolution.self, forKey: .taxonomicResolution) ?? .species; observationDescription = try c.decodeIfPresent(String.self, forKey: .observationDescription) ?? ""; identifiedAt = try c.decode(Date.self, forKey: .identifiedAt); diveNotes = try c.decodeIfPresent(String.self, forKey: .diveNotes); sourceSessionID = try c.decodeIfPresent(UUID.self, forKey: .sourceSessionID); packContext = try c.decodeIfPresent(PackContext.self, forKey: .packContext); matchedLifeStage = try c.decodeIfPresent(SpeciesLifeStage.self, forKey: .matchedLifeStage)
+    }
 }

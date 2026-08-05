@@ -8,6 +8,7 @@ enum AppRoute: Hashable {
     case speciesDetail(Species, IdentificationMatch?)
     case savedIdentification(SavedIdentification)
     case savedSpecies
+    case offlineRegions
 }
 
 @MainActor @Observable

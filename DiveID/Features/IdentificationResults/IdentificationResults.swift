@@ -53,7 +53,7 @@ final class IdentificationResultsViewModel {
             } catch is CancellationError {
                 state = .idle
             } catch let error as LocalIdentificationError {
-                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource)
+                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && { if case .regionMismatch = error { return false }; return true }())
             } catch {
                 state = .failed("Identification could not be completed locally. Please try again.", retryable: true)
             }
@@ -71,6 +71,8 @@ final class IdentificationResultsViewModel {
             "The offline species catalogue could not be loaded."
         case .unsupportedSource:
             "Photo identification is not available in this offline version yet."
+        case .regionMismatch(let selected, let mentioned):
+            "Your description mentions \(mentioned), but the selected offline pack covers the \(selected.rawValue.capitalized). Check the selected dive region and try again."
         }
     }
 
@@ -99,7 +101,7 @@ struct IdentificationResultsView: View {
         Group {
             switch viewModel.state {
             case .idle, .loading:
-                LoadingStateView(message: "Comparing your description with the offline species catalogue…").accessibilityIdentifier("resultsLoading")
+                LoadingStateView(message: "Searching the Caribbean offline pack…").accessibilityIdentifier("resultsLoading")
             case .empty:
                 EmptyStateView(title: "No useful matches", message: "No useful match was found in the current offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
@@ -109,6 +111,8 @@ struct IdentificationResultsView: View {
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(spacing: 12) {
+                        Text("Matches from locally stored Caribbean species")
+                            .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         Text("Match strength reflects similarity to the clues in your description. It is not scientific certainty.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         ForEach(matches) { match in
