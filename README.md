@@ -1,27 +1,40 @@
-# Dive ID iOS V0.1
+# Dive ID
 
-Open `DiveID.xcodeproj` in Xcode 16 or newer. The app targets iOS 18 and uses only Apple frameworks. The primary MVP sends written observations to the Dive ID backend, which keeps provider credentials server-side and returns validated ranked candidates. Suggestions may be inaccurate and are not authoritative scientific identifications.
+Dive ID helps divers and instructors identify marine life from imperfect post-dive descriptions, especially after dives where internet access may be unavailable, unreliable, expensive, or inappropriate.
 
-## AI description identification
+## Offline-first design
 
-`DiveID/Configuration/Debug.xcconfig` and `Release.xcconfig` are assigned to the app target. Debug defaults to deterministic mock description results, so a fresh clone works without a server. Copy `Local.example.xcconfig` to the ignored `Local.xcconfig` to opt into the local backend. Release is always remote: CI or a protected build environment injects `DIVE_ID_PRODUCTION_API_BASE_URL` as an HTTPS origin. Missing/invalid remote configuration is reported distinctly from an outage. The backend URL is public routing configuration; `AI_API_KEY` is a backend secret and never belongs in iOS. No broad ATS exception is used.
+Dive ID is currently an offline-first native iOS prototype:
 
-For local remote-mode development: (1) `cd backend && npm ci`; (2) `cp .env.example .env` and configure the provider; (3) `npm run dev`; (4) verify `curl http://127.0.0.1:8080/health`; (5) copy the example local xcconfig; (6) run Debug and submit a description.
+- Description processing runs on the device.
+- The species catalogue is bundled with the app.
+- No account is required.
+- No backend is required.
+- No internet connection is required for description identification.
+- Descriptions are not uploaded.
+- Selected photos remain on the device.
+- Saved identifications remain local and persistent.
 
-Production description identification is supported. Photo selection/preprocessing infrastructure is preserved, but the Home card is disabled and marked **Coming later**; camera capture remains out of scope.
+## Current identification method
 
-## Foundation architecture
+Version 0.1 uses an explainable local matcher rather than a trained AI model. The app extracts local clues from the description, compares them with structured bundled species profiles, applies deterministic weighted ranking, and returns up to 10 likely matches when there is meaningful evidence. Explanations are generated from matched and conflicting catalogue traits.
 
-Dive ID retains its feature-based SwiftUI structure. Several view and view-model types remain co-located in the original consolidated feature files rather than being split into every filename suggested by the architecture brief. The app continues to use one typed `NavigationStack` and protocol-backed dependencies.
+Match strength reflects relative similarity to the clues in the description. It is not scientific certainty and should not be treated as a confirmed identification.
 
-Identification input screens create temporary sessions only. A lightweight session UUID is routed to the results feature, which resolves the request and optional processed photo, runs the injected service once, and caches the sorted first ten matches in the actor-backed session. Reopening a completed session reads that result instead of calling the service again; an explicit retry is available after failure.
+## Current catalogue limitation
 
-Photos are decoded and orientation-corrected with Image I/O away from the main actor, then newly encoded as metadata-free JPEG data. Preview images are bounded to 1,200 pixels and identification uploads to 2,048 pixels at 0.8 quality. The in-memory session store owns these bytes; neither `UIImage` nor image data enters navigation state.
+The initial bundled catalogue intentionally contains a small set of species so the offline feature flow can be validated before expanding coverage. Results are limited to species included with this version of Dive ID.
 
-**Saved Identifications** retain species, rank, match evidence, original observation, date, and optional notes in a versioned JSON envelope. Multiple observations of the same species may be saved from different sessions. Actor-isolated atomic writes remain; version-1 records and the legacy `saved-species.json` filename migrate to `saved-identifications.json` only after an atomic new-file write succeeds, while corrupt data is preserved.
+## On-device AI roadmap
 
-Production requires an HTTPS iOS backend URL, backend-only provider credentials, a real `redis://` or `rediss://` store, reviewed trusted-proxy configuration, monitoring, provider budget alerts/limits, and the `IDENTIFICATION_ENABLED` emergency switch. The client-supplied installation identifier groups quota usage but is not authentication and can be rotated; the service is not abuse-proof. App Attest or server-issued credentials are future hardening options.
+Future work may evaluate Apple Natural Language, `NLEmbedding`, Create ML, Core ML, Vision, bundled text-ranking models, and bundled photo-classification models. Future models should remain usable offline and fit behind the existing parser/ranker and identification-service boundaries.
 
-The initial V0.1 target is intentionally iPhone-only. The existing app requires full screen and the major screens have not yet received an iPad layout validation pass. Camera capture remains visibly unavailable and does not request permission.
+## Development
 
-GitHub Actions builds and runs unit tests on an iPhone 16 simulator. UI tests remain available in the project but are excluded from CI to avoid simulator automation instability; they use deterministic mock launch modes when run locally.
+Open `DiveID.xcodeproj` in Xcode 16 or newer. Build the `DiveID` scheme. Run `DiveIDTests` locally. Run `DiveIDUITests` locally when needed.
+
+Automated GitHub Actions checks are intentionally not configured during the current step-by-step prototype phase. Build and test verification is performed locally in Xcode.
+
+## Recommended next feature
+
+Expand and validate the offline species catalogue and description-ranking quality with a repeatable set of diver descriptions. Measure whether the intended species appears in the top 10 and top 3, whether explanations are useful, which vocabulary is missing, and which species are commonly confused.

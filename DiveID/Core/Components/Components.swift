@@ -10,7 +10,15 @@ struct FeatureActionCard: View {
     var body: some View { Button(action: action) { HStack(spacing: 16) { Image(systemName: symbol).font(.title).frame(width: 44, height: 44).background(Color.appAccent.opacity(0.2), in: Circle()); VStack(alignment: .leading) { Text(title).font(.headline); Text(subtitle).font(.subheadline).foregroundStyle(Color.appTextSecondary) }; Spacer(); Image(systemName: "chevron.right") }.padding().foregroundStyle(Color.appTextPrimary).background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }.buttonStyle(.plain) }
 }
 
-struct LoadingStateView: View { var body: some View { VStack(spacing: 12) { ProgressView(); Text("Preparing demo matches…").foregroundStyle(.secondary) }.frame(maxWidth: .infinity, minHeight: 220) } }
+struct LoadingStateView: View {
+    var message = "Loading…"
+    var body: some View {
+        VStack(spacing: 12) {
+            ProgressView()
+            Text(message).foregroundStyle(.secondary)
+        }.frame(maxWidth: .infinity, minHeight: 220)
+    }
+}
 struct EmptyStateView: View { let title: String; let message: String; var body: some View { ContentUnavailableView(title, systemImage: "fish", description: Text(message)) } }
 struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var body: some View { ContentUnavailableView { Label("Something went wrong", systemImage: "exclamationmark.triangle") } description: { Text(message) } actions: { if let retry { Button("Try Again", action: retry) } } } }
 

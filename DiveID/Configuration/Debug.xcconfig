@@ -1,3 +1,0 @@
-DIVE_ID_IDENTIFICATION_MODE = mock
-DIVE_ID_API_BASE_URL =
-#include? "Local.xcconfig"

@@ -24,8 +24,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CFG1 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DiveID/Configuration/Debug.xcconfig; sourceTree = SOURCE_ROOT; };
-		CFG2 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DiveID/Configuration/Release.xcconfig; sourceTree = SOURCE_ROOT; };
 		P1 /* DiveID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiveID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		P2 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		P3 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,7 +112,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C2 /* Build configuration list for PBXNativeTarget "DiveID" */;
 			buildPhases = (
-				V1 /* Validate Release Configuration */,
 				S1 /* Sources */,
 				F1 /* Frameworks */,
 				R1 /* Resources */,
@@ -177,20 +174,6 @@
 		};
 /* End PBXNativeTarget section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		V1 /* Validate Release Configuration */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = ();
-			inputPaths = ();
-			name = "Validate Release Configuration";
-			outputPaths = ();
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]; then\n  case \"$DIVE_ID_API_BASE_URL\" in\n    https://*) ;;\n    *) echo \"error: DIVE_ID_PRODUCTION_API_BASE_URL must be an HTTPS URL for Release\" >&2; exit 1 ;;\n  esac\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXProject section */
 		A1 /* Project object */ = {
@@ -375,7 +358,6 @@
 		};
 		Q3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFG1 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -400,7 +382,6 @@
 		};
 		Q4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFG2 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
