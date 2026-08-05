@@ -30,7 +30,8 @@ struct LocalObservationParser: ObservationParsing {
         var tokens = Set(raw.map(Self.singular).filter { !LocalObservationVocabulary.stopWords.contains($0) })
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
         for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: normalized) }) { tokens.insert(key) }
-        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(LocalObservationVocabulary.colors), markings: tokens.intersection(LocalObservationVocabulary.markings), bodyShapes: tokens.intersection(LocalObservationVocabulary.bodyShapes), habitats: tokens.intersection(LocalObservationVocabulary.habitats), regions: tokens.intersection(LocalObservationVocabulary.regions), behaviors: tokens.intersection(LocalObservationVocabulary.behaviors), categories: tokens.intersection(LocalObservationVocabulary.categories), approximateSizeCentimeters: Self.size(in: normalized, tokens: tokens), approximateDepthMeters: Self.depth(in: normalized, tokens: tokens))
+        let measurements = Self.measurements(in: normalized, tokens: tokens)
+        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(LocalObservationVocabulary.colors), markings: tokens.intersection(LocalObservationVocabulary.markings), bodyShapes: tokens.intersection(LocalObservationVocabulary.bodyShapes), habitats: tokens.intersection(LocalObservationVocabulary.habitats), regions: tokens.intersection(LocalObservationVocabulary.regions), behaviors: tokens.intersection(LocalObservationVocabulary.behaviors), categories: tokens.intersection(LocalObservationVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters)
     }
 
     static func normalize(_ text: String) -> String {
@@ -45,31 +46,80 @@ struct LocalObservationParser: ObservationParsing {
         if term.contains(" ") { return normalizedText.range(of: #"(?<![a-z0-9])"# + NSRegularExpression.escapedPattern(for: term) + #"(?![a-z0-9])"#, options: .regularExpression) != nil }
         return tokens.contains(singular(term))
     }
-    static func size(in text: String, tokens: Set<String>) -> Double? {
-        if text.contains("half a meter") || text.contains("half a metre") { return 50 }
-        if tokens.contains("hand-sized") || text.contains("hand sized") { return 15 }
-        if let v = measurement(in: text, kind: .size) { return v.sizeCentimeters }
-        if tokens.contains("small") { return 10 }; if tokens.contains("medium") { return 40 }; if tokens.contains("large") { return 120 }
-        return nil
+    struct ParsedMeasurements: Equatable, Sendable { let sizeCentimeters: Double?; let depthMeters: Double? }
+    private enum MeasurementRole { case size, depth }
+    private enum MeasurementUnit { case centimeters, meters, inches, feet }
+    private struct MeasurementCandidate { let sourceRange: Range<String.Index>; let value: Double; let unit: MeasurementUnit; let role: MeasurementRole }
+
+    static func measurements(in text: String, tokens: Set<String>) -> ParsedMeasurements {
+        let sizeCandidate = explicitMeasurement(in: text, patterns: sizePatterns, role: .size)
+        var size = sizeCandidate.map { $0.unit.sizeCentimeters(for: $0.value) }
+        let depthCandidate = explicitMeasurement(in: text, patterns: depthPatterns, role: .depth)
+        var depth = depthCandidate.flatMap { $0.unit.depthMeters(for: $0.value) }
+        if size == nil, text.contains("half a meter") || text.contains("half a metre") { size = 50 }
+        if size == nil, tokens.contains("hand-sized") || text.contains("hand sized") { size = 15 }
+        if size == nil, tokens.contains("small") { size = 10 }
+        if size == nil, tokens.contains("medium") { size = 40 }
+        if size == nil, tokens.contains("large") { size = 120 }
+        if depth == nil, tokens.contains("shallow") || tokens.contains("lagoon") || tokens.contains("surface") { depth = 3 }
+        if depth == nil, tokens.contains("deep") { depth = 30 }
+        return ParsedMeasurements(sizeCentimeters: size, depthMeters: depth)
     }
-    static func depth(in text: String, tokens: Set<String>) -> Double? {
-        if let v = measurement(in: text, kind: .depth) { return v.depthMeters }
-        if tokens.contains("shallow") || tokens.contains("lagoon") || tokens.contains("surface") { return 3 }
-        if tokens.contains("deep") { return 30 }
-        return nil
-    }
-    enum MeasurementKind { case size, depth }
-    struct Measurement { let value: Double; let unit: String; var sizeCentimeters: Double { unit == "m" ? value * 100 : unit == "cm" ? value : value * 2.54 }; var depthMeters: Double { unit == "ft" ? value * 0.3048 : value } }
-    static func measurement(in text: String, kind: MeasurementKind) -> Measurement? {
-        let unitPattern = #"(cm|centimeter|centimeters|inch|inches|m|meter|meters|metre|metres|ft|feet|foot)"#
-        let number = #"([0-9]+(?:\.[0-9]+)?)"#
-        let patterns: [String] = kind == .depth ? [#"(?:at|depth of|around)\s*"# + number + #"\s*"# + unitPattern + #"(?:\s*deep)?"#, number + #"\s*"# + unitPattern + #"\s*deep"#] : [number + #"\s*"# + unitPattern + #"\s*(?:long|length)"#, #"(?:length about|about|roughly)\s*"# + number + #"\s*"# + unitPattern + #"(?:\s*long)?"#]
+
+    private static let number = #"([0-9]+(?:\.[0-9]+)?)"#
+    private static let unitPattern = #"(cm|centimeter|centimeters|inch|inches|m|meter|meters|metre|metres|ft|feet|foot)"#
+    private static let depthPatterns = [
+        #"(?:at|around|about)\s*"# + number + #"\s*"# + unitPattern + #"\s*deep"#,
+        #"(?:at\s+)?(?:a\s+)?depth\s+of\s*"# + number + #"\s*"# + unitPattern,
+        number + #"\s*"# + unitPattern + #"\s*deep"#,
+        #"(?:^|\s)at\s*"# + number + #"\s*"# + unitPattern + #"(?:\s|$)"#
+    ]
+    private static let sizePatterns = [
+        number + #"\s*"# + unitPattern + #"\s*(?:long|length)"#,
+        #"(?:length\s+about|about|roughly|around)\s*"# + number + #"\s*"# + unitPattern + #"(?:\s*long)?"#,
+        number + #"\s*(cm|centimeter|centimeters|inch|inches)"#
+    ]
+
+    private static func explicitMeasurement(in text: String, patterns: [String], role: MeasurementRole) -> MeasurementCandidate? {
         for pattern in patterns {
-            if let regex = try? NSRegularExpression(pattern: pattern), let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)), match.numberOfRanges >= 3, let vr = Range(match.range(at: 1), in: text), let ur = Range(match.range(at: 2), in: text), let value = Double(text[vr]) {
-                let rawUnit = String(text[ur]); let unit = ["meter":"m","meters":"m","metre":"m","metres":"m","centimeter":"cm","centimeters":"cm","inch":"inches","foot":"ft","feet":"ft" ][rawUnit] ?? rawUnit
-                return Measurement(value: value, unit: unit)
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
+            let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
+            for match in matches where match.numberOfRanges >= 3 {
+                guard let sourceRange = Range(match.range(at: 0), in: text), let valueRange = Range(match.range(at: 1), in: text), let unitRange = Range(match.range(at: 2), in: text), let value = Double(text[valueRange]), let unit = MeasurementUnit(raw: String(text[unitRange])) else { continue }
+                if role == .depth, unit.depthMeters(for: value) == nil { continue }
+                return MeasurementCandidate(sourceRange: sourceRange, value: value, unit: unit, role: role)
             }
         }
         return nil
+    }
+
+}
+
+private extension LocalObservationParser.MeasurementUnit {
+    init?(raw: String) {
+        switch raw {
+        case "cm", "centimeter", "centimeters": self = .centimeters
+        case "m", "meter", "meters", "metre", "metres": self = .meters
+        case "inch", "inches": self = .inches
+        case "ft", "feet", "foot": self = .feet
+        default: return nil
+        }
+    }
+
+    func sizeCentimeters(for value: Double) -> Double {
+        switch self {
+        case .centimeters: value
+        case .meters: value * 100
+        case .inches: value * 2.54
+        case .feet: value * 30.48
+        }
+    }
+
+    func depthMeters(for value: Double) -> Double? {
+        switch self {
+        case .meters: value
+        case .feet: value * 0.3048
+        case .centimeters, .inches: nil
+        }
     }
 }

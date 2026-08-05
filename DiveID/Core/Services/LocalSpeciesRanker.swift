@@ -6,6 +6,7 @@ protocol SpeciesRanking: Sendable {
 
 struct RankedLocalSpecies: Sendable {
     let profile: LocalSpeciesProfile
+    let rawScore: Double
     let score: Double
     let matchedClues: [String]
     let conflictingClues: [String]
@@ -13,20 +14,65 @@ struct RankedLocalSpecies: Sendable {
     let informationLevel: ObservationInformationLevel
 }
 
+extension RankedLocalSpecies {
+    init(profile: LocalSpeciesProfile, score: Double, matchedClues: [String], conflictingClues: [String], matchedAppearanceVariant: SpeciesAppearanceVariant?, informationLevel: ObservationInformationLevel) {
+        self.profile = profile
+        self.rawScore = score
+        self.score = score
+        self.matchedClues = matchedClues
+        self.conflictingClues = conflictingClues
+        self.matchedAppearanceVariant = matchedAppearanceVariant
+        self.informationLevel = informationLevel
+    }
+}
+
 struct LocalRankingWeights: Sendable {
-    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0
+    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, regionConflict = -12.0
     let threshold = 4.0, maximumRawScore = 42.0
+}
+
+enum RegionCompatibility: Equatable, Sendable { case unspecified, compatible, conflicting }
+
+struct RegionCompatibilityResolver: Sendable {
+    private let parents: [String: Set<String>] = [
+        "caribbean": ["western atlantic", "atlantic"], "western atlantic": ["atlantic"], "florida": ["western atlantic", "atlantic"], "bahamas": ["caribbean", "western atlantic", "atlantic"], "bermuda": ["western atlantic", "atlantic"], "gulf of mexico": ["western atlantic", "atlantic"], "belize": ["caribbean", "western atlantic", "atlantic"], "cayman islands": ["caribbean", "western atlantic", "atlantic"], "cozumel": ["caribbean", "western atlantic", "atlantic"], "bonaire": ["caribbean", "western atlantic", "atlantic"], "curaçao": ["caribbean", "western atlantic", "atlantic"], "curacao": ["caribbean", "western atlantic", "atlantic"], "aruba": ["caribbean", "western atlantic", "atlantic"], "turks and caicos": ["caribbean", "western atlantic", "atlantic"], "puerto rico": ["caribbean", "western atlantic", "atlantic"], "us virgin islands": ["caribbean", "western atlantic", "atlantic"], "british virgin islands": ["caribbean", "western atlantic", "atlantic"], "dominican republic": ["caribbean", "western atlantic", "atlantic"], "jamaica": ["caribbean", "western atlantic", "atlantic"],
+        "fiji": ["indo-pacific", "pacific"], "indo-pacific": ["pacific", "indian"], "hawaii": ["pacific"]
+    ]
+
+    func compatibility(observedRegions: Set<String>, profileRegions: Set<String>) -> RegionCompatibility {
+        let observed = Set(observedRegions.map(Self.normalize)).filter { LocalObservationVocabulary.regions.contains($0) }
+        let profile = Set(profileRegions.map(Self.normalize)).filter { LocalObservationVocabulary.regions.contains($0) }
+        guard !observed.isEmpty, !profile.isEmpty else { return .unspecified }
+        for observedRegion in observed {
+            let observedFamily = family(for: observedRegion)
+            for profileRegion in profile where !observedFamily.isDisjoint(with: family(for: profileRegion)) { return .compatible }
+        }
+        return .conflicting
+    }
+
+    private static func normalize(_ value: String) -> String { LocalObservationParser.normalize(value).replacingOccurrences(of: "indo pacific", with: "indo-pacific") }
+    private func family(for region: String) -> Set<String> { Set([region]).union(parents[region] ?? []) }
+}
+
+private struct RawRankedCandidate {
+    let profile: LocalSpeciesProfile
+    let rawScore: Double
+    let matchedClues: [String]
+    let conflictingClues: [String]
+    let matchedAppearanceVariant: SpeciesAppearanceVariant?
+    let informationLevel: ObservationInformationLevel
 }
 
 struct LocalSpeciesRanker: SpeciesRanking {
     let weights: LocalRankingWeights
+    private let regionResolver = RegionCompatibilityResolver()
     init(weights: LocalRankingWeights = LocalRankingWeights()) { self.weights = weights }
 
     func rank(observation: ParsedObservation, profiles: [LocalSpeciesProfile]) async throws -> [RankedLocalSpecies] {
         let info = Self.informationLevel(observation)
         if info == .insufficient { return [] }
         var seen = Set<UUID>()
-        let ranked = profiles.compactMap { profile -> RankedLocalSpecies? in
+        let rawCandidates = profiles.compactMap { profile -> RawRankedCandidate? in
             guard seen.insert(profile.id).inserted else { return nil }
             var score = 0.0
             var matched: [String] = []
@@ -34,7 +80,16 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map { $0.lowercased() }
             if nameTerms.contains(where: { observation.normalizedText.contains($0) }) { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
-            add(observation.regions, profile.regions, weights.region, &score, &matched)
+            switch regionResolver.compatibility(observedRegions: observation.regions, profileRegions: Set(profile.regions)) {
+            case .compatible:
+                score += weights.region
+                matched.append("geographic range")
+            case .conflicting:
+                score += weights.regionConflict
+                conflicts.append("geographic range")
+            case .unspecified:
+                break
+            }
             add(observation.habitats, profile.habitats, weights.habitat, &score, &matched)
             add(observation.markings, profile.markings, weights.marking, &score, &matched)
             add(observation.colors, profile.colors, weights.color, &score, &matched)
@@ -59,11 +114,17 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if !observation.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
             score += occurrenceWeight(profile.regionalOccurrence)
             guard score >= weights.threshold else { return nil }
-            var normalized = max(0, min(1, score / weights.maximumRawScore))
-            if info == .limited { normalized = min(normalized, 0.64) }
-            return RankedLocalSpecies(profile: profile, score: normalized, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: info)
+            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: info)
         }
-        return Array(ranked.sorted { a, b in a.score == b.score ? a.profile.commonName < b.profile.commonName : a.score > b.score }.prefix(10))
+        return rawCandidates.sorted { a, b in
+            if a.rawScore != b.rawScore { return a.rawScore > b.rawScore }
+            if a.profile.commonName != b.profile.commonName { return a.profile.commonName < b.profile.commonName }
+            return a.profile.id.uuidString < b.profile.id.uuidString
+        }.prefix(10).map { candidate in
+            var normalized = max(0, min(1, candidate.rawScore / weights.maximumRawScore))
+            if candidate.informationLevel == .limited { normalized = min(normalized, 0.64) }
+            return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
+        }
     }
 
     private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .occasional, .seasonal: 0; case .rare: -3 } }

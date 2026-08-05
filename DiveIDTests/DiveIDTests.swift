@@ -171,13 +171,16 @@ final class DiveIDTests: XCTestCase {
         var secondMatch = IdentificationMatch(id: second.id, species: second, score: 0.7, scoreKind: .relativeMatch); secondMatch.sourceSessionID = UUID()
         let firstSaved = SavedIdentification(match: firstMatch); let secondSaved = SavedIdentification(match: secondMatch)
         _ = try await repository.save(firstSaved); _ = try await repository.save(firstSaved); _ = try await repository.save(secondSaved)
-        XCTAssertEqual(try await repository.fetchAll().count, 2)
+        let fetched = try await repository.fetchAll()
+        XCTAssertEqual(fetched.count, 2)
         let recreated = try JSONSavedIdentificationRepository(fileURL: url)
         let firstSessionID = try XCTUnwrap(firstSaved.sourceSessionID)
-        XCTAssertEqual(try await recreated.savedIdentification(sourceSessionID: firstSessionID, speciesID: first.id)?.id, firstSaved.id)
+        let recreatedSaved = try await recreated.savedIdentification(sourceSessionID: firstSessionID, speciesID: first.id)
+        XCTAssertEqual(recreatedSaved?.id, firstSaved.id)
         try await recreated.remove(id: firstSaved.id)
         let final = try JSONSavedIdentificationRepository(fileURL: url)
-        XCTAssertEqual(try await final.fetchAll().map(\.species), [second])
+        let finalSaved = try await final.fetchAll()
+        XCTAssertEqual(finalSaved.map(\.species), [second])
     }
 
     func testCorruptPersistenceIsReportedWithoutOverwrite() async throws {
@@ -203,11 +206,14 @@ final class DiveIDTests: XCTestCase {
         await viewModel.toggleSaved()
         let savedID = try XCTUnwrap(viewModel.savedIdentificationID)
         XCTAssertTrue(viewModel.isSaved)
-        XCTAssertEqual(try await repository.savedIdentification(sourceSessionID: try XCTUnwrap(match.sourceSessionID), speciesID: match.species.id)?.id, savedID)
+        let sourceSessionID = try XCTUnwrap(match.sourceSessionID)
+        let savedIdentification = try await repository.savedIdentification(sourceSessionID: sourceSessionID, speciesID: match.species.id)
+        XCTAssertEqual(savedIdentification?.id, savedID)
         await viewModel.toggleSaved()
         XCTAssertFalse(viewModel.isSaved)
         XCTAssertNil(viewModel.savedIdentificationID)
-        XCTAssertNil(try await repository.savedIdentification(sourceSessionID: try XCTUnwrap(match.sourceSessionID), speciesID: match.species.id))
+        let removedIdentification = try await repository.savedIdentification(sourceSessionID: sourceSessionID, speciesID: match.species.id)
+        XCTAssertNil(removedIdentification)
     }
 
     @MainActor
@@ -235,38 +241,25 @@ final class DiveIDTests: XCTestCase {
 final class LocalOfflineIdentificationTests: XCTestCase {
     private let parser = LocalObservationParser()
 
-    func testCatalogJSONExistsAndDecodesWithValidProfiles() throws {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
-        let data = try Data(contentsOf: url)
-        let profiles = try JSONDecoder().decode([LocalSpeciesProfile].self, from: data)
-        XCTAssertEqual(profiles.count, 11)
-        XCTAssertEqual(Set(profiles.map(\.id)).count, profiles.count)
-        XCTAssertEqual(Set(profiles.map { $0.scientificName.lowercased() }).count, profiles.count)
-        XCTAssertTrue(profiles.allSatisfy { !$0.commonName.isEmpty && !$0.scientificName.isEmpty && !$0.distinguishingFeatures.isEmpty && !$0.typicalHabitat.isEmpty && !$0.geographicRange.isEmpty })
-        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(profiles))
+    func testProductionCaribbeanPackLoadsAndValidates() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self))
+        let pack: OfflineIdentificationPack
+        do {
+            pack = try await repository.loadPack(id: .caribbean)
+        } catch {
+            XCTFail("Production Caribbean pack failed to load: \(error)")
+            return
+        }
+        XCTAssertEqual(pack.metadata.id, .caribbean)
+        XCTAssertEqual(pack.metadata.speciesCount, pack.profiles.count)
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: pack, bundle: Bundle(for: Self.self)))
     }
 
-    func testCatalogRepositoryCachesAndReportsMissingOrInvalidResources() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".bundle", isDirectory: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
-        let target = directory.appendingPathComponent("MarineSpeciesCatalog.json")
-        try Data(contentsOf: source).write(to: target)
-        let bundle = try XCTUnwrap(Bundle(url: directory))
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: bundle)
+    func testCatalogRepositoryCachesProductionPack() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self))
         let first = try await repository.loadProfiles()
-        try Data("not json".utf8).write(to: target)
         let second = try await repository.loadProfiles()
         XCTAssertEqual(first, second)
-
-        let missing = BundleMarineSpeciesCatalogRepository(bundle: bundle, resourceName: "MissingCatalog")
-        do { _ = try await missing.loadProfiles(); XCTFail("Expected missing resource") }
-        catch { XCTAssertEqual(error as? LocalCatalogError, .resourceMissing) }
-
-        let invalid = BundleMarineSpeciesCatalogRepository(bundle: bundle)
-        do { _ = try await invalid.loadProfiles(); XCTFail("Expected invalid JSON") }
-        catch { XCTAssertEqual(error as? LocalCatalogError, .invalidData) }
     }
 
     func testCatalogValidationRejectsDuplicates() throws {
@@ -301,7 +294,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testRealisticDescriptionsRankExpectedSpeciesFirst() async throws {
-        let profiles = try catalogProfiles()
+        let profiles = try await catalogProfiles()
         let cases: [(String, String, [String])] = [
             ("Small blue fish with a yellow tail, about 20 cm, seen on a shallow reef in Fiji.", "Palette Surgeonfish", ["blue", "yellow", "reef", "fiji"]),
             ("Striped red and white fish with long spines, hovering near a reef wall.", "Red Lionfish", ["stripes", "spines"]),
@@ -318,7 +311,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testRankingInvariantsVagueAndUnrelatedDescriptions() async throws {
-        let profiles = try catalogProfiles()
+        let profiles = try await catalogProfiles()
         let ranker = LocalSpeciesRanker()
         let vague = try await ranker.rank(observation: await parser.parse("A fish on the reef."), profiles: profiles)
         XCTAssertFalse(vague.isEmpty)
@@ -332,7 +325,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testLocalServiceReturnsRelativeMatchesAndRejectsPhoto() async throws {
-        let service = LocalMarineLifeIdentificationService(catalogRepository: StaticCatalogRepository(profiles: try catalogProfiles()), parser: parser, ranker: LocalSpeciesRanker())
+        let service = LocalMarineLifeIdentificationService(catalogRepository: StaticCatalogRepository(profiles: try await catalogProfiles()), parser: parser, ranker: LocalSpeciesRanker())
         let matches = try await service.identify(request: IdentificationRequest(source: .description("Long silver fish with large teeth swimming alone.")), processedPhoto: nil)
         XCTAssertEqual(matches.first?.species.commonName, "Great Barracuda")
         XCTAssertTrue(matches.allSatisfy { (0...1).contains($0.score) && $0.scoreKind == .relativeMatch && !$0.explanation.isEmpty })
@@ -342,15 +335,15 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         } catch { XCTAssertEqual(error as? LocalIdentificationError, .unsupportedSource) }
     }
 
-    private func catalogProfiles() throws -> [LocalSpeciesProfile] {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
-        return try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
-    }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)).loadProfiles() }
 }
 
 struct StaticCatalogRepository: MarineSpeciesCatalogRepository {
     let profiles: [LocalSpeciesProfile]
-    func loadProfiles() async throws -> [LocalSpeciesProfile] { profiles }
+    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [] }
+    func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
+        OfflineIdentificationPack(metadata: OfflineIdentificationPackMetadata(id: id, schemaVersion: 1, packVersion: 1, displayName: "Test Pack", shortDescription: "Test", geographicScope: "Test", regionAliases: [], speciesCount: profiles.count, speciesResourceName: "TestSpecies", imageSubdirectory: "Images", includedWithApp: true, lastDataReviewDate: nil), profiles: profiles)
+    }
 }
 
 struct IdentificationQualityFixture {
@@ -370,7 +363,7 @@ final class OfflineCatalogHardeningTests: XCTestCase {
     let paletteSurgeonfish = UUID(uuidString: "00000000-0000-0000-0000-000000000011")!
 
     func testBlueTangSpeciesAreSeparateAndRankByRegion() async throws {
-        let profiles = try catalogProfiles()
+        let profiles = try await catalogProfiles()
         let atlantic = try await ranker.rank(observation: await parser.parse("Adult blue tang surgeonfish on a Caribbean reef in the western Atlantic around 15 m deep."), profiles: profiles)
         XCTAssertEqual(atlantic.first?.profile.id, atlanticBlueTang)
         let fiji = try await ranker.rank(observation: await parser.parse("Bright blue Indo-Pacific fish in Fiji with a black marking and yellow tail on a coral reef."), profiles: profiles)
@@ -382,12 +375,18 @@ final class OfflineCatalogHardeningTests: XCTestCase {
     }
 
     func testBoundaryAwareSynonymMatching() async {
-        XCTAssertFalse(await parser.parse("gray fish").categories.contains("ray"))
-        XCTAssertFalse(await parser.parse("predator cruising").colors.contains("red"))
-        XCTAssertFalse(await parser.parse("thousand tiny fish").habitats.contains("sand"))
-        XCTAssertTrue(await parser.parse("eagle ray over sandy bottom").categories.contains("ray"))
-        XCTAssertTrue(await parser.parse("red fish").colors.contains("red"))
-        XCTAssertTrue(await parser.parse("sandy bottom").habitats.contains("sand"))
+        let grayFish = await parser.parse("gray fish")
+        let predator = await parser.parse("predator cruising")
+        let thousandFish = await parser.parse("thousand tiny fish")
+        let eagleRay = await parser.parse("eagle ray over sandy bottom")
+        let redFish = await parser.parse("red fish")
+        let sandyBottom = await parser.parse("sandy bottom")
+        XCTAssertFalse(grayFish.categories.contains("ray"))
+        XCTAssertFalse(predator.colors.contains("red"))
+        XCTAssertFalse(thousandFish.habitats.contains("sand"))
+        XCTAssertTrue(eagleRay.categories.contains("ray"))
+        XCTAssertTrue(redFish.colors.contains("red"))
+        XCTAssertTrue(sandyBottom.habitats.contains("sand"))
     }
 
     func testMeasurementParsingDisambiguatesDepthAndSize() async {
@@ -410,8 +409,61 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertNil(ambiguous.approximateDepthMeters)
     }
 
+    func testMeasurementRegressionPhrases() async {
+        let cases: [(String, Double?, Double?)] = [
+            ("around 2 m long", 200, nil),
+            ("6 ft long", 182.88, nil),
+            ("roughly 12 inches long", 30.48, nil),
+            ("about 30 cm", 30, nil),
+            ("about 20 m deep", nil, 20),
+            ("around 60 feet deep", nil, 18.288),
+            ("at 20 m", nil, 20),
+            ("blue fish 20 meters from the boat", nil, nil),
+            ("A 2 m long shark seen at 20 m deep.", 200, 20),
+            ("A 6 ft long fish at 60 feet deep.", 182.88, 18.288)
+        ]
+        for (text, expectedSize, expectedDepth) in cases {
+            let parsed = await parser.parse(text)
+            XCTAssertEqual(parsed.approximateSizeCentimeters ?? -1, expectedSize ?? -1, accuracy: 0.01, text)
+            XCTAssertEqual(parsed.approximateDepthMeters ?? -1, expectedDepth ?? -1, accuracy: 0.01, text)
+        }
+        let invalidDepth = await parser.parse("at 30 cm")
+        XCTAssertNil(invalidDepth.approximateDepthMeters)
+    }
+
+    func testRegionCompatibilityResolver() {
+        let resolver = RegionCompatibilityResolver()
+        XCTAssertEqual(resolver.compatibility(observedRegions: [], profileRegions: ["caribbean"]), .unspecified)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: []), .unspecified)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: ["caribbean"]), .compatible)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: ["western atlantic"]), .compatible)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["fiji"], profileRegions: ["indo-pacific"]), .compatible)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["fiji"], profileRegions: ["western atlantic"]), .conflicting)
+        XCTAssertEqual(resolver.compatibility(observedRegions: ["madeup place"], profileRegions: ["western atlantic"]), .unspecified)
+    }
+
+    func testBlueTangRegionalConflictsIncludeRawScores() async throws {
+        let profiles = try await catalogProfiles()
+        let caribbeanRanked = try await ranker.rank(observation: await parser.parse("blue tang in Caribbean reef"), profiles: profiles)
+        let atlantic = try XCTUnwrap(caribbeanRanked.first { $0.profile.id == atlanticBlueTang })
+        let palette = try XCTUnwrap(caribbeanRanked.first { $0.profile.id == paletteSurgeonfish })
+        XCTAssertEqual(caribbeanRanked.first?.profile.id, atlanticBlueTang)
+        XCTAssertGreaterThan(atlantic.rawScore, palette.rawScore)
+        XCTAssertTrue(palette.conflictingClues.contains("geographic range"))
+        XCTAssertLessThanOrEqual(palette.score, atlantic.score)
+
+        let fijiRanked = try await ranker.rank(observation: await parser.parse("blue fish yellow tail Fiji reef"), profiles: profiles)
+        let fijiPalette = try XCTUnwrap(fijiRanked.first { $0.profile.id == paletteSurgeonfish })
+        let fijiAtlantic = try XCTUnwrap(fijiRanked.first { $0.profile.id == atlanticBlueTang })
+        XCTAssertEqual(fijiRanked.first?.profile.id, paletteSurgeonfish)
+        XCTAssertGreaterThan(fijiPalette.rawScore, fijiAtlantic.rawScore)
+        XCTAssertTrue(fijiAtlantic.conflictingClues.contains("geographic range"))
+        XCTAssertLessThanOrEqual(fijiAtlantic.score, fijiPalette.score)
+        XCTAssertEqual(Set(fijiAtlantic.conflictingClues.filter { $0 == "geographic range" }).count, 1)
+    }
+
     func testCatalogValidationRules() throws {
-        let base = try catalogProfiles().first!
+        let base = try productionCaribbeanProfiles().first!
         func check(_ p: LocalSpeciesProfile, _ error: LocalCatalogError) { XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([p])) { XCTAssertEqual($0 as? LocalCatalogError, error) } }
         check(copy(base, commonName: " "), .emptyCommonName)
         check(copy(base, scientificName: " "), .emptyScientificName)
@@ -429,10 +481,11 @@ final class OfflineCatalogHardeningTests: XCTestCase {
 
     func testStructuredIdentificationQualityFixtures() async throws {
         let fixtures = qualityFixtures()
-        let profiles = try catalogProfiles()
+        let profiles = try await catalogProfiles()
         for fixture in fixtures {
-            let ranked = try await ranker.rank(observation: await parser.parse(fixture.description), profiles: profiles)
-            if let region = fixture.expectedRegion { XCTAssertTrue((await parser.parse(fixture.description)).regions.contains(region), fixture.notes) }
+            let observation = await parser.parse(fixture.description)
+            let ranked = try await ranker.rank(observation: observation, profiles: profiles)
+            if let region = fixture.expectedRegion { XCTAssertTrue(observation.regions.contains(region), fixture.notes) }
             if let expected = fixture.expectedSpeciesID {
                 let ids = ranked.map(\.profile.id)
                 switch fixture.requirement { case .top1: XCTAssertEqual(ids.first, expected, fixture.notes); case .top3: XCTAssertTrue(ids.prefix(3).contains(expected), fixture.notes); case .top10: XCTAssertTrue(ids.prefix(10).contains(expected), fixture.notes) }
@@ -445,14 +498,18 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         .init(description: "Large flat eagle ray with white spots and a long tail over sand", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000010")!, expectedRegion: nil, requirement: .top1, notes: "clear ray clues", mustNotRankSpeciesIDs: []),
         .init(description: "fish on reef", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: nil, requirement: .top10, notes: "vague fish remains deterministic", mustNotRankSpeciesIDs: []),
         .init(description: "yelow disk fish in hawaii lagoon", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: "hawaii", requirement: .top3, notes: "misspelling plus shape and region", mustNotRankSpeciesIDs: []),
-        .init(description: "blue tang in Caribbean reef", expectedSpeciesID: atlanticBlueTang, expectedRegion: "caribbean", requirement: .top1, notes: "regional blue tang", mustNotRankSpeciesIDs: [paletteSurgeonfish]),
-        .init(description: "blue fish yellow tail Fiji reef", expectedSpeciesID: paletteSurgeonfish, expectedRegion: "fiji", requirement: .top1, notes: "Fiji yellow tail", mustNotRankSpeciesIDs: [atlanticBlueTang]),
+        .init(description: "blue tang in Caribbean reef", expectedSpeciesID: atlanticBlueTang, expectedRegion: "caribbean", requirement: .top1, notes: "regional blue tang", mustNotRankSpeciesIDs: []),
+        .init(description: "blue fish yellow tail Fiji reef", expectedSpeciesID: paletteSurgeonfish, expectedRegion: "fiji", requirement: .top1, notes: "Fiji yellow tail", mustNotRankSpeciesIDs: []),
         .init(description: "red striped fish with venom spines hovering", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!, expectedRegion: nil, requirement: .top1, notes: "lionfish", mustNotRankSpeciesIDs: []),
         .init(description: "green shell animal feeding in seagrass at 5 m", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000009")!, expectedRegion: nil, requirement: .top1, notes: "size/depth compatible turtle", mustNotRankSpeciesIDs: []),
         .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
     ] }
 
-    private func catalogProfiles() throws -> [LocalSpeciesProfile] { try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL)) }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)).loadProfiles() }
+    private func productionCaribbeanProfiles() throws -> [LocalSpeciesProfile] {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/CaribbeanSpecies.json").standardizedFileURL
+        return try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
+    }
     private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
         LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
     }
