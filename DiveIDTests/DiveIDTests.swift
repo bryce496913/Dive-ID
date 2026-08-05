@@ -239,7 +239,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL
         let data = try Data(contentsOf: url)
         let profiles = try JSONDecoder().decode([LocalSpeciesProfile].self, from: data)
-        XCTAssertEqual(profiles.count, 10)
+        XCTAssertEqual(profiles.count, 11)
         XCTAssertEqual(Set(profiles.map(\.id)).count, profiles.count)
         XCTAssertEqual(Set(profiles.map { $0.scientificName.lowercased() }).count, profiles.count)
         XCTAssertTrue(profiles.allSatisfy { !$0.commonName.isEmpty && !$0.scientificName.isEmpty && !$0.distinguishingFeatures.isEmpty && !$0.typicalHabitat.isEmpty && !$0.geographicRange.isEmpty })
@@ -303,7 +303,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     func testRealisticDescriptionsRankExpectedSpeciesFirst() async throws {
         let profiles = try catalogProfiles()
         let cases: [(String, String, [String])] = [
-            ("Small blue fish with a yellow tail, about 20 cm, seen on a shallow reef in Fiji.", "Blue Tang", ["blue", "yellow", "reef", "fiji"]),
+            ("Small blue fish with a yellow tail, about 20 cm, seen on a shallow reef in Fiji.", "Palette Surgeonfish", ["blue", "yellow", "reef", "fiji"]),
             ("Striped red and white fish with long spines, hovering near a reef wall.", "Red Lionfish", ["stripes", "spines"]),
             ("Large turtle with a smooth shell feeding on seagrass in shallow water.", "Green Sea Turtle", ["turtle", "shell", "seagrass"]),
             ("Large flat ray with white spots and a long thin tail swimming above sand.", "Spotted Eagle Ray", ["flat", "spots", "tail"]),
@@ -351,4 +351,109 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 struct StaticCatalogRepository: MarineSpeciesCatalogRepository {
     let profiles: [LocalSpeciesProfile]
     func loadProfiles() async throws -> [LocalSpeciesProfile] { profiles }
+}
+
+struct IdentificationQualityFixture {
+    enum Requirement { case top1, top3, top10 }
+    let description: String
+    let expectedSpeciesID: UUID?
+    let expectedRegion: String?
+    let requirement: Requirement
+    let notes: String
+    let mustNotRankSpeciesIDs: Set<UUID>
+}
+
+final class OfflineCatalogHardeningTests: XCTestCase {
+    let parser = LocalObservationParser()
+    let ranker = LocalSpeciesRanker()
+    let atlanticBlueTang = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
+    let paletteSurgeonfish = UUID(uuidString: "00000000-0000-0000-0000-000000000011")!
+
+    func testBlueTangSpeciesAreSeparateAndRankByRegion() async throws {
+        let profiles = try catalogProfiles()
+        let atlantic = try await ranker.rank(observation: await parser.parse("Adult blue tang surgeonfish on a Caribbean reef in the western Atlantic around 15 m deep."), profiles: profiles)
+        XCTAssertEqual(atlantic.first?.profile.id, atlanticBlueTang)
+        let fiji = try await ranker.rank(observation: await parser.parse("Bright blue Indo-Pacific fish in Fiji with a black marking and yellow tail on a coral reef."), profiles: profiles)
+        XCTAssertEqual(fiji.first?.profile.id, paletteSurgeonfish)
+        let atlanticProfile = profiles.first { $0.id == atlanticBlueTang }
+        let paletteProfile = profiles.first { $0.id == paletteSurgeonfish }
+        XCTAssertNotEqual(atlanticProfile?.scientificName, paletteProfile?.scientificName)
+        XCTAssertFalse(atlanticProfile?.aliases.contains(paletteProfile?.scientificName ?? "") ?? true)
+    }
+
+    func testBoundaryAwareSynonymMatching() async {
+        XCTAssertFalse(await parser.parse("gray fish").categories.contains("ray"))
+        XCTAssertFalse(await parser.parse("predator cruising").colors.contains("red"))
+        XCTAssertFalse(await parser.parse("thousand tiny fish").habitats.contains("sand"))
+        XCTAssertTrue(await parser.parse("eagle ray over sandy bottom").categories.contains("ray"))
+        XCTAssertTrue(await parser.parse("red fish").colors.contains("red"))
+        XCTAssertTrue(await parser.parse("sandy bottom").habitats.contains("sand"))
+    }
+
+    func testMeasurementParsingDisambiguatesDepthAndSize() async {
+        let depthCases = ["at 20 m", "20 m deep", "depth of 20 meters", "around 60 feet deep"]
+        let expectedDepths = [20.0, 20.0, 20.0, 18.288]
+        for (text, expected) in zip(depthCases, expectedDepths) {
+            let parsed = await parser.parse("blue fish " + text)
+            XCTAssertNil(parsed.approximateSizeCentimeters)
+            XCTAssertEqual(parsed.approximateDepthMeters!, expected, accuracy: 0.01)
+        }
+        let sizeCases = ["2 m long", "length about 2 meters", "about 30 cm", "roughly 12 inches long"]
+        let expectedSizes = [200.0, 200.0, 30.0, 30.48]
+        for (text, expected) in zip(sizeCases, expectedSizes) {
+            let parsed = await parser.parse("blue fish " + text)
+            XCTAssertEqual(parsed.approximateSizeCentimeters!, expected, accuracy: 0.01)
+            XCTAssertNil(parsed.approximateDepthMeters)
+        }
+        let ambiguous = await parser.parse("blue fish 20 meters from the boat")
+        XCTAssertNil(ambiguous.approximateSizeCentimeters)
+        XCTAssertNil(ambiguous.approximateDepthMeters)
+    }
+
+    func testCatalogValidationRules() throws {
+        let base = try catalogProfiles().first!
+        func check(_ p: LocalSpeciesProfile, _ error: LocalCatalogError) { XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([p])) { XCTAssertEqual($0 as? LocalCatalogError, error) } }
+        check(copy(base, commonName: " "), .emptyCommonName)
+        check(copy(base, scientificName: " "), .emptyScientificName)
+        check(copy(base, summary: ""), .emptySummary)
+        check(copy(base, distinguishingFeatures: []), .emptyDistinguishingFeatures)
+        check(copy(base, typicalHabitat: ""), .emptyHabitatDescription)
+        check(copy(base, geographicRange: ""), .emptyGeographicRange)
+        check(copy(base, minimumSizeCentimeters: -1), .negativeMeasurement)
+        check(copy(base, minimumDepthMeters: 10, maximumDepthMeters: 1), .invalidMeasurementRange)
+        check(copy(base, colors: ["purple"]), .unknownControlledVocabularyValue("purple"))
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([base, copy(base)])) { XCTAssertEqual($0 as? LocalCatalogError, .duplicateIdentifier) }
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([base, copy(base, id: UUID(), commonName: "Other")])) { XCTAssertEqual($0 as? LocalCatalogError, .duplicateScientificName) }
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([base, copy(base, id: UUID(), commonName: "Other", scientificName: "Other scientific", aliases: [base.commonName])])) { XCTAssertEqual($0 as? LocalCatalogError, .aliasCollidesWithCanonicalIdentity) }
+    }
+
+    func testStructuredIdentificationQualityFixtures() async throws {
+        let fixtures = qualityFixtures()
+        let profiles = try catalogProfiles()
+        for fixture in fixtures {
+            let ranked = try await ranker.rank(observation: await parser.parse(fixture.description), profiles: profiles)
+            if let region = fixture.expectedRegion { XCTAssertTrue((await parser.parse(fixture.description)).regions.contains(region), fixture.notes) }
+            if let expected = fixture.expectedSpeciesID {
+                let ids = ranked.map(\.profile.id)
+                switch fixture.requirement { case .top1: XCTAssertEqual(ids.first, expected, fixture.notes); case .top3: XCTAssertTrue(ids.prefix(3).contains(expected), fixture.notes); case .top10: XCTAssertTrue(ids.prefix(10).contains(expected), fixture.notes) }
+            } else { XCTAssertTrue(ranked.isEmpty, fixture.notes) }
+            XCTAssertTrue(fixture.mustNotRankSpeciesIDs.isDisjoint(with: Set(ranked.map(\.profile.id))), fixture.notes)
+        }
+    }
+
+    private func qualityFixtures() -> [IdentificationQualityFixture] {[
+        .init(description: "Large flat eagle ray with white spots and a long tail over sand", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000010")!, expectedRegion: nil, requirement: .top1, notes: "clear ray clues", mustNotRankSpeciesIDs: []),
+        .init(description: "fish on reef", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: nil, requirement: .top10, notes: "vague fish remains deterministic", mustNotRankSpeciesIDs: []),
+        .init(description: "yelow disk fish in hawaii lagoon", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: "hawaii", requirement: .top3, notes: "misspelling plus shape and region", mustNotRankSpeciesIDs: []),
+        .init(description: "blue tang in Caribbean reef", expectedSpeciesID: atlanticBlueTang, expectedRegion: "caribbean", requirement: .top1, notes: "regional blue tang", mustNotRankSpeciesIDs: [paletteSurgeonfish]),
+        .init(description: "blue fish yellow tail Fiji reef", expectedSpeciesID: paletteSurgeonfish, expectedRegion: "fiji", requirement: .top1, notes: "Fiji yellow tail", mustNotRankSpeciesIDs: [atlanticBlueTang]),
+        .init(description: "red striped fish with venom spines hovering", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!, expectedRegion: nil, requirement: .top1, notes: "lionfish", mustNotRankSpeciesIDs: []),
+        .init(description: "green shell animal feeding in seagrass at 5 m", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000009")!, expectedRegion: nil, requirement: .top1, notes: "size/depth compatible turtle", mustNotRankSpeciesIDs: []),
+        .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
+    ] }
+
+    private func catalogProfiles() throws -> [LocalSpeciesProfile] { try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/Data/MarineSpeciesCatalog.json").standardizedFileURL)) }
+    private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
+        LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
+    }
 }
