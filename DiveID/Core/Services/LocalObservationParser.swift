@@ -48,7 +48,36 @@ struct LocalObservationParser: ObservationParsing {
     }
     struct ParsedMeasurements: Equatable, Sendable { let sizeCentimeters: Double?; let depthMeters: Double? }
     private enum MeasurementRole { case size, depth }
-    private enum MeasurementUnit { case centimeters, meters, inches, feet }
+    private enum MeasurementUnit {
+        case centimeters, meters, inches, feet
+
+        init?(raw: String) {
+            switch raw {
+            case "cm", "centimeter", "centimeters": self = .centimeters
+            case "m", "meter", "meters", "metre", "metres": self = .meters
+            case "inch", "inches": self = .inches
+            case "ft", "feet", "foot": self = .feet
+            default: return nil
+            }
+        }
+
+        func sizeCentimeters(for value: Double) -> Double {
+            switch self {
+            case .centimeters: value
+            case .meters: value * 100
+            case .inches: value * 2.54
+            case .feet: value * 30.48
+            }
+        }
+
+        func depthMeters(for value: Double) -> Double? {
+            switch self {
+            case .meters: value
+            case .feet: value * 0.3048
+            case .centimeters, .inches: nil
+            }
+        }
+    }
     private struct MeasurementCandidate { let sourceRange: Range<String.Index>; let value: Double; let unit: MeasurementUnit; let role: MeasurementRole }
 
     static func measurements(in text: String, tokens: Set<String>) -> ParsedMeasurements {
@@ -91,35 +120,5 @@ struct LocalObservationParser: ObservationParsing {
             }
         }
         return nil
-    }
-
-}
-
-private extension LocalObservationParser.MeasurementUnit {
-    init?(raw: String) {
-        switch raw {
-        case "cm", "centimeter", "centimeters": self = .centimeters
-        case "m", "meter", "meters", "metre", "metres": self = .meters
-        case "inch", "inches": self = .inches
-        case "ft", "feet", "foot": self = .feet
-        default: return nil
-        }
-    }
-
-    func sizeCentimeters(for value: Double) -> Double {
-        switch self {
-        case .centimeters: value
-        case .meters: value * 100
-        case .inches: value * 2.54
-        case .feet: value * 30.48
-        }
-    }
-
-    func depthMeters(for value: Double) -> Double? {
-        switch self {
-        case .meters: value
-        case .feet: value * 0.3048
-        case .centimeters, .inches: nil
-        }
     }
 }
