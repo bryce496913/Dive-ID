@@ -1,12 +1,596 @@
 [
-  {"id":"00000000-0000-0000-0000-000000000001","commonName":"Yellow Tang","scientificName":"Zebrasoma flavescens","aliases":[],"categories":["fish"],"colors":["yellow"],"markings":[],"bodyShapes":["compressed"],"habitats":["reef","lagoon","shallow"],"regions":["pacific"],"behaviors":["swimming"],"keywords":["yellow","reef","fish","tang"],"minimumSizeCentimeters":12,"maximumSizeCentimeters":20,"minimumDepthMeters":1,"maximumDepthMeters":46,"summary":"A laterally compressed reef fish recognizable by its vivid yellow body.","distinguishingFeatures":["Bright yellow body","Disk-shaped profile","Pointed snout"],"typicalHabitat":"Shallow coral reefs and lagoons","geographicRange":"Central and western Pacific","cautions":[],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000002","commonName":"Moorish Idol","scientificName":"Zanclus cornutus","aliases":[],"categories":["fish"],"colors":["black","white","yellow"],"markings":["stripes"],"bodyShapes":["compressed"],"habitats":["reef"],"regions":["indo-pacific","pacific"],"behaviors":["swimming"],"keywords":["bands","streamer","reef"],"minimumSizeCentimeters":15,"maximumSizeCentimeters":23,"minimumDepthMeters":1,"maximumDepthMeters":180,"summary":"A distinctive reef fish with bold bands and a long dorsal filament.","distinguishingFeatures":["Black, white, and yellow bands","Long dorsal streamer"],"typicalHabitat":"Clear tropical reefs","geographicRange":"Indo-Pacific","cautions":[],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000003","commonName":"Blue Tang","scientificName":"Acanthurus coeruleus","aliases":["Palette Surgeonfish"],"categories":["fish"],"colors":["blue","yellow"],"markings":["tail"],"bodyShapes":["compressed"],"habitats":["reef","shallow"],"regions":["atlantic","caribbean","fiji","pacific"],"behaviors":["swimming"],"keywords":["blue","yellow","tail","surgeonfish","reef"],"minimumSizeCentimeters":12,"maximumSizeCentimeters":39,"minimumDepthMeters":2,"maximumDepthMeters":40,"summary":"An oval-bodied surgeonfish whose adult coloration is deep blue.","distinguishingFeatures":["Blue body","Yellow-edged tail spine"],"typicalHabitat":"Coral reefs","geographicRange":"Western Atlantic","cautions":["Tail spine can be sharp"],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000004","commonName":"Threadfin Butterflyfish","scientificName":"Chaetodon auriga","aliases":["Butterflyfish"],"categories":["fish"],"colors":["white","yellow","black"],"markings":["stripes"],"bodyShapes":["compressed"],"habitats":["reef","lagoon"],"regions":["indo-pacific","pacific"],"behaviors":["swimming"],"keywords":["eye","stripe","filament","pair"],"minimumSizeCentimeters":12,"maximumSizeCentimeters":23,"minimumDepthMeters":1,"maximumDepthMeters":35,"summary":"A patterned butterflyfish commonly seen in pairs on reefs.","distinguishingFeatures":["Diagonal dark markings","Eye stripe","Dorsal filament"],"typicalHabitat":"Lagoons and seaward reefs","geographicRange":"Indo-Pacific","cautions":[],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000005","commonName":"Stoplight Parrotfish","scientificName":"Sparisoma viride","aliases":["Parrotfish"],"categories":["fish"],"colors":["green","red","yellow"],"markings":[],"bodyShapes":["elongated"],"habitats":["reef","seagrass"],"regions":["atlantic","caribbean"],"behaviors":["feeding"],"keywords":["beak","grazing","parrotfish"],"minimumSizeCentimeters":30,"maximumSizeCentimeters":60,"minimumDepthMeters":1,"maximumDepthMeters":50,"summary":"A robust grazing fish with color that varies by life phase.","distinguishingFeatures":["Beak-like dental plates","Angular forehead"],"typicalHabitat":"Coral reefs and seagrass","geographicRange":"Western Atlantic","cautions":[],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000006","commonName":"Red Lionfish","scientificName":"Pterois volitans","aliases":["Lionfish"],"categories":["fish"],"colors":["red","white"],"markings":["stripes","spines"],"bodyShapes":["elongated"],"habitats":["reef"],"regions":["indo-pacific","atlantic"],"behaviors":["hovering"],"keywords":["spines","fan","fins","reef"],"minimumSizeCentimeters":20,"maximumSizeCentimeters":47,"minimumDepthMeters":1,"maximumDepthMeters":55,"summary":"A striped fish with conspicuous fan-like fins and long fin rays.","distinguishingFeatures":["Red and white bands","Broad pectoral fins","Long venomous spines"],"typicalHabitat":"Reefs and rocky areas","geographicRange":"Native Indo-Pacific","cautions":["Venomous fin spines; do not touch"],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000007","commonName":"Ocellaris Clownfish","scientificName":"Amphiprion ocellaris","aliases":["Clownfish"],"categories":["fish"],"colors":["orange","white","black"],"markings":["stripes"],"bodyShapes":["compressed"],"habitats":["reef"],"regions":["indian","pacific"],"behaviors":["hovering"],"keywords":["anemone","orange","bars"],"minimumSizeCentimeters":6,"maximumSizeCentimeters":11,"minimumDepthMeters":1,"maximumDepthMeters":15,"summary":"A small orange reef fish associated with host anemones.","distinguishingFeatures":["Three white bars","Black-edged fins"],"typicalHabitat":"Sheltered reefs with anemones","geographicRange":"Eastern Indian Ocean and western Pacific","cautions":[],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000008","commonName":"Great Barracuda","scientificName":"Sphyraena barracuda","aliases":["Barracuda"],"categories":["fish"],"colors":["silver"],"markings":["spots","teeth"],"bodyShapes":["elongated","pointed"],"habitats":["reef","surface"],"regions":["atlantic","pacific"],"behaviors":["solitary","swimming"],"keywords":["long","pointed","teeth","predator"],"minimumSizeCentimeters":60,"maximumSizeCentimeters":200,"minimumDepthMeters":0,"maximumDepthMeters":100,"summary":"A long, streamlined predator often seen cruising near reefs.","distinguishingFeatures":["Elongated silver body","Large jaw","Dark body spots"],"typicalHabitat":"Reefs, channels, and open coastal water","geographicRange":"Tropical and subtropical seas","cautions":["Large individuals deserve respectful distance"],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000009","commonName":"Green Sea Turtle","scientificName":"Chelonia mydas","aliases":[],"categories":["turtle"],"colors":["green"],"markings":["shell"],"bodyShapes":["compressed"],"habitats":["seagrass","lagoon","shallow"],"regions":["atlantic","pacific","indian"],"behaviors":["feeding"],"keywords":["turtle","shell","flippers","seagrass"],"minimumSizeCentimeters":80,"maximumSizeCentimeters":150,"minimumDepthMeters":0,"maximumDepthMeters":40,"summary":"A large marine turtle with a smooth, rounded shell.","distinguishingFeatures":["Oval shell","Small rounded head","Paddle-like flippers"],"typicalHabitat":"Seagrass beds, lagoons, and coastal water","geographicRange":"Tropical and subtropical oceans","cautions":["Observe without touching or chasing"],"imageAssetName":null},
-  {"id":"00000000-0000-0000-0000-000000000010","commonName":"Spotted Eagle Ray","scientificName":"Aetobatus narinari","aliases":["Eagle Ray"],"categories":["ray"],"colors":["black","white"],"markings":["spots","tail"],"bodyShapes":["flat"],"habitats":["reef","sand"],"regions":["atlantic"],"behaviors":["swimming","bottom-swimming"],"keywords":["flat","ray","spots","tail","sand"],"minimumSizeCentimeters":100,"maximumSizeCentimeters":300,"minimumDepthMeters":1,"maximumDepthMeters":80,"summary":"A broad ray with pale spots and a long whip-like tail.","distinguishingFeatures":["Dark back with white spots","Pointed wing tips","Long tail"],"typicalHabitat":"Coastal reefs and sandy flats","geographicRange":"Warm Atlantic waters","cautions":["Give rays room and avoid blocking their path"],"imageAssetName":null}
+  {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "commonName": "Yellow Tang",
+    "scientificName": "Zebrasoma flavescens",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef",
+      "lagoon",
+      "shallow"
+    ],
+    "regions": [
+      "pacific"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "yellow",
+      "reef",
+      "fish",
+      "tang"
+    ],
+    "minimumSizeCentimeters": 12,
+    "maximumSizeCentimeters": 20,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 46,
+    "summary": "A laterally compressed reef fish recognizable by its vivid yellow body.",
+    "distinguishingFeatures": [
+      "Bright yellow body",
+      "Disk-shaped profile",
+      "Pointed snout"
+    ],
+    "typicalHabitat": "Shallow coral reefs and lagoons",
+    "geographicRange": "Central and western Pacific",
+    "cautions": [],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000002",
+    "commonName": "Moorish Idol",
+    "scientificName": "Zanclus cornutus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "stripes"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "bands",
+      "streamer",
+      "reef"
+    ],
+    "minimumSizeCentimeters": 15,
+    "maximumSizeCentimeters": 23,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 180,
+    "summary": "A distinctive reef fish with bold bands and a long dorsal filament.",
+    "distinguishingFeatures": [
+      "Black, white, and yellow bands",
+      "Long dorsal streamer"
+    ],
+    "typicalHabitat": "Clear tropical reefs",
+    "geographicRange": "Indo-Pacific",
+    "cautions": [],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000003",
+    "commonName": "Atlantic Blue Tang",
+    "scientificName": "Acanthurus coeruleus",
+    "aliases": [
+      "Blue Tang",
+      "Blue Surgeonfish",
+      "Blue Doctorfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef",
+      "seagrass",
+      "shallow"
+    ],
+    "regions": [
+      "atlantic",
+      "caribbean"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "blue",
+      "surgeonfish",
+      "reef",
+      "caribbean",
+      "atlantic",
+      "yellow",
+      "juvenile"
+    ],
+    "minimumSizeCentimeters": 10,
+    "maximumSizeCentimeters": 39,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 40,
+    "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
+    "distinguishingFeatures": [
+      "Oval blue adult body",
+      "Small terminal mouth",
+      "Yellow juvenile or transitional blue-and-yellow phases",
+      "Sharp caudal peduncle spine"
+    ],
+    "typicalHabitat": "Coral reefs, rocky reefs, and nearby seagrass in shallow tropical western Atlantic water",
+    "geographicRange": "Western Atlantic, including Florida, the Bahamas, Gulf of Mexico, Caribbean Sea, Bermuda, and Brazil",
+    "cautions": [
+      "Caudal peduncle spine can cut skin; observe without handling"
+    ],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000004",
+    "commonName": "Threadfin Butterflyfish",
+    "scientificName": "Chaetodon auriga",
+    "aliases": [
+      "Butterflyfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "white",
+      "yellow",
+      "black"
+    ],
+    "markings": [
+      "stripes"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef",
+      "lagoon"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "eye",
+      "stripe",
+      "filament",
+      "pair"
+    ],
+    "minimumSizeCentimeters": 12,
+    "maximumSizeCentimeters": 23,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 35,
+    "summary": "A patterned butterflyfish commonly seen in pairs on reefs.",
+    "distinguishingFeatures": [
+      "Diagonal dark markings",
+      "Eye stripe",
+      "Dorsal filament"
+    ],
+    "typicalHabitat": "Lagoons and seaward reefs",
+    "geographicRange": "Indo-Pacific",
+    "cautions": [],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000005",
+    "commonName": "Stoplight Parrotfish",
+    "scientificName": "Sparisoma viride",
+    "aliases": [
+      "Parrotfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "green",
+      "red",
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [
+      "elongated"
+    ],
+    "habitats": [
+      "reef",
+      "seagrass"
+    ],
+    "regions": [
+      "atlantic",
+      "caribbean"
+    ],
+    "behaviors": [
+      "feeding"
+    ],
+    "keywords": [
+      "beak",
+      "grazing",
+      "parrotfish"
+    ],
+    "minimumSizeCentimeters": 30,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 50,
+    "summary": "A robust grazing fish with color that varies by life phase.",
+    "distinguishingFeatures": [
+      "Beak-like dental plates",
+      "Angular forehead"
+    ],
+    "typicalHabitat": "Coral reefs and seagrass",
+    "geographicRange": "Western Atlantic",
+    "cautions": [],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000006",
+    "commonName": "Red Lionfish",
+    "scientificName": "Pterois volitans",
+    "aliases": [
+      "Lionfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "red",
+      "white"
+    ],
+    "markings": [
+      "stripes",
+      "spines"
+    ],
+    "bodyShapes": [
+      "elongated"
+    ],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "atlantic"
+    ],
+    "behaviors": [
+      "hovering"
+    ],
+    "keywords": [
+      "spines",
+      "fan",
+      "fins",
+      "reef"
+    ],
+    "minimumSizeCentimeters": 20,
+    "maximumSizeCentimeters": 47,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 55,
+    "summary": "A striped fish with conspicuous fan-like fins and long fin rays.",
+    "distinguishingFeatures": [
+      "Red and white bands",
+      "Broad pectoral fins",
+      "Long venomous spines"
+    ],
+    "typicalHabitat": "Reefs and rocky areas",
+    "geographicRange": "Native Indo-Pacific",
+    "cautions": [
+      "Venomous fin spines; do not touch"
+    ],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000007",
+    "commonName": "Ocellaris Clownfish",
+    "scientificName": "Amphiprion ocellaris",
+    "aliases": [
+      "Clownfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "orange",
+      "white",
+      "black"
+    ],
+    "markings": [
+      "stripes"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indian",
+      "pacific"
+    ],
+    "behaviors": [
+      "hovering"
+    ],
+    "keywords": [
+      "anemone",
+      "orange",
+      "bars"
+    ],
+    "minimumSizeCentimeters": 6,
+    "maximumSizeCentimeters": 11,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 15,
+    "summary": "A small orange reef fish associated with host anemones.",
+    "distinguishingFeatures": [
+      "Three white bars",
+      "Black-edged fins"
+    ],
+    "typicalHabitat": "Sheltered reefs with anemones",
+    "geographicRange": "Eastern Indian Ocean and western Pacific",
+    "cautions": [],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000008",
+    "commonName": "Great Barracuda",
+    "scientificName": "Sphyraena barracuda",
+    "aliases": [
+      "Barracuda"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "silver"
+    ],
+    "markings": [
+      "spots",
+      "teeth"
+    ],
+    "bodyShapes": [
+      "elongated",
+      "pointed"
+    ],
+    "habitats": [
+      "reef",
+      "surface"
+    ],
+    "regions": [
+      "atlantic",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary",
+      "swimming"
+    ],
+    "keywords": [
+      "long",
+      "pointed",
+      "teeth",
+      "predator"
+    ],
+    "minimumSizeCentimeters": 60,
+    "maximumSizeCentimeters": 200,
+    "minimumDepthMeters": 0,
+    "maximumDepthMeters": 100,
+    "summary": "A long, streamlined predator often seen cruising near reefs.",
+    "distinguishingFeatures": [
+      "Elongated silver body",
+      "Large jaw",
+      "Dark body spots"
+    ],
+    "typicalHabitat": "Reefs, channels, and open coastal water",
+    "geographicRange": "Tropical and subtropical seas",
+    "cautions": [
+      "Large individuals deserve respectful distance"
+    ],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000009",
+    "commonName": "Green Sea Turtle",
+    "scientificName": "Chelonia mydas",
+    "aliases": [],
+    "categories": [
+      "turtle"
+    ],
+    "colors": [
+      "green"
+    ],
+    "markings": [
+      "shell"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "seagrass",
+      "lagoon",
+      "shallow"
+    ],
+    "regions": [
+      "atlantic",
+      "pacific",
+      "indian"
+    ],
+    "behaviors": [
+      "feeding"
+    ],
+    "keywords": [
+      "turtle",
+      "shell",
+      "flippers",
+      "seagrass"
+    ],
+    "minimumSizeCentimeters": 80,
+    "maximumSizeCentimeters": 150,
+    "minimumDepthMeters": 0,
+    "maximumDepthMeters": 40,
+    "summary": "A large marine turtle with a smooth, rounded shell.",
+    "distinguishingFeatures": [
+      "Oval shell",
+      "Small rounded head",
+      "Paddle-like flippers"
+    ],
+    "typicalHabitat": "Seagrass beds, lagoons, and coastal water",
+    "geographicRange": "Tropical and subtropical oceans",
+    "cautions": [
+      "Observe without touching or chasing"
+    ],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000010",
+    "commonName": "Spotted Eagle Ray",
+    "scientificName": "Aetobatus narinari",
+    "aliases": [
+      "Eagle Ray"
+    ],
+    "categories": [
+      "ray"
+    ],
+    "colors": [
+      "black",
+      "white"
+    ],
+    "markings": [
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [
+      "flat"
+    ],
+    "habitats": [
+      "reef",
+      "sand"
+    ],
+    "regions": [
+      "atlantic"
+    ],
+    "behaviors": [
+      "swimming",
+      "bottom-swimming"
+    ],
+    "keywords": [
+      "flat",
+      "ray",
+      "spots",
+      "tail",
+      "sand"
+    ],
+    "minimumSizeCentimeters": 100,
+    "maximumSizeCentimeters": 300,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 80,
+    "summary": "A broad ray with pale spots and a long whip-like tail.",
+    "distinguishingFeatures": [
+      "Dark back with white spots",
+      "Pointed wing tips",
+      "Long tail"
+    ],
+    "typicalHabitat": "Coastal reefs and sandy flats",
+    "geographicRange": "Warm Atlantic waters",
+    "cautions": [
+      "Give rays room and avoid blocking their path"
+    ],
+    "imageAssetName": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000011",
+    "commonName": "Palette Surgeonfish",
+    "scientificName": "Paracanthurus hepatus",
+    "aliases": [
+      "Regal Blue Tang",
+      "Hippo Tang",
+      "Pacific Blue Tang",
+      "Blue Tang"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "yellow",
+      "black"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef",
+      "lagoon",
+      "shallow"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific",
+      "indian",
+      "fiji"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "blue",
+      "yellow",
+      "tail",
+      "black",
+      "palette",
+      "surgeonfish",
+      "reef",
+      "fiji",
+      "indo pacific"
+    ],
+    "minimumSizeCentimeters": 12,
+    "maximumSizeCentimeters": 31,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 40,
+    "summary": "A bright Indo-Pacific surgeonfish with a royal blue body, black palette-like marking, and yellow tail.",
+    "distinguishingFeatures": [
+      "Royal blue body",
+      "Black palette-shaped side marking",
+      "Bright yellow caudal fin",
+      "Compressed surgeonfish profile"
+    ],
+    "typicalHabitat": "Clear coral reefs and reef slopes, often near branching coral and lagoons",
+    "geographicRange": "Indo-Pacific from East Africa and the Indian Ocean to Fiji, Samoa, Japan, and the Great Barrier Reef",
+    "cautions": [
+      "Caudal peduncle spine can be sharp; do not handle"
+    ],
+    "imageAssetName": null
+  }
 ]

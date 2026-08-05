@@ -10,4 +10,14 @@ enum LocalCatalogError: Error, Equatable, Sendable {
     case invalidData
     case duplicateIdentifier
     case duplicateScientificName
+    case emptyCommonName
+    case emptyScientificName
+    case emptySummary
+    case emptyDistinguishingFeatures
+    case emptyHabitatDescription
+    case emptyGeographicRange
+    case negativeMeasurement
+    case invalidMeasurementRange
+    case unknownControlledVocabularyValue(String)
+    case aliasCollidesWithCanonicalIdentity
 }
