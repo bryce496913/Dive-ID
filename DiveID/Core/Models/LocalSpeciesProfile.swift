@@ -31,6 +31,11 @@ struct LocalSpeciesProfile: Identifiable, Codable, Hashable, Sendable {
     var bundledImage: BundledSpeciesImage? = nil
     var dataSources: [SpeciesDataSourceReference] = []
     var review: RecordReview? = nil
+    var taxonomy: SpeciesTaxonomy? = nil
+    var measurements: SpeciesMeasurements? = nil
+    var tailShape: String? = nil
+    var mouthAndHeadShape: [String] = []
+    var finAndSpineClues: [String] = []
 
     var species: Species {
         var value = Species(
@@ -60,7 +65,7 @@ struct LocalSpeciesProfile: Identifiable, Codable, Hashable, Sendable {
 }
 
 extension LocalSpeciesProfile {
-    enum CodingKeys: String, CodingKey { case id, commonName, scientificName, aliases, categories, colors, markings, bodyShapes, habitats, regions, behaviors, keywords, minimumSizeCentimeters, maximumSizeCentimeters, minimumDepthMeters, maximumDepthMeters, summary, distinguishingFeatures, typicalHabitat, geographicRange, cautions, imageAssetName, regionalOccurrence, regionalOccurrenceNotes, subregions, appearanceVariants, similarSpecies, bundledImage, dataSources, review }
+    enum CodingKeys: String, CodingKey { case id, commonName, scientificName, aliases, categories, colors, markings, bodyShapes, habitats, regions, behaviors, keywords, minimumSizeCentimeters, maximumSizeCentimeters, minimumDepthMeters, maximumDepthMeters, summary, distinguishingFeatures, typicalHabitat, geographicRange, cautions, imageAssetName, regionalOccurrence, regionalOccurrenceNotes, subregions, appearanceVariants, similarSpecies, bundledImage, dataSources, review, taxonomy, measurements, tailShape, mouthAndHeadShape, finAndSpineClues }
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(UUID.self, forKey: .id); commonName = try c.decode(String.self, forKey: .commonName); scientificName = try c.decode(String.self, forKey: .scientificName)
@@ -68,5 +73,6 @@ extension LocalSpeciesProfile {
         minimumSizeCentimeters = try c.decodeIfPresent(Double.self, forKey: .minimumSizeCentimeters); maximumSizeCentimeters = try c.decodeIfPresent(Double.self, forKey: .maximumSizeCentimeters); minimumDepthMeters = try c.decodeIfPresent(Double.self, forKey: .minimumDepthMeters); maximumDepthMeters = try c.decodeIfPresent(Double.self, forKey: .maximumDepthMeters)
         summary = try c.decode(String.self, forKey: .summary); distinguishingFeatures = try c.decodeIfPresent([String].self, forKey: .distinguishingFeatures) ?? []; typicalHabitat = try c.decode(String.self, forKey: .typicalHabitat); geographicRange = try c.decode(String.self, forKey: .geographicRange); cautions = try c.decodeIfPresent([String].self, forKey: .cautions) ?? []; imageAssetName = try c.decodeIfPresent(String.self, forKey: .imageAssetName)
         regionalOccurrence = try c.decodeIfPresent(RegionalOccurrenceStatus.self, forKey: .regionalOccurrence) ?? .regular; regionalOccurrenceNotes = try c.decodeIfPresent(String.self, forKey: .regionalOccurrenceNotes); subregions = try c.decodeIfPresent([String].self, forKey: .subregions) ?? []; appearanceVariants = try c.decodeIfPresent([SpeciesAppearanceVariant].self, forKey: .appearanceVariants) ?? []; similarSpecies = try c.decodeIfPresent([SimilarSpeciesComparison].self, forKey: .similarSpecies) ?? []; bundledImage = try c.decodeIfPresent(BundledSpeciesImage.self, forKey: .bundledImage); dataSources = try c.decodeIfPresent([SpeciesDataSourceReference].self, forKey: .dataSources) ?? []; review = try c.decodeIfPresent(RecordReview.self, forKey: .review)
+        taxonomy = try c.decodeIfPresent(SpeciesTaxonomy.self, forKey: .taxonomy); measurements = try c.decodeIfPresent(SpeciesMeasurements.self, forKey: .measurements); tailShape = try c.decodeIfPresent(String.self, forKey: .tailShape); mouthAndHeadShape = try c.decodeIfPresent([String].self, forKey: .mouthAndHeadShape) ?? []; finAndSpineClues = try c.decodeIfPresent([String].self, forKey: .finAndSpineClues) ?? []
     }
 }

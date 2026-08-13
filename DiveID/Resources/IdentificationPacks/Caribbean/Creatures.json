@@ -107,14 +107,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus coeruleus",
+      "sourceScientificName": "Acanthurus coeruleus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 10,
+      "typicalObservedMaximumCentimeters": 39,
+      "maximumRecordedCentimeters": 39,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "00000000-0000-0000-0000-000000000005",
@@ -178,22 +201,23 @@
     ],
     "appearanceVariants": [
       {
-        "id": "juvenile-yellow",
+        "id": "juvenile-initial-dark",
         "lifeStage": "juvenile",
         "colors": [
-          "yellow"
+          "brown"
         ],
         "markings": [
-          "tail"
+          "spots"
         ],
         "bodyShapes": [
-          "oval"
+          "robust"
         ],
         "minimumSizeCentimeters": 2,
-        "maximumSizeCentimeters": 8,
-        "description": "Juveniles can show yellow coloration useful for matching poor descriptions.",
+        "maximumSizeCentimeters": 30,
+        "description": "Juveniles and initial-phase fish are dark reddish-brown with pale markings.",
         "distinguishingFeatures": [
-          "yellow juvenile appearance"
+          "dark or reddish-brown body",
+          "pale or white markings"
         ]
       }
     ],
@@ -219,14 +243,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Sparisoma",
+      "acceptedScientificName": "Sparisoma viride",
+      "sourceScientificName": "Sparisoma viride"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 30,
+      "typicalObservedMaximumCentimeters": 60,
+      "maximumRecordedCentimeters": 60,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "00000000-0000-0000-0000-000000000006",
@@ -313,14 +360,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000006:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Pterois",
+      "acceptedScientificName": "Pterois volitans",
+      "sourceScientificName": "Pterois volitans"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 20,
+      "typicalObservedMaximumCentimeters": 47,
+      "maximumRecordedCentimeters": 47,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "00000000-0000-0000-0000-000000000008",
@@ -409,14 +479,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000008:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Sphyraena",
+      "acceptedScientificName": "Sphyraena barracuda",
+      "sourceScientificName": "Sphyraena barracuda"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 60,
+      "typicalObservedMaximumCentimeters": 200,
+      "maximumRecordedCentimeters": 200,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "00000000-0000-0000-0000-000000000009",
@@ -429,7 +522,10 @@
       "turtle"
     ],
     "colors": [
-      "green"
+      "brown",
+      "olive",
+      "gray",
+      "black"
     ],
     "markings": [
       "shell"
@@ -459,7 +555,7 @@
     "maximumSizeCentimeters": 150,
     "minimumDepthMeters": 0,
     "maximumDepthMeters": 40,
-    "summary": "A large marine turtle with a smooth, rounded shell.",
+    "summary": "A large sea turtle named for the color of its body fat, not its shell; the carapace may appear brown, olive, gray, black, or greenish.",
     "distinguishingFeatures": [
       "Oval shell",
       "Small rounded head",
@@ -504,14 +600,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000009:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Chelonia",
+      "acceptedScientificName": "Chelonia mydas",
+      "sourceScientificName": "Chelonia mydas"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 80,
+      "typicalObservedMaximumCentimeters": 150,
+      "maximumRecordedCentimeters": 150,
+      "type": "carapaceLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "00000000-0000-0000-0000-000000000010",
@@ -601,14 +720,37 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000010:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Aetobatus",
+      "acceptedScientificName": "Aetobatus narinari",
+      "sourceScientificName": "Aetobatus narinari"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 100,
+      "typicalObservedMaximumCentimeters": 300,
+      "maximumRecordedCentimeters": 300,
+      "type": "discWidth"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "fc213eff-6ba6-53ab-b288-f6e654299e68",
@@ -698,7 +840,10 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       },
       {
         "sourceName": "Florida Museum Queen Angelfish species profile",
@@ -707,14 +852,37 @@
           "visualCharacteristics",
           "habitat"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+        "citationReference": "2",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Holacanthus",
+      "acceptedScientificName": "Holacanthus ciliaris",
+      "sourceScientificName": "Holacanthus ciliaris"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": 45,
+      "maximumRecordedCentimeters": 45,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   },
   {
     "id": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
@@ -804,13 +972,36 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-13T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "eff286cc-2c87-5393-b00d-e158fd48e3aa:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
       }
     ],
     "review": {
-      "status": "verified",
-      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
-      "reviewDate": "2026-08-13T00:00:00Z"
-    }
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Pomacanthus",
+      "acceptedScientificName": "Pomacanthus paru",
+      "sourceScientificName": "Pomacanthus paru"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": 41.1,
+      "maximumRecordedCentimeters": 41.1,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
   }
 ]

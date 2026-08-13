@@ -13,7 +13,10 @@ final class DescriptionSearchViewModel {
 
     init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.sessionStore = sessionStore; self.catalog = catalog; self.regionRepository = regionRepository }
 
-    func load() async { pack = try? await catalog.availablePacks().first }
+    func load() async {
+        let selectedID = await regionRepository.selectedRegion()
+        pack = try? await catalog.availablePacks().first { $0.id == selectedID }
+    }
 
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
     var canSubmit: Bool { (5...2000).contains(normalizedDescription.count) && !isCreatingSession }

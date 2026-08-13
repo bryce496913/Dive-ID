@@ -5,8 +5,12 @@ import SwiftUI
 final class HomeViewModel {
     var pack: OfflineIdentificationPackMetadata?
     private let catalog: any MarineSpeciesCatalogRepository
-    init(catalog: any MarineSpeciesCatalogRepository) { self.catalog = catalog }
-    func load() async { pack = try? await catalog.availablePacks().first }
+    private let regionRepository: any SelectedDiveRegionRepository
+    init(catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.catalog = catalog; self.regionRepository = regionRepository }
+    func load() async {
+        let selectedID = await regionRepository.selectedRegion()
+        pack = try? await catalog.availablePacks().first { $0.id == selectedID }
+    }
 }
 
 struct HomeView: View {
@@ -20,4 +24,4 @@ struct HomeView: View {
         Button { router.navigate(to: .savedSpecies) } label: { Label("Saved Identifications", systemImage: "bookmark.fill").frame(minHeight: 44) }.accessibilityIdentifier("savedAction")
     }.padding() }.appScreenBackground().navigationTitle("Home").task { await viewModel.load() } }
 }
-#Preview { NavigationStack { HomeView(router: AppRouter(), features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false), viewModel: .init(catalog: BundleMarineSpeciesCatalogRepository())) } }
+#Preview { NavigationStack { HomeView(router: AppRouter(), features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false), viewModel: .init(catalog: BundleMarineSpeciesCatalogRepository(), regionRepository: UserDefaultsSelectedDiveRegionRepository())) } }

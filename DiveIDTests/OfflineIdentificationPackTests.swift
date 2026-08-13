@@ -2,6 +2,27 @@ import XCTest
 @testable import DiveID
 
 final class OfflineIdentificationPackTests: XCTestCase {
+    func testPackIDUsesStableSingleValueJSONRepresentation() throws {
+        let decoder = JSONDecoder()
+        XCTAssertEqual(try decoder.decode(OfflineIdentificationPackID.self, from: Data(#""caribbean""#.utf8)), .caribbean)
+        XCTAssertEqual(String(decoding: try JSONEncoder().encode(OfflineIdentificationPackID.caribbean), as: UTF8.self), #""caribbean""#)
+    }
+
+    func testPackIDAcceptsUnknownFutureRegion() throws {
+        let id = try JSONDecoder().decode(OfflineIdentificationPackID.self, from: Data(#""indo-pacific-2030""#.utf8))
+        XCTAssertEqual(id.rawValue, "indo-pacific-2030")
+    }
+
+    func testSelectedRegionRoundTripsThroughUserDefaults() async {
+        let suite = "OfflineIdentificationPackTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let repository = UserDefaultsSelectedDiveRegionRepository(defaults: defaults, key: "region")
+        let futureID = OfflineIdentificationPackID(rawValue: "future-region")
+        await repository.setSelectedRegion(futureID)
+        let selected = await repository.selectedRegion()
+        XCTAssertEqual(selected, futureID)
+    }
     func testCaribbeanFixtureCounts() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/../../DiveID/Resources/IdentificationPacks/Caribbean").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
