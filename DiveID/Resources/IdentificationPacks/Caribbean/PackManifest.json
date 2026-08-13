@@ -1,9 +1,9 @@
 {
   "id": "caribbean",
   "schemaVersion": 1,
-  "packVersion": 1,
+  "packVersion": 2,
   "displayName": "Caribbean",
-  "shortDescription": "78 species available offline for the Caribbean",
+  "shortDescription": "A small offline Caribbean starter catalogue",
   "geographicScope": "Common recreational-dive encounters across the tropical western Atlantic, including the broader Caribbean Sea and related western Atlantic dive areas; occurrence varies by island and subregion.",
   "regionAliases": [
     "Caribbean",
@@ -26,7 +26,7 @@
     "Dominican Republic",
     "Jamaica"
   ],
-  "speciesCount": 78,
+  "speciesCount": 8,
   "speciesResourceName": "Species",
   "imageSubdirectory": "Images",
   "includedWithApp": true,

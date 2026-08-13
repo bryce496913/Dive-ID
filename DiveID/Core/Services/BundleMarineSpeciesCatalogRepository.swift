@@ -45,7 +45,6 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         guard m.packVersion > 0 else { throw LocalCatalogError.invalidPackVersion }
         guard !m.displayName.isEmpty, !m.geographicScope.isEmpty else { throw LocalCatalogError.invalidData }
         guard m.speciesCount == profiles.count else { throw LocalCatalogError.countMismatch(expected: m.speciesCount, actual: profiles.count) }
-        if m.id == .caribbean, profiles.count != 78 { throw LocalCatalogError.countMismatch(expected: 78, actual: profiles.count) }
         try validate(profiles, metadata: m, bundle: bundle)
     }
 

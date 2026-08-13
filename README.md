@@ -7,8 +7,8 @@ Dive ID is an offline-first iOS prototype for written marine-life identification
 ### Caribbean Offline Identification Pack
 
 * Pack ID: `caribbean`
-* Pack version: 1
-* 78 locally bundled species
+* Pack version: 2
+* Small locally bundled Caribbean starter catalogue
 * Species data and reference-image files ship in `DiveID/Resources/IdentificationPacks/Caribbean`.
 * The pack focuses on common recreational-dive encounters in the broader Caribbean Sea and related tropical western Atlantic dive areas.
 
