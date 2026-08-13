@@ -1,13 +1,13 @@
 # Dive ID
 
-Dive ID is an offline-first iOS prototype for written marine-life identification. The app processes text descriptions on device, ranks locally bundled species profiles, and stores saved identifications locally.
+Dive ID is an offline-first iOS prototype for written marine-life identification. The app processes text descriptions on device, ranks locally bundled creature records, and stores saved identifications locally.
 
 ## Included Pack
 
 ### Caribbean Offline Identification Pack
 
 * Pack ID: `caribbean`
-* Pack version: 2
+* Pack version: 3
 * Small locally bundled Caribbean starter catalogue
 * Species data and reference-image files ship in `DiveID/Resources/IdentificationPacks/Caribbean`.
 * The pack focuses on common recreational-dive encounters in the broader Caribbean Sea and related tropical western Atlantic dive areas.
@@ -34,7 +34,7 @@ The repository intentionally avoids binary image files. Bundled artwork is store
 
 ## Pack Versioning
 
-Each pack has a JSON manifest with a stable machine-readable ID, schema version, pack version, display metadata, species count, species resource name, and image subdirectory. The bundle repository validates that the decoded species count matches the manifest count.
+Each pack has a JSON manifest with a stable machine-readable ID, schema version, pack version, display metadata, creature count, creature resource name, and image subdirectory. The bundle repository validates that the decoded creature count matches the manifest count.
 
 ## Benchmark
 

@@ -1,6 +1,12 @@
 import Foundation
 
-enum OfflineIdentificationPackID: String, Codable, Hashable, Sendable, CaseIterable { case caribbean }
+/// Stable, extensible identifier for an offline catalogue. Region identifiers are data,
+/// rather than enum cases, so introducing a pack does not require editing shared code.
+struct OfflineIdentificationPackID: RawRepresentable, Codable, Hashable, Sendable {
+    let rawValue: String
+    init(rawValue: String) { self.rawValue = rawValue }
+    static let caribbean = Self(rawValue: "caribbean")
+}
 
 struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Sendable {
     let id: OfflineIdentificationPackID
@@ -62,6 +68,14 @@ struct SpeciesDataSourceReference: Codable, Hashable, Sendable {
     let sourceURL: String
     let reviewedFields: [String]
     let accessedDate: Date?
+}
+
+enum RecordReviewStatus: String, Codable, Hashable, Sendable { case draft, reviewed, verified }
+
+struct RecordReview: Codable, Hashable, Sendable {
+    let status: RecordReviewStatus
+    let reviewerNotes: String?
+    let reviewDate: Date?
 }
 
 enum ObservationInformationLevel: String, Codable, Hashable, Sendable { case sufficient, limited, insufficient }

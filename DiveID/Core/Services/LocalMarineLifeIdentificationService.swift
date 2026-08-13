@@ -22,7 +22,8 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             let pack: OfflineIdentificationPack
             do { pack = try await catalogRepository.loadPack(id: packID) } catch { throw LocalIdentificationError.catalogUnavailable }
             let observation = await parser.parse(trimmed)
-            if let outside = observation.regions.first(where: { !pack.metadata.regionAliases.map({ $0.lowercased() }).contains($0) && !["caribbean","western atlantic","atlantic"].contains($0) }) {
+            let aliases = Set(pack.metadata.regionAliases.map { $0.lowercased() })
+            if let outside = observation.regions.first(where: { !aliases.contains($0.lowercased()) }) {
                 throw LocalIdentificationError.regionMismatch(selected: packID, mentionedRegion: outside.capitalized)
             }
             let ranked = try await ranker.rank(observation: observation, profiles: pack.profiles)

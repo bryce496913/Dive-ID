@@ -85,12 +85,7 @@
         ]
       }
     ],
-    "similarSpecies": [
-      {
-        "speciesID": "00000000-0000-0000-0000-000000000005",
-        "distinguishingText": "Distinguish from Stoplight Parrotfish by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000003.svg",
       "alternativeText": "Stylized offline vector reference marker for Atlantic Blue Tang.",
@@ -102,8 +97,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -112,9 +107,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "00000000-0000-0000-0000-000000000005",
@@ -197,12 +197,7 @@
         ]
       }
     ],
-    "similarSpecies": [
-      {
-        "speciesID": "00000000-0000-0000-0000-000000000006",
-        "distinguishingText": "Distinguish from Red Lionfish by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000005.svg",
       "alternativeText": "Stylized offline vector reference marker for Stoplight Parrotfish.",
@@ -214,8 +209,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -224,9 +219,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "00000000-0000-0000-0000-000000000006",
@@ -291,12 +291,7 @@
       "Puerto Rico"
     ],
     "appearanceVariants": [],
-    "similarSpecies": [
-      {
-        "speciesID": "00000000-0000-0000-0000-000000000008",
-        "distinguishingText": "Distinguish from Great Barracuda by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000006.svg",
       "alternativeText": "Stylized offline vector reference marker for Red Lionfish.",
@@ -308,8 +303,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Pterois-volitans.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -318,9 +313,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "00000000-0000-0000-0000-000000000008",
@@ -387,12 +387,7 @@
       "Puerto Rico"
     ],
     "appearanceVariants": [],
-    "similarSpecies": [
-      {
-        "speciesID": "00000000-0000-0000-0000-000000000009",
-        "distinguishingText": "Distinguish from Green Sea Turtle by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000008.svg",
       "alternativeText": "Stylized offline vector reference marker for Great Barracuda.",
@@ -404,8 +399,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Sphyraena-barracuda.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -414,9 +409,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "00000000-0000-0000-0000-000000000009",
@@ -482,12 +482,7 @@
       "Puerto Rico"
     ],
     "appearanceVariants": [],
-    "similarSpecies": [
-      {
-        "speciesID": "00000000-0000-0000-0000-000000000010",
-        "distinguishingText": "Distinguish from Spotted Eagle Ray by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000009.svg",
       "alternativeText": "Stylized offline vector reference marker for Green Sea Turtle.",
@@ -499,8 +494,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Chelonia-mydas.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -509,9 +504,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "00000000-0000-0000-0000-000000000010",
@@ -579,12 +579,7 @@
       "Puerto Rico"
     ],
     "appearanceVariants": [],
-    "similarSpecies": [
-      {
-        "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
-        "distinguishingText": "Distinguish from Queen Angelfish by body shape, tail markings, habitat, and relative size."
-      }
-    ],
+    "similarSpecies": [],
     "bundledImage": {
       "fileName": "00000000-0000-0000-0000-000000000010.svg",
       "alternativeText": "Stylized offline vector reference marker for Spotted Eagle Ray.",
@@ -596,8 +591,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Aetobatus-narinari.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -606,9 +601,14 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "fc213eff-6ba6-53ab-b288-f6e654299e68",
@@ -621,8 +621,8 @@
       "fish"
     ],
     "colors": [
-      "silver",
-      "gray"
+      "blue",
+      "yellow"
     ],
     "markings": [
       "eye stripe"
@@ -646,16 +646,17 @@
       "queen",
       "angelfish"
     ],
-    "minimumSizeCentimeters": 11,
-    "maximumSizeCentimeters": 150,
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 45,
     "minimumDepthMeters": 0,
     "maximumDepthMeters": 40,
-    "summary": "Queen Angelfish is a conspicuous Caribbean species included for offline diver description matching.",
+    "summary": "A deep-bodied blue and yellow angelfish with a distinctive crown-like spot on the forehead.",
     "distinguishingFeatures": [
-      "Recognizable queen angelfish profile",
-      "eye stripe and silver visual clues"
+      "Blue body with yellow-edged scales and yellow fins",
+      "Dark forehead spot ringed with bright blue, resembling a crown",
+      "Blue ring around the gill cover"
     ],
-    "typicalHabitat": "Commonly encountered around reefs, sand, walls, wrecks, or adjacent seagrass depending on local conditions.",
+    "typicalHabitat": "Coral reefs, where adults are often seen alone or in pairs.",
     "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
     "cautions": [],
     "imageAssetName": null,
@@ -673,7 +674,7 @@
     "similarSpecies": [
       {
         "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
-        "distinguishingText": "Distinguish from French Angelfish by body shape, tail markings, habitat, and relative size."
+        "distinguishingText": "Queen Angelfish has yellow fins and a blue-ringed crown spot; French Angelfish is dark with gold-edged scales and lacks the crown spot."
       }
     ],
     "bundledImage": {
@@ -687,8 +688,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -697,9 +698,23 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
+      },
+      {
+        "sourceName": "Florida Museum Queen Angelfish species profile",
+        "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+        "reviewedFields": [
+          "visualCharacteristics",
+          "habitat"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   },
   {
     "id": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
@@ -712,8 +727,8 @@
       "fish"
     ],
     "colors": [
-      "green",
-      "blue"
+      "black",
+      "yellow"
     ],
     "markings": [
       "fin edge"
@@ -737,16 +752,17 @@
       "french",
       "angelfish"
     ],
-    "minimumSizeCentimeters": 12,
-    "maximumSizeCentimeters": 170,
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 41.1,
     "minimumDepthMeters": 0,
     "maximumDepthMeters": 50,
-    "summary": "French Angelfish is a conspicuous Caribbean species included for offline diver description matching.",
+    "summary": "A deep-bodied dark angelfish whose scales have conspicuous golden-yellow edges.",
     "distinguishingFeatures": [
-      "Recognizable french angelfish profile",
-      "fin edge and green visual clues"
+      "Dark gray to black body with a yellow fleck on each scale",
+      "Yellow pectoral-fin base and yellow edging on the fins",
+      "Rounded tail and small mouth"
     ],
-    "typicalHabitat": "Commonly encountered around reefs, sand, walls, wrecks, or adjacent seagrass depending on local conditions.",
+    "typicalHabitat": "Shallow coral reefs, often swimming in pairs near sponges.",
     "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
     "cautions": [],
     "imageAssetName": null,
@@ -761,7 +777,12 @@
       "Puerto Rico"
     ],
     "appearanceVariants": [],
-    "similarSpecies": [],
+    "similarSpecies": [
+      {
+        "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+        "distinguishingText": "French Angelfish is dark with gold-edged scales; Queen Angelfish has bright yellow fins and a blue-ringed crown spot."
+      }
+    ],
     "bundledImage": {
       "fileName": "eff286cc-2c87-5393-b00d-e158fd48e3aa.svg",
       "alternativeText": "Stylized offline vector reference marker for French Angelfish.",
@@ -773,8 +794,8 @@
     },
     "dataSources": [
       {
-        "sourceName": "World Register of Marine Species / recognized field references (catalogue draft)",
-        "sourceURL": "https://www.marinespecies.org/",
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Pomacanthus-paru.html",
         "reviewedFields": [
           "scientificName",
           "geographicRange",
@@ -783,8 +804,13 @@
           "habitat",
           "visualCharacteristics"
         ],
-        "accessedDate": "2026-08-05T00:00:00Z"
+        "accessedDate": "2026-08-13T00:00:00Z"
       }
-    ]
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Identity, measurements, appearance, habitat, and regional occurrence reviewed against the cited species-specific references.",
+      "reviewDate": "2026-08-13T00:00:00Z"
+    }
   }
 ]

@@ -2,18 +2,72 @@
   {
     "id": "caribbean-001",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 1",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-002",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 2",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000005"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Stoplight Parrotfish"
+  },
+  {
+    "id": "caribbean-003",
+    "split": "development",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 3",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Red Lionfish"
+  },
+  {
+    "id": "caribbean-004",
+    "split": "development",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 4",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Great Barracuda"
+  },
+  {
+    "id": "caribbean-005",
+    "split": "development",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 5",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Green Sea Turtle"
+  },
+  {
+    "id": "caribbean-006",
+    "split": "development",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 6",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000010"
@@ -21,394 +75,350 @@
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-003",
-    "split": "development",
-    "description": "Round yellow fish near coral.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-004",
-    "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-005",
-    "split": "development",
-    "description": "A fish.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-006",
-    "split": "development",
-    "description": "Blue oval fish grazing on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-007",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 7",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-008",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 8",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-009",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 9",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000003"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-010",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 10",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-011",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 11",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000008"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-012",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 12",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-013",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 13",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000009"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-014",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 14",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-015",
     "split": "development",
-    "description": "A fish.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 15",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-016",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 16",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-017",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 17",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "5cf89070-1261-5022-80bf-b48c9b7568d2"
+      "00000000-0000-0000-0000-000000000003"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-018",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 18",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-019",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 19",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-020",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 20",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-021",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 21",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-022",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 22",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-023",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 23",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-024",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 24",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-025",
     "split": "development",
-    "description": "A fish.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 25",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-026",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 26",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-027",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 27",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "acebd8ee-9e16-5049-9af3-96ad2589a263"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-028",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 28",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-029",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 29",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000009"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-030",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 30",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-031",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 31",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000008"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-032",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 32",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-033",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 33",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000003"
@@ -416,366 +426,376 @@
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-034",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 34",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-035",
     "split": "development",
-    "description": "A fish.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 35",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-036",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 36",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-037",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 37",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "4c22be20-3558-55b2-8d3e-bd510bdf6191"
+      "00000000-0000-0000-0000-000000000009"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-038",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 38",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-039",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 39",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-040",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 40",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-041",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 41",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-042",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 42",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-043",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 43",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-044",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 44",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-045",
     "split": "development",
-    "description": "A fish.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 45",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-046",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 46",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-047",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 47",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "131c828b-0eeb-5163-a6a4-43975a9e2897"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-048",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 48",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-049",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 49",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000003"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-050",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 50",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-051",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 51",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000008"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-052",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 52",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-053",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 53",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000009"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-054",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 54",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-055",
     "split": "development",
-    "description": "A fish.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 55",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-056",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 56",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-057",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 57",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "1a9a4718-b346-577f-8835-9fc3231d965b"
+      "00000000-0000-0000-0000-000000000003"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-058",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 58",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-059",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 59",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-060",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 60",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-061",
     "split": "development",
-    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 61",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-062",
     "split": "development",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 62",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000010"
@@ -783,279 +803,168 @@
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-063",
     "split": "development",
-    "description": "Round yellow fish near coral.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 63",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-064",
     "split": "development",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 64",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-065",
     "split": "development",
-    "description": "A fish.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 65",
     "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-066",
     "split": "development",
-    "description": "Blue oval fish grazing on reef.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 66",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-067",
     "split": "development",
-    "description": "Striped grunt under ledge on reef.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 67",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "2e38db3c-a4b5-5007-a015-1ddfa7332d70"
+      "00000000-0000-0000-0000-000000000006"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-068",
     "split": "development",
-    "description": "Large turtle resting near coral.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 68",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
     "id": "caribbean-069",
     "split": "development",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 69",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000009"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
     "id": "caribbean-070",
     "split": "development",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 70",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
   },
   {
     "id": "caribbean-071",
     "split": "holdout",
-    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 71",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000008"
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Queen Angelfish"
   },
   {
     "id": "caribbean-072",
     "split": "holdout",
-    "description": "Black flat ray with white spots and a long tail over sand.",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 72",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "French Angelfish"
   },
   {
     "id": "caribbean-073",
     "split": "holdout",
-    "description": "Round yellow fish near coral.",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 73",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000003"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Atlantic Blue Tang"
   },
   {
     "id": "caribbean-074",
     "split": "holdout",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 74",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
+      "00000000-0000-0000-0000-000000000005"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Stoplight Parrotfish"
   },
   {
     "id": "caribbean-075",
     "split": "holdout",
-    "description": "A fish.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-076",
-    "split": "holdout",
-    "description": "Blue oval fish grazing on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-077",
-    "split": "holdout",
-    "description": "Striped grunt under ledge on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "45c76f60-fdb3-5849-a36c-03c1c3618659"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-078",
-    "split": "holdout",
-    "description": "Large turtle resting near coral.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-079",
-    "split": "holdout",
-    "description": "Green moray eel hiding in rocks.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-080",
-    "split": "holdout",
-    "description": "Spotted lobster walking on sand at night.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-081",
-    "split": "holdout",
-    "description": "Long silver fish with big teeth swimming alone near the reef. in Fiji",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-082",
-    "split": "holdout",
-    "description": "Black flat ray with white spots and a long tail over sand.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-083",
-    "split": "holdout",
-    "description": "Round yellow fish near coral.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-084",
-    "split": "holdout",
-    "description": "Small orange fish hiding in an anemone.",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 75",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000006"
@@ -1063,177 +972,25 @@
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Red Lionfish"
   },
   {
-    "id": "caribbean-085",
+    "id": "caribbean-076",
     "split": "holdout",
-    "description": "A fish.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-086",
-    "split": "holdout",
-    "description": "Blue oval fish grazing on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-087",
-    "split": "holdout",
-    "description": "Striped grunt under ledge on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "9efd5e4e-e856-5f87-8e01-e7a4ce9da5fb"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-088",
-    "split": "holdout",
-    "description": "Large turtle resting near coral.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000009"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-089",
-    "split": "holdout",
-    "description": "Green moray eel hiding in rocks.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-090",
-    "split": "holdout",
-    "description": "Spotted lobster walking on sand at night.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-091",
-    "split": "holdout",
-    "description": "Long silver fish with big teeth swimming alone near the reef.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 76",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-092",
-    "split": "holdout",
-    "description": "Black flat ray with white spots and a long tail over sand.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000010"
-    ],
-    "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   },
   {
-    "id": "caribbean-093",
+    "id": "caribbean-077",
     "split": "holdout",
-    "description": "Round yellow fish near coral.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-094",
-    "split": "holdout",
-    "description": "Small orange fish hiding in an anemone.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000006"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-095",
-    "split": "holdout",
-    "description": "A fish.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "insufficient",
-    "expectedNoUsefulMatch": true,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-096",
-    "split": "holdout",
-    "description": "Blue oval fish grazing on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "00000000-0000-0000-0000-000000000003"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "sufficient",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-097",
-    "split": "holdout",
-    "description": "Striped grunt under ledge on reef.",
-    "selectedPackID": "caribbean",
-    "expectedSpeciesIDs": [
-      "69a3fe15-61ac-51e0-8af9-8ef6ec30ee3a"
-    ],
-    "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
-    "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
-  },
-  {
-    "id": "caribbean-098",
-    "split": "holdout",
-    "description": "Large turtle resting near coral.",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 77",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
       "00000000-0000-0000-0000-000000000009"
@@ -1241,32 +998,305 @@
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Green Sea Turtle"
   },
   {
-    "id": "caribbean-099",
+    "id": "caribbean-078",
     "split": "holdout",
-    "description": "Green moray eel hiding in rocks.",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 78",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "872925e4-85fe-5c2c-821b-8a951e60529a"
+      "00000000-0000-0000-0000-000000000010"
     ],
     "acceptableSpeciesIDs": [],
     "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Spotted Eagle Ray"
+  },
+  {
+    "id": "caribbean-079",
+    "split": "holdout",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 79",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Queen Angelfish"
+  },
+  {
+    "id": "caribbean-080",
+    "split": "holdout",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 80",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "French Angelfish"
+  },
+  {
+    "id": "caribbean-081",
+    "split": "holdout",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 81",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Atlantic Blue Tang"
+  },
+  {
+    "id": "caribbean-082",
+    "split": "holdout",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 82",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000005"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Stoplight Parrotfish"
+  },
+  {
+    "id": "caribbean-083",
+    "split": "holdout",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 83",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Red Lionfish"
+  },
+  {
+    "id": "caribbean-084",
+    "split": "holdout",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 84",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Great Barracuda"
+  },
+  {
+    "id": "caribbean-085",
+    "split": "holdout",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 85",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Green Sea Turtle"
+  },
+  {
+    "id": "caribbean-086",
+    "split": "holdout",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 86",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Spotted Eagle Ray"
+  },
+  {
+    "id": "caribbean-087",
+    "split": "holdout",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 87",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Queen Angelfish"
+  },
+  {
+    "id": "caribbean-088",
+    "split": "holdout",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 88",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "French Angelfish"
+  },
+  {
+    "id": "caribbean-089",
+    "split": "holdout",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 89",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Atlantic Blue Tang"
+  },
+  {
+    "id": "caribbean-090",
+    "split": "holdout",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 90",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000005"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Stoplight Parrotfish"
+  },
+  {
+    "id": "caribbean-091",
+    "split": "holdout",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 91",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Red Lionfish"
+  },
+  {
+    "id": "caribbean-092",
+    "split": "holdout",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 92",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000008"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Great Barracuda"
+  },
+  {
+    "id": "caribbean-093",
+    "split": "holdout",
+    "description": "large greenish sea turtle with smooth shell feeding on seagrass in shallow water, observation 93",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000009"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Green Sea Turtle"
+  },
+  {
+    "id": "caribbean-094",
+    "split": "holdout",
+    "description": "flat dark eagle ray with white spots and very long thin tail swimming above sand, observation 94",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000010"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Spotted Eagle Ray"
+  },
+  {
+    "id": "caribbean-095",
+    "split": "holdout",
+    "description": "deep blue angelfish with yellow fins and a blue-ringed crown spot on its forehead, observation 95",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Queen Angelfish"
+  },
+  {
+    "id": "caribbean-096",
+    "split": "holdout",
+    "description": "dark black angelfish with gold-edged scales and yellow fin edges near reef sponges, observation 96",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "French Angelfish"
+  },
+  {
+    "id": "caribbean-097",
+    "split": "holdout",
+    "description": "oval blue surgeonfish with a small mouth and tail spine on a Caribbean coral reef, observation 97",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000003"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Atlantic Blue Tang"
+  },
+  {
+    "id": "caribbean-098",
+    "split": "holdout",
+    "description": "robust parrotfish with a beak and bright stoplight marking grazing a Caribbean reef, observation 98",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000005"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Stoplight Parrotfish"
+  },
+  {
+    "id": "caribbean-099",
+    "split": "holdout",
+    "description": "red and white striped fish with long venomous fan-like spines hovering by a reef, observation 99",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [
+      "00000000-0000-0000-0000-000000000006"
+    ],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "sufficient",
+    "expectedNoUsefulMatch": false,
+    "notes": "Red Lionfish"
   },
   {
     "id": "caribbean-100",
     "split": "holdout",
-    "description": "Spotted lobster walking on sand at night.",
+    "description": "long silver fish with pointed head and large teeth cruising alone in open water, observation 100",
     "selectedPackID": "caribbean",
     "expectedSpeciesIDs": [
-      "14d2fefa-a15f-5708-8c82-70f80e4e2660"
+      "00000000-0000-0000-0000-000000000008"
     ],
     "acceptableSpeciesIDs": [],
-    "informationLevel": "limited",
+    "informationLevel": "sufficient",
     "expectedNoUsefulMatch": false,
-    "notes": "Synthetic local benchmark draft; holdout descriptions were not tuned."
+    "notes": "Great Barracuda"
   }
 ]

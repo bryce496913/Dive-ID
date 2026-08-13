@@ -3,19 +3,23 @@ import ImageIO
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     private let bundle: Bundle
+    private let registry: RegionCatalogRegistry
     private var cachedPacks: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
-    private let root = "IdentificationPacks/Caribbean"
+    init(bundle: Bundle = .main, registry: RegionCatalogRegistry = .bundled) {
+        self.bundle = bundle; self.registry = registry
+    }
 
-    init(bundle: Bundle = .main, resourceName: String = "MarineSpeciesCatalog") { self.bundle = bundle }
-
-    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [try loadManifest()] }
+    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
+        try registry.definitions.map(loadManifest)
+    }
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
-        guard id == .caribbean else { throw LocalCatalogError.unsupportedPack }
-        let metadata = try loadManifest()
+        guard let definition = registry.definition(for: id) else { throw LocalCatalogError.unsupportedPack }
+        let metadata = try loadManifest(definition)
         guard metadata.id == id else { throw LocalCatalogError.unsupportedPack }
-        guard let url = resourceURL(path: root + "/" + metadata.speciesResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
+        let root = "IdentificationPacks/" + definition.resourceDirectory
+        guard let url = resourceURL(path: root + "/" + definition.creatureResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let profiles = try decoder.decode([LocalSpeciesProfile].self, from: data)
@@ -26,8 +30,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         return pack
     }
 
-    private func loadManifest() throws -> OfflineIdentificationPackMetadata {
-        guard let url = resourceURL(path: root + "/PackManifest", ext: "json") else { throw LocalCatalogError.resourceMissing }
+    private func loadManifest(_ definition: RegionCatalogDefinition) throws -> OfflineIdentificationPackMetadata {
+        let root = "IdentificationPacks/" + definition.resourceDirectory
+        guard let url = resourceURL(path: root + "/" + definition.manifestResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: url))
     }
@@ -64,6 +69,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             guard !p.typicalHabitat.isEmpty else { throw LocalCatalogError.emptyHabitatDescription }
             guard !p.geographicRange.isEmpty else { throw LocalCatalogError.emptyGeographicRange }
             guard !p.dataSources.isEmpty else { throw LocalCatalogError.missingDataSource }
+            if metadata != nil, p.review?.status != .verified { throw LocalCatalogError.unverifiedRecord }
             try validateRange(min: p.minimumSizeCentimeters, max: p.maximumSizeCentimeters); try validateRange(min: p.minimumDepthMeters, max: p.maximumDepthMeters)
             try validate(p.categories, allowed: LocalObservationVocabulary.categories); try validate(p.colors, allowed: LocalObservationVocabulary.colors); try validate(p.markings, allowed: LocalObservationVocabulary.markings); try validate(p.bodyShapes, allowed: LocalObservationVocabulary.bodyShapes); try validate(p.habitats, allowed: LocalObservationVocabulary.habitats); try validate(p.regions, allowed: LocalObservationVocabulary.regions); try validate(p.behaviors, allowed: LocalObservationVocabulary.behaviors)
             let own = Set([normalizedIdentity(p.commonName), normalizedIdentity(p.scientificName)])

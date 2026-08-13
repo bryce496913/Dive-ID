@@ -4,10 +4,11 @@ import XCTest
 final class OfflineIdentificationPackTests: XCTestCase {
     func testCaribbeanFixtureCounts() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/../../DiveID/Resources/IdentificationPacks/Caribbean").standardizedFileURL
-        let manifest = try JSONDecoder().decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: root.appendingPathComponent("PackManifest.json")))
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let manifest = try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: root.appendingPathComponent("PackManifest.json")))
         XCTAssertEqual(manifest.id, .caribbean)
 
-        let profiles = try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: root.appendingPathComponent("Species.json")))
+        let profiles = try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: root.appendingPathComponent("Creatures.json")))
         XCTAssertEqual(profiles.count, manifest.speciesCount)
         XCTAssertEqual(Set(profiles.map(\.id)).count, profiles.count)
         XCTAssertEqual(Set(profiles.map(\.scientificName)).count, profiles.count)
