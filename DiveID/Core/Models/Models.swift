@@ -12,8 +12,26 @@ struct Species: Identifiable, Hashable, Codable, Sendable {
     var bundledImage: BundledSpeciesImage? = nil
     var packContext: PackContext? = nil
     var regionalOccurrence: String? = nil
+    var regionalOccurrenceNotes: String? = nil
+    var subregions: [String] = []
     var appearanceVariants: [SpeciesAppearanceVariant] = []
     var similarSpecies: [SimilarSpeciesComparison] = []
+    var aliases: [String] = []
+    var categories: [String] = []
+    var colors: [String] = []
+    var markings: [String] = []
+    var bodyShapes: [String] = []
+    var habitats: [String] = []
+    var regions: [String] = []
+    var behaviors: [String] = []
+    var keywords: [String] = []
+    var minimumSizeCentimeters: Double? = nil
+    var maximumSizeCentimeters: Double? = nil
+    var minimumDepthMeters: Double? = nil
+    var maximumDepthMeters: Double? = nil
+    var cautions: [String] = []
+    var dataSources: [SpeciesDataSourceReference] = []
+    var review: RecordReview? = nil
 }
 
 enum MatchScoreKind: String, Codable, Sendable {

@@ -1,7 +1,7 @@
 {
   "id": "caribbean",
   "schemaVersion": 1,
-  "packVersion": 2,
+  "packVersion": 3,
   "displayName": "Caribbean",
   "shortDescription": "A small offline Caribbean starter catalogue",
   "geographicScope": "Common recreational-dive encounters across the tropical western Atlantic, including the broader Caribbean Sea and related western Atlantic dive areas; occurrence varies by island and subregion.",
@@ -27,8 +27,8 @@
     "Jamaica"
   ],
   "speciesCount": 8,
-  "speciesResourceName": "Species",
+  "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
-  "lastDataReviewDate": "2026-08-05T00:00:00Z"
+  "lastDataReviewDate": "2026-08-13T00:00:00Z"
 }

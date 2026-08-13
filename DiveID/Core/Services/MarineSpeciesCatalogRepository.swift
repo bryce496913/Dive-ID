@@ -31,6 +31,7 @@ enum LocalCatalogError: Error, Equatable, Sendable {
     case emptyHabitatDescription
     case emptyGeographicRange
     case missingDataSource
+    case unverifiedRecord
     case negativeMeasurement
     case invalidMeasurementRange
     case unknownControlledVocabularyValue(String)

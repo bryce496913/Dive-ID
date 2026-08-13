@@ -48,7 +48,7 @@ struct DescriptionSearchView: View {
                 if let pack = viewModel.pack { HStack { VStack(alignment: .leading) { Text("Dive region: \(pack.displayName)").font(.headline); Text("\(pack.speciesCount) species available offline") } ; Spacer(); Button("Change") { router.navigate(to: .offlineRegions) } }.padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
-                        Text("Example: Small blue fish with a yellow tail, approximately 20 cm, seen on a shallow reef in Fiji.")
+                        Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
                             .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(12)
                     }
                     TextEditor(text: $viewModel.descriptionText)

@@ -296,7 +296,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     func testRealisticDescriptionsRankExpectedSpeciesFirst() async throws {
         let profiles = try await catalogProfiles()
         let cases: [(String, String, [String])] = [
-            ("Small blue fish with a yellow tail, about 20 cm, seen on a shallow reef in Fiji.", "Palette Surgeonfish", ["blue", "yellow", "reef", "fiji"]),
+            ("Blue oval surgeonfish, about 20 cm, seen on a shallow Caribbean reef.", "Atlantic Blue Tang", ["blue", "reef", "caribbean"]),
             ("Striped red and white fish with long spines, hovering near a reef wall.", "Red Lionfish", ["stripes", "spines"]),
             ("Large turtle with a smooth shell feeding on seagrass in shallow water.", "Green Sea Turtle", ["turtle", "shell", "seagrass"]),
             ("Large flat ray with white spots and a long thin tail swimming above sand.", "Spotted Eagle Ray", ["flat", "spots", "tail"]),
@@ -360,19 +360,6 @@ final class OfflineCatalogHardeningTests: XCTestCase {
     let parser = LocalObservationParser()
     let ranker = LocalSpeciesRanker()
     let atlanticBlueTang = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
-    let paletteSurgeonfish = UUID(uuidString: "00000000-0000-0000-0000-000000000011")!
-
-    func testBlueTangSpeciesAreSeparateAndRankByRegion() async throws {
-        let profiles = try await catalogProfiles()
-        let atlantic = try await ranker.rank(observation: await parser.parse("Adult blue tang surgeonfish on a Caribbean reef in the western Atlantic around 15 m deep."), profiles: profiles)
-        XCTAssertEqual(atlantic.first?.profile.id, atlanticBlueTang)
-        let fiji = try await ranker.rank(observation: await parser.parse("Bright blue Indo-Pacific fish in Fiji with a black marking and yellow tail on a coral reef."), profiles: profiles)
-        XCTAssertEqual(fiji.first?.profile.id, paletteSurgeonfish)
-        let atlanticProfile = profiles.first { $0.id == atlanticBlueTang }
-        let paletteProfile = profiles.first { $0.id == paletteSurgeonfish }
-        XCTAssertNotEqual(atlanticProfile?.scientificName, paletteProfile?.scientificName)
-        XCTAssertFalse(atlanticProfile?.aliases.contains(paletteProfile?.scientificName ?? "") ?? true)
-    }
 
     func testBoundaryAwareSynonymMatching() async {
         let grayFish = await parser.parse("gray fish")
@@ -442,26 +429,6 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertEqual(resolver.compatibility(observedRegions: ["madeup place"], profileRegions: ["western atlantic"]), .unspecified)
     }
 
-    func testBlueTangRegionalConflictsIncludeRawScores() async throws {
-        let profiles = try await catalogProfiles()
-        let caribbeanRanked = try await ranker.rank(observation: await parser.parse("blue tang in Caribbean reef"), profiles: profiles)
-        let atlantic = try XCTUnwrap(caribbeanRanked.first { $0.profile.id == atlanticBlueTang })
-        let palette = try XCTUnwrap(caribbeanRanked.first { $0.profile.id == paletteSurgeonfish })
-        XCTAssertEqual(caribbeanRanked.first?.profile.id, atlanticBlueTang)
-        XCTAssertGreaterThan(atlantic.rawScore, palette.rawScore)
-        XCTAssertTrue(palette.conflictingClues.contains("geographic range"))
-        XCTAssertLessThanOrEqual(palette.score, atlantic.score)
-
-        let fijiRanked = try await ranker.rank(observation: await parser.parse("blue fish yellow tail Fiji reef"), profiles: profiles)
-        let fijiPalette = try XCTUnwrap(fijiRanked.first { $0.profile.id == paletteSurgeonfish })
-        let fijiAtlantic = try XCTUnwrap(fijiRanked.first { $0.profile.id == atlanticBlueTang })
-        XCTAssertEqual(fijiRanked.first?.profile.id, paletteSurgeonfish)
-        XCTAssertGreaterThan(fijiPalette.rawScore, fijiAtlantic.rawScore)
-        XCTAssertTrue(fijiAtlantic.conflictingClues.contains("geographic range"))
-        XCTAssertLessThanOrEqual(fijiAtlantic.score, fijiPalette.score)
-        XCTAssertEqual(Set(fijiAtlantic.conflictingClues.filter { $0 == "geographic range" }).count, 1)
-    }
-
     func testCatalogValidationRules() throws {
         let base = try productionCaribbeanProfiles().first!
         func check(_ p: LocalSpeciesProfile, _ error: LocalCatalogError) { XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([p])) { XCTAssertEqual($0 as? LocalCatalogError, error) } }
@@ -496,10 +463,7 @@ final class OfflineCatalogHardeningTests: XCTestCase {
 
     private func qualityFixtures() -> [IdentificationQualityFixture] {[
         .init(description: "Large flat eagle ray with white spots and a long tail over sand", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000010")!, expectedRegion: nil, requirement: .top1, notes: "clear ray clues", mustNotRankSpeciesIDs: []),
-        .init(description: "fish on reef", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: nil, requirement: .top10, notes: "vague fish remains deterministic", mustNotRankSpeciesIDs: []),
-        .init(description: "yelow disk fish in hawaii lagoon", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, expectedRegion: "hawaii", requirement: .top3, notes: "misspelling plus shape and region", mustNotRankSpeciesIDs: []),
         .init(description: "blue tang in Caribbean reef", expectedSpeciesID: atlanticBlueTang, expectedRegion: "caribbean", requirement: .top1, notes: "regional blue tang", mustNotRankSpeciesIDs: []),
-        .init(description: "blue fish yellow tail Fiji reef", expectedSpeciesID: paletteSurgeonfish, expectedRegion: "fiji", requirement: .top1, notes: "Fiji yellow tail", mustNotRankSpeciesIDs: []),
         .init(description: "red striped fish with venom spines hovering", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!, expectedRegion: nil, requirement: .top1, notes: "lionfish", mustNotRankSpeciesIDs: []),
         .init(description: "green shell animal feeding in seagrass at 5 m", expectedSpeciesID: UUID(uuidString: "00000000-0000-0000-0000-000000000009")!, expectedRegion: nil, requirement: .top1, notes: "size/depth compatible turtle", mustNotRankSpeciesIDs: []),
         .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
@@ -507,8 +471,9 @@ final class OfflineCatalogHardeningTests: XCTestCase {
 
     private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)).loadProfiles() }
     private func productionCaribbeanProfiles() throws -> [LocalSpeciesProfile] {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/CaribbeanSpecies.json").standardizedFileURL
-        return try JSONDecoder().decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
     }
     private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
         LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
