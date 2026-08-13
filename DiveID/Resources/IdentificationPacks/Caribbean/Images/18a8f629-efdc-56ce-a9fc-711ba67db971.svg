@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Caribbean Reef Squid">
-  <rect width="1200" height="800" fill="#0B1020"/>
-  <circle cx="250" cy="180" r="90" fill="#8A4FFF" opacity="0.35"/>
-  <ellipse cx="590" cy="410" rx="320" ry="150" fill="#E65C9C" opacity="0.92"/>
-  <polygon points="885,410 1080,270 1080,550" fill="#FF4FB8" opacity="0.88"/>
-  <circle cx="430" cy="370" r="26" fill="#FFFFFF"/>
-  <text x="80" y="720" font-family="Avenir, Arial, sans-serif" font-size="54" fill="#FFFFFF">Caribbean Reef Squid</text>
-</svg>
