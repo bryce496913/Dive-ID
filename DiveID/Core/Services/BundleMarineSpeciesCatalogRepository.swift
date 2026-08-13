@@ -19,7 +19,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         let metadata = try loadManifest(definition)
         guard metadata.id == id else { throw LocalCatalogError.unsupportedPack }
         let root = "IdentificationPacks/" + definition.resourceDirectory
-        guard let url = resourceURL(path: root + "/" + definition.creatureResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
+        guard let url = resourceURL(path: root + "/" + metadata.speciesResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let profiles = try decoder.decode([LocalSpeciesProfile].self, from: data)
@@ -69,7 +69,12 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             guard !p.typicalHabitat.isEmpty else { throw LocalCatalogError.emptyHabitatDescription }
             guard !p.geographicRange.isEmpty else { throw LocalCatalogError.emptyGeographicRange }
             guard !p.dataSources.isEmpty else { throw LocalCatalogError.missingDataSource }
-            if metadata != nil, p.review?.status != .verified { throw LocalCatalogError.unverifiedRecord }
+            if p.review?.status == .verified {
+                guard let reviewer = p.review?.verifiedBy, !reviewer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                      p.review?.reviewDate != nil,
+                      let notes = p.review?.reviewerNotes, !notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                else { throw LocalCatalogError.unverifiedRecord }
+            }
             try validateRange(min: p.minimumSizeCentimeters, max: p.maximumSizeCentimeters); try validateRange(min: p.minimumDepthMeters, max: p.maximumDepthMeters)
             try validate(p.categories, allowed: LocalObservationVocabulary.categories); try validate(p.colors, allowed: LocalObservationVocabulary.colors); try validate(p.markings, allowed: LocalObservationVocabulary.markings); try validate(p.bodyShapes, allowed: LocalObservationVocabulary.bodyShapes); try validate(p.habitats, allowed: LocalObservationVocabulary.habitats); try validate(p.regions, allowed: LocalObservationVocabulary.regions); try validate(p.behaviors, allowed: LocalObservationVocabulary.behaviors)
             let own = Set([normalizedIdentity(p.commonName), normalizedIdentity(p.scientificName)])

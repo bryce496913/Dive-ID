@@ -12,7 +12,7 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack(path: $router.path) {
-            HomeView(router: router, features: features, viewModel: .init(catalog: catalogRepository))
+            HomeView(router: router, features: features, viewModel: .init(catalog: catalogRepository, regionRepository: regionRepository))
                 .navigationDestination(for: AppRoute.self) { route in destination(for: route) }
         }
         .tint(.appAccent)

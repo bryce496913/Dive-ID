@@ -1,7 +1,7 @@
 import XCTest
 @testable import DiveID
 
-struct IdentificationBenchmarkCase: Codable { let id: String; let split: String; let description: String; let selectedPackID: OfflineIdentificationPackID; let expectedSpeciesIDs: [UUID]; let acceptableSpeciesIDs: [UUID]; let informationLevel: ObservationInformationLevel; let expectedNoUsefulMatch: Bool; let notes: String? }
+struct IdentificationBenchmarkCase: Codable { let id: String; let split: String; let description: String; let selectedPackID: OfflineIdentificationPackID; let expectedSpeciesIDs: [UUID]; let acceptableSpeciesIDs: [UUID]; let informationLevel: ObservationInformationLevel; let expectedNoUsefulMatch: Bool; let expectedRank: String; let notes: String? }
 
 final class IdentificationBenchmarkTests: XCTestCase {
     private func fixture() throws -> [IdentificationBenchmarkCase] {
@@ -13,8 +13,11 @@ final class IdentificationBenchmarkTests: XCTestCase {
         let cases = try fixture()
         XCTAssertEqual(cases.count, 100)
         XCTAssertEqual(Set(cases.map(\.description)).count, cases.count)
-        XCTAssertGreaterThanOrEqual(cases.filter { $0.split == "development" }.count, 70)
-        XCTAssertGreaterThanOrEqual(cases.filter { $0.split == "holdout" }.count, 30)
+        XCTAssertEqual(cases.filter { $0.split == "development" }.count, 70)
+        XCTAssertEqual(cases.filter { $0.split == "holdout" }.count, 30)
+        XCTAssertTrue(Set(cases.map(\.informationLevel)).isSuperset(of: [.sufficient, .insufficient]))
+        XCTAssertTrue(cases.contains(where: \.expectedNoUsefulMatch))
+        XCTAssertTrue(Set(cases.map(\.expectedRank)).isSuperset(of: ["top1", "top3", "none"]))
     }
 
     func testBenchmarkActuallyRunsIdentification() async throws {
@@ -23,8 +26,14 @@ final class IdentificationBenchmarkTests: XCTestCase {
         for item in try fixture() {
             let request = IdentificationRequest(source: .description(item.description), context: .init(region: item.selectedPackID))
             let matches = try await service.identify(request: request, processedPhoto: nil)
+            if item.expectedNoUsefulMatch {
+                XCTAssertTrue(matches.isEmpty, item.id)
+                continue
+            }
+            XCTAssertEqual(matches.first?.informationLevel, item.informationLevel, item.id)
             let accepted = Set(item.expectedSpeciesIDs + item.acceptableSpeciesIDs)
-            XCTAssertFalse(accepted.isDisjoint(with: Set(matches.prefix(3).map(\.species.id))), item.id)
+            let resultLimit = item.expectedRank == "top1" ? 1 : 3
+            XCTAssertFalse(accepted.isDisjoint(with: Set(matches.prefix(resultLimit).map(\.species.id))), item.id)
         }
     }
 }

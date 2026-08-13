@@ -16,7 +16,7 @@
     "Cayman Islands",
     "Cozumel",
     "Bonaire",
-    "Cura\u00e7ao",
+    "Curaçao",
     "Curacao",
     "Aruba",
     "Turks and Caicos",
@@ -30,5 +30,5 @@
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
-  "lastDataReviewDate": "2026-08-13T00:00:00Z"
+  "lastDataReviewDate": null
 }

@@ -5,6 +5,14 @@ import Foundation
 struct OfflineIdentificationPackID: RawRepresentable, Codable, Hashable, Sendable {
     let rawValue: String
     init(rawValue: String) { self.rawValue = rawValue }
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        rawValue = try container.decode(String.self)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
     static let caribbean = Self(rawValue: "caribbean")
 }
 
@@ -64,18 +72,44 @@ struct BundledSpeciesImage: Codable, Hashable, Sendable {
 }
 
 struct SpeciesDataSourceReference: Codable, Hashable, Sendable {
+    var stableSourceID: String? = nil
     let sourceName: String
     let sourceURL: String
+    var citationReference: String? = nil
     let reviewedFields: [String]
     let accessedDate: Date?
+    var sourceLicense: String? = nil
 }
 
-enum RecordReviewStatus: String, Codable, Hashable, Sendable { case draft, reviewed, verified }
+enum RecordReviewStatus: String, Codable, Hashable, Sendable { case draft, sourceChecked, verified }
 
 struct RecordReview: Codable, Hashable, Sendable {
     let status: RecordReviewStatus
     let reviewerNotes: String?
     let reviewDate: Date?
+    var verifiedBy: String? = nil
+}
+
+struct SpeciesTaxonomy: Codable, Hashable, Sendable {
+    let wormsAphiaID: Int?
+    let scientificNameAuthority: String?
+    let taxonomicClass: String?
+    let order: String?
+    let family: String?
+    let genus: String?
+    let acceptedScientificName: String
+    let sourceScientificName: String
+}
+
+enum SpeciesMeasurementType: String, Codable, Hashable, Sendable {
+    case totalLength, forkLength, discWidth, carapaceLength
+}
+
+struct SpeciesMeasurements: Codable, Hashable, Sendable {
+    let typicalObservedMinimumCentimeters: Double?
+    let typicalObservedMaximumCentimeters: Double?
+    let maximumRecordedCentimeters: Double?
+    let type: SpeciesMeasurementType
 }
 
 enum ObservationInformationLevel: String, Codable, Hashable, Sendable { case sufficient, limited, insufficient }
