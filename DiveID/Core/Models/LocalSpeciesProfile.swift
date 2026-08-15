@@ -60,6 +60,8 @@ struct LocalSpeciesProfile: Identifiable, Codable, Hashable, Sendable {
         value.minimumSizeCentimeters = minimumSizeCentimeters; value.maximumSizeCentimeters = maximumSizeCentimeters
         value.minimumDepthMeters = minimumDepthMeters; value.maximumDepthMeters = maximumDepthMeters
         value.cautions = cautions; value.dataSources = dataSources; value.review = review
+        value.taxonomy = taxonomy; value.measurements = measurements; value.tailShape = tailShape
+        value.mouthAndHeadShape = mouthAndHeadShape; value.finAndSpineClues = finAndSpineClues
         return value
     }
 }
