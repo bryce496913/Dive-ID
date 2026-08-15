@@ -81,10 +81,11 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             for a in p.aliases.map(normalizedIdentity) where !a.isEmpty && canonical.contains(a) && !own.contains(a) { throw LocalCatalogError.aliasCollidesWithCanonicalIdentity }
             var variantIDs = Set<String>(); for v in p.appearanceVariants { guard variantIDs.insert(v.id).inserted else { throw LocalCatalogError.invalidData }; try validateRange(min: v.minimumSizeCentimeters, max: v.maximumSizeCentimeters) }
             for c in p.similarSpecies { guard c.speciesID != p.id else { throw LocalCatalogError.selfSimilarSpeciesReference }; guard ids.contains(c.speciesID), !c.distinguishingText.isEmpty else { throw LocalCatalogError.invalidSimilarSpeciesReference } }
-            guard let image = p.bundledImage else { throw LocalCatalogError.missingImage(p.id) }
-            guard images.insert(image.fileName).inserted else { throw LocalCatalogError.duplicateImageFilename }
-            guard !image.alternativeText.isEmpty, !image.creatorName.isEmpty, !image.sourceName.isEmpty, !image.licenseURL.isEmpty else { throw LocalCatalogError.emptyImageAttribution }
-            guard ["CC0", "Public Domain", "CC BY 4.0", "CC BY"].contains(image.licenseName) else { throw LocalCatalogError.unsupportedImageLicense(image.licenseName) }
+            if let image = p.bundledImage {
+                guard images.insert(image.fileName).inserted else { throw LocalCatalogError.duplicateImageFilename }
+                guard !image.alternativeText.isEmpty, !image.creatorName.isEmpty, !image.sourceName.isEmpty, !image.licenseURL.isEmpty else { throw LocalCatalogError.emptyImageAttribution }
+                guard ["CC0", "Public Domain", "CC BY 4.0", "CC BY"].contains(image.licenseName) else { throw LocalCatalogError.unsupportedImageLicense(image.licenseName) }
+            }
         }
     }
     private static func normalizedIdentity(_ v: String) -> String { v.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
