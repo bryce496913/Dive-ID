@@ -32,29 +32,6 @@ struct LocalRankingWeights: Sendable {
     let threshold = 4.0, maximumRawScore = 42.0
 }
 
-enum RegionCompatibility: Equatable, Sendable { case unspecified, compatible, conflicting }
-
-struct RegionCompatibilityResolver: Sendable {
-    private let parents: [String: Set<String>] = [
-        "caribbean": ["western atlantic", "atlantic"], "western atlantic": ["atlantic"], "florida": ["western atlantic", "atlantic"], "bahamas": ["caribbean", "western atlantic", "atlantic"], "bermuda": ["western atlantic", "atlantic"], "gulf of mexico": ["western atlantic", "atlantic"], "belize": ["caribbean", "western atlantic", "atlantic"], "cayman islands": ["caribbean", "western atlantic", "atlantic"], "cozumel": ["caribbean", "western atlantic", "atlantic"], "bonaire": ["caribbean", "western atlantic", "atlantic"], "curaçao": ["caribbean", "western atlantic", "atlantic"], "curacao": ["caribbean", "western atlantic", "atlantic"], "aruba": ["caribbean", "western atlantic", "atlantic"], "turks and caicos": ["caribbean", "western atlantic", "atlantic"], "puerto rico": ["caribbean", "western atlantic", "atlantic"], "us virgin islands": ["caribbean", "western atlantic", "atlantic"], "british virgin islands": ["caribbean", "western atlantic", "atlantic"], "dominican republic": ["caribbean", "western atlantic", "atlantic"], "jamaica": ["caribbean", "western atlantic", "atlantic"],
-        "fiji": ["indo-pacific", "pacific"], "indo-pacific": ["pacific", "indian"], "hawaii": ["pacific"]
-    ]
-
-    func compatibility(observedRegions: Set<String>, profileRegions: Set<String>) -> RegionCompatibility {
-        let observed = Set(observedRegions.map(Self.normalize)).filter { LocalObservationVocabulary.regions.contains($0) }
-        let profile = Set(profileRegions.map(Self.normalize)).filter { LocalObservationVocabulary.regions.contains($0) }
-        guard !observed.isEmpty, !profile.isEmpty else { return .unspecified }
-        for observedRegion in observed {
-            let observedFamily = family(for: observedRegion)
-            for profileRegion in profile where !observedFamily.isDisjoint(with: family(for: profileRegion)) { return .compatible }
-        }
-        return .conflicting
-    }
-
-    private static func normalize(_ value: String) -> String { LocalObservationParser.normalize(value).replacingOccurrences(of: "indo pacific", with: "indo-pacific") }
-    private func family(for region: String) -> Set<String> { Set([region]).union(parents[region] ?? []) }
-}
-
 private struct RawRankedCandidate {
     let profile: LocalSpeciesProfile
     let rawScore: Double
@@ -81,7 +58,7 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map { $0.lowercased() }
             if nameTerms.contains(where: { observation.normalizedText.contains($0) }) { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
-            switch regionResolver.compatibility(observedRegions: observation.regions, profileRegions: Set(profile.regions)) {
+            switch regionResolver.compatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
             case .compatible:
                 score += weights.region
                 matched.append("geographic range")

@@ -11,6 +11,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
     let catalogRepository: any MarineSpeciesCatalogRepository
     let parser: any ObservationParsing
     let ranker: any SpeciesRanking
+    private let regionResolver = RegionCompatibilityResolver()
 
     func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] {
         switch request.source {
@@ -22,8 +23,9 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             let pack: OfflineIdentificationPack
             do { pack = try await catalogRepository.loadPack(id: packID) } catch { throw LocalIdentificationError.catalogUnavailable }
             let observation = await parser.parse(trimmed)
-            let aliases = Set(pack.metadata.regionAliases.map { $0.lowercased() })
-            if let outside = observation.regions.first(where: { !aliases.contains($0.lowercased()) }) {
+            let supportedRegions = Set(pack.metadata.regionAliases)
+            if regionResolver.compatibility(observedRegions: observation.regions, supportedRegions: supportedRegions) == .conflicting,
+               let outside = observation.regions.sorted().first {
                 throw LocalIdentificationError.regionMismatch(selected: packID, mentionedRegion: outside.capitalized)
             }
             let ranked = try await ranker.rank(observation: observation, profiles: pack.profiles)
