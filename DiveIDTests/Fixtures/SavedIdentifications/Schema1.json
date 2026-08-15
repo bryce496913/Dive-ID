@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "species": [{
+    "id": "11111111-1111-1111-1111-111111111111",
+    "commonName": "Queen Angelfish",
+    "scientificName": "Holacanthus ciliaris",
+    "summary": "A large reef fish with blue and yellow coloring.",
+    "visualCharacteristics": ["Blue body", "Yellow tail"],
+    "habitat": "Coral reefs",
+    "geographicRange": "Western Atlantic",
+    "imageAssetName": null
+  }]
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "identifications": [{
+    "id": "22222222-2222-2222-2222-222222222222",
+    "species": {
+      "id": "33333333-3333-3333-3333-333333333333",
+      "commonName": "Spotted Eagle Ray",
+      "scientificName": "Aetobatus narinari",
+      "summary": "A ray with pale spots across its dark dorsal surface.",
+      "visualCharacteristics": ["White spots", "Long whip-like tail"],
+      "habitat": "Reefs and sandy flats",
+      "geographicRange": "Western Atlantic",
+      "imageAssetName": null
+    },
+    "matchRank": 2,
+    "matchStrength": "good",
+    "relativeScore": 0.74,
+    "explanation": "The spots and wing-shaped body support this match.",
+    "distinguishingFeatures": ["Rows of white dorsal spots", "Flattened duckbill snout"],
+    "cautions": ["Do not touch or chase wildlife"],
+    "taxonomicResolution": "species",
+    "observationDescription": "Large dark ray with white spots swimming over sand",
+    "identifiedAt": 700000000,
+    "diveNotes": "Observed near the reef edge.",
+    "sourceSessionID": "44444444-4444-4444-4444-444444444444"
+  }]
+}
