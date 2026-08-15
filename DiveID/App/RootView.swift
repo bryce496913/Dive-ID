@@ -30,7 +30,7 @@ struct RootView: View {
             )
         case .identificationResults(let sessionID):
             IdentificationResultsView(
-                viewModel: .init(sessionID: sessionID, service: identificationService, sessionStore: sessionStore),
+                viewModel: .init(sessionID: sessionID, service: identificationService, sessionStore: sessionStore, catalog: catalogRepository),
                 router: router
             )
         case .speciesDetail(let species, let match):
