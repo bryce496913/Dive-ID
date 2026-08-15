@@ -23,6 +23,28 @@ def present(value: object) -> bool:
     return value is not None and str(value).strip() != ""
 
 
+def normalize_spreadsheet_boolean(value: object) -> bool | None:
+    """Normalize an explicit spreadsheet boolean without using truthiness.
+
+    Empty cells are returned as ``None`` so callers can apply the field's null
+    policy. Every other unsupported value raises ``ValueError`` rather than
+    being guessed.
+    """
+    if value is None or isinstance(value, str) and value.strip() == "":
+        return None
+    if isinstance(value, bool):
+        return value
+    if type(value) is int and value in (0, 1):
+        return value == 1
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in ("true", "1"):
+            return True
+        if normalized in ("false", "0"):
+            return False
+    raise ValueError(f"unsupported spreadsheet boolean: {value!r}")
+
+
 @dataclass(frozen=True)
 class SheetData:
     name: str
@@ -143,6 +165,49 @@ def dictionary_metadata(sheets: dict[str, SheetData]):
     return primary_keys, relationships, expected, units, nullable
 
 
+def dictionary_boolean_fields(sheets: dict[str, SheetData]) -> list[tuple[str, str]]:
+    """Return fields explicitly declared boolean by the Data Dictionary."""
+    dictionary = sheets.get("Data Dictionary")
+    if not dictionary:
+        return []
+    return [
+        (str(row.get("sheet", "")).strip(), str(row.get("column", "")).strip())
+        for row in dictionary.rows
+        if str(row.get("type", "")).strip().lower() == "boolean"
+        and present(row.get("sheet"))
+        and present(row.get("column"))
+    ]
+
+
+def invalid_boolean_values(
+    sheets: dict[str, SheetData], boolean_fields: list[tuple[str, str]]
+) -> tuple[int, list[str]]:
+    """Count non-null values that cannot be interpreted as declared booleans."""
+    invalid = []
+    for sheet_name, column in boolean_fields:
+        sheet = sheets.get(sheet_name)
+        if not sheet or column not in sheet.headers:
+            continue
+        for row in sheet.rows:
+            value = row.get(column)
+            try:
+                normalize_spreadsheet_boolean(value)
+            except ValueError:
+                invalid.append(f"{sheet_name}.{column}={value!r}")
+    return len(invalid), sorted(set(invalid))[:5]
+
+
+def count_true_booleans(sheet: SheetData, column: str) -> int:
+    """Count valid true values; invalid values are reported elsewhere."""
+    count = 0
+    for row in sheet.rows:
+        try:
+            count += normalize_spreadsheet_boolean(row.get(column)) is True
+        except ValueError:
+            continue
+    return count
+
+
 def malformed_count(sheet: SheetData, column: str, key_type: str) -> tuple[int, list[str]]:
     bad = []
     for row in sheet.rows:
@@ -172,6 +237,7 @@ def format_examples(examples: list[str]) -> str:
 
 def render_report(source: Path, sheets: dict[str, SheetData]) -> str:
     primary, relationships, expected, units, nullable = dictionary_metadata(sheets)
+    boolean_fields = dictionary_boolean_fields(sheets)
     lines = ["# Tropical Pacific Workbook Profile", "", "## Source", "", source.name, "", "## Sheets", "", "| Sheet | Rows | Columns |", "|---|---:|---:|"]
     for sheet in sheets.values():
         lines.append(f"| {sheet.name} | {len(sheet.rows)} | {len(sheet.headers)} |")
@@ -218,7 +284,9 @@ def render_report(source: Path, sheets: dict[str, SheetData]) -> str:
             sentinels = frozenset({GLOBAL_SENTINEL}) if sheet_name == "Validation" else frozenset()
             count, examples = orphan_foreign_keys(sheets[sheet_name], column, sheets[parent_name], parent_column, sentinels)
             lines.append(f"- {sheet_name}.`{column}` orphan references: {count}{format_examples(examples)}")
-    lines += ["- Unexpected/unparseable Data Dictionary relationships: 0", ""]
+    lines.append("- Unexpected/unparseable Data Dictionary relationships: 0")
+    invalid_booleans, examples = invalid_boolean_values(sheets, boolean_fields)
+    lines += [f"- Unexpected boolean values: {invalid_booleans}{format_examples(examples)}", ""]
 
     creatures = sheets.get("Creatures")
     lines += ["## Small Data Quality Summary", ""]
@@ -232,8 +300,11 @@ def render_report(source: Path, sheets: dict[str, SheetData]) -> str:
         ):
             if column in creatures.headers:
                 lines.append(f"- {label}: {count_missing(creatures, column)}")
+        if ("Creatures", "human_review_required") in boolean_fields and "human_review_required" in creatures.headers:
+            count = count_true_booleans(creatures, "human_review_required")
+            lines.append(f"- Records requiring human review: {count}")
         for label, column, value in (
-            ("Records requiring human review", "human_review_required", "1"), ("Draft records", "status", "draft"),
+            ("Draft records", "status", "draft"),
             ("Low transcription-confidence records", "transcription_confidence", "low"),
             ("Medium transcription-confidence records", "transcription_confidence", "medium"),
         ):
