@@ -446,6 +446,76 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([base, copy(base, id: UUID(), commonName: "Other", scientificName: "Other scientific", aliases: [base.commonName])])) { XCTAssertEqual($0 as? LocalCatalogError, .aliasCollidesWithCanonicalIdentity) }
     }
 
+    func testCatalogAcceptsProfileWithoutBundledArtworkAndMapsItToSpecies() throws {
+        var profile = try productionCaribbeanProfiles().first!
+        profile.bundledImage = nil
+
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+        XCTAssertNil(profile.species.bundledImage)
+        XCTAssertEqual(profile.species.id, profile.id)
+        XCTAssertEqual(profile.species.commonName, profile.commonName)
+    }
+
+    func testCatalogAcceptsValidApprovedBundledArtwork() throws {
+        let profile = try productionCaribbeanProfiles().first!
+
+        XCTAssertNotNil(profile.bundledImage)
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+    }
+
+    func testCatalogRejectsIncompleteOrUnsupportedArtworkAttribution() throws {
+        let base = try productionCaribbeanProfiles().first!
+        let valid = try XCTUnwrap(base.bundledImage)
+
+        func profile(with image: BundledSpeciesImage) -> LocalSpeciesProfile {
+            var profile = base
+            profile.bundledImage = image
+            return profile
+        }
+        func image(
+            creatorName: String? = nil,
+            sourceName: String? = nil,
+            licenseName: String? = nil,
+            licenseURL: String? = nil
+        ) -> BundledSpeciesImage {
+            BundledSpeciesImage(
+                fileName: valid.fileName,
+                alternativeText: valid.alternativeText,
+                creatorName: creatorName ?? valid.creatorName,
+                sourceName: sourceName ?? valid.sourceName,
+                sourceURL: valid.sourceURL,
+                licenseName: licenseName ?? valid.licenseName,
+                licenseURL: licenseURL ?? valid.licenseURL
+            )
+        }
+        func assertAttributionFailure(_ image: BundledSpeciesImage) {
+            XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile(with: image)])) {
+                XCTAssertEqual($0 as? LocalCatalogError, .emptyImageAttribution)
+            }
+        }
+
+        assertAttributionFailure(image(creatorName: ""))
+        assertAttributionFailure(image(sourceName: ""))
+        assertAttributionFailure(image(licenseURL: ""))
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile(with: image(licenseName: ""))])) {
+            XCTAssertEqual($0 as? LocalCatalogError, .unsupportedImageLicense(""))
+        }
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile(with: image(licenseName: "All Rights Reserved"))])) {
+            XCTAssertEqual($0 as? LocalCatalogError, .unsupportedImageLicense("All Rights Reserved"))
+        }
+    }
+
+    @MainActor
+    func testImageLessSpeciesArtworkUsesAccessiblePlaceholder() throws {
+        var profile = try productionCaribbeanProfiles().first!
+        profile.bundledImage = nil
+
+        let artwork = SpeciesArtwork(species: profile.species)
+        XCTAssertTrue(artwork.showsPlaceholder)
+        XCTAssertEqual(artwork.accessibilityDescription, "Placeholder image of \(profile.commonName)")
+        _ = artwork.body
+    }
+
     func testStructuredIdentificationQualityFixtures() async throws {
         let fixtures = qualityFixtures()
         let profiles = try await catalogProfiles()

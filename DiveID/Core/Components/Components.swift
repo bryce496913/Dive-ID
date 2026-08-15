@@ -26,6 +26,8 @@ struct SpeciesArtwork: View {
     let species: Species
     @State private var hasBundledVector = false
     private let loader = BundleSpeciesImageLoader()
+    var showsPlaceholder: Bool { species.bundledImage == nil }
+    var accessibilityDescription: String { species.bundledImage?.alternativeText ?? "Placeholder image of \(species.commonName)" }
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14).fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -34,7 +36,7 @@ struct SpeciesArtwork: View {
                 .foregroundStyle(hasBundledVector ? Color.appHighlight : Color.appTextSecondary)
             VStack { Spacer(); Text(species.commonName).font(.caption.bold()).lineLimit(1).padding(8).frame(maxWidth: .infinity).background(Color.black.opacity(0.35)) }
         }
-        .accessibilityLabel(species.bundledImage?.alternativeText ?? "Placeholder image of \(species.commonName)")
+        .accessibilityLabel(accessibilityDescription)
         .task { if let image = species.bundledImage { hasBundledVector = (try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .caribbean)) != nil } }
     }
     private var symbolName: String {
