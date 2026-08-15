@@ -5,14 +5,27 @@ import SwiftUI
 final class IdentificationResultsViewModel {
     let sessionID: UUID
     private(set) var state: LoadState<[IdentificationMatch]> = .idle
+    private(set) var packMetadata: OfflineIdentificationPackMetadata?
     private let service: any MarineLifeIdentificationService
     private let sessionStore: any IdentificationSessionStore
+    private let catalog: any MarineSpeciesCatalogRepository
     private var loadTask: Task<Void, Never>?
 
-    init(sessionID: UUID, service: any MarineLifeIdentificationService, sessionStore: any IdentificationSessionStore) {
+    init(sessionID: UUID, service: any MarineLifeIdentificationService, sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository = BundleMarineSpeciesCatalogRepository()) {
         self.sessionID = sessionID
         self.service = service
         self.sessionStore = sessionStore
+        self.catalog = catalog
+    }
+
+    var loadingMessage: String {
+        guard let packMetadata else { return "Searching the selected offline pack…" }
+        return "Searching the \(packMetadata.displayName) offline pack…"
+    }
+
+    var resultsSummary: String {
+        guard let packMetadata else { return "Matches from the selected offline pack" }
+        return "Matches from \(packMetadata.speciesCount.formatted()) locally stored \(packMetadata.displayName) records"
     }
 
     func loadIfNeeded() async {
@@ -28,13 +41,21 @@ final class IdentificationResultsViewModel {
     private func execute() async {
         guard loadTask == nil else { return }
         state = .loading
-        let task = Task { [service, sessionStore, sessionID] in
+        let task = Task { [service, sessionStore, catalog, sessionID] in
             do {
+                let request = try await sessionStore.request(for: sessionID)
+                if let packID = request.context.region {
+                    if let packs = try? await catalog.availablePacks() {
+                        for metadata in packs where metadata.id == packID {
+                            packMetadata = metadata
+                            break
+                        }
+                    }
+                }
                 if let cached = try await sessionStore.result(for: sessionID) {
                     apply(cached.matches)
                     return
                 }
-                let request = try await sessionStore.request(for: sessionID)
                 let photo: ProcessedPhoto?
                 if case .processedPhoto(let reference) = request.source {
                     photo = try await sessionStore.photo(for: reference)
@@ -101,7 +122,7 @@ struct IdentificationResultsView: View {
         Group {
             switch viewModel.state {
             case .idle, .loading:
-                LoadingStateView(message: "Searching the Caribbean offline pack…").accessibilityIdentifier("resultsLoading")
+                LoadingStateView(message: viewModel.loadingMessage).accessibilityIdentifier("resultsLoading")
             case .empty:
                 EmptyStateView(title: "No useful matches", message: "No useful match was found in the current offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
@@ -111,7 +132,7 @@ struct IdentificationResultsView: View {
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        Text("Matches from locally stored Caribbean species")
+                        Text(viewModel.resultsSummary)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         Text("Match strength reflects similarity to the clues in your description. It is not scientific certainty.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)

@@ -25,12 +25,108 @@ actor SpyMarineLifeIdentificationService: MarineLifeIdentificationService {
     func setResults(_ value: [IdentificationMatch]) { results = value }
 }
 
+struct ResultsCatalogRepository: MarineSpeciesCatalogRepository {
+    var metadata: [OfflineIdentificationPackMetadata]
+    var error: (any Error)?
+
+    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
+        if let error { throw error }
+        return metadata
+    }
+
+    func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
+        throw LocalCatalogError.unsupportedPack
+    }
+}
+
+actor MutableSelectedDiveRegionRepository: SelectedDiveRegionRepository {
+    private var region: OfflineIdentificationPackID
+
+    init(initialRegion: OfflineIdentificationPackID) { region = initialRegion }
+    func selectedRegion() async -> OfflineIdentificationPackID { region }
+    func setSelectedRegion(_ id: OfflineIdentificationPackID) async { region = id }
+}
+
 struct StubPhotoProcessingService: PhotoProcessingService {
     let photo: ProcessedPhoto
     func processPhotoData(_ data: Data) async throws -> ProcessedPhoto { photo }
 }
 
 final class DiveIDTests: XCTestCase {
+    @MainActor
+    func testResultsCopyUsesCaribbeanRequestMetadataAndSpeciesCount() async throws {
+        let metadata = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 78)
+        let viewModel = try await loadedResultsViewModel(requestRegion: .caribbean, metadata: [metadata])
+
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the Caribbean offline pack…")
+        XCTAssertEqual(viewModel.resultsSummary, "Matches from 78 locally stored Caribbean records")
+    }
+
+    @MainActor
+    func testResultsCopyUsesSyntheticPackFromSubmittedRequest() async throws {
+        let tropicalPacific = OfflineIdentificationPackID(rawValue: "tropical-pacific-test")
+        let metadata = resultPackMetadata(id: tropicalPacific, displayName: "Tropical Pacific", speciesCount: 1_650)
+        let viewModel = try await loadedResultsViewModel(requestRegion: tropicalPacific, metadata: [metadata])
+
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the Tropical Pacific offline pack…")
+        XCTAssertEqual(viewModel.resultsSummary, "Matches from \(1_650.formatted()) locally stored Tropical Pacific records")
+    }
+
+    @MainActor
+    func testResultsRemainTiedToSessionRegionWhenCurrentPreferenceChanges() async throws {
+        let submittedRegion = OfflineIdentificationPackID(rawValue: "submitted-pack")
+        let laterPreference = OfflineIdentificationPackID(rawValue: "later-preference")
+        let submitted = resultPackMetadata(id: submittedRegion, displayName: "Submitted Region", speciesCount: 12)
+        let later = resultPackMetadata(id: laterPreference, displayName: "Later Preference", speciesCount: 99)
+        let preference = MutableSelectedDiveRegionRepository(initialRegion: submittedRegion)
+        let store = InMemoryIdentificationSessionStore()
+        let request = IdentificationRequest(source: .description("striped fish"), context: .init(region: await preference.selectedRegion()))
+        _ = try await store.createSession(for: request, photo: nil)
+        await preference.setSelectedRegion(laterPreference)
+        let viewModel = IdentificationResultsViewModel(
+            sessionID: request.id,
+            service: SpyMarineLifeIdentificationService(results: [makeMatch(score: 0.8)]),
+            sessionStore: store,
+            catalog: ResultsCatalogRepository(metadata: [later, submitted])
+        )
+
+        await viewModel.loadIfNeeded()
+
+        XCTAssertEqual(viewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
+        XCTAssertFalse(viewModel.resultsSummary.contains("Later Preference"))
+    }
+
+    @MainActor
+    func testResultsMetadataFailureUsesGenericFallbackWithoutAnotherIdentification() async throws {
+        let store = InMemoryIdentificationSessionStore()
+        let request = IdentificationRequest(source: .description("striped fish"), context: .init(region: .caribbean))
+        _ = try await store.createSession(for: request, photo: nil)
+        let service = SpyMarineLifeIdentificationService(results: [makeMatch(score: 0.8)])
+        let viewModel = IdentificationResultsViewModel(
+            sessionID: request.id,
+            service: service,
+            sessionStore: store,
+            catalog: ResultsCatalogRepository(metadata: [], error: LocalCatalogError.resourceMissing)
+        )
+
+        await viewModel.loadIfNeeded()
+
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the selected offline pack…")
+        XCTAssertEqual(viewModel.resultsSummary, "Matches from the selected offline pack")
+        let identificationCallCount = await service.callCount()
+        XCTAssertEqual(identificationCallCount, 1)
+        guard case .loaded = viewModel.state else { return XCTFail("Expected identification to remain loaded") }
+    }
+
+    func testActiveResultsCopyHasNoHardCodedCaribbeanText() throws {
+        let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .appendingPathComponent("../DiveID/Features/IdentificationResults/IdentificationResults.swift")
+            .standardizedFileURL
+        let contents = try String(contentsOf: source, encoding: .utf8)
+        XCTAssertFalse(contents.contains("Searching the Caribbean offline pack"))
+        XCTAssertFalse(contents.contains("locally stored Caribbean"))
+    }
+
     @MainActor
     func testDescriptionCreatesSessionWithoutCallingServiceAndPreservesText() async throws {
         let store = InMemoryIdentificationSessionStore()
@@ -194,6 +290,45 @@ final class DiveIDTests: XCTestCase {
         let saved = SavedIdentification(match: IdentificationMatch(id: MockSpecies.all[0].id, species: MockSpecies.all[0], score: 0.5, scoreKind: .relativeMatch))
         do { _ = try await repository.save(saved); XCTFail("Expected corrupt data error") }
         catch { XCTAssertEqual(try Data(contentsOf: url), corrupt) }
+    }
+
+    @MainActor
+    private func loadedResultsViewModel(
+        requestRegion: OfflineIdentificationPackID,
+        metadata: [OfflineIdentificationPackMetadata]
+    ) async throws -> IdentificationResultsViewModel {
+        let store = InMemoryIdentificationSessionStore()
+        let request = IdentificationRequest(source: .description("striped fish"), context: .init(region: requestRegion))
+        _ = try await store.createSession(for: request, photo: nil)
+        let viewModel = IdentificationResultsViewModel(
+            sessionID: request.id,
+            service: SpyMarineLifeIdentificationService(results: [makeMatch(score: 0.8)]),
+            sessionStore: store,
+            catalog: ResultsCatalogRepository(metadata: metadata)
+        )
+        await viewModel.loadIfNeeded()
+        return viewModel
+    }
+
+    private func resultPackMetadata(
+        id: OfflineIdentificationPackID,
+        displayName: String,
+        speciesCount: Int
+    ) -> OfflineIdentificationPackMetadata {
+        OfflineIdentificationPackMetadata(
+            id: id,
+            schemaVersion: 1,
+            packVersion: 1,
+            displayName: displayName,
+            shortDescription: "Test metadata",
+            geographicScope: "Test scope",
+            regionAliases: [],
+            speciesCount: speciesCount,
+            speciesResourceName: "TestSpecies",
+            imageSubdirectory: "Images",
+            includedWithApp: false,
+            lastDataReviewDate: nil
+        )
     }
 
     @MainActor
