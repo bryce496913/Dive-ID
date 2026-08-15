@@ -6,9 +6,13 @@ import unittest
 from openpyxl import Workbook, load_workbook
 
 from Tools.TropicalPacificWorkbook.inspect_workbook import (
+    DEFAULT_REPORT,
+    DEFAULT_WORKBOOK,
     duplicate_and_blank_ids,
     inspect_workbook,
+    normalize_spreadsheet_boolean,
     orphan_foreign_keys,
+    render_report,
 )
 
 
@@ -65,6 +69,54 @@ class WorkbookInspectorTests(unittest.TestCase):
         workbook = load_workbook(self.path, read_only=True)
         self.assertTrue(workbook.read_only)
         workbook.close()
+
+    def test_supported_boolean_representations(self):
+        cases = (
+            (True, True),
+            (False, False),
+            (1, True),
+            (0, False),
+            ("1", True),
+            ("0", False),
+            ("TRUE", True),
+            ("FALSE", False),
+            ("true", True),
+            ("false", False),
+        )
+        workbook = Workbook()
+        booleans = workbook.active
+        booleans.title = "Boolean Values"
+        booleans.append(["value", "case_number"])
+        for index, (source, _) in enumerate(cases):
+            booleans.append([source, index])
+        workbook.save(self.path)
+        values_after_excel_round_trip = [
+            row["value"] for row in inspect_workbook(self.path)["Boolean Values"].rows
+        ]
+
+        for (source, expected), workbook_value in zip(cases, values_after_excel_round_trip):
+            with self.subTest(source=source):
+                self.assertIs(normalize_spreadsheet_boolean(workbook_value), expected)
+
+    def test_unexpected_boolean_is_reported(self):
+        workbook = Workbook()
+        creatures = workbook.active
+        creatures.title = "Creatures"
+        creatures.append(["human_review_required"])
+        creatures.append(["yes"])
+        dictionary = workbook.create_sheet("Data Dictionary")
+        dictionary.append(["sheet", "column", "type"])
+        dictionary.append(["Creatures", "human_review_required", "boolean"])
+        workbook.save(self.path)
+
+        report = render_report(self.path, inspect_workbook(self.path))
+
+        self.assertIn("- Unexpected boolean values: 1", report)
+        self.assertIn("`Creatures.human_review_required='yes'`", report)
+
+    def test_committed_workbook_reproduces_complete_report(self):
+        generated = render_report(DEFAULT_WORKBOOK, inspect_workbook(DEFAULT_WORKBOOK))
+        self.assertEqual(generated, DEFAULT_REPORT.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

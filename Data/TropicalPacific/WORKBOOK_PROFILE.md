@@ -149,6 +149,7 @@ The Data Dictionary defines field types and meanings, controlled vocabularies or
 - Benchmarks.`expected_creature_id` orphan references: 0
 - Benchmarks.`source_id` orphan references: 0
 - Unexpected/unparseable Data Dictionary relationships: 0
+- Unexpected boolean values: 0
 
 ## Small Data Quality Summary
 
