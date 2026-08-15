@@ -28,6 +28,7 @@ extension RankedLocalSpecies {
 
 struct LocalRankingWeights: Sendable {
     let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, regionConflict = -12.0
+    let tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
 }
 
@@ -106,7 +107,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             add(observation.bodyShapes, profile.bodyShapes, weights.bodyShape, &score, &matched)
             add(observation.behaviors, profile.behaviors, weights.behavior, &score, &matched)
             add(observation.tokens, profile.keywords, weights.keyword, &score, &matched)
-            if let size = observation.approximateSizeCentimeters, let min = profile.minimumSizeCentimeters, let max = profile.maximumSizeCentimeters {
+            addVisibleClue(profile.tailShape.map { [$0] } ?? [], label: "tail shape", weight: weights.tailShape, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
+            addVisibleClue(profile.mouthAndHeadShape, label: "head and mouth shape", weight: weights.headAndMouth, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
+            addVisibleClue(profile.finAndSpineClues, label: "fin and spine clues", weight: weights.finAndSpine, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
+            let canonicalMinimum = profile.measurements?.typicalObservedMinimumCentimeters ?? profile.minimumSizeCentimeters
+            let canonicalMaximum = profile.measurements?.typicalObservedMaximumCentimeters ?? profile.measurements?.maximumRecordedCentimeters ?? profile.maximumSizeCentimeters
+            if let size = observation.approximateSizeCentimeters, let min = canonicalMinimum, let max = canonicalMaximum {
                 if (min * 0.5)...(max * 1.5) ~= size { score += weights.size; matched.append("compatible size") } else { score += weights.sizeConflict; conflicts.append("described size") }
             }
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
@@ -145,5 +151,22 @@ struct LocalSpeciesRanker: SpeciesRanking {
         let hits = observed.intersection(Set(profile.map { $0.lowercased() })).sorted()
         score += Double(hits.count) * weight
         matched.append(contentsOf: hits)
+    }
+
+    private func addVisibleClue(_ clues: [String], label: String, weight: Double, observation: ParsedObservation, legacyTerms: [String], score: inout Double, matched: inout [String]) {
+        let matchedLegacy = legacyTerms.map(LocalObservationParser.normalize).filter {
+            LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
+        }
+        let hasNewMatch = clues
+            .map(LocalObservationParser.normalize)
+            .filter { clue in
+                let clueTokens = Set(clue.split(separator: " ").map(String.init).map(LocalObservationParser.singular))
+                return !matchedLegacy.contains { legacy in
+                    let legacyTokens = Set(legacy.split(separator: " ").map(String.init).map(LocalObservationParser.singular))
+                    return !clueTokens.isDisjoint(with: legacyTokens)
+                }
+            }
+            .contains { LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText) }
+        if hasNewMatch { score += weight; matched.append(label) }
     }
 }

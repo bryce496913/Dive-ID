@@ -56,6 +56,11 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         XCTAssertEqual(species.cautions, [])
         XCTAssertEqual(species.dataSources, [])
         XCTAssertNil(species.review)
+        XCTAssertNil(species.taxonomy)
+        XCTAssertNil(species.measurements)
+        XCTAssertNil(species.tailShape)
+        XCTAssertEqual(species.mouthAndHeadShape, [])
+        XCTAssertEqual(species.finAndSpineClues, [])
     }
 
     func testCurrentSchemaFixtureDecodes() async throws {

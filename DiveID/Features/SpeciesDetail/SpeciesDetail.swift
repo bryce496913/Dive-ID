@@ -74,6 +74,11 @@ struct SpeciesDetailView: View {
                 DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))
                 DetailSection(title: "Typical habitat", text: viewModel.species.habitat)
                 DetailSection(title: "General geographic range", text: viewModel.species.geographicRange)
+                if let taxonomy = viewModel.species.taxonomy { DetailSection(title: "Taxonomy", text: Self.taxonomyText(taxonomy)) }
+                if let measurements = viewModel.species.measurements { DetailSection(title: "Size / measurements", text: Self.measurementsText(measurements)) }
+                if let tailShape = viewModel.species.tailShape, !tailShape.isEmpty { DetailSection(title: "Tail shape", text: tailShape) }
+                if !viewModel.species.mouthAndHeadShape.isEmpty { DetailSection(title: "Head and mouth clues", text: viewModel.species.mouthAndHeadShape.joined(separator: " • ")) }
+                if !viewModel.species.finAndSpineClues.isEmpty { DetailSection(title: "Fin and spine clues", text: viewModel.species.finAndSpineClues.joined(separator: " • ")) }
                 if let occurrence = viewModel.species.regionalOccurrence { DetailSection(title: "Regional occurrence", text: occurrence.capitalized) }
                 if !viewModel.species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: viewModel.species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
                 if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
@@ -90,6 +95,21 @@ struct SpeciesDetailView: View {
         .navigationTitle(viewModel.species.commonName)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+    }
+
+    static func taxonomyText(_ taxonomy: SpeciesTaxonomy) -> String {
+        [("Accepted name", Optional(taxonomy.acceptedScientificName)), ("Class", taxonomy.taxonomicClass), ("Order", taxonomy.order), ("Family", taxonomy.family), ("Genus", taxonomy.genus)]
+            .compactMap { label, value in value.map { "\(label): \($0)" } }.joined(separator: " • ")
+    }
+
+    static func measurementsText(_ measurements: SpeciesMeasurements) -> String {
+        var parts: [String] = []
+        if let minimum = measurements.typicalObservedMinimumCentimeters, let maximum = measurements.typicalObservedMaximumCentimeters { parts.append("Typically \(minimum.formatted())–\(maximum.formatted()) cm") }
+        else if let minimum = measurements.typicalObservedMinimumCentimeters { parts.append("Typically from \(minimum.formatted()) cm") }
+        else if let maximum = measurements.typicalObservedMaximumCentimeters { parts.append("Typically up to \(maximum.formatted()) cm") }
+        if let maximum = measurements.maximumRecordedCentimeters { parts.append("Maximum recorded: \(maximum.formatted()) cm") }
+        parts.append(measurements.type.rawValue.replacingOccurrences(of: "Length", with: " length").replacingOccurrences(of: "Width", with: " width").capitalized)
+        return parts.joined(separator: " • ")
     }
 }
 

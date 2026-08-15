@@ -32,6 +32,11 @@ struct Species: Identifiable, Hashable, Codable, Sendable {
     var cautions: [String] = []
     var dataSources: [SpeciesDataSourceReference] = []
     var review: RecordReview? = nil
+    var taxonomy: SpeciesTaxonomy? = nil
+    var measurements: SpeciesMeasurements? = nil
+    var tailShape: String? = nil
+    var mouthAndHeadShape: [String] = []
+    var finAndSpineClues: [String] = []
 }
 
 extension Species {
@@ -41,6 +46,7 @@ extension Species {
         case appearanceVariants, similarSpecies, aliases, categories, colors, markings, bodyShapes, habitats
         case regions, behaviors, keywords, minimumSizeCentimeters, maximumSizeCentimeters
         case minimumDepthMeters, maximumDepthMeters, cautions, dataSources, review
+        case taxonomy, measurements, tailShape, mouthAndHeadShape, finAndSpineClues
     }
 
     init(from decoder: Decoder) throws {
@@ -77,6 +83,11 @@ extension Species {
         cautions = try container.decodeIfPresent([String].self, forKey: .cautions) ?? []
         dataSources = try container.decodeIfPresent([SpeciesDataSourceReference].self, forKey: .dataSources) ?? []
         review = try container.decodeIfPresent(RecordReview.self, forKey: .review)
+        taxonomy = try container.decodeIfPresent(SpeciesTaxonomy.self, forKey: .taxonomy)
+        measurements = try container.decodeIfPresent(SpeciesMeasurements.self, forKey: .measurements)
+        tailShape = try container.decodeIfPresent(String.self, forKey: .tailShape)
+        mouthAndHeadShape = try container.decodeIfPresent([String].self, forKey: .mouthAndHeadShape) ?? []
+        finAndSpineClues = try container.decodeIfPresent([String].self, forKey: .finAndSpineClues) ?? []
     }
 }
 
