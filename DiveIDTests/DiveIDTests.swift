@@ -470,6 +470,47 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         } catch { XCTAssertEqual(error as? LocalIdentificationError, .unsupportedSource) }
     }
 
+    func testCaribbeanServiceRegionValidationUsesSharedCompatibility() async throws {
+        let service = LocalMarineLifeIdentificationService(
+            catalogRepository: BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)),
+            parser: parser,
+            ranker: LocalSpeciesRanker()
+        )
+        let acceptedDescriptions = [
+            "Caribbean reef",
+            "Western Atlantic reef",
+            "Atlantic reef",
+            "Colorful reef fish",
+            "Atlantis reef fish"
+        ]
+
+        for description in acceptedDescriptions {
+            do {
+                _ = try await service.identify(
+                    request: IdentificationRequest(source: .description(description), context: .init(region: .caribbean)),
+                    processedPhoto: nil
+                )
+            } catch {
+                XCTFail("Expected \(description) to pass regional validation, received \(error)")
+            }
+        }
+
+        for description in ["Fiji reef", "Indo-Pacific reef"] {
+            do {
+                _ = try await service.identify(
+                    request: IdentificationRequest(source: .description(description), context: .init(region: .caribbean)),
+                    processedPhoto: nil
+                )
+                XCTFail("Expected \(description) to conflict with the Caribbean pack")
+            } catch let error as LocalIdentificationError {
+                guard case .regionMismatch(let selected, _) = error else {
+                    return XCTFail("Expected region mismatch for \(description), received \(error)")
+                }
+                XCTAssertEqual(selected, .caribbean)
+            }
+        }
+    }
+
     private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)).loadProfiles() }
 }
 
@@ -555,13 +596,26 @@ final class OfflineCatalogHardeningTests: XCTestCase {
 
     func testRegionCompatibilityResolver() {
         let resolver = RegionCompatibilityResolver()
-        XCTAssertEqual(resolver.compatibility(observedRegions: [], profileRegions: ["caribbean"]), .unspecified)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: []), .unspecified)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: ["caribbean"]), .compatible)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["caribbean"], profileRegions: ["western atlantic"]), .compatible)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["fiji"], profileRegions: ["indo-pacific"]), .compatible)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["fiji"], profileRegions: ["western atlantic"]), .conflicting)
-        XCTAssertEqual(resolver.compatibility(observedRegions: ["madeup place"], profileRegions: ["western atlantic"]), .unspecified)
+        let cases: [(observed: Set<String>, supported: Set<String>, expected: RegionCompatibility)] = [
+            ([], ["caribbean"], .unspecified),
+            (["caribbean"], [], .unspecified),
+            (["madeup place"], ["western atlantic"], .unspecified),
+            (["caribbean"], ["caribbean"], .compatible),
+            (["western atlantic"], ["caribbean"], .compatible),
+            (["atlantic"], ["caribbean"], .compatible),
+            (["caribbean"], ["atlantic"], .compatible),
+            (["fiji"], ["indo-pacific"], .compatible),
+            (["fiji"], ["western atlantic"], .conflicting),
+            (["indo-pacific"], ["caribbean"], .conflicting)
+        ]
+
+        for testCase in cases {
+            XCTAssertEqual(
+                resolver.compatibility(observedRegions: testCase.observed, supportedRegions: testCase.supported),
+                testCase.expected,
+                "Observed \(testCase.observed) against supported \(testCase.supported)"
+            )
+        }
     }
 
     func testCatalogValidationRules() throws {
