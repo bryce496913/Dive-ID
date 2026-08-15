@@ -34,6 +34,52 @@ struct Species: Identifiable, Hashable, Codable, Sendable {
     var review: RecordReview? = nil
 }
 
+extension Species {
+    enum CodingKeys: String, CodingKey {
+        case id, commonName, scientificName, summary, visualCharacteristics, habitat, geographicRange, imageAssetName
+        case bundledImage, packContext, regionalOccurrence, regionalOccurrenceNotes, subregions
+        case appearanceVariants, similarSpecies, aliases, categories, colors, markings, bodyShapes, habitats
+        case regions, behaviors, keywords, minimumSizeCentimeters, maximumSizeCentimeters
+        case minimumDepthMeters, maximumDepthMeters, cautions, dataSources, review
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        commonName = try container.decode(String.self, forKey: .commonName)
+        scientificName = try container.decode(String.self, forKey: .scientificName)
+        summary = try container.decode(String.self, forKey: .summary)
+        visualCharacteristics = try container.decode([String].self, forKey: .visualCharacteristics)
+        habitat = try container.decode(String.self, forKey: .habitat)
+        geographicRange = try container.decode(String.self, forKey: .geographicRange)
+        imageAssetName = try container.decodeIfPresent(String.self, forKey: .imageAssetName)
+
+        bundledImage = try container.decodeIfPresent(BundledSpeciesImage.self, forKey: .bundledImage)
+        packContext = try container.decodeIfPresent(PackContext.self, forKey: .packContext)
+        regionalOccurrence = try container.decodeIfPresent(String.self, forKey: .regionalOccurrence)
+        regionalOccurrenceNotes = try container.decodeIfPresent(String.self, forKey: .regionalOccurrenceNotes)
+        subregions = try container.decodeIfPresent([String].self, forKey: .subregions) ?? []
+        appearanceVariants = try container.decodeIfPresent([SpeciesAppearanceVariant].self, forKey: .appearanceVariants) ?? []
+        similarSpecies = try container.decodeIfPresent([SimilarSpeciesComparison].self, forKey: .similarSpecies) ?? []
+        aliases = try container.decodeIfPresent([String].self, forKey: .aliases) ?? []
+        categories = try container.decodeIfPresent([String].self, forKey: .categories) ?? []
+        colors = try container.decodeIfPresent([String].self, forKey: .colors) ?? []
+        markings = try container.decodeIfPresent([String].self, forKey: .markings) ?? []
+        bodyShapes = try container.decodeIfPresent([String].self, forKey: .bodyShapes) ?? []
+        habitats = try container.decodeIfPresent([String].self, forKey: .habitats) ?? []
+        regions = try container.decodeIfPresent([String].self, forKey: .regions) ?? []
+        behaviors = try container.decodeIfPresent([String].self, forKey: .behaviors) ?? []
+        keywords = try container.decodeIfPresent([String].self, forKey: .keywords) ?? []
+        minimumSizeCentimeters = try container.decodeIfPresent(Double.self, forKey: .minimumSizeCentimeters)
+        maximumSizeCentimeters = try container.decodeIfPresent(Double.self, forKey: .maximumSizeCentimeters)
+        minimumDepthMeters = try container.decodeIfPresent(Double.self, forKey: .minimumDepthMeters)
+        maximumDepthMeters = try container.decodeIfPresent(Double.self, forKey: .maximumDepthMeters)
+        cautions = try container.decodeIfPresent([String].self, forKey: .cautions) ?? []
+        dataSources = try container.decodeIfPresent([SpeciesDataSourceReference].self, forKey: .dataSources) ?? []
+        review = try container.decodeIfPresent(RecordReview.self, forKey: .review)
+    }
+}
+
 enum MatchScoreKind: String, Codable, Sendable {
     case relativeMatch
     case calibratedProbability
