@@ -32,6 +32,8 @@ Species records include data-source metadata fields for taxonomy, range, size, d
 
 The repository intentionally avoids binary image files. Bundled artwork is stored as text SVG vector markers with visible attribution metadata; these are offline visual markers, not verified species photographs. If photographic references are added later, use public domain, CC0, or CC BY assets and verify licensing per image before shipping.
 
+The current iOS UI deliberately presents its SF Symbol as an unavailable-artwork placeholder. SwiftUI's native `Image` initializers do not provide a documented, reliable path for decoding these raw bundled SVG files at runtime, and adding a web view or third-party SVG renderer would be disproportionate for the current markers. The app therefore does not load the SVG merely to restyle the placeholder or announce the SVG-specific alternative text. A future artwork pass can add a dedicated renderer while retaining the existing pack metadata and bounded data loader.
+
 ## Pack Versioning
 
 Each pack has a JSON manifest with a stable machine-readable ID, schema version, pack version, display metadata, creature count, creature resource name, and image subdirectory. The bundle repository validates that the decoded creature count matches the manifest count.
