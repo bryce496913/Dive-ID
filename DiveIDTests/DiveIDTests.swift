@@ -544,6 +544,43 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         XCTAssertTrue(unrelated.isEmpty)
     }
 
+    func testWeakDescriptionsDoNotProduceUsefulMatches() async throws {
+        let profiles = try await catalogProfiles()
+        let ranker = LocalSpeciesRanker()
+
+        for description in ["dark shape", "blue thing", "fish", "small fish", "dark fish"] {
+            let results = try await ranker.rank(observation: await parser.parse(description), profiles: profiles)
+            XCTAssertTrue(results.isEmpty, description)
+        }
+    }
+
+    func testRichDescriptionsAndExactNameStillProduceMatches() async throws {
+        let service = LocalMarineLifeIdentificationService(
+            catalogRepository: StaticCatalogRepository(profiles: try await catalogProfiles()),
+            parser: parser,
+            ranker: LocalSpeciesRanker()
+        )
+        let cases = [
+            ("black flat ray with white spots over sand", "Spotted Eagle Ray"),
+            ("long silver fish with big teeth", "Great Barracuda"),
+            ("spotted eagle ray", "Spotted Eagle Ray")
+        ]
+
+        for (description, expectedName) in cases {
+            let matches = try await service.identify(request: IdentificationRequest(source: .description(description)), processedPhoto: nil)
+            XCTAssertEqual(matches.first?.species.commonName, expectedName, description)
+        }
+    }
+
+    func testOccurrenceCannotCarryCandidateAcrossInclusionThreshold() async throws {
+        let barracuda = try productionProfile(named: "Great Barracuda")
+        let observation = await parser.parse("solitary turtle")
+
+        let results = try await LocalSpeciesRanker().rank(observation: observation, profiles: [barracuda])
+
+        XCTAssertTrue(results.isEmpty)
+    }
+
     func testLocalServiceReturnsRelativeMatchesAndRejectsPhoto() async throws {
         let service = LocalMarineLifeIdentificationService(catalogRepository: StaticCatalogRepository(profiles: try await catalogProfiles()), parser: parser, ranker: LocalSpeciesRanker())
         let matches = try await service.identify(request: IdentificationRequest(source: .description("Long silver fish with large teeth swimming alone.")), processedPhoto: nil)
