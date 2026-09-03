@@ -73,7 +73,7 @@ final class DiveIDTests: XCTestCase {
     }
 
     @MainActor
-    func testResultsRemainTiedToSessionRegionWhenCurrentPreferenceChanges() async throws {
+    func testReopenedResultsRemainTiedToSessionRegionWhenCurrentPreferenceChanges() async throws {
         let submittedRegion = OfflineIdentificationPackID(rawValue: "submitted-pack")
         let laterPreference = OfflineIdentificationPackID(rawValue: "later-preference")
         let submitted = resultPackMetadata(id: submittedRegion, displayName: "Submitted Region", speciesCount: 12)
@@ -82,18 +82,32 @@ final class DiveIDTests: XCTestCase {
         let store = InMemoryIdentificationSessionStore()
         let request = IdentificationRequest(source: .description("striped fish"), context: .init(region: await preference.selectedRegion()))
         _ = try await store.createSession(for: request, photo: nil)
-        await preference.setSelectedRegion(laterPreference)
-        let viewModel = IdentificationResultsViewModel(
+        let service = SpyMarineLifeIdentificationService(results: [makeMatch(score: 0.8)])
+        let catalog = ResultsCatalogRepository(metadata: [later, submitted])
+        let initialViewModel = IdentificationResultsViewModel(
             sessionID: request.id,
-            service: SpyMarineLifeIdentificationService(results: [makeMatch(score: 0.8)]),
+            service: service,
             sessionStore: store,
-            catalog: ResultsCatalogRepository(metadata: [later, submitted])
+            catalog: catalog
         )
 
-        await viewModel.loadIfNeeded()
+        await initialViewModel.loadIfNeeded()
+        await preference.setSelectedRegion(laterPreference)
+        let reopenedViewModel = IdentificationResultsViewModel(
+            sessionID: request.id,
+            service: service,
+            sessionStore: store,
+            catalog: catalog
+        )
 
-        XCTAssertEqual(viewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
-        XCTAssertFalse(viewModel.resultsSummary.contains("Later Preference"))
+        await reopenedViewModel.loadIfNeeded()
+
+        XCTAssertEqual(initialViewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
+        XCTAssertEqual(reopenedViewModel.loadingMessage, "Searching the Submitted Region offline pack…")
+        XCTAssertEqual(reopenedViewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
+        XCTAssertFalse(reopenedViewModel.resultsSummary.contains("Later Preference"))
+        let identificationCallCount = await service.callCount()
+        XCTAssertEqual(identificationCallCount, 1)
     }
 
     @MainActor
@@ -123,8 +137,7 @@ final class DiveIDTests: XCTestCase {
             .appendingPathComponent("../DiveID/Features/IdentificationResults/IdentificationResults.swift")
             .standardizedFileURL
         let contents = try String(contentsOf: source, encoding: .utf8)
-        XCTAssertFalse(contents.contains("Searching the Caribbean offline pack"))
-        XCTAssertFalse(contents.contains("locally stored Caribbean"))
+        XCTAssertFalse(contents.contains("Caribbean"))
     }
 
     @MainActor
