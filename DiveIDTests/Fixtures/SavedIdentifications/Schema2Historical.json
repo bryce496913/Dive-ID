@@ -10,7 +10,12 @@
       "visualCharacteristics": ["White spots", "Long whip-like tail"],
       "habitat": "Reefs and sandy flats",
       "geographicRange": "Western Atlantic",
-      "imageAssetName": null
+      "imageAssetName": null,
+      "packContext": {
+        "packID": "caribbean",
+        "displayName": "Caribbean",
+        "packVersion": 1
+      }
     },
     "matchRank": 2,
     "matchStrength": "good",
@@ -22,6 +27,11 @@
     "observationDescription": "Large dark ray with white spots swimming over sand",
     "identifiedAt": 700000000,
     "diveNotes": "Observed near the reef edge.",
-    "sourceSessionID": "44444444-4444-4444-4444-444444444444"
+    "sourceSessionID": "44444444-4444-4444-4444-444444444444",
+    "packContext": {
+      "packID": "caribbean",
+      "displayName": "Caribbean",
+      "packVersion": 1
+    }
   }]
 }

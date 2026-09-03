@@ -33,7 +33,26 @@
       "maximumDepthMeters": null,
       "cautions": [],
       "dataSources": [],
-      "review": null
+      "review": null,
+      "taxonomy": {
+        "wormsAphiaID": 105367,
+        "scientificNameAuthority": "Poey, 1876",
+        "taxonomicClass": "Elasmobranchii",
+        "order": "Carcharhiniformes",
+        "family": "Carcharhinidae",
+        "genus": "Carcharhinus",
+        "acceptedScientificName": "Carcharhinus perezi",
+        "sourceScientificName": "Carcharhinus perezi"
+      },
+      "measurements": {
+        "typicalObservedMinimumCentimeters": 150,
+        "typicalObservedMaximumCentimeters": 200,
+        "maximumRecordedCentimeters": 295,
+        "type": "totalLength"
+      },
+      "tailShape": "heterocercal tail",
+      "mouthAndHeadShape": ["short rounded snout"],
+      "finAndSpineClues": ["low interdorsal ridge"]
     },
     "matchRank": 1,
     "matchStrength": "strong",

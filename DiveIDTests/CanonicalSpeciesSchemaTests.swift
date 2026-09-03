@@ -49,6 +49,29 @@ final class CanonicalSpeciesSchemaTests: XCTestCase {
         XCTAssertEqual(reopened.match.species, species)
     }
 
+    func testSessionCacheRetainsCanonicalEnrichmentAndSpeciesIdentity() async throws {
+        let profile = try enrichedProfile()
+        let species = profile.species
+        let match = IdentificationMatch(id: species.id, species: species, score: 0.8, scoreKind: .relativeMatch)
+        let request = IdentificationRequest(source: .description("fish with canonical clues"))
+        let store = InMemoryIdentificationSessionStore()
+
+        let sessionID = try await store.createSession(for: request, photo: nil)
+        try await store.saveResult(
+            IdentificationSessionResult(matches: [match], completedAt: Date()),
+            for: sessionID
+        )
+
+        let reopened = try XCTUnwrap(try await store.result(for: sessionID)?.matches.first)
+        XCTAssertEqual(reopened.id, profile.id)
+        XCTAssertEqual(reopened.species.id, profile.id)
+        XCTAssertEqual(reopened.species.taxonomy, profile.taxonomy)
+        XCTAssertEqual(reopened.species.measurements, profile.measurements)
+        XCTAssertEqual(reopened.species.tailShape, profile.tailShape)
+        XCTAssertEqual(reopened.species.mouthAndHeadShape, profile.mouthAndHeadShape)
+        XCTAssertEqual(reopened.species.finAndSpineClues, profile.finAndSpineClues)
+    }
+
     func testTailHeadAndFinCluesContributeIndependentVisibleEvidence() async throws {
         let baseline = try enrichedProfile(tailShape: nil, mouthAndHeadShape: [], finAndSpineClues: [])
         let cases: [(String, LocalSpeciesProfile, String)] = [
