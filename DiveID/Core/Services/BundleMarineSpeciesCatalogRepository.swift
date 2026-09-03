@@ -77,10 +77,17 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                 else { throw LocalCatalogError.unverifiedRecord }
             }
             try validateRange(min: p.minimumSizeCentimeters, max: p.maximumSizeCentimeters); try validateRange(min: p.minimumDepthMeters, max: p.maximumDepthMeters)
-            try validate(p.categories, allowed: LocalObservationVocabulary.categories); try validate(p.colors, allowed: LocalObservationVocabulary.colors); try validate(p.markings, allowed: LocalObservationVocabulary.markings); try validate(p.bodyShapes, allowed: LocalObservationVocabulary.bodyShapes); try validate(p.habitats, allowed: LocalObservationVocabulary.habitats); try validate(p.regions, allowed: LocalObservationVocabulary.regions); try validate(p.behaviors, allowed: LocalObservationVocabulary.behaviors)
+            try validate(p.categories, allowed: CatalogueVocabulary.categories); try validate(p.colors, allowed: CatalogueVocabulary.colors); try validate(p.markings, allowed: CatalogueVocabulary.markings); try validate(p.bodyShapes, allowed: CatalogueVocabulary.bodyShapes); try validate(p.habitats, allowed: CatalogueVocabulary.habitats); try validate(p.regions, allowed: CatalogueVocabulary.regions); try validate(p.behaviors, allowed: CatalogueVocabulary.behaviors)
             let own = Set([normalizedIdentity(p.commonName), normalizedIdentity(p.scientificName)])
             for a in p.aliases.map(normalizedIdentity) where !a.isEmpty && canonical.contains(a) && !own.contains(a) { throw LocalCatalogError.aliasCollidesWithCanonicalIdentity }
-            var variantIDs = Set<String>(); for v in p.appearanceVariants { guard variantIDs.insert(v.id).inserted else { throw LocalCatalogError.invalidData }; try validateRange(min: v.minimumSizeCentimeters, max: v.maximumSizeCentimeters) }
+            var variantIDs = Set<String>()
+            for v in p.appearanceVariants {
+                guard variantIDs.insert(v.id).inserted else { throw LocalCatalogError.invalidData }
+                try validateRange(min: v.minimumSizeCentimeters, max: v.maximumSizeCentimeters)
+                try validate(v.colors, allowed: CatalogueVocabulary.colors)
+                try validate(v.markings, allowed: CatalogueVocabulary.markings)
+                try validate(v.bodyShapes, allowed: CatalogueVocabulary.bodyShapes)
+            }
             for c in p.similarSpecies { guard c.speciesID != p.id else { throw LocalCatalogError.selfSimilarSpeciesReference }; guard ids.contains(c.speciesID), !c.distinguishingText.isEmpty else { throw LocalCatalogError.invalidSimilarSpeciesReference } }
             if let image = p.bundledImage {
                 guard images.insert(image.fileName).inserted else { throw LocalCatalogError.duplicateImageFilename }

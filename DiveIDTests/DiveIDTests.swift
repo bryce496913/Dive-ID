@@ -391,6 +391,8 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     func testProductionCaribbeanPackLoadsAndValidates() async throws {
         let repository = BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self))
+        let manifests = try await repository.availablePacks()
+        let manifest = try XCTUnwrap(manifests.first { $0.id == .caribbean })
         let pack: OfflineIdentificationPack
         do {
             pack = try await repository.loadPack(id: .caribbean)
@@ -398,9 +400,62 @@ final class LocalOfflineIdentificationTests: XCTestCase {
             XCTFail("Production Caribbean pack failed to load: \(error)")
             return
         }
+        XCTAssertEqual(manifest.speciesCount, 8)
         XCTAssertEqual(pack.metadata.id, .caribbean)
-        XCTAssertEqual(pack.metadata.speciesCount, pack.profiles.count)
+        XCTAssertEqual(pack.profiles.count, 8)
+        XCTAssertEqual(pack.profiles.count, manifest.speciesCount)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: pack, bundle: Bundle(for: Self.self)))
+    }
+
+    func testParserProducesNewCatalogueClues() async {
+        let parsed = await parser.parse("A robust brown and olive fish")
+        XCTAssertEqual(parsed.colors.intersection(["brown", "olive"]), ["brown", "olive"])
+        XCTAssertTrue(parsed.bodyShapes.contains("robust"))
+    }
+
+    func testCatalogueAcceptsBrownOliveAndRobust() throws {
+        var profile = try productionProfile(named: "Green Sea Turtle")
+        profile.colors = ["brown", "olive"]
+        profile.bodyShapes = ["robust"]
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+    }
+
+    func testCatalogueRejectsUnknownTopLevelColor() throws {
+        var profile = try productionProfile(named: "Green Sea Turtle")
+        profile.colors = ["ultraviolet"]
+        assertUnknownVocabulary(profile, value: "ultraviolet")
+    }
+
+    func testCatalogueRejectsUnknownVariantColor() throws {
+        var profile = try productionProfile(named: "Stoplight Parrotfish")
+        profile.appearanceVariants = [variant(colors: ["ultraviolet"])]
+        assertUnknownVocabulary(profile, value: "ultraviolet")
+    }
+
+    func testCatalogueRejectsUnknownVariantMarking() throws {
+        var profile = try productionProfile(named: "Stoplight Parrotfish")
+        profile.appearanceVariants = [variant(markings: ["chevrons"])]
+        assertUnknownVocabulary(profile, value: "chevrons")
+    }
+
+    func testCatalogueRejectsUnknownVariantBodyShape() throws {
+        var profile = try productionProfile(named: "Stoplight Parrotfish")
+        profile.appearanceVariants = [variant(bodyShapes: ["cuboid"])]
+        assertUnknownVocabulary(profile, value: "cuboid")
+    }
+
+    func testProductionStoplightParrotfishVariantPassesValidation() throws {
+        let profile = try productionProfile(named: "Stoplight Parrotfish")
+        XCTAssertEqual(profile.appearanceVariants.first?.colors, ["brown"])
+        XCTAssertEqual(profile.appearanceVariants.first?.bodyShapes, ["robust"])
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+    }
+
+    func testProductionGreenSeaTurtlePassesValidation() throws {
+        let profile = try productionProfile(named: "Green Sea Turtle")
+        XCTAssertTrue(profile.colors.contains("brown"))
+        XCTAssertTrue(profile.colors.contains("olive"))
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
     }
 
     func testCatalogRepositoryCachesProductionPack() async throws {
@@ -526,6 +581,23 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self)).loadProfiles() }
+
+    private func productionProfile(named name: String) throws -> LocalSpeciesProfile {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let profiles = try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
+        return try XCTUnwrap(profiles.first { $0.commonName == name })
+    }
+
+    private func variant(colors: [String] = ["brown"], markings: [String] = ["spots"], bodyShapes: [String] = ["robust"]) -> SpeciesAppearanceVariant {
+        SpeciesAppearanceVariant(id: "test-variant", lifeStage: .juvenile, colors: colors, markings: markings, bodyShapes: bodyShapes, minimumSizeCentimeters: 2, maximumSizeCentimeters: 30, description: "Test variant", distinguishingFeatures: ["Test feature"])
+    }
+
+    private func assertUnknownVocabulary(_ profile: LocalSpeciesProfile, value: String, file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile]), file: file, line: line) {
+            XCTAssertEqual($0 as? LocalCatalogError, .unknownControlledVocabularyValue(value), file: file, line: line)
+        }
+    }
 }
 
 struct StaticCatalogRepository: MarineSpeciesCatalogRepository {
