@@ -10,6 +10,7 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let saved = try XCTUnwrap(try await repository.fetchAll().first)
         XCTAssertEqual(saved.species.id, UUID(uuidString: "11111111-1111-1111-1111-111111111111"))
         XCTAssertEqual(saved.species.commonName, "Queen Angelfish")
+        XCTAssertEqual(saved.species.scientificName, "Holacanthus ciliaris")
     }
 
     func testSchema2HistoricalFixturePreservesIdentificationAndEvidence() async throws {
@@ -20,12 +21,17 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         XCTAssertEqual(saved.id, UUID(uuidString: "22222222-2222-2222-2222-222222222222"))
         XCTAssertEqual(saved.species.id, UUID(uuidString: "33333333-3333-3333-3333-333333333333"))
         XCTAssertEqual(saved.sourceSessionID, UUID(uuidString: "44444444-4444-4444-4444-444444444444"))
+        XCTAssertEqual(saved.identifiedAt, Date(timeIntervalSinceReferenceDate: 700000000))
         XCTAssertEqual(saved.observationDescription, "Large dark ray with white spots swimming over sand")
         XCTAssertEqual(saved.explanation, "The spots and wing-shaped body support this match.")
         XCTAssertEqual(saved.distinguishingFeatures, ["Rows of white dorsal spots", "Flattened duckbill snout"])
         XCTAssertEqual(saved.cautions, ["Do not touch or chase wildlife"])
         XCTAssertEqual(saved.match.observationDescription, saved.observationDescription)
         XCTAssertEqual(saved.match.explanation, saved.explanation)
+        XCTAssertEqual(saved.packContext?.packID, .caribbean)
+        XCTAssertEqual(saved.packContext?.displayName, "Caribbean")
+        XCTAssertEqual(saved.packContext?.packVersion, 1)
+        XCTAssertEqual(saved.species.packContext, saved.packContext)
     }
 
     func testHistoricalSpeciesMissingEnrichmentUsesSafeDefaults() async throws {
@@ -34,7 +40,7 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
 
         let species = try XCTUnwrap(try await repository.fetchAll().first?.species)
         XCTAssertNil(species.bundledImage)
-        XCTAssertNil(species.packContext)
+        XCTAssertEqual(species.packContext?.packID, .caribbean)
         XCTAssertNil(species.regionalOccurrence)
         XCTAssertNil(species.regionalOccurrenceNotes)
         XCTAssertEqual(species.subregions, [])
@@ -69,8 +75,17 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
 
         let saved = try XCTUnwrap(try await repository.fetchAll().first)
         XCTAssertEqual(saved.id, UUID(uuidString: "55555555-5555-5555-5555-555555555555"))
+        XCTAssertEqual(saved.species.id, UUID(uuidString: "66666666-6666-6666-6666-666666666666"))
+        XCTAssertEqual(saved.species.commonName, "Caribbean Reef Shark")
+        XCTAssertEqual(saved.species.scientificName, "Carcharhinus perezi")
         XCTAssertEqual(saved.species.categories, ["shark"])
         XCTAssertEqual(saved.observationDescription, "Gray shark cruising beside a coral wall")
+        XCTAssertEqual(saved.identifiedAt, Date(timeIntervalSinceReferenceDate: 800000000))
+        XCTAssertEqual(saved.species.taxonomy?.family, "Carcharhinidae")
+        XCTAssertEqual(saved.species.measurements?.maximumRecordedCentimeters, 295)
+        XCTAssertEqual(saved.species.tailShape, "heterocercal tail")
+        XCTAssertEqual(saved.species.mouthAndHeadShape, ["short rounded snout"])
+        XCTAssertEqual(saved.species.finAndSpineClues, ["low interdorsal ridge"])
     }
 
     func testOpeningHistoricalSaveRestoresMatchWithoutIdentificationService() async throws {
