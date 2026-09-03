@@ -499,10 +499,11 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
         for description in acceptedDescriptions {
             do {
-                _ = try await service.identify(
+                let matches = try await service.identify(
                     request: IdentificationRequest(source: .description(description), context: .init(region: .caribbean)),
                     processedPhoto: nil
                 )
+                XCTAssertFalse(matches.isEmpty, "Expected \(description) to reach ranking")
             } catch {
                 XCTFail("Expected \(description) to pass regional validation, received \(error)")
             }
@@ -628,6 +629,39 @@ final class OfflineCatalogHardeningTests: XCTestCase {
                 testCase.expected,
                 "Observed \(testCase.observed) against supported \(testCase.supported)"
             )
+        }
+    }
+
+    func testServiceAndRankerUseEquivalentSharedRegionCompatibility() {
+        let service = LocalMarineLifeIdentificationService(
+            catalogRepository: StaticCatalogRepository(profiles: []),
+            parser: parser,
+            ranker: LocalSpeciesRanker()
+        )
+        let ranker = LocalSpeciesRanker()
+        let caribbeanPackRegions: Set<String> = ["caribbean"]
+        let cases: [(observation: Set<String>, expected: RegionCompatibility)] = [
+            (["caribbean"], .compatible),
+            (["western atlantic"], .compatible),
+            (["atlantic"], .compatible),
+            ([], .unspecified),
+            (["fiji"], .conflicting),
+            (["indo-pacific"], .conflicting)
+        ]
+
+        for testCase in cases {
+            let serviceResult = service.regionCompatibility(
+                observedRegions: testCase.observation,
+                supportedRegions: caribbeanPackRegions
+            )
+            let rankerResult = ranker.regionCompatibility(
+                observedRegions: testCase.observation,
+                supportedRegions: caribbeanPackRegions
+            )
+
+            XCTAssertEqual(serviceResult, testCase.expected, "Service observation: \(testCase.observation)")
+            XCTAssertEqual(rankerResult, testCase.expected, "Ranker observation: \(testCase.observation)")
+            XCTAssertEqual(serviceResult, rankerResult, "Observation: \(testCase.observation)")
         }
     }
 

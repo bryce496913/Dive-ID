@@ -58,7 +58,7 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map { $0.lowercased() }
             if nameTerms.contains(where: { observation.normalizedText.contains($0) }) { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
-            switch regionResolver.compatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
+            switch regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
             case .compatible:
                 score += weights.region
                 matched.append("geographic range")
@@ -108,6 +108,10 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if candidate.informationLevel == .limited { normalized = min(normalized, 0.64) }
             return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
         }
+    }
+
+    func regionCompatibility(observedRegions: Set<String>, supportedRegions: Set<String>) -> RegionCompatibility {
+        regionResolver.compatibility(observedRegions: observedRegions, supportedRegions: supportedRegions)
     }
 
     private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .occasional, .seasonal: 0; case .rare: -3 } }

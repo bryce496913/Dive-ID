@@ -24,7 +24,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             do { pack = try await catalogRepository.loadPack(id: packID) } catch { throw LocalIdentificationError.catalogUnavailable }
             let observation = await parser.parse(trimmed)
             let supportedRegions = Set(pack.metadata.regionAliases)
-            if regionResolver.compatibility(observedRegions: observation.regions, supportedRegions: supportedRegions) == .conflicting,
+            if regionCompatibility(observedRegions: observation.regions, supportedRegions: supportedRegions) == .conflicting,
                let outside = observation.regions.sorted().first {
                 throw LocalIdentificationError.regionMismatch(selected: packID, mentionedRegion: outside.capitalized)
             }
@@ -37,6 +37,10 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
                 return match
             }
         }
+    }
+
+    func regionCompatibility(observedRegions: Set<String>, supportedRegions: Set<String>) -> RegionCompatibility {
+        regionResolver.compatibility(observedRegions: observedRegions, supportedRegions: supportedRegions)
     }
 
     static func explanation(matched: [String], conflicts: [String], variant: SpeciesAppearanceVariant? = nil) -> String {
