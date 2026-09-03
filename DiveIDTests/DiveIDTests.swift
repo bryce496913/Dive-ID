@@ -143,18 +143,35 @@ final class DiveIDTests: XCTestCase {
     @MainActor
     func testDescriptionCreatesSessionWithoutCallingServiceAndPreservesText() async throws {
         let store = InMemoryIdentificationSessionStore()
-        let viewModel = DescriptionSearchViewModel(sessionStore: store)
+        let catalog = ResultsCatalogRepository(metadata: [
+            resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
+        ])
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .caribbean)
+        let viewModel = DescriptionSearchViewModel(
+            sessionStore: store,
+            catalog: catalog,
+            regionRepository: regionRepository
+        )
         viewModel.descriptionText = "  Blue fish, with spots!  "
         let submittedSessionID = await viewModel.submit()
         let sessionID = try XCTUnwrap(submittedSessionID)
         let request = try await store.request(for: sessionID)
         guard case .description(let description) = request.source else { return XCTFail("Expected description") }
         XCTAssertEqual(description, "Blue fish, with spots!")
+        XCTAssertEqual(request.context.region, .caribbean)
     }
 
     @MainActor
     func testDescriptionRejectsWhitespace() {
-        let viewModel = DescriptionSearchViewModel(sessionStore: InMemoryIdentificationSessionStore())
+        let catalog = ResultsCatalogRepository(metadata: [
+            resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
+        ])
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .caribbean)
+        let viewModel = DescriptionSearchViewModel(
+            sessionStore: InMemoryIdentificationSessionStore(),
+            catalog: catalog,
+            regionRepository: regionRepository
+        )
         viewModel.descriptionText = "  \n"
         XCTAssertFalse(viewModel.canSubmit)
     }
