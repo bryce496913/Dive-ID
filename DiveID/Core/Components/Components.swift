@@ -28,6 +28,10 @@ struct SpeciesArtwork: View {
     private let loader = BundleSpeciesImageLoader()
     var showsPlaceholder: Bool { species.bundledImage == nil }
     var accessibilityDescription: String { species.bundledImage?.alternativeText ?? "Placeholder image of \(species.commonName)" }
+    static func canLoadBundledArtwork(for species: Species, using loader: any SpeciesImageLoading) async -> Bool {
+        guard let image = species.bundledImage else { return false }
+        return (try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .caribbean)) != nil
+    }
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14).fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -37,7 +41,7 @@ struct SpeciesArtwork: View {
             VStack { Spacer(); Text(species.commonName).font(.caption.bold()).lineLimit(1).padding(8).frame(maxWidth: .infinity).background(Color.black.opacity(0.35)) }
         }
         .accessibilityLabel(accessibilityDescription)
-        .task { if let image = species.bundledImage { hasBundledVector = (try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .caribbean)) != nil } }
+        .task { hasBundledVector = await Self.canLoadBundledArtwork(for: species, using: loader) }
     }
     private var symbolName: String {
         if species.commonName.contains("Turtle") { return "tortoise.fill" }

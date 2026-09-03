@@ -645,11 +645,31 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertEqual(profile.species.commonName, profile.commonName)
     }
 
+    @MainActor
+    func testImageLessProfileRanksAndOpensInSpeciesDetail() async throws {
+        var profile = try productionCaribbeanProfiles().first!
+        profile.bundledImage = nil
+        let observation = await parser.parse(profile.commonName)
+
+        let matches = try await ranker.rank(observation: observation, profiles: [profile])
+
+        let rankedProfile = try XCTUnwrap(matches.first?.profile)
+        XCTAssertEqual(rankedProfile.id, profile.id)
+        XCTAssertNil(rankedProfile.bundledImage)
+        let viewModel = SpeciesDetailViewModel(species: rankedProfile.species, match: nil, repository: InMemorySavedIdentificationRepository())
+        let detail = SpeciesDetailView(viewModel: viewModel)
+        XCTAssertEqual(viewModel.species.id, profile.id)
+        _ = detail.body
+    }
+
     func testCatalogAcceptsValidApprovedBundledArtwork() throws {
-        let profile = try productionCaribbeanProfiles().first!
+        let profiles = try productionCaribbeanProfiles()
+        let profile = try XCTUnwrap(profiles.first)
 
         XCTAssertNotNil(profile.bundledImage)
-        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(
+            pack: OfflineIdentificationPack(metadata: try productionCaribbeanMetadata(speciesCount: profiles.count), profiles: profiles)
+        ))
     }
 
     func testCatalogRejectsIncompleteOrUnsupportedArtworkAttribution() throws {
@@ -662,17 +682,20 @@ final class OfflineCatalogHardeningTests: XCTestCase {
             return profile
         }
         func image(
+            fileName: String? = nil,
+            alternativeText: String? = nil,
             creatorName: String? = nil,
             sourceName: String? = nil,
+            sourceURL: String? = nil,
             licenseName: String? = nil,
             licenseURL: String? = nil
         ) -> BundledSpeciesImage {
             BundledSpeciesImage(
-                fileName: valid.fileName,
-                alternativeText: valid.alternativeText,
+                fileName: fileName ?? valid.fileName,
+                alternativeText: alternativeText ?? valid.alternativeText,
                 creatorName: creatorName ?? valid.creatorName,
                 sourceName: sourceName ?? valid.sourceName,
-                sourceURL: valid.sourceURL,
+                sourceURL: sourceURL ?? valid.sourceURL,
                 licenseName: licenseName ?? valid.licenseName,
                 licenseURL: licenseURL ?? valid.licenseURL
             )
@@ -683,8 +706,10 @@ final class OfflineCatalogHardeningTests: XCTestCase {
             }
         }
 
+        assertAttributionFailure(image(alternativeText: ""))
         assertAttributionFailure(image(creatorName: ""))
         assertAttributionFailure(image(sourceName: ""))
+        assertAttributionFailure(image(sourceURL: ""))
         assertAttributionFailure(image(licenseURL: ""))
         XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile(with: image(licenseName: ""))])) {
             XCTAssertEqual($0 as? LocalCatalogError, .unsupportedImageLicense(""))
@@ -692,6 +717,49 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([profile(with: image(licenseName: "All Rights Reserved"))])) {
             XCTAssertEqual($0 as? LocalCatalogError, .unsupportedImageLicense("All Rights Reserved"))
         }
+    }
+
+    func testCatalogRejectsMissingDeclaredArtworkFile() throws {
+        var profile = try productionCaribbeanProfiles().first!
+        let valid = try XCTUnwrap(profile.bundledImage)
+        profile.bundledImage = BundledSpeciesImage(
+            fileName: "not-in-the-pack.svg",
+            alternativeText: valid.alternativeText,
+            creatorName: valid.creatorName,
+            sourceName: valid.sourceName,
+            sourceURL: valid.sourceURL,
+            licenseName: valid.licenseName,
+            licenseURL: valid.licenseURL
+        )
+
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate(
+            pack: OfflineIdentificationPack(metadata: try productionCaribbeanMetadata(speciesCount: 1), profiles: [profile])
+        )) {
+            XCTAssertEqual($0 as? LocalCatalogError, .missingImage(profile.id))
+        }
+    }
+
+    func testManifestImageDirectoryLoadsArtwork() async throws {
+        let profile = try productionCaribbeanProfiles().first!
+        let image = try XCTUnwrap(profile.bundledImage)
+        let loader = BundleSpeciesImageLoader(bundle: Bundle(for: Self.self))
+
+        let data = try await loader.imageData(for: image, packID: .caribbean)
+
+        XCTAssertFalse(data.isEmpty)
+        XCTAssertTrue(String(decoding: data.prefix(100), as: UTF8.self).contains("<svg"))
+    }
+
+    @MainActor
+    func testImageLessArtworkDoesNotRequestBundleFile() async throws {
+        var profile = try productionCaribbeanProfiles().first!
+        profile.bundledImage = nil
+        let loader = CountingSpeciesImageLoader()
+
+        let didLoad = await SpeciesArtwork.canLoadBundledArtwork(for: profile.species, using: loader)
+        let requestCount = await loader.requestCount
+        XCTAssertFalse(didLoad)
+        XCTAssertEqual(requestCount, 0)
     }
 
     @MainActor
@@ -734,7 +802,21 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
     }
+    private func productionCaribbeanMetadata(speciesCount: Int) throws -> OfflineIdentificationPackMetadata {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json").standardizedFileURL
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let value = try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: url))
+        return OfflineIdentificationPackMetadata(id: value.id, schemaVersion: value.schemaVersion, packVersion: value.packVersion, displayName: value.displayName, shortDescription: value.shortDescription, geographicScope: value.geographicScope, regionAliases: value.regionAliases, speciesCount: speciesCount, speciesResourceName: value.speciesResourceName, imageSubdirectory: value.imageSubdirectory, includedWithApp: value.includedWithApp, lastDataReviewDate: value.lastDataReviewDate)
+    }
     private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
         LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
+    }
+}
+
+private actor CountingSpeciesImageLoader: SpeciesImageLoading {
+    private(set) var requestCount = 0
+    func imageData(for image: BundledSpeciesImage, packID: OfflineIdentificationPackID) async throws -> Data {
+        requestCount += 1
+        return Data()
     }
 }
