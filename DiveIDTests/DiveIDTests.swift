@@ -971,26 +971,64 @@ final class OfflineCatalogHardeningTests: XCTestCase {
     }
 
     @MainActor
-    func testImageLessArtworkDoesNotRequestBundleFile() async throws {
-        var profile = try productionCaribbeanProfiles().first!
-        profile.bundledImage = nil
-        let loader = CountingSpeciesImageLoader()
+    func testBundledSpeciesArtworkUsesAccessiblePlaceholderUntilSVGRenderingIsSupported() throws {
+        let profile = try productionCaribbeanProfiles().first!
 
-        let didLoad = await SpeciesArtwork.canLoadBundledArtwork(for: profile.species, using: loader)
-        let requestCount = await loader.requestCount
-        XCTAssertFalse(didLoad)
-        XCTAssertEqual(requestCount, 0)
+        let artwork = SpeciesArtwork(species: profile.species)
+        XCTAssertTrue(artwork.showsPlaceholder)
+        XCTAssertEqual(artwork.accessibilityDescription, "Species artwork unavailable")
+        _ = artwork.body
     }
 
     @MainActor
-    func testImageLessSpeciesArtworkUsesAccessiblePlaceholder() throws {
+    func testImageLessSpeciesArtworkUsesSameAccessiblePlaceholder() throws {
         var profile = try productionCaribbeanProfiles().first!
         profile.bundledImage = nil
 
         let artwork = SpeciesArtwork(species: profile.species)
         XCTAssertTrue(artwork.showsPlaceholder)
-        XCTAssertEqual(artwork.accessibilityDescription, "Placeholder image of \(profile.commonName)")
+        XCTAssertEqual(artwork.accessibilityDescription, "Species artwork unavailable")
         _ = artwork.body
+    }
+
+    @MainActor
+    func testMissingArtworkFileMetadataStillUsesAccessiblePlaceholder() throws {
+        let profile = try productionCaribbeanProfiles().first!
+        var species = profile.species
+        let image = try XCTUnwrap(species.bundledImage)
+        species.bundledImage = BundledSpeciesImage(
+            fileName: "missing.svg",
+            alternativeText: image.alternativeText,
+            creatorName: image.creatorName,
+            sourceName: image.sourceName,
+            sourceURL: image.sourceURL,
+            licenseName: image.licenseName,
+            licenseURL: image.licenseURL
+        )
+
+        let artwork = SpeciesArtwork(species: species)
+        XCTAssertTrue(artwork.showsPlaceholder)
+        XCTAssertEqual(artwork.accessibilityDescription, "Species artwork unavailable")
+    }
+
+    @MainActor
+    func testInvalidArtworkMetadataCannotLeakSVGAlternativeText() throws {
+        let profile = try productionCaribbeanProfiles().first!
+        var species = profile.species
+        let image = try XCTUnwrap(species.bundledImage)
+        species.bundledImage = BundledSpeciesImage(
+            fileName: image.fileName,
+            alternativeText: "This SVG artwork is visible",
+            creatorName: image.creatorName,
+            sourceName: image.sourceName,
+            sourceURL: image.sourceURL,
+            licenseName: image.licenseName,
+            licenseURL: image.licenseURL
+        )
+
+        let artwork = SpeciesArtwork(species: species)
+        XCTAssertTrue(artwork.showsPlaceholder)
+        XCTAssertEqual(artwork.accessibilityDescription, "Species artwork unavailable")
     }
 
     func testStructuredIdentificationQualityFixtures() async throws {
@@ -1030,13 +1068,5 @@ final class OfflineCatalogHardeningTests: XCTestCase {
     }
     private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
         LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
-    }
-}
-
-private actor CountingSpeciesImageLoader: SpeciesImageLoading {
-    private(set) var requestCount = 0
-    func imageData(for image: BundledSpeciesImage, packID: OfflineIdentificationPackID) async throws -> Data {
-        requestCount += 1
-        return Data()
     }
 }

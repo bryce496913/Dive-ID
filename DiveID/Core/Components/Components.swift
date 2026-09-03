@@ -24,24 +24,17 @@ struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var
 
 struct SpeciesArtwork: View {
     let species: Species
-    @State private var hasBundledVector = false
-    private let loader = BundleSpeciesImageLoader()
-    var showsPlaceholder: Bool { species.bundledImage == nil }
-    var accessibilityDescription: String { species.bundledImage?.alternativeText ?? "Placeholder image of \(species.commonName)" }
-    static func canLoadBundledArtwork(for species: Species, using loader: any SpeciesImageLoading) async -> Bool {
-        guard let image = species.bundledImage else { return false }
-        return (try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .caribbean)) != nil
-    }
+    var showsPlaceholder: Bool { true }
+    var accessibilityDescription: String { "Species artwork unavailable" }
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14).fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
             Image(systemName: symbolName)
                 .font(.system(size: 54, weight: .semibold))
-                .foregroundStyle(hasBundledVector ? Color.appHighlight : Color.appTextSecondary)
+                .foregroundStyle(Color.appTextSecondary)
             VStack { Spacer(); Text(species.commonName).font(.caption.bold()).lineLimit(1).padding(8).frame(maxWidth: .infinity).background(Color.black.opacity(0.35)) }
         }
         .accessibilityLabel(accessibilityDescription)
-        .task { hasBundledVector = await Self.canLoadBundledArtwork(for: species, using: loader) }
     }
     private var symbolName: String {
         if species.commonName.contains("Turtle") { return "tortoise.fill" }
