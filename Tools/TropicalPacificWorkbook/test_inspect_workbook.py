@@ -1,3 +1,4 @@
+from collections import Counter
 import hashlib
 from pathlib import Path
 import tempfile
@@ -8,6 +9,8 @@ from openpyxl import Workbook, load_workbook
 from Tools.TropicalPacificWorkbook.inspect_workbook import (
     DEFAULT_REPORT,
     DEFAULT_WORKBOOK,
+    count_true_booleans,
+    dictionary_boolean_fields,
     duplicate_and_blank_ids,
     inspect_workbook,
     normalize_spreadsheet_boolean,
@@ -83,22 +86,31 @@ class WorkbookInspectorTests(unittest.TestCase):
             ("true", True),
             ("false", False),
         )
-        workbook = Workbook()
-        booleans = workbook.active
-        booleans.title = "Boolean Values"
-        booleans.append(["value", "case_number"])
-        for index, (source, _) in enumerate(cases):
-            booleans.append([source, index])
-        workbook.save(self.path)
-        values_after_excel_round_trip = [
-            row["value"] for row in inspect_workbook(self.path)["Boolean Values"].rows
-        ]
-
-        for (source, expected), workbook_value in zip(cases, values_after_excel_round_trip):
+        for source, expected in cases:
             with self.subTest(source=source):
-                self.assertIs(normalize_spreadsheet_boolean(workbook_value), expected)
+                self.assertIs(normalize_spreadsheet_boolean(source), expected)
+
+    def test_committed_workbook_boolean_representation_and_count(self):
+        sheets = inspect_workbook(DEFAULT_WORKBOOK)
+        creatures = sheets["Creatures"]
+        values = [row["human_review_required"] for row in creatures.rows]
+
+        self.assertEqual(
+            dictionary_boolean_fields(sheets),
+            [("Creatures", "human_review_required")],
+        )
+        self.assertEqual(
+            Counter((type(value), value) for value in values),
+            {(bool, True): 1650},
+        )
+        self.assertEqual(count_true_booleans(creatures, "human_review_required"), 1650)
 
     def test_unexpected_boolean_is_reported(self):
+        for value in (2, -1, 0.5, "yes", "no", object()):
+            with self.subTest(value=value):
+                with self.assertRaises(ValueError):
+                    normalize_spreadsheet_boolean(value)
+
         workbook = Workbook()
         creatures = workbook.active
         creatures.title = "Creatures"
