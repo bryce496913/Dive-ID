@@ -7,20 +7,13 @@ protocol ObservationParsing: Sendable {
 enum LocalObservationVocabulary {
     static let stopWords: Set<String> = ["a", "an", "and", "the", "with", "near", "on", "in", "at", "of", "to", "was", "it", "about", "approximately", "saw", "seen"]
     static let synonyms: [String: Set<String>] = [
-        "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish"], "white": ["white", "pale"], "black": ["black", "dark"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
+        "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish"], "white": ["white", "pale"], "black": ["black", "dark"], "brown": ["brown"], "olive": ["olive"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
         "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"],
         "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
-        "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"],
+        "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"], "robust": ["robust"],
         "fish": ["fish"], "ray": ["ray", "eagle ray", "flat thing"], "turtle": ["turtle"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
         "schooling": ["school", "schooling"], "solitary": ["alone", "solitary"], "hovering": ["hovering", "hover"], "bottom-swimming": ["bottom", "sand"], "feeding": ["feeding", "grazing"], "swimming": ["swimming", "cruising"]
     ]
-    static let colors = Set(["blue", "yellow", "red", "white", "black", "orange", "silver", "green", "gray"])
-    static let markings = Set(["spots", "stripes", "spines", "tail", "shell", "teeth", "patches", "saddles", "eye stripe", "fin edge", "beak", "barbels"])
-    static let habitats = Set(["reef", "sand", "seagrass", "lagoon", "surface", "deep", "shallow", "rubble", "wall", "wreck", "mangrove", "open water", "anemone"])
-    static let bodyShapes = Set(["flat", "elongated", "compressed", "pointed", "round", "oval", "torpedo", "serpentine", "disk"])
-    static let categories = Set(["fish", "ray", "turtle", "shark", "eel", "octopus", "squid", "crustacean", "mollusk", "seahorse"])
-    static let behaviors = Set(["schooling", "solitary", "hovering", "bottom-swimming", "feeding", "swimming", "grazing", "burrowing", "hiding", "cleaning", "resting", "open-water cruising", "anemone association"])
-    static let regions: Set<String> = ["fiji", "pacific", "atlantic", "western atlantic", "caribbean", "indo-pacific", "hawaii", "indian", "florida", "bahamas", "bermuda", "gulf of mexico", "belize", "cayman islands", "cozumel", "bonaire", "curaçao", "curacao", "aruba", "turks and caicos", "puerto rico", "us virgin islands", "british virgin islands", "dominican republic", "jamaica"]
 }
 
 struct LocalObservationParser: ObservationParsing {
@@ -31,7 +24,7 @@ struct LocalObservationParser: ObservationParsing {
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
         for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: normalized) }) { tokens.insert(key) }
         let measurements = Self.measurements(in: normalized, tokens: tokens)
-        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(LocalObservationVocabulary.colors), markings: tokens.intersection(LocalObservationVocabulary.markings), bodyShapes: tokens.intersection(LocalObservationVocabulary.bodyShapes), habitats: tokens.intersection(LocalObservationVocabulary.habitats), regions: tokens.intersection(LocalObservationVocabulary.regions), behaviors: tokens.intersection(LocalObservationVocabulary.behaviors), categories: tokens.intersection(LocalObservationVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters)
+        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: tokens.intersection(CatalogueVocabulary.regions), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters)
     }
 
     static func normalize(_ text: String) -> String {

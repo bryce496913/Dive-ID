@@ -29,7 +29,7 @@ struct RegionCompatibilityResolver: Sendable {
     }
 
     private func recognizedRegions(in regions: Set<String>) -> Set<String> {
-        Set(regions.map(Self.normalize)).filter { LocalObservationVocabulary.regions.contains($0) }
+        Set(regions.map(Self.normalize)).filter { CatalogueVocabulary.regions.contains($0) }
     }
 
     private static func normalize(_ value: String) -> String {
