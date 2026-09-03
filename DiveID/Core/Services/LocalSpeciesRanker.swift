@@ -47,16 +47,20 @@ struct LocalSpeciesRanker: SpeciesRanking {
     init(weights: LocalRankingWeights = LocalRankingWeights()) { self.weights = weights }
 
     func rank(observation: ParsedObservation, profiles: [LocalSpeciesProfile]) async throws -> [RankedLocalSpecies] {
-        let info = Self.informationLevel(observation)
-        if info == .insufficient { return [] }
+        let observationInformation = Self.informationLevel(observation)
         var seen = Set<UUID>()
         let rawCandidates = profiles.compactMap { profile -> RawRankedCandidate? in
             guard seen.insert(profile.id).inserted else { return nil }
             var score = 0.0
             var matched: [String] = []
             var conflicts: [String] = []
-            let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map { $0.lowercased() }
-            if nameTerms.contains(where: { observation.normalizedText.contains($0) }) { score += weights.exactName; matched.append(profile.commonName) }
+            let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map(LocalObservationParser.normalize)
+            let hasExactName = nameTerms.contains {
+                LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
+            }
+            guard observationInformation != .insufficient || hasExactName else { return nil }
+            let informationLevel: ObservationInformationLevel = hasExactName ? .sufficient : observationInformation
+            if hasExactName { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
             switch regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
             case .compatible:
@@ -95,9 +99,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
             if observation.categories.contains("fish"), profile.categories.contains("turtle") || profile.categories.contains("ray") { score += weights.waterConflict; conflicts.append("animal group") }
             if !observation.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
+            // Occurrence is a prior for ordering plausible candidates, not identification
+            // evidence. A candidate must qualify without it before the prior is applied.
+            guard score >= weights.threshold else { return nil }
             score += occurrenceWeight(profile.regionalOccurrence)
             guard score >= weights.threshold else { return nil }
-            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: info)
+            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel)
         }
         return rawCandidates.sorted { a, b in
             if a.rawScore != b.rawScore { return a.rawScore > b.rawScore }
@@ -117,9 +124,31 @@ struct LocalSpeciesRanker: SpeciesRanking {
     private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .occasional, .seasonal: 0; case .rare: -3 } }
 
     private static func informationLevel(_ observation: ParsedObservation) -> ObservationInformationLevel {
-        let count = [!observation.categories.isEmpty, !observation.colors.isEmpty, !observation.markings.isEmpty, !observation.bodyShapes.isEmpty, !observation.habitats.isEmpty, !observation.behaviors.isEmpty, !observation.regions.isEmpty, observation.approximateSizeCentimeters != nil, observation.approximateDepthMeters != nil].filter { $0 }.count
-        if count >= 3 || observation.tokens.count >= 5 { return .sufficient }
-        if count >= 2 || observation.tokens.count >= 3 { return .limited }
+        // Each boolean is an independent semantic clue group. Expanded synonyms stay
+        // inside their source group and therefore never increase the evidence count.
+        let groups = [
+            !observation.categories.isEmpty,
+            !observation.colors.isEmpty,
+            !observation.markings.isEmpty,
+            !observation.bodyShapes.isEmpty,
+            !observation.habitats.isEmpty,
+            !observation.behaviors.isEmpty,
+            !observation.regions.isEmpty,
+            observation.approximateSizeCentimeters != nil,
+            observation.approximateDepthMeters != nil
+        ]
+        let count = groups.filter { $0 }.count
+        if count >= 3 { return .sufficient }
+
+        // Category, color, and approximate size are broad clues. Two of those alone
+        // (for example, "dark fish" or "small fish") are still not identifying.
+        let hasDistinctiveGroup = !observation.markings.isEmpty
+            || !observation.bodyShapes.isEmpty
+            || !observation.habitats.isEmpty
+            || !observation.behaviors.isEmpty
+            || !observation.regions.isEmpty
+            || observation.approximateDepthMeters != nil
+        if count >= 2, hasDistinctiveGroup { return .limited }
         return .insufficient
     }
 
