@@ -465,6 +465,10 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         let profile = try productionProfile(named: "Stoplight Parrotfish")
         XCTAssertEqual(profile.appearanceVariants.first?.colors, ["brown"])
         XCTAssertEqual(profile.appearanceVariants.first?.bodyShapes, ["robust"])
+        XCTAssertTrue(profile.markings.contains("beak"))
+        XCTAssertTrue(profile.behaviors.contains("grazing"))
+        XCTAssertEqual(profile.mouthAndHeadShape, ["beak-like dental plates", "angular forehead", "squared head"])
+        XCTAssertEqual(profile.review?.status, .draft)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
     }
 
@@ -504,6 +508,24 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         XCTAssertTrue(parsed.tokens.contains("20cm") || parsed.normalizedText.contains("20cm"))
     }
 
+    func testParserNormalizesParrotfishMorphologyAndGrazingTerms() async {
+        for term in ["beak", "beaked", "beak-like"] {
+            let parsed = await parser.parse("\(term) reef fish")
+            XCTAssertTrue(parsed.markings.contains("beak"), term)
+        }
+        for term in ["grazer", "grazing", "graze"] {
+            let parsed = await parser.parse("reef fish that will \(term)")
+            XCTAssertTrue(parsed.behaviors.contains("grazing"), term)
+            XCTAssertFalse(parsed.behaviors.contains("feeding"), term)
+        }
+        let squaredHead = await parser.parse("fish with a squared looking head")
+        XCTAssertTrue(squaredHead.tokens.contains("squared head"))
+
+        let unrelated = await parser.parse("silver fish feeding in open water")
+        XCTAssertFalse(unrelated.markings.contains("beak"))
+        XCTAssertFalse(unrelated.behaviors.contains("grazing"))
+    }
+
     func testParserTextSizesAndNonMarineInput() async {
         let halfMeter = await parser.parse("half a meter large turtle in shallow water")
         XCTAssertEqual(halfMeter.approximateSizeCentimeters, 50)
@@ -527,6 +549,31 @@ final class LocalOfflineIdentificationTests: XCTestCase {
             let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: profiles)
             XCTAssertEqual(ranked.first?.profile.commonName, item.1)
             XCTAssertTrue(item.2.contains { ranked.first?.matchedClues.contains($0) == true })
+        }
+    }
+
+    func testStoplightParrotfishRanksForBeakGrazingAndSquaredHeadClues() async throws {
+        let profiles = try await catalogProfiles()
+        let stoplightID = UUID(uuidString: "00000000-0000-0000-0000-000000000005")!
+        let descriptions = [
+            "beaked reef grazer with a squared looking head",
+            "beaked grazing fish on a Caribbean reef",
+            "parrot-like beak grazing coral reef"
+        ]
+
+        for description in descriptions {
+            let observation = await parser.parse(description)
+            let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: profiles)
+            let stoplightRank = ranked.firstIndex { $0.profile.id == stoplightID }.map { $0 + 1 }
+            XCTAssertNotNil(stoplightRank, description)
+            XCTAssertLessThanOrEqual(stoplightRank ?? .max, 3, description)
+            XCTAssertTrue(ranked.first { $0.profile.id == stoplightID }?.matchedClues.contains("beak") == true, description)
+            XCTAssertTrue(ranked.first { $0.profile.id == stoplightID }?.matchedClues.contains("grazing") == true, description)
+
+            for candidate in ranked where candidate.profile.id != stoplightID {
+                XCTAssertFalse(candidate.matchedClues.contains("beak"), "\(description): \(candidate.profile.commonName)")
+                XCTAssertFalse(candidate.matchedClues.contains("grazing"), "\(description): \(candidate.profile.commonName)")
+            }
         }
     }
 
