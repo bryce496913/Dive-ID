@@ -2,6 +2,18 @@
 
 Dive ID is an offline-first iOS prototype for written marine-life identification. The app processes text descriptions on device, ranks locally bundled creature records, and stores saved identifications locally.
 
+## Build and Run on iPhone
+
+Open **`DiveID.xcodeproj`**, not `Package.swift`, in Xcode. Select the **DiveID** scheme, then choose an iPhone simulator or a connected iPhone from the run-destination menu.
+
+```sh
+open DiveID.xcodeproj
+```
+
+The app target supports iPhone and the iPhone Simulator and currently requires iOS 18 or later. Running on a physical iPhone also requires selecting your development team under **DiveID target > Signing & Capabilities**.
+
+If Xcode only offers **My Mac** as a destination, the repository was probably opened as the Swift package. `Package.swift` exists only to run the platform-independent identification benchmark from the command line; it deliberately excludes the iOS app, UI, and resources and therefore is not an app entry point. Close that window and open `DiveID.xcodeproj` instead.
+
 ## Included Pack
 
 ### Caribbean Offline Identification Pack
