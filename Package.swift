@@ -10,9 +10,7 @@ let package = Package(
             name: "DiveID",
             path: "DiveID",
             exclude: [
-                "App", "Features", "Resources", "Core/Components", "Core/Theme", "Core/Catalog/Regions",
-                "Core/Catalog/Schema/RegionCatalogDefinition.swift",
-                "Core/Services/BundleMarineSpeciesCatalogRepository.swift",
+                "App", "Features", "Resources", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
                 "Core/Services/SavedSpeciesRepository.swift",
@@ -21,12 +19,16 @@ let package = Package(
             ],
             sources: [
                 "Core/Catalog/Schema/CatalogueVocabulary.swift",
+                "Core/Catalog/Schema/RegionCatalogDefinition.swift",
+                "Core/Catalog/Regions/RegionCatalogRegistry.swift",
+                "Core/Catalog/Regions/CaribbeanRegion.swift",
                 "Core/Models/LocalSpeciesProfile.swift",
                 "Core/Models/Models.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
                 "Core/Models/ParsedObservation.swift",
                 "Core/Services/IdentificationService.swift",
                 "Core/Services/IdentificationSessionStore.swift",
+                "Core/Services/BundleMarineSpeciesCatalogRepository.swift",
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
                 "Core/Services/LocalObservationParser.swift",
                 "Core/Services/LocalSpeciesRanker.swift",
@@ -43,7 +45,7 @@ let package = Package(
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
                 "SavedIdentificationCompatibilityTests.swift", "Fixtures"
             ],
-            sources: ["IdentificationBenchmarkTests.swift"]
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift"]
         )
     ]
 )
