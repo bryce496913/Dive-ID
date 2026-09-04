@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(ImageIO)
 import ImageIO
+#endif
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     private let bundle: Bundle
@@ -122,6 +124,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             guard dimensions.width <= maximumImageDimension, dimensions.height <= maximumImageDimension
             else { throw LocalCatalogError.imageTooLarge(speciesID) }
         } else {
+#if canImport(ImageIO)
             guard let source = CGImageSourceCreateWithData(data as CFData, nil),
                   CGImageSourceGetCount(source) > 0,
                   let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
@@ -130,6 +133,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             else { throw LocalCatalogError.invalidImage(speciesID) }
             guard width <= maximumImageDimension, height <= maximumImageDimension
             else { throw LocalCatalogError.imageTooLarge(speciesID) }
+#else
+            throw LocalCatalogError.invalidImage(speciesID)
+#endif
         }
     }
 
