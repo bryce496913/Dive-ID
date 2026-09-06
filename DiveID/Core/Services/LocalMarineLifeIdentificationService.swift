@@ -9,9 +9,16 @@ enum LocalIdentificationError: Error, Equatable, Sendable {
 
 struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
     let catalogRepository: any MarineSpeciesCatalogRepository
-    let parser: any ObservationParsing
-    let ranker: any SpeciesRanking
-    private let regionResolver = RegionCompatibilityResolver()
+    let searchEngine: any DescriptionSearching
+
+    init(catalogRepository: any MarineSpeciesCatalogRepository, searchEngine: any DescriptionSearching = StructuredDescriptionSearchEngine()) {
+        self.catalogRepository = catalogRepository
+        self.searchEngine = searchEngine
+    }
+
+    init(catalogRepository: any MarineSpeciesCatalogRepository, parser: any ObservationParsing, ranker: any SpeciesRanking) {
+        self.init(catalogRepository: catalogRepository, searchEngine: StructuredDescriptionSearchEngine(parser: parser, ranker: ranker))
+    }
 
     func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] {
         switch request.source {
@@ -22,25 +29,19 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             let packID = request.context.region ?? .caribbean
             let pack: OfflineIdentificationPack
             do { pack = try await catalogRepository.loadPack(id: packID) } catch { throw LocalIdentificationError.catalogUnavailable }
-            let observation = await parser.parse(trimmed)
-            let supportedRegions = Set(pack.metadata.regionAliases)
-            if regionCompatibility(observedRegions: observation.regions, supportedRegions: supportedRegions) == .conflicting,
-               let outside = observation.regions.sorted().first {
+            let result = try await searchEngine.search(description: trimmed, pack: pack)
+            if result.queryAnalysis.packRegionCompatibility == .conflicting,
+               let outside = result.queryAnalysis.observedRegions.sorted().first {
                 throw LocalIdentificationError.regionMismatch(selected: packID, mentionedRegion: outside.capitalized)
             }
-            let ranked = try await ranker.rank(observation: observation, profiles: pack.profiles)
-            return ranked.prefix(10).enumerated().map { index, ranked in
+            return result.candidates.prefix(10).enumerated().map { index, ranked in
                 var species = ranked.profile.species
                 species.packContext = PackContext(packID: pack.metadata.id, displayName: pack.metadata.displayName, packVersion: pack.metadata.packVersion)
-                var match = IdentificationMatch(id: ranked.profile.id, species: species, rank: index + 1, score: ranked.score, scoreKind: .relativeMatch, strength: MatchStrength.band(for: ranked.score), explanation: Self.explanation(matched: ranked.matchedClues, conflicts: ranked.conflictingClues, variant: ranked.matchedAppearanceVariant), distinguishingFeatures: ranked.profile.distinguishingFeatures, cautions: ranked.profile.cautions, taxonomicResolution: .species, observationDescription: trimmed)
+                var match = IdentificationMatch(id: ranked.profile.id, species: species, rank: index + 1, score: ranked.score, scoreKind: .relativeMatch, strength: MatchStrength.band(for: ranked.score), explanation: Self.explanation(matched: ranked.matchedEvidence, conflicts: ranked.conflictingEvidence, variant: ranked.matchedAppearanceVariant), distinguishingFeatures: ranked.profile.distinguishingFeatures, cautions: ranked.profile.cautions, taxonomicResolution: .species, observationDescription: trimmed)
                 match.packContext = species.packContext; match.matchedLifeStage = ranked.matchedAppearanceVariant?.lifeStage; match.informationLevel = ranked.informationLevel
                 return match
             }
         }
-    }
-
-    func regionCompatibility(observedRegions: Set<String>, supportedRegions: Set<String>) -> RegionCompatibility {
-        regionResolver.compatibility(observedRegions: observedRegions, supportedRegions: supportedRegions)
     }
 
     static func explanation(matched: [String], conflicts: [String], variant: SpeciesAppearanceVariant? = nil) -> String {
