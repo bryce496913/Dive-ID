@@ -25,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		P1 /* DiveID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiveID.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		P2 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		P3 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		P2 /* DiveIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		P3 /* DiveIDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -99,8 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				P1 /* DiveID.app */,
-				P2 /* .xctest */,
-				P3 /* .xctest */,
+				P2 /* DiveIDTests.xctest */,
+				P3 /* DiveIDUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -148,7 +148,7 @@
 			);
 			name = DiveIDTests;
 			productName = DiveIDTests;
-			productReference = P2 /* .xctest */;
+			productReference = P2 /* DiveIDTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B3 /* DiveIDUITests */ = {
@@ -169,7 +169,7 @@
 			);
 			name = DiveIDUITests;
 			productName = DiveIDUITests;
-			productReference = P3 /* .xctest */;
+			productReference = P3 /* DiveIDUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */

@@ -142,9 +142,7 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
     }
 
     private func repository(for fixtureName: String) throws -> (JSONSavedIdentificationRepository, URL, URL) {
-        let fixtureURL = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .appendingPathComponent("Fixtures/SavedIdentifications/\(fixtureName).json")
+        let fixtureURL = try TestResources.fixture(named: fixtureName, subdirectory: "SavedIdentifications")
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let fileURL = directory.appendingPathComponent("saved-identifications.json")

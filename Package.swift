@@ -47,9 +47,10 @@ let package = Package(
             path: "DiveIDTests",
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
-                "SavedIdentificationCompatibilityTests.swift", "Fixtures"
+                "SavedIdentificationCompatibilityTests.swift"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift"]
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TestResources.swift"],
+            resources: [.copy("Fixtures")]
         )
     ]
 )
