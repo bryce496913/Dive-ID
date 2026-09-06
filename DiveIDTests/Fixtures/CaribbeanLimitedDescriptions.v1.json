@@ -1,0 +1,74 @@
+[
+  {
+    "id": "limited-v1-ray-flat-spotted",
+    "split": "development",
+    "description": "flat spotted animal",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": ["00000000-0000-0000-0000-000000000010"],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "expectedRank": "top1",
+    "notes": "Flat body and spots are catalogue-supported eagle ray clues."
+  },
+  {
+    "id": "limited-v1-parrot-grazing",
+    "split": "development",
+    "description": "fish grazing",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": ["00000000-0000-0000-0000-000000000005"],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "expectedRank": "top1",
+    "notes": "Fish category plus grazing behavior is useful but sparse."
+  },
+  {
+    "id": "limited-v1-spiny-fish",
+    "split": "development",
+    "description": "fish with spines",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": ["00000000-0000-0000-0000-000000000006"],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "expectedRank": "top1",
+    "notes": "Fish category and spine marking are supported lionfish facts."
+  },
+  {
+    "id": "limited-v1-blue-reef",
+    "split": "development",
+    "description": "blue reef animal",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": ["00000000-0000-0000-0000-000000000003"],
+    "acceptableSpeciesIDs": ["fc213eff-6ba6-53ab-b288-f6e654299e68"],
+    "informationLevel": "limited",
+    "expectedNoUsefulMatch": false,
+    "expectedRank": "top3",
+    "notes": "Blue color and reef habitat support both accepted catalogue species."
+  },
+  {
+    "id": "limited-v1-blue-fish-abstain",
+    "split": "development",
+    "description": "blue fish",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "expectedRank": "none",
+    "notes": "Two broad clues do not identify a species."
+  },
+  {
+    "id": "limited-v1-spotted-abstain",
+    "split": "development",
+    "description": "spotted animal",
+    "selectedPackID": "caribbean",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "informationLevel": "insufficient",
+    "expectedNoUsefulMatch": true,
+    "expectedRank": "none",
+    "notes": "A marking without an animal group or body form must abstain."
+  }
+]
