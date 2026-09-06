@@ -9,6 +9,10 @@ protocol DescriptionSearching: Sendable {
 struct DescriptionSearchResult: Sendable {
     let candidates: [DescriptionSearchCandidate]
     let queryAnalysis: DescriptionQueryAnalysis
+    /// IDs admitted by retrieval before biological ranking. Structured search uses
+    /// the complete pack, which makes candidate recall comparable across engines.
+    let retrievedSpeciesIDs: [UUID]
+    let retrievalLimit: Int
 }
 
 struct DescriptionQueryAnalysis: Sendable {
@@ -70,7 +74,9 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
             queryAnalysis: DescriptionQueryAnalysis(
                 observedRegions: observation.regions,
                 packRegionCompatibility: compatibility
-            )
+            ),
+            retrievedSpeciesIDs: pack.profiles.map(\.id),
+            retrievalLimit: pack.profiles.count
         )
     }
 }
@@ -141,7 +147,9 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
             queryAnalysis: DescriptionQueryAnalysis(
                 observedRegions: observation.regions,
                 packRegionCompatibility: compatibility
-            )
+            ),
+            retrievedSpeciesIDs: retrieved.map(\.speciesID),
+            retrievalLimit: candidateLimit
         )
     }
 }
