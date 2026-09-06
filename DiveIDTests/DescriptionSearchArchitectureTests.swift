@@ -95,4 +95,51 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
             }
         }
     }
+
+    func testBM25RetrievesRichTextPhrasesDeterministically() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let retriever = BM25SpeciesCandidateRetriever()
+        let cases = [
+            ("fish with beak-like teeth grazing reef", "Stoplight Parrotfish"),
+            ("long streamlined predator with large jaw", "Great Barracuda"),
+            ("flat animal with white dots and whip-like tail", "Spotted Eagle Ray")
+        ]
+
+        for (query, expectedName) in cases {
+            let first = try await retriever.retrieve(query: query, documents: documents, limit: 5)
+            let second = try await retriever.retrieve(query: query, documents: documents, limit: 5)
+            let expectedID = try XCTUnwrap(pack.profiles.first { $0.commonName == expectedName }?.id)
+            XCTAssertTrue(first.contains { $0.speciesID == expectedID }, query)
+            XCTAssertEqual(first, second, query)
+            XCTAssertEqual(Set(first.map(\.speciesID)).count, first.count, query)
+        }
+    }
+
+    func testBM25LimitExactNameAndVagueQueryBehavior() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let retriever = BM25SpeciesCandidateRetriever()
+        let exact = try await retriever.retrieve(query: "Spotted Eagle Ray", documents: documents, limit: 3)
+        XCTAssertEqual(exact.first?.speciesID, pack.profiles.first { $0.commonName == "Spotted Eagle Ray" }?.id)
+        XCTAssertEqual(exact.first?.evidence, .exactName)
+        XCTAssertLessThanOrEqual(exact.count, 3)
+        let vague = try await retriever.retrieve(query: "an animal in the", documents: documents, limit: 5)
+        XCTAssertTrue(vague.isEmpty)
+    }
+
+    func testHybridSearchUsesRetrievedPoolAndStillCapsStructuredResults() async throws {
+        let pack = try await pack()
+        let result = try await HybridDescriptionSearchEngine(candidateLimit: 5).search(
+            description: "flat animal with white dots and whip-like tail over sand",
+            pack: pack
+        )
+        XCTAssertEqual(result.candidates.first?.profile.commonName, "Spotted Eagle Ray")
+        XCTAssertLessThanOrEqual(result.candidates.count, 10)
+        XCTAssertEqual(Set(result.candidates.map(\.profile.id)).count, result.candidates.count)
+        XCTAssertFalse(result.candidates.first?.matchedEvidence.isEmpty ?? true)
+
+        let vague = try await HybridDescriptionSearchEngine().search(description: "a fish on the reef", pack: pack)
+        XCTAssertTrue(vague.candidates.allSatisfy { $0.informationLevel != .sufficient && $0.score <= 0.64 })
+    }
 }
