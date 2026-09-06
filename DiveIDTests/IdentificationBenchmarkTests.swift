@@ -74,11 +74,10 @@ private struct FixtureCatalogRepository: MarineSpeciesCatalogRepository {
 }
 
 final class IdentificationBenchmarkTests: XCTestCase {
-    private let fixtureDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures")
     private let catalogDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("DiveID/Resources/IdentificationPacks/Caribbean")
 
     private func fixture() throws -> [IdentificationBenchmarkCase] {
-        try decode([IdentificationBenchmarkCase].self, at: fixtureDirectory.appendingPathComponent("CaribbeanIdentificationBenchmark.json"))
+        try decode([IdentificationBenchmarkCase].self, at: TestResources.fixture(named: "CaribbeanIdentificationBenchmark"))
     }
 
     private func pack() throws -> OfflineIdentificationPack {

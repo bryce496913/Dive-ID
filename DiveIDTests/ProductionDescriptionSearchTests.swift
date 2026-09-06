@@ -7,7 +7,7 @@ final class ProductionDescriptionSearchTests: XCTestCase {
     private let parrotfishDescription = "Beaked reef grazer with a squared looking head in the Caribbean."
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: Self.self))
+        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle)
     }
 
     private func service() -> LocalMarineLifeIdentificationService {
