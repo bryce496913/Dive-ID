@@ -106,9 +106,12 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
     }
 
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+        try Task.checkCancellation()
         let observation = await parser.parse(description)
-        let documents = pack.profiles.map { documentBuilder.document(from: $0, pack: pack.metadata) }
+        try Task.checkCancellation()
+        let documents = await SearchDocumentCache.shared.documents(pack: pack, builder: documentBuilder)
         let retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
+        try Task.checkCancellation()
         let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         var included = Set<UUID>()
         let pool = retrieved.enumerated().compactMap { offset, item -> SpeciesRankingCandidate? in
@@ -151,5 +154,57 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
             retrievalLimit: candidateLimit
         )
+    }
+}
+
+/// Pack versions normally invalidate this cache; the profile hash additionally catches
+/// locally edited/test catalogues whose version was not bumped.
+private actor SearchDocumentCache {
+    static let shared = SearchDocumentCache()
+    private var values: [String: [SpeciesSearchDocument]] = [:]
+
+    func documents(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> [SpeciesSearchDocument] {
+        var hasher = Hasher()
+        hasher.combine(pack.profiles)
+        let key = "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion):\(hasher.finalize()):\(String(reflecting: type(of: builder)))"
+        if let cached = values[key] { return cached }
+        let documents = pack.profiles.map { builder.document(from: $0, pack: pack.metadata) }
+        values[key] = documents
+        return documents
+    }
+}
+
+struct ConfiguredDescriptionSearchEngine: DescriptionSearching {
+    let selection: DescriptionRetrievalEngine
+    let bundle: Bundle
+    let runtime: SemanticRetrievalRuntime
+    let diagnostics: (any SemanticDiagnosticsReporting)?
+
+    init(selection: DescriptionRetrievalEngine = .productionBM25, bundle: Bundle = .main,
+         runtime: SemanticRetrievalRuntime = SemanticRetrievalRuntime(), diagnostics: (any SemanticDiagnosticsReporting)? = nil) {
+        self.selection = selection; self.bundle = bundle; self.runtime = runtime; self.diagnostics = diagnostics
+    }
+
+    func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+        guard selection == .experimentalCoreML else { return try await HybridDescriptionSearchEngine().search(description: description, pack: pack) }
+        let locations: SemanticArtifactLocations
+        do { locations = try .bundled(packID: pack.metadata.id, bundle: bundle) }
+        catch {
+            try Task.checkCancellation()
+            let start = ContinuousClock.now
+            let result = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
+            let duration = start.duration(to: .now).components
+            await diagnostics?.record(.init(requestedEngine: .experimentalCoreML, actualEngine: .productionBM25,
+                modelIdentity: nil, tokenizerIdentity: nil, preprocessingIdentity: nil,
+                packIdentity: "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion)",
+                fallbackReason: error as? SemanticArtifactDiagnostic ?? .malformedContract,
+                modelCacheHit: false, indexCacheHit: false, queryCacheHit: false, loadMilliseconds: 0,
+                embeddingMilliseconds: 0, retrievalMilliseconds: Double(duration.seconds) * 1_000 + Double(duration.attoseconds) / 1e15,
+                totalMilliseconds: Double(duration.seconds) * 1_000 + Double(duration.attoseconds) / 1e15))
+            return result
+        }
+        let retriever = ExperimentalSemanticRetriever(pack: pack.metadata, locations: locations, runtime: runtime,
+                                                       fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics)
+        return try await HybridDescriptionSearchEngine(retriever: retriever).search(description: description, pack: pack)
     }
 }
