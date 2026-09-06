@@ -31,6 +31,15 @@ struct SpeciesSearchDocument: Identifiable, Codable, Hashable, Sendable {
     let measurements: SpeciesSearchMeasurements
     let depthRange: SpeciesSearchDepthRange
     let fingerprint: String
+
+    /// Stable fingerprint for the complete document set, independent of input order.
+    static func catalogueFingerprint(_ documents: [SpeciesSearchDocument]) -> String {
+        let value = documents
+            .map { "\($0.speciesID.uuidString.lowercased()):\($0.fingerprint)" }
+            .sorted()
+            .joined(separator: "\n")
+        return StableSHA256.hexDigest("\(schemaVersion)\n\(value)")
+    }
 }
 
 protocol SpeciesSearchDocumentBuilding: Sendable {
