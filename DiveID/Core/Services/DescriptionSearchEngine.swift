@@ -19,6 +19,10 @@ struct DescriptionQueryAnalysis: Sendable {
 struct DescriptionSearchCandidate: Sendable {
     let profile: LocalSpeciesProfile
     let rawScore: Double
+    /// Normalized retrieval relevance, when a retriever participated. This is
+    /// not an identification probability.
+    let retrievalRelevance: Double?
+    let orderingScore: Double
     let score: Double
     let matchedEvidence: [String]
     let conflictingEvidence: [String]
@@ -44,12 +48,18 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
             observedRegions: observation.regions,
             supportedRegions: Set(pack.metadata.regionAliases)
         )
-        let ranked = try await ranker.rank(observation: observation, profiles: pack.profiles)
+        let ranked = try await ranker.rank(input: SpeciesRankingInput(
+            description: description,
+            observation: observation,
+            candidates: pack.profiles.map { SpeciesRankingCandidate(speciesID: $0.id, profile: $0, retrieval: nil) }
+        ))
         return DescriptionSearchResult(
             candidates: ranked.map {
                 DescriptionSearchCandidate(
                     profile: $0.profile,
                     rawScore: $0.rawScore,
+                    retrievalRelevance: $0.retrievalRelevance,
+                    orderingScore: $0.orderingScore,
                     score: $0.score,
                     matchedEvidence: $0.matchedClues,
                     conflictingEvidence: $0.conflictingClues,
@@ -94,8 +104,22 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         let documents = pack.profiles.map { documentBuilder.document(from: $0, pack: pack.metadata) }
         let retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
         let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-        let pool = retrieved.compactMap { profileByID[$0.speciesID] }
-        let ranked = try await ranker.rank(observation: observation, profiles: pool)
+        var included = Set<UUID>()
+        let pool = retrieved.enumerated().compactMap { offset, item -> SpeciesRankingCandidate? in
+            guard included.insert(item.speciesID).inserted, let profile = profileByID[item.speciesID] else { return nil }
+            return SpeciesRankingCandidate(
+                speciesID: item.speciesID,
+                profile: profile,
+                retrieval: SpeciesRetrievalSignal(
+                    source: item.evidence,
+                    scoreKind: item.scoreKind,
+                    score: item.retrievalScore,
+                    rank: offset + 1,
+                    evidence: item.matchedTerms
+                )
+            )
+        }
+        let ranked = try await ranker.rank(input: SpeciesRankingInput(description: description, observation: observation, candidates: pool))
         let compatibility = regionResolver.compatibility(
             observedRegions: observation.regions,
             supportedRegions: Set(pack.metadata.regionAliases)
@@ -105,6 +129,8 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
                 DescriptionSearchCandidate(
                     profile: $0.profile,
                     rawScore: $0.rawScore,
+                    retrievalRelevance: $0.retrievalRelevance,
+                    orderingScore: $0.orderingScore,
                     score: $0.score,
                     matchedEvidence: $0.matchedClues,
                     conflictingEvidence: $0.conflictingClues,
