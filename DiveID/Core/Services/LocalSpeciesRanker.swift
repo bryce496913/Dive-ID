@@ -1,12 +1,47 @@
 import Foundation
 
 protocol SpeciesRanking: Sendable {
-    func rank(observation: ParsedObservation, profiles: [LocalSpeciesProfile]) async throws -> [RankedLocalSpecies]
+    func rank(input: SpeciesRankingInput) async throws -> [RankedLocalSpecies]
+}
+
+/// Complete input to ranking. A nil retrieval signal deliberately identifies the
+/// independently testable structured baseline rather than an unknown score.
+struct SpeciesRankingInput: Sendable {
+    let description: String
+    let observation: ParsedObservation
+    let candidates: [SpeciesRankingCandidate]
+}
+
+struct SpeciesRankingCandidate: Sendable {
+    let speciesID: UUID
+    let profile: LocalSpeciesProfile
+    let retrieval: SpeciesRetrievalSignal?
+}
+
+struct SpeciesRetrievalSignal: Sendable, Equatable {
+    let source: RetrievedSpeciesCandidate.Evidence
+    let scoreKind: RetrievalScoreKind
+    let score: Double
+    let rank: Int
+    let evidence: [String]
+}
+
+extension SpeciesRanking {
+    /// Compatibility entry point for the structured engine and its direct tests.
+    func rank(observation: ParsedObservation, profiles: [LocalSpeciesProfile]) async throws -> [RankedLocalSpecies] {
+        try await rank(input: SpeciesRankingInput(
+            description: observation.normalizedText,
+            observation: observation,
+            candidates: profiles.map { SpeciesRankingCandidate(speciesID: $0.id, profile: $0, retrieval: nil) }
+        ))
+    }
 }
 
 struct RankedLocalSpecies: Sendable {
     let profile: LocalSpeciesProfile
     let rawScore: Double
+    let retrievalRelevance: Double?
+    let orderingScore: Double
     let score: Double
     let matchedClues: [String]
     let conflictingClues: [String]
@@ -18,12 +53,15 @@ extension RankedLocalSpecies {
     init(profile: LocalSpeciesProfile, score: Double, matchedClues: [String], conflictingClues: [String], matchedAppearanceVariant: SpeciesAppearanceVariant?, informationLevel: ObservationInformationLevel) {
         self.profile = profile
         self.rawScore = score
+        self.retrievalRelevance = nil
+        self.orderingScore = score
         self.score = score
         self.matchedClues = matchedClues
         self.conflictingClues = conflictingClues
         self.matchedAppearanceVariant = matchedAppearanceVariant
         self.informationLevel = informationLevel
     }
+
 }
 
 struct LocalRankingWeights: Sendable {
@@ -39,6 +77,8 @@ private struct RawRankedCandidate {
     let conflictingClues: [String]
     let matchedAppearanceVariant: SpeciesAppearanceVariant?
     let informationLevel: ObservationInformationLevel
+    let retrievalRelevance: Double?
+    let orderingScore: Double
 }
 
 struct LocalSpeciesRanker: SpeciesRanking {
@@ -46,11 +86,14 @@ struct LocalSpeciesRanker: SpeciesRanking {
     private let regionResolver = RegionCompatibilityResolver()
     init(weights: LocalRankingWeights = LocalRankingWeights()) { self.weights = weights }
 
-    func rank(observation: ParsedObservation, profiles: [LocalSpeciesProfile]) async throws -> [RankedLocalSpecies] {
+    func rank(input: SpeciesRankingInput) async throws -> [RankedLocalSpecies] {
+        let observation = input.observation
         let observationInformation = Self.informationLevel(observation)
+        let meaningfulTermCount = Self.meaningfulTerms(input.description).count
         var seen = Set<UUID>()
-        let rawCandidates = profiles.compactMap { profile -> RawRankedCandidate? in
-            guard seen.insert(profile.id).inserted else { return nil }
+        let rawCandidates = input.candidates.compactMap { candidate -> RawRankedCandidate? in
+            let profile = candidate.profile
+            guard candidate.speciesID == profile.id, seen.insert(candidate.speciesID).inserted else { return nil }
             var score = 0.0
             var matched: [String] = []
             var conflicts: [String] = []
@@ -58,8 +101,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let hasExactName = nameTerms.contains {
                 LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
             }
-            guard observationInformation != .insufficient || hasExactName else { return nil }
-            let informationLevel: ObservationInformationLevel = hasExactName ? .sufficient : observationInformation
+            let retrievalRelevance = candidate.retrieval.map(Self.normalizedRelevance)
+            let provisionalSemantic = candidate.retrieval?.scoreKind == .cosineSimilarity
+                && (retrievalRelevance ?? 0) >= 0.65 && meaningfulTermCount >= 3
+            guard observationInformation != .insufficient || hasExactName || provisionalSemantic else { return nil }
+            let informationLevel: ObservationInformationLevel = hasExactName ? .sufficient
+                : (provisionalSemantic && observationInformation == .insufficient ? .limited : observationInformation)
             if hasExactName { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
             switch regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
@@ -99,22 +146,39 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
             if observation.categories.contains("fish"), profile.categories.contains("turtle") || profile.categories.contains("ray") { score += weights.waterConflict; conflicts.append("animal group") }
             if !observation.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
-            // Occurrence is a prior for ordering plausible candidates, not identification
-            // evidence. A candidate must qualify without it before the prior is applied.
-            guard score >= weights.threshold else { return nil }
-            score += occurrenceWeight(profile.regionalOccurrence)
-            guard score >= weights.threshold else { return nil }
-            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel)
+            // Retrieval is normalized by its declared scale: cosine maps [-1, 1]
+            // to [0, 1], while BM25 uses a saturating transform s/(s+3). This
+            // avoids adding incompatible raw values. Semantic retrieval can grant
+            // provisional eligibility, but never upgrades confidence by itself.
+            guard score >= weights.threshold || hasExactName || provisionalSemantic else { return nil }
+            let relevanceContribution = (retrievalRelevance ?? 0) * 8
+            let orderingScore = score + relevanceContribution + occurrenceWeight(profile.regionalOccurrence)
+            guard orderingScore > 0 else { return nil }
+            if candidate.retrieval?.source == .semantic { matched.append("catalogue description similarity") }
+            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: orderingScore)
         }
         return rawCandidates.sorted { a, b in
-            if a.rawScore != b.rawScore { return a.rawScore > b.rawScore }
+            if a.orderingScore != b.orderingScore { return a.orderingScore > b.orderingScore }
             if a.profile.commonName != b.profile.commonName { return a.profile.commonName < b.profile.commonName }
             return a.profile.id.uuidString < b.profile.id.uuidString
         }.prefix(10).map { candidate in
+            // Confidence remains structured evidence, not retrieval probability.
             var normalized = max(0, min(1, candidate.rawScore / weights.maximumRawScore))
             if candidate.informationLevel == .limited { normalized = min(normalized, 0.64) }
-            return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
+            return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, retrievalRelevance: candidate.retrievalRelevance, orderingScore: candidate.orderingScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
         }
+    }
+
+    private static func normalizedRelevance(_ signal: SpeciesRetrievalSignal) -> Double {
+        switch signal.scoreKind {
+        case .cosineSimilarity: return max(0, min(1, (signal.score + 1) / 2))
+        case .bm25: return signal.score > 0 ? min(1, signal.score / (signal.score + 3)) : 0
+        }
+    }
+
+    private static func meaningfulTerms(_ description: String) -> Set<String> {
+        let ignored: Set<String> = ["a", "an", "and", "animal", "fish", "in", "is", "it", "of", "on", "the", "to", "with"]
+        return Set(description.lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init).filter { $0.count > 2 && !ignored.contains($0) })
     }
 
     func regionCompatibility(observedRegions: Set<String>, supportedRegions: Set<String>) -> RegionCompatibility {

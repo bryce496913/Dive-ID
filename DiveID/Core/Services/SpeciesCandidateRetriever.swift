@@ -21,6 +21,19 @@ struct RetrievedSpeciesCandidate: Sendable, Equatable {
     let matchedTerms: [String]
 }
 
+/// The scale of a retrieval score. Scores on different scales are never added
+/// directly by the ranker.
+enum RetrievalScoreKind: Sendable, Equatable {
+    case bm25
+    case cosineSimilarity
+}
+
+extension RetrievedSpeciesCandidate {
+    var scoreKind: RetrievalScoreKind {
+        evidence == .semantic ? .cosineSimilarity : .bm25
+    }
+}
+
 /// A small, dependency-free BM25 retriever. It deliberately indexes the complete
 /// canonical document rather than recreating the structured vocabulary as aliases.
 struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
