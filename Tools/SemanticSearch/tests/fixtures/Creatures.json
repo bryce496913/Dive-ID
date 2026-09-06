@@ -1,0 +1,25 @@
+[
+  {
+    "id":"00000000-0000-0000-0000-000000000003",
+    "commonName":"Atlantic Blue Tang",
+    "scientificName":"Acanthurus coeruleus",
+    "aliases":["atlantic-blue-tang"],
+    "categories":["fish"],
+    "colors":["blue","yellow"],
+    "markings":["tail"],
+    "bodyShapes":["compressed"],
+    "habitats":["reef","seagrass"],
+    "regions":["caribbean"],
+    "behaviors":["swimming"],
+    "keywords":["tang"],
+    "summary":"Adults are blue while juveniles are yellow.",
+    "distinguishingFeatures":["Sharp caudal spine"],
+    "typicalHabitat":"Coral reefs and seagrass",
+    "geographicRange":"Western Atlantic",
+    "subregions":[],
+    "appearanceVariants":[{"lifeStage":"juvenile","colors":["yellow"],"markings":[],"bodyShapes":["oval"],"description":"Yellow juvenile.","distinguishingFeatures":[]}],
+    "mouthAndHeadShape":[],
+    "finAndSpineClues":[],
+    "review":{"status":"draft","reviewerNotes":"Needs review","reviewDate":null,"verifiedBy":null}
+  }
+]

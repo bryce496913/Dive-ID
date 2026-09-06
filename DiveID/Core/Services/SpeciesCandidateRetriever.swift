@@ -12,6 +12,7 @@ struct RetrievedSpeciesCandidate: Sendable, Equatable {
     enum Evidence: String, Sendable {
         case exactName
         case fullText
+        case semantic
     }
 
     let speciesID: UUID

@@ -33,6 +33,7 @@ let package = Package(
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
                 "Core/Services/DescriptionSearchEngine.swift",
                 "Core/Services/SpeciesCandidateRetriever.swift",
+                "Core/Services/SemanticCandidateRetriever.swift",
                 "Core/Services/LocalObservationParser.swift",
                 "Core/Services/LocalSpeciesRanker.swift",
                 "Core/Services/MarineSpeciesCatalogRepository.swift",
@@ -48,7 +49,7 @@ let package = Package(
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
                 "SavedIdentificationCompatibilityTests.swift", "Fixtures"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift"]
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift"]
         )
     ]
 )

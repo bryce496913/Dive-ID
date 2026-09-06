@@ -5,3 +5,10 @@ build/
 xcuserdata/
 *.moved-aside
 .build/
+
+# Reproducible semantic-search development artifacts
+Tools/SemanticSearch/generated/
+
+# Python developer-tool caches
+__pycache__/
+*.py[cod]
