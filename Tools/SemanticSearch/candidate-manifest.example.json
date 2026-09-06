@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "frozenAtUTC": "REQUIRED",
+  "model": {"identifier": "REQUIRED", "source": "REQUIRED upstream URL", "revision": "REQUIRED immutable commit SHA", "license": "REQUIRED SPDX identifier"},
+  "conversion": {"coremltoolsVersion": "REQUIRED", "sourceFrameworkVersion": "REQUIRED", "computePrecision": "REQUIRED", "minimumDeploymentTarget": "iOS18", "quantization": "REQUIRED (none is a value)", "command": "REQUIRED"},
+  "preprocessing": {"tokenizerIdentifier": "REQUIRED", "tokenizerRevision": "REQUIRED", "preprocessingIdentifier": "REQUIRED", "maximumSequenceLength": "REQUIRED", "pooling": "REQUIRED", "normalizeL2": true, "queryPrefix": "REQUIRED", "documentPrefix": "REQUIRED"},
+  "ranking": {"candidateLimit": 50, "parameters": "REQUIRED exact frozen values or source revision"},
+  "acceptanceCriteria": {"benchmarkGateVersion": 1, "numericalParity": {"maximumAbsoluteError": 0.001, "minimumCosineSimilarity": 0.999, "maximumTop10RankingChanges": 0}, "deviceBudgets": "REQUIRED frozen per-device budgets"},
+  "catalogue": {"packID": "caribbean", "packVersion": 3, "documentSchemaVersion": 1, "documentFingerprint": "REQUIRED"},
+  "datasets": {"development": "CaribbeanIdentificationBenchmark.json development split (70)", "limited": "CaribbeanLimitedDescriptions.v1.json", "independentHoldout": "REQUIRED fresh unseen dataset version and denominator"},
+  "artifacts": [{"path": "REQUIRED", "sha256": "REQUIRED 64-character lowercase SHA-256"}]
+}

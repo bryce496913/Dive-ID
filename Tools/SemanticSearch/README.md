@@ -103,3 +103,28 @@ Enable the engine explicitly in a developer build by setting the user default
 stale, or malformed artifacts emit a typed diagnostic and fall back offline; query text
 is excluded from the metrics payload. Device inference, latency, encoder conversion
 parity, and accuracy remain unverified until a compatible real artifact is supplied.
+
+## Frozen-candidate audit
+
+`evaluate_candidate.py` is the evidence collector for the next real-model run. It does
+not generate or substitute embeddings. Before exposing holdout cases, copy
+`candidate-manifest.example.json` outside the repository, fill every field, pin the
+model to an immutable revision, list the SHA-256 of every input, and make it read-only.
+
+Reference and physical-device runners export JSONL rows shaped as
+`{"id":"case-id","vector":[...]}`; catalogue rows use species IDs. Verify the
+frozen files and parity with:
+
+```sh
+python3 Tools/SemanticSearch/evaluate_candidate.py \
+  --manifest /frozen/candidate-manifest.json --root /frozen \
+  --reference /frozen/reference-query-vectors.jsonl \
+  --coreml /frozen/device-query-vectors.jsonl \
+  --catalogue-vectors /frozen/reference-catalogue-vectors.jsonl \
+  --output /frozen/parity-report.json
+```
+
+Core ML output must come from the packaged model on named physical hardware. The command
+exits 1 for checksum/parity failure, 2 for invalid evidence, and 0 only when verification
+passes. Omitting all vector inputs is an artifact preflight and reports parity as
+`not-evaluated`; partial parity inputs are rejected.
