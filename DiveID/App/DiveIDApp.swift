@@ -15,9 +15,13 @@ struct DiveIDApp: App {
         let catalogRepository = BundleMarineSpeciesCatalogRepository()
         self.catalogRepository = catalogRepository
         self.regionRepository = UserDefaultsSelectedDiveRegionRepository()
+        // Deliberately opt-in: production installations continue to use BM25 unless a
+        // developer build sets DiveIDExperimentalSemanticSearch to true.
+        let retrievalEngine: DescriptionRetrievalEngine = UserDefaults.standard.bool(forKey: "DiveIDExperimentalSemanticSearch")
+            ? .experimentalCoreML : .productionBM25
         identificationService = LocalMarineLifeIdentificationService(
             catalogRepository: catalogRepository,
-            searchEngine: HybridDescriptionSearchEngine()
+            searchEngine: ConfiguredDescriptionSearchEngine(selection: retrievalEngine)
         )
         savedRepository = (try? JSONSavedIdentificationRepository()) ?? InMemorySavedIdentificationRepository()
         sessionStore = InMemoryIdentificationSessionStore()

@@ -6,9 +6,16 @@ protocol SemanticEmbeddingProviding: Sendable {
     var modelIdentifier: String { get }
     var modelVersion: String { get }
     var embeddingDimension: Int { get }
+    var tokenizerIdentifier: String { get }
+    var preprocessingIdentifier: String { get }
 
     func embedding(for text: String) async throws -> [Float]
     func embeddings(for texts: [String]) async throws -> [[Float]]
+}
+
+extension SemanticEmbeddingProviding {
+    var tokenizerIdentifier: String { "unspecified" }
+    var preprocessingIdentifier: String { "unspecified" }
 }
 
 extension SemanticEmbeddingProviding {
@@ -29,6 +36,9 @@ struct SpeciesEmbeddingIndexMetadata: Codable, Hashable, Sendable {
     let documentFingerprint: String
     let packID: OfflineIdentificationPackID
     let packVersion: Int
+    var tokenizerIdentifier: String = "unspecified"
+    var preprocessingIdentifier: String = "unspecified"
+    var indexFormatVersion: Int = 1
 }
 
 struct SpeciesEmbeddingRecord: Codable, Hashable, Sendable {
@@ -46,12 +56,16 @@ enum SemanticIndexError: Error, Equatable {
     case modelIdentifierMismatch
     case modelVersionMismatch
     case embeddingDimensionMismatch
+    case tokenizerMismatch
+    case preprocessingMismatch
+    case unsupportedIndexFormat
     case searchDocumentSchemaMismatch
     case documentFingerprintMismatch(speciesID: UUID?)
     case packIdentifierMismatch
     case packVersionMismatch
     case missingEmbedding(speciesID: UUID)
     case duplicateEmbedding(speciesID: UUID)
+    case unknownEmbedding(speciesID: UUID)
     case invalidVector(speciesID: UUID)
 }
 
@@ -65,6 +79,9 @@ extension SpeciesEmbeddingIndex {
         guard metadata.modelIdentifier == provider.modelIdentifier else { throw SemanticIndexError.modelIdentifierMismatch }
         guard metadata.modelVersion == provider.modelVersion else { throw SemanticIndexError.modelVersionMismatch }
         guard metadata.embeddingDimension == provider.embeddingDimension else { throw SemanticIndexError.embeddingDimensionMismatch }
+        guard metadata.tokenizerIdentifier == provider.tokenizerIdentifier else { throw SemanticIndexError.tokenizerMismatch }
+        guard metadata.preprocessingIdentifier == provider.preprocessingIdentifier else { throw SemanticIndexError.preprocessingMismatch }
+        guard metadata.indexFormatVersion == 1 else { throw SemanticIndexError.unsupportedIndexFormat }
         guard metadata.searchDocumentSchemaVersion == SpeciesSearchDocument.schemaVersion else { throw SemanticIndexError.searchDocumentSchemaMismatch }
         guard metadata.packID == pack.id else { throw SemanticIndexError.packIdentifierMismatch }
         guard metadata.packVersion == pack.packVersion else { throw SemanticIndexError.packVersionMismatch }
@@ -73,9 +90,15 @@ extension SpeciesEmbeddingIndex {
         }
 
         var byID: [UUID: SpeciesEmbeddingRecord] = [:]
+        let expectedIDs = Set(documents.map(\.speciesID))
         for record in records {
             guard byID.updateValue(record, forKey: record.speciesID) == nil else {
                 throw SemanticIndexError.duplicateEmbedding(speciesID: record.speciesID)
+            }
+            guard expectedIDs.contains(record.speciesID) else { throw SemanticIndexError.unknownEmbedding(speciesID: record.speciesID) }
+            guard !record.vector.isEmpty, record.vector.count == metadata.embeddingDimension,
+                  record.vector.allSatisfy(\.isFinite), record.vector.contains(where: { $0 != 0 }) else {
+                throw SemanticIndexError.invalidVector(speciesID: record.speciesID)
             }
         }
         for document in documents {
@@ -150,6 +173,8 @@ struct FallbackSpeciesCandidateRetriever: SpeciesCandidateRetrieving {
     func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] {
         do {
             return try await primary.retrieve(query: query, documents: documents, limit: limit)
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             return try await fallback.retrieve(query: query, documents: documents, limit: limit)
         }

@@ -34,6 +34,8 @@ let package = Package(
                 "Core/Services/DescriptionSearchEngine.swift",
                 "Core/Services/SpeciesCandidateRetriever.swift",
                 "Core/Services/SemanticCandidateRetriever.swift",
+                "Core/Services/CoreMLSemanticEmbeddingProvider.swift",
+                "Core/Services/SemanticRetrievalRuntime.swift",
                 "Core/Services/LocalObservationParser.swift",
                 "Core/Services/LocalSpeciesRanker.swift",
                 "Core/Services/MarineSpeciesCatalogRepository.swift",
