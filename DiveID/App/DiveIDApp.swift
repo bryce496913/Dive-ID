@@ -15,12 +15,9 @@ struct DiveIDApp: App {
         let catalogRepository = BundleMarineSpeciesCatalogRepository()
         self.catalogRepository = catalogRepository
         self.regionRepository = UserDefaultsSelectedDiveRegionRepository()
-        let parser = LocalObservationParser()
-        let ranker = LocalSpeciesRanker()
         identificationService = LocalMarineLifeIdentificationService(
             catalogRepository: catalogRepository,
-            parser: parser,
-            ranker: ranker
+            searchEngine: StructuredDescriptionSearchEngine()
         )
         savedRepository = (try? JSONSavedIdentificationRepository()) ?? InMemorySavedIdentificationRepository()
         sessionStore = InMemoryIdentificationSessionStore()

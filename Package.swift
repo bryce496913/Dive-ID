@@ -26,10 +26,12 @@ let package = Package(
                 "Core/Models/Models.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
                 "Core/Models/ParsedObservation.swift",
+                "Core/Models/SpeciesSearchDocument.swift",
                 "Core/Services/IdentificationService.swift",
                 "Core/Services/IdentificationSessionStore.swift",
                 "Core/Services/BundleMarineSpeciesCatalogRepository.swift",
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
+                "Core/Services/DescriptionSearchEngine.swift",
                 "Core/Services/LocalObservationParser.swift",
                 "Core/Services/LocalSpeciesRanker.swift",
                 "Core/Services/MarineSpeciesCatalogRepository.swift",
@@ -45,7 +47,7 @@ let package = Package(
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
                 "SavedIdentificationCompatibilityTests.swift", "Fixtures"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift"]
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift"]
         )
     ]
 )
