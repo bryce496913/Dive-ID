@@ -64,3 +64,58 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
         )
     }
 }
+
+/// Retrieves a bounded lexical pool, then delegates every biological score,
+/// conflict, confidence cap, and explanation decision to the structured ranker.
+struct HybridDescriptionSearchEngine: DescriptionSearching {
+    let retriever: any SpeciesCandidateRetrieving
+    let documentBuilder: any SpeciesSearchDocumentBuilding
+    let parser: any ObservationParsing
+    let ranker: any SpeciesRanking
+    let candidateLimit: Int
+    private let regionResolver = RegionCompatibilityResolver()
+
+    init(
+        retriever: any SpeciesCandidateRetrieving = BM25SpeciesCandidateRetriever(),
+        documentBuilder: any SpeciesSearchDocumentBuilding = SpeciesSearchDocumentBuilder(),
+        parser: any ObservationParsing = LocalObservationParser(),
+        ranker: any SpeciesRanking = LocalSpeciesRanker(),
+        candidateLimit: Int = 50
+    ) {
+        self.retriever = retriever
+        self.documentBuilder = documentBuilder
+        self.parser = parser
+        self.ranker = ranker
+        self.candidateLimit = candidateLimit
+    }
+
+    func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+        let observation = await parser.parse(description)
+        let documents = pack.profiles.map { documentBuilder.document(from: $0, pack: pack.metadata) }
+        let retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
+        let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let pool = retrieved.compactMap { profileByID[$0.speciesID] }
+        let ranked = try await ranker.rank(observation: observation, profiles: pool)
+        let compatibility = regionResolver.compatibility(
+            observedRegions: observation.regions,
+            supportedRegions: Set(pack.metadata.regionAliases)
+        )
+        return DescriptionSearchResult(
+            candidates: ranked.map {
+                DescriptionSearchCandidate(
+                    profile: $0.profile,
+                    rawScore: $0.rawScore,
+                    score: $0.score,
+                    matchedEvidence: $0.matchedClues,
+                    conflictingEvidence: $0.conflictingClues,
+                    informationLevel: $0.informationLevel,
+                    matchedAppearanceVariant: $0.matchedAppearanceVariant
+                )
+            },
+            queryAnalysis: DescriptionQueryAnalysis(
+                observedRegions: observation.regions,
+                packRegionCompatibility: compatibility
+            )
+        )
+    }
+}

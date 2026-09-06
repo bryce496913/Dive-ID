@@ -11,13 +11,13 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
     let catalogRepository: any MarineSpeciesCatalogRepository
     let searchEngine: any DescriptionSearching
 
-    init(catalogRepository: any MarineSpeciesCatalogRepository, searchEngine: any DescriptionSearching = StructuredDescriptionSearchEngine()) {
+    init(catalogRepository: any MarineSpeciesCatalogRepository, searchEngine: any DescriptionSearching = HybridDescriptionSearchEngine()) {
         self.catalogRepository = catalogRepository
         self.searchEngine = searchEngine
     }
 
     init(catalogRepository: any MarineSpeciesCatalogRepository, parser: any ObservationParsing, ranker: any SpeciesRanking) {
-        self.init(catalogRepository: catalogRepository, searchEngine: StructuredDescriptionSearchEngine(parser: parser, ranker: ranker))
+        self.init(catalogRepository: catalogRepository, searchEngine: HybridDescriptionSearchEngine(parser: parser, ranker: ranker))
     }
 
     func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] {

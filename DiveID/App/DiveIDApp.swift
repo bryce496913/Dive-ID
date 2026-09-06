@@ -17,7 +17,7 @@ struct DiveIDApp: App {
         self.regionRepository = UserDefaultsSelectedDiveRegionRepository()
         identificationService = LocalMarineLifeIdentificationService(
             catalogRepository: catalogRepository,
-            searchEngine: StructuredDescriptionSearchEngine()
+            searchEngine: HybridDescriptionSearchEngine()
         )
         savedRepository = (try? JSONSavedIdentificationRepository()) ?? InMemorySavedIdentificationRepository()
         sessionStore = InMemoryIdentificationSessionStore()

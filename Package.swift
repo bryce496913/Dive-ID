@@ -32,6 +32,7 @@ let package = Package(
                 "Core/Services/BundleMarineSpeciesCatalogRepository.swift",
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
                 "Core/Services/DescriptionSearchEngine.swift",
+                "Core/Services/SpeciesCandidateRetriever.swift",
                 "Core/Services/LocalObservationParser.swift",
                 "Core/Services/LocalSpeciesRanker.swift",
                 "Core/Services/MarineSpeciesCatalogRepository.swift",
