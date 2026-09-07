@@ -38,6 +38,44 @@ enum LocalCatalogError: Error, Equatable, Sendable {
     case aliasCollidesWithCanonicalIdentity
 }
 
+enum CatalogueDiagnosticCode: String, Equatable, Sendable {
+    case manifestMissing = "CATALOG_MANIFEST_MISSING"
+    case speciesResourceMissing = "CATALOG_SPECIES_RESOURCE_MISSING"
+    case decodeFailed = "CATALOG_DECODE_FAILED"
+    case countMismatch = "CATALOG_COUNT_MISMATCH"
+    case vocabularyInvalid = "CATALOG_VOCABULARY_INVALID"
+    case artworkMissing = "CATALOG_ARTWORK_MISSING"
+    case artworkInvalid = "CATALOG_ARTWORK_INVALID"
+    case validationFailed = "CATALOG_VALIDATION_FAILED"
+    case unsupportedPack = "CATALOG_UNSUPPORTED_PACK"
+}
+
+enum CatalogueLoadPhase: String, Equatable, Sendable {
+    case manifest, speciesResource, decoding, validation, artworkValidation
+}
+
+struct CatalogueLoadFailure: Error, Equatable, Sendable {
+    let packID: OfflineIdentificationPackID
+    let code: CatalogueDiagnosticCode
+    let catalogError: LocalCatalogError?
+    /// A bundle-relative resource name. This must never contain a local filesystem path.
+    let resource: String?
+    let phase: CatalogueLoadPhase
+}
+
+protocol CatalogueDiagnosticsReporting: Sendable {
+    func record(_ failure: CatalogueLoadFailure) async
+}
+
+actor LocalCatalogueDiagnosticsReporter: CatalogueDiagnosticsReporting {
+    static let shared = LocalCatalogueDiagnosticsReporter()
+    private(set) var failures: [CatalogueLoadFailure] = []
+
+    func record(_ failure: CatalogueLoadFailure) {
+        failures.append(failure)
+    }
+}
+
 extension MarineSpeciesCatalogRepository {
     func loadProfiles() async throws -> [LocalSpeciesProfile] { try await loadPack(id: .caribbean).profiles }
 }

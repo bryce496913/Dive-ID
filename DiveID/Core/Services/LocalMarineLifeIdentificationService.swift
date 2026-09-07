@@ -3,6 +3,7 @@ import Foundation
 enum LocalIdentificationError: Error, Equatable, Sendable {
     case invalidDescription
     case catalogUnavailable
+    case catalogueLoadFailed(CatalogueLoadFailure)
     case unsupportedSource
     case regionMismatch(selected: OfflineIdentificationPackID, mentionedRegion: String)
 }
@@ -10,10 +11,12 @@ enum LocalIdentificationError: Error, Equatable, Sendable {
 struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
     let catalogRepository: any MarineSpeciesCatalogRepository
     let searchEngine: any DescriptionSearching
+    let diagnosticsReporter: any CatalogueDiagnosticsReporting
 
-    init(catalogRepository: any MarineSpeciesCatalogRepository, searchEngine: any DescriptionSearching = HybridDescriptionSearchEngine()) {
+    init(catalogRepository: any MarineSpeciesCatalogRepository, searchEngine: any DescriptionSearching = HybridDescriptionSearchEngine(), diagnosticsReporter: any CatalogueDiagnosticsReporting = LocalCatalogueDiagnosticsReporter.shared) {
         self.catalogRepository = catalogRepository
         self.searchEngine = searchEngine
+        self.diagnosticsReporter = diagnosticsReporter
     }
 
     init(catalogRepository: any MarineSpeciesCatalogRepository, parser: any ObservationParsing, ranker: any SpeciesRanking) {
@@ -28,7 +31,20 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             guard trimmed.count >= 5 else { throw LocalIdentificationError.invalidDescription }
             let packID = request.context.region ?? .caribbean
             let pack: OfflineIdentificationPack
-            do { pack = try await catalogRepository.loadPack(id: packID) } catch { throw LocalIdentificationError.catalogUnavailable }
+            do {
+                pack = try await catalogRepository.loadPack(id: packID)
+            } catch let failure as CatalogueLoadFailure {
+                await diagnosticsReporter.record(failure)
+                throw LocalIdentificationError.catalogueLoadFailed(failure)
+            } catch let error as LocalCatalogError {
+                let failure = CatalogueLoadFailure(packID: packID, code: Self.diagnosticCode(for: error), catalogError: error, resource: nil, phase: .validation)
+                await diagnosticsReporter.record(failure)
+                throw LocalIdentificationError.catalogueLoadFailed(failure)
+            } catch {
+                let failure = CatalogueLoadFailure(packID: packID, code: .validationFailed, catalogError: nil, resource: nil, phase: .validation)
+                await diagnosticsReporter.record(failure)
+                throw LocalIdentificationError.catalogueLoadFailed(failure)
+            }
             let result = try await searchEngine.search(description: trimmed, pack: pack)
             if result.queryAnalysis.packRegionCompatibility == .conflicting,
                let outside = result.queryAnalysis.observedRegions.sorted().first {
@@ -41,6 +57,17 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
                 match.packContext = species.packContext; match.matchedLifeStage = ranked.matchedAppearanceVariant?.lifeStage; match.informationLevel = ranked.informationLevel
                 return match
             }
+        }
+    }
+
+    private static func diagnosticCode(for error: LocalCatalogError) -> CatalogueDiagnosticCode {
+        switch error {
+        case .unsupportedPack, .unsupportedSchemaVersion: .unsupportedPack
+        case .countMismatch: .countMismatch
+        case .unknownControlledVocabularyValue: .vocabularyInvalid
+        case .missingImage: .artworkMissing
+        case .invalidImage, .imageTooLarge, .emptyImageAttribution, .unsupportedImageLicense, .duplicateImageFilename: .artworkInvalid
+        default: .validationFailed
         }
     }
 
