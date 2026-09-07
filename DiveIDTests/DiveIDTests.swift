@@ -821,12 +821,8 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         }
     }
 
-    func testServiceAndRankerUseEquivalentSharedRegionCompatibility() {
-        let service = LocalMarineLifeIdentificationService(
-            catalogRepository: StaticCatalogRepository(profiles: []),
-            parser: parser,
-            ranker: LocalSpeciesRanker()
-        )
+    func testResolverAndRankerUseEquivalentSharedRegionCompatibility() {
+        let resolver = RegionCompatibilityResolver()
         let ranker = LocalSpeciesRanker()
         let caribbeanPackRegions: Set<String> = ["caribbean"]
         let cases: [(observation: Set<String>, expected: RegionCompatibility)] = [
@@ -839,7 +835,7 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         ]
 
         for testCase in cases {
-            let serviceResult = service.regionCompatibility(
+            let resolverResult = resolver.compatibility(
                 observedRegions: testCase.observation,
                 supportedRegions: caribbeanPackRegions
             )
@@ -848,9 +844,9 @@ final class OfflineCatalogHardeningTests: XCTestCase {
                 supportedRegions: caribbeanPackRegions
             )
 
-            XCTAssertEqual(serviceResult, testCase.expected, "Service observation: \(testCase.observation)")
+            XCTAssertEqual(resolverResult, testCase.expected, "Resolver observation: \(testCase.observation)")
             XCTAssertEqual(rankerResult, testCase.expected, "Ranker observation: \(testCase.observation)")
-            XCTAssertEqual(serviceResult, rankerResult, "Observation: \(testCase.observation)")
+            XCTAssertEqual(resolverResult, rankerResult, "Observation: \(testCase.observation)")
         }
     }
 

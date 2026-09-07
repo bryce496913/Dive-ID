@@ -7,7 +7,8 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, _) = try repository(for: "Schema1")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let saved = try XCTUnwrap(try await repository.fetchAll().first)
+        let identifications = try await repository.fetchAll()
+        let saved = try XCTUnwrap(identifications.first)
         XCTAssertEqual(saved.species.id, UUID(uuidString: "11111111-1111-1111-1111-111111111111"))
         XCTAssertEqual(saved.species.commonName, "Queen Angelfish")
         XCTAssertEqual(saved.species.scientificName, "Holacanthus ciliaris")
@@ -17,7 +18,8 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, _) = try repository(for: "Schema2Historical")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let saved = try XCTUnwrap(try await repository.fetchAll().first)
+        let identifications = try await repository.fetchAll()
+        let saved = try XCTUnwrap(identifications.first)
         XCTAssertEqual(saved.id, UUID(uuidString: "22222222-2222-2222-2222-222222222222"))
         XCTAssertEqual(saved.species.id, UUID(uuidString: "33333333-3333-3333-3333-333333333333"))
         XCTAssertEqual(saved.sourceSessionID, UUID(uuidString: "44444444-4444-4444-4444-444444444444"))
@@ -38,7 +40,8 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, _) = try repository(for: "Schema2Historical")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let species = try XCTUnwrap(try await repository.fetchAll().first?.species)
+        let identifications = try await repository.fetchAll()
+        let species = try XCTUnwrap(identifications.first?.species)
         XCTAssertNil(species.bundledImage)
         XCTAssertEqual(species.packContext?.packID, .caribbean)
         XCTAssertNil(species.regionalOccurrence)
@@ -73,7 +76,8 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, _) = try repository(for: "CurrentSchema")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let saved = try XCTUnwrap(try await repository.fetchAll().first)
+        let identifications = try await repository.fetchAll()
+        let saved = try XCTUnwrap(identifications.first)
         XCTAssertEqual(saved.id, UUID(uuidString: "55555555-5555-5555-5555-555555555555"))
         XCTAssertEqual(saved.species.id, UUID(uuidString: "66666666-6666-6666-6666-666666666666"))
         XCTAssertEqual(saved.species.commonName, "Caribbean Reef Shark")
@@ -92,7 +96,8 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, _) = try repository(for: "Schema2Historical")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let restored = try XCTUnwrap(try await repository.fetchAll().first).match
+        let identifications = try await repository.fetchAll()
+        let restored = try XCTUnwrap(identifications.first).match
         XCTAssertEqual(restored.id, UUID(uuidString: "33333333-3333-3333-3333-333333333333"))
         XCTAssertEqual(restored.rank, 2)
         XCTAssertEqual(restored.score, 0.74)
@@ -129,14 +134,16 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         let (repository, directory, fileURL) = try repository(for: "Schema1")
         defer { try? FileManager.default.removeItem(at: directory) }
 
-        let migrated = try XCTUnwrap(try await repository.fetchAll().first)
+        let identifications = try await repository.fetchAll()
+        let migrated = try XCTUnwrap(identifications.first)
         let envelope = try JSONDecoder().decode(SavedIdentificationFile.self, from: Data(contentsOf: fileURL))
         XCTAssertEqual(envelope.schemaVersion, JSONSavedIdentificationRepository.schemaVersion)
         XCTAssertEqual(envelope.identifications.first?.id, migrated.id)
         XCTAssertEqual(envelope.identifications.first?.species.id, migrated.species.id)
 
         let relaunched = try JSONSavedIdentificationRepository(fileURL: fileURL)
-        let restored = try XCTUnwrap(try await relaunched.fetchAll().first)
+        let relaunchedIdentifications = try await relaunched.fetchAll()
+        let restored = try XCTUnwrap(relaunchedIdentifications.first)
         XCTAssertEqual(restored.id, migrated.id)
         XCTAssertEqual(restored.species.id, migrated.species.id)
     }
