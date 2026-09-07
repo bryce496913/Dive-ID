@@ -1,7 +1,37 @@
 import XCTest
 @testable import DiveID
+#if canImport(CoreML)
+import CoreML
+#endif
 
 final class SemanticSearchTests: XCTestCase {
+    private struct TokenizerFixture: Decodable {
+        struct FixtureCase: Decodable {
+            let name: String
+            let text: String
+            let document: Bool
+            let truncation: SemanticModelArtifactContract.Truncation
+            let inputIDs: [Int32]
+            let attentionMask: [Int32]
+        }
+        let vocabulary: [String: Int]
+        let contract: SemanticModelArtifactContract
+        let cases: [FixtureCase]
+    }
+
+    private func semanticContract(
+        maximumSequenceLength: Int = 6,
+        embeddingDimension: Int = 2,
+        truncation: SemanticModelArtifactContract.Truncation = .end,
+        pooling: SemanticModelArtifactContract.Pooling = .meanMasked
+    ) -> SemanticModelArtifactContract {
+        SemanticModelArtifactContract(contractVersion: 1, modelIdentifier: "synthetic.mechanics", modelVersion: "1",
+            embeddingDimension: embeddingDimension, tokenizerIdentifier: "synthetic-vocab-1", preprocessingIdentifier: "synthetic-preprocess-1",
+            vocabularyFile: "fixture.json", lowercase: true, stripAccents: true, maximumSequenceLength: maximumSequenceLength, truncation: truncation,
+            clsToken: "[CLS]", separatorToken: "[SEP]", paddingToken: "[PAD]", unknownToken: "[UNK]",
+            queryPrefix: "query: ", documentPrefix: "passage: ", inputIDsFeature: "ids", attentionMaskFeature: "mask",
+            tokenTypeIDsFeature: nil, outputFeature: "hidden", pooling: pooling, normalizeL2: true)
+    }
     private struct FakeProvider: SemanticEmbeddingProviding {
         var modelIdentifier = "test.fake"
         var modelVersion = "1"
@@ -145,18 +175,79 @@ final class SemanticSearchTests: XCTestCase {
     }
 
     func testWordPieceContractAppliesPrefixTruncationMaskAndPadding() throws {
-        let contract = SemanticModelArtifactContract(contractVersion: 1, modelIdentifier: "synthetic.mechanics", modelVersion: "1",
-            embeddingDimension: 2, tokenizerIdentifier: "synthetic-vocab-1", preprocessingIdentifier: "synthetic-preprocess-1",
-            vocabularyFile: "fixture.json", lowercase: true, stripAccents: true, maximumSequenceLength: 6, truncation: .end,
-            clsToken: "[CLS]", separatorToken: "[SEP]", paddingToken: "[PAD]", unknownToken: "[UNK]",
-            queryPrefix: "query: ", documentPrefix: "passage: ", inputIDsFeature: "ids", attentionMaskFeature: "mask",
-            tokenTypeIDsFeature: nil, outputFeature: "hidden", pooling: .meanMasked, normalizeL2: true)
+        let contract = semanticContract()
         let vocabulary = ["[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "query": 4, "cafe": 5, "fish": 6]
         let tokenizer = try WordPieceTokenizer(data: JSONEncoder().encode(vocabulary), contract: contract)
         let encoded = tokenizer.encode("CAFÉ fish")
         XCTAssertEqual(encoded.ids, [2, 4, 5, 6, 3, 0])
         XCTAssertEqual(encoded.mask, [1, 1, 1, 1, 1, 0])
     }
+
+    func testWordPieceTokenizerExactlyMatchesSharedPythonParityFixture() throws {
+        let url = try TestResources.fixture(named: "TokenizerParity.v1")
+        let fixture = try JSONDecoder().decode(TokenizerFixture.self, from: Data(contentsOf: url))
+        let vocabularyData = try JSONEncoder().encode(fixture.vocabulary)
+        for fixtureCase in fixture.cases {
+            let base = fixture.contract
+            let contract = SemanticModelArtifactContract(contractVersion: base.contractVersion,
+                modelIdentifier: base.modelIdentifier, modelVersion: base.modelVersion,
+                embeddingDimension: base.embeddingDimension, tokenizerIdentifier: base.tokenizerIdentifier,
+                preprocessingIdentifier: base.preprocessingIdentifier, vocabularyFile: base.vocabularyFile,
+                lowercase: base.lowercase, stripAccents: base.stripAccents,
+                maximumSequenceLength: base.maximumSequenceLength, truncation: fixtureCase.truncation,
+                clsToken: base.clsToken, separatorToken: base.separatorToken, paddingToken: base.paddingToken,
+                unknownToken: base.unknownToken, queryPrefix: base.queryPrefix, documentPrefix: base.documentPrefix,
+                inputIDsFeature: base.inputIDsFeature, attentionMaskFeature: base.attentionMaskFeature,
+                tokenTypeIDsFeature: base.tokenTypeIDsFeature, outputFeature: base.outputFeature,
+                pooling: base.pooling, normalizeL2: base.normalizeL2)
+            let result = try WordPieceTokenizer(data: vocabularyData, contract: contract)
+                .encode(fixtureCase.text, document: fixtureCase.document)
+            XCTAssertEqual(result.ids, fixtureCase.inputIDs, fixtureCase.name)
+            XCTAssertEqual(result.mask, fixtureCase.attentionMask, fixtureCase.name)
+        }
+    }
+
+#if canImport(CoreML)
+    func testExactCoreMLOutputShapesAndPooling() throws {
+        func set(_ array: MLMultiArray, _ indices: [Int], _ value: Float) {
+            array[indices.map { NSNumber(value: $0) }] = NSNumber(value: value)
+        }
+        let vectorContract = semanticContract(embeddingDimension: 2, pooling: .modelOutput)
+        let vector = try MLMultiArray(shape: [NSNumber(value: 1), NSNumber(value: 2)], dataType: .float32)
+        set(vector, [0, 0], 3); set(vector, [0, 1], 4)
+        XCTAssertEqual(try CoreMLSemanticEmbeddingProvider.pool(vector, mask: [], contract: vectorContract), [0.6, 0.8])
+
+        let clsContract = semanticContract(maximumSequenceLength: 3, embeddingDimension: 2, pooling: .cls)
+        let tokens = try MLMultiArray(shape: [1, 3, 2].map { NSNumber(value: $0) }, dataType: .float16)
+        set(tokens, [0, 0, 0], 3); set(tokens, [0, 0, 1], 4)
+        set(tokens, [0, 1, 0], 100); set(tokens, [0, 1, 1], 100)
+        XCTAssertEqual(try CoreMLSemanticEmbeddingProvider.pool(tokens, mask: [1, 1, 0], contract: clsContract), [0.6, 0.8])
+
+        let meanContract = semanticContract(maximumSequenceLength: 3, embeddingDimension: 2, pooling: .meanMasked)
+        let mean = try MLMultiArray(shape: [1, 3, 2].map { NSNumber(value: $0) }, dataType: .float32)
+        set(mean, [0, 0, 0], 1); set(mean, [0, 0, 1], 0)
+        set(mean, [0, 1, 0], 0); set(mean, [0, 1, 1], 1)
+        set(mean, [0, 2, 0], 20); set(mean, [0, 2, 1], 20)
+        let rootHalf = Float(1 / sqrt(2.0))
+        let pooled = try CoreMLSemanticEmbeddingProvider.pool(mean, mask: [1, 1, 0], contract: meanContract)
+        XCTAssertEqual(pooled[0], rootHalf, accuracy: 0.0001)
+        XCTAssertEqual(pooled[1], rootHalf, accuracy: 0.0001)
+    }
+
+    func testCoreMLOutputRejectsTransposeWrongDimensionsRankAndType() throws {
+        let contract = semanticContract(maximumSequenceLength: 3, embeddingDimension: 2)
+        for shape in [[1, 2, 3], [1, 4, 2], [1, 3, 4], [3, 2], [1, 1, 3, 2]] {
+            let array = try MLMultiArray(shape: shape.map { NSNumber(value: $0) }, dataType: .float32)
+            XCTAssertThrowsError(try CoreMLSemanticEmbeddingProvider.pool(array, mask: [1, 1, 1], contract: contract)) {
+                XCTAssertEqual($0 as? SemanticArtifactDiagnostic, .invalidModelOutputShape)
+            }
+        }
+        let unsupported = try MLMultiArray(shape: [1, 3, 2].map { NSNumber(value: $0) }, dataType: .double)
+        XCTAssertThrowsError(try CoreMLSemanticEmbeddingProvider.pool(unsupported, mask: [1, 1, 1], contract: contract)) {
+            XCTAssertEqual($0 as? SemanticArtifactDiagnostic, .unsupportedModelOutputDataType)
+        }
+    }
+#endif
 
     func testCancellationDoesNotStartFallback() async throws {
         let retriever = FallbackSpeciesCandidateRetriever(primary: CancelledRetriever())

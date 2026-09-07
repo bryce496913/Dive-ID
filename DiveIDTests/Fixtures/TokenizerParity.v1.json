@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "vocabulary": {
+    "[PAD]": 0,
+    "[UNK]": 1,
+    "[CLS]": 2,
+    "[SEP]": 3,
+    "query": 4,
+    "passage": 5,
+    "cafe": 6,
+    "fish": 7,
+    "div": 8,
+    "##ing": 9,
+    "reef": 10,
+    "one": 11,
+    "two": 12,
+    "three": 13,
+    "four": 14,
+    "five": 15,
+    "six": 16,
+    "hello": 17,
+    "world": 18
+  },
+  "contract": {
+    "contractVersion": 1,
+    "modelIdentifier": "fixture.wordpiece",
+    "modelVersion": "1",
+    "embeddingDimension": 2,
+    "tokenizerIdentifier": "fixture-wordpiece-v1",
+    "preprocessingIdentifier": "fixture-preprocess-v1",
+    "vocabularyFile": "tokenizer-parity-fixture.json",
+    "lowercase": true,
+    "stripAccents": true,
+    "maximumSequenceLength": 8,
+    "truncation": "end",
+    "clsToken": "[CLS]",
+    "separatorToken": "[SEP]",
+    "paddingToken": "[PAD]",
+    "unknownToken": "[UNK]",
+    "queryPrefix": "query: ",
+    "documentPrefix": "passage: ",
+    "inputIDsFeature": "ids",
+    "attentionMaskFeature": "mask",
+    "tokenTypeIDsFeature": null,
+    "outputFeature": "hidden",
+    "pooling": "meanMasked",
+    "normalizeL2": true
+  },
+  "cases": [
+    {
+      "name": "uppercase",
+      "text": "HELLO WORLD",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        17,
+        18,
+        3,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "accents",
+      "text": "CAFÉ fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        6,
+        7,
+        3,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "punctuation",
+      "text": "hello, reef-fish!",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        17,
+        10,
+        7,
+        3,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "unknown",
+      "text": "mystery fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        1,
+        7,
+        3,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wordpiece",
+      "text": "DIVING",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        8,
+        9,
+        3,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "end-truncation",
+      "text": "one two three four five six fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        11,
+        12,
+        13,
+        14,
+        15,
+        3
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "beginning-truncation",
+      "text": "one two three four five six fish",
+      "document": false,
+      "truncation": "beginning",
+      "inputIDs": [
+        2,
+        12,
+        13,
+        14,
+        15,
+        16,
+        7,
+        3
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "query-prefix",
+      "text": "reef",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        10,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "document-prefix",
+      "text": "reef",
+      "document": true,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        5,
+        10,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

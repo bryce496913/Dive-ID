@@ -57,6 +57,9 @@ enum SemanticArtifactDiagnostic: Error, Equatable, Sendable, CustomStringConvert
     case coreMLUnavailable
     case modelInputMissing(String)
     case modelOutputMissing(String)
+    case invalidModelOutputShape
+    case unsupportedModelOutputDataType
+    case unsupportedModelOutputLayout
     case invalidModelOutput
 
     var description: String {
@@ -75,6 +78,9 @@ enum SemanticArtifactDiagnostic: Error, Equatable, Sendable, CustomStringConvert
         case .coreMLUnavailable: "Core ML is unavailable on this platform"
         case .modelInputMissing(let value): "model input missing: \(value)"
         case .modelOutputMissing(let value): "model output missing: \(value)"
+        case .invalidModelOutputShape: "invalid model output shape"
+        case .unsupportedModelOutputDataType: "unsupported model output data type"
+        case .unsupportedModelOutputLayout: "unsupported model output layout"
         case .invalidModelOutput: "invalid model output"
         }
     }
@@ -166,7 +172,27 @@ actor CoreMLSemanticEmbeddingProvider: SemanticEmbeddingProviding {
         guard model.modelDescription.outputDescriptionsByName[contract.outputFeature] != nil else {
             throw SemanticArtifactDiagnostic.modelOutputMissing(contract.outputFeature)
         }
+        try validateOutputDescription(model.modelDescription.outputDescriptionsByName[contract.outputFeature]!, contract: contract)
         return CoreMLSemanticEmbeddingProvider(model: model, tokenizer: tokenizer, contract: contract)
+    }
+
+    private static func expectedOutputShape(for contract: SemanticModelArtifactContract) -> [Int] {
+        switch contract.pooling {
+        case .modelOutput: [1, contract.embeddingDimension]
+        case .cls, .meanMasked: [1, contract.maximumSequenceLength, contract.embeddingDimension]
+        }
+    }
+
+    private static func validateOutputDescription(_ description: MLFeatureDescription, contract: SemanticModelArtifactContract) throws {
+        guard description.type == .multiArray, let constraint = description.multiArrayConstraint else {
+            throw SemanticArtifactDiagnostic.unsupportedModelOutputDataType
+        }
+        guard constraint.dataType == .float32 || constraint.dataType == .float16 else {
+            throw SemanticArtifactDiagnostic.unsupportedModelOutputDataType
+        }
+        guard constraint.shape.map(\.intValue) == expectedOutputShape(for: contract) else {
+            throw SemanticArtifactDiagnostic.invalidModelOutputShape
+        }
     }
 
     func embedding(for text: String) async throws -> [Float] {
@@ -190,25 +216,40 @@ actor CoreMLSemanticEmbeddingProvider: SemanticEmbeddingProviding {
         guard let array = output.featureValue(for: contract.outputFeature)?.multiArrayValue else {
             throw SemanticArtifactDiagnostic.modelOutputMissing(contract.outputFeature)
         }
-        return try pool(array, mask: encoded.mask)
+        return try Self.pool(array, mask: encoded.mask, contract: contract)
     }
 
-    private func pool(_ array: MLMultiArray, mask: [Int32]) throws -> [Float] {
-        let values = (0..<array.count).map { array[$0].floatValue }
+    static func pool(_ array: MLMultiArray, mask: [Int32], contract: SemanticModelArtifactContract) throws -> [Float] {
+        guard array.dataType == .float32 || array.dataType == .float16 else {
+            throw SemanticArtifactDiagnostic.unsupportedModelOutputDataType
+        }
+        guard array.shape.map(\.intValue) == expectedOutputShape(for: contract) else {
+            throw SemanticArtifactDiagnostic.invalidModelOutputShape
+        }
+        guard array.strides.count == array.shape.count, array.strides.allSatisfy({ $0.intValue > 0 }) else {
+            throw SemanticArtifactDiagnostic.unsupportedModelOutputLayout
+        }
+        let embeddingDimension = contract.embeddingDimension
+        func vectorValue(_ dimension: Int) -> Float {
+            array[[NSNumber(value: 0), NSNumber(value: dimension)]].floatValue
+        }
+        func tokenValue(_ token: Int, _ dimension: Int) -> Float {
+            array[[NSNumber(value: 0), NSNumber(value: token), NSNumber(value: dimension)]].floatValue
+        }
         var vector: [Float]
         switch contract.pooling {
         case .modelOutput:
-            guard values.count == embeddingDimension else { throw SemanticArtifactDiagnostic.invalidModelOutput }
-            vector = values
+            vector = (0..<embeddingDimension).map(vectorValue)
         case .cls:
-            guard values.count >= embeddingDimension else { throw SemanticArtifactDiagnostic.invalidModelOutput }
-            vector = Array(values.prefix(embeddingDimension))
+            vector = (0..<embeddingDimension).map { tokenValue(0, $0) }
         case .meanMasked:
-            guard values.count == contract.maximumSequenceLength * embeddingDimension else { throw SemanticArtifactDiagnostic.invalidModelOutput }
+            guard mask.count == contract.maximumSequenceLength else {
+                throw SemanticArtifactDiagnostic.unsupportedModelOutputLayout
+            }
             vector = [Float](repeating: 0, count: embeddingDimension)
             let count = max(1, mask.reduce(0) { $0 + Int($1) })
             for token in 0..<contract.maximumSequenceLength where mask[token] == 1 {
-                for dimension in 0..<embeddingDimension { vector[dimension] += values[token * embeddingDimension + dimension] }
+                for dimension in 0..<embeddingDimension { vector[dimension] += tokenValue(token, dimension) }
             }
             vector = vector.map { $0 / Float(count) }
         }
