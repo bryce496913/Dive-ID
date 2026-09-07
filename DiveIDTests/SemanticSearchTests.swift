@@ -89,6 +89,34 @@ final class SemanticSearchTests: XCTestCase {
         )
     }
 
+    private func artifactLocations(missing: String? = nil) throws -> SemanticArtifactLocations {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        func artifact(_ name: String) throws -> URL {
+            let url = directory.appendingPathComponent(name)
+            if missing != name { try Data().write(to: url) }
+            return url
+        }
+        return try SemanticArtifactLocations(
+            contractURL: artifact("contract.json"), compiledModelURL: artifact("model.mlmodelc"),
+            vocabularyURL: artifact("vocab.json"), indexURL: artifact("index.json")
+        )
+    }
+
+    private func fallbackMetric(missing: String) async throws -> SemanticRetrievalMetrics? {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let semanticIndex = try await index(documents: documents, pack: pack.metadata, provider: provider)
+        let diagnostics = SemanticDiagnosticsStore()
+        _ = try await ExperimentalSemanticRetriever(
+            pack: pack.metadata, locations: artifactLocations(missing: missing),
+            runtime: SemanticRetrievalRuntime(provider: provider, index: semanticIndex),
+            fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics
+        ).retrieve(query: "private animal description", documents: documents, limit: 3)
+        return await diagnostics.latest
+    }
+
     func testFakeProviderIsDeterministicAndSupportsBatching() async throws {
         let provider = FakeProvider()
         let first = try await provider.embedding(for: "striped reef fish")
@@ -282,5 +310,69 @@ final class SemanticSearchTests: XCTestCase {
         XCTAssertEqual(metric?.requestedEngine, .experimentalCoreML)
         XCTAssertEqual(metric?.actualEngine, .productionBM25)
         XCTAssertNotNil(metric?.fallbackReason)
+    }
+
+    func testProductionBM25SelectionDoesNotReportSemanticExecution() async throws {
+        let pack = try await pack()
+        let diagnostics = SemanticDiagnosticsStore()
+        let result = try await ConfiguredDescriptionSearchEngine(selection: .productionBM25, diagnostics: diagnostics)
+            .search(description: "Spotted Eagle Ray", pack: pack)
+        XCTAssertEqual(result.candidates.first?.profile.commonName, "Spotted Eagle Ray")
+        let metric = await diagnostics.latest
+        XCTAssertNil(metric)
+    }
+
+    func testMissingContractFallbackIsReported() async throws {
+        let metric = try await fallbackMetric(missing: "contract.json")
+        XCTAssertEqual(metric?.fallbackReason, .missingContract("contract.json"))
+    }
+
+    func testMissingModelFallbackIsReported() async throws {
+        let metric = try await fallbackMetric(missing: "model.mlmodelc")
+        XCTAssertEqual(metric?.fallbackReason, .missingModel("model.mlmodelc"))
+    }
+
+    func testMissingVocabularyFallbackIsReported() async throws {
+        let metric = try await fallbackMetric(missing: "vocab.json")
+        XCTAssertEqual(metric?.fallbackReason, .missingTokenizer("vocab.json"))
+    }
+
+    func testMissingIndexFallbackIsReported() async throws {
+        let metric = try await fallbackMetric(missing: "index.json")
+        XCTAssertEqual(metric?.fallbackReason, .missingIndex("index.json"))
+    }
+
+    func testIncompatibleIndexFallbackIsReported() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let stale = try await index(documents: documents, pack: pack.metadata, provider: provider, modelVersion: "stale")
+        let diagnostics = SemanticDiagnosticsStore()
+        _ = try await ExperimentalSemanticRetriever(pack: pack.metadata, locations: artifactLocations(),
+            runtime: SemanticRetrievalRuntime(provider: provider, index: stale), fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics)
+            .retrieve(query: "ray", documents: documents, limit: 2)
+        let metric = await diagnostics.latest
+        XCTAssertEqual(metric?.fallbackReason, .incompatibleIndex(.modelVersionMismatch))
+    }
+
+    func testValidFakeRuntimeReportsSemanticInferenceAndNoRawQuery() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let semanticIndex = try await index(documents: documents, pack: pack.metadata, provider: provider)
+        let diagnostics = SemanticDiagnosticsStore()
+        let rawQuery = "SECRET raw user description"
+        _ = try await ExperimentalSemanticRetriever(pack: pack.metadata, locations: artifactLocations(),
+            runtime: SemanticRetrievalRuntime(provider: provider, index: semanticIndex), fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics)
+            .retrieve(query: rawQuery, documents: documents, limit: 2)
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.requestedEngine, .experimentalCoreML)
+        XCTAssertEqual(metric.actualEngine, .experimentalCoreML)
+        XCTAssertNil(metric.fallbackReason)
+        XCTAssertEqual(metric.modelIdentity, "test.fake:1")
+        let recordedStrings = [metric.modelIdentity, metric.tokenizerIdentity, metric.preprocessingIdentity,
+                               Optional(metric.packIdentity), metric.fallbackReason.map(\.description)].compactMap { $0 }
+        XCTAssertFalse(recordedStrings.contains(rawQuery))
     }
 }

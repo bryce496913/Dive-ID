@@ -26,6 +26,30 @@ actor SemanticDiagnosticsStore: SemanticDiagnosticsReporting {
     func record(_ metrics: SemanticRetrievalMetrics) { latest = metrics }
 }
 
+#if DEBUG
+/// Debug-only, query-free evidence of which retrieval engine actually served a search.
+/// Keeping this type out of release builds prevents technical telemetry and UI from
+/// accidentally becoming a production data-collection surface.
+actor DebugSemanticDiagnosticsReporter: SemanticDiagnosticsReporting {
+    nonisolated let updates: AsyncStream<SemanticRetrievalMetrics>
+    private let continuation: AsyncStream<SemanticRetrievalMetrics>.Continuation
+    private(set) var latest: SemanticRetrievalMetrics?
+
+    init() {
+        var captured: AsyncStream<SemanticRetrievalMetrics>.Continuation?
+        updates = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { captured = $0 }
+        continuation = captured!
+    }
+
+    func record(_ metrics: SemanticRetrievalMetrics) {
+        latest = metrics
+        continuation.yield(metrics)
+    }
+
+    deinit { continuation.finish() }
+}
+#endif
+
 struct SemanticArtifactLocations: Sendable {
     let contractURL: URL
     let compiledModelURL: URL
@@ -56,19 +80,36 @@ actor SemanticRetrievalRuntime {
     private var queryVectors: [String: [Float]] = [:]
     private var queryLRU: [String] = []
     private let queryCapacity: Int
+    private let injectedArtifacts: Loaded?
 
-    init(queryCapacity: Int = 32) { self.queryCapacity = max(0, queryCapacity) }
+    init(queryCapacity: Int = 32) {
+        self.queryCapacity = max(0, queryCapacity)
+        injectedArtifacts = nil
+    }
+
+    /// Test seam for proving diagnostics around a valid semantic execution without
+    /// requiring a platform Core ML binary. Production always uses the initializer above.
+    init(queryCapacity: Int = 32, provider: any SemanticEmbeddingProviding, index: SpeciesEmbeddingIndex) {
+        self.queryCapacity = max(0, queryCapacity)
+        injectedArtifacts = Loaded(provider: provider, index: index,
+                                   identity: "\(provider.modelIdentifier):\(provider.modelVersion):\(index.metadata.documentFingerprint)")
+    }
 
     func retrieve(locations: SemanticArtifactLocations, pack: OfflineIdentificationPackMetadata,
                   documents: [SpeciesSearchDocument], query: String, limit: Int) async throws
         -> (candidates: [RetrievedSpeciesCandidate], modelHit: Bool, indexHit: Bool, queryHit: Bool, loadMS: Double, embeddingMS: Double, retrievalMS: Double, loaded: (String, String, String)) {
         try Task.checkCancellation()
         let loadStart = ContinuousClock.now
+        try Self.requireArtifact(locations.contractURL, or: .missingContract(locations.contractURL.lastPathComponent))
+        try Self.requireArtifact(locations.compiledModelURL, or: .missingModel(locations.compiledModelURL.lastPathComponent))
+        try Self.requireArtifact(locations.vocabularyURL, or: .missingTokenizer(locations.vocabularyURL.lastPathComponent))
+        try Self.requireArtifact(locations.indexURL, or: .missingIndex(locations.indexURL.lastPathComponent))
         let artifactKey = try [locations.contractURL, locations.compiledModelURL,
                                locations.vocabularyURL, locations.indexURL].map(Self.fileIdentity).joined(separator: "|")
         let wasLoaded = loaded[artifactKey] != nil
         let artifacts: Loaded
-        if let cached = loaded[artifactKey] { artifacts = cached } else {
+        if let injectedArtifacts { artifacts = injectedArtifacts }
+        else if let cached = loaded[artifactKey] { artifacts = cached } else {
             let task: Task<Loaded, Error>
             if let inFlight = loading[artifactKey] { task = inFlight }
             else {
@@ -153,11 +194,11 @@ actor SemanticRetrievalRuntime {
         return Double(duration.components.seconds) * 1_000 + Double(duration.components.attoseconds) / 1e15
     }
     private static func fileIdentity(_ url: URL) throws -> String {
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            throw SemanticArtifactDiagnostic.missingModel(url.lastPathComponent)
-        }
         let values = try url.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey])
         return "\(url.path):\(values.fileSize ?? -1):\(values.contentModificationDate?.timeIntervalSince1970 ?? -1)"
+    }
+    private static func requireArtifact(_ url: URL, or diagnostic: SemanticArtifactDiagnostic) throws {
+        guard FileManager.default.fileExists(atPath: url.path) else { throw diagnostic }
     }
 }
 
@@ -182,7 +223,8 @@ struct ExperimentalSemanticRetriever: SpeciesCandidateRetrieving {
         } catch is CancellationError { throw CancellationError() }
         catch {
             try Task.checkCancellation()
-            let reason = (error as? SemanticArtifactDiagnostic) ?? .malformedIndex
+            // Never attach arbitrary error text: model errors can echo their input.
+            let reason = (error as? SemanticArtifactDiagnostic) ?? .semanticRuntimeFailure
             let fallbackStart = ContinuousClock.now
             let candidates = try await fallback.retrieve(query: query, documents: documents, limit: limit)
             await diagnostics?.record(.init(requestedEngine: .experimentalCoreML, actualEngine: .productionBM25,
