@@ -70,9 +70,12 @@ locally licensed, genuine encoder by adding these four build resources (replace 
 
 The version-1 contract must name the model inputs (`inputIDsFeature`,
 `attentionMaskFeature`, and optional `tokenTypeIDsFeature`) and output
-(`outputFeature`). Inputs are int32 `[1, maximumSequenceLength]`. The output is either
-`[1, embeddingDimension]` for `modelOutput`, or contiguous
+(`outputFeature`). Inputs are int32 `[1, maximumSequenceLength]`. The only supported
+output shapes are exactly `[1, embeddingDimension]` for `modelOutput`, or
 `[1, maximumSequenceLength, embeddingDimension]` token states for `cls`/`meanMasked`.
+Outputs must be Float32 or Float16. Shape and type are checked from model metadata at
+load time; runtime pooling uses dimension-aware `MLMultiArray` indexing and never
+infers layout from flattened element count.
 It must also specify model/version, tokenizer/preprocessing identities, special-token
 strings, lowercasing/accent behavior, sequence limit, beginning/end truncation, query
 and document prefixes, pooling, and `normalizeL2: true`. The Core ML conversion and
@@ -91,7 +94,12 @@ python3 Tools/SemanticSearch/build_embedding_index.py \
   --output Tools/SemanticSearch/generated/Semantic-caribbean.index.json
 ```
 
-The second command uses developer-only `torch` and `transformers`, with
+The second command validates the local Hugging Face tokenizer as WordPiece and proves
+its vocabulary, special tokens, inspected lowercase/accent behavior, maximum length,
+and explicitly configured truncation side match the contract. It then bypasses Hugging
+Face preprocessing: a small Python tokenizer mirroring Swift emits the exact padded IDs
+and masks. The index records canonical vocabulary and tokenizer-contract SHA-256
+fingerprints. Developer-only `torch` and `transformers` are loaded with
 `local_files_only=True`; they are not app or identification dependencies. Copy local
 artifacts into the target only for a private build. Generated corpora, model bundles,
 and full indexes remain ignored and must not be committed. Small synthetic vocabularies,
@@ -109,7 +117,11 @@ parity, and accuracy remain unverified until a compatible real artifact is suppl
 `evaluate_candidate.py` is the evidence collector for the next real-model run. It does
 not generate or substitute embeddings. Before exposing holdout cases, copy
 `candidate-manifest.example.json` outside the repository, fill every field, pin the
-model to an immutable revision, list the SHA-256 of every input, and make it read-only.
+model to an immutable hexadecimal revision, declare conversion input/output tensors,
+freeze the complete preprocessing and ranking contracts, identify every dataset and
+catalogue by fingerprint, list at least one uniquely pathed artifact with its SHA-256
+and role, and make it read-only. Empty evidence sections are invalid, and `frozenAtUTC`
+must be a valid UTC `Z` timestamp.
 
 Reference and physical-device runners export JSONL rows shaped as
 `{"id":"case-id","vector":[...]}`; catalogue rows use species IDs. Verify the

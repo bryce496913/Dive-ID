@@ -86,13 +86,108 @@ def validate_manifest(manifest):
                 "ranking", "acceptanceCriteria", "catalogue", "datasets", "artifacts"]
     missing = [key for key in required if key not in manifest]
     if missing: raise ValueError("manifest missing: " + ", ".join(missing))
-    model = manifest["model"]
-    for key in ("source", "revision", "license", "identifier"):
-        if not model.get(key): raise ValueError(f"model.{key} must be pinned before evaluation")
     if manifest["schemaVersion"] != 1: raise ValueError("unsupported manifest schema")
-    for item in manifest["artifacts"]:
-        if set(("path", "sha256")) - item.keys() or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]):
-            raise ValueError("every artifact needs path and SHA-256")
+    if not isinstance(manifest["frozenAtUTC"], str) or not re.fullmatch(
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z", manifest["frozenAtUTC"]):
+        raise ValueError("frozenAtUTC must be an ISO-8601 UTC timestamp ending in Z")
+    # datetime performs the calendar validation which a shape-only regular expression cannot.
+    from datetime import datetime
+    try: datetime.fromisoformat(manifest["frozenAtUTC"].replace("Z", "+00:00"))
+    except ValueError as error: raise ValueError("frozenAtUTC is not a valid timestamp") from error
+
+    def require_object(parent, name, fields):
+        value = parent.get(name)
+        if not isinstance(value, dict) or not value:
+            raise ValueError(f"{name} must be a non-empty object")
+        for field in fields:
+            if field not in value or value[field] is None or value[field] == "":
+                raise ValueError(f"{name}.{field} is required")
+        return value
+
+    model = require_object(manifest, "model", ("source", "revision", "identifier", "license", "version"))
+    if str(model["revision"]).lower() in ("main", "master", "head", "latest") or not re.fullmatch(r"[0-9a-f]{7,64}", str(model["revision"])):
+        raise ValueError("model.revision must be an immutable hexadecimal revision")
+    conversion = require_object(manifest, "conversion", ("tool", "toolVersion", "sourceFormat", "coreMLFormat",
+        "minimumDeploymentTarget", "computePrecision", "expectedInputs", "expectedOutputs"))
+    for field in ("expectedInputs", "expectedOutputs"):
+        features = conversion[field]
+        if not isinstance(features, list) or not features:
+            raise ValueError(f"conversion.{field} must contain feature declarations")
+        for feature in features:
+            if not isinstance(feature, dict) or any(not feature.get(key) for key in ("name", "dataType", "shape")):
+                raise ValueError(f"conversion.{field} entries require name, dataType, and shape")
+            if not isinstance(feature["shape"], list) or not feature["shape"] or any(
+                    not isinstance(value, int) or isinstance(value, bool) or value <= 0 for value in feature["shape"]):
+                raise ValueError(f"conversion.{field} shape must contain positive integer dimensions")
+
+    preprocessing = require_object(manifest, "preprocessing", ("tokenizerIdentifier", "tokenizerRevision",
+        "vocabularySHA256", "lowercase", "stripAccents", "maximumSequenceLength", "truncation",
+        "specialTokens", "prefixes", "pooling", "normalization"))
+    if not re.fullmatch(r"[0-9a-f]{64}", str(preprocessing["vocabularySHA256"])):
+        raise ValueError("preprocessing.vocabularySHA256 must be a lowercase SHA-256")
+    if not all(isinstance(preprocessing[key], bool) for key in ("lowercase", "stripAccents")):
+        raise ValueError("preprocessing lowercase and stripAccents must be booleans")
+    if not isinstance(preprocessing["maximumSequenceLength"], int) or isinstance(preprocessing["maximumSequenceLength"], bool) or preprocessing["maximumSequenceLength"] < 2:
+        raise ValueError("preprocessing.maximumSequenceLength must be at least two")
+    if preprocessing["truncation"] not in ("beginning", "end"):
+        raise ValueError("preprocessing.truncation must be beginning or end")
+    require_object(preprocessing, "specialTokens", ("cls", "separator", "padding", "unknown"))
+    require_object(preprocessing, "prefixes", ("query", "document"))
+    if preprocessing["pooling"] not in ("cls", "meanMasked", "modelOutput"):
+        raise ValueError("preprocessing.pooling is unsupported")
+    if preprocessing["normalization"] != "l2":
+        raise ValueError("preprocessing.normalization must be l2")
+
+    ranking = require_object(manifest, "ranking", ("contractVersion", "candidateLimit", "parameters"))
+    if not isinstance(ranking["contractVersion"], int) or ranking["contractVersion"] <= 0:
+        raise ValueError("ranking.contractVersion must be positive")
+    if not isinstance(ranking["candidateLimit"], int) or isinstance(ranking["candidateLimit"], bool) or ranking["candidateLimit"] <= 0:
+        raise ValueError("ranking.candidateLimit must be positive")
+    if not isinstance(ranking["parameters"], dict) or not ranking["parameters"]:
+        raise ValueError("ranking.parameters must freeze concrete values")
+
+    acceptance = require_object(manifest, "acceptanceCriteria", ("benchmarkGateVersion", "numericalParity"))
+    if not isinstance(acceptance["benchmarkGateVersion"], int) or acceptance["benchmarkGateVersion"] <= 0:
+        raise ValueError("acceptanceCriteria.benchmarkGateVersion must be positive")
+    numerical = require_object(acceptance, "numericalParity", ("maximumAbsoluteError", "minimumCosineSimilarity", "maximumTop10RankingChanges"))
+    for key in ("maximumAbsoluteError", "minimumCosineSimilarity", "maximumTop10RankingChanges"):
+        value = numerical[key]
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value):
+            raise ValueError(f"acceptanceCriteria.numericalParity.{key} must be finite")
+    if numerical["maximumAbsoluteError"] < 0 or not -1 <= numerical["minimumCosineSimilarity"] <= 1:
+        raise ValueError("numerical parity error must be non-negative and cosine must be within [-1, 1]")
+    if not isinstance(numerical["maximumTop10RankingChanges"], int) or numerical["maximumTop10RankingChanges"] < 0:
+        raise ValueError("maximumTop10RankingChanges must be a non-negative integer")
+
+    catalogue = require_object(manifest, "catalogue", ("packID", "packVersion", "speciesCount",
+        "searchDocumentSchemaVersion", "fingerprint"))
+    for key in ("packVersion", "speciesCount", "searchDocumentSchemaVersion"):
+        if not isinstance(catalogue[key], int) or isinstance(catalogue[key], bool) or catalogue[key] <= 0:
+            raise ValueError(f"catalogue.{key} must be a positive integer")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(catalogue["fingerprint"])):
+        raise ValueError("catalogue.fingerprint must be a lowercase SHA-256")
+
+    datasets = manifest["datasets"]
+    if not isinstance(datasets, list) or not datasets:
+        raise ValueError("datasets must contain explicit dataset declarations")
+    for dataset in datasets:
+        if not isinstance(dataset, dict) or any(not dataset.get(key) for key in ("identifier", "fingerprint", "role")):
+            raise ValueError("every dataset needs identifier, fingerprint, and role")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(dataset["fingerprint"])):
+            raise ValueError("dataset fingerprints must be lowercase SHA-256 values")
+
+    artifacts = manifest["artifacts"]
+    if not isinstance(artifacts, list) or not artifacts:
+        raise ValueError("artifacts must contain at least one artifact")
+    paths = []
+    for item in artifacts:
+        if not isinstance(item, dict) or any(not item.get(key) for key in ("path", "sha256", "role")):
+            raise ValueError("every artifact needs path, SHA-256, and role/type")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(item["sha256"])):
+            raise ValueError("artifact SHA-256 values must be lowercase hexadecimal")
+        paths.append(item["path"])
+    if len(paths) != len(set(paths)):
+        raise ValueError("artifact paths must be unique")
 
 
 def main(argv=None):

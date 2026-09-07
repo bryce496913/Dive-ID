@@ -1,12 +1,22 @@
 {
   "schemaVersion": 1,
-  "frozenAtUTC": "REQUIRED",
-  "model": {"identifier": "REQUIRED", "source": "REQUIRED upstream URL", "revision": "REQUIRED immutable commit SHA", "license": "REQUIRED SPDX identifier"},
-  "conversion": {"coremltoolsVersion": "REQUIRED", "sourceFrameworkVersion": "REQUIRED", "computePrecision": "REQUIRED", "minimumDeploymentTarget": "iOS18", "quantization": "REQUIRED (none is a value)", "command": "REQUIRED"},
-  "preprocessing": {"tokenizerIdentifier": "REQUIRED", "tokenizerRevision": "REQUIRED", "preprocessingIdentifier": "REQUIRED", "maximumSequenceLength": "REQUIRED", "pooling": "REQUIRED", "normalizeL2": true, "queryPrefix": "REQUIRED", "documentPrefix": "REQUIRED"},
-  "ranking": {"candidateLimit": 50, "parameters": "REQUIRED exact frozen values or source revision"},
-  "acceptanceCriteria": {"benchmarkGateVersion": 1, "numericalParity": {"maximumAbsoluteError": 0.001, "minimumCosineSimilarity": 0.999, "maximumTop10RankingChanges": 0}, "deviceBudgets": "REQUIRED frozen per-device budgets"},
-  "catalogue": {"packID": "caribbean", "packVersion": 3, "documentSchemaVersion": 1, "documentFingerprint": "REQUIRED"},
-  "datasets": {"development": "CaribbeanIdentificationBenchmark.json development split (70)", "limited": "CaribbeanLimitedDescriptions.v1.json", "independentHoldout": "REQUIRED fresh unseen dataset version and denominator"},
-  "artifacts": [{"path": "REQUIRED", "sha256": "REQUIRED 64-character lowercase SHA-256"}]
+  "frozenAtUTC": "2026-01-01T00:00:00Z",
+  "model": {"identifier": "REQUIRED", "version": "REQUIRED", "source": "https://REQUIRED", "revision": "REQUIRED_IMMUTABLE_HEX_REVISION", "license": "REQUIRED_SPDX"},
+  "conversion": {
+    "tool": "coremltools", "toolVersion": "REQUIRED", "sourceFormat": "REQUIRED", "coreMLFormat": "mlprogram",
+    "minimumDeploymentTarget": "iOS18", "computePrecision": "REQUIRED",
+    "expectedInputs": [{"name": "input_ids", "dataType": "int32", "shape": [1, 128]}],
+    "expectedOutputs": [{"name": "hidden_states", "dataType": "float16", "shape": [1, 128, 384]}]
+  },
+  "preprocessing": {
+    "tokenizerIdentifier": "REQUIRED", "tokenizerRevision": "REQUIRED", "vocabularySHA256": "REQUIRED_64_CHARACTER_LOWERCASE_SHA256",
+    "lowercase": true, "stripAccents": true, "maximumSequenceLength": 128, "truncation": "end",
+    "specialTokens": {"cls": "[CLS]", "separator": "[SEP]", "padding": "[PAD]", "unknown": "[UNK]"},
+    "prefixes": {"query": "query: ", "document": "passage: "}, "pooling": "meanMasked", "normalization": "l2"
+  },
+  "ranking": {"contractVersion": 1, "candidateLimit": 50, "parameters": {"ranker": "REQUIRED_EXACT_VERSION"}},
+  "acceptanceCriteria": {"benchmarkGateVersion": 1, "numericalParity": {"maximumAbsoluteError": 0.001, "minimumCosineSimilarity": 0.999, "maximumTop10RankingChanges": 0}},
+  "catalogue": {"packID": "caribbean", "packVersion": 3, "speciesCount": 8, "searchDocumentSchemaVersion": 1, "fingerprint": "REQUIRED_64_CHARACTER_LOWERCASE_SHA256"},
+  "datasets": [{"identifier": "REQUIRED", "fingerprint": "REQUIRED_64_CHARACTER_LOWERCASE_SHA256", "role": "development"}],
+  "artifacts": [{"path": "REQUIRED", "sha256": "REQUIRED_64_CHARACTER_LOWERCASE_SHA256", "role": "converted-model"}]
 }
