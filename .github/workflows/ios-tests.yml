@@ -1,0 +1,112 @@
+name: iOS and portable tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  portable-tests:
+    name: SwiftPM and Python tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run SwiftPM tests
+        run: swift test
+      - name: Run Python tests
+        run: |
+          python3 -m unittest Tools/TropicalPacificWorkbook/test_inspect_workbook.py
+          python3 Tools/SemanticSearch/tests/test_evaluate_candidate.py
+          python3 Tools/SemanticSearch/tests/test_export_search_corpus.py
+
+  xcode-tests:
+    name: Xcode unit and UI tests
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      DERIVED_DATA: ${{ github.workspace }}/.derived-data
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+
+      - name: Resolve an iOS 18 simulator
+        id: simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          xcodebuild -project DiveID.xcodeproj -scheme DiveID -showdestinations
+          udid="$({ xcrun simctl list devices available --json || exit 1; } | python3 -c '
+          import json, re, sys
+          devices = json.load(sys.stdin)["devices"]
+          candidates = []
+          for runtime, entries in devices.items():
+              match = re.search(r"iOS[- ](\d+)[-.](\d+)", runtime)
+              if not match or int(match.group(1)) < 18:
+                  continue
+              version = tuple(map(int, match.groups()))
+              for device in entries:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      candidates.append((version, device["name"], device["udid"]))
+          if not candidates:
+              raise SystemExit("No available iOS 18+ iPhone simulator was found")
+          candidates.sort(reverse=True)
+          print(candidates[0][2])
+          ' )"
+          echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
+
+      - name: Build application and tests
+        id: build
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA" \
+            CODE_SIGNING_ALLOWED=NO \
+            build-for-testing
+
+      - name: Run complete unit-test target
+        id: unit_tests
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath "$RUNNER_TEMP/DiveIDTests.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            test-without-building \
+            -only-testing:DiveIDTests
+
+      - name: Run UI-test target
+        id: ui_tests
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath "$RUNNER_TEMP/DiveIDUITests.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            test-without-building \
+            -only-testing:DiveIDUITests
+
+      - name: Upload failed Xcode result bundles
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-test-results
+          path: ${{ runner.temp }}/*.xcresult
+          if-no-files-found: ignore
+          retention-days: 14

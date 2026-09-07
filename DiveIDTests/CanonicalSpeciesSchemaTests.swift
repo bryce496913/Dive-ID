@@ -44,7 +44,8 @@ final class CanonicalSpeciesSchemaTests: XCTestCase {
         XCTAssertEqual(saved.species.mouthAndHeadShape, profile.mouthAndHeadShape)
         XCTAssertEqual(saved.species.finAndSpineClues, profile.finAndSpineClues)
 
-        let reopened = try XCTUnwrap(try await JSONSavedIdentificationRepository(fileURL: fileURL).fetchAll().first)
+        let reopenedIdentifications = try await JSONSavedIdentificationRepository(fileURL: fileURL).fetchAll()
+        let reopened = try XCTUnwrap(reopenedIdentifications.first)
         XCTAssertEqual(reopened.species, species)
         XCTAssertEqual(reopened.match.species, species)
     }
@@ -62,7 +63,8 @@ final class CanonicalSpeciesSchemaTests: XCTestCase {
             for: sessionID
         )
 
-        let reopened = try XCTUnwrap(try await store.result(for: sessionID)?.matches.first)
+        let storedResult = try await store.result(for: sessionID)
+        let reopened = try XCTUnwrap(storedResult?.matches.first)
         XCTAssertEqual(reopened.id, profile.id)
         XCTAssertEqual(reopened.species.id, profile.id)
         XCTAssertEqual(reopened.species.taxonomy, profile.taxonomy)
