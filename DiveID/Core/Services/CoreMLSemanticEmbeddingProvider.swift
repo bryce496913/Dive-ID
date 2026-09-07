@@ -61,6 +61,7 @@ enum SemanticArtifactDiagnostic: Error, Equatable, Sendable, CustomStringConvert
     case unsupportedModelOutputDataType
     case unsupportedModelOutputLayout
     case invalidModelOutput
+    case semanticRuntimeFailure
 
     var description: String {
         switch self {
@@ -82,6 +83,7 @@ enum SemanticArtifactDiagnostic: Error, Equatable, Sendable, CustomStringConvert
         case .unsupportedModelOutputDataType: "unsupported model output data type"
         case .unsupportedModelOutputLayout: "unsupported model output layout"
         case .invalidModelOutput: "invalid model output"
+        case .semanticRuntimeFailure: "semantic runtime failed"
         }
     }
 }
