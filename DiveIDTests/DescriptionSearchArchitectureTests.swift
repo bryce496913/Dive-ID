@@ -22,7 +22,7 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
     ]
 
     private func pack() async throws -> OfflineIdentificationPack {
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle).loadPack(id: .caribbean)
+        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadPack(id: .caribbean)
     }
 
     func testStructuredEnginePreservesLegacyOrderingScoresAndEvidence() async throws {

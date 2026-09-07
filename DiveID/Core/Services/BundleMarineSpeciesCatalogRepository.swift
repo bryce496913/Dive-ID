@@ -4,11 +4,26 @@ import ImageIO
 #endif
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
+    enum ResourceResolutionMode: Sendable {
+        case bundleOnly
+        case bundleThenDevelopmentSource
+    }
+
     private let bundle: Bundle
     private let registry: RegionCatalogRegistry
+    private let resourceResolutionMode: ResourceResolutionMode
+    private let developmentSourceRoot: URL
     private var cachedPacks: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
-    init(bundle: Bundle = .main, registry: RegionCatalogRegistry = .bundled) {
-        self.bundle = bundle; self.registry = registry
+    init(
+        bundle: Bundle = .main,
+        registry: RegionCatalogRegistry = .bundled,
+        resourceResolutionMode: ResourceResolutionMode = .bundleOnly,
+        developmentSourceRoot: URL = URL(fileURLWithPath: "DiveID/Resources", isDirectory: true)
+    ) {
+        self.bundle = bundle
+        self.registry = registry
+        self.resourceResolutionMode = resourceResolutionMode
+        self.developmentSourceRoot = developmentSourceRoot
     }
 
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
@@ -17,15 +32,36 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
-        guard let definition = registry.definition(for: id) else { throw LocalCatalogError.unsupportedPack }
+        guard let definition = registry.definition(for: id) else {
+            throw failure(id, .unsupportedPack, .unsupportedPack, nil, .manifest)
+        }
         let metadata = try loadManifest(definition)
-        guard metadata.id == id else { throw LocalCatalogError.unsupportedPack }
+        guard metadata.id == id else {
+            throw failure(id, .unsupportedPack, .unsupportedPack, manifestResource(definition), .validation)
+        }
         let root = "IdentificationPacks/" + definition.resourceDirectory
-        guard let url = resourceURL(path: root + "/" + metadata.speciesResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
-        let data = try Data(contentsOf: url)
+        let speciesResource = root + "/" + metadata.speciesResourceName + ".json"
+        guard let url = resourceURL(path: root + "/" + metadata.speciesResourceName, ext: "json") else {
+            throw failure(id, .speciesResourceMissing, .resourceMissing, speciesResource, .speciesResource)
+        }
+        let data: Data
+        do { data = try Data(contentsOf: url) }
+        catch { throw failure(id, .speciesResourceMissing, .unreadableData, speciesResource, .speciesResource) }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
-        let profiles = try decoder.decode([LocalSpeciesProfile].self, from: data)
-        try Self.validate(pack: OfflineIdentificationPack(metadata: metadata, profiles: profiles), bundle: bundle, resourceDirectory: definition.resourceDirectory)
+        let profiles: [LocalSpeciesProfile]
+        do { profiles = try decoder.decode([LocalSpeciesProfile].self, from: data) }
+        catch { throw failure(id, .decodeFailed, .invalidData, speciesResource, .decoding) }
+        do {
+            try Self.validate(
+                pack: OfflineIdentificationPack(metadata: metadata, profiles: profiles),
+                bundle: bundle,
+                resourceDirectory: definition.resourceDirectory,
+                resourceResolver: resourceURL(path:ext:)
+            )
+        } catch let error as LocalCatalogError {
+            let context = validationContext(error: error, profiles: profiles, metadata: metadata, directory: definition.resourceDirectory)
+            throw failure(id, context.code, error, context.resource ?? speciesResource, context.phase)
+        }
         let sorted = profiles.sorted { $0.commonName.localizedStandardCompare($1.commonName) == .orderedAscending }
         let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted)
         cachedPacks[id] = pack
@@ -34,29 +70,61 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
 
     private func loadManifest(_ definition: RegionCatalogDefinition) throws -> OfflineIdentificationPackMetadata {
         let root = "IdentificationPacks/" + definition.resourceDirectory
-        guard let url = resourceURL(path: root + "/" + definition.manifestResourceName, ext: "json") else { throw LocalCatalogError.resourceMissing }
+        let resource = manifestResource(definition)
+        guard let url = resourceURL(path: root + "/" + definition.manifestResourceName, ext: "json") else {
+            throw failure(definition.id, .manifestMissing, .resourceMissing, resource, .manifest)
+        }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: url))
+        let data: Data
+        do { data = try Data(contentsOf: url) }
+        catch { throw failure(definition.id, .manifestMissing, .unreadableData, resource, .manifest) }
+        do { return try decoder.decode(OfflineIdentificationPackMetadata.self, from: data) }
+        catch { throw failure(definition.id, .decodeFailed, .invalidData, resource, .decoding) }
     }
 
     private func resourceURL(path: String, ext: String) -> URL? {
-        bundle.url(forResource: path, withExtension: ext) ?? URL(fileURLWithPath: "DiveID/Resources/").appendingPathComponent(path).appendingPathExtension(ext)
-            .standardizedFileURL
-            .absoluteURL
-            .existing
+        if let bundled = bundle.url(forResource: path, withExtension: ext) { return bundled }
+        guard resourceResolutionMode == .bundleThenDevelopmentSource else { return nil }
+        return developmentSourceRoot.appendingPathComponent(path).appendingPathExtension(ext).standardizedFileURL.existing
     }
 
-    static func validate(pack: OfflineIdentificationPack, bundle: Bundle = .main, resourceDirectory: String? = nil) throws {
+    private func manifestResource(_ definition: RegionCatalogDefinition) -> String {
+        "IdentificationPacks/\(definition.resourceDirectory)/\(definition.manifestResourceName).json"
+    }
+
+    private func failure(_ packID: OfflineIdentificationPackID, _ code: CatalogueDiagnosticCode, _ error: LocalCatalogError?, _ resource: String?, _ phase: CatalogueLoadPhase) -> CatalogueLoadFailure {
+        CatalogueLoadFailure(packID: packID, code: code, catalogError: error, resource: resource, phase: phase)
+    }
+
+    private func validationContext(error: LocalCatalogError, profiles: [LocalSpeciesProfile], metadata: OfflineIdentificationPackMetadata, directory: String) -> (code: CatalogueDiagnosticCode, resource: String?, phase: CatalogueLoadPhase) {
+        switch error {
+        case .countMismatch: return (.countMismatch, nil, .validation)
+        case .unknownControlledVocabularyValue: return (.vocabularyInvalid, nil, .validation)
+        case .missingImage(let id): return (.artworkMissing, artworkResource(id: id, profiles: profiles, metadata: metadata, directory: directory), .artworkValidation)
+        case .invalidImage(let id), .imageTooLarge(let id): return (.artworkInvalid, artworkResource(id: id, profiles: profiles, metadata: metadata, directory: directory), .artworkValidation)
+        case .emptyImageAttribution, .unsupportedImageLicense, .duplicateImageFilename:
+            return (.artworkInvalid, nil, .artworkValidation)
+        case .unsupportedSchemaVersion: return (.unsupportedPack, nil, .validation)
+        default: return (.validationFailed, nil, .validation)
+        }
+    }
+
+    private func artworkResource(id: UUID, profiles: [LocalSpeciesProfile], metadata: OfflineIdentificationPackMetadata, directory: String) -> String? {
+        guard let fileName = profiles.first(where: { $0.id == id })?.bundledImage?.fileName else { return nil }
+        return "IdentificationPacks/\(directory)/\(metadata.imageSubdirectory)/\(fileName)"
+    }
+
+    static func validate(pack: OfflineIdentificationPack, bundle: Bundle = .main, resourceDirectory: String? = nil, resourceResolver: ((String, String) -> URL?)? = nil) throws {
         let m = pack.metadata; let profiles = pack.profiles
         guard m.schemaVersion == 1 else { throw LocalCatalogError.unsupportedSchemaVersion }
         guard m.packVersion > 0 else { throw LocalCatalogError.invalidPackVersion }
         guard !m.displayName.isEmpty, !m.geographicScope.isEmpty else { throw LocalCatalogError.invalidData }
         guard m.speciesCount == profiles.count else { throw LocalCatalogError.countMismatch(expected: m.speciesCount, actual: profiles.count) }
         let directory = resourceDirectory ?? RegionCatalogRegistry.bundled.definition(for: m.id)?.resourceDirectory ?? m.id.rawValue
-        try validate(profiles, metadata: m, bundle: bundle, resourceDirectory: directory)
+        try validate(profiles, metadata: m, bundle: bundle, resourceDirectory: directory, resourceResolver: resourceResolver)
     }
 
-    static func validate(_ profiles: [LocalSpeciesProfile], metadata: OfflineIdentificationPackMetadata? = nil, bundle: Bundle = .main, resourceDirectory: String? = nil) throws {
+    static func validate(_ profiles: [LocalSpeciesProfile], metadata: OfflineIdentificationPackMetadata? = nil, bundle: Bundle = .main, resourceDirectory: String? = nil, resourceResolver: ((String, String) -> URL?)? = nil) throws {
         var ids = Set<UUID>(), sci = Set<String>(), names = Set<String>(), canonical = Set<String>(), images = Set<String>()
         for p in profiles {
             guard ids.insert(p.id).inserted else { throw LocalCatalogError.duplicateIdentifier }
@@ -101,7 +169,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                 else { throw LocalCatalogError.emptyImageAttribution }
                 guard ["CC0", "Public Domain", "CC BY 4.0", "CC BY"].contains(image.licenseName) else { throw LocalCatalogError.unsupportedImageLicense(image.licenseName) }
                 if let metadata {
-                    try validateImageFile(image, speciesID: p.id, metadata: metadata, bundle: bundle, resourceDirectory: resourceDirectory ?? metadata.id.rawValue)
+                    try validateImageFile(image, speciesID: p.id, metadata: metadata, bundle: bundle, resourceDirectory: resourceDirectory ?? metadata.id.rawValue, resourceResolver: resourceResolver)
                 }
             }
         }
@@ -109,9 +177,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     private static let maximumImageByteCount = 5_000_000
     private static let maximumImageDimension = 4_096
 
-    private static func validateImageFile(_ image: BundledSpeciesImage, speciesID: UUID, metadata: OfflineIdentificationPackMetadata, bundle: Bundle, resourceDirectory: String) throws {
+    private static func validateImageFile(_ image: BundledSpeciesImage, speciesID: UUID, metadata: OfflineIdentificationPackMetadata, bundle: Bundle, resourceDirectory: String, resourceResolver: ((String, String) -> URL?)?) throws {
         let path = "IdentificationPacks/\(resourceDirectory)/\(metadata.imageSubdirectory)/\(image.fileName)"
-        guard let url = bundle.url(forResource: path, withExtension: nil) ?? URL(fileURLWithPath: "DiveID/Resources").appendingPathComponent(path).standardizedFileURL.existing
+        guard let url = resourceResolver?(path, "") ?? bundle.url(forResource: path, withExtension: nil)
         else { throw LocalCatalogError.missingImage(speciesID) }
         guard let data = try? Data(contentsOf: url), !data.isEmpty else { throw LocalCatalogError.invalidImage(speciesID) }
         guard data.count <= maximumImageByteCount else { throw LocalCatalogError.imageTooLarge(speciesID) }

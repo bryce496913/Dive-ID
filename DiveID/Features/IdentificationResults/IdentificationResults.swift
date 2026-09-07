@@ -84,12 +84,22 @@ final class IdentificationResultsViewModel {
         loadTask = nil
     }
 
-    private static func message(for error: LocalIdentificationError) -> String {
+    static func message(for error: LocalIdentificationError, includesDiagnostics: Bool = {
+#if DEBUG
+        true
+#else
+        false
+#endif
+    }()) -> String {
         switch error {
         case .invalidDescription:
             "Add more detail about the animal before trying again."
         case .catalogUnavailable:
             "The offline species catalogue could not be loaded."
+        case .catalogueLoadFailed(let failure):
+            includesDiagnostics
+                ? "The offline species catalogue could not be loaded.\nDiagnostic: \(failure.code.rawValue)"
+                : "The offline species catalogue could not be loaded."
         case .unsupportedSource:
             "Photo identification is not available in this offline version yet."
         case .regionMismatch(let selected, let mentioned):

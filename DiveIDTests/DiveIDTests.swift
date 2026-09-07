@@ -53,6 +53,22 @@ struct StubPhotoProcessingService: PhotoProcessingService {
 }
 
 final class DiveIDTests: XCTestCase {
+    func testCatalogueFailureReleaseMessageRemainsGeneric() {
+        let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
+        XCTAssertEqual(
+            IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: false),
+            "The offline species catalogue could not be loaded."
+        )
+    }
+
+    func testCatalogueFailureDebugMessageShowsOnlyStableCode() {
+        let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
+        let message = IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: true)
+        XCTAssertEqual(message, "The offline species catalogue could not be loaded.\nDiagnostic: CATALOG_SPECIES_RESOURCE_MISSING")
+        XCTAssertFalse(message.contains("IdentificationPacks"))
+        XCTAssertFalse(message.contains("resourceMissing"))
+    }
+
     @MainActor
     func testResultsCopyUsesCaribbeanRequestMetadataAndSpeciesCount() async throws {
         let metadata = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 78)
@@ -407,7 +423,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     private let parser = LocalObservationParser()
 
     func testProductionCaribbeanPackLoadsAndValidates() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle)
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
         let manifests = try await repository.availablePacks()
         let manifest = try XCTUnwrap(manifests.first { $0.id == .caribbean })
         let pack: OfflineIdentificationPack
@@ -480,7 +496,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testCatalogRepositoryCachesProductionPack() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle)
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
         let first = try await repository.loadProfiles()
         let second = try await repository.loadProfiles()
         XCTAssertEqual(first, second)
@@ -641,7 +657,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     func testCaribbeanServiceRegionValidationUsesSharedCompatibility() async throws {
         let service = LocalMarineLifeIdentificationService(
-            catalogRepository: BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle),
+            catalogRepository: BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource),
             parser: parser,
             ranker: LocalSpeciesRanker()
         )
@@ -681,7 +697,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         }
     }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
 
     private func productionProfile(named name: String) throws -> LocalSpeciesProfile {
         let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
@@ -1054,7 +1070,7 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
     ] }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
     private func productionCaribbeanProfiles() throws -> [LocalSpeciesProfile] {
         let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
