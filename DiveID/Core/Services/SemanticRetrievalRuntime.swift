@@ -1,6 +1,13 @@
 import Foundation
 
-enum DescriptionRetrievalEngine: String, Sendable { case productionBM25, experimentalCoreML }
+enum DescriptionRetrievalEngine: String, Sendable {
+    case productionBM25, experimentalCoreML
+
+    /// This constant is deliberately machine-tested. Experimental availability is not
+    /// evidence of production approval; promotion additionally requires the external,
+    /// fingerprint-bound production-readiness gate.
+    static let productionDefault: Self = .productionBM25
+}
 
 struct SemanticRetrievalMetrics: Sendable {
     let requestedEngine: DescriptionRetrievalEngine

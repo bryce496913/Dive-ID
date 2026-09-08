@@ -5,6 +5,10 @@ import CoreML
 #endif
 
 final class SemanticSearchTests: XCTestCase {
+    func testProductionDefaultRemainsBM25PendingFingerprintBoundApproval() {
+        XCTAssertEqual(DescriptionRetrievalEngine.productionDefault, .productionBM25)
+    }
+
     private struct TokenizerFixture: Decodable {
         struct FixtureCase: Decodable {
             let name: String
