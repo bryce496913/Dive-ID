@@ -180,7 +180,7 @@ struct ConfiguredDescriptionSearchEngine: DescriptionSearching {
     let runtime: SemanticRetrievalRuntime
     let diagnostics: (any SemanticDiagnosticsReporting)?
 
-    init(selection: DescriptionRetrievalEngine = .productionBM25, bundle: Bundle = .main,
+    init(selection: DescriptionRetrievalEngine = .productionDefault, bundle: Bundle = .main,
          runtime: SemanticRetrievalRuntime = SemanticRetrievalRuntime(), diagnostics: (any SemanticDiagnosticsReporting)? = nil) {
         self.selection = selection; self.bundle = bundle; self.runtime = runtime; self.diagnostics = diagnostics
     }

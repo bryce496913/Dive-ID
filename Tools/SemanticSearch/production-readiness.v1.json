@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "evaluationIdentifier": "diveid-semantic-production-readiness-v1",
+  "productionStatus": "not evaluated",
+  "identity": {
+    "modelRevision": "unselected",
+    "tokenizerFingerprint": "unavailable",
+    "preprocessingFingerprint": "unavailable",
+    "embeddingIndexFingerprint": "unavailable",
+    "rankingContractFingerprint": "LocalSpeciesRanker.v1-unfrozen-for-production",
+    "catalogueVersion": "caribbean-pack-3",
+    "freshDatasetVersion": "unavailable"
+  },
+  "freshDataset": {
+    "status": "unavailable",
+    "humanReviewed": false,
+    "previousUses": [],
+    "requiredCharacteristics": ["bad descriptions", "partial recollection", "spelling mistakes", "vague colors", "approximate sizes", "habitat clues", "behavioral clues", "confusing similar species", "genuine no-match cases"],
+    "leakagePolicy": "Evaluation descriptions are access-controlled holdout data and must never be imported into search or training corpora, synonym development, ranking tuning, threshold tuning, or debugging inputs. Ground truth requires independent human review."
+  },
+  "catalogue": {
+    "count": 8,
+    "fingerprint": "development-caribbean-search-documents-not-production-catalogue",
+    "reviewStateDistribution": {"bundledDevelopmentRecords": 8, "productionReviewed": 0},
+    "inclusionPolicy": "Only reviewed, canonical, region-eligible records may enter production evaluation. The 1650-record staging workbook is not accepted as verified truth."
+  },
+  "metricInterpretation": {
+    "candidateRecallAt10": "non-informative: catalogue has fewer than 10 records",
+    "candidateRecallAt25": "non-informative: catalogue has fewer than 25 records",
+    "candidateRecallAt50": "non-informative: catalogue has fewer than 50 records",
+    "top10": "non-informative: catalogue has fewer than 10 records"
+  },
+  "engines": {
+    "structuredBaseline": {"status": "not evaluated on fresh data", "metrics": {"candidateRecallAt10": null, "candidateRecallAt25": null, "candidateRecallAt50": null, "candidateMRR": null, "top1": null, "top3": null, "top10": null, "noMatchCorrectness": null, "falsePositiveRate": null, "queryEmbeddingLatencyMilliseconds": null, "retrievalLatencyMilliseconds": null, "totalLatencyMilliseconds": null}},
+    "bm25Hybrid": {"status": "not evaluated on fresh data", "metrics": {"candidateRecallAt10": null, "candidateRecallAt25": null, "candidateRecallAt50": null, "candidateMRR": null, "top1": null, "top3": null, "top10": null, "noMatchCorrectness": null, "falsePositiveRate": null, "queryEmbeddingLatencyMilliseconds": null, "retrievalLatencyMilliseconds": null, "totalLatencyMilliseconds": null}},
+    "realSemanticHybrid": {"status": "not evaluated: genuine encoder artifacts and Apple execution evidence unavailable", "metrics": {"candidateRecallAt10": null, "candidateRecallAt25": null, "candidateRecallAt50": null, "candidateMRR": null, "top1": null, "top3": null, "top10": null, "noMatchCorrectness": null, "falsePositiveRate": null, "queryEmbeddingLatencyMilliseconds": null, "retrievalLatencyMilliseconds": null, "totalLatencyMilliseconds": null}}
+  },
+  "regressionGate": {"label": "regression gates", "dataset": "CaribbeanIdentificationBenchmark.v1", "top1": "44/80", "top3": "59/80", "top10": "64/80", "noMatch": "20/20"},
+  "productionThresholds": {"candidateRecallAt10": null, "candidateRecallAt25": null, "candidateRecallAt50": null, "top1": null, "top3": null, "top10": null, "noMatchCorrectness": null, "falsePositiveRate": null, "latency": null},
+  "approval": {"status": "not approved", "identity": {}}
+}

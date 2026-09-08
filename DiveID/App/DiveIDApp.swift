@@ -23,12 +23,12 @@ struct DiveIDApp: App {
         // developer build sets DiveIDExperimentalSemanticSearch to true.
         #if DEBUG
         retrievalEngine = UserDefaults.standard.bool(forKey: "DiveIDExperimentalSemanticSearch")
-            ? .experimentalCoreML : .productionBM25
+            ? .experimentalCoreML : .productionDefault
         let semanticDiagnostics = DebugSemanticDiagnosticsReporter()
         self.semanticDiagnostics = semanticDiagnostics
         #else
         // Experimental selection and its diagnostics are both excluded from production.
-        retrievalEngine = .productionBM25
+        retrievalEngine = .productionDefault
         #endif
         #if DEBUG
         let searchEngine = ConfiguredDescriptionSearchEngine(selection: retrievalEngine, diagnostics: semanticDiagnostics)

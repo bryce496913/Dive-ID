@@ -1,5 +1,29 @@
 # Semantic-search corpus exporter
 
+## Production-readiness gate
+
+The frozen 100-case Caribbean benchmark remains a **regression gate**, not a production
+claim. `production-readiness.v1.json` is the separate production evaluation ledger. It
+currently records `production status = not evaluated`: there is no genuinely unseen,
+human-reviewed description set, representative reviewed catalogue, or genuine encoder
+run in this checkout. Null thresholds are intentional rather than invented targets.
+
+Validate the ledger, or fail closed when a release process requires approval:
+
+```sh
+python3 Tools/SemanticSearch/validate_production_readiness.py \
+  Tools/SemanticSearch/production-readiness.v1.json
+python3 Tools/SemanticSearch/validate_production_readiness.py --require-approved \
+  Tools/SemanticSearch/production-readiness.v1.json
+```
+
+Approval binds all seven identities named in the request: model revision, tokenizer,
+preprocessing, embedding index, ranking contract, catalogue, and fresh dataset. A change
+to any identity invalidates approval. All three engines must pass the same fresh evaluation.
+Fresh descriptions are holdout-only and may never automatically flow into corpus export,
+training, synonyms, ranking/threshold tuning, or debugging. Recall@k and top-k are marked
+non-informative when the catalogue has fewer than k records.
+
 This developer-only Python tool exports an app-loadable identification pack to compact,
 deterministic JSONL. Python is **not** an iOS runtime dependency.
 
