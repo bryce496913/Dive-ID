@@ -44,7 +44,9 @@
     "tokenTypeIDsFeature": null,
     "outputFeature": "hidden",
     "pooling": "meanMasked",
-    "normalizeL2": true
+    "normalizeL2": true,
+    "vocabularySHA256": "ea1e8dcea8bd3d88eaa383cd220e02f4a45619a37b617f88f781b5b9ee97c64d",
+    "tokenizerFingerprint": "773d3568de8b8967f098eb4d597726d6949264783956d24f02232407704474b5"
   },
   "cases": [
     {

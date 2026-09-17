@@ -228,7 +228,7 @@ def main():
         "documentFingerprint": catalogue_fingerprint(rows, schema), "packID": pack_id, "packVersion": pack_version,
         "tokenizerIdentifier": contract["tokenizerIdentifier"], "preprocessingIdentifier": contract["preprocessingIdentifier"],
         "tokenizerFingerprint": tokenizer_fingerprint(contract, vocabulary),
-        "vocabularySHA256": vocabulary_checksum(vocabulary), "indexFormatVersion": 1}, "records": [
+        "vocabularySHA256": vocabulary_checksum(vocabulary), "indexFormatVersion": 2}, "records": [
         {"speciesID": row["species_id"], "documentFingerprint": row["document_fingerprint"], "vector": vector}
         for row, vector in zip(rows, vectors)]}
     args.output.parent.mkdir(parents=True, exist_ok=True)

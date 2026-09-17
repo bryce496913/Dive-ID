@@ -5,6 +5,9 @@ import CoreML
 #endif
 
 final class SemanticSearchTests: XCTestCase {
+    func testSHA256Implementation() {
+        XCTAssertEqual(SHA256Digest.hex(Data("abc".utf8)), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+    }
     func testProductionDefaultRemainsBM25PendingFingerprintBoundApproval() {
         XCTAssertEqual(DescriptionRetrievalEngine.productionDefault, .productionBM25)
     }
@@ -31,6 +34,7 @@ final class SemanticSearchTests: XCTestCase {
     ) -> SemanticModelArtifactContract {
         SemanticModelArtifactContract(contractVersion: 1, modelIdentifier: "synthetic.mechanics", modelVersion: "1",
             embeddingDimension: embeddingDimension, tokenizerIdentifier: "synthetic-vocab-1", preprocessingIdentifier: "synthetic-preprocess-1",
+            tokenizerFingerprint: String(repeating: "a", count: 64), vocabularySHA256: String(repeating: "b", count: 64),
             vocabularyFile: "fixture.json", lowercase: true, stripAccents: true, maximumSequenceLength: maximumSequenceLength, truncation: truncation,
             clsToken: "[CLS]", separatorToken: "[SEP]", paddingToken: "[PAD]", unknownToken: "[UNK]",
             queryPrefix: "query: ", documentPrefix: "passage: ", inputIDsFeature: "ids", attentionMaskFeature: "mask",
@@ -41,6 +45,8 @@ final class SemanticSearchTests: XCTestCase {
         var modelVersion = "1"
         var embeddingDimension = 3
         var shouldFail = false
+        var tokenizerFingerprint = String(repeating: "1", count: 64)
+        var vocabularySHA256 = String(repeating: "2", count: 64)
 
         func embedding(for text: String) async throws -> [Float] {
             if shouldFail { throw TestError.modelUnavailable }
@@ -72,7 +78,9 @@ final class SemanticSearchTests: XCTestCase {
         catalogueFingerprint: String? = nil,
         vectors: [[Float]]? = nil,
         tokenizerIdentifier: String? = nil,
-        preprocessingIdentifier: String? = nil
+        preprocessingIdentifier: String? = nil,
+        tokenizerFingerprint: String? = nil,
+        vocabularySHA256: String? = nil
     ) async throws -> SpeciesEmbeddingIndex {
         let generated = try await provider.embeddings(for: documents.map(\.combinedText))
         return SpeciesEmbeddingIndex(
@@ -85,7 +93,9 @@ final class SemanticSearchTests: XCTestCase {
                 packID: pack.id,
                 packVersion: packVersion ?? pack.packVersion,
                 tokenizerIdentifier: tokenizerIdentifier ?? provider.tokenizerIdentifier,
-                preprocessingIdentifier: preprocessingIdentifier ?? provider.preprocessingIdentifier
+                preprocessingIdentifier: preprocessingIdentifier ?? provider.preprocessingIdentifier,
+                tokenizerFingerprint: tokenizerFingerprint ?? provider.tokenizerFingerprint,
+                vocabularySHA256: vocabularySHA256 ?? provider.vocabularySHA256
             ),
             records: zip(documents, vectors ?? generated).map {
                 SpeciesEmbeddingRecord(speciesID: $0.speciesID, documentFingerprint: $0.fingerprint, vector: $1)
@@ -207,8 +217,8 @@ final class SemanticSearchTests: XCTestCase {
     }
 
     func testWordPieceContractAppliesPrefixTruncationMaskAndPadding() throws {
-        let contract = semanticContract()
         let vocabulary = ["[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "query": 4, "cafe": 5, "fish": 6]
+        let contract = try semanticContract().binding(to: vocabulary)
         let tokenizer = try WordPieceTokenizer(data: JSONEncoder().encode(vocabulary), contract: contract)
         let encoded = tokenizer.encode("CAFÉ fish")
         XCTAssertEqual(encoded.ids, [2, 4, 5, 6, 3, 0])
@@ -219,12 +229,16 @@ final class SemanticSearchTests: XCTestCase {
         let url = try TestResources.fixture(named: "TokenizerParity.v1")
         let fixture = try JSONDecoder().decode(TokenizerFixture.self, from: Data(contentsOf: url))
         let vocabularyData = try JSONEncoder().encode(fixture.vocabulary)
+        let sharedIdentities = try FingerprintContract.identities(contract: fixture.contract, vocabulary: fixture.vocabulary)
+        XCTAssertEqual(sharedIdentities.vocabularySHA256, fixture.contract.vocabularySHA256)
+        XCTAssertEqual(sharedIdentities.tokenizerFingerprint, fixture.contract.tokenizerFingerprint)
         for fixtureCase in fixture.cases {
             let base = fixture.contract
             let contract = SemanticModelArtifactContract(contractVersion: base.contractVersion,
                 modelIdentifier: base.modelIdentifier, modelVersion: base.modelVersion,
                 embeddingDimension: base.embeddingDimension, tokenizerIdentifier: base.tokenizerIdentifier,
-                preprocessingIdentifier: base.preprocessingIdentifier, vocabularyFile: base.vocabularyFile,
+                preprocessingIdentifier: base.preprocessingIdentifier, tokenizerFingerprint: base.tokenizerFingerprint,
+                vocabularySHA256: base.vocabularySHA256, vocabularyFile: base.vocabularyFile,
                 lowercase: base.lowercase, stripAccents: base.stripAccents,
                 maximumSequenceLength: base.maximumSequenceLength, truncation: fixtureCase.truncation,
                 clsToken: base.clsToken, separatorToken: base.separatorToken, paddingToken: base.paddingToken,
@@ -232,7 +246,7 @@ final class SemanticSearchTests: XCTestCase {
                 inputIDsFeature: base.inputIDsFeature, attentionMaskFeature: base.attentionMaskFeature,
                 tokenTypeIDsFeature: base.tokenTypeIDsFeature, outputFeature: base.outputFeature,
                 pooling: base.pooling, normalizeL2: base.normalizeL2)
-            let result = try WordPieceTokenizer(data: vocabularyData, contract: contract)
+            let result = try WordPieceTokenizer(data: vocabularyData, contract: contract.binding(to: fixture.vocabulary))
                 .encode(fixtureCase.text, document: fixtureCase.document)
             XCTAssertEqual(result.ids, fixtureCase.inputIDs, fixtureCase.name)
             XCTAssertEqual(result.mask, fixtureCase.attentionMask, fixtureCase.name)
@@ -303,6 +317,54 @@ final class SemanticSearchTests: XCTestCase {
         }
     }
 
+    func testVerifiedFingerprintCompatibilityAndVocabularyMismatch() async throws {
+        let pack = try await pack()
+        let documents = Array(pack.profiles.prefix(2)).map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let matching = try await index(documents: documents, pack: pack.metadata, provider: provider)
+        XCTAssertNoThrow(try matching.validate(provider: provider, pack: pack.metadata, documents: documents))
+
+        let differentVocabulary = FakeProvider(vocabularySHA256: String(repeating: "3", count: 64))
+        XCTAssertThrowsError(try matching.validate(provider: differentVocabulary, pack: pack.metadata, documents: documents)) {
+            XCTAssertEqual($0 as? SemanticIndexError, .vocabularyMismatch)
+        }
+        let changedPreprocessing = FakeProvider(tokenizerFingerprint: String(repeating: "4", count: 64))
+        XCTAssertThrowsError(try matching.validate(provider: changedPreprocessing, pack: pack.metadata, documents: documents)) {
+            XCTAssertEqual($0 as? SemanticIndexError, .tokenizerFingerprintMismatch)
+        }
+    }
+
+    func testMissingAndMalformedIndexFingerprintsAreRejected() async throws {
+        let pack = try await pack()
+        let documents = Array(pack.profiles.prefix(1)).map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let malformed = try await index(documents: documents, pack: pack.metadata, provider: provider,
+                                        tokenizerFingerprint: "not-a-sha256")
+        XCTAssertThrowsError(try malformed.validate(provider: provider, pack: pack.metadata, documents: documents)) {
+            XCTAssertEqual($0 as? SemanticIndexError, .malformedTokenizerFingerprint)
+        }
+        let encoded = try JSONEncoder().encode(malformed)
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        var metadata = try XCTUnwrap(object["metadata"] as? [String: Any]); metadata.removeValue(forKey: "vocabularySHA256")
+        object["metadata"] = metadata
+        XCTAssertThrowsError(try JSONDecoder().decode(SpeciesEmbeddingIndex.self,
+            from: JSONSerialization.data(withJSONObject: object)))
+    }
+
+    func testVocabularyIntegrityAndCacheIdentityAreFingerprintBound() throws {
+        let vocabularyA = ["[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "query": 4]
+        let contractA = try semanticContract().binding(to: vocabularyA)
+        _ = try WordPieceTokenizer(data: JSONEncoder().encode(vocabularyA), contract: contractA)
+        var vocabularyB = vocabularyA; vocabularyB["query"] = 9
+        XCTAssertThrowsError(try WordPieceTokenizer(data: JSONEncoder().encode(vocabularyB), contract: contractA)) {
+            XCTAssertEqual($0 as? SemanticArtifactDiagnostic, .malformedTokenizer)
+        }
+        let contractB = try semanticContract().binding(to: vocabularyB)
+        XCTAssertNotEqual(contractA.vocabularySHA256, contractB.vocabularySHA256)
+        XCTAssertNotEqual(contractA.tokenizerFingerprint, contractB.tokenizerFingerprint)
+        XCTAssertNotEqual(contractA.cacheIdentity, contractB.cacheIdentity)
+    }
+
     func testExplicitExperimentalSelectionFallsBackWhenBundleAssetsAreMissing() async throws {
         let pack = try await pack()
         let diagnostics = SemanticDiagnosticsStore()
@@ -357,6 +419,22 @@ final class SemanticSearchTests: XCTestCase {
             .retrieve(query: "ray", documents: documents, limit: 2)
         let metric = await diagnostics.latest
         XCTAssertEqual(metric?.fallbackReason, .incompatibleIndex(.modelVersionMismatch))
+    }
+
+    func testVocabularyMismatchFallsBackAndNeverReportsSemanticExecution() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let stale = try await index(documents: documents, pack: pack.metadata, provider: provider,
+                                    vocabularySHA256: String(repeating: "9", count: 64))
+        let diagnostics = SemanticDiagnosticsStore()
+        _ = try await ExperimentalSemanticRetriever(pack: pack.metadata, locations: artifactLocations(),
+            runtime: SemanticRetrievalRuntime(provider: provider, index: stale), fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics)
+            .retrieve(query: "ray", documents: documents, limit: 2)
+        let metric = await diagnostics.latest
+        XCTAssertEqual(metric?.actualEngine, .productionBM25)
+        XCTAssertEqual(metric?.fallbackReason, .incompatibleIndex(.vocabularyMismatch))
+        XCTAssertFalse(metric?.queryCacheHit ?? true)
     }
 
     func testValidFakeRuntimeReportsSemanticInferenceAndNoRawQuery() async throws {

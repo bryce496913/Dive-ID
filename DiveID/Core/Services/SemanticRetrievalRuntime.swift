@@ -99,7 +99,7 @@ actor SemanticRetrievalRuntime {
     init(queryCapacity: Int = 32, provider: any SemanticEmbeddingProviding, index: SpeciesEmbeddingIndex) {
         self.queryCapacity = max(0, queryCapacity)
         injectedArtifacts = Loaded(provider: provider, index: index,
-                                   identity: "\(provider.modelIdentifier):\(provider.modelVersion):\(index.metadata.documentFingerprint)")
+                                   identity: "\(provider.modelIdentifier):\(provider.modelVersion):\(provider.tokenizerFingerprint):\(provider.vocabularySHA256):\(index.metadata.documentFingerprint)")
     }
 
     func retrieve(locations: SemanticArtifactLocations, pack: OfflineIdentificationPackMetadata,
@@ -183,7 +183,9 @@ actor SemanticRetrievalRuntime {
         guard let index = try? JSONDecoder().decode(SpeciesEmbeddingIndex.self, from: indexData) else { throw SemanticArtifactDiagnostic.malformedIndex }
 #if canImport(CoreML)
         let provider = try await CoreMLSemanticEmbeddingProvider.load(compiledModelURL: locations.compiledModelURL, contract: contract, vocabularyData: vocabularyData)
-        return Loaded(provider: provider, index: index, identity: contract.cacheIdentity + ":" + index.metadata.documentFingerprint)
+        return Loaded(provider: provider, index: index, identity: contract.cacheIdentity + ":" +
+                      index.metadata.tokenizerFingerprint + ":" + index.metadata.vocabularySHA256 + ":" +
+                      index.metadata.documentFingerprint)
 #else
         _ = vocabularyData; _ = index
         throw SemanticArtifactDiagnostic.coreMLUnavailable

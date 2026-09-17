@@ -77,5 +77,10 @@ class EmbeddingIndexTokenizerTests(unittest.TestCase):
         changed_vocabulary = copy.deepcopy(vocabulary); changed_vocabulary["fish"] = 99
         self.assertNotEqual(original, builder.tokenizer_fingerprint(contract, changed_vocabulary))
 
+    def test_shared_fixture_carries_authoritative_python_fingerprints(self):
+        contract = self.fixture["contract"]; vocabulary = self.fixture["vocabulary"]
+        self.assertEqual(contract["vocabularySHA256"], builder.vocabulary_checksum(vocabulary))
+        self.assertEqual(contract["tokenizerFingerprint"], builder.tokenizer_fingerprint(contract, vocabulary))
+
 
 if __name__ == "__main__": unittest.main()
