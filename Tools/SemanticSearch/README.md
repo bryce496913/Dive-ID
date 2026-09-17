@@ -81,6 +81,20 @@ holdout leakage, then convert the chosen encoder to Core ML and generate an inde
 metadata matches `SpeciesEmbeddingIndexMetadata`. Do not commit generated corpora,
 models, or full embedding indexes.
 
+### Tokenizer fingerprint contract
+
+Semantic index format 2 is fail-closed. `vocabularySHA256` is SHA-256 over the UTF-8
+bytes of the decoded token-to-integer-ID JSON object serialized with keys sorted,
+no insignificant whitespace, and non-ASCII characters left as UTF-8. It deliberately
+identifies vocabulary meaning rather than source-file formatting. `tokenizerFingerprint`
+is SHA-256 over the same canonical JSON representation of `tokenizerFamily`
+(`WordPiece`), `vocabularySHA256`, and the fields in `TOKENIZER_CONTRACT_FIELDS` in
+`build_embedding_index.py`. Swift recomputes both values from the loaded contract and
+vocabulary during provider loading. Missing, malformed, mismatched, and legacy format-1
+indexes are incompatible and therefore use the visible typed BM25 fallback; identifier
+labels alone never establish compatibility. These two digests are also part of loaded
+provider, validated-index, and query-vector cache identities.
+
 ## Frozen real-encoder candidate and provisioning
 
 The selected development candidate is

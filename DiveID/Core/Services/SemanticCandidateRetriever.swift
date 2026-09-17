@@ -8,6 +8,8 @@ protocol SemanticEmbeddingProviding: Sendable {
     var embeddingDimension: Int { get }
     var tokenizerIdentifier: String { get }
     var preprocessingIdentifier: String { get }
+    var tokenizerFingerprint: String { get }
+    var vocabularySHA256: String { get }
 
     func embedding(for text: String) async throws -> [Float]
     func embeddings(for texts: [String]) async throws -> [[Float]]
@@ -16,6 +18,8 @@ protocol SemanticEmbeddingProviding: Sendable {
 extension SemanticEmbeddingProviding {
     var tokenizerIdentifier: String { "unspecified" }
     var preprocessingIdentifier: String { "unspecified" }
+    var tokenizerFingerprint: String { "unspecified" }
+    var vocabularySHA256: String { "unspecified" }
 }
 
 extension SemanticEmbeddingProviding {
@@ -38,7 +42,9 @@ struct SpeciesEmbeddingIndexMetadata: Codable, Hashable, Sendable {
     let packVersion: Int
     var tokenizerIdentifier: String = "unspecified"
     var preprocessingIdentifier: String = "unspecified"
-    var indexFormatVersion: Int = 1
+    let tokenizerFingerprint: String
+    let vocabularySHA256: String
+    var indexFormatVersion: Int = 2
 }
 
 struct SpeciesEmbeddingRecord: Codable, Hashable, Sendable {
@@ -58,6 +64,10 @@ enum SemanticIndexError: Error, Equatable {
     case embeddingDimensionMismatch
     case tokenizerMismatch
     case preprocessingMismatch
+    case tokenizerFingerprintMismatch
+    case vocabularyMismatch
+    case malformedTokenizerFingerprint
+    case malformedVocabularyFingerprint
     case unsupportedIndexFormat
     case searchDocumentSchemaMismatch
     case documentFingerprintMismatch(speciesID: UUID?)
@@ -81,7 +91,11 @@ extension SpeciesEmbeddingIndex {
         guard metadata.embeddingDimension == provider.embeddingDimension else { throw SemanticIndexError.embeddingDimensionMismatch }
         guard metadata.tokenizerIdentifier == provider.tokenizerIdentifier else { throw SemanticIndexError.tokenizerMismatch }
         guard metadata.preprocessingIdentifier == provider.preprocessingIdentifier else { throw SemanticIndexError.preprocessingMismatch }
-        guard metadata.indexFormatVersion == 1 else { throw SemanticIndexError.unsupportedIndexFormat }
+        guard FingerprintContract.isSHA256(metadata.tokenizerFingerprint) else { throw SemanticIndexError.malformedTokenizerFingerprint }
+        guard FingerprintContract.isSHA256(metadata.vocabularySHA256) else { throw SemanticIndexError.malformedVocabularyFingerprint }
+        guard metadata.tokenizerFingerprint == provider.tokenizerFingerprint else { throw SemanticIndexError.tokenizerFingerprintMismatch }
+        guard metadata.vocabularySHA256 == provider.vocabularySHA256 else { throw SemanticIndexError.vocabularyMismatch }
+        guard metadata.indexFormatVersion == 2 else { throw SemanticIndexError.unsupportedIndexFormat }
         guard metadata.searchDocumentSchemaVersion == SpeciesSearchDocument.schemaVersion else { throw SemanticIndexError.searchDocumentSchemaMismatch }
         guard metadata.packID == pack.id else { throw SemanticIndexError.packIdentifierMismatch }
         guard metadata.packVersion == pack.packVersion else { throw SemanticIndexError.packVersionMismatch }

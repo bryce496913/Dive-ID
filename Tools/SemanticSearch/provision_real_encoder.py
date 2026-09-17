@@ -15,7 +15,8 @@ import sys
 import time
 from pathlib import Path
 
-from build_embedding_index import ReferenceWordPieceTokenizer, canonical_json
+from build_embedding_index import (ReferenceWordPieceTokenizer, canonical_json,
+                                   tokenizer_fingerprint, vocabulary_checksum)
 
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = Path(__file__).resolve().parent
@@ -137,6 +138,9 @@ def main():
     vocabulary_path = output / f"{stem}.vocab.json"
     vocabulary_path.write_text(canonical_json(vocabulary) + "\n")
     contract = contract_for(lock, vocabulary_path.name)
+    # These claims are independently recomputed from the loaded vocabulary by Swift.
+    contract["vocabularySHA256"] = vocabulary_checksum(vocabulary)
+    contract["tokenizerFingerprint"] = tokenizer_fingerprint(contract, vocabulary)
     contract_path = output / f"{stem}.contract.json"
     contract_path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n")
 
