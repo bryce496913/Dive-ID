@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import time
+import tempfile
 from pathlib import Path
 
 from build_embedding_index import (ReferenceWordPieceTokenizer, canonical_json,
@@ -28,6 +29,48 @@ def sha256(path):
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def compiled_model_fingerprint(directory):
+    """Return a deterministic, strict fingerprint of a compiled model directory.
+
+    The aggregate is SHA-256 over canonical JSON (UTF-8, no trailing newline) of the
+    ordered per-file records. Symlinks and non-regular entries are rejected rather
+    than followed or silently omitted.
+    """
+    directory = Path(directory)
+    if not directory.is_dir() or directory.is_symlink():
+        raise ValueError(f"compiled model is not a real directory: {directory}")
+    records = []
+    for path in sorted(directory.rglob("*"), key=lambda item: item.relative_to(directory).as_posix()):
+        relative = path.relative_to(directory).as_posix()
+        if path.is_symlink():
+            raise ValueError(f"compiled model contains symlink: {relative}")
+        if path.is_dir():
+            continue
+        if not path.is_file():
+            raise ValueError(f"compiled model contains unsupported entry: {relative}")
+        records.append({"path": relative, "bytes": path.stat().st_size, "sha256": sha256(path)})
+    if not records:
+        raise ValueError("compiled model contains no regular files")
+    serialized = json.dumps(records, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return {"algorithm": "sha256-canonical-file-manifest-v1", "files": records,
+            "sha256": hashlib.sha256(serialized.encode("utf-8")).hexdigest()}
+
+
+def atomic_json(path, document):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n")
+    os.replace(temporary, path)
+
+
+def tool_version(command):
+    try:
+        result = subprocess.run(command, check=True, text=True, capture_output=True)
+        return (result.stdout or result.stderr).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
 
 
 def run(command):
@@ -107,6 +150,61 @@ def convert(model_dir, contract, destination):
     converted.save(destination)
 
 
+def package_resources(package, resources, stem, copy_files, evidence_builder,
+                      compiler=None):
+    """Compile and transactionally install resources, then write success evidence.
+
+    ``compiler`` is injectable solely for unit tests; normal provisioning invokes
+    xcrun coremlcompiler. The fingerprint is always calculated after copying into
+    the staged *final resource layout*, never from compiler output.
+    """
+    resources = Path(resources).resolve()
+    resources.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="diveid-package-", dir=resources.parent) as work_name:
+        work = Path(work_name)
+        compiled_parent = work / "compiler-output"
+        compiled_parent.mkdir()
+        if compiler:
+            compiler(package, compiled_parent)
+        else:
+            run(["xcrun", "coremlcompiler", "compile", package, compiled_parent])
+        produced = list(compiled_parent.glob("*.mlmodelc"))
+        if len(produced) != 1:
+            raise RuntimeError(f"compiler produced {len(produced)} .mlmodelc directories; expected one")
+        # Validate compiler output first, including symlinks/unsupported entries.
+        compiled_model_fingerprint(produced[0])
+
+        staged = work / "resources"
+        if resources.exists():
+            if not resources.is_dir() or resources.is_symlink():
+                raise RuntimeError(f"resource destination is not a real directory: {resources}")
+            shutil.copytree(resources, staged)
+        else:
+            staged.mkdir()
+        final_model = staged / f"{stem}.mlmodelc"
+        if final_model.is_symlink() or (final_model.exists() and not final_model.is_dir()):
+            final_model.unlink()
+        elif final_model.exists():
+            shutil.rmtree(final_model)
+        shutil.copytree(produced[0], final_model)
+        for source, destination_name in copy_files:
+            shutil.copy2(source, staged / destination_name)
+        fingerprint = compiled_model_fingerprint(final_model)
+        evidence = evidence_builder(fingerprint)
+        atomic_json(staged / "provisioning-evidence.json", evidence)
+
+        backup = work / "previous-resources"
+        if resources.exists():
+            os.replace(resources, backup)
+        try:
+            os.replace(staged, resources)
+        except BaseException:
+            if backup.exists():
+                os.replace(backup, resources)
+            raise
+        return evidence
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=TOOLS / "generated" / "real-encoder")
@@ -163,32 +261,47 @@ def main():
              vocabulary_path, contract_path, corpus, index]
     if package.exists():
         files.extend(path for path in package.rglob("*") if path.is_file())
-    evidence = {
-        "schemaVersion": 1, "createdAtUTC": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    base_evidence = {
+        "schemaVersion": 2, "createdAtUTC": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "sourceRevision": lock["sourceRevision"], "modelIdentifier": lock["modelIdentifier"],
-        "environment": {"platform": platform.platform(), "python": platform.python_version()},
+        "environment": {"platform": platform.platform(), "python": platform.python_version(),
+                        "xcodebuild": tool_version(["xcodebuild", "-version"]),
+                        "coremlcompiler": tool_version(["xcrun", "coremlcompiler", "--version"])},
         "tokenizerParityCases": 5,
         "artifacts": [{"path": str(path.relative_to(ROOT) if path.is_relative_to(ROOT) else path),
                        "bytes": path.stat().st_size, "sha256": sha256(path)} for path in files],
+        "identities": {"sourceModel": f"{lock['modelIdentifier']}@{lock['sourceRevision']}",
+                       "tokenizerFingerprint": contract["tokenizerFingerprint"],
+                       "contractSHA256": sha256(contract_path), "corpusSHA256": sha256(corpus),
+                       "indexSHA256": sha256(index)},
     }
     evidence_path = output / "provisioning-evidence.json"
-    evidence_path.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n")
-
     if args.package_resources:
         if not package.exists(): raise SystemExit("packaging requires conversion")
         if sys.platform != "darwin" or not shutil.which("xcrun"):
-            raise SystemExit("packaging .mlmodelc requires macOS with Xcode (xcrun coremlcompiler)")
-        target = args.package_resources.resolve(); target.mkdir(parents=True, exist_ok=True)
-        compiled_parent = output / "compiled"; shutil.rmtree(compiled_parent, ignore_errors=True)
-        run(["xcrun", "coremlcompiler", "compile", package, compiled_parent])
-        produced = next(compiled_parent.glob("*.mlmodelc"))
-        shutil.copytree(produced, target / f"{stem}.mlmodelc", dirs_exist_ok=True)
-        for path in (contract_path, vocabulary_path, index, evidence_path): shutil.copy2(path, target / path.name)
-        notice = target / "THIRD_PARTY_NOTICES.md"
+            incomplete = dict(base_evidence, status="incomplete",
+                              completion={"conversion": package.exists(), "compilation": False,
+                                          "packaging": False}, compiledModel=None)
+            atomic_json(evidence_path, incomplete)
+            raise SystemExit("packaging .mlmodelc requires macOS with Xcode (xcrun coremlcompiler); incomplete evidence written")
+        notice = output / "THIRD_PARTY_NOTICES.md"
         notice.write_text("# Third-party notices\n\nThe bundled `sentence-transformers/all-MiniLM-L6-v2` "
                           f"weights and tokenizer at `{lock['sourceRevision']}` are licensed under Apache-2.0. "
                           "The complete license is included as `MiniLM-LICENSE.txt`.\n")
-        shutil.copy2(license_path, target / "MiniLM-LICENSE.txt")
+        def successful(fingerprint):
+            return dict(base_evidence, status="complete",
+                        completion={"conversion": True, "compilation": True, "packaging": True},
+                        compiledModel={"resourceName": f"{stem}.mlmodelc", **fingerprint,
+                                       "sourcePackage": compiled_model_fingerprint(package)})
+        evidence = package_resources(package, args.package_resources, stem,
+            [(contract_path, contract_path.name), (vocabulary_path, vocabulary_path.name),
+             (index, index.name), (notice, notice.name), (license_path, "MiniLM-LICENSE.txt")], successful)
+        atomic_json(evidence_path, evidence)
+    else:
+        evidence = dict(base_evidence, status="incomplete",
+                        completion={"conversion": package.exists(), "compilation": False, "packaging": False},
+                        compiledModel=None)
+        atomic_json(evidence_path, evidence)
     print(evidence_path)
 
 

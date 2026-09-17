@@ -10,9 +10,11 @@ import json
 import sys
 from pathlib import Path
 
+from provision_real_encoder import compiled_model_fingerprint
+
 FINGERPRINT_KEYS = (
     "modelRevision", "tokenizerFingerprint", "preprocessingFingerprint",
-    "embeddingIndexFingerprint", "rankingContractFingerprint",
+    "embeddingIndexFingerprint", "compiledModelFingerprint", "rankingContractFingerprint",
     "catalogueVersion", "freshDatasetVersion",
 )
 METRICS = (
@@ -69,6 +71,8 @@ def validate(document):
                 and thresholds and all(value is not None for value in thresholds.values())
                 and all(engines.get(name, {}).get("status") == "pass" for name in
                         ("structuredBaseline", "bm25Hybrid", "realSemanticHybrid")))
+    if document.get("productionStatus") == "pass" and identity.get("compiledModelFingerprint", "").startswith("unavailable"):
+        errors.append("passing evaluation requires a verified compiled-model fingerprint")
     if eligible:
         if approval.get("status") != "approved":
             errors.append("passing evaluation requires explicit approval")
@@ -81,15 +85,45 @@ def validate(document):
     return errors, eligible and not errors
 
 
+def validate_provisioning_evidence(evidence, resources):
+    errors = []
+    if evidence.get("schemaVersion") != 2:
+        errors.append("unsupported provisioning evidence schemaVersion")
+    completion = evidence.get("completion", {})
+    if evidence.get("status") != "complete" or any(completion.get(key) is not True for key in
+                                                     ("conversion", "compilation", "packaging")):
+        errors.append("compiled-artifact provisioning is incomplete")
+        return errors
+    recorded = evidence.get("compiledModel")
+    if not isinstance(recorded, dict) or not recorded.get("resourceName"):
+        return errors + ["compiledModel fingerprint is required"]
+    try:
+        actual = compiled_model_fingerprint(Path(resources) / recorded["resourceName"])
+    except (OSError, ValueError) as error:
+        return errors + [f"compiled model cannot be verified: {error}"]
+    for key in ("algorithm", "files", "sha256"):
+        if recorded.get(key) != actual.get(key):
+            errors.append(f"compiledModel.{key} mismatch")
+    return errors
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("evaluation", type=Path)
     parser.add_argument("--require-approved", action="store_true",
                         help="return failure unless exact artifacts have passing approval")
+    parser.add_argument("--provisioning-evidence", type=Path)
+    parser.add_argument("--packaged-resources", type=Path)
     args = parser.parse_args(argv)
     try:
         document = json.loads(args.evaluation.read_text(encoding="utf-8"))
         errors, approved = validate(document)
+        if args.provisioning_evidence or args.packaged_resources:
+            if not args.provisioning_evidence or not args.packaged_resources:
+                errors.append("both --provisioning-evidence and --packaged-resources are required")
+            else:
+                provisioning = json.loads(args.provisioning_evidence.read_text(encoding="utf-8"))
+                errors.extend(validate_provisioning_evidence(provisioning, args.packaged_resources))
     except (OSError, json.JSONDecodeError) as error:
         print(f"invalid evaluation: {error}", file=sys.stderr); return 2
     result = {"evaluationSHA256": digest(args.evaluation), "schemaValid": not errors,
