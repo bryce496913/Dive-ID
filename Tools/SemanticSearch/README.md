@@ -126,10 +126,44 @@ the same slow Hugging Face WordPiece implementation, exports exactly the canonic
 eight-species corpus, creates reference embeddings, converts the transformer to a
 Float16 iOS 18 ML Program, compiles it with Xcode, and copies its contract, vocabulary,
 index, evidence/checksum manifest, and license notices into the application resources.
+Evidence schema 2 is finalized only after compilation and a staged, atomic resource
+installation. Its `completion` flags distinguish conversion, compilation, and
+packaging; `status: incomplete` (the only possible source/conversion-only result on a
+non-Apple host) is not runtime-ready. The complete record links source revision,
+tokenizer, contract, corpus, index, and source-package identities to the final
+`Semantic-caribbean.mlmodelc` resource, plus available platform/Xcode/compiler versions.
+The compiled fingerprint recursively rejects symlinks and unsupported entries, sorts
+normalized relative POSIX paths, records every regular file's byte count and SHA-256,
+then SHA-256 hashes canonical JSON (`sort_keys`, UTF-8, compact separators) of that file
+array. Timestamps, absolute paths, and enumeration order are excluded. This promises
+content determinism, not identical output from different Core ML compiler versions.
 Every downloaded and derived file is SHA-256 recorded in
 `generated/real-encoder/provisioning-evidence.json`. Generated weights and indexes are
 ignored by Git; a private experimental build must run this command before Xcode so the
 app never downloads at identification time.
+
+Verify the provisioned resources (and the production ledger, which remains unapproved):
+
+```sh
+python3 Tools/SemanticSearch/validate_production_readiness.py \
+  Tools/SemanticSearch/production-readiness.v1.json \
+  --provisioning-evidence DiveID/Resources/SemanticSearch/provisioning-evidence.json \
+  --packaged-resources DiveID/Resources/SemanticSearch
+```
+
+To verify what is actually inside a built app, point both options at its resources:
+
+```sh
+python3 Tools/SemanticSearch/validate_production_readiness.py \
+  Tools/SemanticSearch/production-readiness.v1.json \
+  --provisioning-evidence /path/to/DiveID.app/provisioning-evidence.json \
+  --packaged-resources /path/to/DiveID.app
+```
+
+If Xcode transforms or recompiles the model during a different build arrangement, the
+app-directory fingerprint is a distinct build identity and will intentionally mismatch
+the provisioning record; capture that computed manifest separately with the build's
+Xcode/toolchain identity rather than claiming the bytes are unchanged.
 
 `real-encoder.v1.json` has SHA-256
 `3e3d212c588ece68371be9f34580bdb2c8de5ba74a7ec4bfd9d70f6e604acf2b`.

@@ -7,6 +7,7 @@
     "tokenizerFingerprint": "unavailable",
     "preprocessingFingerprint": "minilm-mean-mask-l2-v1; artifact fingerprint unavailable until provisioning",
     "embeddingIndexFingerprint": "unavailable; canonical catalogue fingerprint 335468d199be540e833ab80b7c0680c2dc782505cb8ae6377a60a3f5958a7168",
+    "compiledModelFingerprint": "unavailable; provisioning evidence is incomplete",
     "rankingContractFingerprint": "LocalSpeciesRanker.v1-unfrozen-for-production",
     "catalogueVersion": "caribbean-pack-3",
     "freshDatasetVersion": "unavailable"
