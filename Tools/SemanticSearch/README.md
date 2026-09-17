@@ -81,10 +81,55 @@ holdout leakage, then convert the chosen encoder to Core ML and generate an inde
 metadata matches `SpeciesEmbeddingIndexMetadata`. Do not commit generated corpora,
 models, or full embedding indexes.
 
+## Frozen real-encoder candidate and provisioning
+
+The selected development candidate is
+`sentence-transformers/all-MiniLM-L6-v2` at immutable source commit
+`c9745ed1d9f207416be6d2e6f8de32d1f16199bf` (Apache-2.0). The selection is frozen in
+`real-encoder.v1.json`; do not replace the revision with a branch or tag. It is a
+six-layer, 384-dimensional MiniLM encoder selected as a plausible candidate for the
+pre-declared 100 MiB semantic-asset budget, with mature WordPiece conversion support;
+the compiled size must still be measured. It uses
+256 tokens, right/end truncation, BERT `[CLS]`/`[SEP]` framing, attention-mask mean
+pooling, and L2 normalization. Query and catalogue text receive no asymmetric prefix.
+This is the model's published sentence-transformers recipe, not catalogue-specific
+training or fine-tuning.
+
+On a networked Mac with Python 3.12 and Xcode 16.4, provision and package every
+offline resource with:
+
+```sh
+python3 -m venv .venv-real-encoder
+. .venv-real-encoder/bin/activate
+python3 -m pip install -r Tools/SemanticSearch/requirements-real-encoder.txt
+python3 Tools/SemanticSearch/provision_real_encoder.py \
+  --package-resources DiveID/Resources/SemanticSearch
+```
+
+The provisioner downloads only the pinned revision, requires the model, tokenizer,
+pooling configuration, and license files, tests five meaningful tokenizer cases against
+the same slow Hugging Face WordPiece implementation, exports exactly the canonical
+eight-species corpus, creates reference embeddings, converts the transformer to a
+Float16 iOS 18 ML Program, compiles it with Xcode, and copies its contract, vocabulary,
+index, evidence/checksum manifest, and license notices into the application resources.
+Every downloaded and derived file is SHA-256 recorded in
+`generated/real-encoder/provisioning-evidence.json`. Generated weights and indexes are
+ignored by Git; a private experimental build must run this command before Xcode so the
+app never downloads at identification time.
+
+`real-encoder.v1.json` has SHA-256
+`3e3d212c588ece68371be9f34580bdb2c8de5ba74a7ec4bfd9d70f6e604acf2b`.
+The canonical exported corpus has SHA-256
+`9a589f77f1b6be547d29d14a87fef9b21c617a7159cd644eafee2d5e611ea3d4`
+and catalogue fingerprint
+`335468d199be540e833ab80b7c0680c2dc782505cb8ae6377a60a3f5958a7168`.
+Source/tokenizer/model and derived artifact checksums are intentionally recorded from
+actual bytes by the provisioner rather than copied from mutable download metadata.
+
 ## Experimental Core ML artifact contract
 
-No production encoder is bundled or promoted by this change. A developer may package a
-locally licensed, genuine encoder by adding these four build resources (replace `PACK`):
+No production encoder is promoted by this change. The generated private experimental
+build contains these four build resources (replace `PACK`):
 
 * `Semantic-PACK.contract.json` — `SemanticModelArtifactContract` encoded with Swift's
   default camel-case JSON keys;

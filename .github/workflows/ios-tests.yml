@@ -22,6 +22,7 @@ jobs:
           python3 -m unittest Tools/TropicalPacificWorkbook/test_inspect_workbook.py
           python3 Tools/SemanticSearch/tests/test_evaluate_candidate.py
           python3 Tools/SemanticSearch/tests/test_export_search_corpus.py
+          python3 Tools/SemanticSearch/tests/test_provision_real_encoder.py
 
   xcode-tests:
     name: Xcode unit and UI tests

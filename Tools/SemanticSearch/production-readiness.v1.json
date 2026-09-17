@@ -3,10 +3,10 @@
   "evaluationIdentifier": "diveid-semantic-production-readiness-v1",
   "productionStatus": "not evaluated",
   "identity": {
-    "modelRevision": "unselected",
+    "modelRevision": "sentence-transformers/all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
     "tokenizerFingerprint": "unavailable",
-    "preprocessingFingerprint": "unavailable",
-    "embeddingIndexFingerprint": "unavailable",
+    "preprocessingFingerprint": "minilm-mean-mask-l2-v1; artifact fingerprint unavailable until provisioning",
+    "embeddingIndexFingerprint": "unavailable; canonical catalogue fingerprint 335468d199be540e833ab80b7c0680c2dc782505cb8ae6377a60a3f5958a7168",
     "rankingContractFingerprint": "LocalSpeciesRanker.v1-unfrozen-for-production",
     "catalogueVersion": "caribbean-pack-3",
     "freshDatasetVersion": "unavailable"
