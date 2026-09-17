@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "modelIdentifier": "sentence-transformers/all-MiniLM-L6-v2",
+  "sourceRevision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+  "license": "Apache-2.0",
+  "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+  "embeddingDimension": 384,
+  "maximumSequenceLength": 256,
+  "pooling": "meanMasked",
+  "normalizeL2": true,
+  "queryPrefix": "",
+  "documentPrefix": "",
+  "lowercase": true,
+  "stripAccents": true,
+  "truncation": "end",
+  "coreMLMinimumDeploymentTarget": "iOS18",
+  "coreMLComputePrecision": "FLOAT16",
+  "artifactStem": "Semantic-caribbean",
+  "requiredSourceFiles": [
+    "config.json",
+    "model.safetensors",
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "special_tokens_map.json",
+    "vocab.txt",
+    "1_Pooling/config.json"
+  ]
+}
