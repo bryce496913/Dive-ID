@@ -43,7 +43,9 @@ actor BundleSpeciesImageLoader: SpeciesImageLoading {
     }
 
     private func resourceURL(path: String, withExtension ext: String) -> URL? {
-        if let bundledURL = bundle.url(forResource: path, withExtension: ext) { return bundledURL }
+        let resource = URL(fileURLWithPath: path).lastPathComponent
+        let directory = (path as NSString).deletingLastPathComponent
+        if let bundledURL = bundle.url(forResource: resource, withExtension: ext, subdirectory: directory) { return bundledURL }
         let sourceURL = URL(fileURLWithPath: "DiveID/Resources")
             .appendingPathComponent(path)
             .appendingPathExtension(ext)
