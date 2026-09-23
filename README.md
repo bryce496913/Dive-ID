@@ -57,3 +57,10 @@ A local Caribbean benchmark fixture contains 100 description cases with an appro
 ## Future Packs
 
 The repository now uses a pack-oriented catalogue boundary and selected-region repository so future regional packs can be added. No downloadable pack system exists yet, and the app does not include download controls or remote pack updates.
+
+### Tropical Pacific Offline Identification Pack
+
+* Pack ID: `tropical-pacific`; pack version 1; 40 source-traceable starter records.
+* The generated pack and its region selection metadata ship in `DiveID/Resources/IdentificationPacks/TropicalPacific`.
+* Rebuild and audit instructions, selection rules, exclusions, and licensing safeguards are documented in `Docs/TropicalPacificCatalogue.md`.
+* Neither the Tropical Pacific evaluation nor the existing eight-species Caribbean benchmark establishes production identification quality.

@@ -22,6 +22,7 @@ let package = Package(
                 "Core/Catalog/Schema/RegionCatalogDefinition.swift",
                 "Core/Catalog/Regions/RegionCatalogRegistry.swift",
                 "Core/Catalog/Regions/CaribbeanRegion.swift",
+                "Core/Catalog/Regions/TropicalPacificRegion.swift",
                 "Core/Models/LocalSpeciesProfile.swift",
                 "Core/Models/Models.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
@@ -51,7 +52,7 @@ let package = Package(
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
                 "SavedIdentificationCompatibilityTests.swift"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TestResources.swift"],
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "TestResources.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

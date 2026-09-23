@@ -14,6 +14,7 @@ struct OfflineIdentificationPackID: RawRepresentable, Codable, Hashable, Sendabl
         try container.encode(rawValue)
     }
     static let caribbean = Self(rawValue: "caribbean")
+    static let tropicalPacific = Self(rawValue: "tropical-pacific")
 }
 
 struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Sendable {

@@ -142,7 +142,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         for p in profiles {
             guard !p.summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw LocalCatalogError.emptySummary }
             guard !p.distinguishingFeatures.isEmpty else { throw LocalCatalogError.emptyDistinguishingFeatures }
-            guard !p.typicalHabitat.isEmpty else { throw LocalCatalogError.emptyHabitatDescription }
+            // Empty is intentional when the source does not support a separate habitat field.
+            // Search still uses source-backed summary and distinguishing features.
             guard !p.geographicRange.isEmpty else { throw LocalCatalogError.emptyGeographicRange }
             guard !p.dataSources.isEmpty else { throw LocalCatalogError.missingDataSource }
             if p.review?.status == .verified {

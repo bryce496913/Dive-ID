@@ -1,0 +1,3616 @@
+[
+  {
+    "id": "963e8b58-2834-5f5c-a668-af3ade719497",
+    "commonName": "Oval-spot Butterflyfish",
+    "scientificName": "Chaetodon speculum",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "yellow"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 18,
+    "minimumDepthMeters": 8,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Bright yellow: large black oval-shaped spot on middle of back. Usually solitary or in pairs; shy. Coral-rich reefs in lagoons and on outer reefs in 8-30 m.",
+    "distinguishingFeatures": [
+      "ID: Bright yellow: large black oval-shaped spot on middle of back. Usually solitary or in pairs; shy. Coral-rich reefs in lagoons and on outer reefs in 8-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "© West Pacific: Indonesia, Malaysian Peninsula, Philippines, New Guinea to Tonga. - S.W. Japan to N.W. & B. Australia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-BEA5A59C",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 20.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 20 (PDF p. 21)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Chastodantidea",
+      "genus": "Chaetodon",
+      "acceptedScientificName": "Chaetodon speculum",
+      "sourceScientificName": "Chaetodon speculum"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 18,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "42230a6b-4a16-5b24-8af2-f90c163af695",
+    "commonName": "Yellow-crowned Butterflyfish",
+    "scientificName": "Chaetodon flavocoronatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 12,
+    "minimumDepthMeters": 35,
+    "maximumDepthMeters": 75,
+    "summary": "ID: White with numerous dark dots, yellow tail: broad black diagonal area across rear of body, yellow band on nape. Solitary or in pairs. Shelter in black corals and sea fans on steep slopes in 35-75 m.",
+    "distinguishingFeatures": [
+      "ID: White with numerous dark dots, yellow tail: broad black diagonal area across rear of body, yellow band on nape. Solitary or in pairs. Shelter in black corals and sea fans on steep slopes in 35-75 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Localized: Known only from Guam (Orote Peninsula) i Mariana Is, Micronesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-B48D10E5",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 22.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 22 (PDF p. 23)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Chastotontiise",
+      "genus": "Chaetodon",
+      "acceptedScientificName": "Chaetodon flavocoronatus",
+      "sourceScientificName": "Chaetodon flavocoronatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 12,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "f5591466-ba33-5c7a-b4dd-e4a3130c6a23",
+    "commonName": "Schooling Bannerfish",
+    "scientificName": "Heniochus diphreutes",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 21,
+    "minimumDepthMeters": 5,
+    "maximumDepthMeters": 21,
+    "summary": "ID: White with pair of black bands, the second band ending at tip of anal fin; elongate dorsal fin filament. Form large aggregations; solitary or groups. Outer reef slopes in 5-21 m.",
+    "distinguishingFeatures": [
+      "ID: White with pair of black bands, the second band ending at tip of anal fin; elongate dorsal fin filament. Form large aggregations; solitary or groups. Outer reef slopes in 5-21 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo- Southwest Pacific: Red Sea and E. Africa, Maldives, S. Indonesia. - N.W. & E. Australia to Vanuatu and Kermadec Is. - Also 2nd narrow range from Japan to Hawaii.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-7F00AD7B",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 28.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 28 (PDF p. 29)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Chastodontidee:",
+      "genus": "Heniochus",
+      "acceptedScientificName": "Heniochus diphreutes",
+      "sourceScientificName": "Heniochus diphreutes"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 21,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "f608ffee-fa19-5e07-8bbe-babf929faa98",
+    "commonName": "Masked Bannerfish",
+    "scientificName": "Heniochus monoceros",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "white",
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 23,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 25,
+    "summary": "ID: Rear body and fins yellow: white band runs from dorsal fin filament to lower head with dark bar behind; bump on nape. Solitary, in pairs or small groups. Lagoons and outer reefs with rich coral growth in 2-25 m.",
+    "distinguishingFeatures": [
+      "ID: Rear body and fins yellow: white band runs from dorsal fin filament to lower head with dark bar behind; bump on nape. Solitary, in pairs or small groups. Lagoons and outer reefs with rich coral growth in 2-25 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: E. Africa, Bay of Bengal to Indonesia, Philippinés, New Guinea and French Polynesia, -&.W. Japan to R. Austria,",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-4B23110A",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 28.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 28 (PDF p. 29)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Chastodontidae",
+      "genus": "Heniochus",
+      "acceptedScientificName": "Heniochus monoceros",
+      "sourceScientificName": "Heniochus monoceros"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 23,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "65a2bc6f-f09d-53a8-aa73-97bf0212bdd3",
+    "commonName": "Orangehead Pygmy Angelfish",
+    "scientificName": "Centropyge hotumatua",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "blue",
+      "orange",
+      "yellow"
+    ],
+    "markings": [
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "deep",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 8,
+    "minimumDepthMeters": 14,
+    "maximumDepthMeters": 45,
+    "summary": "ID: Yellow-orange head and deep blue to nearly black body yellow-orange tail; blue ring around eye, small dark spot near gill cover. Solitary or form small aggregations. Rock or coral reefs in 14-45 m.",
+    "distinguishingFeatures": [
+      "ID: Yellow-orange head and deep blue to nearly black body yellow-orange tail; blue ring around eye, small dark spot near gill cover. Solitary or form small aggregations. Rock or coral reefs in 14-45 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Localized: Austral and Rapa Is. in French Polynesia, also Pitcairn and Easter Is.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-8D2A57FF",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 32.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 32 (PDF p. 33)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacanthidae",
+      "genus": "Centropyge",
+      "acceptedScientificName": "Centropyge hotumatua",
+      "sourceScientificName": "Centropyge hotumatua"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 8,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "d57e2c37-6d4a-50f3-add6-871de33cc8e0",
+    "commonName": "Lemonpeel Angelfish",
+    "scientificName": "Centropyge flavissimus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 14,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 25,
+    "summary": "ID: Bright yellow; blue edge on gill cover and usually blue ring around eye. Usually in harems. Mimicked by juvenile Mimic Surgeonfish. Coral-rich lagoons and seaward reefs to 25 m.",
+    "distinguishingFeatures": [
+      "ID: Bright yellow; blue edge on gill cover and usually blue ring around eye. Usually in harems. Mimicked by juvenile Mimic Surgeonfish. Coral-rich lagoons and seaward reefs to 25 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "East Indo-Pacific: Christmas & Cocos-Keeling Is. to E. Philippines, Micronesia (except Palau and Yap). N. Papua New Guinea and French Polynesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-AB2746B2",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 33.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 33 (PDF p. 34)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacanthidae",
+      "genus": "Centropyge",
+      "acceptedScientificName": "Centropyge flavissimus",
+      "sourceScientificName": "Centropyge flavissimus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 14,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "2bc7b96e-5cd4-5968-872b-ba8e4427f15d",
+    "commonName": "Orangepeel Angelfish",
+    "scientificName": "Centropyge shepardi",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "orange",
+      "red"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 12,
+    "minimumDepthMeters": 10,
+    "maximumDepthMeters": 56,
+    "summary": "ID: Red-orange with narrow dark bars, rear dorsal and anal fins also black. Exposed outer reefs on mixed live and dead coral bottoms in 10-56 m.",
+    "distinguishingFeatures": [
+      "ID: Red-orange with narrow dark bars, rear dorsal and anal fins also black. Exposed outer reefs on mixed live and dead coral bottoms in 10-56 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Localized: Mariana Is. in Micronesia and Bonin Is. north to Japan's Izu National Park.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-742904E6",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 35.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 35 (PDF p. 36)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacanthidae",
+      "genus": "Centropyge",
+      "acceptedScientificName": "Centropyge shepardi",
+      "sourceScientificName": "Centropyge shepardi"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 12,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "d4efa718-46af-55b9-803c-bb10f4a41f4e",
+    "commonName": "Rusty Angelfish",
+    "scientificName": "Centropyge ferrugatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "brown"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef",
+      "rubble"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 10,
+    "minimumDepthMeters": 6,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Rusty color with numerous brown spots; dorsal and anal fins edged with bright blue. Solitary or form small groups usually close to reef crevices. Rocky reefs and rubble in 6-30 m. ‘",
+    "distinguishingFeatures": [
+      "ID: Rusty color with numerous brown spots; dorsal and anal fins edged with bright blue. Solitary or form small groups usually close to reef crevices. Rocky reefs and rubble in 6-30 m. ‘"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Localized: S.W. Japan south through N. Mindanau in Philippines. - Common at Okinawa.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-99FE811F",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 35.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 35 (PDF p. 36)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacanthidas",
+      "genus": "Centropyge",
+      "acceptedScientificName": "Centropyge ferrugatus",
+      "sourceScientificName": "Centropyge ferrugatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 10,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "73a903ae-9475-5188-9636-87fd4db52b72",
+    "commonName": "Black Velvet Angelfish",
+    "scientificName": "Chaetodontoplus melanosoma",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "gray",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 20,
+    "minimumDepthMeters": 5,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Light gray head and back, dark gray below, dorsal, anal and tail fins black with yellow margin; maze of yellow Inarkings on snout and nape. Solitary or in pairs. Inshore and outer rock and coral reefs in 5-30 m.",
+    "distinguishingFeatures": [
+      "ID: Light gray head and back, dark gray below, dorsal, anal and tail fins black with yellow margin; maze of yellow Inarkings on snout and nape. Solitary or in pairs. Inshore and outer rock and coral reefs in 5-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Asian Pacific: Indonesia and Philippines. to $.W. Javan.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-DCC8CBB2",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 39.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 39 (PDF p. 40)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Fooiacarthidae",
+      "genus": "Chaetodontoplus",
+      "acceptedScientificName": "Chaetodontoplus melanosoma",
+      "sourceScientificName": "Chaetodontoplus melanosoma"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 20,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "cc4394d7-ce81-515e-b22a-22d5892c0913",
+    "commonName": "Omate Angelfish",
+    "scientificName": "Genicanthus bellus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "gray",
+      "orange"
+    ],
+    "markings": [
+      "stripes",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 18,
+    "minimumDepthMeters": 25,
+    "maximumDepthMeters": 110,
+    "summary": "ID: Mele - Light gray: golden orange stripe along base of dorsal fin and another on mid-body, borders of tail blue. Solitary or form groups: feed on plankton above bottom. Outer reefs, 25-110 m; rare above 50 m. Scattered Range: Philippines and scattered east Pacific Is. to Mariana and Marshall Is. Also Society is. in French Polynesia.",
+    "distinguishingFeatures": [
+      "ID: Mele - Light gray: golden orange stripe along base of dorsal fin and another on mid-body, borders of tail blue. Solitary or form groups: feed on plankton above bottom. Outer reefs, 25-110 m; rare above 50 m. Scattered Range: Philippines and scattered east Pacific Is. to Mariana and Marshall Is. Also Society is. in French Polynesia.",
+      "berneceenee TD: Male - Light gray; golden orange. stripe along base al fin and enottes on mld Heiner Srpeieg doreal thiil-body, Solitary or form groups; feed on plankton above bottom, Outer reais, 25-110 m; rere shove 50m. ‘Scatteced Range: Philippines and scattered est Pacific Is, to ‘Mariana and Marsitall Is. Also Society Js. in Franch Polynesia."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Pacific Is. to Mariana and Marshall Is. Also Society Is. in French Polynesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-D04E0C28",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 39.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 39 (PDF p. 40)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacanthidae",
+      "genus": "Genicanthus",
+      "acceptedScientificName": "Genicanthus bellus",
+      "sourceScientificName": "Genicanthus bellus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 18,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "ffadf689-450a-5699-a5aa-f363e72c7eb0",
+    "commonName": "Blackstriped Angelfish",
+    "scientificName": "Genicanthus lamarck",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white"
+    ],
+    "markings": [
+      "stripes",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 23,
+    "minimumDepthMeters": 10,
+    "maximumDepthMeters": 50,
+    "summary": "ID: Mole - White with 4 black stripes; broad black stripe on outer edge of dorsal fin: black speckles on tail. Form groups. Outer reefs in 10-50 m.",
+    "distinguishingFeatures": [
+      "ID: Mole - White with 4 black stripes; broad black stripe on outer edge of dorsal fin: black speckles on tail. Form groups. Outer reefs in 10-50 m.",
+      "| «Wise with black stipes; broad black stipe on TD: Male ~ 4 outer of dorsal fin; black spackias: = ted, Form groups. | herein howe Ce ee ea aa Pemingala, Enbipeee,"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Asian Pacific: Indonesia, Malaysian Peninsula, Philippines New Guinea to Vanuatu. - S.W. Japan to N. Great Barrier Reef.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-D5EF86CC",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 41.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 41 (PDF p. 42)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Fomacanthidae",
+      "genus": "Genicanthus",
+      "acceptedScientificName": "Genicanthus lamarck",
+      "sourceScientificName": "Genicanthus lamarck"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 23,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "cdfc2035-ad85-5272-867a-91a5bba76772",
+    "commonName": "Shortfin Spadefish",
+    "scientificName": "Zabidius novemaculeatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "silver",
+      "white"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 46,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 25,
+    "summary": "ID: Silver, faint eye bar and second faint bar through pectoral fins; row of pearly white spots just above lateral line; slight bump between eyes. Usually form groups. Inshore coral teefs, often in turbid water in 2-25 m.",
+    "distinguishingFeatures": [
+      "ID: Silver, faint eye bar and second faint bar through pectoral fins; row of pearly white spots just above lateral line; slight bump between eyes. Usually form groups. Inshore coral teefs, often in turbid water in 2-25 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "‘Locelieed: N. Australia and'S, New Guinea, St. ce",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-CDD2D7F6",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 43.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 43 (PDF p. 44)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Ephippidae",
+      "genus": "Zabidius",
+      "acceptedScientificName": "Zabidius novemaculeatus",
+      "sourceScientificName": "Zabidius novemaculeatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 46,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "4f2f87f1-11d4-5d2c-8e62-c1d8cbbcaec5",
+    "commonName": "White-spotted Surgeonfish",
+    "scientificName": "Acanthurus guttatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "white"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 29,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 4,
+    "summary": "ID: Darkish with numerous white spots or streaks rear body white bar behind eye and behind pectoral fin, yellowish foretail. Usually form groups. Surge zone to 4 m.",
+    "distinguishingFeatures": [
+      "ID: Darkish with numerous white spots or streaks rear body white bar behind eye and behind pectoral fin, yellowish foretail. Usually form groups. Surge zone to 4 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "‘Indo-Pacific: ‘Maurikiny to Indonogla, Mictdciedin, Hetival jan. French Polynesia. -§ W. Japaii to Groat Barrier Reef and New Caledonia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-C412A5E2",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 45.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 45 (PDF p. 46)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acantturidse",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus guttatus",
+      "sourceScientificName": "Acanthurus guttatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 29,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "b932ea57-be9a-54c9-9036-656dc49e5e2e",
+    "commonName": "Orangeband Surgeonfish",
+    "scientificName": "Acanthurus olivaceus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray",
+      "orange"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef",
+      "sand"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 36,
+    "minimumDepthMeters": 3,
+    "maximumDepthMeters": 45,
+    "summary": "ID: Light gray head and forebody, dark gray behind; btue- edged elliptical orange hand behind upper gill cover. Solitary or form groups. Over sand bottoms near reefs in 3-45 m.",
+    "distinguishingFeatures": [
+      "ID: Light gray head and forebody, dark gray behind; btue- edged elliptical orange hand behind upper gill cover. Solitary or form groups. Over sand bottoms near reefs in 3-45 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Bast Indo-Pacific: Coco-Keeling Is. to Indonesia, Philippines Hawaii and Tuamotu Is. in French Polynesia. -S.W. Japan to Lord Howe I",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-3BEEF34E",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 45.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 45 (PDF p. 46)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuriine",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus olivaceus",
+      "sourceScientificName": "Acanthurus olivaceus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 36,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "ca1f8cd6-e40b-54ec-97d2-7d40e425c304",
+    "commonName": "Indian Mimic Surgeonfish",
+    "scientificName": "Acanthurus tristis",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "brown",
+      "gray",
+      "white"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 26,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Gray face and tan to dark brown body; curving black band from chin to upper gill cover, black patch above pectoral fin base, white margin on tail, Usually solitary. Lagoon and outer reefs in 2-30 m.",
+    "distinguishingFeatures": [
+      "ID: Gray face and tan to dark brown body; curving black band from chin to upper gill cover, black patch above pectoral fin base, white margin on tail, Usually solitary. Lagoon and outer reefs in 2-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Anidaman Sea to Bali ii Indonesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-AE2AACC6",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 46.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 46 (PDF p. 47)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acenthurides",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus tristis",
+      "sourceScientificName": "Acanthurus tristis"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 26,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "bd8e2fa5-6f2b-5d12-ab95-d980722bd16a",
+    "commonName": "Dark Surgeonfish",
+    "scientificName": "Acanthurus nubilus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 45,
+    "minimumDepthMeters": 20,
+    "maximumDepthMeters": 90,
+    "summary": "ID: Bluish with numerous blue spots and wavy lines; lower head profile rounded (lower head profile is fattened in most surgeonfishes), Solitary or form small groups; feed on zooplankton. Steep outer reef slopes in 20-90 m.",
+    "distinguishingFeatures": [
+      "ID: Bluish with numerous blue spots and wavy lines; lower head profile rounded (lower head profile is fattened in most surgeonfishes), Solitary or form small groups; feed on zooplankton. Steep outer reef slopes in 20-90 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "—_Inido-Paciflo: E. Aftica to Indonegie, Philirgines, New Caledonia and Pitoaim Is. east of French Polynesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-F0C67CB4",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 47.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 47 (PDF p. 48)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridae",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus nubilus",
+      "sourceScientificName": "Acanthurus nubilus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 45,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "4c541d71-90e9-5f9e-ab57-54039aa093ce",
+    "commonName": "Blackstreak Surgeonfish",
+    "scientificName": "Acanthurus nigricaudus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "brown",
+      "gray"
+    ],
+    "markings": [
+      "spines",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "sand"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 40,
+    "minimumDepthMeters": 3,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Pale to dark brown or gray; long black bar behind eye to above pectoral fin, thin streak on rear body to tail spine. Solitary or form small groups. Usually over sand near coral or Tock outcrops in 3-30 m.",
+    "distinguishingFeatures": [
+      "ID: Pale to dark brown or gray; long black bar behind eye to above pectoral fin, thin streak on rear body to tail spine. Solitary or form small groups. Usually over sand near coral or Tock outcrops in 3-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific; E. Africa to French Polynenta. - 5:.W. Japan to ‘Greet Banter Reef.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-E7AA4861",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 48.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 48 (PDF p. 49)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthurkias:",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus nigricaudus",
+      "sourceScientificName": "Acanthurus nigricaudus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 40,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "9353ee92-eaa7-5bcb-b2f8-8b3a0577d5b4",
+    "commonName": "Striped Surgeonfish",
+    "scientificName": "Acanthurus lineatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "blue",
+      "yellow"
+    ],
+    "markings": [
+      "spines",
+      "stripes",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 38,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 6,
+    "summary": "ID: Gold underoolor with numerous black edged blue stripes and bluish belly, yellow ventral fins; bright blue margins on most fins. Solitary: territorial and aggressive; tail spine venomous. Outer edge of reefs to 6 m. - $,W. Japan to Great Barrier Reef and New Caledonia. 48",
+    "distinguishingFeatures": [
+      "ID: Gold underoolor with numerous black edged blue stripes and bluish belly, yellow ventral fins; bright blue margins on most fins. Solitary: territorial and aggressive; tail spine venomous. Outer edge of reefs to 6 m. - $,W. Japan to Great Barrier Reef and New Caledonia. 48"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "‘Indo: Pacific: E. Africa to Indonesia, Micronania and Polynesia, -S.W, Japan to Greet Barrier Reef and New Caledonia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-A12D3C83",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 48.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 48 (PDF p. 49)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridae",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus lineatus",
+      "sourceScientificName": "Acanthurus lineatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 38,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "72c9d5d0-47b8-540d-87cf-b4f31e15f342",
+    "commonName": "Pale-lipped Surgeonfish",
+    "scientificName": "Acanthurus leucocheilus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "brown",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "spines",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 20,
+    "minimumDepthMeters": 4,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Brown; pale lips and pale band on chin; yellow sub-border on pectoral fin, white tail spine. Solitary. Near dropoffs on seaward clearwater reefs in 4-30 m.",
+    "distinguishingFeatures": [
+      "ID: Brown; pale lips and pale band on chin; yellow sub-border on pectoral fin, white tail spine. Solitary. Near dropoffs on seaward clearwater reefs in 4-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: E. Africa to Philippines and Line Is. in eastern Central Pacific.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-6556768A",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 49.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 49 (PDF p. 50)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthurides",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus leucocheilus",
+      "sourceScientificName": "Acanthurus leucocheilus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 20,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "2cb9a370-a27f-5b22-96da-d71b41956004",
+    "commonName": "Palette Surgeonfish",
+    "scientificName": "Acanthurus maculiceps",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white"
+    ],
+    "markings": [
+      "spines",
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 20,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 25,
+    "summary": "ID: Black head with numerous white spots and grayish body black streak behind upper edge of gill cover, black margin on tail spine, often a white ring around tail base. Solitary or form groups. Outer reefs to 15m.",
+    "distinguishingFeatures": [
+      "ID: Black head with numerous white spots and grayish body black streak behind upper edge of gill cover, black margin on tail spine, often a white ring around tail base. Solitary or form groups. Outer reefs to 15m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: E. Africa to Indonesia, Micronesia, Samoa, New Caledonia and Line I. - S.W. Japan to Great Barrier Reef. 50",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-78D129A7",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 50.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 50 (PDF p. 51)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridda",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus maculiceps",
+      "sourceScientificName": "Acanthurus maculiceps"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 20,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "af3278f2-a161-51be-9088-bb410b71e8ac",
+    "commonName": "Whitefin Surgeonfish",
+    "scientificName": "Acanthurus albipectoralis",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "gray",
+      "white"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 13,
+    "minimumDepthMeters": 5,
+    "maximumDepthMeters": 20,
+    "summary": "ID: Dark gray to nearly black, except for white outer half of pectoral fin. Solitary or form small groups; feed on plankton high above bottom. Steep outer reef slopes in 5-20 m.",
+    "distinguishingFeatures": [
+      "ID: Dark gray to nearly black, except for white outer half of pectoral fin. Solitary or form small groups; feed on plankton high above bottom. Steep outer reef slopes in 5-20 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Southwest Pacific; Great Baxsies Reet and Coral Sea to Tonga.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-580BA2DF",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 50.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 50 (PDF p. 51)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridas",
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus albipectoralis",
+      "sourceScientificName": "Acanthurus albipectoralis"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 13,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "1133195d-a39e-5a98-9732-e36b062591b2",
+    "commonName": "Slender Unicornfish",
+    "scientificName": "Naso lopezi",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 65,
+    "minimumDepthMeters": 20,
+    "maximumDepthMeters": 80,
+    "summary": "ID: Slender body; bluish gray with numerous small round dark gray spots; occasionally displays a large whitish patch around pectoral fin. Form groups; feed on zooplankton along steep outer reef drop-offs in 20-50 m.",
+    "distinguishingFeatures": [
+      "ID: Slender body; bluish gray with numerous small round dark gray spots; occasionally displays a large whitish patch around pectoral fin. Form groups; feed on zooplankton along steep outer reef drop-offs in 20-50 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "East Indo-Asian Pacific: Andaman Sea to Papua New Guinea. - Philippines to Great Barrier Reef.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-3D1ADA61",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 53.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 53 (PDF p. 54)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridae",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso lopezi",
+      "sourceScientificName": "Naso lopezi"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 65,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "6c03d484-cfeb-58ec-9853-32f23898e25d",
+    "commonName": "Gray Unicornfish",
+    "scientificName": "Naso caesius",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 6,
+    "maximumDepthMeters": 60,
+    "summary": "ID: Gray to brownish gray, can rapidly change to pattern of indistinct round to vertically elliptical blotches on upper half of body; no hom and no dark margin on gill cover. Solitary or form aggregations. Outer reefs in 6-60 m.",
+    "distinguishingFeatures": [
+      "ID: Gray to brownish gray, can rapidly change to pattern of indistinct round to vertically elliptical blotches on upper half of body; no hom and no dark margin on gill cover. Solitary or form aggregations. Outer reefs in 6-60 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Pacific: Micronesia, Papua New Guinea, New Caledonia to Hawaii and Pitcairn Is. east of French Polynesia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-1804063A",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 53.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 53 (PDF p. 54)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acunthuridae",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso caesius",
+      "sourceScientificName": "Naso caesius"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 60,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "3f4b6e4d-fb62-5ce4-baf0-adf27743cad2",
+    "commonName": "Blackspine Unicornfish",
+    "scientificName": "Naso brevirostris",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "brown",
+      "white"
+    ],
+    "markings": [
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 19,
+    "minimumDepthMeters": 4,
+    "maximumDepthMeters": 46,
+    "summary": "ID: Brown with dark spots on head and vertical rows of spots and lines on sides, white tail; a broad-based tapering ham on forehead. Usually form small groups. Lagoon and seaward reefs in4-46m",
+    "distinguishingFeatures": [
+      "ID: Brown with dark spots on head and vertical rows of spots and lines on sides, white tail; a broad-based tapering ham on forehead. Usually form small groups. Lagoon and seaward reefs in4-46m"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Asian Pacific: E. Africa to Indonesia, Philippines, Papua New Guinea and Great Barrier Reef.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-5AE89F04",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 54.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 54 (PDF p. 55)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridas:",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso brevirostris",
+      "sourceScientificName": "Naso brevirostris"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 19,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "b36371f4-4a7c-5ccd-b0f5-67cbe42680eb",
+    "commonName": "Humpback Unicornfish",
+    "scientificName": "Naso brachycentron",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray",
+      "olive"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 8,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Olive gray; unusual profile gives “hump-backed” appearance, adult males develop long horn on forehead females have only a slight bump. Often form small groups. Seaward reef slopes in 8-30 m.",
+    "distinguishingFeatures": [
+      "ID: Olive gray; unusual profile gives “hump-backed” appearance, adult males develop long horn on forehead females have only a slight bump. Often form small groups. Seaward reef slopes in 8-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: E. Africa to Society and Marquesas Is. in French Polynesia. - S.W. Japan to N. Australia and Vanuatu.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-004DE660",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 54.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 54 (PDF p. 55)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acsnthiridas",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso brachycentron",
+      "sourceScientificName": "Naso brachycentron"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 60,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "873641c3-42e7-54d8-8be7-7ddb6a50ee5c",
+    "commonName": "Humpnose Unicornfish",
+    "scientificName": "Naso tuberosus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray",
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 3,
+    "maximumDepthMeters": 20,
+    "summary": "ID: Gray gradating to pale yellow on lower side; large bulbous snout, and hump on back. Often form small groups. Seaward reefs in 3-20 m.",
+    "distinguishingFeatures": [
+      "ID: Gray gradating to pale yellow on lower side; large bulbous snout, and hump on back. Often form small groups. Seaward reefs in 3-20 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Initio: West Pacific: E: Africa to Indoneeie, Micronetie, Ciibett",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-6E53C416",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 55.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 55 (PDF p. 56)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthundae",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso tuberosus",
+      "sourceScientificName": "Naso tuberosus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 60,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "ed4a355e-e3e6-59ee-be7e-0b5fc46dcc6b",
+    "commonName": "Barred Unicornfish",
+    "scientificName": "Naso thynnoides",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray"
+    ],
+    "markings": [
+      "spots",
+      "stripes",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 30,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 30,
+    "summary": "ID: Pale gray; wide yellowish stripe from eye to tail, numerous dark bluish gray bars on sides, irregular spots on head. Form groups, Lagoons and outer reefs in 2-30 m.",
+    "distinguishingFeatures": [
+      "ID: Pale gray; wide yellowish stripe from eye to tail, numerous dark bluish gray bars on sides, irregular spots on head. Form groups, Lagoons and outer reefs in 2-30 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Tado-Went Pacific: R. Attica to Indonesia, Micronesia, Gilbert",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-F51AFCD0",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 55.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 55 (PDF p. 56)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Acanthuridae",
+      "genus": "Naso",
+      "acceptedScientificName": "Naso thynnoides",
+      "sourceScientificName": "Naso thynnoides"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 30,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "d11f5668-8ca7-5d21-b732-8663c51ca45e",
+    "commonName": "Barred Rabbitfish",
+    "scientificName": "Siganus doliatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "yellow"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 20,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 15,
+    "summary": "ID: Light blue to whitish with intricate pattem of thin yellow and blue lines; pair of dark bands on head and forebody. May hybridize with Virgate Rabbitfish [next]. In pairs or small groups. Inshore and outer reefs in 2-15 m.",
+    "distinguishingFeatures": [
+      "ID: Light blue to whitish with intricate pattem of thin yellow and blue lines; pair of dark bands on head and forebody. May hybridize with Virgate Rabbitfish [next]. In pairs or small groups. Inshore and outer reefs in 2-15 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "West Pacific: Sulawesi in Indonesia to Tonga. - Palau toS. Great Barrier Reef and New Caledonia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-E58676DD",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 56.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 56 (PDF p. 57)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Siganidae",
+      "genus": "Siganus",
+      "acceptedScientificName": "Siganus doliatus",
+      "sourceScientificName": "Siganus doliatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 20,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "1107cfb1-aa8a-598b-b795-7b248e8fb434",
+    "commonName": "Vermiculate Rabbitfish",
+    "scientificName": "Siganus vermiculatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "brown",
+      "white"
+    ],
+    "markings": [
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef",
+      "shallow"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 37,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 15,
+    "summary": "ID: Bluish white undercolor with maze of wavy yellowish brown bands; small dark spots on tail with straight margin. Usually form groups. Young occur in shallow brackish areas adults inhabit sheltered reefs to 15 m.",
+    "distinguishingFeatures": [
+      "ID: Bluish white undercolor with maze of wavy yellowish brown bands; small dark spots on tail with straight margin. Usually form groups. Young occur in shallow brackish areas adults inhabit sheltered reefs to 15 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "—-_‘Tado- West Pacific: India to Indonesin, New Guinea and ~ Philippines and Guam to N. Great Barriat Reef. aa",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-C9464ADA",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 58.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 58 (PDF p. 59)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Siganidae",
+      "genus": "Siganus",
+      "acceptedScientificName": "Siganus vermiculatus",
+      "sourceScientificName": "Siganus vermiculatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 37,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "a61a04fd-0159-51d6-a385-b1c7baf193a5",
+    "commonName": "Dusky Rabbitfish",
+    "scientificName": "Siganus fuscescens",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray"
+    ],
+    "markings": [
+      "spots",
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "deep",
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "feeding"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 32,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 4,
+    "summary": "ID: Gray to bluish gray with numerous small gold spots slightly lunate tail. Form feeding schools over grass beds at high tide, retreat to deeper lagoons at low tide. Costal reefs inner reefs of deep lagoons and sea grass beds to 4 m.",
+    "distinguishingFeatures": [
+      "ID: Gray to bluish gray with numerous small gold spots slightly lunate tail. Form feeding schools over grass beds at high tide, retreat to deeper lagoons at low tide. Costal reefs inner reefs of deep lagoons and sea grass beds to 4 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "East Indo-Asian Pacific: Andaman Sea to Vanuatu and E. Micronesia. -$.W. Japan to W. & E. Australia and New Caledonia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-A74E542B",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 58.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 58 (PDF p. 59)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Siganidae",
+      "genus": "Siganus",
+      "acceptedScientificName": "Siganus fuscescens",
+      "sourceScientificName": "Siganus fuscescens"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 32,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "fce30641-92b9-5a00-b2bd-97aa7cfdaec0",
+    "commonName": "White-spotted Rabbitfish",
+    "scientificName": "Siganus canaliculatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "brown",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef",
+      "seagrass"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "resting"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 29,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 4,
+    "summary": "ID: Greenish to yellow-brown with numerous bluish white spots {change to mottled pattern when resting on bottom) often dark spot behind upper gill opening. Form aggregations. Most common on seagrass flats to 4 m.",
+    "distinguishingFeatures": [
+      "ID: Greenish to yellow-brown with numerous bluish white spots {change to mottled pattern when resting on bottom) often dark spot behind upper gill opening. Form aggregations. Most common on seagrass flats to 4 m.",
+      "spots (change to zktiod pattorn whan rosting on bottom); Siem connion cn opege tees team tndo-Asian Pactii Arabian Gulf to, China Sea and Tatwan, south to Grout Barrier Reef,"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Asian Pacific: Arabian Gulf to S. China Sea and Taiwan, south to Great Barrier Reef.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-20A62336",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 58.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 58 (PDF p. 59)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Siganidse",
+      "genus": "Siganus",
+      "acceptedScientificName": "Siganus canaliculatus",
+      "sourceScientificName": "Siganus canaliculatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 29,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "50e8b5f2-0196-5811-8c51-2d1366ac10ce",
+    "commonName": "Magnificent Rabbitfish",
+    "scientificName": "Siganus magnificus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 23,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 20,
+    "summary": "ID: White head, blackish upper body becomes pale below yellow pectoral, anal and tail fins: black band from protruding . snout to dorsal fin. In pairs. Coral-rich areas in 2-20 m. '",
+    "distinguishingFeatures": [
+      "ID: White head, blackish upper body becomes pale below yellow pectoral, anal and tail fins: black band from protruding . snout to dorsal fin. In pairs. Coral-rich areas in 2-20 m. '"
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "East Indian Ocean: Andaman Sea at Similan Is. and W. Thailand.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-B7BF5889",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 59.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 59 (PDF p. 60)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Signnidgs =",
+      "genus": "Siganus",
+      "acceptedScientificName": "Siganus magnificus",
+      "sourceScientificName": "Siganus magnificus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 23,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "16bfc131-a3ec-546f-9fd9-2be8edd961ae",
+    "commonName": "Black-tail Sergeant",
+    "scientificName": "Abudefduf lorenzi",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 15,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": null,
+    "summary": "ID: Whitish to yellowish with 5-6 black bars: large black blotch on base of tail. Protected coastal areas near shore. frequently next to docks or breakwaters in jess than 6 m.",
+    "distinguishingFeatures": [
+      "ID: Whitish to yellowish with 5-6 black bars: large black blotch on base of tail. Protected coastal areas near shore. frequently next to docks or breakwaters in jess than 6 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "‘Asisn Pacific: ‘Sulawesi and Molucca Is. in Indonesia to pn nines Papo New Guinea and Solomon Ie,",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-081BDB6C",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 61.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 61 (PDF p. 62)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacantrides",
+      "genus": "Abudefduf",
+      "acceptedScientificName": "Abudefduf lorenzi",
+      "sourceScientificName": "Abudefduf lorenzi"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 15,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "ae6bf313-0729-545b-a855-4fb333210e63",
+    "commonName": "Banded Sergeant",
+    "scientificName": "Abudefduf septemfasciatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 19,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 3,
+    "summary": "ID: Whitish with 6-7 dark grayish bars, upper first 2-3 bars often intensely dark. Form small groups. Rocky inshore reefs with mild to moderate surge conditions to 3m.",
+    "distinguishingFeatures": [
+      "ID: Whitish with 6-7 dark grayish bars, upper first 2-3 bars often intensely dark. Form small groups. Rocky inshore reefs with mild to moderate surge conditions to 3m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: B. Attica 9 Line Js..and French Polyriesia, - S.W. Japan to Great Barrier Reet:",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-34739D43",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 61.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 61 (PDF p. 62)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacentridae",
+      "genus": "Abudefduf",
+      "acceptedScientificName": "Abudefduf septemfasciatus",
+      "sourceScientificName": "Abudefduf septemfasciatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 19,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "0ed08b3f-ca79-51f3-9a4e-d945c0201e84",
+    "commonName": "Green Damsel",
+    "scientificName": "Amblyglyphidodon indicus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray",
+      "green",
+      "white"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 15,
+    "minimumDepthMeters": 5,
+    "maximumDepthMeters": 45,
+    "summary": "ID: Green upper body gradating to gray or yellowish below Rartow dark borders on tail. Long considered a variation of White-belly Damsel, but is an undescribed species. Solitary or form small groups. Near shore and outer reefs in 5-45 m.",
+    "distinguishingFeatures": [
+      "ID: Green upper body gradating to gray or yellowish below Rartow dark borders on tail. Long considered a variation of White-belly Damsel, but is an undescribed species. Solitary or form small groups. Near shore and outer reefs in 5-45 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indian Ocean: Red Sea and E. Africa to Andaman Sea.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-0A3D2741",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 63.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 63 (PDF p. 64)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomanentridac",
+      "genus": "Amblyglyphidodon",
+      "acceptedScientificName": "Amblyglyphidodon indicus",
+      "sourceScientificName": "Amblyglyphidodon indicus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 15,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "c059528c-f884-5b96-b67b-d912a33846b1",
+    "commonName": "Red and Black Anemonefish",
+    "scientificName": "Amphiprion melanopus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "orange",
+      "white"
+    ],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": [
+      "anemone",
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 13,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 10,
+    "summary": "ID: Reddish orange with variable amounts of black on sides; a white to pale bluish bar on head. Young are overall reddish orange with 2-3 narrow white bars. Live with 3 anemone species in lagoons and outer reefs to 10 m.",
+    "distinguishingFeatures": [
+      "ID: Reddish orange with variable amounts of black on sides; a white to pale bluish bar on head. Young are overall reddish orange with 2-3 narrow white bars. Live with 3 anemone species in lagoons and outer reefs to 10 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "‘Paeifir: Bali in Indonesia to Marshall is., Fil and Society Is. in French Polynasia. - Philippines to Great Banter Reat,",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-E164A444",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 65.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 65 (PDF p. 66)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacentridee",
+      "genus": "Amphiprion",
+      "acceptedScientificName": "Amphiprion melanopus",
+      "sourceScientificName": "Amphiprion melanopus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 13,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "8439dc39-4aca-5c2a-84a0-9a4f1b0b1052",
+    "commonName": "McCulloch's Anemonefish",
+    "scientificName": "Amphiprion mecullochi",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "brown",
+      "white"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "anemone",
+      "lagoon",
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 12,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 45,
+    "summary": "ID: Dark brown to black with whitish snout and tail; white head bar does not cross over head. Lagoons and rocky shoreline reefs. Live most commonly with Bull-Tentacle Anemone in 2-45 m.",
+    "distinguishingFeatures": [
+      "ID: Dark brown to black with whitish snout and tail; white head bar does not cross over head. Lagoons and rocky shoreline reefs. Live most commonly with Bull-Tentacle Anemone in 2-45 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Localized: Lord Howe and Norfolk Is.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-D1717E40",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 66.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 66 (PDF p. 67)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacentridas",
+      "genus": "Amphiprion",
+      "acceptedScientificName": "Amphiprion mecullochi",
+      "sourceScientificName": "Amphiprion mecullochi"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 12,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "87727436-cafc-58b3-8818-f77fcbf554b7",
+    "commonName": "Spinecheek Anemonefish",
+    "scientificName": "Premnas biaculeatus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "gray",
+      "red",
+      "white"
+    ],
+    "markings": [
+      "spines"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "anemone"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 3,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 18,
+    "summary": "ID: Mole- Brilliant red to brownish red with 3 narrow white to gray bars; pair of long spines on cheek. Live in Bulb-tentacle Anemone to 18 m.",
+    "distinguishingFeatures": [
+      "ID: Mole- Brilliant red to brownish red with 3 narrow white to gray bars; pair of long spines on cheek. Live in Bulb-tentacle Anemone to 18 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Asian Pacific: Indonesia and Philippines to New Guinea, N, Great Barrier Reef and Vanuatu.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-2D889F83",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 67.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 67 (PDF p. 68)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Painacontidae",
+      "genus": "Premnas",
+      "acceptedScientificName": "Premnas biaculeatus",
+      "sourceScientificName": "Premnas biaculeatus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 3,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "7d777eae-4892-5b09-b2af-f87d46a6d5b6",
+    "commonName": "Brighteye Damsel",
+    "scientificName": "Plectrogiyphidodon imparipennis",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "blue",
+      "gray",
+      "white",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "shallow"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 6,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 3,
+    "summary": "ID: Light blue-gray (nearly white), tail base and tail often yellow, nape and fore-back may be dusky; black bar across middle of eye, iris silvery. Wave-swept shallows to 3 m.",
+    "distinguishingFeatures": [
+      "ID: Light blue-gray (nearly white), tail base and tail often yellow, nape and fore-back may be dusky; black bar across middle of eye, iris silvery. Wave-swept shallows to 3 m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Indo-Pacific: R. Africa to Hawall and Phhcaim Ie, éest of French Polynesia. -.W, Japan to 8. Australia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-BDA5AAB1",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 71.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 71 (PDF p. 72)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacentridae",
+      "genus": "Plectrogiyphidodon",
+      "acceptedScientificName": "Plectrogiyphidodon imparipennis",
+      "sourceScientificName": "Plectrogiyphidodon imparipennis"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 6,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "9750208f-6631-5d60-897c-1e55766a8d75",
+    "commonName": "Whiteband Damsel",
+    "scientificName": "Plectroglyphidodon leucozonus",
+    "aliases": [],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "black",
+      "brown",
+      "white"
+    ],
+    "markings": [
+      "spots"
+    ],
+    "bodyShapes": [],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "indo-pacific",
+      "pacific"
+    ],
+    "behaviors": [
+      "solitary"
+    ],
+    "keywords": [],
+    "minimumSizeCentimeters": null,
+    "maximumSizeCentimeters": 10,
+    "minimumDepthMeters": null,
+    "maximumDepthMeters": 4,
+    "summary": "ID: Brown with white bar across mid-body; rear edge of gill cover often dark, black spot on upper pectoral fin base. Solitary ot form loose groups. Rocky shores and reef flats exposed to wave action to 4m.",
+    "distinguishingFeatures": [
+      "ID: Brown with white bar across mid-body; rear edge of gill cover often dark, black spot on upper pectoral fin base. Solitary ot form loose groups. Rocky shores and reef flats exposed to wave action to 4m."
+    ],
+    "typicalHabitat": "",
+    "geographicRange": "Pacific: Red Sea and E. Africa to Micronesia and Pitcairn Is. east of French Polynesia. - S.W. Japan to Australia.",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "book distribution statement; absence not inferred",
+    "subregions": [],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": null,
+    "dataSources": [
+      {
+        "stableSourceID": "SRC-2BAEE1B1",
+        "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 71.",
+        "sourceURL": "",
+        "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 71 (PDF p. 72)",
+        "reviewedFields": [
+          "printed common/scientific name",
+          "category/family text",
+          "maximum size",
+          "depth",
+          "identification description",
+          "habitat/behavior",
+          "distribution/range",
+          "photo locator"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": "Pomacentridae",
+      "genus": "Plectroglyphidodon",
+      "acceptedScientificName": "Plectroglyphidodon leucozonus",
+      "sourceScientificName": "Plectroglyphidodon leucozonus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": null,
+      "typicalObservedMaximumCentimeters": null,
+      "maximumRecordedCentimeters": 10,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  }
+]
