@@ -4,7 +4,9 @@
     "commonName": "3andspot Cardinalfish",
     "scientificName": "Apogon selas",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -76,7 +78,9 @@
     "commonName": "Allen's Cardinalfish",
     "scientificName": "Cheilodipterus alleni",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -150,7 +154,9 @@
     "commonName": "Ambon Cardinalfish",
     "scientificName": "Apogon amboinensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -222,7 +228,9 @@
     "commonName": "Anchor Tuskfish",
     "scientificName": "Choerodon anchorago",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -298,7 +306,9 @@
     "commonName": "Anda Cardinalfish",
     "scientificName": "Apogon kiensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white"
     ],
@@ -371,7 +381,9 @@
     "commonName": "Andaman Damsel",
     "scientificName": "Pomacentrus alleni",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -442,7 +454,9 @@
     "commonName": "Andaman Jawfish",
     "scientificName": "Opistognathus sp.",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -516,7 +530,9 @@
     "commonName": "Areolate Grouper",
     "scientificName": "Epinephelus areolatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -588,7 +604,9 @@
     "commonName": "Arrowhead Soapfish",
     "scientificName": "Jelonoperca chabanaudi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -663,7 +681,9 @@
     "commonName": "Australian Blenny",
     "scientificName": "Ecsenius australianus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -735,7 +755,9 @@
     "commonName": "Axilspot Wormfish",
     "scientificName": "Halichoeres podostigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -811,7 +833,9 @@
     "commonName": "Azure Demoiselle",
     "scientificName": "Shrysiptera hemicyanea",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -882,7 +906,9 @@
     "commonName": "Banatail Frogfish",
     "scientificName": "Antennanius dorehensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "tail"
@@ -951,7 +977,9 @@
     "commonName": "Banded Damsel",
     "scientificName": "Jischistodus fasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -1020,7 +1048,9 @@
     "commonName": "Banded Sergeant",
     "scientificName": "Abudefduf septemfasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -1085,7 +1115,9 @@
     "commonName": "Banded Snake Eel",
     "scientificName": "Myrichthys colubrinus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "black",
       "brown",
@@ -1160,7 +1192,9 @@
     "commonName": "Bandtail Dartfish",
     "scientificName": "Ptereleotris uroditaenia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -1234,7 +1268,9 @@
     "commonName": "Barred Moray",
     "scientificName": "Echidna polyzona",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown"
     ],
@@ -1304,7 +1340,9 @@
     "commonName": "Barred Pipefish",
     "scientificName": "Choeroichthys cinctus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white",
       "yellow"
@@ -1378,7 +1416,9 @@
     "commonName": "Barred Rabbitfish",
     "scientificName": "Siganus doliatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -1516,7 +1556,9 @@
     "commonName": "Barred Snake Moray",
     "scientificName": "Uropterygius fasciolatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown"
     ],
@@ -1588,7 +1630,9 @@
     "commonName": "Barred Unicornfish",
     "scientificName": "Naso thynnoides",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -1660,7 +1704,9 @@
     "commonName": "Barrier Reef Anthias",
     "scientificName": "Pseudanthias engelhardi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "spines"
@@ -1730,7 +1776,9 @@
     "commonName": "Bearded Dottyback",
     "scientificName": "Pseudoplesiops sp.",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -1798,7 +1846,9 @@
     "commonName": "Bearded Filefish",
     "scientificName": "Anacanthus barbatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -1871,7 +1921,9 @@
     "commonName": "Bengal Snapper",
     "scientificName": "Lutjanus bengalensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "white",
@@ -1943,7 +1995,9 @@
     "commonName": "Bicolor Blenny",
     "scientificName": "Ecsenius bicolor",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange",
@@ -2015,7 +2069,9 @@
     "commonName": "Bicolor Chromis",
     "scientificName": "Chromis margaritifer",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -2089,7 +2145,9 @@
     "commonName": "Bicolor Cleaner Wormfish",
     "scientificName": "Labropsis bicolor",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -2163,7 +2221,9 @@
     "commonName": "Bird Wrasse",
     "scientificName": "Gomphosus varius",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green"
@@ -2234,7 +2294,9 @@
     "commonName": "Black Cardinalfish",
     "scientificName": "Apogon melas",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -2307,7 +2369,9 @@
     "commonName": "Black Snapper",
     "scientificName": "Macolor niger",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -2381,7 +2445,9 @@
     "commonName": "Black Spot Wormfish",
     "scientificName": "Halichoeres melanochir",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -2456,7 +2522,9 @@
     "commonName": "Black Triggerfish",
     "scientificName": "Melichthys niger",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -2529,7 +2597,9 @@
     "commonName": "Black Velvet Angelfish",
     "scientificName": "Chaetodontoplus melanosoma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -2602,7 +2672,9 @@
     "commonName": "Black Waspfish",
     "scientificName": "Tetraroge niger",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -2677,7 +2749,9 @@
     "commonName": "Black Wormfish",
     "scientificName": "Macropharyngodon negrosensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -2750,7 +2824,9 @@
     "commonName": "Black-banded Flathead",
     "scientificName": "Rogadius patriciae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -2822,7 +2898,9 @@
     "commonName": "Black-eared Wormfish",
     "scientificName": "Halichoeres melasmapomus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -2898,7 +2976,9 @@
     "commonName": "Black-tail Sergeant",
     "scientificName": "Abudefduf lorenzi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -2965,7 +3045,9 @@
     "commonName": "Black-tailed Dascyllus",
     "scientificName": "Jascyllus melanurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -3037,7 +3119,9 @@
     "commonName": "Blackline Shrimpgoby",
     "scientificName": "Myersina nigrivirgata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -3112,7 +3196,9 @@
     "commonName": "Blacksaddle Coral Grouper",
     "scientificName": "Jectropomus laevis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -3186,7 +3272,9 @@
     "commonName": "Blacksaddle Snake Eel",
     "scientificName": "Ophichthus cephalozona",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "black",
       "brown"
@@ -3258,7 +3346,9 @@
     "commonName": "Blackspine Unicornfish",
     "scientificName": "Naso brevirostris",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -3330,7 +3420,9 @@
     "commonName": "Blackspot Blenny",
     "scientificName": "Ecsenius lividanalis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -3403,7 +3495,9 @@
     "commonName": "Blackspot Cleaner Wormfish",
     "scientificName": "Labropsis pectoralis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -3478,7 +3572,9 @@
     "commonName": "Blackspot Damsel",
     "scientificName": "Pomacentrus stigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray"
@@ -3548,7 +3644,9 @@
     "commonName": "Blackspot Snapper",
     "scientificName": "Lutjanus ehrenbergii",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -3620,7 +3718,9 @@
     "commonName": "Blackspotted Puffer",
     "scientificName": "Arothron nigropunctatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -3693,7 +3793,9 @@
     "commonName": "Blackstreak Surgeonfish",
     "scientificName": "Acanthurus nigricaudus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -3767,7 +3869,9 @@
     "commonName": "Blackstripe Cardinalfish",
     "scientificName": "Apogon nigrofasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -3841,7 +3945,9 @@
     "commonName": "Blackstripe Dottyback",
     "scientificName": "Pseudochromis perspicillatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -3916,7 +4022,9 @@
     "commonName": "Blackstriped Angelfish",
     "scientificName": "Genicanthus lamarck",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -3988,7 +4096,9 @@
     "commonName": "Bleeker’s Demoiselle",
     "scientificName": "Shrysiptera rex",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -4058,7 +4168,9 @@
     "commonName": "Blue Blanquillo Tilefish",
     "scientificName": "Malacanthus latovittatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -4133,7 +4245,9 @@
     "commonName": "Blue Devil Damsel",
     "scientificName": "Shrysiptera cyanea",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "orange",
@@ -4207,7 +4321,9 @@
     "commonName": "Blue Triggerfish",
     "scientificName": "Pseudobalistes fuscus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -4281,7 +4397,9 @@
     "commonName": "Blue-spotted Ribbontail Ray",
     "scientificName": "Taeniura lymma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -4357,7 +4475,9 @@
     "commonName": "Bluespot Demoiselle",
     "scientificName": "Shrysiptera oxycephala",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray"
@@ -4428,7 +4548,9 @@
     "commonName": "Bluespotted Grouper",
     "scientificName": "Cephalopholis cyanostigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -4502,7 +4624,9 @@
     "commonName": "Bluestreak Fusilier",
     "scientificName": "Pterocaesio tile",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue"
@@ -4574,7 +4698,9 @@
     "commonName": "Borneo Dottyback",
     "scientificName": "Pseudochromis alleni",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white",
@@ -4645,7 +4771,9 @@
     "commonName": "Brackish Damsel",
     "scientificName": "Pomacentrus taeniometopon",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -4718,7 +4846,9 @@
     "commonName": "Brick \\dierfish",
     "scientificName": "Myripristis amaena",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red",
       "white"
@@ -4788,7 +4918,9 @@
     "commonName": "Brighteye Damsel",
     "scientificName": "Plectrogiyphidodon imparipennis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -4861,7 +4993,9 @@
     "commonName": "Broom Filefish",
     "scientificName": "Amanses scopas",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -4934,7 +5068,9 @@
     "commonName": "Brown Demoiselle",
     "scientificName": "Neopomacentrus filamentosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -5006,7 +5142,9 @@
     "commonName": "Brown-banded Pygmygoby",
     "scientificName": "Eviota latifasciata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -5077,7 +5215,9 @@
     "commonName": "Brownback Dottyback",
     "scientificName": "Pseudochromis ransonneti",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -5147,7 +5287,9 @@
     "commonName": "Brownstripe Snapper",
     "scientificName": "Lutjanus vitta",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "yellow"
@@ -5218,7 +5360,9 @@
     "commonName": "Buan Goby",
     "scientificName": "Amblygobius buanensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white"
@@ -5292,7 +5436,9 @@
     "commonName": "Bundoon Fangblenny",
     "scientificName": "Meiacanthus bundoon",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -5368,7 +5514,9 @@
     "commonName": "Camouflage Grouper",
     "scientificName": "Epinephelus polyphekadion",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -5443,7 +5591,9 @@
     "commonName": "Celebes Razorfish",
     "scientificName": "Iniistius celebicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -5517,7 +5667,9 @@
     "commonName": "Ceram Coralgoby",
     "scientificName": "Gobiodon ceramensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -5587,7 +5739,9 @@
     "commonName": "Chain-lined Wormfish",
     "scientificName": "Halichoeres leucurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green",
@@ -5662,7 +5816,9 @@
     "commonName": "Chameleon Parrotfish",
     "scientificName": "Scarus flavipectoralis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green"
@@ -5734,7 +5890,9 @@
     "commonName": "Checkerboard Wormfish",
     "scientificName": "Halichoeres hortulanus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green",
@@ -5811,7 +5969,9 @@
     "commonName": "Choat's Wormfish",
     "scientificName": "Macropharyngodon choati",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red",
       "white",
@@ -5886,7 +6046,9 @@
     "commonName": "Chocolate Grouper",
     "scientificName": "Cephalopholis boenak",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown"
@@ -5958,7 +6120,9 @@
     "commonName": "Clearfin Lizardfish",
     "scientificName": "Synodus dermatogenys",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -6032,7 +6196,9 @@
     "commonName": "Clouded Lizardfish",
     "scientificName": "Saurida nebulosa",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -6099,7 +6265,9 @@
     "commonName": "Cockatoo Waspfish",
     "scientificName": "Ablabys taenianotus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "spines"
@@ -6170,7 +6338,9 @@
     "commonName": "Comical Blenny",
     "scientificName": "Ecsenius axelrodi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange"
     ],
@@ -6242,7 +6412,9 @@
     "commonName": "Common Lionfish",
     "scientificName": "Pterois mombasae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red"
@@ -6315,7 +6487,9 @@
     "commonName": "Common Seahorse",
     "scientificName": "Hippocampus taeniopterus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "seahorse"
+    ],
     "colors": [
       "black",
       "brown",
@@ -6389,7 +6563,9 @@
     "commonName": "Copperstriped Cardinalfish",
     "scientificName": "Apogon holotaenia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -6460,7 +6636,9 @@
     "commonName": "Coral Cardinalfish",
     "scientificName": "Apogon properupta",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange",
@@ -6531,7 +6709,9 @@
     "commonName": "Coral Demoiselle",
     "scientificName": "Neopomacentrus nemurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -6604,7 +6784,9 @@
     "commonName": "Coral Grouper",
     "scientificName": "Cephalopholis sexmaculata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "orange",
@@ -6678,7 +6860,9 @@
     "commonName": "Coral Rock Grouper",
     "scientificName": "Epinephelus corallicola",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -6741,7 +6925,9 @@
     "commonName": "Cosmetic Wormfish",
     "scientificName": "Halichoeres cosmetus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "orange"
@@ -6815,7 +7001,9 @@
     "commonName": "Crescent-banded Grunter",
     "scientificName": "Terapon jarbua",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "tail"
@@ -6880,7 +7068,9 @@
     "commonName": "Crocodile 2edlefish",
     "scientificName": "Tylosurus crocodilus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -6954,7 +7144,9 @@
     "commonName": "Crosshatch Goby",
     "scientificName": "Amblygobius decussatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange"
@@ -7027,7 +7219,9 @@
     "commonName": "Curious Wormfish",
     "scientificName": "Gunnelichthys curiosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "orange",
@@ -7103,7 +7297,9 @@
     "commonName": "Dark Surgeonfish",
     "scientificName": "Acanthurus nubilus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue"
     ],
@@ -7174,7 +7370,9 @@
     "commonName": "Dark-capped Parrotfish",
     "scientificName": "Scarus oviceps",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green"
@@ -7245,7 +7443,9 @@
     "commonName": "Dartfish",
     "scientificName": "Tryssogobius colini",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -7316,7 +7516,9 @@
     "commonName": "Deep Reef Chromis",
     "scientificName": "Chromis cinerascens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -7387,7 +7589,9 @@
     "commonName": "Delicate Blenny",
     "scientificName": "Glyptoparus delicatulus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -7459,7 +7663,9 @@
     "commonName": "Devil Ray",
     "scientificName": "Mobula tarapacana",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -7528,7 +7734,9 @@
     "commonName": "Disappearing Wormfish",
     "scientificName": "Pseudocheilinus evanidus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "red",
@@ -7601,7 +7809,9 @@
     "commonName": "Dolphinfish",
     "scientificName": "Joryphaena hippurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "silver",
       "yellow"
@@ -7669,7 +7879,9 @@
     "commonName": "Dottyback Anthias",
     "scientificName": "Pseudanthias venator",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange"
     ],
@@ -7739,7 +7951,9 @@
     "commonName": "Doublepore Fangblenny",
     "scientificName": "Meiacanthus ditrema",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "silver",
@@ -7808,7 +8022,9 @@
     "commonName": "Doublestriped Dottyback",
     "scientificName": "Pseudochromis bitaeniatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -7882,7 +8098,9 @@
     "commonName": "Dragon Moray",
     "scientificName": "Enchelycore pardalis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "orange",
       "white",
@@ -7956,7 +8174,9 @@
     "commonName": "Drummer Dragonet",
     "scientificName": "Kyphosus bigibbus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white"
@@ -8028,7 +8248,9 @@
     "commonName": "Dusky Dottyback",
     "scientificName": "Pseudochromis fuscus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -8105,7 +8327,9 @@
     "commonName": "Dusky Garden Eel",
     "scientificName": "Heteroconger perissodon",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "white"
@@ -8177,7 +8401,9 @@
     "commonName": "Dusky Rabbitfish",
     "scientificName": "Siganus fuscescens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -8251,7 +8477,9 @@
     "commonName": "Dusky Wormfish",
     "scientificName": "Halichoeres marginatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green"
@@ -8326,7 +8554,9 @@
     "commonName": "Dwarf Perchlet",
     "scientificName": "Jectranthias nanus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -8400,7 +8630,9 @@
     "commonName": "Elongate Ghostgoby",
     "scientificName": "Jeurosicya elongata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "spots"
@@ -8536,7 +8768,9 @@
     "commonName": "Estuary Seahorse",
     "scientificName": "Hippocampus kuda",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "seahorse"
+    ],
     "colors": [
       "black",
       "brown"
@@ -8609,7 +8843,9 @@
     "commonName": "Estuary Waspfish",
     "scientificName": "Tetraroge barbata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -8681,7 +8917,9 @@
     "commonName": "Eyelined Blenny",
     "scientificName": "Ecsenius midas",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "yellow"
@@ -8751,7 +8989,9 @@
     "commonName": "False Threespot Cardinalfish",
     "scientificName": "Apogon rhodopterus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "saddles",
@@ -8824,7 +9064,9 @@
     "commonName": "Fan-bellied Filefish",
     "scientificName": "Monacanthus chinensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -8895,7 +9137,9 @@
     "commonName": "Festive Parrotfish",
     "scientificName": "Scanus festivus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green",
       "orange",
@@ -8970,7 +9214,9 @@
     "commonName": "Fire Dartfish",
     "scientificName": "Nemateleotris magnifica",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -9046,7 +9292,9 @@
     "commonName": "Fivefinger Razorfish",
     "scientificName": "Inustius pentadactylus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "red"
@@ -9118,7 +9366,9 @@
     "commonName": "Flame Anthias",
     "scientificName": "Pseudanthias ignitus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "red",
@@ -9189,7 +9439,9 @@
     "commonName": "Flower Cardinalfish",
     "scientificName": "Apogon fleurieu",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -9263,7 +9515,9 @@
     "commonName": "Fourlined Cardinalfish",
     "scientificName": "Apogon quadrifasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -9336,7 +9590,9 @@
     "commonName": "Freckled Frogfish",
     "scientificName": "Antennanius coccineus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -9410,7 +9666,9 @@
     "commonName": "Freshwater Demoiselle",
     "scientificName": "Neopomacentrus taeniurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "yellow"
@@ -9480,7 +9738,9 @@
     "commonName": "Fringelip Flathead",
     "scientificName": "Thysanophrys otaitensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -9552,7 +9812,9 @@
     "commonName": "Frogface Sleepergoby",
     "scientificName": "Dxyurichthys papuensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -9623,7 +9885,9 @@
     "commonName": "Giant Grouper",
     "scientificName": "Epinephelus lanceolatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -9696,7 +9960,9 @@
     "commonName": "Giant Shovelnose Ray",
     "scientificName": "Rhinobatos typus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "brown"
     ],
@@ -9765,7 +10031,9 @@
     "commonName": "Giant Shrimpgoby",
     "scientificName": "Amblyeleotris fontanesii",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "orange",
@@ -9838,7 +10106,9 @@
     "commonName": "Girdled Cardinalfish",
     "scientificName": "Archana zosterophora",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -9910,7 +10180,9 @@
     "commonName": "Goldbar Sand Diver",
     "scientificName": "Trichonotus halstead",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -9982,7 +10254,9 @@
     "commonName": "Golden Trevally Jack",
     "scientificName": "Gnathanodon speciosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "silver",
@@ -10055,7 +10329,9 @@
     "commonName": "Goldstripe Wormfish",
     "scientificName": "Halichoeres zeylonicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green",
       "orange",
@@ -10128,7 +10404,9 @@
     "commonName": "Graphic Tuskfish",
     "scientificName": "Choerodon graphicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -10201,7 +10479,9 @@
     "commonName": "Gray Demoiselle",
     "scientificName": "Shrysiptera glauca",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "olive"
@@ -10270,7 +10550,9 @@
     "commonName": "Gray Large-eye Bream",
     "scientificName": "Gymnocranius griseus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -10341,7 +10623,9 @@
     "commonName": "Gray Unicornfish",
     "scientificName": "Naso caesius",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -10410,7 +10694,9 @@
     "commonName": "Green Chromis",
     "scientificName": "Chromis delta",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -10484,7 +10770,9 @@
     "commonName": "Green Damsel",
     "scientificName": "Amblyglyphidodon indicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "green",
@@ -10557,7 +10845,9 @@
     "commonName": "Greenback Wormfish",
     "scientificName": "Halichoeres nigrescens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green"
     ],
@@ -10625,7 +10915,9 @@
     "commonName": "Greensnout Parrotfish",
     "scientificName": "Scarus spinus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green",
       "yellow"
@@ -10693,7 +10985,9 @@
     "commonName": "Halfmoon Grouper",
     "scientificName": "Epinephelus rivulatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -10764,7 +11058,9 @@
     "commonName": "Halfmoon Triggerfish",
     "scientificName": "Rhinecanthus lunula",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -10838,7 +11134,9 @@
     "commonName": "Harlequin Tuskfish",
     "scientificName": "Choerodon cyanodus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white"
@@ -10912,7 +11210,9 @@
     "commonName": "Hexagon Grouper",
     "scientificName": "Epinephelus hexagonatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -10984,7 +11284,9 @@
     "commonName": "Highfin Coral Grouper",
     "scientificName": "Jectropomus leopardus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -11061,7 +11363,9 @@
     "commonName": "Highfin Grouper",
     "scientificName": "Epinephelus maculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -11136,7 +11440,9 @@
     "commonName": "Highfin Parrotfish",
     "scientificName": "Scatus longipinnis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green",
       "orange",
@@ -11207,7 +11513,9 @@
     "commonName": "Hispid Frogfish",
     "scientificName": "Antennanius hispidus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "orange",
@@ -11280,7 +11588,9 @@
     "commonName": "Hookjaw Moray",
     "scientificName": "Enchelycore schismatorhynchus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "gray",
       "white"
@@ -11346,7 +11656,9 @@
     "commonName": "Humpback Unicornfish",
     "scientificName": "Naso brachycentron",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "olive"
@@ -11414,7 +11726,9 @@
     "commonName": "Humphead Wormfish",
     "scientificName": "Cheilinus undulatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -11481,7 +11795,9 @@
     "commonName": "Humpnose Bigeye",
     "scientificName": "Monotaxis grandoculis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -11556,7 +11872,9 @@
     "commonName": "Humpnose Unicornfish",
     "scientificName": "Naso tuberosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "yellow"
@@ -11624,7 +11942,9 @@
     "commonName": "Immaculate Puffer",
     "scientificName": "Arothron immaculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -11700,7 +12020,9 @@
     "commonName": "Indian Mimic Surgeonfish",
     "scientificName": "Acanthurus tristis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -11775,7 +12097,9 @@
     "commonName": "Indian Parrotfish",
     "scientificName": "Chlorurus capistratoides",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green"
     ],
@@ -11843,7 +12167,9 @@
     "commonName": "Indian Snapper",
     "scientificName": "Lutjanus madras",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -11908,7 +12234,9 @@
     "commonName": "Indonesian Grouper",
     "scientificName": "Epinephelus waandersi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -11981,7 +12309,9 @@
     "commonName": "Intermediate Cardinalfish",
     "scientificName": "Cheilodipterus intermedius",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white"
     ],
@@ -12054,7 +12384,9 @@
     "commonName": "Iridescent Cardinalfish",
     "scientificName": "Apogon kallopterus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -12130,7 +12462,9 @@
     "commonName": "Japanese Flathead",
     "scientificName": "Thysanophrys carbunculus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -12200,7 +12534,9 @@
     "commonName": "Knife Razorfish",
     "scientificName": "Symolutes praetextatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "green",
@@ -12276,7 +12612,9 @@
     "commonName": "Lacey Scorpionfish",
     "scientificName": "Pteroidichthys amboinensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -12346,7 +12684,9 @@
     "commonName": "Large-spotted Snake Eel",
     "scientificName": "Ophichthus polyophthalmus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "yellow"
@@ -12421,7 +12761,9 @@
     "commonName": "Largehead Snake Moray",
     "scientificName": "Uropterygits macrocephalus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "white"
@@ -12494,7 +12836,9 @@
     "commonName": "Largemouth Triplefin",
     "scientificName": "Ucla xenogrammus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -12566,7 +12910,9 @@
     "commonName": "Largespined Glassfish",
     "scientificName": "Ambassis macracanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -12629,7 +12975,9 @@
     "commonName": "Larval Cardinalfish",
     "scientificName": "Apogon neotes",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "silver",
@@ -12703,7 +13051,9 @@
     "commonName": "Lemon Coralgoby",
     "scientificName": "Gobiodon citrinus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -12773,7 +13123,9 @@
     "commonName": "Lemonpeel Angelfish",
     "scientificName": "Centropyge flavissimus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -12842,7 +13194,9 @@
     "commonName": "Leopard Coral Grouper",
     "scientificName": "Jectropomus oligacanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -12913,7 +13267,9 @@
     "commonName": "Leopard Grouper",
     "scientificName": "Cephalopholis leopardus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "orange",
@@ -12989,7 +13345,9 @@
     "commonName": "Lined Dottyback",
     "scientificName": "Labracinus lineatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -13138,7 +13496,9 @@
     "commonName": "Lined Wrasse",
     "scientificName": "Anampses lineatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "red",
@@ -13214,7 +13574,9 @@
     "commonName": "Linespot Cardinalfish",
     "scientificName": "Apogon lineomaculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -13288,7 +13650,9 @@
     "commonName": "Longfin Dottyback",
     "scientificName": "Pseudochromis polynemus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -13361,7 +13725,9 @@
     "commonName": "Longfin Emperor",
     "scientificName": "Lethrinus erythropterus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -13436,7 +13802,9 @@
     "commonName": "Longfin Perchlet",
     "scientificName": "Jectranthias longimanus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -13509,7 +13877,9 @@
     "commonName": "Lowfin Dragonet",
     "scientificName": "Kyphosus vaigiensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -13580,7 +13950,9 @@
     "commonName": "Lunartail Snapper",
     "scientificName": "Lutjanus fulvus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -13654,7 +14026,9 @@
     "commonName": "Mackerel",
     "scientificName": "Jecapterus macarellus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "spots"
@@ -13719,7 +14093,9 @@
     "commonName": "Magnificent Rabbitfish",
     "scientificName": "Siganus magnificus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -13788,7 +14164,9 @@
     "commonName": "Mangrove Cardinalfish",
     "scientificName": "Apogon ceramensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "silver"
@@ -13859,7 +14237,9 @@
     "commonName": "Many-barbed Stingfish",
     "scientificName": "Choridactylus multibarbus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -13926,7 +14306,9 @@
     "commonName": "Manyline Basslet",
     "scientificName": "Liopropoma multilineatum",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red",
       "white"
@@ -13999,7 +14381,9 @@
     "commonName": "Manylined Cardinalfish",
     "scientificName": "Apogon multilineatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -14074,7 +14458,9 @@
     "commonName": "Masked Bannerfish",
     "scientificName": "Heniochus monoceros",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white",
       "yellow"
@@ -14145,7 +14531,9 @@
     "commonName": "McCulloch's Anemonefish",
     "scientificName": "Amphiprion mecullochi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -14218,7 +14606,9 @@
     "commonName": "Minute Filefish",
     "scientificName": "Rudarius minutus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -14291,7 +14681,9 @@
     "commonName": "Moluccan Seahorse",
     "scientificName": "Hippocampus moluccensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "seahorse"
+    ],
     "colors": [
       "brown",
       "white",
@@ -14362,7 +14754,9 @@
     "commonName": "Monster Shrimpgoby",
     "scientificName": "Tomiyamichthys oni",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -14433,7 +14827,9 @@
     "commonName": "Morrison's Dragonet",
     "scientificName": "Synchiropus moyeri",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -14502,7 +14898,9 @@
     "commonName": "Mosaic Moray",
     "scientificName": "Enchelycore lichenosa",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "black",
       "brown"
@@ -14576,7 +14974,9 @@
     "commonName": "Multicolored Dottyback",
     "scientificName": "Ogilbyina novaehollandiae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -14650,7 +15050,9 @@
     "commonName": "Neon Pygmygoby",
     "scientificName": "Eviota guttata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "red",
@@ -14725,7 +15127,9 @@
     "commonName": "Oblong Silver Biddy",
     "scientificName": "Gerres oblongus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "silver"
     ],
@@ -14797,7 +15201,9 @@
     "commonName": "Ocular Blenny",
     "scientificName": "Ecsenius prooculis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -14872,7 +15278,9 @@
     "commonName": "Omate Angelfish",
     "scientificName": "Genicanthus bellus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -14947,7 +15355,9 @@
     "commonName": "Onespot Cardinalfish",
     "scientificName": "Apogon uninotatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -15019,7 +15429,9 @@
     "commonName": "Onespot Snapper",
     "scientificName": "Lutjanus monostigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "silver",
@@ -15092,7 +15504,9 @@
     "commonName": "Orange-striped Emperor",
     "scientificName": "Lethrinus obsoletus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "yellow"
@@ -15168,7 +15582,9 @@
     "commonName": "Orangeband Surgeonfish",
     "scientificName": "Acanthurus olivaceus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange"
@@ -15239,7 +15655,9 @@
     "commonName": "Orangehead Pygmy Angelfish",
     "scientificName": "Centropyge hotumatua",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -15315,7 +15733,9 @@
     "commonName": "Orangepeel Angelfish",
     "scientificName": "Centropyge shepardi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "orange",
@@ -15384,7 +15804,9 @@
     "commonName": "Orangespot Cardinalfish",
     "scientificName": "Apogon rubrimacula",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "silver",
@@ -15459,7 +15881,9 @@
     "commonName": "Orangestripe Wormfish",
     "scientificName": "Gunnelichthys vindescens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "orange"
@@ -15532,7 +15956,9 @@
     "commonName": "Ornate Wormfish",
     "scientificName": "Halichoeres ornatissimus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green"
     ],
@@ -15605,7 +16031,9 @@
     "commonName": "Oval-spot Butterflyfish",
     "scientificName": "Chaetodon speculum",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -15678,7 +16106,9 @@
     "commonName": "Pale-barred Coris",
     "scientificName": "Cons dorsomacula",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -15753,7 +16183,9 @@
     "commonName": "Pale-lipped Surgeonfish",
     "scientificName": "Acanthurus leucocheilus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -15827,7 +16259,9 @@
     "commonName": "Pale-tail Chromis",
     "scientificName": "Chromis xanthura",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white"
@@ -15897,7 +16331,9 @@
     "commonName": "Palemargin Grouper",
     "scientificName": "Epinephelus bontoides",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -15970,7 +16406,9 @@
     "commonName": "Palette Surgeonfish",
     "scientificName": "Acanthurus maculiceps",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -16044,7 +16482,9 @@
     "commonName": "Pearly Dartfish",
     "scientificName": "Ptereleotris heteroptera",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -16121,7 +16561,9 @@
     "commonName": "Picturesque Dragonet",
     "scientificName": "Synchiropus picturatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -16195,7 +16637,9 @@
     "commonName": "Pictus Blenny",
     "scientificName": "Ecsenius pictus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -16269,7 +16713,9 @@
     "commonName": "Pink Dottyback",
     "scientificName": "Pseudoplesiops multisquamatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -16343,7 +16789,9 @@
     "commonName": "Pinktail Triggerfish",
     "scientificName": "Melichthys vidua",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -16416,7 +16864,9 @@
     "commonName": "Pinstriped Wormfish",
     "scientificName": "Halichoeres melanurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -16493,7 +16943,9 @@
     "commonName": "Potato Grouper",
     "scientificName": "Epinephelus tukula",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -16563,7 +17015,9 @@
     "commonName": "Princess Anthias",
     "scientificName": "Pseudanthias smithvanizi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -16633,7 +17087,9 @@
     "commonName": "Purple Anthias",
     "scientificName": "Pseudanthias tuka",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -16703,7 +17159,9 @@
     "commonName": "Purple Queen Anthias",
     "scientificName": "Pseudanthias pascalus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "orange"
@@ -16773,7 +17231,9 @@
     "commonName": "Pygmygoby",
     "scientificName": "Eviota mikiae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white",
       "yellow"
@@ -16846,7 +17306,9 @@
     "commonName": "Queensland Dottyback",
     "scientificName": "Ogilbyina queenslandiae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "tail"
@@ -16916,7 +17378,9 @@
     "commonName": "Rcupinefish",
     "scientificName": "Jiodon liturosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -16990,7 +17454,9 @@
     "commonName": "Red and Black Anemonefish",
     "scientificName": "Amphiprion melanopus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "orange",
@@ -17061,7 +17527,9 @@
     "commonName": "Red Emperor",
     "scientificName": "Lutjanus sebae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -17134,7 +17602,9 @@
     "commonName": "Red Snapper",
     "scientificName": "Lutjanus bohar",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "red"
@@ -17205,7 +17675,9 @@
     "commonName": "Red-tipped Longfin Devilfish",
     "scientificName": "Jesiops coeruleolineatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -17281,7 +17753,9 @@
     "commonName": "Redbreasted Wormfish",
     "scientificName": "Cheilinus fasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "red",
@@ -17357,7 +17831,9 @@
     "commonName": "Redlip Cleaner Wormfish",
     "scientificName": "Labropsis rubrolabiatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -17433,7 +17909,9 @@
     "commonName": "Redstripe Anthias",
     "scientificName": "Pseudanthias rubrizonatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -17503,7 +17981,9 @@
     "commonName": "Redstriped Cardinalfish",
     "scientificName": "Apogon notatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -17576,7 +18056,9 @@
     "commonName": "Redtooth Triggerfish",
     "scientificName": "Odonus niger",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue"
     ],
@@ -17647,7 +18129,9 @@
     "commonName": "Reef Lizardfish",
     "scientificName": "Synodus rubromarmoratus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red"
@@ -17722,7 +18206,9 @@
     "commonName": "Reticulate Stargazer",
     "scientificName": "Uranoscopus sp.",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "white"
@@ -17864,7 +18350,9 @@
     "commonName": "Roving Coral Grouper",
     "scientificName": "Jectropomus pessuliferus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -17939,7 +18427,9 @@
     "commonName": "Royal Dottyback",
     "scientificName": "Pseudochromis paccagnellae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -18008,7 +18498,9 @@
     "commonName": "Ruby Cardinalfish",
     "scientificName": "Apogon crassiceps",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "stripes"
@@ -18077,7 +18569,9 @@
     "commonName": "Rusty Angelfish",
     "scientificName": "Centropyge ferrugatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown"
@@ -18150,7 +18644,9 @@
     "commonName": "Saddle Blenny",
     "scientificName": "Ecsenius sellifer",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -18223,7 +18719,9 @@
     "commonName": "Samoan Pipefish",
     "scientificName": "Halicampus mataafae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -18297,7 +18795,9 @@
     "commonName": "Sand Goby",
     "scientificName": "Heteroplopomus barbatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -18371,7 +18871,9 @@
     "commonName": "Scarlet \\dierfish",
     "scientificName": "Myripristis chryseres",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -18442,7 +18944,9 @@
     "commonName": "Schooling Bannerfish",
     "scientificName": "Heniochus diphreutes",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -18512,7 +19016,9 @@
     "commonName": "Scrawled Filefish",
     "scientificName": "Aluterus scriptus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -18589,7 +19095,9 @@
     "commonName": "Scythe Triggerfish",
     "scientificName": "Sufflamen bursa",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -18663,7 +19171,9 @@
     "commonName": "Seagrass Wormfish",
     "scientificName": "Halichoeres papilionaceus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "green"
@@ -18733,7 +19243,9 @@
     "commonName": "Shark",
     "scientificName": "Rhina ancylostoma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "gray",
       "white"
@@ -18803,7 +19315,9 @@
     "commonName": "Short-tailed Pipefish",
     "scientificName": "Trachyrhamphus bicoarctatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "green",
@@ -18881,7 +19395,9 @@
     "commonName": "Short-whiskered Goby",
     "scientificName": "Gobipsis exigua",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -18953,7 +19469,9 @@
     "commonName": "Shortfin Spadefish",
     "scientificName": "Zabidius novemaculeatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "silver",
       "white"
@@ -19021,7 +19539,9 @@
     "commonName": "Shortnose Pipefish",
     "scientificName": "Syngnathoides biaculeatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green"
     ],
@@ -19091,7 +19611,9 @@
     "commonName": "Sicklefin Lemon Sergeant",
     "scientificName": "Negaprion acutidens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "shark"
+    ],
     "colors": [
       "brown",
       "yellow"
@@ -19161,7 +19683,9 @@
     "commonName": "Sigillata Pygmygoby",
     "scientificName": "Eviota sigillata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -19235,7 +19759,9 @@
     "commonName": "Signalfin Goby",
     "scientificName": "Coryphopterus signipinnis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red"
@@ -19309,7 +19835,9 @@
     "commonName": "Silver Grunter",
     "scientificName": "Mesopristes argenteus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -19384,7 +19912,9 @@
     "commonName": "Silver Pearlfish",
     "scientificName": "Encheliophis homei",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -19450,7 +19980,9 @@
     "commonName": "Similar Damsel",
     "scientificName": "Pomacentrus similis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue"
     ],
@@ -19523,7 +20055,9 @@
     "commonName": "Singapore Cardinalfish",
     "scientificName": "Cheilodipterus singapurensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -19598,7 +20132,9 @@
     "commonName": "Singapore Tuskfish",
     "scientificName": "Choerodon oligacanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -19675,7 +20211,9 @@
     "commonName": "Sixstripe Cardinalfish",
     "scientificName": "Apogon endekataenia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -19819,7 +20357,9 @@
     "commonName": "Slender Fusilier",
     "scientificName": "Gymnocaesio gymnoptera",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "green",
@@ -19891,7 +20431,9 @@
     "commonName": "Slender Grouper",
     "scientificName": "Anyperodon leucogrammicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange",
@@ -19966,7 +20508,9 @@
     "commonName": "Slender Unicornfish",
     "scientificName": "Naso lopezi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -20035,7 +20579,9 @@
     "commonName": "Smalltooth Jobfish",
     "scientificName": "Aphareus furca",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray"
@@ -20108,7 +20654,9 @@
     "commonName": "Smoky Chromis",
     "scientificName": "Chromis analis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -20177,7 +20725,9 @@
     "commonName": "Smooth Seahorse",
     "scientificName": "Hippocampus kampylotrachelos",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "seahorse"
+    ],
     "colors": [
       "brown",
       "white"
@@ -20247,7 +20797,9 @@
     "commonName": "Snubnose Pompano",
     "scientificName": "Trachinotus blochi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "silver",
@@ -20320,7 +20872,9 @@
     "commonName": "Solor Boxfish",
     "scientificName": "Ostracion solorensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue"
@@ -20392,7 +20946,9 @@
     "commonName": "South Seas Devil Damsel",
     "scientificName": "Shrysiptera taupou",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -20468,7 +21024,9 @@
     "commonName": "Southern Tubelip Wormfish",
     "scientificName": "Labropsis australis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -20544,7 +21102,9 @@
     "commonName": "Spangled Shrimpgoby",
     "scientificName": "Vanderhorstia sp.",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -20614,7 +21174,9 @@
     "commonName": "Speckled Damsel",
     "scientificName": "Pomacentrus bankanensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -20688,7 +21250,9 @@
     "commonName": "Speckled Grouper",
     "scientificName": "Epinephelus cyanopodus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray"
@@ -20762,7 +21326,9 @@
     "commonName": "Sphynx Goby",
     "scientificName": "Amblygobius semicinctus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -20837,7 +21403,9 @@
     "commonName": "Spinecheek Anemonefish",
     "scientificName": "Premnas biaculeatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "red",
@@ -20908,7 +21476,9 @@
     "commonName": "Spiny Chromis",
     "scientificName": "Acanthochromis polyacanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -20974,7 +21544,9 @@
     "commonName": "Spiny Flathead",
     "scientificName": "Onigocia spinosa",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -21049,7 +21621,9 @@
     "commonName": "Spiny Waspfish",
     "scientificName": "Ablabys macracanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -21119,7 +21693,9 @@
     "commonName": "Splendid Dottyback",
     "scientificName": "Pseudochromis splendens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -21195,7 +21771,9 @@
     "commonName": "Spotfin Squirrelfish",
     "scientificName": "Neoniphon sammara",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "red",
@@ -21269,7 +21847,9 @@
     "commonName": "Spotted Coral Grouper",
     "scientificName": "Jectropomus maculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "brown",
@@ -21345,7 +21925,9 @@
     "commonName": "Spotted Eagle Ray",
     "scientificName": "Aetobatus narinan",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "black",
       "brown",
@@ -21423,7 +22005,9 @@
     "commonName": "Spotted Goatfish",
     "scientificName": "Chilomycterus reticulatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -21498,7 +22082,9 @@
     "commonName": "Squarebelly Pygmygoby",
     "scientificName": "Eviota punctulata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "green",
@@ -21572,7 +22158,9 @@
     "commonName": "Squaretail Coral Grouper",
     "scientificName": "Jectropomus areolatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -21645,7 +22233,9 @@
     "commonName": "Starry Dragonet",
     "scientificName": "Synchiropus stellatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -21718,7 +22308,9 @@
     "commonName": "Starry Triggerfish",
     "scientificName": "Abalistes stellatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -21793,7 +22385,9 @@
     "commonName": "Stocky Anthias",
     "scientificName": "Pseudanthias hypselosoma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -21864,7 +22458,9 @@
     "commonName": "Storthynx Goby",
     "scientificName": "Eviota storthynx",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -21939,7 +22535,9 @@
     "commonName": "Strapweed Filefish",
     "scientificName": "Pseudomonacanthus macrurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -22015,7 +22613,9 @@
     "commonName": "Strawberry Grouper",
     "scientificName": "Cephalopholis spiloparaea",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "orange",
@@ -22161,7 +22761,9 @@
     "commonName": "Striped Surgeonfish",
     "scientificName": "Acanthurus lineatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -22304,7 +22906,9 @@
     "commonName": "Sunset Anthias",
     "scientificName": "Pseudanthias parvirostris",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white",
       "yellow"
@@ -22375,7 +22979,9 @@
     "commonName": "Surge Dottyback",
     "scientificName": "Pseudochromis cyanotaenia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -22451,7 +23057,9 @@
     "commonName": "Surge Grouper",
     "scientificName": "Epinephelus socialis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "olive",
@@ -22527,7 +23135,9 @@
     "commonName": "Swakefish",
     "scientificName": "Trachinocephalus myops",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -22602,7 +23212,9 @@
     "commonName": "Swarthy Parrotfish",
     "scientificName": "Scarus niger",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "green",
@@ -22674,7 +23286,9 @@
     "commonName": "Sweetwater Demoiselle",
     "scientificName": "Neopomacentrus aquadulcis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -22743,7 +23357,9 @@
     "commonName": "Tahitian ‘ingray",
     "scientificName": "Himantura fai",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -22817,7 +23433,9 @@
     "commonName": "Tailspot Blenny",
     "scientificName": "Ecsenius oculus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -22889,7 +23507,9 @@
     "commonName": "Tailspot Wormfish",
     "scientificName": "Pseudocheilinus ocellatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "red",
@@ -22964,7 +23584,9 @@
     "commonName": "Tailspot Wrasse",
     "scientificName": "Halichoeres richmondi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green",
@@ -23039,7 +23661,9 @@
     "commonName": "Tasseled Scorpionfish",
     "scientificName": "Scorpaenopsis oxycephala",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [],
     "bodyShapes": [],
@@ -23104,7 +23728,9 @@
     "commonName": "Tawny Nurse Shark",
     "scientificName": "Nebrius ferrugineus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "shark"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -23177,7 +23803,9 @@
     "commonName": "Thinstriped Dottyback",
     "scientificName": "Pseudochromis howsoni",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -23252,7 +23880,9 @@
     "commonName": "Threadfin",
     "scientificName": "Apogon leptacanthus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -23320,7 +23950,9 @@
     "commonName": "Threadfin Dartfish",
     "scientificName": "Ptereleotris hanae",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "gray",
@@ -23394,7 +24026,9 @@
     "commonName": "Threeband Demoiselle",
     "scientificName": "Shrysiptera tricincta",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white"
@@ -23464,7 +24098,9 @@
     "commonName": "Threespot Cardinalfish",
     "scientificName": "Apogon trimaculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [],
     "markings": [
       "saddles",
@@ -23535,7 +24171,9 @@
     "commonName": "Threespot Damsel",
     "scientificName": "Pomacentrus tripunctatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -23608,7 +24246,9 @@
     "commonName": "Thumbprint Emperor",
     "scientificName": "Lethrinus harak",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "orange"
@@ -23680,7 +24320,9 @@
     "commonName": "Tiger Cardinalfish",
     "scientificName": "Cheilodipterus macrodon",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red"
@@ -23755,7 +24397,9 @@
     "commonName": "Tiger Sergeant",
     "scientificName": "Galeocerdo cuvier",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "shark"
+    ],
     "colors": [
       "gray"
     ],
@@ -23827,7 +24471,9 @@
     "commonName": "Tiny Cardinalfish",
     "scientificName": "Apogon nanus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -23899,7 +24545,9 @@
     "commonName": "Topsail Dragonet",
     "scientificName": "Kyphosus cinerascens",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -23969,7 +24617,9 @@
     "commonName": "Torpedo Wormfish",
     "scientificName": "Pseudocoris heteroptera",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green",
@@ -24039,7 +24689,9 @@
     "commonName": "Twinspot Grouper",
     "scientificName": "Epinephelus bilobatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -24113,7 +24765,9 @@
     "commonName": "Two-spot Snapper",
     "scientificName": "Lutjanus biguttatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "gray",
@@ -24187,7 +24841,9 @@
     "commonName": "Twospot Anthias",
     "scientificName": "Pseudanthias bimaculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "red",
@@ -24260,7 +24916,9 @@
     "commonName": "Twotone Wormfish",
     "scientificName": "Halichoeres prosopeion",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "yellow"
@@ -24333,7 +24991,9 @@
     "commonName": "Velvet Ghost Pipefish",
     "scientificName": "Choeroichthys brachysoma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -24409,7 +25069,9 @@
     "commonName": "Vermiculate Rabbitfish",
     "scientificName": "Siganus vermiculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -24481,7 +25143,9 @@
     "commonName": "Viper Moray",
     "scientificName": "Enchelynassa canina",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "gray"
@@ -24554,7 +25218,9 @@
     "commonName": "Wavy-lined Grouper",
     "scientificName": "Epinephelus undulosus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -24626,7 +25292,9 @@
     "commonName": "Wedgetail Triggerfish",
     "scientificName": "Rhinecanthus rectangulus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -24699,7 +25367,9 @@
     "commonName": "Weedy Cardinalfish",
     "scientificName": "Rhabdamia cypselurus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black"
     ],
@@ -24772,7 +25442,9 @@
     "commonName": "Weedy Surge Wormfish",
     "scientificName": "Halichoeres margaritaceus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "green"
     ],
@@ -24842,7 +25514,9 @@
     "commonName": "Welander'’s Flathead",
     "scientificName": "Rogadius welandenri",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown"
@@ -24916,7 +25590,9 @@
     "commonName": "Whale Sergeant",
     "scientificName": "Rhincodon typus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "shark"
+    ],
     "colors": [
       "gray",
       "white"
@@ -24990,7 +25666,9 @@
     "commonName": "White Ribbon Moray",
     "scientificName": "Pseudechidna brummen",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "green",
@@ -25065,7 +25743,9 @@
     "commonName": "White-spotted Chromis",
     "scientificName": "Chromis albomaculata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown"
     ],
@@ -25132,7 +25812,9 @@
     "commonName": "White-spotted Puffer",
     "scientificName": "Arothron hispidus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -25207,7 +25889,9 @@
     "commonName": "White-spotted Rabbitfish",
     "scientificName": "Siganus canaliculatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -25282,7 +25966,9 @@
     "commonName": "White-spotted Surgeonfish",
     "scientificName": "Acanthurus guttatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "white"
     ],
@@ -25349,7 +26035,9 @@
     "commonName": "White-tailed Dottyback",
     "scientificName": "Labracinus atrofasciatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -25423,7 +26111,9 @@
     "commonName": "Whiteband Damsel",
     "scientificName": "Plectroglyphidodon leucozonus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -25496,7 +26186,9 @@
     "commonName": "Whitebar Bigeye",
     "scientificName": "Pristigenys niphonia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red"
     ],
@@ -25567,7 +26259,9 @@
     "commonName": "Whiteblotched Grouper",
     "scientificName": "Epinephelus multinotatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray"
     ],
@@ -25640,7 +26334,9 @@
     "commonName": "Whiteface Waspfish",
     "scientificName": "Richardsonichthys leucogaster",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red"
@@ -25713,7 +26409,9 @@
     "commonName": "Whitefin Surgeonfish",
     "scientificName": "Acanthurus albipectoralis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -25784,7 +26482,9 @@
     "commonName": "Whitemargin Stargazer",
     "scientificName": "Uranoscopus sulphureus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -25857,7 +26557,9 @@
     "commonName": "Whitespot \\dierfish",
     "scientificName": "Myripristis woodsi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "red",
@@ -25929,7 +26631,9 @@
     "commonName": "Whitespot Tuskfish",
     "scientificName": "Choerodon monostigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -26003,7 +26707,9 @@
     "commonName": "Whitespotted Bamboo Sergeant",
     "scientificName": "Chiloscyllium plagiosum",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "shark"
+    ],
     "colors": [
       "brown",
       "white"
@@ -26075,7 +26781,9 @@
     "commonName": "Whitestreaked Grouper",
     "scientificName": "Epinephelus ongus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
@@ -26149,7 +26857,9 @@
     "commonName": "Whitestripe Tuskfish",
     "scientificName": "Choerodon zosterophorus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -26223,7 +26933,9 @@
     "commonName": "Whitetail ‘ingray",
     "scientificName": "Himantura granulata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "ray"
+    ],
     "colors": [
       "gray",
       "white"
@@ -26299,7 +27011,9 @@
     "commonName": "Wide-barred Shrimpgoby",
     "scientificName": "Amblyeleotris latifasciata",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "orange"
@@ -26372,7 +27086,9 @@
     "commonName": "Yaeyama Blenny",
     "scientificName": "Ecsenius yaeyamaensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -26443,7 +27159,9 @@
     "commonName": "Yellow Boxfish",
     "scientificName": "Ostracion cubicus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -26516,7 +27234,9 @@
     "commonName": "Yellow Cardinalfish",
     "scientificName": "Apogon luteus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "orange",
@@ -26590,7 +27310,9 @@
     "commonName": "Yellow Crown Demoiselle",
     "scientificName": "Chrysiptera sp.",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "yellow"
@@ -26659,7 +27381,9 @@
     "commonName": "Yellow-crowned Butterflyfish",
     "scientificName": "Chaetodon flavocoronatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "white",
@@ -26730,7 +27454,9 @@
     "commonName": "Yellow-speckled Chromis",
     "scientificName": "Chromis alpha",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "brown",
@@ -26804,7 +27530,9 @@
     "commonName": "Yellowback Anthias",
     "scientificName": "Pseudanthias evansi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "yellow"
     ],
@@ -26876,7 +27604,9 @@
     "commonName": "Yellowback Fusilier",
     "scientificName": "Caesio xanthonota",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -26946,7 +27676,9 @@
     "commonName": "Yelloweyed Cardinalfish",
     "scientificName": "Apogon monospilus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white",
@@ -27017,7 +27749,9 @@
     "commonName": "Yellowface Wormfish",
     "scientificName": "Halichoeres solorensis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "gray",
@@ -27089,7 +27823,9 @@
     "commonName": "Yellowfin Tuna",
     "scientificName": "Thunnus albacares",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "silver",
       "yellow"
@@ -27158,7 +27894,9 @@
     "commonName": "Yellowlined Cardinalfish",
     "scientificName": "Apogon chrysotaenia",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "yellow"
@@ -27231,7 +27969,9 @@
     "commonName": "Yellownose Slender Anthias",
     "scientificName": "Luzonichthys whitleyi",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "red",
@@ -27304,7 +28044,9 @@
     "commonName": "Yellowspotted Anthias",
     "scientificName": "Pseudanthias flavoguttatus",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "red",
       "white",
@@ -27377,7 +28119,9 @@
     "commonName": "Yellowstriped Cardinalfish",
     "scientificName": "Apogon cyanosoma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "orange",
       "silver",
@@ -27453,7 +28197,9 @@
     "commonName": "Yellowtail Blenny",
     "scientificName": "Ecsenius namiyei",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "gray",
       "yellow"
@@ -27526,7 +28272,9 @@
     "commonName": "Yellowtail Fusilier",
     "scientificName": "Caesio cuning",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "blue",
       "green",
@@ -27597,7 +28345,9 @@
     "commonName": "Zebra Moray",
     "scientificName": "Gymnomuraena zebra",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "eel"
+    ],
     "colors": [
       "brown",
       "white"
@@ -27667,7 +28417,9 @@
     "commonName": "Zigzag Wormfish",
     "scientificName": "Halichoeres scapularis",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "black",
       "blue",
@@ -27743,7 +28495,9 @@
     "commonName": "| Netfin Grouper",
     "scientificName": "Epinephelus melanostigma",
     "aliases": [],
-    "categories": [],
+    "categories": [
+      "fish"
+    ],
     "colors": [
       "brown",
       "white"
