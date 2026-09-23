@@ -83,7 +83,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     }
 
     private func resourceURL(path: String, ext: String) -> URL? {
-        if let bundled = bundle.url(forResource: path, withExtension: ext) { return bundled }
+        let resource = URL(fileURLWithPath: path).lastPathComponent
+        let directory = (path as NSString).deletingLastPathComponent
+        if let bundled = bundle.url(forResource: resource, withExtension: ext, subdirectory: directory) { return bundled }
         guard resourceResolutionMode == .bundleThenDevelopmentSource else { return nil }
         return developmentSourceRoot.appendingPathComponent(path).appendingPathExtension(ext).standardizedFileURL.existing
     }
@@ -93,7 +95,10 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     }
 
     private func failure(_ packID: OfflineIdentificationPackID, _ code: CatalogueDiagnosticCode, _ error: LocalCatalogError?, _ resource: String?, _ phase: CatalogueLoadPhase) -> CatalogueLoadFailure {
-        CatalogueLoadFailure(packID: packID, code: code, catalogError: error, resource: resource, phase: phase)
+#if DEBUG
+        print("DiveID catalogue: \(code.rawValue), phase=\(phase.rawValue), resource=\(resource ?? "none"), cause=\(String(describing: error))")
+#endif
+        return CatalogueLoadFailure(packID: packID, code: code, catalogError: error, resource: resource, phase: phase)
     }
 
     private func validationContext(error: LocalCatalogError, profiles: [LocalSpeciesProfile], metadata: OfflineIdentificationPackMetadata, directory: String) -> (code: CatalogueDiagnosticCode, resource: String?, phase: CatalogueLoadPhase) {
@@ -179,7 +184,11 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
 
     private static func validateImageFile(_ image: BundledSpeciesImage, speciesID: UUID, metadata: OfflineIdentificationPackMetadata, bundle: Bundle, resourceDirectory: String, resourceResolver: ((String, String) -> URL?)?) throws {
         let path = "IdentificationPacks/\(resourceDirectory)/\(metadata.imageSubdirectory)/\(image.fileName)"
-        guard let url = resourceResolver?(path, "") ?? bundle.url(forResource: path, withExtension: nil)
+        guard let url = resourceResolver?(path, "") ?? bundle.url(
+            forResource: image.fileName,
+            withExtension: nil,
+            subdirectory: "IdentificationPacks/\(resourceDirectory)/\(metadata.imageSubdirectory)"
+        )
         else { throw LocalCatalogError.missingImage(speciesID) }
         guard let data = try? Data(contentsOf: url), !data.isEmpty else { throw LocalCatalogError.invalidImage(speciesID) }
         guard data.count <= maximumImageByteCount else { throw LocalCatalogError.imageTooLarge(speciesID) }

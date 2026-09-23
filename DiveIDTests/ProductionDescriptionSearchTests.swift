@@ -34,8 +34,8 @@ final class ProductionDescriptionSearchTests: XCTestCase {
 
     func testProductionCaribbeanPackLoadsWithExpectedRecords() async throws {
 #if !SWIFT_PACKAGE
-        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "IdentificationPacks/Caribbean/PackManifest", withExtension: "json"))
-        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "IdentificationPacks/Caribbean/Creatures", withExtension: "json"))
+        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
+        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
 #endif
         let pack = try await repository().loadPack(id: .caribbean)
 
@@ -43,6 +43,13 @@ final class ProductionDescriptionSearchTests: XCTestCase {
         XCTAssertEqual(pack.metadata.speciesCount, 8)
         XCTAssertEqual(pack.profiles.count, 8)
         XCTAssertEqual(Set(pack.profiles.map(\.id)).count, 8)
+#if !SWIFT_PACKAGE
+        for profile in pack.profiles {
+            if let image = profile.bundledImage {
+                XCTAssertNotNil(TestResources.productionBundle.url(forResource: image.fileName, withExtension: nil, subdirectory: "IdentificationPacks/Caribbean/Images"))
+            }
+        }
+#endif
     }
 
     func testEagleRayQueryReturnsSpottedEagleRayFirst() async throws {
