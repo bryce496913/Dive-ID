@@ -38,6 +38,8 @@ struct OfflineIdentificationPack: Sendable, Hashable {
 }
 
 enum RegionalOccurrenceStatus: String, Codable, Hashable, Sendable {
+    /// Presence is supported, but the source does not establish abundance.
+    case unknown
     case common, regular, occasional, rare, seasonal, introduced
 }
 

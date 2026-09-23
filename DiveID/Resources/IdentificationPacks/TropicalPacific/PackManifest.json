@@ -1,10 +1,10 @@
 {
   "id": "tropical-pacific",
   "schemaVersion": 1,
-  "packVersion": 1,
+  "packVersion": 2,
   "displayName": "Tropical Pacific",
-  "shortDescription": "A source-traceable offline Tropical Pacific starter catalogue",
-  "geographicScope": "Tropical Indo-Pacific reef-fish accounts whose workbook occurrence is supported by the cited book distribution statement.",
+  "shortDescription": "Source-traceable draft Tropical Pacific catalogue",
+  "geographicScope": "Workbook accounts with source-supported Tropical Pacific presence; presence does not assert abundance.",
   "regionAliases": [
     "Tropical Pacific",
     "Pacific",
@@ -15,7 +15,7 @@
     "Philippines",
     "Indonesia"
   ],
-  "speciesCount": 40,
+  "speciesCount": 384,
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
