@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		R4 /* IdentificationPacks in Resources */ = {isa = PBXBuildFile; fileRef = P4 /* IdentificationPacks */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		X2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,7 +27,6 @@
 		P1 /* DiveID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiveID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		P2 /* DiveIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		P3 /* DiveIDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiveIDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		P4 /* IdentificationPacks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DiveID/Resources/IdentificationPacks; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -39,7 +34,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Resources/IdentificationPacks,
 			);
 			target = B1 /* DiveID */;
 		};
@@ -50,6 +44,9 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				E1 /* Exceptions for "DiveID" folder in "DiveID" target */,
+			);
+			explicitFolders = (
+				Resources/IdentificationPacks,
 			);
 			path = DiveID;
 			sourceTree = "<group>";
@@ -95,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				G2 /* DiveID */,
-				P4 /* IdentificationPacks */,
 				G3 /* DiveIDTests */,
 				G4 /* DiveIDUITests */,
 				G5 /* Products */,
@@ -229,7 +225,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				R4 /* IdentificationPacks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
