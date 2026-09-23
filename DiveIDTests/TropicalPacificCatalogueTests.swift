@@ -3,6 +3,46 @@ import XCTest
 @testable import DiveID
 
 final class TropicalPacificCatalogueTests: XCTestCase {
+    private struct DiverDescriptionCase: Decodable {
+        let id: String
+        let description: String
+        let selectedPackID: OfflineIdentificationPackID
+        let expectedSpeciesIDs: [UUID]
+        let acceptableSpeciesIDs: [UUID]
+        let maximumAcceptableRank: Int?
+        let rationale: String
+        let sources: [String]
+
+        var acceptedSpeciesIDs: Set<UUID> { Set(expectedSpeciesIDs + acceptableSpeciesIDs) }
+        var expectsNoMatch: Bool { expectedSpeciesIDs.isEmpty && acceptableSpeciesIDs.isEmpty }
+    }
+
+    private struct PositiveEvaluationFailure: Error {
+        let caseIDs: [String]
+    }
+
+    private struct PacificFixtureCatalogRepository: MarineSpeciesCatalogRepository {
+        let pack: OfflineIdentificationPack
+
+        func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [pack.metadata] }
+
+        func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
+            guard id == pack.metadata.id else { throw LocalIdentificationError.catalogUnavailable }
+            return pack
+        }
+    }
+
+    private struct EmptyDescriptionSearchEngine: DescriptionSearching {
+        func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+            DescriptionSearchResult(
+                candidates: [],
+                queryAnalysis: .init(observedRegions: [], packRegionCompatibility: .unspecified),
+                retrievedSpeciesIDs: [],
+                retrievalLimit: 50
+            )
+        }
+    }
+
     private let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
         .appendingPathComponent("DiveID/Resources/IdentificationPacks/TropicalPacific")
 
@@ -11,6 +51,52 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         let metadata = try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: root.appendingPathComponent("PackManifest.json")))
         let profiles = try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: root.appendingPathComponent("Creatures.json")))
         return .init(metadata: metadata, profiles: profiles)
+    }
+
+    private func diverDescriptions() throws -> [DiverDescriptionCase] {
+        try JSONDecoder().decode(
+            [DiverDescriptionCase].self,
+            from: Data(contentsOf: TestResources.fixture(named: "TropicalPacificDiverDescriptions.v1"))
+        )
+    }
+
+    private func evaluate(
+        _ cases: [DiverDescriptionCase],
+        searchEngine: any DescriptionSearching,
+        engineName: String
+    ) async throws -> [(id: String, rank: Int?)] {
+        let value = try pack()
+        XCTAssertEqual(value.metadata.id, .tropicalPacific)
+        XCTAssertEqual(value.metadata.packVersion, 2)
+        XCTAssertEqual(value.metadata.speciesCount, 384)
+        XCTAssertEqual(value.profiles.count, value.metadata.speciesCount)
+
+        let repository = PacificFixtureCatalogRepository(pack: value)
+        let service = LocalMarineLifeIdentificationService(catalogRepository: repository, searchEngine: searchEngine)
+        var measurements: [(id: String, rank: Int?)] = []
+        var positiveFailures: [String] = []
+
+        for item in cases {
+            let request = IdentificationRequest(
+                source: .description(item.description),
+                context: .init(region: item.selectedPackID)
+            )
+            let matches = try await service.identify(request: request, processedPhoto: nil)
+            let rank = matches.firstIndex { item.acceptedSpeciesIDs.contains($0.species.id) }.map { $0 + 1 }
+            measurements.append((item.id, rank))
+
+            if item.expectsNoMatch {
+                XCTAssertTrue(matches.isEmpty, "\(item.id) unexpectedly returned \(matches.map(\.species.commonName))")
+            } else if rank == nil || rank! > item.maximumAcceptableRank! {
+                positiveFailures.append(item.id)
+            }
+
+            XCTAssertTrue(matches.allSatisfy { (0...1).contains($0.score) }, "\(item.id) returned confidence outside 0...1")
+            print("PACIFIC_DESCRIPTION_CASE engine=\(engineName) id=\(item.id) expected=\(item.expectedSpeciesIDs) maxRank=\(String(describing: item.maximumAcceptableRank)) measuredRank=\(String(describing: rank)) returned=\(matches.map { $0.species.id })")
+        }
+
+        if !positiveFailures.isEmpty { throw PositiveEvaluationFailure(caseIDs: positiveFailures) }
+        return measurements
     }
 
     func testGeneratedPackPreservesTraceabilityAndHasNoLicensedArtworkClaims() throws {
@@ -89,20 +175,35 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         }
     }
 
-    func testActualIdentificationServiceDisplaysExpandedPackResults() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource)
-        let service = LocalMarineLifeIdentificationService(catalogRepository: repository)
-        let descriptions = [
-            "pale reef fish with a black oval near the dorsal fin and yellow fins",
-            "small silver schooling fish with one dark stripe",
-            "a fish near coral",
-            "freshwater frog sitting on a lily pad"
-        ]
-        for description in descriptions {
-            let request = IdentificationRequest(source: .description(description), context: .init(region: .tropicalPacific))
-            let displayed = try await service.identify(request: request, processedPhoto: nil)
-            print("Tropical Pacific displayed results for \(description): top1=\(displayed.prefix(1).map(\.species.commonName)); top3=\(displayed.prefix(3).map(\.species.commonName)); top10=\(displayed.prefix(10).map(\.species.commonName))")
-            if description.contains("frog") { XCTAssertTrue(displayed.isEmpty) }
+    func testVersionedDiverDescriptionsThroughProductionIdentificationService() async throws {
+        let cases = try diverDescriptions()
+        XCTAssertEqual(cases.count, 7)
+        XCTAssertEqual(Set(cases.map(\.id)).count, cases.count)
+        XCTAssertTrue(cases.allSatisfy { $0.selectedPackID == .tropicalPacific })
+        XCTAssertTrue(cases.allSatisfy { !$0.rationale.isEmpty && !$0.sources.isEmpty })
+        XCTAssertTrue(cases.contains { $0.description.lowercased().contains("fish") })
+        XCTAssertTrue(cases.contains { $0.id == "pacific-v1-frog-no-match" && $0.expectsNoMatch })
+        XCTAssertTrue(cases.filter { !$0.expectsNoMatch }.allSatisfy { $0.maximumAcceptableRank != nil })
+
+        _ = try await evaluate(
+            cases,
+            searchEngine: HybridDescriptionSearchEngine(),
+            engineName: "production-bm25-plus-biological-ranking"
+        )
+    }
+
+    func testPositiveEvaluatorRejectsAnEngineThatAlwaysReturnsEmptyResults() async throws {
+        let positiveCases = try diverDescriptions().filter { !$0.expectsNoMatch }
+        XCTAssertFalse(positiveCases.isEmpty)
+        do {
+            _ = try await evaluate(
+                positiveCases,
+                searchEngine: EmptyDescriptionSearchEngine(),
+                engineName: "controlled-always-empty"
+            )
+            XCTFail("The positive-case evaluator accepted an engine that returned no results")
+        } catch let failure as PositiveEvaluationFailure {
+            XCTAssertEqual(Set(failure.caseIDs), Set(positiveCases.map(\.id)))
         }
     }
 }

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "pacific-v1-ribbontail-ray",
+    "description": "Small yellow-brown ray covered in vivid blue spots, with a flattened ribbon-like tail resting on sand.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["50020f47-9605-5ed9-bb79-7a2e43db22b9"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 3,
+    "rationale": "The blue spots and broad, ribbon-like tail distinguish Taeniura lymma from other rays.",
+    "sources": [
+      "Australian Museum, Bluespotted Fantail Ray, Taeniura lymma: https://australian.museum/learn/animals/fishes/bluespotted-fantail-ray-taeniura-lymma/"
+    ]
+  },
+  {
+    "id": "pacific-v1-dragon-moray",
+    "description": "A red-orange moray with white spots and long tube-like nostrils sticking out from its snout.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["042f8722-88e3-5fc2-8f26-66d00b546730"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 3,
+    "rationale": "The spotted red-orange pattern and conspicuous tubular nostrils are characteristic of Enchelycore pardalis.",
+    "sources": [
+      "Waikiki Aquarium, Dragon Moray Eel: https://www.waikikiaquarium.org/experience/animal-guide/fishes/eels/dragon-moray-eel/"
+    ]
+  },
+  {
+    "id": "pacific-v1-fire-dartfish",
+    "description": "Slender pale fish shading to orange-red at the tail, hovering above a burrow and darting inside when approached.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["7a662be3-854f-5819-8d32-cb8b1f19a00b"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 5,
+    "rationale": "Nemateleotris magnifica has a pale forebody, red-orange rear, and retreats rapidly to a burrow when threatened.",
+    "sources": [
+      "Fishes of Australia, Fire Dartfish, Nemateleotris magnifica: https://fishesofaustralia.net.au/home/species/1852"
+    ]
+  },
+  {
+    "id": "pacific-v1-cockatoo-waspfish",
+    "description": "Leaf-shaped brown fish with a tall sail-like dorsal fin, rocking back and forth among debris on the bottom.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["5f4d48f4-6556-50f3-95af-a4d28635f4bb"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 5,
+    "rationale": "Ablabys taenianotus resembles a dead leaf, has a high dorsal fin, and sways with water movement.",
+    "sources": [
+      "Fishes of Australia, Cockatoo Waspfish, Ablabys taenianotus: https://fishesofaustralia.net.au/home/species/2118"
+    ]
+  },
+  {
+    "id": "pacific-v1-blackspotted-puffer-short",
+    "description": "Pale puffer covered with black spots.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["3994805f-494f-5c71-9f2f-7105615c6a27"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 10,
+    "rationale": "The short account retains the diagnostic dark spotting and puffer body group for Arothron nigropunctatus.",
+    "sources": [
+      "Fishes of Australia, Blackspotted Pufferfish, Arothron nigropunctatus: https://fishesofaustralia.net.au/home/species/850"
+    ]
+  },
+  {
+    "id": "pacific-v1-bluespotted-ray-short",
+    "description": "Ray with brilliant blue spots and a striped blue tail.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": ["50020f47-9605-5ed9-bb79-7a2e43db22b9"],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": 5,
+    "rationale": "Even in a short description, blue disc spots together with blue tail markings support Taeniura lymma.",
+    "sources": [
+      "Australian Museum, Bluespotted Fantail Ray, Taeniura lymma: https://australian.museum/learn/animals/fishes/bluespotted-fantail-ray-taeniura-lymma/"
+    ]
+  },
+  {
+    "id": "pacific-v1-frog-no-match",
+    "description": "Freshwater frog sitting on a lily pad.",
+    "selectedPackID": "tropical-pacific",
+    "expectedSpeciesIDs": [],
+    "acceptableSpeciesIDs": [],
+    "maximumAcceptableRank": null,
+    "rationale": "A freshwater amphibian is outside the marine Tropical Pacific identification pack.",
+    "sources": [
+      "Catalogue scope assertion; no biological species identity is expected."
+    ]
+  }
+]
