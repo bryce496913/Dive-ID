@@ -185,7 +185,7 @@ struct LocalSpeciesRanker: SpeciesRanking {
         regionResolver.compatibility(observedRegions: observedRegions, supportedRegions: supportedRegions)
     }
 
-    private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .occasional, .seasonal: 0; case .rare: -3 } }
+    private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .unknown, .occasional, .seasonal: 0; case .rare: -3 } }
 
     private static func informationLevel(_ observation: ParsedObservation) -> ObservationInformationLevel {
         // Each boolean is an independent semantic clue group. Expanded synonyms stay

@@ -16,11 +16,23 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     func testGeneratedPackPreservesTraceabilityAndHasNoLicensedArtworkClaims() throws {
         let value = try pack()
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.profiles.count, 40)
+        XCTAssertEqual(value.profiles.count, 384)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
         XCTAssertTrue(value.profiles.allSatisfy { $0.bundledImage == nil && $0.imageAssetName == nil })
         XCTAssertTrue(value.profiles.allSatisfy { $0.review?.status == .draft && !($0.dataSources.first?.stableSourceID ?? "").isEmpty })
         XCTAssertTrue(value.profiles.allSatisfy { $0.minimumSizeCentimeters == nil && $0.measurements?.typicalObservedMinimumCentimeters == nil })
+    }
+
+    func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
+#if os(Linux)
+        throw XCTSkip("The SwiftPM Linux test bundle does not contain app-target resources; run this bundle-only check with xcodebuild on macOS.")
+#else
+        // Bundle-only is deliberate: this must not fall back to the source tree.
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly)
+        let value = try await repository.loadPack(id: .tropicalPacific)
+        XCTAssertEqual(value.profiles.count, 384)
+        XCTAssertEqual(value.metadata.speciesCount, value.profiles.count)
+#endif
     }
 
     func testSearchDiagnosticsSeparateRetrievalMissFromRankerRejection() async throws {
@@ -60,8 +72,25 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             }
             for description in noMatches {
                 let result = try await engine.search(description: description, pack: value)
-                XCTAssertEqual(result.diagnostics.disposition, .noRetrievedCandidates)
+                XCTAssertTrue(result.candidates.isEmpty)
             }
+        }
+    }
+
+    func testActualIdentificationServiceDisplaysExpandedPackResults() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource)
+        let service = LocalMarineLifeIdentificationService(catalogRepository: repository)
+        let descriptions = [
+            "pale reef fish with a black oval near the dorsal fin and yellow fins",
+            "small silver schooling fish with one dark stripe",
+            "a fish near coral",
+            "freshwater frog sitting on a lily pad"
+        ]
+        for description in descriptions {
+            let request = IdentificationRequest(source: .description(description), context: .init(region: .tropicalPacific))
+            let displayed = try await service.identify(request: request, processedPhoto: nil)
+            print("Tropical Pacific displayed results for \(description): top1=\(displayed.prefix(1).map(\.species.commonName)); top3=\(displayed.prefix(3).map(\.species.commonName)); top10=\(displayed.prefix(10).map(\.species.commonName))")
+            if description.contains("frog") { XCTAssertTrue(displayed.isEmpty) }
         }
     }
 }

@@ -1,89 +1,116 @@
 #!/usr/bin/env python3
-"""Repeatably build the reviewed Tropical Pacific starter pack from the source workbook.
+"""Deterministically account for every Tropical Pacific workbook creature.
 
-Requires Python 3 and openpyxl (`python -m pip install -r Tools/CatalogImport/requirements.txt`).
-The importer never copies Media rows: workbook photographs are reference-only and unlicensed.
+Only rows meeting the documented, conservative inclusion policy enter the app pack.
+Everything else remains visible in the outcome and review reports. Workbook media is
+never read because it is reference-only and is not licensed for the application.
 """
 from __future__ import annotations
+
 import argparse, csv, json, re
-from collections import defaultdict
-from datetime import datetime, timezone
+from collections import Counter, defaultdict
 from pathlib import Path
 from openpyxl import load_workbook
 
-PACK_SIZE = 40
+BASELINE_SIZE = 40
+BATCH_SIZE = 100
 COLORS = {'black','blue','brown','gray','green','olive','orange','red','silver','white','yellow'}
 MARKINGS = {'barbels','beak','eye stripe','fin edge','patches','saddles','shell','spines','spots','stripes','tail','teeth'}
 HABITATS = {'anemone','deep','lagoon','mangrove','open water','reef','rubble','sand','seagrass','shallow','surface','wall','wreck'}
 BEHAVIORS = {'burrowing','cleaning','feeding','grazing','hiding','hovering','resting','schooling','solitary','swimming'}
 
 def rows(sheet):
-    it=sheet.iter_rows(values_only=True); header=[str(x) for x in next(it)]
-    return [dict(zip(header,r)) for r in it if any(x is not None for x in r)]
-def terms(text, vocabulary):
-    low=text.lower(); out=[]
-    for v in sorted(vocabulary):
-        variants={v, v.rstrip('s'), v+'s'}
-        if any(re.search(r'(?<![a-z])'+re.escape(x)+r'(?![a-z])',low) for x in variants): out.append(v)
-    return out
+    iterator=sheet.iter_rows(values_only=True); header=[str(value) for value in next(iterator)]
+    return [dict(zip(header,row)) for row in iterator if any(value is not None for value in row)]
 def clean(value): return re.sub(r'\s+',' ',str(value or '')).strip()
+def number(value): return float(value) if value is not None and clean(value) else None
+def terms(text, vocabulary):
+    low=text.lower()
+    return [value for value in sorted(vocabulary) if any(re.search(r'(?<![a-z])'+re.escape(candidate)+r'(?![a-z])',low) for candidate in {value,value.rstrip('s'),value+'s'})]
 def iso_date(value):
     if value is None: return None
-    if hasattr(value,'isoformat'):
-        result=value.isoformat().replace('+00:00','Z')
-        return result + 'T00:00:00Z' if len(result) == 10 else (result if result.endswith('Z') else result + 'Z')
-    result=str(value)
-    return result + 'T00:00:00Z' if re.fullmatch(r'\d{4}-\d{2}-\d{2}', result) else result
+    result=value.isoformat() if hasattr(value,'isoformat') else str(value)
+    return result+'T00:00:00Z' if re.fullmatch(r'\d{4}-\d{2}-\d{2}',result) else result.replace('+00:00','Z')
+def normalized(value): return clean(value).casefold()
+
+def review_reasons(creature, source_traits, source):
+    reasons=[]
+    if clean(creature.get('occurrence_status'))!='presence_supported': reasons.append('regional presence is not source-supported')
+    if clean(creature.get('identity_confidence'))!='high' or number(creature.get('identity_confidence_score')) != 100: reasons.append('identity confidence is below the inclusion threshold')
+    if clean(creature.get('text_transcription_confidence'))!='high': reasons.append('account transcription confidence is not high')
+    if not clean(creature.get('common_name')) or not clean(creature.get('scientific_name_printed')): reasons.append('printed identity is incomplete')
+    if not source_traits: reasons.append('no identification description')
+    elif not any(clean(trait.get('transcription_confidence'))=='high' for trait in source_traits): reasons.append('identification descriptions are not high-confidence transcriptions')
+    if source is None: reasons.append('species-account source locator is missing')
+    elif not clean(source.get('source_id')) or not clean(source.get('source_locator')): reasons.append('species-account source ID or locator is missing')
+    return reasons
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--workbook',default='DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx'); ap.add_argument('--output',default='DiveID/Resources/IdentificationPacks/TropicalPacific'); ap.add_argument('--report',default='Reports/TropicalPacificImportReport.json'); ap.add_argument('--exclusions',default='Reports/TropicalPacificExclusions.csv'); a=ap.parse_args()
-    wb=load_workbook(a.workbook,data_only=True,read_only=True)
-    creatures=rows(wb['Creatures']); traits=defaultdict(list); sources={};
-    for x in rows(wb['Traits']): traits[x['creature_id']].append(x)
-    for x in rows(wb['Sources']):
-        if x['creature_id']: sources[x['creature_id']]=x
-    eligible=[]; excluded=[]
-    for c in creatures:
-        reasons=[]; cid=clean(c['creature_id']); ts=[t for t in traits[cid] if clean(t['trait_type']) in ('identification_description','variation_description')]
-        if clean(c['occurrence_status'])!='presence_supported': reasons.append('regional occurrence is not source-supported')
-        if clean(c['identity_confidence'])!='high' or float(c['identity_confidence_score'] or 0)<100: reasons.append('identity confidence is below the starter-pack threshold')
-        if clean(c['text_transcription_confidence'])!='high': reasons.append('account transcription confidence is not high')
-        if not clean(c['common_name']) or not clean(c['scientific_name_printed']): reasons.append('identity is incomplete')
-        if not ts: reasons.append('no identification trait transcription')
-        elif not any(clean(t['transcription_confidence'])=='high' for t in ts): reasons.append('identification traits are not high-confidence transcriptions')
-        if cid not in sources: reasons.append('species-account provenance is missing')
-        if reasons: excluded.append((cid,clean(c['common_name']),'; '.join(reasons)))
-        else: eligible.append(c)
-    # Stable, broad initial sample: source page then UUID. No subjective quality ranking.
-    selected=sorted(eligible,key=lambda c:(int(c['source_book_page'] or 99999),clean(c['creature_id'])))[:PACK_SIZE]
-    selected_ids={c['creature_id'] for c in selected}
-    for c in eligible:
-        if c['creature_id'] not in selected_ids: excluded.append((c['creature_id'],clean(c['common_name']),'eligible but outside the deterministic 40-record starter-pack limit'))
-    profiles=[]
-    for c in selected:
-        cid=c['creature_id']; s=sources[cid]
-        source_traits=[clean(t['value']) for t in traits[cid] if clean(t['value']) and clean(t['transcription_confidence'])=='high']
-        trait=' '.join(source_traits); family=clean(c['family_printed_raw'])
-        profile={'id':cid,'commonName':clean(c['common_name']),'scientificName':clean(c['scientific_name_printed']),'aliases':[],
-          'categories':['fish'],'colors':terms(trait,COLORS),'markings':terms(trait,MARKINGS),'bodyShapes':[],
-          'habitats':terms(trait,HABITATS),'regions':['indo-pacific','pacific'],'behaviors':terms(trait,BEHAVIORS),'keywords':[],
-          'minimumSizeCentimeters':None,'maximumSizeCentimeters':c['max_size_cm'],'minimumDepthMeters':c['depth_min_m'],'maximumDepthMeters':c['depth_max_m'],
-          'summary':source_traits[0],'distinguishingFeatures':source_traits,'typicalHabitat':'','geographicRange':clean(c['range_detail_raw']),
-          'cautions':[],'imageAssetName':None,'regionalOccurrence':'regular','regionalOccurrenceNotes':clean(c['occurrence_basis']),'subregions':[],
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--workbook',default='DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx')
+    parser.add_argument('--output',default='DiveID/Resources/IdentificationPacks/TropicalPacific')
+    parser.add_argument('--report',default='Reports/TropicalPacificImportReport.json')
+    parser.add_argument('--outcomes',default='Reports/TropicalPacificOutcomes.csv')
+    parser.add_argument('--review-queue',default='Reports/TropicalPacificReviewQueue.csv')
+    args=parser.parse_args()
+    workbook=load_workbook(args.workbook,data_only=True,read_only=True)
+    creatures=rows(workbook['Creatures']); traits=defaultdict(list); sources={}
+    for trait in rows(workbook['Traits']): traits[clean(trait.get('creature_id'))].append(trait)
+    for source in rows(workbook['Sources']):
+        creature_id=clean(source.get('creature_id'))
+        if creature_id and creature_id not in sources: sources[creature_id]=source
+
+    assessed=[]
+    for index, creature in enumerate(creatures,1):
+        creature_id=clean(creature.get('creature_id'))
+        descriptions=[trait for trait in traits[creature_id] if clean(trait.get('trait_type')) in ('identification_description','variation_description')]
+        assessed.append((index,creature,descriptions,sources.get(creature_id),review_reasons(creature,descriptions,sources.get(creature_id))))
+    candidates=[item for item in assessed if not item[4]]
+    common_counts=Counter(normalized(item[1].get('common_name')) for item in candidates)
+    scientific_counts=Counter(normalized(item[1].get('scientific_name_printed')) for item in candidates)
+    for item in candidates:
+        if common_counts[normalized(item[1].get('common_name'))]>1: item[4].append('common name duplicates another otherwise eligible row')
+        if scientific_counts[normalized(item[1].get('scientific_name_printed'))]>1: item[4].append('printed scientific name duplicates another otherwise eligible row')
+
+    eligible=sorted((item for item in assessed if not item[4]),key=lambda item:(int(item[1].get('source_book_page') or 99999),clean(item[1].get('creature_id'))))
+    baseline_ids=[clean(item[1].get('creature_id')) for item in eligible[:BASELINE_SIZE]]
+    profiles=[]; outcomes=[]
+    for index, creature, descriptions, source, reasons in assessed:
+        creature_id=clean(creature.get('creature_id'))
+        if not creature_id or not re.fullmatch(r'[0-9a-fA-F-]{36}',creature_id):
+            outcome='excluded'; reasons=['missing or malformed creature_id']+reasons
+        elif reasons: outcome='pending_review'
+        else: outcome='included'
+        evidence=' | '.join(clean(trait.get('value')) for trait in descriptions if clean(trait.get('value')))
+        outcomes.append({'workbook_row':index+1,'creature_id':creature_id,'common_name':clean(creature.get('common_name')),'scientific_name_printed':clean(creature.get('scientific_name_printed')),'outcome':outcome,'reasons':'; '.join(dict.fromkeys(reasons)),'workbook_human_review_required':clean(creature.get('human_review_required')),'source_id':clean(creature.get('source_id')),'source_book_page':clean(creature.get('source_book_page')),'source_pdf_page':clean(creature.get('source_pdf_page')),'source_tile':clean(creature.get('source_tile')),'identity_confidence':clean(creature.get('identity_confidence')),'identity_confidence_score':clean(creature.get('identity_confidence_score')),'text_transcription_confidence':clean(creature.get('text_transcription_confidence')),'source_title_common_ocr':clean(creature.get('source_title_common_ocr')),'source_title_scientific_ocr':clean(creature.get('source_title_scientific_ocr')),'identification_evidence':evidence})
+        if outcome!='included': continue
+        high_traits=[clean(trait.get('value')) for trait in descriptions if clean(trait.get('value')) and clean(trait.get('transcription_confidence'))=='high']
+        trait_text=' '.join(high_traits); max_size=number(creature.get('max_size_cm')); category=normalized(creature.get('category'))
+        profiles.append({'id':creature_id,'commonName':clean(creature.get('common_name')),'scientificName':clean(creature.get('scientific_name_printed')),'aliases':[],
+          'categories':['fish'] if category in ('fish','fishes') else [],'colors':terms(trait_text,COLORS),'markings':terms(trait_text,MARKINGS),'bodyShapes':[],
+          'habitats':terms(trait_text,HABITATS),'regions':[],'behaviors':terms(trait_text,BEHAVIORS),'keywords':[],
+          'minimumSizeCentimeters':None,'maximumSizeCentimeters':max_size,'minimumDepthMeters':number(creature.get('depth_min_m')),'maximumDepthMeters':number(creature.get('depth_max_m')),
+          'summary':high_traits[0],'distinguishingFeatures':high_traits,'typicalHabitat':'','geographicRange':clean(creature.get('range_detail_raw')),
+          'cautions':[],'imageAssetName':None,'regionalOccurrence':'unknown','regionalOccurrenceNotes':clean(creature.get('occurrence_basis')) or None,'subregions':[],
           'appearanceVariants':[],'similarSpecies':[],'bundledImage':None,
-          'dataSources':[{'stableSourceID':clean(s['source_id']),'sourceName':clean(s['citation']),'sourceURL':clean(s['species_specific_url']),'citationReference':clean(s['source_locator']),'reviewedFields':[x.strip() for x in clean(s['supported_fields']).split(';') if x.strip()],'accessedDate':iso_date(s['accessed_date']),'sourceLicense':clean(s['licence'])}],
-          'review':{'status':'draft','reviewerNotes':'Imported from high-confidence workbook transcription; external taxonomy and independent source review remain required.','reviewDate':None,'verifiedBy':None},
-          'taxonomy':{'wormsAphiaID':c['aphia_id'],'scientificNameAuthority':None,'taxonomicClass':None,'order':None,'family':family or None,'genus':clean(c['scientific_name_printed']).split()[0],'acceptedScientificName':clean(c['scientific_name_printed']),'sourceScientificName':clean(c['scientific_name_printed'])},
-          'measurements':{'typicalObservedMinimumCentimeters':None,'typicalObservedMaximumCentimeters':None,'maximumRecordedCentimeters':c['max_size_cm'],'type':'totalLength'},
-          'tailShape':None,'mouthAndHeadShape':[],'finAndSpineClues':[]}
-        profiles.append(profile)
-    out=Path(a.output); out.mkdir(parents=True,exist_ok=True)
-    (out/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n')
-    manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':1,'displayName':'Tropical Pacific','shortDescription':'A source-traceable offline Tropical Pacific starter catalogue','geographicScope':'Tropical Indo-Pacific reef-fish accounts whose workbook occurrence is supported by the cited book distribution statement.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None}
-    (out/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-    report={'workbook':a.workbook,'selectionPolicy':{'packSize':PACK_SIZE,'rules':['presence_supported occurrence','high identity confidence with score 100','high text transcription confidence','high-confidence identification trait','species-account provenance']},'selectedCount':len(profiles),'excludedCount':len(excluded),'selectedIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'All workbook media is reference_only_not_licensed_for_app and is not imported.','unsupportedFieldsPolicy':'Unsupported values remain null, empty strings, or empty arrays; no taxonomy, typical size, image, alias, caution, or comparison is inferred.'}
-    Path(a.report).write_text(json.dumps(report,indent=2)+'\n')
-    with Path(a.exclusions).open('w',newline='') as f:
-        w=csv.writer(f); w.writerow(['creature_id','common_name','exclusion_reason']); w.writerows(sorted(excluded))
-    print(f"wrote {len(profiles)} records; reported {len(excluded)} exclusions")
+          'dataSources':[{'stableSourceID':clean(source.get('source_id')),'sourceName':clean(source.get('citation')),'sourceURL':clean(source.get('species_specific_url')),'citationReference':clean(source.get('source_locator')),'reviewedFields':[field.strip() for field in clean(source.get('supported_fields')).split(';') if field.strip()],'accessedDate':iso_date(source.get('accessed_date')),'sourceLicense':clean(source.get('licence')) or None}],
+          'review':{'status':'draft','reviewerNotes':'Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.','reviewDate':None,'verifiedBy':None},
+          'taxonomy':None,'measurements':None,'tailShape':None,'mouthAndHeadShape':[],'finAndSpineClues':[]})
+
+    profiles.sort(key=lambda profile:(profile['commonName'].casefold(),profile['id']))
+    output=Path(args.output); output.mkdir(parents=True,exist_ok=True)
+    (output/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':2,'displayName':'Tropical Pacific','shortDescription':'Source-traceable draft Tropical Pacific catalogue','geographicScope':'Workbook accounts with source-supported Tropical Pacific presence; presence does not assert abundance.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None}
+    (output/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+    fields=list(outcomes[0]); Path(args.outcomes).parent.mkdir(parents=True,exist_ok=True)
+    with Path(args.outcomes).open('w',newline='',encoding='utf-8') as handle:
+        writer=csv.DictWriter(handle,fieldnames=fields); writer.writeheader(); writer.writerows(outcomes)
+    # Included rows remain draft and are also queued when the workbook asks for review.
+    pending=[row for row in outcomes if row['outcome']=='pending_review' or row['workbook_human_review_required'].lower() in ('true','1','yes')]
+    with Path(args.review_queue).open('w',newline='',encoding='utf-8') as handle:
+        writer=csv.DictWriter(handle,fieldnames=fields); writer.writeheader(); writer.writerows(pending)
+    counts=Counter(row['outcome'] for row in outcomes)
+    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
+    Path(args.report).write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    print(f"processed {len(creatures)} rows: bundled {counts['included']}, pending {counts['pending_review']}, excluded {counts['excluded']}")
 if __name__=='__main__': main()
