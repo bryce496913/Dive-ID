@@ -325,7 +325,7 @@ actor CoreMLSemanticEmbeddingProvider: SemanticEmbeddingProviding {
         ]
         if let name = contract.tokenTypeIDsFeature { features[name] = MLFeatureValue(multiArray: types) }
         let input = try MLDictionaryFeatureProvider(dictionary: features)
-        let output = try model.prediction(from: input)
+        let output = try await model.prediction(from: input)
         try Task.checkCancellation()
         guard let array = output.featureValue(for: contract.outputFeature)?.multiArrayValue else {
             throw SemanticArtifactDiagnostic.modelOutputMissing(contract.outputFeature)
