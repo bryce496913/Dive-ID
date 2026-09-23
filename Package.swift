@@ -10,7 +10,7 @@ let package = Package(
             name: "DiveID",
             path: "DiveID",
             exclude: [
-                "App", "Features", "Resources", "Core/Components", "Core/Theme",
+                "App", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
                 "Core/Services/SavedSpeciesRepository.swift",
@@ -42,7 +42,8 @@ let package = Package(
                 "Core/Services/MarineSpeciesCatalogRepository.swift",
                 "Core/Services/MockSpecies.swift",
                 "Core/Services/RegionCompatibilityResolver.swift"
-            ]
+            ],
+            resources: [.copy("Resources/IdentificationPacks")]
         ),
         .testTarget(
             name: "IdentificationBenchmarkTests",

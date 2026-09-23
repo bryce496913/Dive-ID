@@ -1,11 +1,12 @@
 import Foundation
+@testable import DiveID
 
 enum TestResources {
-    /// Production resources belong to the hosted app in Xcode. SwiftPM's core target
-    /// intentionally has no resources and uses the repository checkout fallback.
+    /// Production resources belong to the hosted app in Xcode and to the library's
+    /// explicitly declared resource bundle in SwiftPM.
     static var productionBundle: Bundle {
 #if SWIFT_PACKAGE
-        Bundle(for: BundleToken.self)
+        BundleMarineSpeciesCatalogRepository.swiftPackageResourceBundle
 #else
         .main
 #endif

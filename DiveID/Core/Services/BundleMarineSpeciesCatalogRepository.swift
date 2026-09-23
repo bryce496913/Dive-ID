@@ -4,6 +4,12 @@ import ImageIO
 #endif
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
+#if SWIFT_PACKAGE
+    /// The explicit SwiftPM resource bundle. Portable tests must not use
+    /// `Bundle.main`, which is the `swift-test` runner on macOS and Linux.
+    nonisolated static var swiftPackageResourceBundle: Bundle { .module }
+#endif
+
     enum ResourceResolutionMode: Sendable {
         case bundleOnly
         case bundleThenDevelopmentSource
