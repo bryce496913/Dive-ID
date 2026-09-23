@@ -19,6 +19,42 @@ MARKINGS = {'barbels','beak','eye stripe','fin edge','patches','saddles','shell'
 HABITATS = {'anemone','deep','lagoon','mangrove','open water','reef','rubble','sand','seagrass','shallow','surface','wall','wreck'}
 BEHAVIORS = {'burrowing','cleaning','feeding','grazing','hiding','hovering','resting','schooling','solitary','swimming'}
 
+# Workbook group names are source classifications, not app vocabulary.  Keep this
+# allow-list explicit: suffix matching would incorrectly classify jellyfish,
+# cuttlefish, starfish, and any future OCR corruption as fish.
+FISH_GROUPS = {
+    'Anemonefishes', 'Angelfishes', 'Anthias', 'Barracudas', 'Batfishes',
+    'Bigeyes', 'Blennies', 'Boxfishes', 'Brotulas', 'Butterflyfishes',
+    'Cardinalfishes', 'Chubs', 'Coral Breams', 'Cornetfishes', 'Damselfishes',
+    'Dartfishes', 'Devilfishes', 'Diamondfishes', 'Dolphinfishes', 'Dottybacks',
+    'Dragonets', 'Eel-tailed Catfishes', 'Emperors', 'Filefishes', 'Fish',
+    'Fishes', 'Flagtails', 'Flashlightfishes', 'Flatheads', 'Flounders',
+    'Frogfishes', 'Fusiliers', 'Goatfishes', 'Gobies', 'Groupers', 'Grunters',
+    'Gurnards', 'Hawkfishes', 'Jawfishes', 'Jacks', 'Lionfishes',
+    'Lizardfishes', 'Milkfish', 'Mojarras', 'Moorish Idol', 'Mullets',
+    'Needlefishes', 'Parrotfishes', 'Pearl Fishes', 'Pearl Perches',
+    'Pineconefishes', 'Pipefishes', 'Ponyfishes', 'Porcupinefishes', 'Puffers',
+    'Rabbitfishes', 'Sand Divers', 'Sandperches', 'Scorpionfishes',
+    'Scorpionfishes/Lionfishes', 'Sea Basses/Anthias', 'Sea Moths',
+    'Seabasses/Basslets', 'Shrimpfishes', 'Signalfishes', 'Silversides',
+    'Snappers', 'Snooks', 'Soapfishes', 'Soles', 'Spadefishes',
+    'Squirrelfishes', 'Stargazers', 'Stonefishes', 'Surgeonfishes',
+    'Sweetlips', 'Sweepers', 'Tarpons', 'Threadfins', 'Tilefishes',
+    'Triplefins', 'Trumpetfishes', 'Triggerfishes', 'Tunas & Mackerels',
+    'Waspfishes', 'Wormfishes', 'Wrasses',
+}
+EEL_GROUPS = {'Conger Eels', 'Garden Eels', 'Morays', 'Snake Eels'}
+SEAHORSE_GROUPS = {'Seahorses'}
+SHARK_GROUPS = {'Bamboo Sharks', 'Cat Sharks', 'Nurse Sharks', 'Requiem Sharks', 'Sharks', 'Whale Sharks', 'Wobbegongs'}
+RAY_GROUPS = {'Guitarfishes', 'Manta Rays', 'Mantas', 'Rays', 'Stingrays', 'Wedgefishes'}
+GROUP_CATEGORY_MAP = {
+    **{name.casefold(): 'fish' for name in FISH_GROUPS},
+    **{name.casefold(): 'eel' for name in EEL_GROUPS},
+    **{name.casefold(): 'seahorse' for name in SEAHORSE_GROUPS},
+    **{name.casefold(): 'shark' for name in SHARK_GROUPS},
+    **{name.casefold(): 'ray' for name in RAY_GROUPS},
+}
+
 def rows(sheet):
     iterator=sheet.iter_rows(values_only=True); header=[str(value) for value in next(iterator)]
     return [dict(zip(header,row)) for row in iterator if any(value is not None for value in row)]
@@ -32,6 +68,13 @@ def iso_date(value):
     result=value.isoformat() if hasattr(value,'isoformat') else str(value)
     return result+'T00:00:00Z' if re.fullmatch(r'\d{4}-\d{2}-\d{2}',result) else result.replace('+00:00','Z')
 def normalized(value): return clean(value).casefold()
+
+def canonical_category(value):
+    """Resolve an exact, normalized workbook group or return a review diagnostic."""
+    source=clean(value); canonical=GROUP_CATEGORY_MAP.get(source.casefold())
+    if canonical: return canonical, ''
+    if not source: return None, 'missing workbook category'
+    return None, f'unrecognized workbook category: {source}'
 
 def review_reasons(creature, source_traits, source):
     reasons=[]
@@ -82,12 +125,13 @@ def main():
         elif reasons: outcome='pending_review'
         else: outcome='included'
         evidence=' | '.join(clean(trait.get('value')) for trait in descriptions if clean(trait.get('value')))
-        outcomes.append({'workbook_row':index+1,'creature_id':creature_id,'common_name':clean(creature.get('common_name')),'scientific_name_printed':clean(creature.get('scientific_name_printed')),'outcome':outcome,'reasons':'; '.join(dict.fromkeys(reasons)),'workbook_human_review_required':clean(creature.get('human_review_required')),'source_id':clean(creature.get('source_id')),'source_book_page':clean(creature.get('source_book_page')),'source_pdf_page':clean(creature.get('source_pdf_page')),'source_tile':clean(creature.get('source_tile')),'identity_confidence':clean(creature.get('identity_confidence')),'identity_confidence_score':clean(creature.get('identity_confidence_score')),'text_transcription_confidence':clean(creature.get('text_transcription_confidence')),'source_title_common_ocr':clean(creature.get('source_title_common_ocr')),'source_title_scientific_ocr':clean(creature.get('source_title_scientific_ocr')),'identification_evidence':evidence})
+        source_category=clean(creature.get('category')); canonical, category_diagnostic=canonical_category(source_category)
+        outcomes.append({'workbook_row':index+1,'creature_id':creature_id,'common_name':clean(creature.get('common_name')),'scientific_name_printed':clean(creature.get('scientific_name_printed')),'outcome':outcome,'reasons':'; '.join(dict.fromkeys(reasons)),'workbook_human_review_required':clean(creature.get('human_review_required')),'source_id':clean(creature.get('source_id')),'source_book_page':clean(creature.get('source_book_page')),'source_pdf_page':clean(creature.get('source_pdf_page')),'source_tile':clean(creature.get('source_tile')),'source_category':source_category,'canonical_category':canonical or '','category_diagnostic':category_diagnostic,'identity_confidence':clean(creature.get('identity_confidence')),'identity_confidence_score':clean(creature.get('identity_confidence_score')),'text_transcription_confidence':clean(creature.get('text_transcription_confidence')),'source_title_common_ocr':clean(creature.get('source_title_common_ocr')),'source_title_scientific_ocr':clean(creature.get('source_title_scientific_ocr')),'identification_evidence':evidence})
         if outcome!='included': continue
         high_traits=[clean(trait.get('value')) for trait in descriptions if clean(trait.get('value')) and clean(trait.get('transcription_confidence'))=='high']
-        trait_text=' '.join(high_traits); max_size=number(creature.get('max_size_cm')); category=normalized(creature.get('category'))
+        trait_text=' '.join(high_traits); max_size=number(creature.get('max_size_cm'))
         profiles.append({'id':creature_id,'commonName':clean(creature.get('common_name')),'scientificName':clean(creature.get('scientific_name_printed')),'aliases':[],
-          'categories':['fish'] if category in ('fish','fishes') else [],'colors':terms(trait_text,COLORS),'markings':terms(trait_text,MARKINGS),'bodyShapes':[],
+          'categories':[canonical] if canonical else [],'colors':terms(trait_text,COLORS),'markings':terms(trait_text,MARKINGS),'bodyShapes':[],
           'habitats':terms(trait_text,HABITATS),'regions':[],'behaviors':terms(trait_text,BEHAVIORS),'keywords':[],
           'minimumSizeCentimeters':None,'maximumSizeCentimeters':max_size,'minimumDepthMeters':number(creature.get('depth_min_m')),'maximumDepthMeters':number(creature.get('depth_max_m')),
           'summary':high_traits[0],'distinguishingFeatures':high_traits,'typicalHabitat':'','geographicRange':clean(creature.get('range_detail_raw')),
@@ -104,13 +148,17 @@ def main():
     (output/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
     fields=list(outcomes[0]); Path(args.outcomes).parent.mkdir(parents=True,exist_ok=True)
     with Path(args.outcomes).open('w',newline='',encoding='utf-8') as handle:
-        writer=csv.DictWriter(handle,fieldnames=fields); writer.writeheader(); writer.writerows(outcomes)
+        writer=csv.DictWriter(handle,fieldnames=fields,lineterminator='\n'); writer.writeheader(); writer.writerows(outcomes)
     # Included rows remain draft and are also queued when the workbook asks for review.
     pending=[row for row in outcomes if row['outcome']=='pending_review' or row['workbook_human_review_required'].lower() in ('true','1','yes')]
     with Path(args.review_queue).open('w',newline='',encoding='utf-8') as handle:
-        writer=csv.DictWriter(handle,fieldnames=fields); writer.writeheader(); writer.writerows(pending)
+        writer=csv.DictWriter(handle,fieldnames=fields,lineterminator='\n'); writer.writeheader(); writer.writerows(pending)
     counts=Counter(row['outcome'] for row in outcomes)
-    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
+    source_category_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['outcome']=='included')
+    canonical_category_counts=Counter(row['canonical_category'] or '(unresolved)' for row in outcomes if row['outcome']=='included')
+    unresolved_category_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['category_diagnostic'])
+    included_unresolved_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['outcome']=='included' and row['category_diagnostic'])
+    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'categoryNormalization':{'method':'casefolded, collapsed-whitespace exact allow-list; no substring matching','mapping':dict(sorted((key,value) for key,value in GROUP_CATEGORY_MAP.items())),'includedSourceCategoryCounts':dict(sorted(source_category_counts.items())),'includedCanonicalCategoryCounts':dict(sorted(canonical_category_counts.items())),'includedUnresolvedCategoryCounts':dict(sorted(included_unresolved_counts.items())),'unresolvedWorkbookCategoryCounts':dict(sorted(unresolved_category_counts.items()))},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
     Path(args.report).write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(f"processed {len(creatures)} rows: bundled {counts['included']}, pending {counts['pending_review']}, excluded {counts['excluded']}")
 if __name__=='__main__': main()

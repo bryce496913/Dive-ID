@@ -23,6 +23,18 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertTrue(value.profiles.allSatisfy { $0.minimumSizeCentimeters == nil && $0.measurements?.typicalObservedMinimumCentimeters == nil })
     }
 
+    func testImportedFishCategoryReachesStructuredRankingEvidence() async throws {
+        let value = try pack()
+        let butterflyfish = try XCTUnwrap(value.profiles.first { $0.id == UUID(uuidString: "963e8b58-2834-5f5c-a668-af3ade719497") })
+        XCTAssertEqual(butterflyfish.categories, ["fish"])
+
+        let observation = await LocalObservationParser().parse("yellow fish on a reef")
+        let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: [butterflyfish])
+        let match = try XCTUnwrap(ranked.first)
+        XCTAssertTrue(match.matchedClues.contains("fish"))
+        XCTAssertGreaterThanOrEqual(match.rawScore, LocalRankingWeights().category)
+    }
+
     func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
 #if os(Linux)
         throw XCTSkip("The SwiftPM Linux test bundle does not contain app-target resources; run this bundle-only check with xcodebuild on macOS.")
