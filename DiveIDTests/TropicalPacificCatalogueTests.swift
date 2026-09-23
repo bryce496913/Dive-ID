@@ -121,17 +121,34 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(match.rawScore, LocalRankingWeights().category)
     }
 
-    func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
-#if os(Linux)
-        throw XCTSkip("The SwiftPM Linux test bundle does not contain app-target resources; run this bundle-only check with xcodebuild on macOS.")
-#else
-        // Bundle-only is deliberate: this must not fall back to the source tree.
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly)
+    func testProductionRepositoryLoadsTropicalPacificFromExplicitPortableBundle() async throws {
+        // Bundle-only is deliberate: SwiftPM must package the catalogue rather than
+        // allowing this portable assertion to pass through a checkout fallback.
+        let repository = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle,
+            resourceResolutionMode: .bundleOnly
+        )
         let value = try await repository.loadPack(id: .tropicalPacific)
+        XCTAssertEqual(value.metadata.id, .tropicalPacific)
+        XCTAssertEqual(value.metadata.packVersion, 2)
         XCTAssertEqual(value.profiles.count, 384)
         XCTAssertEqual(value.metadata.speciesCount, value.profiles.count)
-#endif
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
     }
+
+#if DIVEID_XCODE_HOSTED_TEST
+    func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
+        // This test exists only in the Xcode-hosted iOS test target. A missing app
+        // resource is a test failure, never a signal that the test is "not hosted".
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly)
+        let value = try await repository.loadPack(id: .tropicalPacific)
+        XCTAssertEqual(value.metadata.id, .tropicalPacific)
+        XCTAssertEqual(value.metadata.packVersion, 2)
+        XCTAssertEqual(value.metadata.speciesCount, 384)
+        XCTAssertEqual(value.profiles.count, value.metadata.speciesCount)
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
+    }
+#endif
 
     func testSearchDiagnosticsSeparateRetrievalMissFromRankerRejection() async throws {
         let value = try pack()

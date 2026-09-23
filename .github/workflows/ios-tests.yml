@@ -36,6 +36,9 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
 
+      - name: Run macOS SwiftPM tests
+        run: swift test
+
       - name: Resolve an iOS 18 simulator
         id: simulator
         shell: bash
@@ -87,6 +90,20 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             test-without-building \
             -only-testing:DiveIDTests
+
+      - name: Run hosted application-bundle packaging test explicitly
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath "$RUNNER_TEMP/DiveIDHostedPackagingTest.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            test-without-building \
+            -only-testing:DiveIDTests/TropicalPacificCatalogueTests/testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle
 
       - name: Run UI-test target
         id: ui_tests
