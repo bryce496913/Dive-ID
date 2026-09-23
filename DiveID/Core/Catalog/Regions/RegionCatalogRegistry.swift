@@ -1,5 +1,5 @@
 struct RegionCatalogRegistry: Sendable {
-    static let bundled = Self(definitions: [CaribbeanRegion.definition])
+    static let bundled = Self(definitions: [CaribbeanRegion.definition, TropicalPacificRegion.definition])
     let definitions: [RegionCatalogDefinition]
 
     func definition(for id: OfflineIdentificationPackID) -> RegionCatalogDefinition? {

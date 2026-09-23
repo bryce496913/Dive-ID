@@ -6,6 +6,20 @@ protocol DescriptionSearching: Sendable {
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult
 }
 
+enum DescriptionSearchDisposition: String, Sendable, Equatable {
+    /// Retrieval found no catalogue documents. This does not contain or retain query text.
+    case noRetrievedCandidates
+    /// Retrieval found documents, but the biological ranker rejected every candidate.
+    case allCandidatesRejectedByRanker
+    case rankedCandidates
+}
+
+struct DescriptionSearchDiagnostics: Sendable, Equatable {
+    let disposition: DescriptionSearchDisposition
+    let retrievedCandidateCount: Int
+    let rankedCandidateCount: Int
+}
+
 struct DescriptionSearchResult: Sendable {
     let candidates: [DescriptionSearchCandidate]
     let queryAnalysis: DescriptionQueryAnalysis
@@ -13,6 +27,13 @@ struct DescriptionSearchResult: Sendable {
     /// the complete pack, which makes candidate recall comparable across engines.
     let retrievedSpeciesIDs: [UUID]
     let retrievalLimit: Int
+    var diagnostics: DescriptionSearchDiagnostics {
+        .init(
+            disposition: retrievedSpeciesIDs.isEmpty ? .noRetrievedCandidates : (candidates.isEmpty ? .allCandidatesRejectedByRanker : .rankedCandidates),
+            retrievedCandidateCount: retrievedSpeciesIDs.count,
+            rankedCandidateCount: candidates.count
+        )
+    }
 }
 
 struct DescriptionQueryAnalysis: Sendable {
