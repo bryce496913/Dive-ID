@@ -36,7 +36,31 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
     var humanReviewedRecordCount: Int? = nil
     var publicationEligibleRecordCount: Int? = nil
 
-    var isExperimental: Bool { (publicationEligibleRecordCount ?? speciesCount) < speciesCount }
+    /// Missing accounting is deliberately treated as unapproved. A manifest is
+    /// never allowed to imply publication approval merely by omitting counts.
+    var isExperimental: Bool {
+        guard let includedRecordCount, let humanReviewedRecordCount,
+              let publicationEligibleRecordCount,
+              includedRecordCount == speciesCount,
+              humanReviewedRecordCount >= publicationEligibleRecordCount
+        else { return true }
+        return publicationEligibleRecordCount < speciesCount
+    }
+
+    var publicationStatusText: String {
+        guard let includedRecordCount, let humanReviewedRecordCount,
+              let publicationEligibleRecordCount,
+              includedRecordCount == speciesCount,
+              humanReviewedRecordCount >= publicationEligibleRecordCount
+        else { return "Review accounting unavailable — not approved for publication" }
+        if publicationEligibleRecordCount == 0 {
+            return "0 of \(includedRecordCount) records approved for publication"
+        }
+        if publicationEligibleRecordCount == includedRecordCount {
+            return "All \(includedRecordCount) records approved for publication"
+        }
+        return "\(publicationEligibleRecordCount) of \(includedRecordCount) records approved for publication"
+    }
 }
 
 struct OfflineIdentificationPack: Sendable, Hashable {

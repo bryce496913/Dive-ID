@@ -7,6 +7,7 @@
     "publicationEligible": 0,
     "reviewQueue": 1650
   },
+  "reviewDecisionOutcomes": [],
   "outcomeCounts": {
     "included": 384,
     "pendingReview": 1266,

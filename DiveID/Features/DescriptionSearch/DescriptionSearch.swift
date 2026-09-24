@@ -7,6 +7,8 @@ final class DescriptionSearchViewModel {
     var isCreatingSession = false
     var errorMessage: String?
     var pack: OfflineIdentificationPackMetadata?
+    var catalogueLoaded = false
+    var catalogueLoadFailed = false
     private let sessionStore: any IdentificationSessionStore
     private let catalog: any MarineSpeciesCatalogRepository
     private let regionRepository: any SelectedDiveRegionRepository
@@ -15,11 +17,20 @@ final class DescriptionSearchViewModel {
 
     func load() async {
         let selectedID = await regionRepository.selectedRegion()
-        pack = try? await catalog.availablePacks().first { $0.id == selectedID }
+        do {
+            let packs = try await catalog.availablePacks()
+            pack = packs.first { $0.id == selectedID }
+            catalogueLoaded = true
+            catalogueLoadFailed = false
+        } catch {
+            pack = nil
+            catalogueLoaded = false
+            catalogueLoadFailed = true
+        }
     }
 
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
-    var canSubmit: Bool { (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
+    var canSubmit: Bool { pack != nil && (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
 
     func submit() async -> UUID? {
         guard canSubmit else { return nil }
@@ -49,6 +60,8 @@ struct DescriptionSearchView: View {
                 Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
                     .foregroundStyle(Color.appTextSecondary)
                 if let pack = viewModel.pack { HStack { VStack(alignment: .leading) { Text("Dive region: \(pack.displayName)").font(.headline); Text("\(pack.speciesCount) species available offline") } ; Spacer(); Button("Change") { router.navigate(to: .offlineRegions) } }.padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }
+                else if viewModel.catalogueLoadFailed { ErrorStateView(message: "The offline identification catalogue could not be loaded.") }
+                else if viewModel.catalogueLoaded { EmptyStateView(title: "No reviewed catalogue available", message: "No human-reviewed identification catalogue is currently available for new searches. This is not a no-match result; no search was run.") }
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
                         Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")

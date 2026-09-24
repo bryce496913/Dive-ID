@@ -234,6 +234,52 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         await assertFailure(root: root, code: .countMismatch, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .validation)
     }
 
+    func testMissingPublicationAccountingFailsClosed() async throws {
+        let root = try temporaryRoot()
+        let directory = try copyProductionResources(to: root, includeImages: true)
+        let manifestURL = directory.appendingPathComponent("PackManifest.json")
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: manifestURL)) as? [String: Any])
+        object.removeValue(forKey: "includedRecordCount")
+        object.removeValue(forKey: "humanReviewedRecordCount")
+        object.removeValue(forKey: "publicationEligibleRecordCount")
+        try JSONSerialization.data(withJSONObject: object).write(to: manifestURL)
+        do {
+            _ = try await repository(root: root).loadPack(id: .caribbean)
+            XCTFail("Missing accounting must not imply approval")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .reviewAccountingInvalid)
+            XCTAssertEqual(failure.catalogError, .reviewAccountingInvalid)
+        }
+    }
+
+    func testPublicationAccessReturnsOnlySyntheticVerifiedFixture() async throws {
+        let root = try temporaryRoot()
+        let directory = try copyProductionResources(to: root, includeImages: true)
+        let speciesURL = directory.appendingPathComponent("Creatures.json")
+        var records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: speciesURL)) as? [[String: Any]])
+        records[0]["review"] = [
+            "status": "verified", "reviewerNotes": "Synthetic gate fixture only",
+            "reviewDate": "2026-09-24T00:00:00Z", "verifiedBy": "Synthetic test reviewer"
+        ]
+        try JSONSerialization.data(withJSONObject: records).write(to: speciesURL)
+        let manifestURL = directory.appendingPathComponent("PackManifest.json")
+        var manifest = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: manifestURL)) as? [String: Any])
+        manifest["humanReviewedRecordCount"] = 1
+        manifest["publicationEligibleRecordCount"] = 1
+        try JSONSerialization.data(withJSONObject: manifest).write(to: manifestURL)
+
+        let publicationRepository = BundleMarineSpeciesCatalogRepository(
+            bundle: Bundle(for: CatalogueDiagnosticsTests.self),
+            resourceResolutionMode: .bundleThenDevelopmentSource,
+            developmentSourceRoot: root,
+            access: .publication
+        )
+        let pack = try await publicationRepository.loadPack(id: .caribbean)
+        XCTAssertEqual(pack.profiles.count, 1)
+        XCTAssertEqual(pack.profiles.first?.review?.status, .verified)
+        XCTAssertEqual(pack.metadata.publicationEligibleRecordCount, 1)
+    }
+
     func testVocabularyErrorHasStableDiagnostic() async throws {
         let root = try temporaryRoot()
         let directory = try copyProductionResources(to: root)

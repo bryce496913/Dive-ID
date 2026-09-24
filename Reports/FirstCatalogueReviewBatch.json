@@ -1,0 +1,1042 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Human-review preparation only; no record in this packet is approved.",
+  "sourcePageAvailability": "The repository contains workbook transcriptions and page/tile locators, but not the original source PDF pages. Category corrections remain unresolved until a reviewer inspects those pages.",
+  "recordCounts": {
+    "caribbean": 8,
+    "tropicalPacificUnresolvedCategory": 7
+  },
+  "records": [
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000003"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Atlantic Blue Tang",
+        "scientificName": "Acanthurus coeruleus",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
+        "distinguishingFeatures": [
+          "Oval blue adult body",
+          "Small terminal mouth",
+          "Yellow juvenile or transitional blue-and-yellow phases",
+          "Sharp caudal peduncle spine"
+        ],
+        "typicalHabitat": "Coral reefs, rocky reefs, and nearby seagrass in shallow tropical western Atlantic water",
+        "geographicRange": "Western Atlantic, including Florida, the Bahamas, Gulf of Mexico, Caribbean Sea, Bermuda, and Brazil",
+        "minimumSizeCentimeters": 10,
+        "maximumSizeCentimeters": 39,
+        "minimumDepthMeters": 2,
+        "maximumDepthMeters": 40
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Oval blue adult body",
+          "Small terminal mouth",
+          "Yellow juvenile or transitional blue-and-yellow phases",
+          "Sharp caudal peduncle spine"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:736b22d961b6746321f758eafdf10214f8c37f5c85afd48a566fbbe51987eec8",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000003:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000005"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Stoplight Parrotfish",
+        "scientificName": "Sparisoma viride",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A robust grazing fish with color that varies by life phase.",
+        "distinguishingFeatures": [
+          "Beak-like dental plates",
+          "Angular forehead"
+        ],
+        "typicalHabitat": "Coral reefs and seagrass",
+        "geographicRange": "Western Atlantic",
+        "minimumSizeCentimeters": 30,
+        "maximumSizeCentimeters": 60,
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 50
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Beak-like dental plates",
+          "Angular forehead"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:31aaa4d6ceb8fca8383966454f84763cfa7d5e152fc855554448c81ceb7b0470",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000005:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000006"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Red Lionfish",
+        "scientificName": "Pterois volitans",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A striped fish with conspicuous fan-like fins and long fin rays.",
+        "distinguishingFeatures": [
+          "Red and white bands",
+          "Broad pectoral fins",
+          "Long venomous spines"
+        ],
+        "typicalHabitat": "Reefs and rocky areas",
+        "geographicRange": "Native Indo-Pacific",
+        "minimumSizeCentimeters": 20,
+        "maximumSizeCentimeters": 47,
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 55
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000006:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Pterois-volitans.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Red and white bands",
+          "Broad pectoral fins",
+          "Long venomous spines"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:e1ee82d27c40e8b7f42fd55dc915b7065e0f219e0f593581419b6d3e1154d970",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000006:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000008",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000008"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Great Barracuda",
+        "scientificName": "Sphyraena barracuda",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A long, streamlined predator often seen cruising near reefs.",
+        "distinguishingFeatures": [
+          "Elongated silver body",
+          "Large jaw",
+          "Dark body spots"
+        ],
+        "typicalHabitat": "Reefs, channels, and open coastal water",
+        "geographicRange": "Tropical and subtropical seas",
+        "minimumSizeCentimeters": 60,
+        "maximumSizeCentimeters": 200,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 100
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000008:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Sphyraena-barracuda.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Elongated silver body",
+          "Large jaw",
+          "Dark body spots"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:93dbcc49092ea5246a7b80f02c8db8fe697eab0c92a49734105e22dba3881561",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000008:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000009",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000009"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Green Sea Turtle",
+        "scientificName": "Chelonia mydas",
+        "categories": [
+          "turtle"
+        ],
+        "summary": "A large sea turtle named for the color of its body fat, not its shell; the carapace may appear brown, olive, gray, black, or greenish.",
+        "distinguishingFeatures": [
+          "Oval shell",
+          "Small rounded head",
+          "Paddle-like flippers"
+        ],
+        "typicalHabitat": "Seagrass beds, lagoons, and coastal water",
+        "geographicRange": "Tropical and subtropical oceans",
+        "minimumSizeCentimeters": 80,
+        "maximumSizeCentimeters": 150,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 40
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000009:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Chelonia-mydas.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Oval shell",
+          "Small rounded head",
+          "Paddle-like flippers"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:fd6a5f1f35ed6b3704b3b3f6932b2904d0541548a44ce48a757d6328ab980cac",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000009:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000010"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Spotted Eagle Ray",
+        "scientificName": "Aetobatus narinari",
+        "categories": [
+          "ray"
+        ],
+        "summary": "A broad ray with pale spots and a long whip-like tail.",
+        "distinguishingFeatures": [
+          "Dark back with white spots",
+          "Pointed wing tips",
+          "Long tail"
+        ],
+        "typicalHabitat": "Coastal reefs and sandy flats",
+        "geographicRange": "Warm Atlantic waters",
+        "minimumSizeCentimeters": 100,
+        "maximumSizeCentimeters": 300,
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 80
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000010:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Aetobatus-narinari.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Dark back with white spots",
+          "Pointed wing tips",
+          "Long tail"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:b09f5c9f939b7d501fa43ab9380706b4ea17a4fb6c6383a1deb13b0d47cc34b0",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000010:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "Queen Angelfish",
+        "scientificName": "Holacanthus ciliaris",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A deep-bodied blue and yellow angelfish with a distinctive crown-like spot on the forehead.",
+        "distinguishingFeatures": [
+          "Blue body with yellow-edged scales and yellow fins",
+          "Dark forehead spot ringed with bright blue, resembling a crown",
+          "Blue ring around the gill cover"
+        ],
+        "typicalHabitat": "Coral reefs, where adults are often seen alone or in pairs.",
+        "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 45,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 40
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        },
+        {
+          "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+          "sourceName": "Florida Museum Queen Angelfish species profile",
+          "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+          "citationReference": "2",
+          "reviewedFields": [
+            "visualCharacteristics",
+            "habitat"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Blue body with yellow-edged scales and yellow fins",
+          "Dark forehead spot ringed with bright blue, resembling a crown",
+          "Blue ring around the gill cover"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:507b13b1c150226c23284b75f9f3d7735471e4ff3063a20accfe5a9c9e63c14d",
+      "sourceIdentity": [
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+          "1"
+        ],
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+          "2"
+        ]
+      ]
+    },
+    {
+      "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+      "sourceRowIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+      },
+      "pack": "caribbean",
+      "currentFields": {
+        "commonName": "French Angelfish",
+        "scientificName": "Pomacanthus paru",
+        "categories": [
+          "fish"
+        ],
+        "summary": "A deep-bodied dark angelfish whose scales have conspicuous golden-yellow edges.",
+        "distinguishingFeatures": [
+          "Dark gray to black body with a yellow fleck on each scale",
+          "Yellow pectoral-fin base and yellow edging on the fins",
+          "Rounded tail and small mouth"
+        ],
+        "typicalHabitat": "Shallow coral reefs, often swimming in pairs near sponges.",
+        "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 41.1,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 50
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "eff286cc-2c87-5393-b00d-e158fd48e3aa:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Pomacanthus-paru.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Dark gray to black body with a yellow fleck on each scale",
+          "Yellow pectoral-fin base and yellow edging on the fins",
+          "Rounded tail and small mouth"
+        ]
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+      ],
+      "fieldEvidence": [],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:146c5e9241fc5a01752d77cbcd9d827eab46404da21974e591528e060092bec3",
+      "sourceIdentity": [
+        [
+          "eff286cc-2c87-5393-b00d-e158fd48e3aa:source:1",
+          "1"
+        ]
+      ]
+    },
+    {
+      "speciesID": "2236afd6-7658-5782-b578-3985f74beffd",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 562,
+        "sourceID": "SRC-B3520529"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Barred Shrimpgoby",
+        "scientificName": "Cryptocentrus fasciatus",
+        "categories": [],
+        "summary": "ID: Pale with 4 brown occasionally irreguiar bars; white or bluish streaks and spots on head, ventral and anal fins unmarked dorsal fins. Share burrow with alpheid shrimp. Sheltered sand and mud bottoms to 15 m.",
+        "distinguishingFeatures": [
+          "ID: Pale with 4 brown occasionally irreguiar bars; white or bluish streaks and spots on head, ventral and anal fins unmarked dorsal fins. Share burrow with alpheid shrimp. Sheltered sand and mud bottoms to 15 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "{Indo -Aisian Pacitie: &; Aftioa and Red Sea to Solomon Is, arid Groot Barcies Raf,",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 8.0,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": 15.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-B3520529",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 305.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 305 (PDF p. 306)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: Pale with 4 brown occasionally irreguiar bars; white or bluish streaks and spots on head, ventral and anal fins unmarked dorsal fins. Share burrow with alpheid shrimp. Sheltered sand and mud bottoms to 15 m."
+        ],
+        "sourceCategory": "Gctblee",
+        "identificationEvidence": "ID: Pale with 4 brown occasionally irreguiar bars; white or bluish streaks and spots on head, ventral and anal fins unmarked dorsal fins. Share burrow with alpheid shrimp. Sheltered sand and mud bottoms to 15 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Gctblee' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 562; source SRC-B3520529; book page 305; PDF page 306; tile bl"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:801694eae00833fb016dae03a0fe90d77442281cf16aab4f49af3faa7260aeb7",
+      "sourceIdentity": [
+        [
+          "SRC-B3520529",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 305 (PDF p. 306)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "490d41af-6fe3-5ee5-90c1-8db7343bd488",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 907,
+        "sourceID": "SRC-DDEFCE94"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Roundbelly Cowfish",
+        "scientificName": "Lactoria diaphana",
+        "categories": [],
+        "summary": "ID: Rounded belly; mottled shades of white, brown and gray with honeycomb net pattern; pairs of short homs in front of eyes and lower rear body and a single thorn on mid-back. Solitary. Coastal and outer reefs to 50 m.",
+        "distinguishingFeatures": [
+          "ID: Rounded belly; mottled shades of white, brown and gray with honeycomb net pattern; pairs of short homs in front of eyes and lower rear body and a single thorn on mid-back. Solitary. Coastal and outer reefs to 50 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "Indo-Pactlic: £, Africa to Hawaii, Panama andPer.-Japento Kemnadecis,",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 25.0,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": 50.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-DDEFCE94",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 393.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 393 (PDF p. 394)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: Rounded belly; mottled shades of white, brown and gray with honeycomb net pattern; pairs of short homs in front of eyes and lower rear body and a single thorn on mid-back. Solitary. Coastal and outer reefs to 50 m."
+        ],
+        "sourceCategory": "Boxitihias",
+        "identificationEvidence": "ID: Rounded belly; mottled shades of white, brown and gray with honeycomb net pattern; pairs of short homs in front of eyes and lower rear body and a single thorn on mid-back. Solitary. Coastal and outer reefs to 50 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Boxitihias' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 907; source SRC-DDEFCE94; book page 393; PDF page 394; tile ml"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:80ca5295f2aa99d27559c62b3259c3f97b078b75aab1f69895d066d441b120a1",
+      "sourceIdentity": [
+        [
+          "SRC-DDEFCE94",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 393 (PDF p. 394)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "f0c4bc22-176d-5de0-bad0-ec82eb76787b",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 975,
+        "sourceID": "SRC-FA379252"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Sulu Fangblenny",
+        "scientificName": "Meiacanthus abditus",
+        "categories": [],
+        "summary": "ID: White with 3 black stripes and blackish dorsal fin. Form aggregations among gorgonians and black coral. Coastal teefs and steep slopes in 5-40 m.",
+        "distinguishingFeatures": [
+          "ID: White with 3 black stripes and blackish dorsal fin. Form aggregations among gorgonians and black coral. Coastal teefs and steep slopes in 5-40 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "Localized: Sabah in N. Borneo and Sulu Archipelago to Philippines",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 6.5,
+        "minimumDepthMeters": 5.0,
+        "maximumDepthMeters": 40.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-FA379252",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 340.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 340 (PDF p. 341)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: White with 3 black stripes and blackish dorsal fin. Form aggregations among gorgonians and black coral. Coastal teefs and steep slopes in 5-40 m."
+        ],
+        "sourceCategory": "} Blomiiivs",
+        "identificationEvidence": "ID: White with 3 black stripes and blackish dorsal fin. Form aggregations among gorgonians and black coral. Coastal teefs and steep slopes in 5-40 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR '} Blomiiivs' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 975; source SRC-FA379252; book page 340; PDF page 341; tile br"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:5ffe3d9bbea80e2d80144406bc03c0c1beed153a7b88712770de45fad191c042",
+      "sourceIdentity": [
+        [
+          "SRC-FA379252",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 340 (PDF p. 341)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "a1cd00fe-6e62-5abd-b138-da65a9d42b45",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 982,
+        "sourceID": "SRC-947B46F8"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Striped Fangblenny",
+        "scientificName": "Meiacanthus grammistes",
+        "categories": [],
+        "summary": "ID: White with yellowish head and upper body with 3 black stripes; hlack edges on dorsal and anal fins, black spots on tail Mimic Shorthead Fangblenny [below). Solitary or in pairs. Coastal, lagoon and outer slopes to 20 m.",
+        "distinguishingFeatures": [
+          "ID: White with yellowish head and upper body with 3 black stripes; hlack edges on dorsal and anal fins, black spots on tail Mimic Shorthead Fangblenny [below). Solitary or in pairs. Coastal, lagoon and outer slopes to 20 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "Indo-Asian Pacttic: East Afric Africa to Papas New Guinea. - S.W..Japan to A.W. Australia and New Caledonia.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 13.0,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": 15.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-947B46F8",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 341.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 341 (PDF p. 342)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: White with yellowish head and upper body with 3 black stripes; hlack edges on dorsal and anal fins, black spots on tail Mimic Shorthead Fangblenny [below). Solitary or in pairs. Coastal, lagoon and outer slopes to 20 m."
+        ],
+        "sourceCategory": "Bioruies",
+        "identificationEvidence": "ID: White with yellowish head and upper body with 3 black stripes; hlack edges on dorsal and anal fins, black spots on tail Mimic Shorthead Fangblenny [below). Solitary or in pairs. Coastal, lagoon and outer slopes to 20 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Bioruies' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 982; source SRC-947B46F8; book page 341; PDF page 342; tile ml"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:9d428d0035fedfd040f44ef381db802667757e6c09352718fffa1c172d217fbe",
+      "sourceIdentity": [
+        [
+          "SRC-947B46F8",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 341 (PDF p. 342)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "a388889a-8816-5616-9b14-7b606e7a7137",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 984,
+        "sourceID": "SRC-D52889F3"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Lined Fangblenny",
+        "scientificName": "Meiacanthus lineatus",
+        "categories": [],
+        "summary": "ID: Bright yellow with white belly: 3 black stripes on head and body, black sub-marginal stripe on dorsal fin. Mimic Deceiver Blenny [next page}, which lacks dorsal fin stripe. Solitary or in pairs. Lagoons and seaward reefs in 3-18 m.",
+        "distinguishingFeatures": [
+          "ID: Bright yellow with white belly: 3 black stripes on head and body, black sub-marginal stripe on dorsal fin. Mimic Deceiver Blenny [next page}, which lacks dorsal fin stripe. Solitary or in pairs. Lagoons and seaward reefs in 3-18 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "‘Localized: Great Barrier Reaf.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 3.0,
+        "minimumDepthMeters": 3.0,
+        "maximumDepthMeters": 18.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-D52889F3",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 341.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 341 (PDF p. 342)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: Bright yellow with white belly: 3 black stripes on head and body, black sub-marginal stripe on dorsal fin. Mimic Deceiver Blenny [next page}, which lacks dorsal fin stripe. Solitary or in pairs. Lagoons and seaward reefs in 3-18 m."
+        ],
+        "sourceCategory": "Bigunics",
+        "identificationEvidence": "ID: Bright yellow with white belly: 3 black stripes on head and body, black sub-marginal stripe on dorsal fin. Mimic Deceiver Blenny [next page}, which lacks dorsal fin stripe. Solitary or in pairs. Lagoons and seaward reefs in 3-18 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Bigunics' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 984; source SRC-D52889F3; book page 341; PDF page 342; tile mr"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:a0aa6df0a989bb882220a4be5e3f5a68b8d7ea0cfa97b3e3f9de160d7671b40b",
+      "sourceIdentity": [
+        [
+          "SRC-D52889F3",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 341 (PDF p. 342)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "c4297488-0a9f-5834-b2b1-252884d3522d",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 1573,
+        "sourceID": "SRC-74D9E945"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Skinspot Dwarfgoby",
+        "scientificName": "Trimma halonevum",
+        "categories": [],
+        "summary": "ID: Light to dark salmon; mid-lateral row of tiny dark brown spots, a few scattered darkish spots on head and front of body. Solitary or form small groups. Sheltered coastal reefs and seaward slopes to 45 m.",
+        "distinguishingFeatures": [
+          "ID: Light to dark salmon; mid-lateral row of tiny dark brown spots, a few scattered darkish spots on head and front of body. Solitary or form small groups. Sheltered coastal reefs and seaward slopes to 45 m."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "© Indo-Peaifle: SMakdivas to Indonesia, Philippines, Micsonesia and Boclety is. in French Polynesia.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 2.8,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": 45.0
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-74D9E945",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 328.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 328 (PDF p. 329)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: Light to dark salmon; mid-lateral row of tiny dark brown spots, a few scattered darkish spots on head and front of body. Solitary or form small groups. Sheltered coastal reefs and seaward slopes to 45 m."
+        ],
+        "sourceCategory": "Golsios",
+        "identificationEvidence": "ID: Light to dark salmon; mid-lateral row of tiny dark brown spots, a few scattered darkish spots on head and front of body. Solitary or form small groups. Sheltered coastal reefs and seaward slopes to 45 m.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Golsios' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 1573; source SRC-74D9E945; book page 328; PDF page 329; tile br"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:48572626c2eb4a6824f0de1503a4c110ebd666a8eb5d039b85f40875ff264300",
+      "sourceIdentity": [
+        [
+          "SRC-74D9E945",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 328 (PDF p. 329)"
+        ]
+      ]
+    },
+    {
+      "speciesID": "5e1834f8-29c2-543a-b5d3-e5d42e264a40",
+      "sourceRowIdentity": {
+        "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
+        "workbookRow": 1629,
+        "sourceID": "SRC-31970B57"
+      },
+      "pack": "tropical-pacific",
+      "currentFields": {
+        "commonName": "Estuarine Halfbeak",
+        "scientificName": "Zenarchopterus dispar",
+        "categories": [],
+        "summary": "ID: Silvery; slender body with very short upper jaw and elongate sword-like lower jaw; margin of tail straight (not forked). Common in estuaries, but occasionally at surface above coral reefs and near mangroves.",
+        "distinguishingFeatures": [
+          "ID: Silvery; slender body with very short upper jaw and elongate sword-like lower jaw; margin of tail straight (not forked). Common in estuaries, but occasionally at surface above coral reefs and near mangroves."
+        ],
+        "typicalHabitat": "",
+        "geographicRange": "Indo- West Pacific: Sri Lanka to Samos. - Mariana le. ia. ‘Mieronesis to New Caledonia.",
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 13.0,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": null
+      },
+      "sourceReferences": [
+        {
+          "stableSourceID": "SRC-31970B57",
+          "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 135.",
+          "sourceURL": "",
+          "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 135 (PDF p. 136)",
+          "reviewedFields": [
+            "printed common/scientific name",
+            "category/family text",
+            "maximum size",
+            "depth",
+            "identification description",
+            "habitat/behavior",
+            "distribution/range",
+            "photo locator"
+          ]
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "ID: Silvery; slender body with very short upper jaw and elongate sword-like lower jaw; margin of tail straight (not forked). Common in estuaries, but occasionally at surface above coral reefs and near mangroves."
+        ],
+        "sourceCategory": "Haifheake",
+        "identificationEvidence": "ID: Silvery; slender body with very short upper jaw and elongate sword-like lower jaw; margin of tail straight (not forked). Common in estuaries, but occasionally at surface above coral reefs and near mangroves.",
+        "sourceTitleCommonOCR": "",
+        "sourceTitleScientificOCR": ""
+      },
+      "proposedCorrections": {},
+      "unresolvedQuestions": [
+        "Category OCR 'Haifheake' is unreadable; inspect the cited original page before proposing a controlled category."
+      ],
+      "fieldEvidence": [
+        {
+          "field": "source row",
+          "value": "workbook row 1629; source SRC-31970B57; book page 135; PDF page 136; tile mr"
+        }
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:c15db929521a9aff4622927844ccf95b41241592e7b4bddd7f6c23b7d5b61390",
+      "sourceIdentity": [
+        [
+          "SRC-31970B57",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 135 (PDF p. 136)"
+        ]
+      ]
+    }
+  ]
+}

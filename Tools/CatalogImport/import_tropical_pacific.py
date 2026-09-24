@@ -7,10 +7,13 @@ never read because it is reference-only and is not licensed for the application.
 """
 from __future__ import annotations
 
-import argparse, csv, json, re
+import argparse, csv, json, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from openpyxl import load_workbook
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'CatalogReview'))
+from catalog_review import apply_decisions, update_manifest
 
 BASELINE_SIZE = 40
 BATCH_SIZE = 100
@@ -95,6 +98,7 @@ def main():
     parser.add_argument('--report',default='Reports/TropicalPacificImportReport.json')
     parser.add_argument('--outcomes',default='Reports/TropicalPacificOutcomes.csv')
     parser.add_argument('--review-queue',default='Reports/TropicalPacificReviewQueue.csv')
+    parser.add_argument('--review-decisions',default='Data/CatalogReview/ReviewDecisions.json')
     args=parser.parse_args()
     workbook=load_workbook(args.workbook,data_only=True,read_only=True)
     creatures=rows(workbook['Creatures']); traits=defaultdict(list); sources={}
@@ -143,8 +147,11 @@ def main():
 
     profiles.sort(key=lambda profile:(profile['commonName'].casefold(),profile['id']))
     output=Path(args.output); output.mkdir(parents=True,exist_ok=True)
-    (output/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':2,'displayName':'Tropical Pacific (Experimental)','shortDescription':'Source-traceable draft Tropical Pacific catalogue; not verified for publication','geographicScope':'Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None,'includedRecordCount':len(profiles),'humanReviewedRecordCount':0,'publicationEligibleRecordCount':0}
+    decision_path=Path(args.review_decisions)
+    decision_outcomes=apply_decisions(profiles,json.loads(decision_path.read_text(encoding='utf-8'))) if decision_path.is_file() else []
+    update_manifest(manifest,profiles)
+    (output/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     (output/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
     fields=list(outcomes[0]); Path(args.outcomes).parent.mkdir(parents=True,exist_ok=True)
     with Path(args.outcomes).open('w',newline='',encoding='utf-8') as handle:
@@ -158,7 +165,7 @@ def main():
     canonical_category_counts=Counter(row['canonical_category'] or '(unresolved)' for row in outcomes if row['outcome']=='included')
     unresolved_category_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['category_diagnostic'])
     included_unresolved_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['outcome']=='included' and row['category_diagnostic'])
-    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'recordCounts':{'structurallyIncluded':len(profiles),'humanReviewed':0,'publicationEligible':0,'reviewQueue':len(pending)},'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'publicationPolicy':'Structural import, parsing, normalization, and search testing never confer publication approval. Promotion requires traceable source evidence plus named, dated human review with notes.','categoryNormalization':{'method':'casefolded, collapsed-whitespace exact allow-list; no substring matching','mapping':dict(sorted((key,value) for key,value in GROUP_CATEGORY_MAP.items())),'includedSourceCategoryCounts':dict(sorted(source_category_counts.items())),'includedCanonicalCategoryCounts':dict(sorted(canonical_category_counts.items())),'includedUnresolvedCategoryCounts':dict(sorted(included_unresolved_counts.items())),'unresolvedWorkbookCategoryCounts':dict(sorted(unresolved_category_counts.items()))},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
+    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'recordCounts':{'structurallyIncluded':len(profiles),'humanReviewed':manifest['humanReviewedRecordCount'],'publicationEligible':manifest['publicationEligibleRecordCount'],'reviewQueue':len(pending)},'reviewDecisionOutcomes':decision_outcomes,'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'publicationPolicy':'Structural import, parsing, normalization, and search testing never confer publication approval. Promotion requires traceable source evidence plus named, dated human review with notes.','categoryNormalization':{'method':'casefolded, collapsed-whitespace exact allow-list; no substring matching','mapping':dict(sorted((key,value) for key,value in GROUP_CATEGORY_MAP.items())),'includedSourceCategoryCounts':dict(sorted(source_category_counts.items())),'includedCanonicalCategoryCounts':dict(sorted(canonical_category_counts.items())),'includedUnresolvedCategoryCounts':dict(sorted(included_unresolved_counts.items())),'unresolvedWorkbookCategoryCounts':dict(sorted(unresolved_category_counts.items()))},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
     Path(args.report).write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(f"processed {len(creatures)} rows: bundled {counts['included']}, pending {counts['pending_review']}, excluded {counts['excluded']}")
 if __name__=='__main__': main()
