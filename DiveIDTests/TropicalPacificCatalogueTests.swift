@@ -276,6 +276,22 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         )
     }
 
+    func testParserRecognizesControlledTermsBeforeSentencePunctuation() async {
+        let observation = await LocalObservationParser().parse("Fish with spots. Resting on sand.")
+
+        XCTAssertTrue(observation.markings.contains("spots"))
+        XCTAssertTrue(observation.habitats.contains("sand"))
+        XCTAssertTrue(observation.behaviors.contains("resting"))
+    }
+
+    func testParserDoesNotInventWhiteColorFromPaleLightness() async {
+        let pale = await LocalObservationParser().parse("pale animal")
+        let white = await LocalObservationParser().parse("white animal")
+
+        XCTAssertFalse(pale.colors.contains("white"))
+        XCTAssertTrue(white.colors.contains("white"))
+    }
+
     func testPositiveEvaluatorRejectsAnEngineThatAlwaysReturnsEmptyResults() async throws {
         let positiveCases = try diverDescriptions().filter { !$0.expectsNoMatch }
         XCTAssertFalse(positiveCases.isEmpty)
