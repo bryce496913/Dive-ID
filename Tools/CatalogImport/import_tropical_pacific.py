@@ -149,7 +149,7 @@ def main():
     output=Path(args.output); output.mkdir(parents=True,exist_ok=True)
     manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':2,'displayName':'Tropical Pacific (Experimental)','shortDescription':'Source-traceable draft Tropical Pacific catalogue; not verified for publication','geographicScope':'Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None,'includedRecordCount':len(profiles),'humanReviewedRecordCount':0,'publicationEligibleRecordCount':0}
     decision_path=Path(args.review_decisions)
-    decision_outcomes=apply_decisions(profiles,json.loads(decision_path.read_text(encoding='utf-8'))) if decision_path.is_file() else []
+    decision_outcomes=apply_decisions(profiles,json.loads(decision_path.read_text(encoding='utf-8')),manifest['id']) if decision_path.is_file() else []
     update_manifest(manifest,profiles)
     (output/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     (output/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
