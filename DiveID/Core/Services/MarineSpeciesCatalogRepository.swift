@@ -33,6 +33,7 @@ enum LocalCatalogError: Error, Equatable, Sendable {
     case missingDataSource
     case unverifiedRecord
     case publicationUnavailable
+    case reviewAccountingInvalid
     case negativeMeasurement
     case invalidMeasurementRange
     case unknownControlledVocabularyValue(String)
@@ -50,6 +51,7 @@ enum CatalogueDiagnosticCode: String, Equatable, Sendable {
     case validationFailed = "CATALOG_VALIDATION_FAILED"
     case unsupportedPack = "CATALOG_UNSUPPORTED_PACK"
     case publicationUnavailable = "CATALOG_PUBLICATION_UNAVAILABLE"
+    case reviewAccountingInvalid = "CATALOG_REVIEW_ACCOUNTING_INVALID"
 }
 
 enum CatalogueLoadPhase: String, Equatable, Sendable {

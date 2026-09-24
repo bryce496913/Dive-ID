@@ -153,6 +153,29 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertTrue(value.profiles.allSatisfy { $0.review?.status == .draft })
     }
 
+    func testPublicationStatusLabelsFailClosedAndDescribeDraftMixedAndApprovedPacks() throws {
+        var metadata = try pack().metadata
+        metadata.includedRecordCount = nil
+        metadata.humanReviewedRecordCount = nil
+        metadata.publicationEligibleRecordCount = nil
+        XCTAssertTrue(metadata.isExperimental)
+        XCTAssertEqual(metadata.publicationStatusText, "Review accounting unavailable — not approved for publication")
+
+        metadata.includedRecordCount = 384
+        metadata.humanReviewedRecordCount = 0
+        metadata.publicationEligibleRecordCount = 0
+        XCTAssertEqual(metadata.publicationStatusText, "0 of 384 records approved for publication")
+
+        metadata.humanReviewedRecordCount = 12
+        metadata.publicationEligibleRecordCount = 10
+        XCTAssertEqual(metadata.publicationStatusText, "10 of 384 records approved for publication")
+
+        metadata.humanReviewedRecordCount = 384
+        metadata.publicationEligibleRecordCount = 384
+        XCTAssertFalse(metadata.isExperimental)
+        XCTAssertEqual(metadata.publicationStatusText, "All 384 records approved for publication")
+    }
+
     func testPublicationAccessExcludesDraftPackAndReturnsClearDiagnosticWhenRequested() async throws {
         let repository = BundleMarineSpeciesCatalogRepository(
             bundle: TestResources.productionBundle,

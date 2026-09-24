@@ -22,6 +22,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     private let developmentSourceRoot: URL
     private let access: CatalogueAccess
     private var cachedPacks: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
+    private var cachedRawPacks: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
     init(
         bundle: Bundle = .main,
         registry: RegionCatalogRegistry = .bundled,
@@ -43,21 +44,25 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     }
 
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
-        let manifests = try registry.definitions.map(loadManifest)
-        guard case .publication = access else { return manifests }
-        var approved: [OfflineIdentificationPackMetadata] = []
-        for manifest in manifests {
-            let pack = try loadRawPack(id: manifest.id)
+        var available: [OfflineIdentificationPackMetadata] = []
+        for definition in registry.definitions {
+            let pack = try loadRawPack(id: definition.id)
+            let metadata = try accountingMetadata(for: pack)
+            guard case .publication = access else {
+                available.append(metadata)
+                continue
+            }
             if pack.profiles.contains(where: Self.isPublicationEligible) {
-                approved.append(publicationMetadata(for: pack))
+                available.append(publicationMetadata(for: pack))
             }
         }
-        return approved
+        return available
     }
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
         let raw = try loadRawPack(id: id)
+        _ = try accountingMetadata(for: raw)
         let pack: OfflineIdentificationPack
         if case .publication = access {
             let eligible = raw.profiles.filter(Self.isPublicationEligible)
@@ -73,6 +78,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     }
 
     private func loadRawPack(id: OfflineIdentificationPackID) throws -> OfflineIdentificationPack {
+        if let cached = cachedRawPacks[id] { return cached }
         guard let definition = registry.definition(for: id) else {
             throw failure(id, .unsupportedPack, .unsupportedPack, nil, .manifest)
         }
@@ -104,11 +110,36 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             throw failure(id, context.code, error, context.resource ?? speciesResource, context.phase)
         }
         let sorted = profiles.sorted { $0.commonName.localizedStandardCompare($1.commonName) == .orderedAscending }
-        return OfflineIdentificationPack(metadata: metadata, profiles: sorted)
+        let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted)
+        cachedRawPacks[id] = pack
+        return pack
     }
 
     private static func isPublicationEligible(_ profile: LocalSpeciesProfile) -> Bool {
-        profile.review?.status == .verified
+        profile.review?.status == .verified && !profile.categories.isEmpty
+    }
+
+    /// Records are authoritative; manifest counts are an independently generated
+    /// assertion which must be complete and agree with those records.
+    private func accountingMetadata(for pack: OfflineIdentificationPack) throws -> OfflineIdentificationPackMetadata {
+        let included = pack.profiles.count
+        let reviewed = pack.profiles.filter { profile in
+            guard let status = profile.review?.status else { return false }
+            return status == .sourceChecked || status == .verified
+        }.count
+        let eligible = pack.profiles.filter(Self.isPublicationEligible).count
+        guard pack.metadata.includedRecordCount == included,
+              pack.metadata.humanReviewedRecordCount == reviewed,
+              pack.metadata.publicationEligibleRecordCount == eligible
+        else {
+            throw failure(pack.metadata.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
+                          "IdentificationPacks/\(pack.metadata.id.rawValue)/PackManifest.json", .validation)
+        }
+        var metadata = pack.metadata
+        metadata.includedRecordCount = included
+        metadata.humanReviewedRecordCount = reviewed
+        metadata.publicationEligibleRecordCount = eligible
+        return metadata
     }
 
     private func publicationMetadata(for pack: OfflineIdentificationPack) -> OfflineIdentificationPackMetadata {
@@ -161,6 +192,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         case .emptyImageAttribution, .unsupportedImageLicense, .duplicateImageFilename:
             return (.artworkInvalid, nil, .artworkValidation)
         case .unsupportedSchemaVersion: return (.unsupportedPack, nil, .validation)
+        case .reviewAccountingInvalid: return (.reviewAccountingInvalid, nil, .validation)
         default: return (.validationFailed, nil, .validation)
         }
     }

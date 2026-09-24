@@ -168,6 +168,7 @@ final class DiveIDTests: XCTestCase {
             catalog: catalog,
             regionRepository: regionRepository
         )
+        await viewModel.load()
         viewModel.descriptionText = "  Blue fish, with spots!  "
         let submittedSessionID = await viewModel.submit()
         let sessionID = try XCTUnwrap(submittedSessionID)
@@ -190,6 +191,26 @@ final class DiveIDTests: XCTestCase {
         )
         viewModel.descriptionText = "  \n"
         XCTAssertFalse(viewModel.canSubmit)
+    }
+
+    @MainActor
+    func testEmptyApprovedCatalogueDisablesNewSearch() async {
+        let catalog = ResultsCatalogRepository(metadata: [])
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .caribbean)
+        let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
+        await home.load()
+        XCTAssertTrue(home.catalogueLoaded)
+        XCTAssertFalse(home.catalogueLoadFailed)
+        XCTAssertFalse(home.canSearch)
+
+        let search = DescriptionSearchViewModel(
+            sessionStore: InMemoryIdentificationSessionStore(), catalog: catalog,
+            regionRepository: regionRepository
+        )
+        search.descriptionText = "striped reef fish"
+        await search.load()
+        XCTAssertFalse(search.canSubmit)
+
     }
 
     @MainActor

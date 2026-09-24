@@ -30,5 +30,8 @@
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
-  "lastDataReviewDate": null
+  "lastDataReviewDate": null,
+  "includedRecordCount": 8,
+  "humanReviewedRecordCount": 0,
+  "publicationEligibleRecordCount": 0
 }
