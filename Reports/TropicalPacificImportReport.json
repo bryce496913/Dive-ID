@@ -1,11 +1,18 @@
 {
   "workbook": "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx",
   "workbookRowCount": 1650,
+  "recordCounts": {
+    "structurallyIncluded": 384,
+    "humanReviewed": 0,
+    "publicationEligible": 0,
+    "reviewQueue": 1650
+  },
   "outcomeCounts": {
     "included": 384,
     "pendingReview": 1266,
     "excluded": 0
   },
+  "publicationPolicy": "Structural import, parsing, normalization, and search testing never confer publication approval. Promotion requires traceable source evidence plus named, dated human review with notes.",
   "categoryNormalization": {
     "method": "casefolded, collapsed-whitespace exact allow-list; no substring matching",
     "mapping": {

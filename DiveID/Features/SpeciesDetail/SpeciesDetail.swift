@@ -84,6 +84,9 @@ struct SpeciesDetailView: View {
                 if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
                 if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
                 if let pack = viewModel.species.packContext { DetailSection(title: "Offline pack", text: pack.displayName) }
+                if let review = viewModel.species.review {
+                    DetailSection(title: "Record review status", text: review.status == .verified ? "Human-reviewed and approved for publication" : "\(review.status.rawValue.capitalized) — experimental record; identity and biological accuracy are not verified")
+                }
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
                 if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }

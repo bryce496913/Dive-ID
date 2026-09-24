@@ -8,9 +8,9 @@ final class ProductionDescriptionSearchTests: XCTestCase {
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
 #if SWIFT_PACKAGE
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
+        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
 #else
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly)
+        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
 #endif
     }
 
@@ -160,7 +160,8 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         BundleMarineSpeciesCatalogRepository(
             bundle: Bundle(for: CatalogueDiagnosticsTests.self),
             resourceResolutionMode: .bundleThenDevelopmentSource,
-            developmentSourceRoot: root
+            developmentSourceRoot: root,
+            access: .experimentalDevelopment
         )
     }
 

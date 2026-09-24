@@ -44,6 +44,21 @@ class CategoryNormalizationTests(unittest.TestCase):
         self.assertTrue(mapped_fish)
         self.assertTrue(all(profile_by_id[row["creature_id"]]["categories"] == ["fish"] for row in mapped_fish))
         self.assertEqual(report["outcomeCounts"], {"included": 384, "pendingReview": 1266, "excluded": 0})
+        self.assertEqual(report["recordCounts"], {
+            "structurallyIncluded": 384,
+            "humanReviewed": 0,
+            "publicationEligible": 0,
+            "reviewQueue": 1650,
+        })
+
+    def test_suspect_omate_entry_remains_traceable_in_review_queue(self):
+        import csv
+        with (ROOT / "Reports/TropicalPacificReviewQueue.csv").open(newline="", encoding="utf-8") as handle:
+            matches = [row for row in csv.DictReader(handle) if row["common_name"] == "Omate Angelfish"]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["creature_id"], "cc4394d7-ce81-515e-b22a-22d5892c0913")
+        self.assertEqual(matches[0]["source_id"], "SRC-D04E0C28")
+        self.assertEqual(matches[0]["source_book_page"], "39")
 
 
 if __name__ == "__main__":

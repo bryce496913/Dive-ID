@@ -4,6 +4,7 @@ import ImageIO
 #endif
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
+    enum CatalogueAccess: Sendable { case publication, experimentalDevelopment }
 #if SWIFT_PACKAGE
     /// The explicit SwiftPM resource bundle. Portable tests must not use
     /// `Bundle.main`, which is the `swift-test` runner on macOS and Linux.
@@ -19,25 +20,59 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     private let registry: RegionCatalogRegistry
     private let resourceResolutionMode: ResourceResolutionMode
     private let developmentSourceRoot: URL
+    private let access: CatalogueAccess
     private var cachedPacks: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
     init(
         bundle: Bundle = .main,
         registry: RegionCatalogRegistry = .bundled,
         resourceResolutionMode: ResourceResolutionMode = .bundleOnly,
-        developmentSourceRoot: URL = URL(fileURLWithPath: "DiveID/Resources", isDirectory: true)
+        developmentSourceRoot: URL = URL(fileURLWithPath: "DiveID/Resources", isDirectory: true),
+        access: CatalogueAccess = {
+#if DEBUG
+            .experimentalDevelopment
+#else
+            .publication
+#endif
+        }()
     ) {
         self.bundle = bundle
         self.registry = registry
         self.resourceResolutionMode = resourceResolutionMode
         self.developmentSourceRoot = developmentSourceRoot
+        self.access = access
     }
 
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
-        try registry.definitions.map(loadManifest)
+        let manifests = try registry.definitions.map(loadManifest)
+        guard case .publication = access else { return manifests }
+        var approved: [OfflineIdentificationPackMetadata] = []
+        for manifest in manifests {
+            let pack = try loadRawPack(id: manifest.id)
+            if pack.profiles.contains(where: Self.isPublicationEligible) {
+                approved.append(publicationMetadata(for: pack))
+            }
+        }
+        return approved
     }
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
+        let raw = try loadRawPack(id: id)
+        let pack: OfflineIdentificationPack
+        if case .publication = access {
+            let eligible = raw.profiles.filter(Self.isPublicationEligible)
+            guard !eligible.isEmpty else {
+                throw failure(id, .publicationUnavailable, .publicationUnavailable, nil, .validation)
+            }
+            pack = .init(metadata: publicationMetadata(for: raw), profiles: eligible)
+        } else {
+            pack = raw
+        }
+        cachedPacks[id] = pack
+        return pack
+    }
+
+    private func loadRawPack(id: OfflineIdentificationPackID) throws -> OfflineIdentificationPack {
         guard let definition = registry.definition(for: id) else {
             throw failure(id, .unsupportedPack, .unsupportedPack, nil, .manifest)
         }
@@ -69,9 +104,19 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             throw failure(id, context.code, error, context.resource ?? speciesResource, context.phase)
         }
         let sorted = profiles.sorted { $0.commonName.localizedStandardCompare($1.commonName) == .orderedAscending }
-        let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted)
-        cachedPacks[id] = pack
-        return pack
+        return OfflineIdentificationPack(metadata: metadata, profiles: sorted)
+    }
+
+    private static func isPublicationEligible(_ profile: LocalSpeciesProfile) -> Bool {
+        profile.review?.status == .verified
+    }
+
+    private func publicationMetadata(for pack: OfflineIdentificationPack) -> OfflineIdentificationPackMetadata {
+        var metadata = pack.metadata
+        let eligible = pack.profiles.filter(Self.isPublicationEligible).count
+        metadata.speciesCount = eligible
+        metadata.publicationEligibleRecordCount = eligible
+        return metadata
     }
 
     private func loadManifest(_ definition: RegionCatalogDefinition) throws -> OfflineIdentificationPackMetadata {
@@ -157,6 +202,12 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                       p.review?.reviewDate != nil,
                       let notes = p.review?.reviewerNotes, !notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 else { throw LocalCatalogError.unverifiedRecord }
+                guard p.dataSources.contains(where: {
+                    !($0.stableSourceID ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    && !$0.sourceURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    && !($0.citationReference ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    && !$0.reviewedFields.isEmpty
+                }) else { throw LocalCatalogError.unverifiedRecord }
             }
             try validateRange(min: p.minimumSizeCentimeters, max: p.maximumSizeCentimeters); try validateRange(min: p.minimumDepthMeters, max: p.maximumDepthMeters)
             try validate(p.categories, allowed: CatalogueVocabulary.categories); try validate(p.colors, allowed: CatalogueVocabulary.colors); try validate(p.markings, allowed: CatalogueVocabulary.markings); try validate(p.bodyShapes, allowed: CatalogueVocabulary.bodyShapes); try validate(p.habitats, allowed: CatalogueVocabulary.habitats); try validate(p.regions, allowed: CatalogueVocabulary.regions); try validate(p.behaviors, allowed: CatalogueVocabulary.behaviors)

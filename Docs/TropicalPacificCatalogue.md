@@ -43,7 +43,7 @@ test "$BUNDLE_ID" = com.brycecameron.DiveID
 printf 'resolved bundle identifier: %s\n' "$BUNDLE_ID"
 ```
 
-Use `Debug` for this validation. Every generated Pacific record currently has review status `draft`; the development validation pass is explicitly authorized to expose those records and supplies debug-only reporting of the actual retrieval engine and fallback. The current bundle loader does not filter draft records from `Release`, so a successful Release build is only packaging evidence: it is **not** approval to publish the draft catalogue. Release also fixes retrieval to the production BM25 default and omits the debug diagnostics UI. Do not change ranking, thresholds, or engine selection for this pass.
+Use `Debug` for this validation. Every generated Pacific record currently has review status `draft`; explicit experimental-development catalogue access exposes all 384 structurally included records and supplies debug-only reporting of the actual retrieval engine and fallback. Publication access (the `Release` default) filters to records carrying complete, traceable human-review evidence. The current Pacific pack has zero publication-eligible records, so it is omitted from ordinary Release catalogue choices and an explicit request fails with `CATALOG_PUBLICATION_UNAVAILABLE`; it is never replaced by Caribbean or treated as approved because parsing/search tests passed. Release also fixes retrieval to the production BM25 default and omits the debug diagnostics UI. Do not change ranking, thresholds, or engine selection for this pass.
 
 ### Simulator: build, test, install, and launch one exact product
 

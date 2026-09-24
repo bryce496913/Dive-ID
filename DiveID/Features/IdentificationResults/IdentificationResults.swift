@@ -144,6 +144,10 @@ struct IdentificationResultsView: View {
                     LazyVStack(spacing: 12) {
                         Text(viewModel.resultsSummary)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                        if viewModel.packMetadata?.isExperimental == true {
+                            Label("Experimental draft catalogue — identities and biological details have not been verified", systemImage: "exclamationmark.triangle.fill")
+                                .font(.footnote.bold()).foregroundStyle(Color.appWarning)
+                        }
                         Text("Match strength reflects similarity to the clues in your description. It is not scientific certainty.")
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         ForEach(matches) { match in

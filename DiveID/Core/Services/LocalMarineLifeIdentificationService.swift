@@ -67,6 +67,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
         case .unknownControlledVocabularyValue: .vocabularyInvalid
         case .missingImage: .artworkMissing
         case .invalidImage, .imageTooLarge, .emptyImageAttribution, .unsupportedImageLicense, .duplicateImageFilename: .artworkInvalid
+        case .publicationUnavailable: .publicationUnavailable
         default: .validationFailed
         }
     }

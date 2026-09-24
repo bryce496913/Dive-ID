@@ -126,7 +126,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         // allowing this portable assertion to pass through a checkout fallback.
         let repository = BundleMarineSpeciesCatalogRepository(
             bundle: TestResources.productionBundle,
-            resourceResolutionMode: .bundleOnly
+            resourceResolutionMode: .bundleOnly,
+            access: .experimentalDevelopment
         )
         let value = try await repository.loadPack(id: .tropicalPacific)
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
@@ -136,11 +137,54 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
     }
 
+    func testDevelopmentAccessExplicitlyLoadsAllDraftPacificRecords() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle,
+            resourceResolutionMode: .bundleOnly,
+            access: .experimentalDevelopment
+        )
+        let metadata = try await repository.availablePacks().first { $0.id == .tropicalPacific }
+        XCTAssertEqual(metadata?.includedRecordCount, 384)
+        XCTAssertEqual(metadata?.humanReviewedRecordCount, 0)
+        XCTAssertEqual(metadata?.publicationEligibleRecordCount, 0)
+        XCTAssertEqual(metadata?.isExperimental, true)
+        let value = try await repository.loadPack(id: .tropicalPacific)
+        XCTAssertEqual(value.profiles.count, 384)
+        XCTAssertTrue(value.profiles.allSatisfy { $0.review?.status == .draft })
+    }
+
+    func testPublicationAccessExcludesDraftPackAndReturnsClearDiagnosticWhenRequested() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle,
+            resourceResolutionMode: .bundleOnly,
+            access: .publication
+        )
+        let available = try await repository.availablePacks()
+        XCTAssertFalse(available.contains { $0.id == .tropicalPacific })
+        do {
+            _ = try await repository.loadPack(id: .tropicalPacific)
+            XCTFail("Publication access exposed draft-only Pacific records")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .publicationUnavailable)
+            XCTAssertEqual(failure.catalogError, .publicationUnavailable)
+        }
+    }
+
+    func testVerifiedPromotionRequiresTraceableHumanReviewEvidence() throws {
+        let value = try pack()
+        var promoted = try XCTUnwrap(value.profiles.first)
+        promoted.review = RecordReview(status: .verified, reviewerNotes: "Checked", reviewDate: Date(), verifiedBy: "Human reviewer")
+        promoted.dataSources[0].citationReference = nil
+        XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([promoted])) {
+            XCTAssertEqual($0 as? LocalCatalogError, .unverifiedRecord)
+        }
+    }
+
 #if DIVEID_XCODE_HOSTED_TEST
     func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
         // This test exists only in the Xcode-hosted iOS test target. A missing app
         // resource is a test failure, never a signal that the test is "not hosted".
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly)
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let value = try await repository.loadPack(id: .tropicalPacific)
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
         XCTAssertEqual(value.metadata.packVersion, 2)

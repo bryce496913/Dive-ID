@@ -2,9 +2,9 @@
   "id": "tropical-pacific",
   "schemaVersion": 1,
   "packVersion": 2,
-  "displayName": "Tropical Pacific",
-  "shortDescription": "Source-traceable draft Tropical Pacific catalogue",
-  "geographicScope": "Workbook accounts with source-supported Tropical Pacific presence; presence does not assert abundance.",
+  "displayName": "Tropical Pacific (Experimental)",
+  "shortDescription": "Source-traceable draft Tropical Pacific catalogue; not verified for publication",
+  "geographicScope": "Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.",
   "regionAliases": [
     "Tropical Pacific",
     "Pacific",
@@ -19,5 +19,8 @@
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
-  "lastDataReviewDate": null
+  "lastDataReviewDate": null,
+  "includedRecordCount": 384,
+  "humanReviewedRecordCount": 0,
+  "publicationEligibleRecordCount": 0
 }
