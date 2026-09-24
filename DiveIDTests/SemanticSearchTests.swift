@@ -66,7 +66,7 @@ final class SemanticSearchTests: XCTestCase {
     }
 
     private func pack() async throws -> OfflineIdentificationPack {
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadPack(id: .caribbean)
+        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment).loadPack(id: .caribbean)
     }
 
     private func index(

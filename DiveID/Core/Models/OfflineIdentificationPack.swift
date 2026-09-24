@@ -25,11 +25,18 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
     let shortDescription: String
     let geographicScope: String
     let regionAliases: [String]
-    let speciesCount: Int
+    var speciesCount: Int
     let speciesResourceName: String
     let imageSubdirectory: String
     let includedWithApp: Bool
     let lastDataReviewDate: Date?
+    /// Import accounting is not publication approval. These counts are emitted by
+    /// the importer so catalogue/UI diagnostics can state that distinction.
+    var includedRecordCount: Int? = nil
+    var humanReviewedRecordCount: Int? = nil
+    var publicationEligibleRecordCount: Int? = nil
+
+    var isExperimental: Bool { (publicationEligibleRecordCount ?? speciesCount) < speciesCount }
 }
 
 struct OfflineIdentificationPack: Sendable, Hashable {
