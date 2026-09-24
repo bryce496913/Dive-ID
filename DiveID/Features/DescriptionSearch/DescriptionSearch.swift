@@ -33,13 +33,12 @@ final class DescriptionSearchViewModel {
     var canSubmit: Bool { pack != nil && (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
 
     func submit() async -> UUID? {
-        guard canSubmit else { return nil }
+        guard canSubmit, let pack else { return nil }
         isCreatingSession = true
         errorMessage = nil
         defer { isCreatingSession = false }
         do {
-            let region = await regionRepository.selectedRegion()
-            let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: region))
+            let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: pack.id))
             return try await sessionStore.createSession(for: request, photo: nil)
         } catch is CancellationError {
             return nil
@@ -93,6 +92,6 @@ struct DescriptionSearchView: View {
         }
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
-        .task { await viewModel.load() }
+        .task(id: router.path) { await viewModel.load() }
     }
 }
