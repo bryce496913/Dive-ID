@@ -1,0 +1,19 @@
+{
+  "id": "partial-approval-fixture",
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "displayName": "Partial Approval Fixture",
+  "shortDescription": "Synthetic mixed-publication test fixture",
+  "geographicScope": "Synthetic test fixture only",
+  "regionAliases": [
+    "Synthetic Fixture"
+  ],
+  "speciesCount": 4,
+  "speciesResourceName": "Creatures",
+  "imageSubdirectory": "Images",
+  "includedWithApp": true,
+  "lastDataReviewDate": null,
+  "includedRecordCount": 4,
+  "humanReviewedRecordCount": 1,
+  "publicationEligibleRecordCount": 1
+}

@@ -53,7 +53,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                 continue
             }
             if pack.profiles.contains(where: Self.isPublicationEligible) {
-                available.append(publicationMetadata(for: pack))
+                available.append(try publicationPack(from: pack, accounting: metadata).metadata)
             }
         }
         return available
@@ -62,14 +62,14 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
         let raw = try loadRawPack(id: id)
-        _ = try accountingMetadata(for: raw)
+        let accounting = try accountingMetadata(for: raw)
         let pack: OfflineIdentificationPack
         if case .publication = access {
             let eligible = raw.profiles.filter(Self.isPublicationEligible)
             guard !eligible.isEmpty else {
                 throw failure(id, .publicationUnavailable, .publicationUnavailable, nil, .validation)
             }
-            pack = .init(metadata: publicationMetadata(for: raw), profiles: eligible)
+            pack = try publicationPack(from: raw, accounting: accounting)
         } else {
             pack = raw
         }
@@ -142,12 +142,22 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         return metadata
     }
 
-    private func publicationMetadata(for pack: OfflineIdentificationPack) -> OfflineIdentificationPackMetadata {
-        var metadata = pack.metadata
-        let eligible = pack.profiles.filter(Self.isPublicationEligible).count
-        metadata.speciesCount = eligible
-        metadata.publicationEligibleRecordCount = eligible
-        return metadata
+    /// Source accounting is checked before filtering. The resulting publication
+    /// pack then independently asserts that its exposed count is the approved count.
+    private func publicationPack(from pack: OfflineIdentificationPack, accounting: OfflineIdentificationPackMetadata) throws -> OfflineIdentificationPack {
+        let eligible = pack.profiles.filter(Self.isPublicationEligible)
+        guard eligible.count == accounting.publicationEligibleRecordCount else {
+            throw failure(pack.metadata.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
+                          "IdentificationPacks/\(pack.metadata.id.rawValue)/PackManifest.json", .validation)
+        }
+        var metadata = accounting
+        metadata.speciesCount = eligible.count
+        let exposed = OfflineIdentificationPack(metadata: metadata, profiles: eligible)
+        guard exposed.profiles.count == exposed.metadata.speciesCount else {
+            throw failure(pack.metadata.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
+                          "IdentificationPacks/\(pack.metadata.id.rawValue)/PackManifest.json", .validation)
+        }
+        return exposed
     }
 
     private func loadManifest(_ definition: RegionCatalogDefinition) throws -> OfflineIdentificationPackMetadata {
