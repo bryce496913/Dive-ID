@@ -67,7 +67,12 @@ Tropical Pacific importer reapplies matching decisions after every import. The s
 review tool can apply the same overlay to another pack. A decision is applied only
 when its stable source identity and post-correction content fingerprint match;
 material changes become stale. Verified decisions with unresolved questions or an
-empty category are blocked. The tool then regenerates structurally included,
+empty category are blocked. The overlay's `catalogueID` must match the target pack,
+and each species may occur only once. Decisions use `draft`, `sourceChecked`, or
+`verified`; a verified decision requires a nonblank reviewer identity and notes, a
+UTC review date in `YYYY-MM-DDTHH:MM:SSZ` format, and the complete source evidence
+required by the app's catalogue validator. The complete overlay and both generated
+outputs are validated before either catalogue file is safely replaced. The tool then regenerates structurally included,
 human-reviewed, and publication-eligible counts separately.
 
 ## Saved identifications
