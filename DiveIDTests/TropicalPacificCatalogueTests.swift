@@ -164,16 +164,16 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         metadata.includedRecordCount = 384
         metadata.humanReviewedRecordCount = 0
         metadata.publicationEligibleRecordCount = 0
-        XCTAssertEqual(metadata.publicationStatusText, "0 of 384 records approved for publication")
+        XCTAssertEqual(metadata.publicationStatusText, "384 records available — 0 approved and 384 draft")
 
         metadata.humanReviewedRecordCount = 12
         metadata.publicationEligibleRecordCount = 10
-        XCTAssertEqual(metadata.publicationStatusText, "10 of 384 records approved for publication")
+        XCTAssertEqual(metadata.publicationStatusText, "384 records available — 10 approved and 374 draft")
 
         metadata.humanReviewedRecordCount = 384
         metadata.publicationEligibleRecordCount = 384
         XCTAssertFalse(metadata.isExperimental)
-        XCTAssertEqual(metadata.publicationStatusText, "All 384 records approved for publication")
+        XCTAssertEqual(metadata.publicationStatusText, "All 384 available records approved for publication")
     }
 
     func testPublicationAccessExcludesDraftPackAndReturnsClearDiagnosticWhenRequested() async throws {

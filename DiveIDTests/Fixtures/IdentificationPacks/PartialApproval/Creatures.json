@@ -1,0 +1,519 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000003",
+    "commonName": "Atlantic Blue Tang",
+    "scientificName": "Acanthurus coeruleus",
+    "aliases": [
+      "atlantic-blue-tang"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "blue",
+      "yellow"
+    ],
+    "markings": [
+      "tail"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
+    "habitats": [
+      "reef",
+      "seagrass",
+      "shallow"
+    ],
+    "regions": [
+      "caribbean",
+      "western atlantic",
+      "atlantic"
+    ],
+    "behaviors": [
+      "swimming"
+    ],
+    "keywords": [
+      "atlantic",
+      "blue",
+      "tang"
+    ],
+    "minimumSizeCentimeters": 10,
+    "maximumSizeCentimeters": 39,
+    "minimumDepthMeters": 2,
+    "maximumDepthMeters": 40,
+    "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
+    "distinguishingFeatures": [
+      "Oval blue adult body",
+      "Small terminal mouth",
+      "Yellow juvenile or transitional blue-and-yellow phases",
+      "Sharp caudal peduncle spine"
+    ],
+    "typicalHabitat": "Coral reefs, rocky reefs, and nearby seagrass in shallow tropical western Atlantic water",
+    "geographicRange": "Western Atlantic, including Florida, the Bahamas, Gulf of Mexico, Caribbean Sea, Bermuda, and Brazil",
+    "cautions": [
+      "Caudal peduncle spine can cut skin; observe without handling"
+    ],
+    "imageAssetName": null,
+    "regionalOccurrence": "common",
+    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+    "subregions": [
+      "Bahamas",
+      "Belize",
+      "Bonaire",
+      "Cayman Islands",
+      "Florida Keys",
+      "Puerto Rico"
+    ],
+    "appearanceVariants": [
+      {
+        "id": "juvenile-yellow",
+        "lifeStage": "juvenile",
+        "colors": [
+          "yellow"
+        ],
+        "markings": [
+          "tail"
+        ],
+        "bodyShapes": [
+          "oval"
+        ],
+        "minimumSizeCentimeters": 2,
+        "maximumSizeCentimeters": 8,
+        "description": "Juveniles can show yellow coloration useful for matching poor descriptions.",
+        "distinguishingFeatures": [
+          "yellow juvenile appearance"
+        ]
+      }
+    ],
+    "similarSpecies": [],
+    "bundledImage": {
+      "fileName": "00000000-0000-0000-0000-000000000003.svg",
+      "alternativeText": "Stylized offline vector reference marker for Atlantic Blue Tang.",
+      "creatorName": "Dive ID",
+      "sourceName": "Dive ID bundled vector marker",
+      "sourceURL": "https://github.com/bryce496913/Dive-ID",
+      "licenseName": "CC0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "dataSources": [
+      {
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+        "reviewedFields": [
+          "scientificName",
+          "geographicRange",
+          "size",
+          "depth",
+          "habitat",
+          "visualCharacteristics"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
+      }
+    ],
+    "review": {
+      "status": "verified",
+      "reviewerNotes": "Synthetic review evidence for partial-approval repository fixture only.",
+      "reviewDate": "2026-09-24T00:00:00Z",
+      "verifiedBy": "Synthetic fixture reviewer"
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Acanthurus",
+      "acceptedScientificName": "Acanthurus coeruleus",
+      "sourceScientificName": "Acanthurus coeruleus"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 10,
+      "typicalObservedMaximumCentimeters": 39,
+      "maximumRecordedCentimeters": 39,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000005",
+    "commonName": "Stoplight Parrotfish",
+    "scientificName": "Sparisoma viride",
+    "aliases": [
+      "stoplight-parrotfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "green",
+      "red",
+      "yellow"
+    ],
+    "markings": [
+      "beak",
+      "stripes"
+    ],
+    "bodyShapes": [
+      "elongated"
+    ],
+    "habitats": [
+      "reef",
+      "seagrass"
+    ],
+    "regions": [
+      "caribbean",
+      "western atlantic",
+      "atlantic"
+    ],
+    "behaviors": [
+      "grazing"
+    ],
+    "keywords": [
+      "stoplight",
+      "parrotfish"
+    ],
+    "minimumSizeCentimeters": 30,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 50,
+    "summary": "A robust grazing fish with color that varies by life phase.",
+    "distinguishingFeatures": [
+      "Beak-like dental plates",
+      "Angular forehead"
+    ],
+    "typicalHabitat": "Coral reefs and seagrass",
+    "geographicRange": "Western Atlantic",
+    "cautions": [],
+    "imageAssetName": null,
+    "regionalOccurrence": "regular",
+    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+    "subregions": [
+      "Bahamas",
+      "Belize",
+      "Bonaire",
+      "Cayman Islands",
+      "Florida Keys",
+      "Puerto Rico"
+    ],
+    "appearanceVariants": [
+      {
+        "id": "juvenile-initial-dark",
+        "lifeStage": "juvenile",
+        "colors": [
+          "brown"
+        ],
+        "markings": [
+          "spots"
+        ],
+        "bodyShapes": [
+          "robust"
+        ],
+        "minimumSizeCentimeters": 2,
+        "maximumSizeCentimeters": 30,
+        "description": "Juveniles and initial-phase fish are dark reddish-brown with pale markings.",
+        "distinguishingFeatures": [
+          "dark or reddish-brown body",
+          "pale or white markings"
+        ]
+      }
+    ],
+    "similarSpecies": [],
+    "bundledImage": {
+      "fileName": "00000000-0000-0000-0000-000000000005.svg",
+      "alternativeText": "Stylized offline vector reference marker for Stoplight Parrotfish.",
+      "creatorName": "Dive ID",
+      "sourceName": "Dive ID bundled vector marker",
+      "sourceURL": "https://github.com/bryce496913/Dive-ID",
+      "licenseName": "CC0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "dataSources": [
+      {
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+        "reviewedFields": [
+          "scientificName",
+          "geographicRange",
+          "size",
+          "depth",
+          "habitat",
+          "visualCharacteristics"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Sparisoma",
+      "acceptedScientificName": "Sparisoma viride",
+      "sourceScientificName": "Sparisoma viride"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 30,
+      "typicalObservedMaximumCentimeters": 60,
+      "maximumRecordedCentimeters": 60,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [
+      "beak-like dental plates",
+      "angular forehead",
+      "squared head"
+    ],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000006",
+    "commonName": "Red Lionfish",
+    "scientificName": "Pterois volitans",
+    "aliases": [
+      "red-lionfish"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "red",
+      "white"
+    ],
+    "markings": [
+      "stripes",
+      "spines"
+    ],
+    "bodyShapes": [
+      "elongated"
+    ],
+    "habitats": [
+      "reef"
+    ],
+    "regions": [
+      "caribbean",
+      "western atlantic",
+      "atlantic"
+    ],
+    "behaviors": [
+      "hovering"
+    ],
+    "keywords": [
+      "red",
+      "lionfish"
+    ],
+    "minimumSizeCentimeters": 20,
+    "maximumSizeCentimeters": 47,
+    "minimumDepthMeters": 1,
+    "maximumDepthMeters": 55,
+    "summary": "A striped fish with conspicuous fan-like fins and long fin rays.",
+    "distinguishingFeatures": [
+      "Red and white bands",
+      "Broad pectoral fins",
+      "Long venomous spines"
+    ],
+    "typicalHabitat": "Reefs and rocky areas",
+    "geographicRange": "Native Indo-Pacific",
+    "cautions": [
+      "Venomous fin spines; do not touch"
+    ],
+    "imageAssetName": null,
+    "regionalOccurrence": "introduced",
+    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+    "subregions": [
+      "Bahamas",
+      "Belize",
+      "Bonaire",
+      "Cayman Islands",
+      "Florida Keys",
+      "Puerto Rico"
+    ],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": {
+      "fileName": "00000000-0000-0000-0000-000000000006.svg",
+      "alternativeText": "Stylized offline vector reference marker for Red Lionfish.",
+      "creatorName": "Dive ID",
+      "sourceName": "Dive ID bundled vector marker",
+      "sourceURL": "https://github.com/bryce496913/Dive-ID",
+      "licenseName": "CC0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "dataSources": [
+      {
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Pterois-volitans.html",
+        "reviewedFields": [
+          "scientificName",
+          "geographicRange",
+          "size",
+          "depth",
+          "habitat",
+          "visualCharacteristics"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000006:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Pterois",
+      "acceptedScientificName": "Pterois volitans",
+      "sourceScientificName": "Pterois volitans"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 20,
+      "typicalObservedMaximumCentimeters": 47,
+      "maximumRecordedCentimeters": 47,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000008",
+    "commonName": "Great Barracuda",
+    "scientificName": "Sphyraena barracuda",
+    "aliases": [
+      "great-barracuda"
+    ],
+    "categories": [
+      "fish"
+    ],
+    "colors": [
+      "silver"
+    ],
+    "markings": [
+      "spots",
+      "teeth"
+    ],
+    "bodyShapes": [
+      "elongated",
+      "pointed"
+    ],
+    "habitats": [
+      "reef",
+      "surface"
+    ],
+    "regions": [
+      "caribbean",
+      "western atlantic",
+      "atlantic"
+    ],
+    "behaviors": [
+      "solitary",
+      "swimming"
+    ],
+    "keywords": [
+      "great",
+      "barracuda"
+    ],
+    "minimumSizeCentimeters": 60,
+    "maximumSizeCentimeters": 200,
+    "minimumDepthMeters": 0,
+    "maximumDepthMeters": 100,
+    "summary": "A long, streamlined predator often seen cruising near reefs.",
+    "distinguishingFeatures": [
+      "Elongated silver body",
+      "Large jaw",
+      "Dark body spots"
+    ],
+    "typicalHabitat": "Reefs, channels, and open coastal water",
+    "geographicRange": "Tropical and subtropical seas",
+    "cautions": [
+      "Large individuals deserve respectful distance"
+    ],
+    "imageAssetName": null,
+    "regionalOccurrence": "common",
+    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+    "subregions": [
+      "Bahamas",
+      "Belize",
+      "Bonaire",
+      "Cayman Islands",
+      "Florida Keys",
+      "Puerto Rico"
+    ],
+    "appearanceVariants": [],
+    "similarSpecies": [],
+    "bundledImage": {
+      "fileName": "00000000-0000-0000-0000-000000000008.svg",
+      "alternativeText": "Stylized offline vector reference marker for Great Barracuda.",
+      "creatorName": "Dive ID",
+      "sourceName": "Dive ID bundled vector marker",
+      "sourceURL": "https://github.com/bryce496913/Dive-ID",
+      "licenseName": "CC0",
+      "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "dataSources": [
+      {
+        "sourceName": "FishBase species summary",
+        "sourceURL": "https://www.fishbase.se/summary/Sphyraena-barracuda.html",
+        "reviewedFields": [
+          "scientificName",
+          "geographicRange",
+          "size",
+          "depth",
+          "habitat",
+          "visualCharacteristics"
+        ],
+        "accessedDate": "2026-08-13T00:00:00Z",
+        "stableSourceID": "00000000-0000-0000-0000-000000000008:source:1",
+        "citationReference": "1",
+        "sourceLicense": null
+      }
+    ],
+    "review": {
+      "status": "draft",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
+      "reviewDate": null,
+      "verifiedBy": null
+    },
+    "taxonomy": {
+      "wormsAphiaID": null,
+      "scientificNameAuthority": null,
+      "taxonomicClass": null,
+      "order": null,
+      "family": null,
+      "genus": "Sphyraena",
+      "acceptedScientificName": "Sphyraena barracuda",
+      "sourceScientificName": "Sphyraena barracuda"
+    },
+    "measurements": {
+      "typicalObservedMinimumCentimeters": 60,
+      "typicalObservedMaximumCentimeters": 200,
+      "maximumRecordedCentimeters": 200,
+      "type": "totalLength"
+    },
+    "tailShape": null,
+    "mouthAndHeadShape": [],
+    "finAndSpineClues": []
+  }
+]

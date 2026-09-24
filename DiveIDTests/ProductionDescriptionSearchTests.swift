@@ -150,6 +150,8 @@ private extension Sequence {
 }
 
 final class CatalogueDiagnosticsTests: XCTestCase {
+    private let partialApprovalID = OfflineIdentificationPackID(rawValue: "partial-approval-fixture")
+
     private func temporaryRoot() throws -> URL {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -162,6 +164,19 @@ final class CatalogueDiagnosticsTests: XCTestCase {
             resourceResolutionMode: .bundleThenDevelopmentSource,
             developmentSourceRoot: root,
             access: .experimentalDevelopment
+        )
+    }
+
+    private func partialApprovalRepository(access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) -> BundleMarineSpeciesCatalogRepository {
+        let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures", isDirectory: true)
+        return BundleMarineSpeciesCatalogRepository(
+            bundle: Bundle(for: CatalogueDiagnosticsTests.self),
+            registry: RegionCatalogRegistry(definitions: [
+                RegionCatalogDefinition(id: partialApprovalID, resourceDirectory: "PartialApproval")
+            ]),
+            resourceResolutionMode: .bundleThenDevelopmentSource,
+            developmentSourceRoot: fixtures,
+            access: access
         )
     }
 
@@ -278,6 +293,72 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         XCTAssertEqual(pack.profiles.count, 1)
         XCTAssertEqual(pack.profiles.first?.review?.status, .verified)
         XCTAssertEqual(pack.metadata.publicationEligibleRecordCount, 1)
+    }
+
+    func testRepositoryFixturePreservesFullAccountingAcrossDevelopmentAndPublicationFiltering() async throws {
+        let development = partialApprovalRepository(access: .experimentalDevelopment)
+        let developmentPack = try await development.loadPack(id: partialApprovalID)
+        XCTAssertEqual(developmentPack.profiles.count, 4)
+        XCTAssertEqual(developmentPack.metadata.availableRecordCount, 4)
+        XCTAssertEqual(developmentPack.metadata.includedRecordCount, 4)
+        XCTAssertEqual(developmentPack.metadata.approvedRecordCount, 1)
+        XCTAssertEqual(developmentPack.metadata.draftRecordCount, 3)
+        XCTAssertEqual(developmentPack.metadata.publicationStatusText, "4 records available — 1 approved and 3 draft")
+        XCTAssertTrue(developmentPack.metadata.isExperimental)
+
+        let publication = partialApprovalRepository(access: .publication)
+        let available = try await publication.availablePacks()
+        let region = try XCTUnwrap(available.first { $0.id == partialApprovalID })
+        XCTAssertEqual(region.availableRecordCount, 1)
+        XCTAssertEqual(region.includedRecordCount, 4, "Full-pack accounting must remain traceable")
+        XCTAssertEqual(region.publicationStatusText, "1 approved record available (3 draft records excluded)")
+        XCTAssertFalse(region.isExperimental)
+
+        let publicationPack = try await publication.loadPack(id: partialApprovalID)
+        XCTAssertEqual(publicationPack.profiles.count, 1)
+        XCTAssertEqual(publicationPack.metadata.speciesCount, 1)
+        XCTAssertEqual(publicationPack.metadata.includedRecordCount, 4)
+        XCTAssertTrue(publicationPack.profiles.allSatisfy { $0.review?.status == .verified })
+
+        let draftIDs = Set(developmentPack.profiles.filter { $0.review?.status == .draft }.map(\.id))
+        let service = LocalMarineLifeIdentificationService(catalogRepository: publication)
+        let candidates = try await service.identify(
+            request: IdentificationRequest(
+                source: .description("Atlantic blue tang reef fish"),
+                context: .init(region: partialApprovalID)
+            ),
+            processedPhoto: nil
+        )
+        XCTAssertFalse(candidates.isEmpty)
+        XCTAssertTrue(draftIDs.isDisjoint(with: candidates.map(\.species.id)), "Draft IDs must not enter Release search candidates")
+    }
+
+    func testInconsistentPartialApprovalFixtureAccountingFailsClosed() async throws {
+        let root = try temporaryRoot()
+        let fixture = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .appendingPathComponent("Fixtures/IdentificationPacks/PartialApproval", isDirectory: true)
+        let destination = root.appendingPathComponent("IdentificationPacks/PartialApproval", isDirectory: true)
+        try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try FileManager.default.copyItem(at: fixture, to: destination)
+        let manifestURL = destination.appendingPathComponent("PackManifest.json")
+        var manifest = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: manifestURL)) as? [String: Any])
+        manifest["publicationEligibleRecordCount"] = 2
+        try JSONSerialization.data(withJSONObject: manifest).write(to: manifestURL)
+        let repository = BundleMarineSpeciesCatalogRepository(
+            bundle: Bundle(for: CatalogueDiagnosticsTests.self),
+            registry: RegionCatalogRegistry(definitions: [RegionCatalogDefinition(id: partialApprovalID, resourceDirectory: "PartialApproval")]),
+            resourceResolutionMode: .bundleThenDevelopmentSource,
+            developmentSourceRoot: root,
+            access: .publication
+        )
+        do {
+            _ = try await repository.loadPack(id: partialApprovalID)
+            XCTFail("Inconsistent accounting must fail closed")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .reviewAccountingInvalid)
+            XCTAssertEqual(failure.catalogError, .reviewAccountingInvalid)
+            XCTAssertEqual(failure.phase, .validation)
+        }
     }
 
     func testVocabularyErrorHasStableDiagnostic() async throws {

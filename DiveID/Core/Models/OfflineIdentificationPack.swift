@@ -30,36 +30,54 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
     let imageSubdirectory: String
     let includedWithApp: Bool
     let lastDataReviewDate: Date?
-    /// Import accounting is not publication approval. These counts are emitted by
-    /// the importer so catalogue/UI diagnostics can state that distinction.
+    /// Source-pack accounting, emitted before any configuration-specific filtering.
+    /// `includedRecordCount` is the full pack, `publicationEligibleRecordCount` is
+    /// its approved subset, and `speciesCount` is the subset exposed by this value.
+    /// Records not publication-eligible are drafts for publication purposes.
     var includedRecordCount: Int? = nil
     var humanReviewedRecordCount: Int? = nil
     var publicationEligibleRecordCount: Int? = nil
 
-    /// Missing accounting is deliberately treated as unapproved. A manifest is
-    /// never allowed to imply publication approval merely by omitting counts.
-    var isExperimental: Bool {
+    var approvedRecordCount: Int? { publicationEligibleRecordCount }
+    var draftRecordCount: Int? {
+        guard let includedRecordCount, let publicationEligibleRecordCount,
+              publicationEligibleRecordCount <= includedRecordCount else { return nil }
+        return includedRecordCount - publicationEligibleRecordCount
+    }
+    var availableRecordCount: Int { speciesCount }
+
+    /// Accounting is valid when source counts are ordered and the exposed records
+    /// are either the complete development pack or exactly its approved subset.
+    private var hasValidPublicationAccounting: Bool {
         guard let includedRecordCount, let humanReviewedRecordCount,
               let publicationEligibleRecordCount,
-              includedRecordCount == speciesCount,
-              humanReviewedRecordCount >= publicationEligibleRecordCount
-        else { return true }
-        return publicationEligibleRecordCount < speciesCount
+              includedRecordCount >= 0,
+              publicationEligibleRecordCount >= 0,
+              humanReviewedRecordCount >= publicationEligibleRecordCount,
+              humanReviewedRecordCount <= includedRecordCount,
+              publicationEligibleRecordCount <= includedRecordCount
+        else { return false }
+        return speciesCount == includedRecordCount || speciesCount == publicationEligibleRecordCount
+    }
+
+    /// Missing or inconsistent accounting is deliberately treated as unapproved.
+    var isExperimental: Bool {
+        guard hasValidPublicationAccounting, let publicationEligibleRecordCount else { return true }
+        return speciesCount > publicationEligibleRecordCount
     }
 
     var publicationStatusText: String {
-        guard let includedRecordCount, let humanReviewedRecordCount,
-              let publicationEligibleRecordCount,
-              includedRecordCount == speciesCount,
-              humanReviewedRecordCount >= publicationEligibleRecordCount
+        guard hasValidPublicationAccounting,
+              let includedRecordCount, let publicationEligibleRecordCount,
+              let draftRecordCount
         else { return "Review accounting unavailable — not approved for publication" }
-        if publicationEligibleRecordCount == 0 {
-            return "0 of \(includedRecordCount) records approved for publication"
-        }
         if publicationEligibleRecordCount == includedRecordCount {
-            return "All \(includedRecordCount) records approved for publication"
+            return "All \(speciesCount) available records approved for publication"
         }
-        return "\(publicationEligibleRecordCount) of \(includedRecordCount) records approved for publication"
+        if speciesCount == publicationEligibleRecordCount {
+            return "\(publicationEligibleRecordCount) approved \(publicationEligibleRecordCount == 1 ? "record" : "records") available (\(draftRecordCount) draft \(draftRecordCount == 1 ? "record" : "records") excluded)"
+        }
+        return "\(speciesCount) records available — \(publicationEligibleRecordCount) approved and \(draftRecordCount) draft"
     }
 }
 
