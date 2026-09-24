@@ -40,7 +40,10 @@ struct RootView: View {
         case .savedSpecies:
             SavedSpeciesView(viewModel: .init(repository: savedRepository), router: router)
         case .offlineRegions:
-            OfflineRegionsView(viewModel: .init(catalog: catalogRepository, selection: regionRepository))
+            OfflineRegionsView(
+                viewModel: .init(catalog: catalogRepository, selection: regionRepository),
+                selectionDidChange: { router.goBack() }
+            )
         }
     }
 }

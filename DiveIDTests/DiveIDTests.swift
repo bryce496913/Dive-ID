@@ -202,6 +202,8 @@ final class DiveIDTests: XCTestCase {
         XCTAssertTrue(home.catalogueLoaded)
         XCTAssertFalse(home.catalogueLoadFailed)
         XCTAssertFalse(home.canSearch)
+        XCTAssertFalse(home.canChangeRegion)
+        XCTAssertFalse(home.selectedRegionUnavailable)
 
         let search = DescriptionSearchViewModel(
             sessionStore: InMemoryIdentificationSessionStore(), catalog: catalog,
@@ -211,6 +213,46 @@ final class DiveIDTests: XCTestCase {
         await search.load()
         XCTAssertFalse(search.canSubmit)
 
+    }
+
+    @MainActor
+    func testUnavailablePersistedPacificCanChangeToAvailableCaribbeanAndSearch() async throws {
+        let caribbean = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
+        let catalog = ResultsCatalogRepository(metadata: [caribbean])
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .tropicalPacific)
+        let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
+
+        await home.load()
+
+        XCTAssertNil(home.pack)
+        XCTAssertFalse(home.canSearch)
+        XCTAssertTrue(home.canChangeRegion)
+        XCTAssertTrue(home.selectedRegionUnavailable)
+
+        let chooser = OfflineRegionsViewModel(catalog: catalog, selection: regionRepository)
+        await chooser.load()
+        XCTAssertEqual(chooser.selected, .tropicalPacific)
+        XCTAssertEqual(chooser.packs.map(\.id), [.caribbean])
+
+        let didSelect = await chooser.select(.caribbean)
+        let persistedRegion = await regionRepository.selectedRegion()
+        XCTAssertTrue(didSelect)
+        XCTAssertEqual(persistedRegion, .caribbean)
+
+        await home.load()
+        XCTAssertEqual(home.pack?.id, .caribbean)
+        XCTAssertTrue(home.canSearch)
+        XCTAssertFalse(home.selectedRegionUnavailable)
+
+        let search = DescriptionSearchViewModel(
+            sessionStore: InMemoryIdentificationSessionStore(),
+            catalog: catalog,
+            regionRepository: regionRepository
+        )
+        search.descriptionText = "striped reef fish"
+        await search.load()
+        XCTAssertEqual(search.pack?.id, .caribbean)
+        XCTAssertTrue(search.canSubmit)
     }
 
     @MainActor

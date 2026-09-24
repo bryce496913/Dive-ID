@@ -15,4 +15,5 @@ enum AppRoute: Hashable {
 final class AppRouter {
     var path: [AppRoute] = []
     func navigate(to route: AppRoute) { path.append(route) }
+    func goBack() { if !path.isEmpty { path.removeLast() } }
 }
