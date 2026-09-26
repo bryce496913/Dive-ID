@@ -53,7 +53,7 @@ let package = Package(
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
                 "SavedIdentificationCompatibilityTests.swift"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "TestResources.swift"],
+            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

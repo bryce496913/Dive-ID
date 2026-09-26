@@ -26,7 +26,10 @@ struct LocalObservationParser: ObservationParsing {
         var tokens = Set(raw.map(Self.singular).filter { !LocalObservationVocabulary.stopWords.contains($0) })
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
         for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: normalized) }) { tokens.insert(key) }
-        let measurements = Self.measurements(in: normalized, tokens: tokens)
+        // Measurement ranges must refer to the user's original string. In
+        // particular, normalization can remove multi-byte Unicode characters
+        // and make ranges from the normalized string invalid for the source.
+        let measurements = Self.measurements(in: description, tokens: tokens)
         return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: tokens.intersection(CatalogueVocabulary.regions), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters)
     }
 
@@ -76,15 +79,32 @@ struct LocalObservationParser: ObservationParsing {
             }
         }
     }
-    private struct MeasurementCandidate { let sourceRange: Range<String.Index>; let value: Double; let unit: MeasurementUnit; let role: MeasurementRole }
+    private struct MeasurementCandidate {
+        /// The numeric value and unit occurrence in the original input.
+        let sourceRange: Range<String.Index>
+        let value: Double
+        let unit: MeasurementUnit
+        let role: MeasurementRole
+        /// Explicit role words (`deep`, `depth`, `long`, or `length`) outrank
+        /// looser forms such as `about 10 m` when interpretations overlap.
+        let contextStrength: Int
+        let patternOrder: Int
+    }
+
+    private struct MeasurementPattern {
+        let expression: String
+        let contextStrength: Int
+    }
 
     static func measurements(in text: String, tokens: Set<String>) -> ParsedMeasurements {
-        let sizeCandidate = explicitMeasurement(in: text, patterns: sizePatterns, role: .size)
+        let candidates = resolvedMeasurementCandidates(in: text)
+        let sizeCandidate = candidates.first { $0.role == .size }
         var size = sizeCandidate.map { $0.unit.sizeCentimeters(for: $0.value) }
-        let depthCandidate = explicitMeasurement(in: text, patterns: depthPatterns, role: .depth)
+        let depthCandidate = candidates.first { $0.role == .depth }
         var depth = depthCandidate.flatMap { $0.unit.depthMeters(for: $0.value) }
-        if size == nil, text.contains("half a meter") || text.contains("half a metre") { size = 50 }
-        if size == nil, tokens.contains("hand-sized") || text.contains("hand sized") { size = 15 }
+        let normalizedText = normalize(text)
+        if size == nil, normalizedText.contains("half a meter") || normalizedText.contains("half a metre") { size = 50 }
+        if size == nil, tokens.contains("hand-sized") || normalizedText.contains("hand sized") { size = 15 }
         if size == nil, tokens.contains("small") { size = 10 }
         if size == nil, tokens.contains("medium") { size = 40 }
         if size == nil, tokens.contains("large") { size = 120 }
@@ -96,27 +116,57 @@ struct LocalObservationParser: ObservationParsing {
     private static let number = #"([0-9]+(?:\.[0-9]+)?)"#
     private static let unitPattern = #"(cm|centimeter|centimeters|inch|inches|m|meter|meters|metre|metres|ft|feet|foot)"#
     private static let depthPatterns = [
-        #"(?:at|around|about)\s*"# + number + #"\s*"# + unitPattern + #"\s*deep"#,
-        #"(?:at\s+)?(?:a\s+)?depth\s+of\s*"# + number + #"\s*"# + unitPattern,
-        number + #"\s*"# + unitPattern + #"\s*deep"#,
-        #"(?:^|\s)at\s*"# + number + #"\s*"# + unitPattern + #"(?:\s|$)"#
+        MeasurementPattern(expression: #"(?:at|around|about)\s*"# + number + #"\s*"# + unitPattern + #"\s*deep"#, contextStrength: 2),
+        MeasurementPattern(expression: #"(?:at\s+)?(?:a\s+)?depth(?:\s+of)?\s*"# + number + #"\s*"# + unitPattern, contextStrength: 2),
+        MeasurementPattern(expression: number + #"\s*"# + unitPattern + #"\s*(?:deep|depth)"#, contextStrength: 2),
+        MeasurementPattern(expression: #"(?:^|\s)at\s*"# + number + #"\s*"# + unitPattern + #"(?:\s|$)"#, contextStrength: 1)
     ]
     private static let sizePatterns = [
-        number + #"\s*"# + unitPattern + #"\s*(?:long|length)"#,
-        #"(?:length\s+about|about|roughly|around)\s*"# + number + #"\s*"# + unitPattern + #"(?:\s*long)?"#,
-        number + #"\s*(cm|centimeter|centimeters|inch|inches)"#
+        MeasurementPattern(expression: number + #"\s*"# + unitPattern + #"\s*(?:long|length)"#, contextStrength: 2),
+        MeasurementPattern(expression: #"(?:length\s+about|about|roughly|around)\s*"# + number + #"\s*"# + unitPattern + #"(?:\s*long)?"#, contextStrength: 1),
+        MeasurementPattern(expression: number + #"\s*(cm|centimeter|centimeters|inch|inches)"#, contextStrength: 0)
     ]
 
-    private static func explicitMeasurement(in text: String, patterns: [String], role: MeasurementRole) -> MeasurementCandidate? {
-        for pattern in patterns {
-            guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
+    private static func measurementCandidates(in text: String, patterns: [MeasurementPattern], role: MeasurementRole) -> [MeasurementCandidate] {
+        var candidates: [MeasurementCandidate] = []
+        for (patternOrder, pattern) in patterns.enumerated() {
+            guard let regex = try? NSRegularExpression(pattern: pattern.expression, options: [.caseInsensitive]) else { continue }
             let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
             for match in matches where match.numberOfRanges >= 3 {
-                guard let sourceRange = Range(match.range(at: 0), in: text), let valueRange = Range(match.range(at: 1), in: text), let unitRange = Range(match.range(at: 2), in: text), let value = Double(text[valueRange]), let unit = MeasurementUnit(raw: String(text[unitRange])) else { continue }
+                guard let valueRange = Range(match.range(at: 1), in: text),
+                      let unitRange = Range(match.range(at: 2), in: text),
+                      let value = Double(text[valueRange]),
+                      let unit = MeasurementUnit(raw: String(text[unitRange]).lowercased()) else { continue }
                 if role == .depth, unit.depthMeters(for: value) == nil { continue }
-                return MeasurementCandidate(sourceRange: sourceRange, value: value, unit: unit, role: role)
+                candidates.append(MeasurementCandidate(
+                    sourceRange: valueRange.lowerBound..<unitRange.upperBound,
+                    value: value,
+                    unit: unit,
+                    role: role,
+                    contextStrength: pattern.contextStrength,
+                    patternOrder: patternOrder
+                ))
             }
         }
-        return nil
+        return candidates
+    }
+
+    private static func resolvedMeasurementCandidates(in text: String) -> [MeasurementCandidate] {
+        let candidates = measurementCandidates(in: text, patterns: sizePatterns, role: .size)
+            + measurementCandidates(in: text, patterns: depthPatterns, role: .depth)
+        let preferred = candidates.sorted {
+            if $0.contextStrength != $1.contextStrength { return $0.contextStrength > $1.contextStrength }
+            if $0.sourceRange.lowerBound != $1.sourceRange.lowerBound { return $0.sourceRange.lowerBound < $1.sourceRange.lowerBound }
+            return $0.patternOrder < $1.patternOrder
+        }
+
+        // Once one role claims a numeric/unit occurrence, discard every other
+        // interpretation whose original-source range overlaps it. Disjoint
+        // occurrences remain available even when their values and units match.
+        var resolved: [MeasurementCandidate] = []
+        for candidate in preferred where !resolved.contains(where: { $0.sourceRange.overlaps(candidate.sourceRange) }) {
+            resolved.append(candidate)
+        }
+        return resolved.sorted { $0.sourceRange.lowerBound < $1.sourceRange.lowerBound }
     }
 }
