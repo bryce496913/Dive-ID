@@ -306,4 +306,38 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             XCTAssertEqual(Set(failure.caseIDs), Set(positiveCases.map(\.id)))
         }
     }
+
+    func testSourceCorrectionAndUnresolvedRetrievalTrace() async throws {
+        let value = try pack()
+        let cases = try diverDescriptions().filter { ["pacific-v1-fire-dartfish", "pacific-v1-cockatoo-waspfish"].contains($0.id) }
+        let builder = SpeciesSearchDocumentBuilder()
+        let documents = value.profiles.map { builder.document(from: $0, pack: value.metadata) }
+        for item in cases {
+            let observation = await LocalObservationParser().parse(item.description)
+            let retrieved = try await BM25SpeciesCandidateRetriever().retrieve(query: item.description, documents: documents, limit: documents.count)
+            let expected = try XCTUnwrap(retrieved.first { item.acceptedSpeciesIDs.contains($0.speciesID) })
+            let retrievalRank = try XCTUnwrap(retrieved.firstIndex(of: expected)).advanced(by: 1)
+            let profile = try XCTUnwrap(value.profiles.first { $0.id == expected.speciesID })
+            let isolated = try await LocalSpeciesRanker().rank(input: .init(
+                description: item.description,
+                observation: observation,
+                candidates: [.init(speciesID: profile.id, profile: profile, retrieval: .init(
+                    source: expected.evidence, scoreKind: expected.scoreKind, score: expected.retrievalScore,
+                    rank: retrievalRank, evidence: expected.matchedTerms
+                ))]
+            )).first
+            let displayed = try await HybridDescriptionSearchEngine().search(description: item.description, pack: value)
+            let displayedRank = displayed.candidates.firstIndex { $0.profile.id == profile.id }.map { $0 + 1 }
+            if item.id == "pacific-v1-fire-dartfish" {
+                XCTAssertEqual(profile.colors, ["brown", "red", "white", "yellow"])
+                XCTAssertEqual(profile.behaviors, ["hovering", "solitary"])
+                XCTAssertLessThanOrEqual(retrievalRank, 50)
+                XCTAssertEqual(displayedRank, 5)
+            } else {
+                XCTAssertGreaterThan(retrievalRank, 50)
+                XCTAssertNil(displayedRank, "Unsupported Cockatoo Waspfish traits must not be invented to satisfy the fixture")
+            }
+            print("PACIFIC_FAILURE_TRACE id=\(item.id) categories=\(observation.categories.sorted()) colors=\(observation.colors.sorted()) markings=\(observation.markings.sorted()) shapes=\(observation.bodyShapes.sorted()) habitats=\(observation.habitats.sorted()) behaviors=\(observation.behaviors.sorted()) retrievalRank=\(retrievalRank) retrievalScore=\(expected.retrievalScore) terms=\(expected.matchedTerms) survives50=\(retrievalRank <= 50) rawScore=\(String(describing: isolated?.rawScore)) support=\(isolated?.matchedClues ?? []) conflicts=\(isolated?.conflictingClues ?? []) eligible=\(isolated != nil) displayedRank=\(String(describing: displayedRank))")
+        }
+    }
 }

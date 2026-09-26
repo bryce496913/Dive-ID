@@ -7,7 +7,13 @@
     "publicationEligible": 0,
     "reviewQueue": 1650
   },
-  "reviewDecisionOutcomes": [],
+  "reviewDecisionOutcomes": [
+    {
+      "speciesID": "7a662be3-854f-5819-8d32-cb8b1f19a00b",
+      "state": "applied",
+      "decision": "draft"
+    }
+  ],
   "outcomeCounts": {
     "included": 384,
     "pendingReview": 1266,

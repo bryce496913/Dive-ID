@@ -1,5 +1,35 @@
 {
   "schemaVersion": 1,
   "catalogueID": "tropical-pacific",
-  "decisions": []
+  "decisions": [
+    {
+      "speciesID": "7a662be3-854f-5819-8d32-cb8b1f19a00b",
+      "sourceIdentity": [
+        [
+          "SRC-E19DD980",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 282 (PDF p. 283)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:56b491995c0b7013d8bf97e902c19dcfbe5465318d1db1ade3eb54434f25d9c9",
+      "corrections": {
+        "colors": [
+          "brown",
+          "red",
+          "white",
+          "yellow"
+        ],
+        "behaviors": [
+          "hovering",
+          "solitary"
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Structured traits corrected from the high-confidence source transcription: reddish brown rear body and hover above burrows. This data correction is not human publication approval.",
+      "unresolvedQuestions": [
+        "Independent source-page and taxonomy review are still required before publication."
+      ]
+    }
+  ]
 }

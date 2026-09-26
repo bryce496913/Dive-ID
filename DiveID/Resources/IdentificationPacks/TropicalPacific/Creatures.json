@@ -9219,6 +9219,7 @@
     ],
     "colors": [
       "brown",
+      "red",
       "white",
       "yellow"
     ],
@@ -9234,6 +9235,7 @@
     ],
     "regions": [],
     "behaviors": [
+      "hovering",
       "solitary"
     ],
     "keywords": [],
@@ -9277,7 +9279,7 @@
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Structured traits corrected from the high-confidence source transcription: reddish brown rear body and hover above burrows. This data correction is not human publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
