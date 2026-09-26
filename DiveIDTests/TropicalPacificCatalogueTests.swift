@@ -3,6 +3,29 @@ import XCTest
 @testable import DiveID
 
 final class TropicalPacificCatalogueTests: XCTestCase {
+    func testSharedCatalogueValidationFixturesAgreeWithSwiftDecodeAndDomainValidation() throws {
+        let data = try Data(contentsOf: TestResources.fixture(named: "CatalogueValidationCases"))
+        let document = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let valid = try XCTUnwrap(document["validRecord"] as? [String: Any])
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let profile = try decoder.decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: valid))
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
+
+        for item in try XCTUnwrap(document["invalid"] as? [[String: Any]]) {
+            let name = try XCTUnwrap(item["name"] as? String)
+            let field = try XCTUnwrap(item["field"] as? String)
+            var candidate = valid
+            candidate[field] = item["value"]
+            let candidateData = try JSONSerialization.data(withJSONObject: candidate)
+            do {
+                let decoded = try decoder.decode(LocalSpeciesProfile.self, from: candidateData)
+                XCTAssertThrowsError(try BundleMarineSpeciesCatalogRepository.validate([decoded]), name)
+            } catch is DecodingError {
+                // Type, required/null, nested, and enum mismatches are rejected before domain validation.
+            }
+        }
+    }
+
     private struct DiverDescriptionCase: Decodable {
         let id: String
         let description: String

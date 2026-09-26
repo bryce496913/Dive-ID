@@ -12,9 +12,13 @@ import hashlib
 import json
 import os
 import re
+import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from catalogue_validation import CatalogueValidationError, validate_catalogue
 
 PUBLICATION_FIELDS = (
     "commonName", "scientificName", "aliases", "categories", "colors", "markings",
@@ -183,7 +187,18 @@ def apply_decisions(records, decision_document, catalogue_id):
                                "reviewDate": decision.get("reviewDate"), "verifiedBy": decision.get("reviewerIdentity")}
         replacements.append((record, corrected))
         outcomes.append({"speciesID": record["id"], "state": "applied", "decision": status})
-    # Even record mutation is transactional: every decision is prepared first.
+    # Validate a fully corrected in-memory pack before mutating even one caller-owned
+    # record.  This catches Codable type failures and cross-record domain failures.
+    candidate_records = copy.deepcopy(records)
+    by_identity = {id(original): corrected for original, corrected in replacements}
+    for index, original in enumerate(records):
+        if id(original) in by_identity:
+            candidate_records[index] = by_identity[id(original)]
+    try:
+        validate_catalogue(candidate_records)
+    except CatalogueValidationError as error:
+        raise DecisionValidationError(error.diagnostics) from error
+    # Even record mutation is transactional: every decision and record is prepared first.
     for record, corrected in replacements:
         record.clear()
         record.update(corrected)
@@ -241,6 +256,10 @@ def main():
     document = json.loads(args.decisions.read_text(encoding="utf-8"))
     outcomes = apply_decisions(records, document, manifest.get("id"))
     update_manifest(manifest, records)
+    try:
+        validate_catalogue(records, manifest)
+    except CatalogueValidationError as error:
+        raise DecisionValidationError(error.diagnostics) from error
     replace_catalogue_pair(creatures_path, manifest_path, records, manifest)
     print(json.dumps(outcomes, indent=2))
 

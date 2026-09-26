@@ -1,0 +1,33 @@
+{
+  "validRecord": {
+    "id": "ac81b567-593a-5e77-a012-726017fa9d08",
+    "commonName": "Fixture Fish",
+    "scientificName": "Exemplum validum",
+    "aliases": [],
+    "categories": ["fish"],
+    "colors": ["blue"],
+    "markings": [],
+    "bodyShapes": [],
+    "habitats": ["reef"],
+    "regions": ["pacific"],
+    "behaviors": ["swimming"],
+    "keywords": [],
+    "summary": "A fixture used by Python and Swift validation tests.",
+    "distinguishingFeatures": ["Blue fixture"],
+    "typicalHabitat": "Reef",
+    "geographicRange": "Pacific",
+    "cautions": [],
+    "regionalOccurrence": "regular",
+    "dataSources": [{"stableSourceID":"fixture-source","sourceName":"Fixture","sourceURL":"https://example.test/fixture","citationReference":"p. 1","reviewedFields":["identity"],"accessedDate":null}],
+    "review": {"status":"draft","reviewerNotes":null,"reviewDate":null,"verifiedBy":null}
+  },
+  "invalid": [
+    {"name":"string categories","field":"categories","value":"fish","diagnosticPath":"categories"},
+    {"name":"non-string array element","field":"categories","value":["fish",7],"diagnosticPath":"categories[1]"},
+    {"name":"invalid numeric","field":"minimumDepthMeters","value":"deep","diagnosticPath":"minimumDepthMeters"},
+    {"name":"negative domain value","field":"minimumDepthMeters","value":-1,"diagnosticPath":"minimumDepthMeters"},
+    {"name":"invalid nested object","field":"taxonomy","value":{"acceptedScientificName":7,"sourceScientificName":"Exemplum validum"},"diagnosticPath":"taxonomy.acceptedScientificName"},
+    {"name":"invalid enum","field":"regionalOccurrence","value":"abundant","diagnosticPath":"regionalOccurrence"},
+    {"name":"invalid required null","field":"summary","value":null,"diagnosticPath":"summary"}
+  ]
+}
