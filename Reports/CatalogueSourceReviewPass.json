@@ -1,0 +1,819 @@
+{
+  "schemaVersion": 1,
+  "purpose": "A bounded source-review handoff. Retrieval was attempted, but no source page was available for inspection; this report contains no approval and makes no correction claim.",
+  "validationDate": "2026-09-26",
+  "catalogueCountsObserved": {
+    "caribbean": {
+      "structurallyIncluded": 8,
+      "humanReviewed": 0,
+      "publicationEligible": 0,
+      "releaseSearchable": 0
+    },
+    "tropicalPacific": {
+      "structurallyIncluded": 384,
+      "humanReviewed": 0,
+      "publicationEligible": 0,
+      "releaseSearchable": 0
+    }
+  },
+  "selection": {
+    "count": 3,
+    "speciesIDs": [
+      "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "00000000-0000-0000-0000-000000000003",
+      "00000000-0000-0000-0000-000000000005"
+    ],
+    "policy": "Selected only from the existing packets; preferred direct species pages and the sole record with a second museum source."
+  },
+  "sourceAvailability": {
+    "repositoryOriginalPagesPresent": false,
+    "retrievalOutcome": "All four selected URLs were unavailable from this environment. HTTP response status is availability evidence only, not biological evidence."
+  },
+  "appliedDecisions": [],
+  "records": [
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "selectionReason": "Only existing packet with two named species-specific source pages, including a museum profile.",
+      "stableIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      },
+      "sourceIdentity": [
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+          "1"
+        ],
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+          "2"
+        ]
+      ],
+      "sourceReferences": [
+        {
+          "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ],
+          "retrieval": {
+            "result": "unavailable",
+            "observation": "HTTPS retrieval returned HTTP 403 from this validation environment; no source content was inspected."
+          }
+        },
+        {
+          "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+          "sourceName": "Florida Museum Queen Angelfish species profile",
+          "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+          "citationReference": "2",
+          "reviewedFields": [
+            "visualCharacteristics",
+            "habitat"
+          ],
+          "retrieval": {
+            "result": "unavailable",
+            "observation": "HTTPS retrieval returned HTTP 403 from this validation environment; no source content was inspected."
+          }
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Blue body with yellow-edged scales and yellow fins",
+          "Dark forehead spot ringed with bright blue, resembling a crown",
+          "Blue ring around the gill cover"
+        ]
+      },
+      "currentRecordSnapshot": {
+        "id": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+        "commonName": "Queen Angelfish",
+        "scientificName": "Holacanthus ciliaris",
+        "aliases": [
+          "queen-angelfish"
+        ],
+        "categories": [
+          "fish"
+        ],
+        "colors": [
+          "blue",
+          "yellow"
+        ],
+        "markings": [
+          "eye stripe"
+        ],
+        "bodyShapes": [
+          "compressed"
+        ],
+        "habitats": [
+          "mangrove",
+          "reef"
+        ],
+        "regions": [
+          "caribbean",
+          "western atlantic",
+          "atlantic"
+        ],
+        "behaviors": [
+          "hiding"
+        ],
+        "keywords": [
+          "queen",
+          "angelfish"
+        ],
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 45,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 40,
+        "summary": "A deep-bodied blue and yellow angelfish with a distinctive crown-like spot on the forehead.",
+        "distinguishingFeatures": [
+          "Blue body with yellow-edged scales and yellow fins",
+          "Dark forehead spot ringed with bright blue, resembling a crown",
+          "Blue ring around the gill cover"
+        ],
+        "typicalHabitat": "Coral reefs, where adults are often seen alone or in pairs.",
+        "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
+        "cautions": [],
+        "imageAssetName": null,
+        "regionalOccurrence": "common",
+        "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+        "subregions": [
+          "Bahamas",
+          "Belize",
+          "Bonaire",
+          "Cayman Islands",
+          "Florida Keys",
+          "Puerto Rico"
+        ],
+        "appearanceVariants": [],
+        "similarSpecies": [
+          {
+            "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+            "distinguishingText": "Queen Angelfish has yellow fins and a blue-ringed crown spot; French Angelfish is dark with gold-edged scales and lacks the crown spot."
+          }
+        ],
+        "bundledImage": {
+          "fileName": "fc213eff-6ba6-53ab-b288-f6e654299e68.svg",
+          "alternativeText": "Stylized offline vector reference marker for Queen Angelfish.",
+          "creatorName": "Dive ID",
+          "sourceName": "Dive ID bundled vector marker",
+          "sourceURL": "https://github.com/bryce496913/Dive-ID",
+          "licenseName": "CC0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          },
+          {
+            "sourceName": "Florida Museum Queen Angelfish species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+            "reviewedFields": [
+              "visualCharacteristics",
+              "habitat"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+            "citationReference": "2",
+            "sourceLicense": null
+          }
+        ],
+        "review": {
+          "status": "draft",
+          "reviewerNotes": "Requires independent species-specific source review before promotion.",
+          "reviewDate": null,
+          "verifiedBy": null
+        },
+        "taxonomy": {
+          "wormsAphiaID": null,
+          "scientificNameAuthority": null,
+          "taxonomicClass": null,
+          "order": null,
+          "family": null,
+          "genus": "Holacanthus",
+          "acceptedScientificName": "Holacanthus ciliaris",
+          "sourceScientificName": "Holacanthus ciliaris"
+        },
+        "measurements": {
+          "typicalObservedMinimumCentimeters": null,
+          "typicalObservedMaximumCentimeters": 45,
+          "maximumRecordedCentimeters": 45,
+          "type": "totalLength"
+        },
+        "tailShape": null,
+        "mouthAndHeadShape": [],
+        "finAndSpineClues": []
+      },
+      "proposedCorrections": {},
+      "fieldReview": [
+        {
+          "field": "commonName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "scientificName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "categories",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "distinguishingFeatures",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "geographicRange",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "typicalHabitat",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        }
+      ],
+      "unresolvedQuestions": [
+        "Obtain and inspect every listed original source page, or add an accessible authoritative source with a stable locator.",
+        "Compare the printed identity, category, distinguishing traits, size, depth, habitat, and range with this exact current record snapshot.",
+        "Record source-supported field-level corrections separately from remaining questions; do not treat the current catalogue prose as source evidence.",
+        "Obtain an explicit human decision for this fingerprint and source identity, including reviewer identity, UTC review date, and notes, before setting verified."
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:507b13b1c150226c23284b75f9f3d7735471e4ff3063a20accfe5a9c9e63c14d"
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "selectionReason": "Existing packet has a direct species-specific FishBase source page and clear identification fields.",
+      "stableIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000003"
+      },
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000003:source:1",
+          "1"
+        ]
+      ],
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ],
+          "retrieval": {
+            "result": "unavailable",
+            "observation": "HTTPS retrieval returned HTTP 403 from this validation environment; no source content was inspected."
+          }
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Oval blue adult body",
+          "Small terminal mouth",
+          "Yellow juvenile or transitional blue-and-yellow phases",
+          "Sharp caudal peduncle spine"
+        ]
+      },
+      "currentRecordSnapshot": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "commonName": "Atlantic Blue Tang",
+        "scientificName": "Acanthurus coeruleus",
+        "aliases": [
+          "atlantic-blue-tang"
+        ],
+        "categories": [
+          "fish"
+        ],
+        "colors": [
+          "blue",
+          "yellow"
+        ],
+        "markings": [
+          "tail"
+        ],
+        "bodyShapes": [
+          "compressed"
+        ],
+        "habitats": [
+          "reef",
+          "seagrass",
+          "shallow"
+        ],
+        "regions": [
+          "caribbean",
+          "western atlantic",
+          "atlantic"
+        ],
+        "behaviors": [
+          "swimming"
+        ],
+        "keywords": [
+          "atlantic",
+          "blue",
+          "tang"
+        ],
+        "minimumSizeCentimeters": 10,
+        "maximumSizeCentimeters": 39,
+        "minimumDepthMeters": 2,
+        "maximumDepthMeters": 40,
+        "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
+        "distinguishingFeatures": [
+          "Oval blue adult body",
+          "Small terminal mouth",
+          "Yellow juvenile or transitional blue-and-yellow phases",
+          "Sharp caudal peduncle spine"
+        ],
+        "typicalHabitat": "Coral reefs, rocky reefs, and nearby seagrass in shallow tropical western Atlantic water",
+        "geographicRange": "Western Atlantic, including Florida, the Bahamas, Gulf of Mexico, Caribbean Sea, Bermuda, and Brazil",
+        "cautions": [
+          "Caudal peduncle spine can cut skin; observe without handling"
+        ],
+        "imageAssetName": null,
+        "regionalOccurrence": "common",
+        "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+        "subregions": [
+          "Bahamas",
+          "Belize",
+          "Bonaire",
+          "Cayman Islands",
+          "Florida Keys",
+          "Puerto Rico"
+        ],
+        "appearanceVariants": [
+          {
+            "id": "juvenile-yellow",
+            "lifeStage": "juvenile",
+            "colors": [
+              "yellow"
+            ],
+            "markings": [
+              "tail"
+            ],
+            "bodyShapes": [
+              "oval"
+            ],
+            "minimumSizeCentimeters": 2,
+            "maximumSizeCentimeters": 8,
+            "description": "Juveniles can show yellow coloration useful for matching poor descriptions.",
+            "distinguishingFeatures": [
+              "yellow juvenile appearance"
+            ]
+          }
+        ],
+        "similarSpecies": [],
+        "bundledImage": {
+          "fileName": "00000000-0000-0000-0000-000000000003.svg",
+          "alternativeText": "Stylized offline vector reference marker for Atlantic Blue Tang.",
+          "creatorName": "Dive ID",
+          "sourceName": "Dive ID bundled vector marker",
+          "sourceURL": "https://github.com/bryce496913/Dive-ID",
+          "licenseName": "CC0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          }
+        ],
+        "review": {
+          "status": "draft",
+          "reviewerNotes": "Requires independent species-specific source review before promotion.",
+          "reviewDate": null,
+          "verifiedBy": null
+        },
+        "taxonomy": {
+          "wormsAphiaID": null,
+          "scientificNameAuthority": null,
+          "taxonomicClass": null,
+          "order": null,
+          "family": null,
+          "genus": "Acanthurus",
+          "acceptedScientificName": "Acanthurus coeruleus",
+          "sourceScientificName": "Acanthurus coeruleus"
+        },
+        "measurements": {
+          "typicalObservedMinimumCentimeters": 10,
+          "typicalObservedMaximumCentimeters": 39,
+          "maximumRecordedCentimeters": 39,
+          "type": "totalLength"
+        },
+        "tailShape": null,
+        "mouthAndHeadShape": [],
+        "finAndSpineClues": []
+      },
+      "proposedCorrections": {},
+      "fieldReview": [
+        {
+          "field": "commonName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "scientificName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "categories",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "distinguishingFeatures",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "geographicRange",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "typicalHabitat",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        }
+      ],
+      "unresolvedQuestions": [
+        "Obtain and inspect every listed original source page, or add an accessible authoritative source with a stable locator.",
+        "Compare the printed identity, category, distinguishing traits, size, depth, habitat, and range with this exact current record snapshot.",
+        "Record source-supported field-level corrections separately from remaining questions; do not treat the current catalogue prose as source evidence.",
+        "Obtain an explicit human decision for this fingerprint and source identity, including reviewer identity, UTC review date, and notes, before setting verified."
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:736b22d961b6746321f758eafdf10214f8c37f5c85afd48a566fbbe51987eec8"
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "selectionReason": "Existing packet has a direct species-specific FishBase source page and clear identification fields.",
+      "stableIdentity": {
+        "catalogue": "caribbean-pack-3",
+        "stableSpeciesID": "00000000-0000-0000-0000-000000000005"
+      },
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000005:source:1",
+          "1"
+        ]
+      ],
+      "sourceReferences": [
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+          "sourceName": "FishBase species summary",
+          "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+          "citationReference": "1",
+          "reviewedFields": [
+            "scientificName",
+            "geographicRange",
+            "size",
+            "depth",
+            "habitat",
+            "visualCharacteristics"
+          ],
+          "retrieval": {
+            "result": "unavailable",
+            "observation": "HTTPS retrieval returned HTTP 403 from this validation environment; no source content was inspected."
+          }
+        }
+      ],
+      "originalText": {
+        "identificationText": [
+          "Beak-like dental plates",
+          "Angular forehead"
+        ]
+      },
+      "currentRecordSnapshot": {
+        "id": "00000000-0000-0000-0000-000000000005",
+        "commonName": "Stoplight Parrotfish",
+        "scientificName": "Sparisoma viride",
+        "aliases": [
+          "stoplight-parrotfish"
+        ],
+        "categories": [
+          "fish"
+        ],
+        "colors": [
+          "green",
+          "red",
+          "yellow"
+        ],
+        "markings": [
+          "beak",
+          "stripes"
+        ],
+        "bodyShapes": [
+          "elongated"
+        ],
+        "habitats": [
+          "reef",
+          "seagrass"
+        ],
+        "regions": [
+          "caribbean",
+          "western atlantic",
+          "atlantic"
+        ],
+        "behaviors": [
+          "grazing"
+        ],
+        "keywords": [
+          "stoplight",
+          "parrotfish"
+        ],
+        "minimumSizeCentimeters": 30,
+        "maximumSizeCentimeters": 60,
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 50,
+        "summary": "A robust grazing fish with color that varies by life phase.",
+        "distinguishingFeatures": [
+          "Beak-like dental plates",
+          "Angular forehead"
+        ],
+        "typicalHabitat": "Coral reefs and seagrass",
+        "geographicRange": "Western Atlantic",
+        "cautions": [],
+        "imageAssetName": null,
+        "regionalOccurrence": "regular",
+        "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+        "subregions": [
+          "Bahamas",
+          "Belize",
+          "Bonaire",
+          "Cayman Islands",
+          "Florida Keys",
+          "Puerto Rico"
+        ],
+        "appearanceVariants": [
+          {
+            "id": "juvenile-initial-dark",
+            "lifeStage": "juvenile",
+            "colors": [
+              "brown"
+            ],
+            "markings": [
+              "spots"
+            ],
+            "bodyShapes": [
+              "robust"
+            ],
+            "minimumSizeCentimeters": 2,
+            "maximumSizeCentimeters": 30,
+            "description": "Juveniles and initial-phase fish are dark reddish-brown with pale markings.",
+            "distinguishingFeatures": [
+              "dark or reddish-brown body",
+              "pale or white markings"
+            ]
+          }
+        ],
+        "similarSpecies": [],
+        "bundledImage": {
+          "fileName": "00000000-0000-0000-0000-000000000005.svg",
+          "alternativeText": "Stylized offline vector reference marker for Stoplight Parrotfish.",
+          "creatorName": "Dive ID",
+          "sourceName": "Dive ID bundled vector marker",
+          "sourceURL": "https://github.com/bryce496913/Dive-ID",
+          "licenseName": "CC0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          }
+        ],
+        "review": {
+          "status": "draft",
+          "reviewerNotes": "Requires independent species-specific source review before promotion.",
+          "reviewDate": null,
+          "verifiedBy": null
+        },
+        "taxonomy": {
+          "wormsAphiaID": null,
+          "scientificNameAuthority": null,
+          "taxonomicClass": null,
+          "order": null,
+          "family": null,
+          "genus": "Sparisoma",
+          "acceptedScientificName": "Sparisoma viride",
+          "sourceScientificName": "Sparisoma viride"
+        },
+        "measurements": {
+          "typicalObservedMinimumCentimeters": 30,
+          "typicalObservedMaximumCentimeters": 60,
+          "maximumRecordedCentimeters": 60,
+          "type": "totalLength"
+        },
+        "tailShape": null,
+        "mouthAndHeadShape": [
+          "beak-like dental plates",
+          "angular forehead",
+          "squared head"
+        ],
+        "finAndSpineClues": []
+      },
+      "proposedCorrections": {},
+      "fieldReview": [
+        {
+          "field": "commonName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "scientificName",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "categories",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "distinguishingFeatures",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumSizeCentimeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "minimumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "maximumDepthMeters",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "geographicRange",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        },
+        {
+          "field": "typicalHabitat",
+          "status": "unresolved",
+          "evidence": "No source-page content was available to compare with the current value."
+        }
+      ],
+      "unresolvedQuestions": [
+        "Obtain and inspect every listed original source page, or add an accessible authoritative source with a stable locator.",
+        "Compare the printed identity, category, distinguishing traits, size, depth, habitat, and range with this exact current record snapshot.",
+        "Record source-supported field-level corrections separately from remaining questions; do not treat the current catalogue prose as source evidence.",
+        "Obtain an explicit human decision for this fingerprint and source identity, including reviewer identity, UTC review date, and notes, before setting verified."
+      ],
+      "reviewDecision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewedContentFingerprint": "sha256:31aaa4d6ceb8fca8383966454f84763cfa7d5e152fc855554448c81ceb7b0470"
+    }
+  ],
+  "remainingBlockers": [
+    "No selected original source page was retrievable or stored in the repository, so no biological field was reconciled and no corrected record can honestly be asserted.",
+    "No explicit human decision covers any selected current-content fingerprint. All selected records must remain draft.",
+    "Release has no publication-eligible record in either pack, so Release catalogue availability and real-approved-record search testing remain blocked.",
+    "Xcode, Simulator, and Apple device tooling are unavailable in this Linux environment; hosted and installed-app checks were not run."
+  ],
+  "validationResults": {
+    "regeneration": {
+      "result": "pass",
+      "runs": 2,
+      "observation": "Tropical Pacific catalogue/reports and the first review packet had identical SHA-256 hashes after both runs."
+    },
+    "pythonReviewTests": {
+      "result": "pass",
+      "tests": 16
+    },
+    "pythonImporterTests": {
+      "result": "pass",
+      "tests": 6
+    },
+    "portableSwiftFullSuite": {
+      "result": "fail",
+      "executed": 79,
+      "skipped": 1,
+      "failures": 1,
+      "observation": "Known catalogue-quality regression: pacific-v1-cockatoo-waspfish was not returned within its asserted top-five bound. This draft-data search is not evidence from a real approved record."
+    },
+    "portableSyntheticPublicationTests": {
+      "result": "pass",
+      "tests": 2,
+      "observation": "Synthetic verified-record filtering and partial-pack accounting passed; this is gate behavior only, not real-record publication evidence."
+    },
+    "realApprovedRecordReleaseSearch": {
+      "result": "blocked",
+      "observation": "No publication-eligible record exists."
+    },
+    "hostedAndInstalledApp": {
+      "result": "notRun",
+      "observation": "xcodebuild, Simulator, and Apple device tooling are unavailable on this Linux host."
+    }
+  }
+}
