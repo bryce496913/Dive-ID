@@ -17,12 +17,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run SwiftPM tests
         run: swift test
-      - name: Run Python tests
+      - name: Install lightweight Python test dependencies
         run: |
-          python3 -m unittest Tools/TropicalPacificWorkbook/test_inspect_workbook.py
-          python3 Tools/SemanticSearch/tests/test_evaluate_candidate.py
-          python3 Tools/SemanticSearch/tests/test_export_search_corpus.py
-          python3 Tools/SemanticSearch/tests/test_provision_real_encoder.py
+          python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt
+          python3 -m pip install -r Tools/CatalogImport/requirements.txt
+      - name: Run workbook inspector tests
+        run: python3 -m unittest discover -s Tools/TropicalPacificWorkbook -p 'test_*.py' -v
+      - name: Run catalogue importer tests
+        run: python3 -m unittest discover -s Tools/CatalogImport -p 'test_*.py' -v
+      - name: Run catalogue review tests
+        run: python3 -m unittest discover -s Tools/CatalogReview -p 'test_*.py' -v
+      - name: Run semantic-search tooling tests
+        run: python3 -m unittest discover -s Tools/SemanticSearch/tests -p 'test_*.py' -v
 
   xcode-tests:
     name: Xcode unit and UI tests
