@@ -1,5 +1,47 @@
 # Catalogue publication and first-review record
 
+## Bounded source-review pass (2026-09-26)
+
+The current manifests and decoded catalogues were counted again for this pass; the
+figures below are observations of the current files, not the previously reported
+figures carried forward. Caribbean still contains 8 structurally included records
+and Tropical Pacific still contains 384. Both manifests report 0 human-reviewed
+and 0 publication-eligible records, and every decoded record remains `draft`.
+Consequently, publication access exposes 0 regions and 0 records in Release.
+
+`Reports/CatalogueSourceReviewPass.json` is the complete handoff for a deliberately
+small selection from the existing packets:
+
+* `fc213eff-6ba6-53ab-b288-f6e654299e68` — Queen Angelfish
+* `00000000-0000-0000-0000-000000000003` — Atlantic Blue Tang
+* `00000000-0000-0000-0000-000000000005` — Stoplight Parrotfish
+
+These were preferred because each has a direct species page and Queen Angelfish is
+the only existing packet with a second, museum-hosted species profile. Retrieval of
+all four referenced URLs was attempted on 2026-09-26. Each request was refused with
+HTTP 403 in the validation environment, and the repository contains no captured
+original page. An HTTP status is not biological evidence. No page content was
+inspected, no value was inferred from the existing catalogue prose, and no category
+or other field was reconstructed. The handoff therefore preserves each stable ID,
+source identity, exact references, original packet text, full current record,
+content fingerprint, field-by-field unresolved state, and empty correction set.
+
+No explicit human decision covers these current fingerprints. No reviewer identity,
+date, or approval was created, and no overlay decision was applied. To unblock each
+record, a reviewer must obtain every listed page (or record an accessible,
+authoritative replacement source with a stable locator), compare identity, category,
+traits, size, depth, habitat, and range against the recorded snapshot, document each
+field correction and unresolved question, and provide a named, dated decision with
+notes. Until then all three records remain draft and Release catalogue availability
+remains blocked.
+
+The Tropical Pacific importer and first-packet generator were run twice. The six
+generated catalogue/report artifacts had identical SHA-256 hashes after both runs.
+Portable Swift and Python checks can exercise publication filtering, mixed-pack
+accounting, saved snapshots, and region recovery synthetically, but there is no real
+approved record with which to run the requested Release search. Xcode, Simulator,
+and physical-device checks remain unavailable in this Linux environment.
+
 ## Validation record (2026-09-24)
 
 * Repository commit inspected before changes: `3503db8` (`work` branch).
