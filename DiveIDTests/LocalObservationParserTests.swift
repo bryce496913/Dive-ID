@@ -4,6 +4,17 @@ import XCTest
 final class LocalObservationParserMeasurementTests: XCTestCase {
     private let parser = LocalObservationParser()
 
+    func testSpineDescriptionsShareOneEvidenceGroupAndRespectWordBoundaries() async {
+        for description in ["fish with dorsal needles", "spiny reef fish", "spiky fins", "fish with spines"] {
+            let observation = await parser.parse(description)
+            XCTAssertEqual(observation.markings, ["spines"], description)
+        }
+        for description in ["needlefish on a reef", "spineless animal", "spinnaker sail"] {
+            let observation = await parser.parse(description)
+            XCTAssertFalse(observation.markings.contains("spines"), description)
+        }
+    }
+
     func testExplicitContextAssignsOneRolePerMeasurementOccurrence() async {
         await assertMeasurement("around 10 m deep", size: nil, depth: 10)
         await assertMeasurement("about 10 cm long", size: 10, depth: nil)
