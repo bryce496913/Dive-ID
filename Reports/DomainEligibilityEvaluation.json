@@ -1,0 +1,759 @@
+{
+  "baselineSHA": "5f6a9584b76f7d0208954ad340aad22120921f1b",
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "suiteID": "v05-development-v2",
+  "policy": "Explicit affirmative amphibian subject; unknown vocabulary, comparisons, negation and uncertainty are not domain contradictions.",
+  "groups": [
+    {
+      "access": "experimentalDevelopment",
+      "engine": "production-bm25-50-biological",
+      "packSizes": {
+        "caribbean": 8,
+        "tropical-pacific": 384
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 33,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 22,
+        "top3": 28,
+        "top10": 30
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 33,
+        "confidenceCompliant": 46,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 6,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 0,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 22,
+        "top3": 28,
+        "top10": 30
+      },
+      "changedCases": [
+        {
+          "before": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [
+              0.16666666666666666
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "00000000-0000-0000-0000-000000000010"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "noMatch",
+              "confidenceLimit"
+            ],
+            "id": "v05-caribbean-terrestrial",
+            "informationLevels": [
+              "sufficient"
+            ],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 3,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-caribbean-terrestrial",
+            "informationLevels": [],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 3,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          }
+        },
+        {
+          "before": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "50020F47-9605-5ED9-BB79-7A2E43DB22B9",
+              "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
+              "14548B26-3ECE-526F-AB9C-AB5293546DBF",
+              "5EC416BC-7421-54C8-99E0-2BECA1C062E9",
+              "C8C1235D-283F-56C7-BE3B-B4D0CFAF5E87",
+              "E74C1781-F03C-5378-B8C9-6184AA16BD6C",
+              "62015454-381B-5A12-B3BA-AFB5AA41EABA",
+              "C5C35E73-5A99-5868-BB94-81FA7C2A8A89",
+              "7ACC216E-6E3F-5228-BF2B-51CB4CF7C597",
+              "368CE0A4-9C3F-59E7-96E0-7FCE888DF4A6"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "noMatch",
+              "confidenceLimit"
+            ],
+            "id": "v05-tropical-pacific-terrestrial",
+            "informationLevels": [
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient"
+            ],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 50,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-tropical-pacific-terrestrial",
+            "informationLevels": [],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 50,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          }
+        }
+      ],
+      "remainingFailures": [
+        {
+          "id": "v05-09-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-10-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-13-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-17-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        }
+      ],
+      "gates": [
+        {
+          "denominator": 34,
+          "hits": 33,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "passed"
+        },
+        {
+          "denominator": 46,
+          "hits": 46,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 6,
+          "hits": 6,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 4,
+          "hits": 4,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 22,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 30,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 28,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "access": "experimentalDevelopment",
+      "engine": "structured-full-pack",
+      "packSizes": {
+        "caribbean": 8,
+        "tropical-pacific": 384
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 1,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 16,
+        "top3": 21,
+        "top10": 24
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 1,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 46,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 6,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 0,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 16,
+        "top3": 21,
+        "top10": 24
+      },
+      "changedCases": [
+        {
+          "before": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [
+              0.16666666666666666,
+              0.09523809523809523
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "00000000-0000-0000-0000-000000000010",
+              "00000000-0000-0000-0000-000000000005"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "noMatch",
+              "confidenceLimit"
+            ],
+            "id": "v05-caribbean-terrestrial",
+            "informationLevels": [
+              "sufficient",
+              "sufficient"
+            ],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 8,
+            "retrievedCandidateCount": 8,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-caribbean-terrestrial",
+            "informationLevels": [],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 8,
+            "retrievedCandidateCount": 8,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          }
+        },
+        {
+          "before": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047,
+              0.19047619047619047
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "B16558C8-C88A-5367-BF59-474E803A4F83",
+              "2236AFD6-7658-5782-B578-3985F74BEFFD",
+              "A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0",
+              "E74C1781-F03C-5378-B8C9-6184AA16BD6C",
+              "50020F47-9605-5ED9-BB79-7A2E43DB22B9",
+              "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
+              "1CEF7D51-E7ED-5153-839F-555AB9E728FD",
+              "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
+              "CE88CB94-3966-591B-93FF-F296B7D62A6E",
+              "9177B115-C1AC-5765-B426-6448E27E61EA"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "noMatch",
+              "confidenceLimit"
+            ],
+            "id": "v05-tropical-pacific-terrestrial",
+            "informationLevels": [
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient"
+            ],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 384,
+            "retrievedCandidateCount": 384,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-tropical-pacific-terrestrial",
+            "informationLevels": [],
+            "kind": "noMatch",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 384,
+            "retrievedCandidateCount": 384,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          }
+        }
+      ],
+      "remainingFailures": [
+        {
+          "id": "v05-09-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-10-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-11-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-11-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-12-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-12-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-13-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-15-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-16-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-17-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-ambiguous-trigger",
+          "failures": [
+            "rankRequirement"
+          ]
+        }
+      ],
+      "gates": [
+        {
+          "denominator": 34,
+          "hits": 34,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "passed"
+        },
+        {
+          "denominator": 46,
+          "hits": 46,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 6,
+          "hits": 6,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 4,
+          "hits": 4,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 16,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 24,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "failed"
+        },
+        {
+          "denominator": 34,
+          "hits": 21,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "access": "publication",
+      "engine": "production-bm25-50-biological",
+      "packSizes": {
+        "caribbean": 0,
+        "tropical-pacific": 0
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "changedCases": [],
+      "remainingFailures": [],
+      "gates": [
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "not-evaluated"
+        }
+      ]
+    },
+    {
+      "access": "publication",
+      "engine": "structured-full-pack",
+      "packSizes": {
+        "caribbean": 0,
+        "tropical-pacific": 0
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "changedCases": [],
+      "remainingFailures": [],
+      "gates": [
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "not-evaluated"
+        }
+      ]
+    }
+  ]
+}

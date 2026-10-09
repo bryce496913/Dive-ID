@@ -12,4 +12,10 @@ struct ParsedObservation: Equatable, Sendable {
     let categories: Set<String>
     let approximateSizeCentimeters: Double?
     let approximateDepthMeters: Double?
+    var domainContradiction: ObservationDomainContradiction? = nil
+}
+
+/// Positive evidence about the subject, not a penalty for unknown vocabulary.
+enum ObservationDomainContradiction: String, Equatable, Sendable {
+    case amphibianSubject
 }

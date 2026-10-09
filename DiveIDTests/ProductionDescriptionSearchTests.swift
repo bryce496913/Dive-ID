@@ -445,3 +445,76 @@ private struct FailingCatalogueRepository: MarineSpeciesCatalogRepository {
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { throw error }
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack { throw error }
 }
+
+final class DomainEligibilityTests: XCTestCase {
+    private func repository() -> BundleMarineSpeciesCatalogRepository {
+        .init(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+    }
+
+    func testDomainContradictionRejectsCandidatesInBothEnginesAndPacks() async throws {
+        for packID in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+            let pack = try await repository().loadPack(id: packID)
+            for engine: any DescriptionSearching in [HybridDescriptionSearchEngine(), StructuredDescriptionSearchEngine()] {
+                let result = try await engine.search(description: "A spotted freshwater frog swimming on sand, about 5 cm long.", pack: pack)
+                XCTAssertFalse(result.retrievedSpeciesIDs.isEmpty)
+                XCTAssertTrue(result.candidates.isEmpty)
+                XCTAssertEqual(result.diagnostics.disposition, .allCandidatesRejectedByRanker)
+                XCTAssertEqual(result.queryAnalysis.packRegionCompatibility, .unspecified)
+            }
+        }
+    }
+
+    func testExactNameAndStrongSemanticRetrievalCannotOverrideSubjectContradiction() async throws {
+        let pack = try await repository().loadPack(id: .caribbean)
+        let profile = try XCTUnwrap(pack.profiles.first)
+        let description = "A spotted frog beside a sign reading \(profile.commonName)."
+        let observation = await LocalObservationParser().parse(description)
+        XCTAssertEqual(observation.domainContradiction, .amphibianSubject)
+        let result = try await LocalSpeciesRanker().rank(input: .init(description: description, observation: observation, candidates: [
+            .init(speciesID: profile.id, profile: profile, retrieval: .init(source: .semantic, scoreKind: .cosineSimilarity, score: 1, rank: 1, evidence: []))
+        ]))
+        XCTAssertTrue(result.isEmpty)
+    }
+
+    func testNearbyMarineDescriptionsRemainEligible() async throws {
+        let pack = try await repository().loadPack(id: .caribbean)
+        for engine: any DescriptionSearching in [HybridDescriptionSearchEngine(), StructuredDescriptionSearchEngine()] {
+            for description in [
+                "Not a frog. A large flat eagle ray with white spots and a long tail over sand.",
+                "A frog-like face on a long silver fish with large teeth and dark spots near a reef.",
+                "A long silver fish eating a frog, with large teeth and dark spots near a reef.",
+                "A large flat eagle ray with white spots and an unfamiliar glorp near its long tail over sand."
+            ] {
+                let result = try await engine.search(description: description, pack: pack)
+                XCTAssertFalse(result.candidates.isEmpty, description)
+            }
+        }
+    }
+
+    func testNoMatchRegionMismatchAndLoadFailureRemainDistinct() async throws {
+        let service = LocalMarineLifeIdentificationService(catalogRepository: repository())
+        let description = "A spotted freshwater frog swimming over sand."
+        let matches = try await service.identify(request: .init(source: .description(description), context: .init(region: .caribbean)), processedPhoto: nil)
+        XCTAssertTrue(matches.isEmpty)
+        do {
+            _ = try await service.identify(request: .init(source: .description(description + " In Fiji."), context: .init(region: .caribbean)), processedPhoto: nil)
+            XCTFail("Expected region mismatch even when domain evidence rejects candidates")
+        } catch LocalIdentificationError.regionMismatch(let selected, _) {
+            XCTAssertEqual(selected, .caribbean)
+        }
+        let broken = LocalMarineLifeIdentificationService(catalogRepository: UnreadableDomainTestRepository())
+        do {
+            _ = try await broken.identify(request: .init(source: .description(description), context: .init(region: .caribbean)), processedPhoto: nil)
+            XCTFail("Storage failure must not become successful no-match")
+        } catch LocalIdentificationError.catalogueLoadFailed(let failure) {
+            XCTAssertEqual(failure.catalogError, .unreadableData)
+        }
+    }
+}
+
+private struct UnreadableDomainTestRepository: MarineSpeciesCatalogRepository {
+    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [] }
+    func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
+        throw LocalCatalogError.unreadableData
+    }
+}
