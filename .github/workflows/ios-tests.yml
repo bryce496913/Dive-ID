@@ -10,25 +10,55 @@ permissions:
   contents: read
 
 jobs:
-  portable-tests:
-    name: SwiftPM and Python tests
+  python-tests:
+    name: Python (${{ matrix.suite }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [TropicalPacificWorkbook, CatalogImport, CatalogReview, SemanticSearch/tests, CI]
     steps:
       - uses: actions/checkout@v4
-      - name: Run SwiftPM tests
-        run: swift test
-      - name: Install lightweight Python test dependencies
+      - name: Install Python test dependencies
+        run: python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt -r Tools/CatalogImport/requirements.txt
+      - name: Run tooling suite
+        shell: bash
         run: |
-          python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt
-          python3 -m pip install -r Tools/CatalogImport/requirements.txt
-      - name: Run workbook inspector tests
-        run: python3 -m unittest discover -s Tools/TropicalPacificWorkbook -p 'test_*.py' -v
-      - name: Run catalogue importer tests
-        run: python3 -m unittest discover -s Tools/CatalogImport -p 'test_*.py' -v
-      - name: Run catalogue review tests
-        run: python3 -m unittest discover -s Tools/CatalogReview -p 'test_*.py' -v
-      - name: Run semantic-search tooling tests
-        run: python3 -m unittest discover -s Tools/SemanticSearch/tests -p 'test_*.py' -v
+          set -o pipefail
+          python3 -m unittest discover -s 'Tools/${{ matrix.suite }}' -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/python-tests.log"
+      - name: Retain Python log
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-${{ strategy.job-index }}-logs
+          path: ${{ runner.temp }}/python-tests.log
+          retention-days: 14
+
+  swiftpm-tests:
+    name: SwiftPM (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode 16.4
+        if: ${{ runner.os == 'macOS' }}
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Run SwiftPM tests
+        shell: bash
+        run: |
+          set -o pipefail
+          swift --version
+          swift test 2>&1 | tee "$RUNNER_TEMP/swiftpm-tests.log"
+      - name: Retain SwiftPM log
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: swiftpm-${{ matrix.os }}-logs
+          path: ${{ runner.temp }}/swiftpm-tests.log
+          retention-days: 14
 
   xcode-tests:
     name: Xcode unit and UI tests
@@ -41,9 +71,6 @@ jobs:
 
       - name: Select Xcode 16.4
         run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
-
-      - name: Run macOS SwiftPM tests
-        run: swift test
 
       - name: Resolve an iOS 18 simulator
         id: simulator
@@ -71,8 +98,23 @@ jobs:
           ' )"
           echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
 
+      - name: Resolve and validate Debug test product settings
+        id: debug_settings
+        if: ${{ always() && steps.simulator.outcome == 'success' }}
+        run: |
+          xcodebuild -project DiveID.xcodeproj -alltargets -configuration Debug -sdk iphonesimulator -showBuildSettings -json > "$RUNNER_TEMP/settings-Debug.json" 2> "$RUNNER_TEMP/settings-Debug.log"
+          python3 Tools/CI/validate_xcode_settings.py "$RUNNER_TEMP/settings-Debug.json" Debug
+
+      - name: Resolve and validate Release test product settings
+        id: release_settings
+        if: ${{ always() && steps.simulator.outcome == 'success' }}
+        run: |
+          xcodebuild -project DiveID.xcodeproj -alltargets -configuration Release -sdk iphonesimulator -showBuildSettings -json > "$RUNNER_TEMP/settings-Release.json" 2> "$RUNNER_TEMP/settings-Release.log"
+          python3 Tools/CI/validate_xcode_settings.py "$RUNNER_TEMP/settings-Release.json" Release
+
       - name: Build application and tests
         id: build
+        if: ${{ always() && steps.simulator.outcome == 'success' }}
         run: |
           set -o pipefail
           xcodebuild \
@@ -81,10 +123,12 @@ jobs:
             -destination '${{ steps.simulator.outputs.destination }}' \
             -derivedDataPath "$DERIVED_DATA" \
             CODE_SIGNING_ALLOWED=NO \
-            build-for-testing
+            -resultBundlePath "$RUNNER_TEMP/Build.xcresult" \
+            build-for-testing 2>&1 | tee "$RUNNER_TEMP/build.log"
 
       - name: Run complete unit-test target
         id: unit_tests
+        if: ${{ always() && steps.build.outcome == 'success' }}
         run: |
           set -o pipefail
           xcodebuild \
@@ -95,9 +139,10 @@ jobs:
             -resultBundlePath "$RUNNER_TEMP/DiveIDTests.xcresult" \
             CODE_SIGNING_ALLOWED=NO \
             test-without-building \
-            -only-testing:DiveIDTests
+            -only-testing:DiveIDTests 2>&1 | tee "$RUNNER_TEMP/unit-tests.log"
 
       - name: Run hosted application-bundle packaging test explicitly
+        id: packaging
         if: ${{ always() && steps.build.outcome == 'success' }}
         run: |
           set -o pipefail
@@ -109,7 +154,7 @@ jobs:
             -resultBundlePath "$RUNNER_TEMP/DiveIDHostedPackagingTest.xcresult" \
             CODE_SIGNING_ALLOWED=NO \
             test-without-building \
-            -only-testing:DiveIDTests/TropicalPacificCatalogueTests/testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle
+            -only-testing:DiveIDTests/TropicalPacificCatalogueTests/testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle 2>&1 | tee "$RUNNER_TEMP/packaging-test.log"
 
       - name: Run UI-test target
         id: ui_tests
@@ -124,13 +169,49 @@ jobs:
             -resultBundlePath "$RUNNER_TEMP/DiveIDUITests.xcresult" \
             CODE_SIGNING_ALLOWED=NO \
             test-without-building \
-            -only-testing:DiveIDUITests
+            -only-testing:DiveIDUITests 2>&1 | tee "$RUNNER_TEMP/ui-tests.log"
 
-      - name: Upload failed Xcode result bundles
-        if: ${{ failure() }}
+      - name: Summarize hosted outcomes
+        if: ${{ always() }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          Tested SHA: `${{ github.sha }}`
+
+          | Stage | Outcome |
+          | --- | --- |
+          | Debug settings | ${{ steps.debug_settings.outcome }} |
+          | Release settings | ${{ steps.release_settings.outcome }} |
+          | Build | ${{ steps.build.outcome }} |
+          | Complete unit target | ${{ steps.unit_tests.outcome }} |
+          | Hosted packaging | ${{ steps.packaging.outcome }} |
+          | UI target | ${{ steps.ui_tests.outcome }} |
+          SUMMARY
+
+      - name: Upload Xcode logs, settings and result bundles
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: xcode-test-results
-          path: ${{ runner.temp }}/*.xcresult
+          path: |
+            ${{ runner.temp }}/*.xcresult
+            ${{ runner.temp }}/*.log
+            ${{ runner.temp }}/settings-*.json
           if-no-files-found: ignore
           retention-days: 14
+
+  validation:
+    name: Required validation
+    if: ${{ always() }}
+    needs: [python-tests, swiftpm-tests, xcode-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every validation job to succeed
+        env:
+          PYTHON_RESULT: ${{ needs.python-tests.result }}
+          SWIFTPM_RESULT: ${{ needs.swiftpm-tests.result }}
+          XCODE_RESULT: ${{ needs.xcode-tests.result }}
+        run: |
+          printf 'Python: %s\nSwiftPM: %s\nXcode: %s\n' "$PYTHON_RESULT" "$SWIFTPM_RESULT" "$XCODE_RESULT" >> "$GITHUB_STEP_SUMMARY"
+          test "$PYTHON_RESULT" = success
+          test "$SWIFTPM_RESULT" = success
+          test "$XCODE_RESULT" = success
