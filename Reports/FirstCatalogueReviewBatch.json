@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "purpose": "Human-review preparation only; no record in this packet is approved.",
-  "sourcePageAvailability": "The repository contains workbook transcriptions and page/tile locators, but not the original source PDF pages. Category corrections remain unresolved until a reviewer inspects those pages.",
+  "purpose": "Human-review preparation only; this generator does not approve records. Current decisions are copied from the catalogue.",
+  "sourcePageAvailability": "Original Pacific book pages remain unavailable. Accessible species-specific accounts inspected in this pass are linked in sourceInspectionReferences; category OCR packets still require original pages or authoritative replacement evidence.",
   "recordCounts": {
     "caribbean": 8,
     "tropicalPacificUnresolvedCategory": 7
@@ -29,10 +29,10 @@
         ],
         "typicalHabitat": "Coral reefs, rocky reefs, and nearby seagrass in shallow tropical western Atlantic water",
         "geographicRange": "Western Atlantic, including Florida, the Bahamas, Gulf of Mexico, Caribbean Sea, Bermuda, and Brazil",
-        "minimumSizeCentimeters": 10,
+        "minimumSizeCentimeters": null,
         "maximumSizeCentimeters": 39,
         "minimumDepthMeters": 2,
-        "maximumDepthMeters": 40
+        "maximumDepthMeters": 50
       },
       "sourceReferences": [
         {
@@ -48,6 +48,19 @@
             "habitat",
             "visualCharacteristics"
           ]
+        },
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000003:source:florida-museum",
+          "sourceName": "Florida Museum Atlantic Blue Tang species profile",
+          "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+          "citationReference": "Biology; Habitat; Geographical Distribution",
+          "reviewedFields": [
+            "identity",
+            "appearanceVariants",
+            "mouthAndHeadShape",
+            "habitat",
+            "geographicRange"
+          ]
         }
       ],
       "originalText": {
@@ -60,18 +73,69 @@
       },
       "proposedCorrections": {},
       "unresolvedQuestions": [
-        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
-      "fieldEvidence": [],
+      "fieldEvidence": [
+        {
+          "field": "identity",
+          "value": "Both accounts identify Acanthurus coeruleus."
+        },
+        {
+          "field": "structuredTraits",
+          "value": "Compressed blue adults, yellow juveniles, yellow caudal spine; museum describes small mouth and pointed snout."
+        },
+        {
+          "field": "measurements",
+          "value": "FishBase maximum 39 cm total length (ref 36453), common length 25 cm (5217); depth 2–50 m (7345), usually 2–18 m (27115). Museum gives maximum 37 cm and depth 2–40 m. No typical size interval or 2–8 cm juvenile interval established."
+        },
+        {
+          "field": "habitat",
+          "value": "Reef, rocky and grassy habitat; algal feeding."
+        },
+        {
+          "field": "range",
+          "value": "Western Atlantic New York/Bermuda through Gulf of Mexico and Brazil; Ascension also reported. Caribbean coverage supported."
+        }
+      ],
       "reviewDecision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewedContentFingerprint": "sha256:736b22d961b6746321f758eafdf10214f8c37f5c85afd48a566fbbe51987eec8",
+      "reviewedContentFingerprint": "sha256:02f48c206737f65b40dcf18034883b68fb587b62476e33cb48a5900f462c34b0",
       "sourceIdentity": [
         [
           "00000000-0000-0000-0000-000000000003:source:1",
           "1"
+        ],
+        [
+          "00000000-0000-0000-0000-000000000003:source:florida-museum",
+          "Biology; Habitat; Geographical Distribution"
         ]
+      ],
+      "sourceInspectionReferences": [
+        {
+          "url": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
       ]
     },
     {
@@ -90,13 +154,13 @@
         "summary": "A robust grazing fish with color that varies by life phase.",
         "distinguishingFeatures": [
           "Beak-like dental plates",
-          "Angular forehead"
+          "Bluntly rounded head"
         ],
         "typicalHabitat": "Coral reefs and seagrass",
         "geographicRange": "Western Atlantic",
-        "minimumSizeCentimeters": 30,
-        "maximumSizeCentimeters": 60,
-        "minimumDepthMeters": 1,
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 64,
+        "minimumDepthMeters": 3,
         "maximumDepthMeters": 50
       },
       "sourceReferences": [
@@ -113,28 +177,92 @@
             "habitat",
             "visualCharacteristics"
           ]
+        },
+        {
+          "stableSourceID": "00000000-0000-0000-0000-000000000005:source:florida-museum",
+          "sourceName": "Florida Museum Stoplight Parrotfish species profile",
+          "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/",
+          "citationReference": "Biology; Habitat; Geographical Distribution",
+          "reviewedFields": [
+            "identity",
+            "appearanceVariants",
+            "mouthAndHeadShape",
+            "habitat",
+            "geographicRange"
+          ]
         }
       ],
       "originalText": {
         "identificationText": [
           "Beak-like dental plates",
-          "Angular forehead"
+          "Bluntly rounded head"
         ]
       },
       "proposedCorrections": {},
       "unresolvedQuestions": [
-        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+        "Accept FishBase maximum 64 cm total length over Museum 55 cm; confirm life-stage interpretation. Family placement differs between accounts; higher taxonomy remains unset.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
-      "fieldEvidence": [],
+      "fieldEvidence": [
+        {
+          "field": "identity",
+          "value": "Both accounts identify Sparisoma viride."
+        },
+        {
+          "field": "structuredTraits",
+          "value": "Museum: oblong, moderately compressed, bluntly rounded head and beak; juvenile pale spot rows; terminal males green with orange head bands and yellow spots. Angular/squared head removed."
+        },
+        {
+          "field": "measurements",
+          "value": "FishBase maximum 64 cm total length and common length 38 cm (ref 3802), depth 3–50 m (9710). Museum maximum 55 cm. Neither supports a typical 30–60 cm interval or fixed 2–30 cm juvenile interval."
+        },
+        {
+          "field": "habitat",
+          "value": "Coral reefs; young also seagrass; daytime algal grazing."
+        },
+        {
+          "field": "range",
+          "value": "Southern Florida, Bermuda, Bahamas and Caribbean to Brazil."
+        }
+      ],
       "reviewDecision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewedContentFingerprint": "sha256:31aaa4d6ceb8fca8383966454f84763cfa7d5e152fc855554448c81ceb7b0470",
+      "reviewedContentFingerprint": "sha256:4bbb0baa7aba654a40d525fd007fac90efad594b7c284fb6d6fb8034b442d5d8",
       "sourceIdentity": [
         [
           "00000000-0000-0000-0000-000000000005:source:1",
           "1"
+        ],
+        [
+          "00000000-0000-0000-0000-000000000005:source:florida-museum",
+          "Biology; Habitat; Geographical Distribution"
         ]
+      ],
+      "sourceInspectionReferences": [
+        {
+          "url": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
       ]
     },
     {
@@ -414,14 +542,14 @@
         "distinguishingFeatures": [
           "Blue body with yellow-edged scales and yellow fins",
           "Dark forehead spot ringed with bright blue, resembling a crown",
-          "Blue ring around the gill cover"
+          "Blue spot at the pectoral-fin base"
         ],
         "typicalHabitat": "Coral reefs, where adults are often seen alone or in pairs.",
         "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
         "minimumSizeCentimeters": null,
         "maximumSizeCentimeters": 45,
-        "minimumDepthMeters": 0,
-        "maximumDepthMeters": 40
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 70
       },
       "sourceReferences": [
         {
@@ -453,18 +581,41 @@
         "identificationText": [
           "Blue body with yellow-edged scales and yellow fins",
           "Dark forehead spot ringed with bright blue, resembling a crown",
-          "Blue ring around the gill cover"
+          "Blue spot at the pectoral-fin base"
         ]
       },
       "proposedCorrections": {},
       "unresolvedQuestions": [
-        "Independent species-specific review of identity, traits, range, habitat, size, and source support is required."
+        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
-      "fieldEvidence": [],
+      "fieldEvidence": [
+        {
+          "field": "identity",
+          "value": "Both accounts identify Holacanthus ciliaris (Linnaeus, 1758)."
+        },
+        {
+          "field": "structuredTraits",
+          "value": "FishBase: compressed body, blue-ringed forehead spot, yellow tail/pectoral fins, blue pectoral-base spot. Replaces unsupported eye-stripe, mangrove, hiding and gill-ring coding."
+        },
+        {
+          "field": "measurements",
+          "value": "FishBase 45 cm maximum total length (ref 4858), common length 30 cm (3797), depth 1–70 m (9710). Museum agrees on maximum 45 cm and depth to 70 m. Maximum is not a typical interval."
+        },
+        {
+          "field": "habitat",
+          "value": "Coral reefs, singly or in pairs, sponge feeding."
+        },
+        {
+          "field": "range",
+          "value": "Museum: Bermuda to Brazil including Caribbean; FishBase also records St Paul’s Rocks."
+        }
+      ],
       "reviewDecision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewedContentFingerprint": "sha256:507b13b1c150226c23284b75f9f3d7735471e4ff3063a20accfe5a9c9e63c14d",
+      "reviewedContentFingerprint": "sha256:dded4121be42e6020a7bee8a5873a0b676df1fa82897a76426f0a1516ecf64bd",
       "sourceIdentity": [
         [
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
@@ -474,6 +625,30 @@
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
           "2"
         ]
+      ],
+      "sourceInspectionReferences": [
+        {
+          "url": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
       ]
     },
     {

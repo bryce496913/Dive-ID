@@ -39,7 +39,7 @@
           "Reef Fish Identification: Tropical Pacific, species account book p. 381 (PDF p. 382)"
         ]
       ],
-      "reviewedContentFingerprint": "sha256:4fa83f99115288f3fdea3c1a9f24e55fb0d98dcec8598d08f98a009912da98f5",
+      "reviewedContentFingerprint": "sha256:8b994af8cf225b361c937bce9db533aad9adaa91959b5c63892af6c9a754653f",
       "corrections": {
         "colors": [
           "brown",
@@ -80,11 +80,14 @@
             "stableSourceID": "FOA-3205",
             "sourceName": "Bray, D.J. 2023. Ablabys taenianotus. Fishes of Australia, Museums Victoria.",
             "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
-            "citationReference": "Cockatoo Waspfish: Summary and Features",
+            "citationReference": "Cockatoo Waspfish: Summary, Features and Quick Facts",
             "reviewedFields": [
               "colors",
               "bodyShapes",
-              "distinguishingFeatures"
+              "distinguishingFeatures",
+              "maximumSizeCentimeters",
+              "minimumDepthMeters",
+              "maximumDepthMeters"
             ],
             "accessedDate": "2026-10-09T00:00:00Z",
             "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
@@ -101,14 +104,18 @@
             "accessedDate": "2026-10-09T00:00:00Z",
             "sourceLicense": null
           }
-        ]
+        ],
+        "maximumSizeCentimeters": 15,
+        "minimumDepthMeters": 0,
+        "maximumDepthMeters": 80
       },
       "decision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
       "reviewerNotes": "Supplementary authoritative accounts inspected 2026-10-09; see Docs/PacificDescriptionSearchFailureAnalysis.md. Original workbook provenance retained. Automated source-backed correction does not confer human publication approval.",
       "unresolvedQuestions": [
-        "Original book p. 381 (PDF p. 382) and independent taxonomy review remain outstanding before publication."
+        "Approve Fishes of Australia as authoritative replacement for unavailable original book p. 381 (PDF p. 382), including 15 cm TL / 0–80 m recorded limits versus transcription 16 cm / to 20 m; 20 m describes usual habitat, not maximum occurrence.",
+        "Reconcile original identification text reporting 17 dorsal spines with Fishes of Australia 17–18 and independently verify taxonomy, range and full corrected fingerprint before publication."
       ]
     }
   ]

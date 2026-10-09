@@ -6291,9 +6291,9 @@
     ],
     "keywords": [],
     "minimumSizeCentimeters": null,
-    "maximumSizeCentimeters": 16.0,
-    "minimumDepthMeters": null,
-    "maximumDepthMeters": 20.0,
+    "maximumSizeCentimeters": 15,
+    "minimumDepthMeters": 0,
+    "maximumDepthMeters": 80,
     "summary": "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
     "distinguishingFeatures": [
       "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
@@ -6332,11 +6332,14 @@
         "stableSourceID": "FOA-3205",
         "sourceName": "Bray, D.J. 2023. Ablabys taenianotus. Fishes of Australia, Museums Victoria.",
         "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
-        "citationReference": "Cockatoo Waspfish: Summary and Features",
+        "citationReference": "Cockatoo Waspfish: Summary, Features and Quick Facts",
         "reviewedFields": [
           "colors",
           "bodyShapes",
-          "distinguishingFeatures"
+          "distinguishingFeatures",
+          "maximumSizeCentimeters",
+          "minimumDepthMeters",
+          "maximumDepthMeters"
         ],
         "accessedDate": "2026-10-09T00:00:00Z",
         "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"

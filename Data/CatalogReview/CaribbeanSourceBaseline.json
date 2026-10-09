@@ -37,10 +37,10 @@
       "blue",
       "tang"
     ],
-    "minimumSizeCentimeters": null,
+    "minimumSizeCentimeters": 10,
     "maximumSizeCentimeters": 39,
     "minimumDepthMeters": 2,
-    "maximumDepthMeters": 50,
+    "maximumDepthMeters": 40,
     "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
     "distinguishingFeatures": [
       "Oval blue adult body",
@@ -77,9 +77,9 @@
         "bodyShapes": [
           "oval"
         ],
-        "minimumSizeCentimeters": null,
-        "maximumSizeCentimeters": null,
-        "description": "Yellow juvenile coloration changes through a blue-and-yellow intermediate phase; color transition is not tied to a fixed size.",
+        "minimumSizeCentimeters": 2,
+        "maximumSizeCentimeters": 8,
+        "description": "Juveniles can show yellow coloration useful for matching poor descriptions.",
         "distinguishingFeatures": [
           "yellow juvenile appearance"
         ]
@@ -111,26 +111,11 @@
         "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
         "citationReference": "1",
         "sourceLicense": null
-      },
-      {
-        "stableSourceID": "00000000-0000-0000-0000-000000000003:source:florida-museum",
-        "sourceName": "Florida Museum Atlantic Blue Tang species profile",
-        "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
-        "citationReference": "Biology; Habitat; Geographical Distribution",
-        "reviewedFields": [
-          "identity",
-          "appearanceVariants",
-          "mouthAndHeadShape",
-          "habitat",
-          "geographicRange"
-        ],
-        "accessedDate": "2026-10-09T00:00:00Z",
-        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -145,8 +130,8 @@
       "sourceScientificName": "Acanthurus coeruleus"
     },
     "measurements": {
-      "typicalObservedMinimumCentimeters": null,
-      "typicalObservedMaximumCentimeters": null,
+      "typicalObservedMinimumCentimeters": 10,
+      "typicalObservedMaximumCentimeters": 39,
       "maximumRecordedCentimeters": 39,
       "type": "totalLength"
     },
@@ -192,14 +177,14 @@
       "stoplight",
       "parrotfish"
     ],
-    "minimumSizeCentimeters": null,
-    "maximumSizeCentimeters": 64,
-    "minimumDepthMeters": 3,
+    "minimumSizeCentimeters": 30,
+    "maximumSizeCentimeters": 60,
+    "minimumDepthMeters": 1,
     "maximumDepthMeters": 50,
     "summary": "A robust grazing fish with color that varies by life phase.",
     "distinguishingFeatures": [
       "Beak-like dental plates",
-      "Bluntly rounded head"
+      "Angular forehead"
     ],
     "typicalHabitat": "Coral reefs and seagrass",
     "geographicRange": "Western Atlantic",
@@ -228,9 +213,9 @@
         "bodyShapes": [
           "robust"
         ],
-        "minimumSizeCentimeters": null,
-        "maximumSizeCentimeters": null,
-        "description": "Juveniles are reddish brown with rows of pale spots and a pale band across the tail.",
+        "minimumSizeCentimeters": 2,
+        "maximumSizeCentimeters": 30,
+        "description": "Juveniles and initial-phase fish are dark reddish-brown with pale markings.",
         "distinguishingFeatures": [
           "dark or reddish-brown body",
           "pale or white markings"
@@ -263,26 +248,11 @@
         "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
         "citationReference": "1",
         "sourceLicense": null
-      },
-      {
-        "stableSourceID": "00000000-0000-0000-0000-000000000005:source:florida-museum",
-        "sourceName": "Florida Museum Stoplight Parrotfish species profile",
-        "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/",
-        "citationReference": "Biology; Habitat; Geographical Distribution",
-        "reviewedFields": [
-          "identity",
-          "appearanceVariants",
-          "mouthAndHeadShape",
-          "habitat",
-          "geographicRange"
-        ],
-        "accessedDate": "2026-10-09T00:00:00Z",
-        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -297,15 +267,16 @@
       "sourceScientificName": "Sparisoma viride"
     },
     "measurements": {
-      "typicalObservedMinimumCentimeters": null,
-      "typicalObservedMaximumCentimeters": null,
-      "maximumRecordedCentimeters": 64,
+      "typicalObservedMinimumCentimeters": 30,
+      "typicalObservedMaximumCentimeters": 60,
+      "maximumRecordedCentimeters": 60,
       "type": "totalLength"
     },
     "tailShape": null,
     "mouthAndHeadShape": [
       "beak-like dental plates",
-      "bluntly rounded head"
+      "angular forehead",
+      "squared head"
     ],
     "finAndSpineClues": []
   },
@@ -801,12 +772,13 @@
       "yellow"
     ],
     "markings": [
-      "spots"
+      "eye stripe"
     ],
     "bodyShapes": [
       "compressed"
     ],
     "habitats": [
+      "mangrove",
       "reef"
     ],
     "regions": [
@@ -815,7 +787,7 @@
       "atlantic"
     ],
     "behaviors": [
-      "solitary"
+      "hiding"
     ],
     "keywords": [
       "queen",
@@ -823,13 +795,13 @@
     ],
     "minimumSizeCentimeters": null,
     "maximumSizeCentimeters": 45,
-    "minimumDepthMeters": 1,
-    "maximumDepthMeters": 70,
+    "minimumDepthMeters": 0,
+    "maximumDepthMeters": 40,
     "summary": "A deep-bodied blue and yellow angelfish with a distinctive crown-like spot on the forehead.",
     "distinguishingFeatures": [
       "Blue body with yellow-edged scales and yellow fins",
       "Dark forehead spot ringed with bright blue, resembling a crown",
-      "Blue spot at the pectoral-fin base"
+      "Blue ring around the gill cover"
     ],
     "typicalHabitat": "Coral reefs, where adults are often seen alone or in pairs.",
     "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
@@ -893,7 +865,7 @@
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Requires independent species-specific source review before promotion.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -909,7 +881,7 @@
     },
     "measurements": {
       "typicalObservedMinimumCentimeters": null,
-      "typicalObservedMaximumCentimeters": null,
+      "typicalObservedMaximumCentimeters": 45,
       "maximumRecordedCentimeters": 45,
       "type": "totalLength"
     },

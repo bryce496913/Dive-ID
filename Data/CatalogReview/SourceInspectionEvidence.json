@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "pack": "caribbean",
+      "commonName": "Atlantic Blue Tang",
+      "sourceInspectionDate": "2026-10-09",
+      "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
+      "references": [
+        {
+          "url": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
+      ],
+      "fieldEvidence": {
+        "identity": "Both accounts identify Acanthurus coeruleus.",
+        "structuredTraits": "Compressed blue adults, yellow juveniles, yellow caudal spine; museum describes small mouth and pointed snout.",
+        "measurements": "FishBase maximum 39 cm total length (ref 36453), common length 25 cm (5217); depth 2–50 m (7345), usually 2–18 m (27115). Museum gives maximum 37 cm and depth 2–40 m. No typical size interval or 2–8 cm juvenile interval established.",
+        "habitat": "Reef, rocky and grassy habitat; algal feeding.",
+        "range": "Western Atlantic New York/Bermuda through Gulf of Mexico and Brazil; Ascension also reported. Caribbean coverage supported."
+      },
+      "requiredHumanDecisions": [
+        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "pack": "caribbean",
+      "commonName": "Stoplight Parrotfish",
+      "sourceInspectionDate": "2026-10-09",
+      "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
+      "references": [
+        {
+          "url": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
+      ],
+      "fieldEvidence": {
+        "identity": "Both accounts identify Sparisoma viride.",
+        "structuredTraits": "Museum: oblong, moderately compressed, bluntly rounded head and beak; juvenile pale spot rows; terminal males green with orange head bands and yellow spots. Angular/squared head removed.",
+        "measurements": "FishBase maximum 64 cm total length and common length 38 cm (ref 3802), depth 3–50 m (9710). Museum maximum 55 cm. Neither supports a typical 30–60 cm interval or fixed 2–30 cm juvenile interval.",
+        "habitat": "Coral reefs; young also seagrass; daytime algal grazing.",
+        "range": "Southern Florida, Bermuda, Bahamas and Caribbean to Brazil."
+      },
+      "requiredHumanDecisions": [
+        "Accept FishBase maximum 64 cm total length over Museum 55 cm; confirm life-stage interpretation. Family placement differs between accounts; higher taxonomy remains unset.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    },
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "pack": "caribbean",
+      "commonName": "Queen Angelfish",
+      "sourceInspectionDate": "2026-10-09",
+      "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
+      "references": [
+        {
+          "url": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+          "role": "original catalogue reference",
+          "sections": [
+            "Classification / Names",
+            "Environment",
+            "Distribution",
+            "Size / Weight / Age",
+            "Short description",
+            "Biology"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+          "role": "authoritative supplementary account",
+          "sections": [
+            "Geographical Distribution",
+            "Habitat",
+            "Biology: Distinctive Features, Coloration, Size, Food Habits",
+            "Taxonomy"
+          ]
+        }
+      ],
+      "fieldEvidence": {
+        "identity": "Both accounts identify Holacanthus ciliaris (Linnaeus, 1758).",
+        "structuredTraits": "FishBase: compressed body, blue-ringed forehead spot, yellow tail/pectoral fins, blue pectoral-base spot. Replaces unsupported eye-stripe, mangrove, hiding and gill-ring coding.",
+        "measurements": "FishBase 45 cm maximum total length (ref 4858), common length 30 cm (3797), depth 1–70 m (9710). Museum agrees on maximum 45 cm and depth to 70 m. Maximum is not a typical interval.",
+        "habitat": "Coral reefs, singly or in pairs, sponge feeding.",
+        "range": "Museum: Bermuda to Brazil including Caribbean; FishBase also records St Paul’s Rocks."
+      },
+      "requiredHumanDecisions": [
+        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    },
+    {
+      "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",
+      "pack": "tropical-pacific",
+      "commonName": "Cockatoo Waspfish",
+      "sourceInspectionDate": "2026-10-09",
+      "inspectionType": "automated reading of authoritative replacement; not human approval",
+      "references": [
+        {
+          "url": "https://fishesofaustralia.net.au/home/species/3205",
+          "role": "authoritative replacement; original book unavailable",
+          "sections": [
+            "Summary",
+            "Distribution",
+            "Features",
+            "Quick Facts"
+          ]
+        },
+        {
+          "url": "https://australian.museum/learn/animals/fishes/cockatoo-waspfish-ablabys-taenianotus-cuvier-1829/",
+          "role": "supplementary identification account inspected in preceding pass",
+          "sections": [
+            "Identification"
+          ]
+        }
+      ],
+      "fieldEvidence": {
+        "identity": "Fishes of Australia identifies Ablabys taenianotus (Cuvier 1829).",
+        "structuredTraits": "Compressed body, elevated anterior dorsal fin, variable brown/red/yellow/white; dorsal spines 17–18.",
+        "measurements": "Quick Facts maximum 15 cm TL, depth 0–80 m. Original transcription 16 cm and to 20 m retained in provenance; usual habitat to 20 m distinguished from recorded limit.",
+        "habitat": "Sheltered sand, rubble, mud and weed; singly or pairs.",
+        "range": "Eastern Indo-West Pacific; Australian distribution includes offshore Indian and Pacific islands."
+      },
+      "requiredHumanDecisions": [
+        "Approve Fishes of Australia as authoritative replacement for unavailable original book p. 381 (PDF p. 382), including 15 cm TL / 0–80 m recorded limits versus transcription 16 cm / to 20 m; 20 m describes usual habitat, not maximum occurrence.",
+        "Reconcile original identification text reporting 17 dorsal spines with Fishes of Australia 17–18 and independently verify taxonomy, range and full corrected fingerprint before publication."
+      ]
+    }
+  ]
+}

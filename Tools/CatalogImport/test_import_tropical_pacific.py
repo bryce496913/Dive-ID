@@ -46,8 +46,8 @@ class CategoryNormalizationTests(unittest.TestCase):
         self.assertEqual(report["outcomeCounts"], {"included": 384, "pendingReview": 1266, "excluded": 0})
         self.assertEqual(report["recordCounts"], {
             "structurallyIncluded": 384,
-            "humanReviewed": 0,
-            "publicationEligible": 0,
+            "humanReviewed": sum(p["review"]["status"] in ("sourceChecked", "verified") for p in profiles),
+            "publicationEligible": sum(p["review"]["status"] == "verified" for p in profiles),
             "reviewQueue": 1650,
         })
 
