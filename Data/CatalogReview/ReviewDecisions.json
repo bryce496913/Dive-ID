@@ -30,6 +30,86 @@
       "unresolvedQuestions": [
         "Independent source-page and taxonomy review are still required before publication."
       ]
+    },
+    {
+      "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",
+      "sourceIdentity": [
+        [
+          "SRC-B853F73C",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 381 (PDF p. 382)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:4fa83f99115288f3fdea3c1a9f24e55fb0d98dcec8598d08f98a009912da98f5",
+      "corrections": {
+        "colors": [
+          "brown",
+          "red",
+          "white",
+          "yellow"
+        ],
+        "bodyShapes": [
+          "compressed"
+        ],
+        "finAndSpineClues": [
+          "sail-like dorsal fin"
+        ],
+        "distinguishingFeatures": [
+          "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
+          "Laterally compressed body with raised anterior dorsal spines; sways with the surge to mimic drifting leaves and debris."
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-B853F73C",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 381.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 381 (PDF p. 382)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FOA-3205",
+            "sourceName": "Bray, D.J. 2023. Ablabys taenianotus. Fishes of Australia, Museums Victoria.",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
+            "citationReference": "Cockatoo Waspfish: Summary and Features",
+            "reviewedFields": [
+              "colors",
+              "bodyShapes",
+              "distinguishingFeatures"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
+          },
+          {
+            "stableSourceID": "AM-ABLABYS-TAENIANOTUS",
+            "sourceName": "McGrouther, Mark. Cockatoo Waspfish, Ablabys taenianotus. Australian Museum. Updated 6 May 2022.",
+            "sourceURL": "https://australian.museum/learn/animals/fishes/cockatoo-waspfish-ablabys-taenianotus-cuvier-1829/",
+            "citationReference": "Cockatoo Waspfish: Identification",
+            "reviewedFields": [
+              "colors",
+              "finAndSpineClues"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Supplementary authoritative accounts inspected 2026-10-09; see Docs/PacificDescriptionSearchFailureAnalysis.md. Original workbook provenance retained. Automated source-backed correction does not confer human publication approval.",
+      "unresolvedQuestions": [
+        "Original book p. 381 (PDF p. 382) and independent taxonomy review remain outstanding before publication."
+      ]
     }
   ]
 }
