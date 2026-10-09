@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "fixtureFreezeCommit": "5a9dbf3d455d16274ac3b73a77b165e1db7ca9c0",
+  "enginePrerequisiteCommit": "92a975e09f57c1fc882a32cc2b516e448efaceb1",
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "reportSHA256": "45717340fd90a7402948cf8e6d2862732501b7e59ec603e3da137e13c0c11dfd",
+  "repeatDebugByteIdentical": true,
+  "releaseByteIdentical": true,
+  "swiftPM": {
+    "platform": "Linux x86_64",
+    "version": "6.2.3",
+    "debug": {
+      "tests": 108,
+      "skipped": 1,
+      "failedTestMethods": 1,
+      "failedAssertions": 30
+    },
+    "release": {
+      "tests": 108,
+      "skipped": 1,
+      "failedTestMethods": 1,
+      "failedAssertions": 30
+    },
+    "existingGates": "passed; all failures belong to the new V05DevelopmentEvaluationTests test"
+  },
+  "python": {
+    "passed": 75,
+    "failed": 0
+  },
+  "xcodeAndDevice": "not executed locally"
+}
