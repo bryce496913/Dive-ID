@@ -30,7 +30,7 @@ struct RootView: View {
             )
         case .identificationResults(let sessionID):
             IdentificationResultsView(
-                viewModel: .init(sessionID: sessionID, service: identificationService, sessionStore: sessionStore, catalog: catalogRepository),
+                viewModel: router.resultsModel(sessionID: sessionID, service: identificationService, catalog: catalogRepository),
                 router: router
             )
         case .speciesDetail(let species, let match):
@@ -49,11 +49,12 @@ struct RootView: View {
 }
 
 #Preview {
+    let store = InMemoryIdentificationSessionStore()
     RootView(
-        router: AppRouter(),
+        router: AppRouter(sessionStore: store),
         identificationService: MockMarineLifeIdentificationService(delay: .zero),
         savedRepository: InMemorySavedIdentificationRepository(),
-        sessionStore: InMemoryIdentificationSessionStore(),
+        sessionStore: store,
         photoProcessor: DefaultPhotoProcessingService(),
         catalogRepository: BundleMarineSpeciesCatalogRepository(),
         regionRepository: UserDefaultsSelectedDiveRegionRepository()

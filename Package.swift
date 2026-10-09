@@ -11,7 +11,7 @@ let package = Package(
             name: "DiveID",
             path: "DiveID",
             exclude: [
-                "App", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
+                "App/DebugSemanticSearchStatusView.swift", "App/DiveIDApp.swift", "App/RootView.swift", "App/FeatureAvailability.swift", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
                 "Core/Services/SelectedDiveRegionRepository.swift",
@@ -25,6 +25,8 @@ let package = Package(
                 "Core/Catalog/Regions/TropicalPacificRegion.swift",
                 "Core/Models/LocalSpeciesProfile.swift",
                 "Core/Models/Models.swift",
+                "Core/Models/IdentificationResultsViewModel.swift",
+                "App/AppRouter.swift",
                 "Core/Models/SavedIdentificationViewModels.swift",
                 "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
@@ -54,7 +56,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
+            sources: ["IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

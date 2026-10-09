@@ -40,6 +40,9 @@ final class DescriptionSearchViewModel {
         do {
             let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: pack.id))
             return try await sessionStore.createSession(for: request, photo: nil)
+        } catch IdentificationSessionStoreError.capacityReached {
+            errorMessage = "Finish an existing search by going back before starting another."
+            return nil
         } catch is CancellationError {
             return nil
         } catch {
@@ -81,6 +84,7 @@ struct DescriptionSearchView: View {
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
                     Task {
+                        await router.waitForSessionUpdates()
                         if let sessionID = await viewModel.submit() {
                             router.navigate(to: .identificationResults(sessionID: sessionID))
                         }
