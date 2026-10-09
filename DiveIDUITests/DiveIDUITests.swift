@@ -1,6 +1,7 @@
 import XCTest
 
 final class DiveIDUITests: XCTestCase {
+    @MainActor
     func testCoreOfflineNavigationSmokeFlow() {
         let spottedEagleRayResultIdentifier = "result_00000000-0000-0000-0000-000000000010"
         let app = XCUIApplication()
@@ -29,6 +30,7 @@ final class DiveIDUITests: XCTestCase {
         XCTAssertTrue(app.buttons["toggleSaved"].waitForExistence(timeout: 2))
     }
 
+    @MainActor
     func testPhotoCardIsDisabledAndSavedScreenOpens() {
         let app = XCUIApplication()
         app.launch()

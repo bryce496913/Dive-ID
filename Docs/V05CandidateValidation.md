@@ -11,6 +11,13 @@ There are zero real approved records. Release must show the no-reviewed-catalogu
 state, disable search and retain Saved Identifications access. Positive Release
 search and Release region switching are blocked until real reviews approve records.
 
+The preceding main Actions run [37948403218](https://github.com/bryce496913/Dive-ID/actions/runs/37948403218)
+failed Xcode build-for-testing on UI-test main-actor isolation. This candidate adds
+`@MainActor` to both UI test methods, preserving every assertion. The annotation
+repair is not locally type-checked against XCTest/iOS; a hosted rerun is required.
+That run's macOS SwiftPM results are prior-baseline evidence, not an installed
+candidate validation or proof of identical Linux/macOS ranking.
+
 ## Record the source and toolchain
 
 Use a clean checkout of the candidate SHA in `Reports/V05CandidateReadiness.json`.
