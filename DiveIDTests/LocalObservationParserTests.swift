@@ -55,3 +55,68 @@ final class LocalObservationParserMeasurementTests: XCTestCase {
         }
     }
 }
+
+final class LocationRecognitionTests: XCTestCase {
+    func testWholePhrasesPreserveNamesAndNormalizeExistingVariants() async {
+        let examples: [(String, Set<String>)] = [
+            ("fish in the BAHAMAS.", ["bahamas"]),
+            ("near the Philippines!", ["philippines"]),
+            ("Gulf-of-Mexico reef", ["gulf of mexico"]),
+            ("near TURKS, AND CAICOS", ["turks and caicos"]),
+            ("Curaçao / Curacao", ["curacao"]),
+            ("Western Atlantic", ["western atlantic"]),
+            ("Indo-Pacific", ["indo-pacific"]),
+            ("Tropical Pacific", ["tropical pacific"]),
+            ("British Virgin Islands", ["british virgin islands"])
+        ]
+        for (text, expected) in examples {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertEqual(observation.regions, expected, text)
+        }
+    }
+
+    func testUnknownPartialAndSubstringLocationsDoNotEstablishRegion() async {
+        for text in ["fish near Atlantis", "Indianapolis reef", "Fijian fish", "Virgin Islands", "Cayman", "fish on a reef"] {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertEqual(observation.regions, [], text)
+            XCTAssertEqual(RegionCompatibilityResolver().compatibility(observedRegions: observation.regions, supportedRegions: ["caribbean"]), .unspecified)
+        }
+    }
+
+    func testConflictingAlternativesRemainUnspecified() async {
+        let observation = await LocalObservationParser().parse("Was it in Fiji or the Bahamas?")
+        XCTAssertEqual(observation.regions, ["fiji", "bahamas"])
+        XCTAssertEqual(RegionCompatibilityResolver().compatibility(observedRegions: observation.regions, supportedRegions: ["caribbean"]), .unspecified)
+    }
+
+    func testEveryBundledAliasIsRecognizedAndCompatibleOnlyWithItsPack() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        for packID in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+            let pack = try await repository.loadPack(id: packID)
+            let other = try await repository.loadPack(id: packID == .caribbean ? .tropicalPacific : .caribbean)
+            for alias in pack.metadata.regionAliases {
+                let observation = await LocalObservationParser().parse("Fish on a reef in \(alias).")
+                XCTAssertFalse(observation.regions.isEmpty, alias)
+                let resolver = RegionCompatibilityResolver()
+                XCTAssertEqual(resolver.compatibility(observedRegions: observation.regions, supportedRegions: Set(pack.metadata.regionAliases)), .compatible, alias)
+                XCTAssertEqual(resolver.compatibility(observedRegions: observation.regions, supportedRegions: Set(other.metadata.regionAliases)), .conflicting, alias)
+            }
+        }
+    }
+
+    func testServiceRejectsRecognizedWrongPackButNotUnknownLocation() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let service = LocalMarineLifeIdentificationService(catalogRepository: repository)
+        for location in ["Gulf of Mexico", "Curaçao", "Turks and Caicos"] {
+            do {
+                _ = try await service.identify(request: .init(source: .description("Blue reef fish in \(location)."), context: .init(region: .tropicalPacific)), processedPhoto: nil)
+                XCTFail("Expected mismatch for \(location)")
+            } catch LocalIdentificationError.regionMismatch(let selected, _) {
+                XCTAssertEqual(selected, .tropicalPacific)
+            }
+        }
+        for location in ["Atlantis", "Virgin Islands", "Fiji"] {
+            _ = try await service.identify(request: .init(source: .description("Blue reef fish in \(location)."), context: .init(region: .tropicalPacific)), processedPhoto: nil)
+        }
+    }
+}
