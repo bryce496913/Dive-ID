@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "suiteID": "v05-development-v2",
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "frozenBeforeFirstExecution": true,
+  "minimumRates": {
+    "candidateRecall": 0.85,
+    "top1": 0.4,
+    "top3": 0.6,
+    "top10": 0.8,
+    "noMatchCorrect": 1.0,
+    "regionConflictCorrect": 1.0,
+    "confidenceCompliant": 1.0
+  },
+  "rationale": {
+    "candidateRecall": "At least 85% of source-supported identities must enter the 50-candidate pool; retrieval must not conceal ranker misses.",
+    "top1": "40% is a provisional development floor for an expanded 384-record draft pack; not a publication criterion.",
+    "top3": "60% requires a majority of descriptions to surface the target near the top.",
+    "top10": "80% requires useful recall within the UI limit; no lower floor chosen after observing output.",
+    "safety": "All explicit no-match, regional conflict and confidence-limit contracts must hold. Per-case rank requirements are also enforced.",
+    "publication": "Zero eligible identities means quality is not evaluated; never report 0/0 as success. Positive targets absent from the subset are coverage-blocked, not no-match successes."
+  },
+  "rankPolicy": "Diagnostic combinations: top3; paraphrases and intentionally ambiguous alternatives: top10. No expected identity is derived from engine output.",
+  "confidencePolicy": "Scores are relativeMatch, not calibrated probabilities. Ambiguous probes <=0.64; others finite in [0,1].",
+  "independence": "Development-only synthetic source-informed data, some based on catalogue transcriptions. Not an independent human holdout; existing frozen cohort remains untouched.",
+  "erratum": "v1 generated its ID lookup by common name across both packs. The Pacific Spotted Eagle Ray overwrote the intended Caribbean record. v2 corrects only s08 identity/reference and the two ray cases selected pack/expected ID according to the already cited western Atlantic source. Descriptions, bounds and thresholds unchanged. v1 artifacts retained; v2 is not an independent unseen evaluation."
+}

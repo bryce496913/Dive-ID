@@ -1,0 +1,1114 @@
+{
+  "schemaVersion": 1,
+  "suiteID": "v05-development-v2",
+  "provenance": "All 46 descriptions are AI-authored synthetic development probes. Zero collected diver descriptions. Expectations and thresholds frozen before first run. Sources support traits, not rank requirements or publication approval.",
+  "evidence": [
+    {
+      "id": "s01",
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "scientificName": "Acanthurus coeruleus",
+      "facts": "Blue adults, yellow juveniles and caudal spine; color stage does not specify size.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s02",
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "scientificName": "Sparisoma viride",
+      "facts": "Beak, rounded head and life-stage colors; 30 cm is an authored plausible observation, not a diagnostic size.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s03",
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "scientificName": "Holacanthus ciliaris",
+      "facts": "Forehead crown, compressed body and 1–70 m recorded depth.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s04",
+      "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+      "scientificName": "Pomacanthus paru",
+      "facts": "FishBase short description and biology: gold-edged black scales, pale chin, pairs on reefs.",
+      "references": [
+        "https://www.fishbase.se/summary/Pomacanthus-paru.html"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s05",
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "scientificName": "Pterois volitans",
+      "facts": "Museum coloration and habitat; a within-pack target, not a species diagnosis excluding unbundled Pterois miles.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/red-lionfish/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s06",
+      "speciesID": "00000000-0000-0000-0000-000000000008",
+      "scientificName": "Sphyraena barracuda",
+      "facts": "Museum dentition, lower-side spots, habitat and size account; length is authored within reported range.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/great-barracuda/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s07",
+      "speciesID": "00000000-0000-0000-0000-000000000009",
+      "scientificName": "Chelonia mydas",
+      "facts": "NOAA appearance and diet: adult 3–4 feet, olive/brown shell, small head, herbivory. Replaces inappropriate FishBase citation for fixture evidence only.",
+      "references": [
+        "https://www.fisheries.noaa.gov/species/green-turtle"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s08",
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "scientificName": "Aetobatus narinan",
+      "facts": "Museum morphology and western Atlantic range; old global taxonomic range is not used to identify Indo-Pacific rays.",
+      "references": [
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/spotted-eagle-ray/"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s09",
+      "speciesID": "5af89b7e-ac74-545c-9a78-cd3b0e91101b",
+      "scientificName": "Gomphosus varius",
+      "facts": "Adult elongate snout, solitary coral habitat; book transcription supports male colors, FishBase confirms adult snout and habitat.",
+      "references": [
+        "https://www.fishbase.se/summary/Gomphosus-varius.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 209 (PDF p. 210)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s10",
+      "speciesID": "ded990cc-3044-5f31-98d4-d388267b0167",
+      "scientificName": "Melichthys niger",
+      "facts": "Book transcription: black body with pale dorsal/anal base bands; FishBase reef habitat. Negated tail is a confusing-alternative challenge.",
+      "references": [
+        "https://www.fishbase.se/summary/Melichthys-niger.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s11",
+      "speciesID": "12135912-59af-5b63-9015-67e636beea7c",
+      "scientificName": "Melichthys vidua",
+      "facts": "Book transcription color pattern; FishBase confirms reef association and lengths up to 40 cm TL. Observation dimensions are synthetic.",
+      "references": [
+        "https://www.fishbase.se/summary/Melichthys-vidua.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s12",
+      "speciesID": "987b3653-d83f-54a0-afcf-0b48c75c635e",
+      "scientificName": "Odonus niger",
+      "facts": "Book transcription tail and colors; FishBase schooling, current-swept reefs and common 30 cm TL.",
+      "references": [
+        "https://www.fishbase.se/summary/Odonus-niger.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s13",
+      "speciesID": "b932ea57-be9a-54c9-9036-656dc49e5e2e",
+      "scientificName": "Acanthurus olivaceus",
+      "facts": "FishBase short description: orange gill-adjacent band and contrasting body halves; reef/sand habitat.",
+      "references": [
+        "https://www.fishbase.se/summary/Acanthurus-olivaceus.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 45 (PDF p. 46)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s14",
+      "speciesID": "9353ee92-eaa7-5bcb-b2f8-8b3a0577d5b4",
+      "scientificName": "Acanthurus lineatus",
+      "facts": "FishBase color pattern, compressed body and usual 1–3 m depth.",
+      "references": [
+        "https://www.fishbase.se/summary/Acanthurus-lineatus.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 48 (PDF p. 49)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s15",
+      "speciesID": "c059528c-f884-5b96-b67b-d912a33846b1",
+      "scientificName": "Amphiprion melanopus",
+      "facts": "Book transcription adult head bar and dark sides; FishBase anemone association. Other unbundled anemonefish share traits.",
+      "references": [
+        "https://www.fishbase.se/summary/Amphiprion-melanopus.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 65 (PDF p. 66)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s16",
+      "speciesID": "87727436-cafc-58b3-8818-f77fcbf554b7",
+      "scientificName": "Premnas biaculeatus",
+      "facts": "Book transcription three bars and cheek spines; FishBase association with Entacmaea quadricolor. Source name retained for existing stable ID.",
+      "references": [
+        "https://www.fishbase.se/summary/Premnas-biaculeatus.html",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 67 (PDF p. 68)"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    },
+    {
+      "id": "s17",
+      "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",
+      "scientificName": "Ablabys taenianotus",
+      "facts": "Fishes of Australia summary: compressed leaf mimic and high dorsal; recorded maximum 15 cm TL, usually shallow shelter.",
+      "references": [
+        "https://fishesofaustralia.net.au/home/species/3205",
+        "Reef Fish Identification: Tropical Pacific, species account book p. 381 (PDF p. 382)",
+        "Cockatoo Waspfish: Summary, Features and Quick Facts",
+        "Cockatoo Waspfish: Identification"
+      ],
+      "sourceBasis": "Accessible authoritative account; where explicitly stated, high-confidence book transcription retained in catalogue. Original book page not independently inspected.",
+      "inspectedDate": "2026-10-09"
+    }
+  ],
+  "cases": [
+    {
+      "id": "v05-01-diagnostic",
+      "description": "Compressed blue reef fish with a yellow spine beside its tail.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s01"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-01-paraphrase",
+      "description": "Yellow juvenile surgeonfish grazing on the Caribbean reef.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s01"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-02-diagnostic",
+      "description": "Green reef grazer with a beak and a yellow spot near its gill cover.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s02"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-02-paraphrase",
+      "description": "About 30 cm long, a reddish brown parrotfish with pale spots and a blunt round head.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s02"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-03-diagnostic",
+      "description": "Blue and yellow deep-bodied fish with a blue-ringed crown spot on its forehead.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s03"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-03-paraphrase",
+      "description": "An oval blue fish with yellow fins and a dark crown mark, at a depth of 20 meters.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s03"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-04-diagnostic",
+      "description": "Black angelfish covered in gold-edged scales, swimming with a partner by sea fans.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s04"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-04-paraphrase",
+      "description": "Dark compressed fish with golden rims on the scales and a pale chin.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s04"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-05-diagnostic",
+      "description": "Red and white banded reef fish with spreading pectoral fins and long dorsal spines.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s05"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-05-paraphrase",
+      "description": "Striped fish with spotted fins, hanging almost motionless beneath a rocky ledge.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s05"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-06-diagnostic",
+      "description": "Silver streamlined fish with a projecting jaw, sharp teeth and black spots low on its sides.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s06"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-06-paraphrase",
+      "description": "A fish roughly 4 feet long, silvery with large teeth, near the surface over seagrass.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s06"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-07-diagnostic",
+      "description": "Turtle grazing on seagrass, olive shell and a relatively small head.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s07"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-07-paraphrase",
+      "description": "A hard-shelled turtle about 1 meter long eating algae in shallow Caribbean water.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s07"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-08-diagnostic",
+      "description": "Dark ray with white dots, pointed wings, duckbill snout and a very long whip tail.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s08"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-08-paraphrase",
+      "description": "Wide spotted ray flying above a Caribbean reef with a long thin tail.",
+      "selectedPackID": "caribbean",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s08"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-09-diagnostic",
+      "description": "Green fish with a very long birdlike snout, hunting alone on a coral reef.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "5af89b7e-ac74-545c-9a78-cd3b0e91101b"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s09"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-09-paraphrase",
+      "description": "Slender blue-green wrasse, long pointed nose, at 10 m deep.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "5af89b7e-ac74-545c-9a78-cd3b0e91101b"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s09"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-10-diagnostic",
+      "description": "Black triggerfish with thin pale lines along the bases of its dorsal and anal fins.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "ded990cc-3044-5f31-98d4-d388267b0167"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s10"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-10-paraphrase",
+      "description": "Dark fish on an outer reef, pale blue borders at the fin bases and no bright pink tail.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "ded990cc-3044-5f31-98d4-d388267b0167"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s10"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-11-diagnostic",
+      "description": "Brown triggerfish with a pink tail margin, yellow pectoral fins and pale black-edged fins.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "12135912-59af-5b63-9015-67e636beea7c"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s11"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-11-paraphrase",
+      "description": "Pink-edged tail on a dark triggerfish about 25 cm long at 15 m depth.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "12135912-59af-5b63-9015-67e636beea7c"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s11"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-12-diagnostic",
+      "description": "Blue-purple triggerfish with a crescent tail, schooling in current above the reef.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "987b3653-d83f-54a0-afcf-0b48c75c635e"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s12"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-12-paraphrase",
+      "description": "A blue triggerfish with long tail lobes, around 12 inches long at 60 feet deep.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "987b3653-d83f-54a0-afcf-0b48c75c635e"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s12"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-13-diagnostic",
+      "description": "Gray surgeonfish with an orange shoulder patch, pale front half and darker rear.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "b932ea57-be9a-54c9-9036-656dc49e5e2e"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s13"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-13-paraphrase",
+      "description": "Oval fish with an orange mark behind its gill, browsing over sand by a Pacific reef.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "b932ea57-be9a-54c9-9036-656dc49e5e2e"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s13"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-14-diagnostic",
+      "description": "Yellow and blue striped surgeonfish with black borders to the stripes and a pale belly.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "9353ee92-eaa7-5bcb-b2f8-8b3a0577d5b4"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s14"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-14-paraphrase",
+      "description": "A compressed fish at 3 meters depth, blue stripes outlined black across yellow sides.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "9353ee92-eaa7-5bcb-b2f8-8b3a0577d5b4"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s14"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-15-diagnostic",
+      "description": "Red-orange anemonefish with dark sides and a single white head bar.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "c059528c-f884-5b96-b67b-d912a33846b1"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s15"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-15-paraphrase",
+      "description": "Orange fish with black flanks and a pale band on its head, tucked into an anemone.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "c059528c-f884-5b96-b67b-d912a33846b1"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s15"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-16-diagnostic",
+      "description": "Maroon anemonefish with three narrow white bars and a visible cheek spine.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "87727436-cafc-58b3-8818-f77fcbf554b7"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s16"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-16-paraphrase",
+      "description": "Reddish brown fish with cheek spines and pale stripes beside a bubble-tip anemone.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "87727436-cafc-58b3-8818-f77fcbf554b7"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase"
+      ],
+      "evidenceIDs": [
+        "s16"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-17-diagnostic",
+      "description": "Brown compressed fish swaying like a leaf above rubble, high front dorsal fin.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "5f4d48f4-6556-50f3-95af-a4d28635f4bb"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 3,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "diagnostic"
+      ],
+      "evidenceIDs": [
+        "s17"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-17-paraphrase",
+      "description": "A leaflike bottom fish with a tall dorsal fin, about 10 cm long at 12 m deep.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "identification",
+      "expectedSpeciesIDs": [
+        "5f4d48f4-6556-50f3-95af-a4d28635f4bb"
+      ],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "paraphrase",
+        "measurement"
+      ],
+      "evidenceIDs": [
+        "s17"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+    },
+    {
+      "id": "v05-ambiguous-angelfish",
+      "description": "Dark angelfish near a Caribbean reef.",
+      "selectedPackID": "caribbean",
+      "kind": "ambiguous",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [
+        "fc213eff-6ba6-53ab-b288-f6e654299e68",
+        "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+      ],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 0.64,
+      "tags": [
+        "ambiguous",
+        "short"
+      ],
+      "evidenceIDs": [
+        "s03",
+        "s04"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-ambiguous-trigger",
+      "description": "Dark triggerfish on an outer reef.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "ambiguous",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [
+        "ded990cc-3044-5f31-98d4-d388267b0167",
+        "12135912-59af-5b63-9015-67e636beea7c",
+        "987b3653-d83f-54a0-afcf-0b48c75c635e"
+      ],
+      "maximumAcceptableRank": 10,
+      "maximumConfidence": 0.64,
+      "tags": [
+        "ambiguous",
+        "short"
+      ],
+      "evidenceIDs": [
+        "s10",
+        "s11",
+        "s12"
+      ],
+      "provenance": "synthetic-source-informed",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-caribbean-frog",
+      "description": "Freshwater frog sitting on a lily pad.",
+      "selectedPackID": "caribbean",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-caribbean-vague",
+      "description": "A fish moved past me.",
+      "selectedPackID": "caribbean",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-caribbean-terrestrial",
+      "description": "A spotted freshwater frog on sand, about 5 cm long.",
+      "selectedPackID": "caribbean",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-tropical-pacific-frog",
+      "description": "Freshwater frog sitting on a lily pad.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-tropical-pacific-vague",
+      "description": "A fish moved past me.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-tropical-pacific-terrestrial",
+      "description": "A spotted freshwater frog on sand, about 5 cm long.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "noMatch",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 0,
+      "tags": [
+        "noMatch",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-region-1",
+      "description": "Blue and yellow striped surgeonfish on a reef in Fiji.",
+      "selectedPackID": "caribbean",
+      "kind": "regionConflict",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "regionConflict",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-region-2",
+      "description": "Brown leaflike fish in the Philippines.",
+      "selectedPackID": "caribbean",
+      "kind": "regionConflict",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "regionConflict",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-region-3",
+      "description": "Blue fish with a crown spot on a reef in the Bahamas.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "regionConflict",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "regionConflict",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    },
+    {
+      "id": "v05-region-4",
+      "description": "Spotted ray above sand in the Caribbean.",
+      "selectedPackID": "tropical-pacific",
+      "kind": "regionConflict",
+      "expectedSpeciesIDs": [],
+      "acceptableSpeciesIDs": [],
+      "maximumAcceptableRank": null,
+      "maximumConfidence": 1.0,
+      "tags": [
+        "regionConflict",
+        "short"
+      ],
+      "evidenceIDs": [],
+      "provenance": "synthetic-policy-probe",
+      "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+    }
+  ]
+}
