@@ -1,66 +1,103 @@
-# Dive ID
+# Dive ID — v0.5 candidate
 
-Dive ID is an offline-first iOS prototype for written marine-life identification. The app processes text descriptions on device, ranks locally bundled creature records, and stores saved identifications locally.
+An iPhone prototype for offline written-description search, region selection,
+results/species details, and persistent saved identifications. Requires **iOS 18+**.
+The candidate uses marketing version **0.5**, build **2**. Build 2 exceeds the
+previous repository build (1); TestFlight/App Store Connect distribution history
+is unavailable and must be checked before any future distribution. Nothing is
+submitted or published by this repository workflow.
 
-## Build and Run on iPhone
+## Current catalogue and availability
 
-Open **`DiveID.xcodeproj`**, not `Package.swift`, in Xcode. Select the **DiveID** scheme, then choose an iPhone simulator or a connected iPhone from the run-destination menu.
+| Pack | Version | Bundled records | Human-reviewed | Publication-eligible |
+| --- | ---: | ---: | ---: | ---: |
+| Caribbean | 3 | 8 | 0 | 0 |
+| Tropical Pacific | 2 | 384 | 0 | 0 |
+
+All 392 records remain draft. Debug explicitly permits the full development
+catalogue. Release uses only publication-eligible records: **Release currently has
+no searchable regions or species**. Its UI disables new searches and preserves
+access to saved identifications. Do not add `DEBUG` to Release, promote synthetic
+fixtures, or treat search quality as human publication approval.
+
+The production engine is **BM25 retrieval plus biological ranking**, with at most
+50 retrieved candidates and ten displayed matches. Scores describe relative clue
+similarity, not calibrated probabilities or confirmed identifications. Catalogue
+coverage is incomplete; source transcriptions and some biological fields still
+need review. See [source review](Docs/CataloguePublicationReview.md).
+
+## Features and limits
+
+- Description search and bundled catalogue access work without a network or account.
+- Region selection chooses an available local pack; there are no pack downloads.
+- Results/details retain their temporary session during detail/back navigation;
+  finished flows release it. Remaining temporary sessions have a hard limit of 16.
+- Saved sightings use persistent JSON storage and include a species snapshot.
+  Initialization/write failures expose an error and retry path, never a silent
+  memory-only success. Unreadable storage is not automatically reset.
+- **Photo identification is unavailable.** The home action is disabled and says
+  “Coming later”; image preparation code is not an identification model.
+- **Core ML search is experimental**, Debug-only opt-in pending real-model
+  evaluation. The default remains BM25. Debug diagnostics distinguish requested
+  and actual engines and label a BM25 fallback explicitly.
+- Artwork is a placeholder, not a verified species photograph. Caribbean SVG
+  marker metadata is bundled, but the current iOS UI does not render those files.
+
+## Build an iPhone app
+
+Open **`DiveID.xcodeproj`**, select the shared **DiveID** scheme and an iOS 18+
+iPhone simulator or connected iPhone. Physical installation needs an authorized
+development team and provisioning. CI currently selects Xcode 16.4.
 
 ```sh
 open DiveID.xcodeproj
+xcodebuild -project DiveID.xcodeproj -scheme DiveID -showdestinations
 ```
 
-The app target supports iPhone and the iPhone Simulator and currently requires iOS 18 or later. Running on a physical iPhone also requires selecting your development team under **DiveID target > Signing & Capabilities**.
+Do not open `Package.swift` expecting an app destination. SwiftPM builds the
+portable core and test resources, including the catalogues; it excludes the
+SwiftUI application entry point and feature views. A successful SwiftPM build
+is not evidence that the iOS app was built, installed or exercised.
 
-If Xcode only offers **My Mac** as a destination, the repository was probably opened as the Swift package. `Package.swift` exists only to run the platform-independent identification benchmark from the command line; it deliberately excludes the iOS app, UI, and resources and therefore is not an app entry point. Close that window and open `DiveID.xcodeproj` instead.
+See [candidate validation](Docs/V05CandidateValidation.md) for exact simulator,
+Release and device checks, independent test stages, and an iPhone measurement
+worksheet. No actual iPhone latency or memory measurement is currently available.
 
-## Included Pack
+## Required portable checks
 
-### Caribbean Offline Identification Pack
+```sh
+python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt \
+  -r Tools/CatalogImport/requirements.txt
+suite_failures=0
+for suite in TropicalPacificWorkbook CatalogImport CatalogReview SemanticSearch/tests CI Evaluation; do
+  python3 -m unittest discover -s "Tools/$suite" -p 'test_*.py' -v || suite_failures=1
+done
+test "$suite_failures" = 0
+swift test
+swift test -c release
+python3 Tools/Evaluation/run_v05.py --configuration debug
+```
 
-* Pack ID: `caribbean`
-* Pack version: 3
-* Small locally bundled Caribbean starter catalogue
-* Species data and reference-image files ship in `DiveID/Resources/IdentificationPacks/Caribbean`.
-* The pack focuses on common recreational-dive encounters in the broader Caribbean Sea and related tropical western Atlantic dive areas.
+CI runs Python, Linux/macOS SwiftPM and hosted Xcode validation independently and
+requires every job to succeed. The v0.5 evaluation currently exposes failures;
+these commands must retain their nonzero exit status. The shell loop runs all six suites and aggregates their status. Existing Caribbean/Pacific gates pass, but the new source-informed
+46-case development evaluation fails on paraphrase retrieval/ranking, freshwater
+false positives and regional conflicts. See [full results and limitations](Docs/V05DevelopmentEvaluation.md).
+Its descriptions are synthetic, not independent diver holdout data. The legacy
+100-case benchmark includes an opt-in frozen cohort; routine tests leave it closed.
 
-## Offline Behavior
+## Rebuild catalogue data
 
-* Species data ships with the app.
-* Text-based vector reference markers ship with the app; binary image assets are intentionally not required by this repository.
-* Descriptions stay on-device.
-* Results require no internet.
-* Saved identifications stay local.
-* No account is required.
-* Photo identification remains disabled and labelled as coming later.
+```sh
+python3 Tools/CatalogReview/regenerate_caribbean.py
+python3 Tools/CatalogImport/import_tropical_pacific.py
+python3 Tools/CatalogReview/prepare_source_review_pass.py
+python3 Tools/CatalogReview/prepare_review_batch.py
+python3 Tools/CatalogReview/verify_source_review_reproducibility.py
+```
 
-## Catalogue Scope
-
-The Caribbean pack is not a complete inventory of Caribbean marine life. It is a curated offline identification set for common diver and snorkeler encounters. Geographic occurrence varies by island, season, habitat, and subregion. Match strength is descriptive similarity against catalogue clues, not certainty, confirmation, probability, or scientific validation.
-
-## Data and Image Sources
-
-Species records include data-source metadata fields for taxonomy, range, size, depth, habitat, and visual-characteristic review. The current committed catalogue records source metadata in each profile. Image attribution is displayed from the bundled image metadata on species detail screens.
-
-The repository intentionally avoids binary image files. Bundled artwork is stored as text SVG vector markers with visible attribution metadata; these are offline visual markers, not verified species photographs. If photographic references are added later, use public domain, CC0, or CC BY assets and verify licensing per image before shipping.
-
-The current iOS UI deliberately presents its SF Symbol as an unavailable-artwork placeholder. SwiftUI's native `Image` initializers do not provide a documented, reliable path for decoding these raw bundled SVG files at runtime, and adding a web view or third-party SVG renderer would be disproportionate for the current markers. The app therefore does not load the SVG merely to restyle the placeholder or announce the SVG-specific alternative text. A future artwork pass can add a dedicated renderer while retaining the existing pack metadata and bounded data loader.
-
-## Pack Versioning
-
-Each pack has a JSON manifest with a stable machine-readable ID, schema version, pack version, display metadata, creature count, creature resource name, and image subdirectory. The bundle repository validates that the decoded creature count matches the manifest count.
-
-## Benchmark
-
-A local Caribbean benchmark fixture contains 100 description cases with an approximate 70 development / 30 holdout split. It includes insufficient descriptions, out-of-region descriptions, ambiguous descriptions, juvenile/color clues, size clues, habitat clues, and common diver language. Full benchmark thresholds were not verified in this execution environment because Xcode was unavailable.
-
-## Future Packs
-
-The repository now uses a pack-oriented catalogue boundary and selected-region repository so future regional packs can be added. No downloadable pack system exists yet, and the app does not include download controls or remote pack updates.
-
-### Tropical Pacific Offline Identification Pack
-
-* Pack ID: `tropical-pacific`; pack version 1; 40 source-traceable starter records.
-* The generated pack and its region selection metadata ship in `DiveID/Resources/IdentificationPacks/TropicalPacific`.
-* Rebuild and audit instructions, selection rules, exclusions, and licensing safeguards are documented in `Docs/TropicalPacificCatalogue.md`.
-* Neither the Tropical Pacific evaluation nor the existing eight-species Caribbean benchmark establishes production identification quality.
+Use the validated overlay/import inputs rather than editing generated records.
+Stable IDs, original provenance and named human review decisions must survive
+regeneration. See [Pacific import documentation](Docs/TropicalPacificCatalogue.md)
+and [candidate readiness record](Reports/V05CandidateReadiness.json). Publication
+approval and on-device readiness are separate from import/build success.

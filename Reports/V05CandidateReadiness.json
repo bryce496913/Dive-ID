@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "candidateSourceSHA": "06d88c2da1ae9f35395658288374c79f5dad3f36",
+  "candidateSourceTree": "0c93fe9100bed58820fdbd17d158273b13ba25ae",
+  "portableTestsExecutedAtSHA": "53d2b8a1313fb5b17b6d7a1b7c0cfdb058494215",
+  "traceability": "Subsequent candidate changes are documentation and two UI-test actor annotations. Portable targets and application sources are unchanged from the portable test SHA. This readiness-record-only follow-up does not change the candidate application.",
+  "baselineMainSHA": "7d9e84553e2197dfce2095ee95923ecc8d976423",
+  "readiness": "blocked; metadata candidate only, no installed iOS candidate or distribution artifact produced",
+  "version": {
+    "marketing": "0.5",
+    "build": "2",
+    "previousRepositoryBuild": "1",
+    "deploymentTarget": "iOS 18.0",
+    "deviceFamily": "iPhone",
+    "distributionHistory": "GitHub releases empty and tag refs unavailable (404). App Store Connect/TestFlight history inaccessible; uniqueness above previously distributed builds cannot be confirmed."
+  },
+  "catalogues": {
+    "caribbean": {
+      "packVersion": 3,
+      "bundled": 8,
+      "draft": 8,
+      "humanReviewed": 0,
+      "publicationEligible": 0
+    },
+    "tropical-pacific": {
+      "packVersion": 2,
+      "bundled": 384,
+      "draft": 384,
+      "humanReviewed": 0,
+      "publicationEligible": 0
+    }
+  },
+  "features": {
+    "debugSearch": "experimental-development catalogue: 392 records across two selectable regions",
+    "releaseSearch": "blocked: zero publication-eligible records and zero searchable regions",
+    "engine": "production BM25 retrieval + biological ranking, candidate limit 50, display limit 10",
+    "photoIdentification": "disabled; Coming later; service rejects photo requests",
+    "coreML": "Debug-only experimental opt-in; no real-model validation claimed; fallback remains explicitly BM25",
+    "savedIdentifications": "persistent JSON repository; no silent memory-only fallback; saved snapshots independent of temporary search sessions"
+  },
+  "verification": {
+    "staticProjectPlistScheme": "passed: both app configurations version 0.5/build 2; iOS 18; plist substitutions; no added DEBUG in Release; shared scheme XML parsed",
+    "uiActorRepair": "Both UI-test methods annotated @MainActor after preceding hosted Xcode errors. Swift syntax parsing passed. XCTest/iOS type-check and simulator execution pending.",
+    "python": {
+      "passed": 75,
+      "failed": 0,
+      "suites": {
+        "TropicalPacificWorkbook": 9,
+        "CatalogImport": 6,
+        "CatalogReview": 19,
+        "SemanticSearch": 33,
+        "CI": 5,
+        "Evaluation": 3
+      }
+    },
+    "swiftPM": {
+      "Debug": {
+        "platform": "Linux x86_64",
+        "swift": "6.2.3",
+        "build": "passed",
+        "tests": 108,
+        "skipped": 1,
+        "failedTestMethods": 1,
+        "failedAssertions": 30,
+        "failure": "V05DevelopmentEvaluationTests only; prior gates passed",
+        "evaluationReportMatchesCommittedBytes": true
+      },
+      "Release": {
+        "platform": "Linux x86_64",
+        "swift": "6.2.3",
+        "build": "passed",
+        "tests": 108,
+        "skipped": 1,
+        "failedTestMethods": 1,
+        "failedAssertions": 30,
+        "failure": "V05DevelopmentEvaluationTests only; prior gates passed",
+        "evaluationReportMatchesCommittedBytes": true
+      }
+    },
+    "portableFunctionality": "Existing positive/no-match gates, publication filtering/labels, 10 controlled search-lifecycle tests, 16 saved persistence/compatibility tests and BM25/fallback diagnostic tests pass. These are not installed-app, relaunch-process, gesture or suspension evidence.",
+    "evaluationReportSHA256": "45717340fd90a7402948cf8e6d2862732501b7e59ec603e3da137e13c0c11dfd"
+  },
+  "precedingHostedEvidence": {
+    "sha": "7d9e84553e2197dfce2095ee95923ecc8d976423",
+    "runURL": "https://github.com/bryce496913/Dive-ID/actions/runs/37948403218",
+    "appliesToCandidate": false,
+    "macOSSwiftPM": "110 tests, one skip, 29 evaluation assertions failed; not identical to Linux results",
+    "resolvedTestSettings": "Debug: DiveIDTests DEBUG + DIVEID_XCODE_HOSTED_TEST, UITests DEBUG. Release: DiveIDTests DIVEID_XCODE_HOSTED_TEST, UITests no conditions. Product checks passed.",
+    "xcodeBuild": "failed: UI tests accessed main-actor XCTest APIs from nonisolated methods",
+    "unitPackagingUI": "skipped after build failure; no simulator execution evidence"
+  },
+  "unexecutedChecks": [
+    "Resolve candidate Debug/Release Xcode settings and inspect built Info.plist version/build and Release compilation flags.",
+    "Build-for-testing and install candidate Debug app on an available iOS 18+ iPhone simulator; run complete hosted unit, explicit packaging and UI targets independently.",
+    "Build actual Release app for iOS; sign/install/run on an actual iPhone. Run separate optimized hosted unit/packaging tests without DEBUG.",
+    "Verify installed Debug region selection and persistence, offline positive/no-match searches, ranks, result/detail/back navigation and cancelled search behavior.",
+    "Verify installed Release empty publication state, disabled search/photo action and continued saved-snapshot access. Positive Release search and region switching remain publication-blocked.",
+    "Save, terminate, relaunch, reopen, remove and relaunch again on an installed app; verify recoverable errors without resetting unreadable user storage.",
+    "Background/foreground during search, results, details and saved-record screens; verify state and retry behavior.",
+    "Measure actual iPhone cold/warm search-to-results latency and repeated-search memory with recorded device/OS/configuration/catalogue/engine/method and raw traces.",
+    "Confirm build number against actual prior TestFlight/App Store distributions before any later distribution."
+  ],
+  "deviceMeasurements": {
+    "status": "not measured; no accessible Apple tooling or iPhone on this Linux host",
+    "device": null,
+    "os": null,
+    "coldLatency": null,
+    "warmLatency": null,
+    "memory": null,
+    "method": "Planned protocol and empty worksheet in Docs/V05CandidateValidation.md; no XCTest timings substituted."
+  },
+  "releaseBlockers": [
+    "No real approved catalogue; Release identification unavailable.",
+    "New v0.5 evaluation still fails retrieval/ranking, explicit no-match and regional-conflict requirements.",
+    "Hosted UI-test actor repair requires macOS verification; no candidate iOS build/install/test evidence yet.",
+    "No real iPhone functional, suspension, latency or memory measurements.",
+    "Distribution build-number history is unavailable."
+  ],
+  "submissionOrPublicationPerformed": false
+}
