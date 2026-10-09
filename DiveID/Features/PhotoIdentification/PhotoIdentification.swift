@@ -3,10 +3,11 @@ import PhotosUI
 import SwiftUI
 
 enum PhotoSelectionError: Equatable {
-    case unableToRead, unsupportedFormat, decodingFailed, processingFailed
+    case unableToRead, unsupportedFormat, decodingFailed, processingFailed, sessionLimitReached
 
     var message: String {
         switch self {
+        case .sessionLimitReached: "Finish an existing search by going back before starting another."
         case .unableToRead: "The selected item could not be read. Please choose another photo."
         case .unsupportedFormat: "That image format is not supported. Please choose a JPEG, PNG, or HEIF photo."
         case .decodingFailed: "The selected image could not be decoded. Please choose another photo."
@@ -79,6 +80,9 @@ final class PhotoIdentificationViewModel {
         do {
             let request = IdentificationRequest(source: .processedPhoto(processedPhoto.reference))
             return try await sessionStore.createSession(for: request, photo: processedPhoto)
+        } catch IdentificationSessionStoreError.capacityReached {
+            selectionError = .sessionLimitReached
+            return nil
         } catch is CancellationError {
             return nil
         } catch {
@@ -118,6 +122,7 @@ struct PhotoIdentificationView: View {
                 if let error = viewModel.selectionError { Text(error.message).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Identify Photo", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
                     Task {
+                        await router.waitForSessionUpdates()
                         if let sessionID = await viewModel.submit() {
                             router.navigate(to: .identificationResults(sessionID: sessionID))
                         }

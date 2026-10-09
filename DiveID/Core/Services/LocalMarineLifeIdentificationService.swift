@@ -24,6 +24,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
     }
 
     func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] {
+        try Task.checkCancellation()
         switch request.source {
         case .processedPhoto: throw LocalIdentificationError.unsupportedSource
         case .description(let description):
@@ -33,6 +34,8 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             let pack: OfflineIdentificationPack
             do {
                 pack = try await catalogRepository.loadPack(id: packID)
+            } catch is CancellationError {
+                throw CancellationError()
             } catch let failure as CatalogueLoadFailure {
                 await diagnosticsReporter.record(failure)
                 throw LocalIdentificationError.catalogueLoadFailed(failure)
@@ -45,7 +48,9 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
                 await diagnosticsReporter.record(failure)
                 throw LocalIdentificationError.catalogueLoadFailed(failure)
             }
+            try Task.checkCancellation()
             let result = try await searchEngine.search(description: trimmed, pack: pack)
+            try Task.checkCancellation()
             if result.queryAnalysis.packRegionCompatibility == .conflicting,
                let outside = result.queryAnalysis.observedRegions.sorted().first {
                 throw LocalIdentificationError.regionMismatch(selected: packID, mentionedRegion: outside.capitalized)

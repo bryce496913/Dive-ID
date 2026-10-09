@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct DiveIDApp: App {
-    @State private var router = AppRouter()
+    @State private var router: AppRouter
     private let identificationService: any MarineLifeIdentificationService
     private let savedRepository: any SavedIdentificationRepository
     private let sessionStore: any IdentificationSessionStore
@@ -40,7 +40,9 @@ struct DiveIDApp: App {
             searchEngine: searchEngine
         )
         savedRepository = PersistentSavedIdentificationRepository()
-        sessionStore = InMemoryIdentificationSessionStore()
+        let sessionStore = InMemoryIdentificationSessionStore()
+        self.sessionStore = sessionStore
+        self.router = AppRouter(sessionStore: sessionStore)
         photoProcessor = DefaultPhotoProcessingService()
     }
 

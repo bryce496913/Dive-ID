@@ -1,128 +1,4 @@
-import Observation
 import SwiftUI
-
-@MainActor @Observable
-final class IdentificationResultsViewModel {
-    let sessionID: UUID
-    private(set) var state: LoadState<[IdentificationMatch]> = .idle
-    private(set) var packMetadata: OfflineIdentificationPackMetadata?
-    private let service: any MarineLifeIdentificationService
-    private let sessionStore: any IdentificationSessionStore
-    private let catalog: any MarineSpeciesCatalogRepository
-    private var loadTask: Task<Void, Never>?
-
-    init(sessionID: UUID, service: any MarineLifeIdentificationService, sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository = BundleMarineSpeciesCatalogRepository()) {
-        self.sessionID = sessionID
-        self.service = service
-        self.sessionStore = sessionStore
-        self.catalog = catalog
-    }
-
-    var loadingMessage: String {
-        guard let packMetadata else { return "Searching the selected offline pack…" }
-        return "Searching the \(packMetadata.displayName) offline pack…"
-    }
-
-    var resultsSummary: String {
-        guard let packMetadata else { return "Matches from the selected offline pack" }
-        return "Matches from \(packMetadata.speciesCount.formatted()) locally stored \(packMetadata.displayName) records"
-    }
-
-    func loadIfNeeded() async {
-        guard case .idle = state, loadTask == nil else { return }
-        await execute()
-    }
-
-    func retry() async {
-        guard loadTask == nil else { return }
-        if case .failed = state { await execute() }
-    }
-
-    private func execute() async {
-        guard loadTask == nil else { return }
-        state = .loading
-        let task = Task { [service, sessionStore, catalog, sessionID] in
-            do {
-                let request = try await sessionStore.request(for: sessionID)
-                if let packID = request.context.region {
-                    if let packs = try? await catalog.availablePacks() {
-                        for metadata in packs where metadata.id == packID {
-                            packMetadata = metadata
-                            break
-                        }
-                    }
-                }
-                if let cached = try await sessionStore.result(for: sessionID) {
-                    apply(cached.matches)
-                    return
-                }
-                let photo: ProcessedPhoto?
-                if case .processedPhoto(let reference) = request.source {
-                    photo = try await sessionStore.photo(for: reference)
-                } else {
-                    photo = nil
-                }
-                let matches = try await service.identify(request: request, processedPhoto: photo)
-                try Task.checkCancellation()
-                let displayed = normalized(matches).map { value in
-                    var value = value; value.sourceSessionID = sessionID
-                    if case .description(let description) = request.source { value.observationDescription = description }
-                    return value
-                }
-                try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date()), for: sessionID)
-                apply(displayed)
-            } catch is CancellationError {
-                state = .idle
-            } catch let error as LocalIdentificationError {
-                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && { if case .regionMismatch = error { return false }; return true }())
-            } catch {
-                state = .failed("Identification could not be completed locally. Please try again.", retryable: true)
-            }
-        }
-        loadTask = task
-        await task.value
-        loadTask = nil
-    }
-
-    static func message(for error: LocalIdentificationError, includesDiagnostics: Bool = {
-#if DEBUG
-        true
-#else
-        false
-#endif
-    }()) -> String {
-        switch error {
-        case .invalidDescription:
-            "Add more detail about the animal before trying again."
-        case .catalogUnavailable:
-            "The offline species catalogue could not be loaded."
-        case .catalogueLoadFailed(let failure):
-            includesDiagnostics
-                ? "The offline species catalogue could not be loaded.\nDiagnostic: \(failure.code.rawValue)"
-                : "The offline species catalogue could not be loaded."
-        case .unsupportedSource:
-            "Photo identification is not available in this offline version yet."
-        case .regionMismatch(let selected, let mentioned):
-            "Your description mentions \(mentioned), but the selected offline pack covers the \(selected.rawValue.capitalized). Check the selected dive region and try again."
-        }
-    }
-
-    private func apply(_ matches: [IdentificationMatch]) {
-        let displayed = normalized(matches)
-        state = displayed.isEmpty ? .empty : .loaded(displayed)
-    }
-
-    private func normalized(_ matches: [IdentificationMatch]) -> [IdentificationMatch] {
-        var seen = Set<UUID>()
-        return Array(matches.sorted { $0.rank == $1.rank ? $0.score > $1.score : $0.rank < $1.rank }.filter { seen.insert($0.species.id).inserted }.prefix(10))
-    }
-
-    func cancel() {
-        loadTask?.cancel()
-        loadTask = nil
-        if case .loading = state { state = .idle }
-    }
-}
 
 struct IdentificationResultsView: View {
     @State var viewModel: IdentificationResultsViewModel
@@ -166,6 +42,11 @@ struct IdentificationResultsView: View {
         }
         .appScreenBackground()
         .navigationTitle("Possible Matches")
-        .task { await viewModel.loadIfNeeded() }
+        // A detail push cancels this view task, but the router still owns the flow.
+        .task {
+            await router.waitForSessionUpdates()
+            guard !Task.isCancelled else { return }
+            await viewModel.loadIfNeeded()
+        }
     }
 }
