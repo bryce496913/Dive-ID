@@ -3,7 +3,8 @@ import PackageDescription
 
 let package = Package(
     name: "DiveIDBenchmark",
-    platforms: [.macOS(.v13)],
+    // Observation-backed saved-state models require macOS 14 in the portable test harness.
+    platforms: [.macOS(.v14)],
     products: [.library(name: "DiveID", targets: ["DiveID"])],
     targets: [
         .target(
@@ -13,7 +14,6 @@ let package = Package(
                 "App", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
-                "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Services/SelectedDiveRegionRepository.swift",
                 "Info.plist"
             ],
@@ -25,6 +25,8 @@ let package = Package(
                 "Core/Catalog/Regions/TropicalPacificRegion.swift",
                 "Core/Models/LocalSpeciesProfile.swift",
                 "Core/Models/Models.swift",
+                "Core/Models/SavedIdentificationViewModels.swift",
+                "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
                 "Core/Models/ParsedObservation.swift",
                 "Core/Models/SpeciesSearchDocument.swift",
@@ -50,10 +52,9 @@ let package = Package(
             dependencies: ["DiveID"],
             path: "DiveIDTests",
             exclude: [
-                "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift",
-                "SavedIdentificationCompatibilityTests.swift"
+                "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
+            sources: ["SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

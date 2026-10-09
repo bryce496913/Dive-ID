@@ -18,14 +18,78 @@ actor InMemorySavedIdentificationRepository: SavedIdentificationRepository {
 
 struct SavedIdentificationFile: Codable, Sendable { let schemaVersion: Int; var identifications: [SavedIdentification] }
 private struct LegacySavedSpeciesFile: Codable { let schemaVersion: Int; let species: [Species] }
-enum SavedIdentificationRepositoryError: Error { case unsupportedSchema, corruptData, storageUnavailable }
+enum SavedIdentificationRepositoryError: Error, LocalizedError {
+    case unsupportedSchema, corruptData, storageUnavailable
+    case initializationFailed
+
+    var errorDescription: String? {
+        switch self {
+        case .unsupportedSchema: "Saved storage uses a newer format. Update DiveID and retry."
+        case .corruptData: "Saved storage could not be read. Your file has not been reset. Retry, or restore a readable backup."
+        case .storageUnavailable, .initializationFailed:
+            "Saved storage is unavailable. Check available device storage and retry. Offline search is still available."
+        }
+    }
+
+    static func message(for error: Error) -> String {
+        (error as? Self)?.errorDescription
+            ?? "Saved storage could not be accessed. Check available device storage and retry."
+    }
+}
+
+/// Production storage only. A failed initialization is reported to the caller;
+/// the next user operation retries the same persistent factory, never memory storage.
+actor PersistentSavedIdentificationRepository: SavedIdentificationRepository {
+    private let makeRepository: @Sendable () throws -> JSONSavedIdentificationRepository
+    private var repository: JSONSavedIdentificationRepository?
+
+    init(makeRepository: @escaping @Sendable () throws -> JSONSavedIdentificationRepository = {
+        try JSONSavedIdentificationRepository()
+    }) {
+        self.makeRepository = makeRepository
+    }
+
+    private func persistentRepository() throws -> JSONSavedIdentificationRepository {
+        if let repository { return repository }
+        do {
+            let repository = try makeRepository()
+            self.repository = repository
+            return repository
+        } catch {
+            throw SavedIdentificationRepositoryError.initializationFailed
+        }
+    }
+
+    func fetchAll() async throws -> [SavedIdentification] {
+        try await persistentRepository().fetchAll()
+    }
+    func save(_ value: SavedIdentification) async throws -> SavedIdentification {
+        try await persistentRepository().save(value)
+    }
+    func remove(id: UUID) async throws {
+        try await persistentRepository().remove(id: id)
+    }
+    func savedIdentification(sourceSessionID: UUID, speciesID: UUID) async throws -> SavedIdentification? {
+        try await persistentRepository().savedIdentification(sourceSessionID: sourceSessionID, speciesID: speciesID)
+    }
+}
 
 actor JSONSavedIdentificationRepository: SavedIdentificationRepository {
     static let schemaVersion = 2
     private let fileURL: URL; private let legacyFileURL: URL?; private let fileManager: FileManager
-    init(fileURL: URL? = nil, fileManager: FileManager = .default) throws {
+    private let writeData: @Sendable (Data, URL) throws -> Void
+    init(fileURL: URL? = nil, fileManager: FileManager = .default,
+         writeData: @escaping @Sendable (Data, URL) throws -> Void = { data, url in
+             try data.write(to: url, options: .atomic)
+         }) throws {
+        self.writeData = writeData
         self.fileManager = fileManager
-        if let fileURL { self.fileURL = fileURL; self.legacyFileURL = nil; return }
+        if let fileURL {
+            try fileManager.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            self.fileURL = fileURL
+            self.legacyFileURL = nil
+            return
+        }
         guard let directory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { throw SavedIdentificationRepositoryError.storageUnavailable }
         let appDirectory = directory.appendingPathComponent("DiveID", isDirectory: true); try fileManager.createDirectory(at: appDirectory, withIntermediateDirectories: true)
         self.fileURL = appDirectory.appendingPathComponent("saved-identifications.json")
@@ -37,10 +101,14 @@ actor JSONSavedIdentificationRepository: SavedIdentificationRepository {
     func savedIdentification(sourceSessionID: UUID, speciesID: UUID) throws -> SavedIdentification? { try read().first { $0.sourceSessionID == sourceSessionID && $0.species.id == speciesID } }
     private func read() throws -> [SavedIdentification] {
         let sourceURL: URL
-        if fileManager.fileExists(atPath: fileURL.path) { sourceURL = fileURL }
-        else if let legacyFileURL, fileManager.fileExists(atPath: legacyFileURL.path) { sourceURL = legacyFileURL }
-        else { return [] }
-        let data = try Data(contentsOf: sourceURL)
+        let data: Data
+        if let current = try dataIfPresent(at: fileURL) {
+            sourceURL = fileURL
+            data = current
+        } else if let legacyFileURL, let legacy = try dataIfPresent(at: legacyFileURL) {
+            sourceURL = legacyFileURL
+            data = legacy
+        } else { return [] }
         if let envelope = try? JSONDecoder().decode(SavedIdentificationFile.self, from: data) { guard envelope.schemaVersion == Self.schemaVersion else { throw SavedIdentificationRepositoryError.unsupportedSchema }; if sourceURL != fileURL { try write(envelope.identifications) }; return envelope.identifications }
         if let legacy = try? JSONDecoder().decode(LegacySavedSpeciesFile.self, from: data), legacy.schemaVersion == 1 {
             let migrated = legacy.species.map { species in SavedIdentification(match: .init(id: species.id, species: species, score: 0, scoreKind: .relativeMatch, strength: .weak, explanation: "Saved before identification details were available.", distinguishingFeatures: [], cautions: [], taxonomicResolution: .species)) }
@@ -48,10 +116,14 @@ actor JSONSavedIdentificationRepository: SavedIdentificationRepository {
         }
         throw SavedIdentificationRepositoryError.corruptData
     }
+    private func dataIfPresent(at url: URL) throws -> Data? {
+        do { return try Data(contentsOf: url) }
+        catch CocoaError.fileReadNoSuchFile { return nil }
+    }
     private func write(_ values: [SavedIdentification]) throws {
         let data = try JSONEncoder().encode(SavedIdentificationFile(schemaVersion: Self.schemaVersion, identifications: values)); let directory = fileURL.deletingLastPathComponent(); try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
-        let temporary = directory.appendingPathComponent(".\(UUID().uuidString).tmp")
-        do { try data.write(to: temporary, options: .atomic); if fileManager.fileExists(atPath: fileURL.path) { _ = try fileManager.replaceItemAt(fileURL, withItemAt: temporary) } else { try fileManager.moveItem(at: temporary, to: fileURL) } }
-        catch { try? fileManager.removeItem(at: temporary); throw error }
+        // Atomic replacement preserves the previous file if writing fails. Avoid
+        // a separate remove/rename sequence that could lose confirmed records.
+        try writeData(data, fileURL)
     }
 }
