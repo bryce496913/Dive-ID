@@ -9,6 +9,11 @@
   },
   "reviewDecisionOutcomes": [
     {
+      "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",
+      "state": "applied",
+      "decision": "draft"
+    },
+    {
       "speciesID": "7a662be3-854f-5819-8d32-cb8b1f19a00b",
       "state": "applied",
       "decision": "draft"

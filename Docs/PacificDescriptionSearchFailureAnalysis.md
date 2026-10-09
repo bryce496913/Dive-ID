@@ -1,88 +1,102 @@
-# Tropical Pacific description-search pass
+# Tropical Pacific description-search correction
 
-## Scope and execution status
+## Scope and baseline
 
-Fresh Linux SwiftPM execution on 2026-09-26 used the unchanged version 2
-Tropical Pacific development pack (384 draft records), selected the fixture's
-`tropical-pacific` pack, and ran the production-default
-`HybridDescriptionSearchEngine`: BM25 retrieval with a 50-candidate limit,
-followed by `LocalSpeciesRanker` and the service's ten-result presentation
-limit. The seven fixture descriptions, expected IDs, acceptable maximum ranks,
-and frog no-match assertion were not changed. The publication configuration
-still excludes this draft-only pack.
+Pass executed 2026-10-09 on clean branch `work`, starting at `f7694dd`
+(main's merge of PR #79; that PR enables the DEBUG compilation condition).
+No applicable AGENTS.md was present. Tests use the 384-record draft Pacific
+pack, production BM25 retrieval with 50 candidates, biological ranking, and
+10 displayed results. No algorithm, weights, candidate limits, publication
+policy, positive rank bounds, expected IDs, or no-match assertions changed.
 
-The repository's previous trace described three historical failures. A fresh
-pre-change fixture run instead reproduced exactly two: Fire Dartfish and
-Cockatoo Waspfish. Ribbontail Ray ranked 1, Dragon Moray ranked 1,
-Blackspotted Puffer ranked 6, the short Bluespotted Ray ranked 1, and the frog
-correctly produced no result. Those are fresh observations; the earlier ranks
-below are labelled historical rather than presented as a rerun.
+The full baseline Pacific suite reproduced the single positive failure.
 
-## Current traces
+| Fixture case | Before displayed | After displayed | Required maximum |
+| --- | ---: | ---: | ---: |
+| Ribbontail Ray | 1 | 1 | 3 |
+| Dragon Moray | 1 | 1 | 3 |
+| Fire Dartfish | 5 | 5 | 5 |
+| Cockatoo Waspfish | absent | 1 | 5 |
+| Blackspotted Puffer, short | 6 | 6 | 10 |
+| Bluespotted Ray, short | 1 | 1 | 5 |
+| Freshwater frog | no match | no match | no match |
 
-“Retrieval rank” is the expected record's BM25 rank over all 384 documents.
-“Displayed rank” is its position after the production 50-record boundary,
-structured eligibility/scoring, the ranker's ten-result limit, and service
-presentation.
+## Retrieval and biological trace
 
-| Case | Parsed structured observations | BM25 evidence (score; rank) | Survives 50 | Structured decision | Historical displayed | Fresh displayed after correction |
-| --- | --- | --- | :---: | --- | ---: | ---: |
-| Fire Dartfish | category `fish`; colors `orange`, `red`; marking `tail`; behavior `hovering` | `above`, `burrow`, `fish`, `hovering`, `red`, `tail` (15.37792039201181; 1) | yes | eligible; support `fish`, `tail`, `red`, `hovering`; no contradictions; raw 15 | absent | 5 |
-| Cockatoo Waspfish | category `fish`; color `brown`; behavior `bottom-swimming` | `bottom`, `dorsal`, `fish` (4.693223201117945; 81) | **no** | eligible only when diagnosed in isolation; support `fish`; no contradictions; raw 6 | absent | absent |
+The waspfish query parses category `fish`, color `brown`, and behavior
+`bottom-swimming`; no structured shape, habitat, or marking is recognized.
+Before correction its BM25 rank is 81, score 4.693223201117945, matched terms
+`bottom`, `dorsal`, `fish`. It misses the 50-candidate boundary entirely.
+Isolated ranking (diagnosis only) finds it eligible at raw score 6 for `fish`,
+with no conflicts. This establishes a retrieval miss rather than rejection.
 
-Fire Dartfish historically retrieved at rank 13 and survived the boundary, but
-its incomplete structured record left it outside the displayed top ten. After
-the source-backed overlay, the corrected traits also improve its search
-document, so fresh retrieval is rank 1 and final ranking is exactly the
-fixture's maximum acceptable rank 5. This was a catalogue-data defect, not a
-candidate-limit or final-ranking defect.
+After the source correction its BM25 rank is 3, score 18.01633610114738,
+matched terms `bottom`, `brown`, `debri`, `dorsal`, `fin`, `fish`, `like`,
+`sail`. It enters the production pool and is biologically eligible at raw
+score 11: fish (6), brown (3), fin/spine clue (2), with no conflicts. It
+ranks first both in the hybrid output and in the service's displayed results.
+The parser still does not recognize leaf shape or swaying; neither is falsely
+encoded as bottom-swimming to earn behavior points. No remaining failure
+justifies a general retrieval or ranking change.
 
-Cockatoo Waspfish remains a retrieval miss: rank 81 never enters the production
-pool. Giving the ranker that candidate solely for diagnosis shows that its
-current structure would be eligible, but only on generic `fish` support and at
-raw score 6. It would still lack support for the fixture's leaf shape, brown
-color, sail-like dorsal fin, and rocking behavior. Raising the limit or adding
-a species/query-specific rule would conceal the incomplete source data and was
-not done.
+Fire Dartfish retrieves at rank 1 before and after (BM25 score
+15.37792039201181 → 15.373917616366668), raw biological score 15, displayed
+rank 5. Small corpus-wide BM25 score changes are expected from document
+length/frequency changes.
 
-## Evidence-backed correction
+## Inspected evidence and durable correction
 
-The workbook's high-confidence Fire Dartfish species-account transcription is
-source-bound to *Reef Fish Identification: Tropical Pacific*, species account
-book p. 282 (PDF p. 283), source ID `SRC-E19DD980`. It states “reddish brown
-rear body” and “Hover above burrows”. The importer previously extracted
-`brown` but not the red color concept from `reddish`, and `solitary` but not
-`hovering` from the verb `Hover`. The review overlay therefore adds only `red`
-and `hovering`, retaining the already extracted colors and behavior. The
-decision remains `draft`, names the unresolved independent source-page and
-taxonomy review, and does not confer publication approval. Reimport applies
-the correction reproducibly and records its fingerprint/outcome in the import
-report.
+The workbook's waspfish source `SRC-B853F73C` identifies book p. 381
+(PDF p. 382), *Reef Fish Identification: Tropical Pacific*. Its high-confidence
+trait `TRT-D7180089` is only a comparison with Spiny Waspfish plus spine count,
+social behavior and habitat. The other identification trait has low-confidence
+corrupted OCR. Neither supports inheriting the preceding species' appearance.
+The original scan remains unavailable in the repository.
 
-No general retrieval or ranking correction was justified: with the supported
-traits present, the existing production pipeline meets the Fire Dartfish bound
-without changing limits, weights, eligibility, confidence, or search-document
-wording.
+Accessible authoritative accounts were inspected through the web tool:
 
-## Unresolved source evidence
+- [Bray, D.J. 2023, Fishes of Australia, Ablabys taenianotus](https://fishesofaustralia.net.au/home/species/3205),
+  Summary and Features, accessed 2026-10-09: variable coloration including
+  brown, reddish, yellowish and white areas; strong lateral compression;
+  elevated anterior dorsal spines; swaying that imitates leaves/debris in surge.
+  The text is CC BY 3.0 Australia; no photographs were imported.
+- [McGrouther, Australian Museum, Cockatoo Waspfish](https://australian.museum/learn/animals/fishes/cockatoo-waspfish-ablabys-taenianotus-cuvier-1829/),
+  Identification, updated 6 May 2022, accessed 2026-10-09: brown coloration
+  and a sail-like dorsal fin beginning above the eyes. Only a short trait
+  label is stored from this account, with attribution.
 
-The Cockatoo Waspfish workbook record is source-bound to the same book,
-species account p. 381 (PDF p. 382), source ID `SRC-B853F73C`, but its only
-high-confidence text is comparative: “Similar to Spiny Waspfish (previous)”
-and the explicit differences are dorsal-spine count and occurrence alone. It
-does not state the leaf shape, brown color, sail-like fin, or rocking behavior
-needed by the fixture. The source scan itself is not stored in the repository.
+The fixture's previous URL `/home/species/2118` actually identifies
+*Scorpaenodes hirsutus* (Hairy Scorpionfish). Only that source URL was corrected
+to `/home/species/3205`; the fixture description and all assertions are intact.
 
-The fixture points to the Fishes of Australia Cockatoo Waspfish account as an
-independent authoritative reference, but this environment could not retrieve
-that page: the web provider returned HTTP 401 and direct HTTPS access was
-blocked by the network proxy with HTTP 403. The exact missing evidence is a
-retrievable source passage tying *Ablabys taenianotus* to (1) leaf-like body
-shape, (2) brown coloration, (3) a high/sail-like dorsal fin, and (4) swaying
-or rocking behavior. Until that evidence can be inspected, no overlay copies
-the preceding species' traits and the top-5 assertion deliberately remains
-failing and visible.
+`Data/CatalogReview/ReviewDecisions.json` adds a fingerprint-bound **draft**
+overlay for stable species ID `5f4d48f4-6556-50f3-95af-a4d28635f4bb`.
+It supplies controlled colors, compressed body shape, the dorsal-fin clue,
+and a separately written feature summary. It retains the original workbook
+summary, feature, source ID and locator, appending field-scoped source records
+`FOA-3205` and `AM-ABLABYS-TAENIANOTUS`. It does not copy the test sentence.
+The existing importer regenerates the catalogue and reports the decision as
+applied. Reimport is byte-identical across all five generated outputs.
 
-SwiftPM exercised the portable service, retrieval, ranking, no-match, and
-confidence behavior. Xcode-hosted bundle, iOS Simulator, device build, Core ML,
-and device performance/thermal checks were unavailable in this Linux pass.
+No human reviewer or review date is fabricated. All 384 records remain draft;
+human-reviewed and publication-eligible counts remain zero. Original source-page
+and independent taxonomy review remain outstanding for publication.
+
+## Verification
+
+- Baseline full Pacific suite: 15 tests, one failure (waspfish positive).
+- Corrected full SwiftPM suite: 79 tests, zero failures, one intentionally
+  skipped opt-in frozen evaluation. All seven Pacific fixture cases pass.
+- Caribbean development quality gates pass for both structured and hybrid
+  engines; limited-description confidence/no-match checks also pass.
+- The explicit frozen Caribbean 100-case evaluation was run separately with
+  `DIVEID_FROZEN_HOLDOUT=1`: passed for both engines (one test, zero failures).
+- Python importer: 6 tests passed; catalogue review: 16 tests passed.
+- Diagnostic regression now checks candidate-pool inclusion, isolated biological
+  eligibility/support, and displayed rank separately. The independent
+  no-retrieved-candidates versus all-candidates-rejected test is retained.
+- Xcode/iOS Simulator and device checks are unavailable in this Linux pass.
+
+Commands use Swift 6.2.3 with writable `CLANG_MODULE_CACHE_PATH` and SwiftPM
+`--cache-path` under `/workspace/.dive-id-toolchain`. The initial invocation
+without those paths failed before testing due to a read-only home cache.

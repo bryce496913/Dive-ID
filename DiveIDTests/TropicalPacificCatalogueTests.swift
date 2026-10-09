@@ -330,7 +330,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         }
     }
 
-    func testSourceCorrectionAndUnresolvedRetrievalTrace() async throws {
+    func testSourceCorrectionsSurviveRetrievalAndBiologicalRanking() async throws {
         let value = try pack()
         let cases = try diverDescriptions().filter { ["pacific-v1-fire-dartfish", "pacific-v1-cockatoo-waspfish"].contains($0.id) }
         let builder = SpeciesSearchDocumentBuilder()
@@ -357,10 +357,18 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 XCTAssertLessThanOrEqual(retrievalRank, 50)
                 XCTAssertEqual(displayedRank, 5)
             } else {
-                XCTAssertGreaterThan(retrievalRank, 50)
-                XCTAssertNil(displayedRank, "Unsupported Cockatoo Waspfish traits must not be invented to satisfy the fixture")
+                XCTAssertTrue(profile.colors.contains("brown"))
+                XCTAssertEqual(profile.bodyShapes, ["compressed"])
+                XCTAssertEqual(profile.finAndSpineClues, ["sail-like dorsal fin"])
+                XCTAssertLessThanOrEqual(retrievalRank, 50, "Source-backed record must reach the candidate pool")
+                XCTAssertTrue(displayed.retrievedSpeciesIDs.contains(profile.id), "Retrieval miss, before biological ranking")
+                XCTAssertNotNil(isolated, "Biological ranker rejected the retrieved record")
+                XCTAssertEqual(isolated?.rawScore, 11)
+                XCTAssertTrue(isolated?.matchedClues.contains("fin and spine clues") == true)
+                XCTAssertNotNil(displayedRank, "Eligible candidate was lost during competitive ranking")
+                XCTAssertLessThanOrEqual(try XCTUnwrap(displayedRank), try XCTUnwrap(item.maximumAcceptableRank))
             }
-            print("PACIFIC_FAILURE_TRACE id=\(item.id) categories=\(observation.categories.sorted()) colors=\(observation.colors.sorted()) markings=\(observation.markings.sorted()) shapes=\(observation.bodyShapes.sorted()) habitats=\(observation.habitats.sorted()) behaviors=\(observation.behaviors.sorted()) retrievalRank=\(retrievalRank) retrievalScore=\(expected.retrievalScore) terms=\(expected.matchedTerms) survives50=\(retrievalRank <= 50) rawScore=\(String(describing: isolated?.rawScore)) support=\(isolated?.matchedClues ?? []) conflicts=\(isolated?.conflictingClues ?? []) eligible=\(isolated != nil) displayedRank=\(String(describing: displayedRank))")
+            print("PACIFIC_SOURCE_TRACE id=\(item.id) categories=\(observation.categories.sorted()) colors=\(observation.colors.sorted()) markings=\(observation.markings.sorted()) shapes=\(observation.bodyShapes.sorted()) habitats=\(observation.habitats.sorted()) behaviors=\(observation.behaviors.sorted()) retrievalRank=\(retrievalRank) retrievalScore=\(expected.retrievalScore) terms=\(expected.matchedTerms) survives50=\(retrievalRank <= 50) rawScore=\(String(describing: isolated?.rawScore)) support=\(isolated?.matchedClues ?? []) conflicts=\(isolated?.conflictingClues ?? []) eligible=\(isolated != nil) displayedRank=\(String(describing: displayedRank))")
         }
     }
 }

@@ -6268,11 +6268,18 @@
     "categories": [
       "fish"
     ],
-    "colors": [],
+    "colors": [
+      "brown",
+      "red",
+      "white",
+      "yellow"
+    ],
     "markings": [
       "spines"
     ],
-    "bodyShapes": [],
+    "bodyShapes": [
+      "compressed"
+    ],
     "habitats": [
       "reef",
       "rubble",
@@ -6289,7 +6296,8 @@
     "maximumDepthMeters": 20.0,
     "summary": "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
     "distinguishingFeatures": [
-      "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m."
+      "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
+      "Laterally compressed body with raised anterior dorsal spines; sways with the surge to mimic drifting leaves and debris."
     ],
     "typicalHabitat": "",
     "geographicRange": "East Indo-West Pacific: Andaman Sea to Fiji. - $. Japan to Australia.",
@@ -6319,11 +6327,36 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FOA-3205",
+        "sourceName": "Bray, D.J. 2023. Ablabys taenianotus. Fishes of Australia, Museums Victoria.",
+        "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
+        "citationReference": "Cockatoo Waspfish: Summary and Features",
+        "reviewedFields": [
+          "colors",
+          "bodyShapes",
+          "distinguishingFeatures"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
+      },
+      {
+        "stableSourceID": "AM-ABLABYS-TAENIANOTUS",
+        "sourceName": "McGrouther, Mark. Cockatoo Waspfish, Ablabys taenianotus. Australian Museum. Updated 6 May 2022.",
+        "sourceURL": "https://australian.museum/learn/animals/fishes/cockatoo-waspfish-ablabys-taenianotus-cuvier-1829/",
+        "citationReference": "Cockatoo Waspfish: Identification",
+        "reviewedFields": [
+          "colors",
+          "finAndSpineClues"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Supplementary authoritative accounts inspected 2026-10-09; see Docs/PacificDescriptionSearchFailureAnalysis.md. Original workbook provenance retained. Automated source-backed correction does not confer human publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -6331,7 +6364,9 @@
     "measurements": null,
     "tailShape": null,
     "mouthAndHeadShape": [],
-    "finAndSpineClues": []
+    "finAndSpineClues": [
+      "sail-like dorsal fin"
+    ]
   },
   {
     "id": "d7814301-7430-5f61-a096-40cb06d773ac",
