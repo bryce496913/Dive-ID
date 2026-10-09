@@ -1,0 +1,775 @@
+{
+  "baselineSHA": "48ff1889c594d5e675969c6a4e4997236d7bfd9b",
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "suiteID": "v05-development-v2",
+  "groups": [
+    {
+      "access": "experimentalDevelopment",
+      "engine": "production-bm25-50-biological",
+      "packSizes": {
+        "caribbean": 8,
+        "tropical-pacific": 384
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 33,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 2,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 22,
+        "top3": 28,
+        "top10": 30
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 33,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 22,
+        "top3": 28,
+        "top10": 30
+      },
+      "changedCases": [
+        {
+          "before": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [
+              "regionConflict"
+            ],
+            "id": "v05-region-2",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 7,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-region-2",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [
+              "philippines"
+            ],
+            "pack": "caribbean",
+            "packRegionCompatibility": "conflicting",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 7,
+            "retrievedTargetRanks": {},
+            "serviceError": "regionConflict"
+          }
+        },
+        {
+          "before": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6",
+              "F947DD86-AA8B-58BC-8E14-7539CD219B3D",
+              "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
+              "B562A1AC-CDD6-5532-9752-CB481B696E8A",
+              "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
+              "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
+              "5EDE4248-968A-506A-BE19-71A06B8CE2A2",
+              "1E867B08-420F-5D06-ABEB-6A45377E5159",
+              "A515F207-F215-55EB-88C8-90402E50D46B",
+              "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "regionConflict"
+            ],
+            "id": "v05-region-3",
+            "informationLevels": [
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient"
+            ],
+            "kind": "regionConflict",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 50,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "production-bm25-50-biological",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-region-3",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [
+              "bahamas"
+            ],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "conflicting",
+            "retrievalLimit": 50,
+            "retrievedCandidateCount": 50,
+            "retrievedTargetRanks": {},
+            "serviceError": "regionConflict"
+          }
+        }
+      ],
+      "remainingFailures": [
+        {
+          "id": "v05-09-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-10-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-13-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-17-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-caribbean-terrestrial",
+          "failures": [
+            "noMatch",
+            "confidenceLimit"
+          ]
+        },
+        {
+          "id": "v05-tropical-pacific-terrestrial",
+          "failures": [
+            "noMatch",
+            "confidenceLimit"
+          ]
+        }
+      ],
+      "gates": [
+        {
+          "denominator": 34,
+          "hits": 33,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "passed"
+        },
+        {
+          "denominator": 46,
+          "hits": 44,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "failed"
+        },
+        {
+          "denominator": 6,
+          "hits": 4,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "failed"
+        },
+        {
+          "denominator": 4,
+          "hits": 4,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 22,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 30,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 28,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "access": "experimentalDevelopment",
+      "engine": "structured-full-pack",
+      "packSizes": {
+        "caribbean": 8,
+        "tropical-pacific": 384
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 1,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 2,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 16,
+        "top3": 21,
+        "top10": 24
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 1,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 44,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 4,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 2,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 16,
+        "top3": 21,
+        "top10": 24
+      },
+      "changedCases": [
+        {
+          "before": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [
+              "regionConflict"
+            ],
+            "id": "v05-region-2",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [],
+            "pack": "caribbean",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 8,
+            "retrievedCandidateCount": 8,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "allCandidatesRejectedByRanker",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-region-2",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [
+              "philippines"
+            ],
+            "pack": "caribbean",
+            "packRegionCompatibility": "conflicting",
+            "retrievalLimit": 8,
+            "retrievedCandidateCount": 8,
+            "retrievedTargetRanks": {},
+            "serviceError": "regionConflict"
+          }
+        },
+        {
+          "before": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477,
+              0.40476190476190477
+            ],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [
+              "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+              "6B449B85-1344-554C-965E-F2FCE0B6E9E9",
+              "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
+              "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
+              "1E867B08-420F-5D06-ABEB-6A45377E5159",
+              "22156798-7E62-580E-848D-857612F4E85E",
+              "7E2F0AC3-B76A-5F88-BD0F-28856A003446",
+              "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
+              "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
+              "5EDE4248-968A-506A-BE19-71A06B8CE2A2"
+            ],
+            "displayedRank": null,
+            "failures": [
+              "regionConflict"
+            ],
+            "id": "v05-region-3",
+            "informationLevels": [
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient",
+              "sufficient"
+            ],
+            "kind": "regionConflict",
+            "observedRegions": [],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "unspecified",
+            "retrievalLimit": 384,
+            "retrievedCandidateCount": 384,
+            "retrievedTargetRanks": {},
+            "serviceError": null
+          },
+          "after": {
+            "actualEngine": "structured-full-pack",
+            "candidateRecalled": false,
+            "confidence": [],
+            "coverageBlocked": false,
+            "diagnostic": "rankedCandidates",
+            "displayedIDs": [],
+            "displayedRank": null,
+            "failures": [],
+            "id": "v05-region-3",
+            "informationLevels": [],
+            "kind": "regionConflict",
+            "observedRegions": [
+              "bahamas"
+            ],
+            "pack": "tropical-pacific",
+            "packRegionCompatibility": "conflicting",
+            "retrievalLimit": 384,
+            "retrievedCandidateCount": 384,
+            "retrievedTargetRanks": {},
+            "serviceError": "regionConflict"
+          }
+        }
+      ],
+      "remainingFailures": [
+        {
+          "id": "v05-09-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-10-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-11-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-11-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-12-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-12-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-13-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-15-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-16-diagnostic",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-17-paraphrase",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-ambiguous-trigger",
+          "failures": [
+            "rankRequirement"
+          ]
+        },
+        {
+          "id": "v05-caribbean-terrestrial",
+          "failures": [
+            "noMatch",
+            "confidenceLimit"
+          ]
+        },
+        {
+          "id": "v05-tropical-pacific-terrestrial",
+          "failures": [
+            "noMatch",
+            "confidenceLimit"
+          ]
+        }
+      ],
+      "gates": [
+        {
+          "denominator": 34,
+          "hits": 34,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "passed"
+        },
+        {
+          "denominator": 46,
+          "hits": 44,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "failed"
+        },
+        {
+          "denominator": 6,
+          "hits": 4,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "failed"
+        },
+        {
+          "denominator": 4,
+          "hits": 4,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 16,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "passed"
+        },
+        {
+          "denominator": 34,
+          "hits": 24,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "failed"
+        },
+        {
+          "denominator": 34,
+          "hits": 21,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "access": "publication",
+      "engine": "production-bm25-50-biological",
+      "packSizes": {
+        "caribbean": 0,
+        "tropical-pacific": 0
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "changedCases": [],
+      "remainingFailures": [],
+      "gates": [
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "not-evaluated"
+        }
+      ]
+    },
+    {
+      "access": "publication",
+      "engine": "structured-full-pack",
+      "packSizes": {
+        "caribbean": 0,
+        "tropical-pacific": 0
+      },
+      "beforeCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "afterCounts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      },
+      "changedCases": [],
+      "remainingFailures": [],
+      "gates": [
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "candidateRecall",
+          "minimumRate": 0.85,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "confidenceCompliant",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "noMatchCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "regionConflictCorrect",
+          "minimumRate": 1,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top1",
+          "minimumRate": 0.4,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top10",
+          "minimumRate": 0.8,
+          "status": "not-evaluated"
+        },
+        {
+          "denominator": 0,
+          "hits": 0,
+          "metric": "top3",
+          "minimumRate": 0.6,
+          "status": "not-evaluated"
+        }
+      ]
+    }
+  ]
+}
