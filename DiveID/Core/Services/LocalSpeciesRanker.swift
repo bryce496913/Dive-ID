@@ -87,7 +87,11 @@ struct LocalSpeciesRanker: SpeciesRanking {
     init(weights: LocalRankingWeights = LocalRankingWeights()) { self.weights = weights }
 
     func rank(input: SpeciesRankingInput) async throws -> [RankedLocalSpecies] {
+        try Task.checkCancellation()
         let observation = input.observation
+        // A decisive subject contradiction cannot be outweighed by generic clues,
+        // exact-name overlap, or provisional semantic retrieval eligibility.
+        guard observation.domainContradiction == nil else { return [] }
         let observationInformation = Self.informationLevel(observation)
         let meaningfulTermCount = Self.meaningfulTerms(input.description).count
         var seen = Set<UUID>()

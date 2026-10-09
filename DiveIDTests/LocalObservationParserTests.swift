@@ -120,3 +120,44 @@ final class LocationRecognitionTests: XCTestCase {
         }
     }
 }
+
+final class ObservationDomainPolicyTests: XCTestCase {
+    func testExplicitAmphibianSubjectsAreDecisiveDespiteSharedClues() async {
+        for text in [
+            "A spotted freshwater frog on sand, about 5 cm long.",
+            "Freshwater frog sitting on a lily pad.",
+            "I saw a small green toad swimming over sand.",
+            "It was a striped amphibian with a long tail.",
+            "We observed large brown frogs near a reef."
+        ] {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertEqual(observation.domainContradiction, .amphibianSubject, text)
+        }
+    }
+
+    func testNegationComparisonObjectsAndUncertaintyAreNotSubjectAssertions() async {
+        for text in [
+            "Not a frog, a spotted fish on sand.",
+            "It was not a frog but a reef fish.",
+            "A frog-like face on a spotted fish.",
+            "A frog shaped head on a fish.",
+            "A frog face, with fins and scales.",
+            "A fish with a face like a frog.",
+            "A fish eating a frog over sand.",
+            "Maybe a frog on sand.",
+            "A frog or a fish swimming on sand.",
+            "A frog and a fish swimming on sand.",
+            "Was it a frog?",
+            "A frogfish on the reef.",
+            "A toadfish over sand.",
+            "An unfamiliar glorp swimming over sand."
+        ] {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertNil(observation.domainContradiction, text)
+        }
+        for category in CatalogueVocabulary.categories {
+            let observation = await LocalObservationParser().parse("A spotted \(category) swimming over sand.")
+            XCTAssertNil(observation.domainContradiction, category)
+        }
+    }
+}

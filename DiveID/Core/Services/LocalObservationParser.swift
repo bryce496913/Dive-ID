@@ -30,7 +30,7 @@ struct LocalObservationParser: ObservationParsing {
         // particular, normalization can remove multi-byte Unicode characters
         // and make ranges from the normalized string invalid for the source.
         let measurements = Self.measurements(in: description, tokens: tokens)
-        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: RegionCompatibilityResolver.locations(in: description), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters)
+        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: RegionCompatibilityResolver.locations(in: description), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters, domainContradiction: MarineObservationDomainPolicy.contradiction(in: description))
     }
 
     static func normalize(_ text: String) -> String {
@@ -168,5 +168,51 @@ struct LocalObservationParser: ObservationParsing {
             resolved.append(candidate)
         }
         return resolved.sorted { $0.sourceRange.lowerBound < $1.sourceRange.lowerBound }
+    }
+}
+
+/// The bundled marine catalogue has no amphibian category. Only an explicit
+/// subject assertion is decisive; comparisons, negation, uncertainty and nouns
+/// mentioned as objects must not turn into catalogue-wide exclusions.
+/// This deliberately small grammar is not a general natural-language classifier.
+enum MarineObservationDomainPolicy {
+    private static let amphibians: Set<String> = ["frog", "frogs", "toad", "toads", "amphibian", "amphibians"]
+    private static let modifiers = CatalogueVocabulary.colors.union([
+        "a", "an", "the", "this", "that", "small", "large", "tiny", "little", "big",
+        "spotted", "striped", "banded", "freshwater", "fresh", "water", "terrestrial"
+    ])
+    private static let nonAssertions: Set<String> = [
+        "not", "no", "never", "without", "maybe", "perhaps", "possibly", "probably",
+        "or", "if", "whether", "like", "unlike", "resembles", "resembling"
+    ]
+    private static let comparisonHeads: Set<String> = [
+        "like", "shaped", "looking", "face", "faces", "head", "heads", "mouth", "eyes", "fish"
+    ]
+
+    static func contradiction(in description: String) -> ObservationDomainContradiction? {
+        // A question does not assert the subject's identity.
+        guard !description.contains("?") else { return nil }
+        for clause in description.components(separatedBy: CharacterSet(charactersIn: ".!;\n")) {
+            var words = clause.lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init)
+            guard Set(words).isDisjoint(with: nonAssertions) else { continue }
+            let prefixes = [
+                ["i", "saw"], ["we", "saw"], ["i", "observed"], ["we", "observed"],
+                ["i", "spotted"], ["we", "spotted"], ["i", "found"], ["we", "found"],
+                ["it", "is"], ["it", "was"], ["this", "is"], ["this", "was"],
+                ["that", "is"], ["that", "was"], ["the", "subject", "is"], ["the", "subject", "was"]
+            ]
+            if let prefix = prefixes.first(where: { words.starts(with: $0) }) {
+                words.removeFirst(prefix.count)
+            }
+            guard let subject = words.firstIndex(where: { amphibians.contains($0) }),
+                  words[..<subject].allSatisfy({ modifiers.contains($0) }) else { continue }
+            let suffix = words.dropFirst(subject + 1)
+            if let next = suffix.first, comparisonHeads.contains(next) { continue }
+            // Coordinated animal subjects are ambiguous, not a single decisive
+            // amphibian assertion (e.g. "a frog and a fish swimming").
+            if suffix.contains("and"), !Set(suffix).isDisjoint(with: CatalogueVocabulary.categories) { continue }
+            return .amphibianSubject
+        }
+        return nil
     }
 }
