@@ -128,7 +128,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertEqual(value.profiles.count, 384)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
         XCTAssertTrue(value.profiles.allSatisfy { $0.bundledImage == nil && $0.imageAssetName == nil })
-        XCTAssertTrue(value.profiles.allSatisfy { $0.review?.status == .draft && !($0.dataSources.first?.stableSourceID ?? "").isEmpty })
+        XCTAssertTrue(value.profiles.allSatisfy { !($0.dataSources.first?.stableSourceID ?? "").isEmpty })
         XCTAssertTrue(value.profiles.allSatisfy { $0.minimumSizeCentimeters == nil && $0.measurements?.typicalObservedMinimumCentimeters == nil })
     }
 
@@ -160,20 +160,23 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
     }
 
-    func testDevelopmentAccessExplicitlyLoadsAllDraftPacificRecords() async throws {
+    func testDevelopmentAccessPreservesCurrentReviewAccounting() async throws {
         let repository = BundleMarineSpeciesCatalogRepository(
             bundle: TestResources.productionBundle,
             resourceResolutionMode: .bundleOnly,
             access: .experimentalDevelopment
         )
-        let metadata = try await repository.availablePacks().first { $0.id == .tropicalPacific }
-        XCTAssertEqual(metadata?.includedRecordCount, 384)
-        XCTAssertEqual(metadata?.humanReviewedRecordCount, 0)
-        XCTAssertEqual(metadata?.publicationEligibleRecordCount, 0)
-        XCTAssertEqual(metadata?.isExperimental, true)
-        let value = try await repository.loadPack(id: .tropicalPacific)
-        XCTAssertEqual(value.profiles.count, 384)
-        XCTAssertTrue(value.profiles.allSatisfy { $0.review?.status == .draft })
+        for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+            let value = try await repository.loadPack(id: id)
+            let available = try await repository.availablePacks()
+            let metadata = try XCTUnwrap(available.first { $0.id == id })
+            let reviewed = value.profiles.filter { $0.review?.status == .sourceChecked || $0.review?.status == .verified }.count
+            let approved = value.profiles.filter { $0.review?.status == .verified }.count
+            XCTAssertEqual(metadata.includedRecordCount, value.profiles.count)
+            XCTAssertEqual(metadata.humanReviewedRecordCount, reviewed)
+            XCTAssertEqual(metadata.publicationEligibleRecordCount, approved)
+            XCTAssertEqual(metadata.isExperimental, approved != value.profiles.count)
+        }
     }
 
     func testPublicationStatusLabelsFailClosedAndDescribeDraftMixedAndApprovedPacks() throws {
@@ -199,20 +202,30 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertEqual(metadata.publicationStatusText, "All 384 available records approved for publication")
     }
 
-    func testPublicationAccessExcludesDraftPackAndReturnsClearDiagnosticWhenRequested() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(
-            bundle: TestResources.productionBundle,
-            resourceResolutionMode: .bundleOnly,
-            access: .publication
-        )
-        let available = try await repository.availablePacks()
-        XCTAssertFalse(available.contains { $0.id == .tropicalPacific })
-        do {
-            _ = try await repository.loadPack(id: .tropicalPacific)
-            XCTFail("Publication access exposed draft-only Pacific records")
-        } catch let failure as CatalogueLoadFailure {
-            XCTAssertEqual(failure.code, .publicationUnavailable)
-            XCTAssertEqual(failure.catalogError, .publicationUnavailable)
+    func testBundledPublicationAvailabilityTracksActualVerifiedRecords() async throws {
+        let publication = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
+        let development = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let available = try await publication.availablePacks()
+        for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+            let full = try await development.loadPack(id: id)
+            let approved = full.profiles.filter { $0.review?.status == .verified }
+            XCTAssertEqual(available.contains { $0.id == id }, !approved.isEmpty)
+            if approved.isEmpty {
+                do {
+                    _ = try await publication.loadPack(id: id)
+                    XCTFail("Publication exposed a pack with no approved records")
+                } catch let failure as CatalogueLoadFailure {
+                    XCTAssertEqual(failure.code, .publicationUnavailable)
+                    XCTAssertEqual(failure.catalogError, .publicationUnavailable)
+                }
+            } else {
+                let published = try await publication.loadPack(id: id)
+                XCTAssertEqual(Set(published.profiles.map(\.id)), Set(approved.map(\.id)))
+                XCTAssertTrue(published.profiles.allSatisfy { $0.review?.status == .verified })
+            }
+            print("PUBLICATION_GATE pack=\(id.rawValue) approved=\(approved.count) available=\(!approved.isEmpty)")
         }
     }
 

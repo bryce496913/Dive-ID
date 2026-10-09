@@ -1,6 +1,98 @@
-# Catalogue publication and first-review record
+# Catalogue publication and source-review record
 
-## Bounded source-review pass (2026-09-26)
+## Current pass — 2026-10-09
+
+Baseline: main `d031795d5414bb6e3c9d47148a1ccb4d0d5c3243` (PR #83 merged).
+No applicable AGENTS.md was found. This pass inspected accessible source pages;
+it did not obtain human approval. Actual approved IDs: **none**. Caribbean remains
+8 draft / 0 reviewed / 0 publication eligible; Pacific remains 384 / 0 / 0.
+Release publication access therefore correctly offers no region or search records.
+
+The three Caribbean accounts selected in the existing review handoff now have
+accessible original FishBase summaries and Florida Museum species accounts.
+Cockatoo Waspfish has an accessible Museums Victoria Fishes of Australia account.
+`Data/CatalogReview/SourceInspectionEvidence.json` records exact URLs, named
+sections, field evidence, inspection date and outstanding decisions.
+`Reports/CatalogueSourceReviewPass.json` binds those observations to complete
+current publication content, stable source identities and SHA-256 fingerprints.
+Its blank human-decision fields are a handoff, not synthetic approval.
+
+| Record / stable ID | Supported correction | Exact decision still needed |
+| --- | --- | --- |
+| Atlantic Blue Tang `00000000-0000-0000-0000-000000000003` | FishBase depth maximum 50 m; remove unsupported typical and juvenile size intervals | Resolve FishBase 39 cm / 2–50 m versus Museum 37 cm / 2–40 m; confirm locality/frequency list |
+| Stoplight Parrotfish `00000000-0000-0000-0000-000000000005` | FishBase maximum 64 cm TL, minimum depth 3 m; Museum rounded head; remove unsupported size intervals and separate juvenile description from initial phase | Resolve FishBase 64 cm versus Museum 55 cm; confirm life stages, taxonomy authority and localities |
+| Queen Angelfish `fc213eff-6ba6-53ab-b288-f6e654299e68` | FishBase 1–70 m, forehead spot, pectoral-base blue spot, reef and solitary coding; maximum not encoded as typical size | Confirm coding, locality/frequency list and French Angelfish comparison |
+| Cockatoo Waspfish `5f4d48f4-6556-50f3-95af-a4d28635f4bb` | Fishes of Australia maximum 15 cm TL and recorded depth 0–80 m; usual habitat to 20 m remains distinct | Accept authoritative replacement for unavailable book p. 381 / PDF p. 382; reconcile transcription 16 cm and 17 spines with replacement 15 cm and 17–18 spines; check full taxonomy/range |
+
+For **each** record a real human must inspect the linked accounts and complete
+content, resolve its packet's questions, and supply an actual identity, UTC review
+date and notes covering the exact fingerprint. Only then change its overlay to
+`verified` and clear resolved questions. If content changes, recompute the
+fingerprint after applying corrections; a decision for old content is stale.
+Do not substitute the automated inspection date for a human review date. The
+current draft corrections neither imply sourceChecked nor publication permission.
+
+Five other Caribbean starter records remain deferred with their original source
+references in the report. Green Sea Turtle specifically needs an authoritative
+turtle account to replace its inappropriate FishBase fish reference. Seven
+Pacific OCR-category packets still need original pages or documented replacement
+evidence. No locality evidence or missing original page was invented.
+
+## Reproduction
+
+The Caribbean baseline preserves the full pre-overlay input from the inspected
+main tree, including original sources. `CaribbeanReviewDecisions.json` adds
+supported corrections and supplementary museum provenance. The existing
+`apply_decisions` validator applies the entire overlay and validates the pack
+before the transactional catalogue/manifest replacement. Regeneration rejects
+stale or blocked decisions. Pacific retains its workbook/import/overlay pipeline.
+Edit those inputs/decisions, not generated catalogue records.
+
+```sh
+python3 Tools/CatalogReview/regenerate_caribbean.py
+python3 Tools/CatalogImport/import_tropical_pacific.py
+python3 Tools/CatalogReview/prepare_source_review_pass.py
+python3 Tools/CatalogReview/prepare_review_batch.py
+python3 Tools/CatalogReview/verify_source_review_reproducibility.py
+```
+
+Use the documented Python dependencies (including openpyxl). Two complete
+regenerations produced byte-identical catalogues, manifests and reports;
+`Reports/SourceReviewReproducibility.json` stores hashes for nine artifacts.
+Original species IDs, original source metadata, artwork and unrelated records
+are preserved. Supplementary page access dates are explicitly new provenance.
+
+## Validation for this pass
+
+Bundled tests now derive review accounting and publication availability from
+actual statuses in both packs. A dedicated all-draft fixture and mixed-status
+fixtures still prove that drafts cannot enter publication search. Synthetic
+reviewers occur only in test fixtures; they approve no real records.
+
+Python: 72 tests passed (review 19, import 6, workbook 9, semantic 33, CI 5).
+SwiftPM Debug: 106 tests, one opt-in frozen evaluation skipped, one quality-gate
+failure. Full Pacific fixture passes; all positive bounds and no-match assertions
+are unchanged. Caribbean production hybrid top-1/3/10 remains 43/44/45 with all
+14 no-match cases correct and 56/56 candidate recall. Structured search changes
+from 39/42/45 to 40/41/45: the top-3 floor remains 42 and fails visibly. Case
+`realistic-029` moves from rank 3 to 4 after supported catalogue corrections;
+`realistic-014` improves from 2 to 1. Search/ranking code and fixtures are untouched.
+
+SwiftPM Release also built and executed 106 tests with the same one quality-gate
+failure and one opt-in skip. All 13 catalogue-diagnostic tests, 15 Pacific tests,
+and 16 saved-record persistence/compatibility tests passed in each configuration.
+Both actual publication gates reported approved=0 / available=false. These are
+Linux SwiftPM Release checks, not an Xcode app build. No genuinely approved record
+exists to demonstrate successful Release identification or region switching.
+Portable filtering, labels and saved-record compatibility are useful test evidence,
+not proof of a publication-ready catalogue. Xcode/device behavior remains unverified
+in this Linux environment.
+
+The following sections are historical observations, retained as an audit trail.
+The current packet replaces the earlier inaccessible-source handoff; historical
+counts and test failures must not be read as results of the current pass.
+
+## Historical source-review pass (2026-09-26; superseded below by current packets)
 
 The current manifests and decoded catalogues were counted again for this pass; the
 figures below are observations of the current files, not the previously reported

@@ -1,0 +1,213 @@
+{
+  "baselineMain": "d031795d5414bb6e3c9d47148a1ccb4d0d5c3243",
+  "environment": "Linux x86_64, Swift 6.2.3; Xcode unavailable",
+  "python": {
+    "CatalogReview": 19,
+    "CatalogImport": 6,
+    "TropicalPacificWorkbook": 9,
+    "SemanticSearch": 33,
+    "CI": 5,
+    "failures": 0
+  },
+  "swiftpm": {
+    "debug": {
+      "build": "passed",
+      "tests": 106,
+      "skipped": 1,
+      "failures": 1,
+      "failure": "IdentificationBenchmarkTests.testDevelopmentQualityGatesForStructuredAndHybrid: structured top3=41 below unchanged floor=42",
+      "suites": {
+        "CatalogueDiagnosticsTests": {
+          "tests": 13,
+          "failures": 0
+        },
+        "DescriptionSearchArchitectureTests": {
+          "tests": 10,
+          "failures": 0
+        },
+        "IdentificationBenchmarkTests": {
+          "tests": 6,
+          "failures": 1
+        },
+        "IdentificationLifecycleTests": {
+          "tests": 10,
+          "failures": 0
+        },
+        "LocalObservationParserMeasurementTests": {
+          "tests": 3,
+          "failures": 0
+        },
+        "ProductionDescriptionSearchTests": {
+          "tests": 9,
+          "failures": 0
+        },
+        "SavedIdentificationCompatibilityTests": {
+          "tests": 8,
+          "failures": 0
+        },
+        "SavedIdentificationPersistenceTests": {
+          "tests": 8,
+          "failures": 0
+        },
+        "SemanticSearchTests": {
+          "tests": 24,
+          "failures": 0
+        },
+        "TropicalPacificCatalogueTests": {
+          "tests": 15,
+          "failures": 0
+        },
+        "debug.xctest": {
+          "tests": 106,
+          "failures": 1
+        },
+        "All tests": {
+          "tests": 106,
+          "failures": 1
+        }
+      },
+      "caribbeanDevelopment": {
+        "structured": {
+          "candidateRecallHits": 56,
+          "cases": 70,
+          "correctNoMatch": 14,
+          "falsePositives": 0,
+          "noMatchCases": 14,
+          "positives": 56,
+          "top1": 40,
+          "top10": 45,
+          "top3": 41
+        },
+        "hybrid-bm25-50": {
+          "candidateRecallHits": 56,
+          "cases": 70,
+          "correctNoMatch": 14,
+          "falsePositives": 0,
+          "noMatchCases": 14,
+          "positives": 56,
+          "top1": 43,
+          "top10": 45,
+          "top3": 44
+        }
+      },
+      "pacificFixture": [
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-ribbontail-ray expected=[50020F47-9605-5ED9-BB79-7A2E43DB22B9] maxRank=Optional(3) measuredRank=Optional(1) returned=[50020F47-9605-5ED9-BB79-7A2E43DB22B9, B16558C8-C88A-5367-BF59-474E803A4F83, 6D7E2241-7164-5ADA-BEB1-D3D4BA6E31E3, FDD38925-1CFD-5220-A7AE-E03E7C3B7BEA, 5A54DA12-AC3D-577D-8CBD-645D6A3B3F55, F272B8C6-75B7-5C3F-8D83-CEB0E8743C55, 213F6835-63A1-5FED-B113-AD3788D92A5B, A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0, BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A, 9CE9FE05-F68A-590E-8726-DCE87E9AF7C4]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-dragon-moray expected=[042F8722-88E3-5FC2-8F26-66D00B546730] maxRank=Optional(3) measuredRank=Optional(1) returned=[042F8722-88E3-5FC2-8F26-66D00B546730, CE88CB94-3966-591B-93FF-F296B7D62A6E, B9051029-84C1-5B09-8BF2-992304454F80, D2B7404C-DF37-5067-A8E4-E24992358DFB, 757D4766-1539-5BD4-8965-89653F23A83B, 7580303C-2E94-5386-B2FD-4FBF4A94603F, F8D905FE-124C-5FA2-B3AA-7A60FAF106D9, B5173597-6AE9-5941-9A76-20DF2C7BC93E, 5784208A-308B-59D4-A2BE-EA82BFCC18E9, 9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-fire-dartfish expected=[7A662BE3-854F-5819-8D32-CB8B1F19A00B] maxRank=Optional(5) measuredRank=Optional(5) returned=[8E7606D3-7C68-5884-AF54-06F6F2CF81C6, 1B18CDE6-8227-5AE4-8559-385D09A12A7B, 5F52E714-6058-54B8-BE54-304C90D2A8DE, B5173597-6AE9-5941-9A76-20DF2C7BC93E, 7A662BE3-854F-5819-8D32-CB8B1F19A00B, A9860C43-98AF-5C69-919B-117DC9190340, 9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E, D8672E57-58D4-5216-AFCB-BB299BC7BFB1, D2B7404C-DF37-5067-A8E4-E24992358DFB, C3937D91-8158-5379-BC35-1E53584F3BD1]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-cockatoo-waspfish expected=[5F4D48F4-6556-50F3-95AF-A4D28635F4BB] maxRank=Optional(5) measuredRank=Optional(1) returned=[5F4D48F4-6556-50F3-95AF-A4D28635F4BB, 96938621-211D-5DF8-BB5A-D78AE4D6F3CF, 1CEF7D51-E7ED-5153-839F-555AB9E728FD, 1FE0EFC9-AEE1-50D4-9060-CE8FC6FBBF25, EF324852-C4C5-53B0-95EC-8C3CBE8414AF, 9B670C86-1FF3-54D5-B1EF-A9660C03A8D6, ABC1BCB3-CB9E-5E39-9111-A882112D6DEA, 2F66DA41-9069-5426-B6A6-1FE33CD0D34E, 053466E0-679C-570D-8108-5DCFA48F2282, 6AE06CB7-CB33-52B8-BD63-FF0812A3CC37]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-blackspotted-puffer-short expected=[3994805F-494F-5C71-9F2F-7105615C6A27] maxRank=Optional(10) measuredRank=Optional(6) returned=[C5C35E73-5A99-5868-BB94-81FA7C2A8A89, 7E2F0AC3-B76A-5F88-BD0F-28856A003446, CF7EA288-D448-52F2-8E2B-FE08D17BDB4C, A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA, 548B5397-A694-5BCD-8B0B-47898DF4A675, 3994805F-494F-5C71-9F2F-7105615C6A27, F947DD86-AA8B-58BC-8E14-7539CD219B3D, D140620A-7D95-50A6-AAFF-5CD30CBDE260, 6C756E8E-318B-5FC6-9CDF-0C7E9721A186, EF324852-C4C5-53B0-95EC-8C3CBE8414AF]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-bluespotted-ray-short expected=[50020F47-9605-5ED9-BB79-7A2E43DB22B9] maxRank=Optional(5) measuredRank=Optional(1) returned=[50020F47-9605-5ED9-BB79-7A2E43DB22B9, 558769EB-54DB-5CB8-B778-154F08891BFB, C3335449-CA92-5B8B-ACAC-1F112E4D3D0F, 3AFA7118-5141-5284-A8C0-AF8148B418FE, 9CE9FE05-F68A-590E-8726-DCE87E9AF7C4, FDD38925-1CFD-5220-A7AE-E03E7C3B7BEA, 0FBC3D58-311E-5BE0-B61C-F4DA9EE649F1, A1CD00FE-6E62-5ABD-B138-DA65A9D42B45, 9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4, 9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-frog-no-match expected=[] maxRank=nil measuredRank=nil returned=[]"
+      ],
+      "publicationEvidence": [
+        "PUBLICATION_GATE pack=caribbean approved=0 available=false",
+        "PUBLICATION_GATE pack=tropical-pacific approved=0 available=false"
+      ]
+    },
+    "release": {
+      "build": "passed",
+      "tests": 106,
+      "skipped": 1,
+      "failures": 1,
+      "failure": "IdentificationBenchmarkTests.testDevelopmentQualityGatesForStructuredAndHybrid: structured top3=41 below unchanged floor=42",
+      "suites": {
+        "CatalogueDiagnosticsTests": {
+          "tests": 13,
+          "failures": 0
+        },
+        "DescriptionSearchArchitectureTests": {
+          "tests": 10,
+          "failures": 0
+        },
+        "IdentificationBenchmarkTests": {
+          "tests": 6,
+          "failures": 1
+        },
+        "IdentificationLifecycleTests": {
+          "tests": 10,
+          "failures": 0
+        },
+        "LocalObservationParserMeasurementTests": {
+          "tests": 3,
+          "failures": 0
+        },
+        "ProductionDescriptionSearchTests": {
+          "tests": 9,
+          "failures": 0
+        },
+        "SavedIdentificationCompatibilityTests": {
+          "tests": 8,
+          "failures": 0
+        },
+        "SavedIdentificationPersistenceTests": {
+          "tests": 8,
+          "failures": 0
+        },
+        "SemanticSearchTests": {
+          "tests": 24,
+          "failures": 0
+        },
+        "TropicalPacificCatalogueTests": {
+          "tests": 15,
+          "failures": 0
+        },
+        "release.xctest": {
+          "tests": 106,
+          "failures": 1
+        },
+        "All tests": {
+          "tests": 106,
+          "failures": 1
+        }
+      },
+      "caribbeanDevelopment": {
+        "structured": {
+          "candidateRecallHits": 56,
+          "cases": 70,
+          "correctNoMatch": 14,
+          "falsePositives": 0,
+          "noMatchCases": 14,
+          "positives": 56,
+          "top1": 40,
+          "top10": 45,
+          "top3": 41
+        },
+        "hybrid-bm25-50": {
+          "candidateRecallHits": 56,
+          "cases": 70,
+          "correctNoMatch": 14,
+          "falsePositives": 0,
+          "noMatchCases": 14,
+          "positives": 56,
+          "top1": 43,
+          "top10": 45,
+          "top3": 44
+        }
+      },
+      "pacificFixture": [
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-ribbontail-ray expected=[50020F47-9605-5ED9-BB79-7A2E43DB22B9] maxRank=Optional(3) measuredRank=Optional(1) returned=[50020F47-9605-5ED9-BB79-7A2E43DB22B9, B16558C8-C88A-5367-BF59-474E803A4F83, 6D7E2241-7164-5ADA-BEB1-D3D4BA6E31E3, FDD38925-1CFD-5220-A7AE-E03E7C3B7BEA, 5A54DA12-AC3D-577D-8CBD-645D6A3B3F55, F272B8C6-75B7-5C3F-8D83-CEB0E8743C55, 213F6835-63A1-5FED-B113-AD3788D92A5B, A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0, BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A, 9CE9FE05-F68A-590E-8726-DCE87E9AF7C4]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-dragon-moray expected=[042F8722-88E3-5FC2-8F26-66D00B546730] maxRank=Optional(3) measuredRank=Optional(1) returned=[042F8722-88E3-5FC2-8F26-66D00B546730, CE88CB94-3966-591B-93FF-F296B7D62A6E, B9051029-84C1-5B09-8BF2-992304454F80, D2B7404C-DF37-5067-A8E4-E24992358DFB, 757D4766-1539-5BD4-8965-89653F23A83B, 7580303C-2E94-5386-B2FD-4FBF4A94603F, F8D905FE-124C-5FA2-B3AA-7A60FAF106D9, B5173597-6AE9-5941-9A76-20DF2C7BC93E, 5784208A-308B-59D4-A2BE-EA82BFCC18E9, 9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-fire-dartfish expected=[7A662BE3-854F-5819-8D32-CB8B1F19A00B] maxRank=Optional(5) measuredRank=Optional(5) returned=[8E7606D3-7C68-5884-AF54-06F6F2CF81C6, 1B18CDE6-8227-5AE4-8559-385D09A12A7B, 5F52E714-6058-54B8-BE54-304C90D2A8DE, B5173597-6AE9-5941-9A76-20DF2C7BC93E, 7A662BE3-854F-5819-8D32-CB8B1F19A00B, A9860C43-98AF-5C69-919B-117DC9190340, 9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E, D8672E57-58D4-5216-AFCB-BB299BC7BFB1, D2B7404C-DF37-5067-A8E4-E24992358DFB, C3937D91-8158-5379-BC35-1E53584F3BD1]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-cockatoo-waspfish expected=[5F4D48F4-6556-50F3-95AF-A4D28635F4BB] maxRank=Optional(5) measuredRank=Optional(1) returned=[5F4D48F4-6556-50F3-95AF-A4D28635F4BB, 96938621-211D-5DF8-BB5A-D78AE4D6F3CF, 1CEF7D51-E7ED-5153-839F-555AB9E728FD, 1FE0EFC9-AEE1-50D4-9060-CE8FC6FBBF25, EF324852-C4C5-53B0-95EC-8C3CBE8414AF, 9B670C86-1FF3-54D5-B1EF-A9660C03A8D6, ABC1BCB3-CB9E-5E39-9111-A882112D6DEA, 2F66DA41-9069-5426-B6A6-1FE33CD0D34E, 053466E0-679C-570D-8108-5DCFA48F2282, 6AE06CB7-CB33-52B8-BD63-FF0812A3CC37]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-blackspotted-puffer-short expected=[3994805F-494F-5C71-9F2F-7105615C6A27] maxRank=Optional(10) measuredRank=Optional(6) returned=[C5C35E73-5A99-5868-BB94-81FA7C2A8A89, 7E2F0AC3-B76A-5F88-BD0F-28856A003446, CF7EA288-D448-52F2-8E2B-FE08D17BDB4C, A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA, 548B5397-A694-5BCD-8B0B-47898DF4A675, 3994805F-494F-5C71-9F2F-7105615C6A27, F947DD86-AA8B-58BC-8E14-7539CD219B3D, D140620A-7D95-50A6-AAFF-5CD30CBDE260, 6C756E8E-318B-5FC6-9CDF-0C7E9721A186, EF324852-C4C5-53B0-95EC-8C3CBE8414AF]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-bluespotted-ray-short expected=[50020F47-9605-5ED9-BB79-7A2E43DB22B9] maxRank=Optional(5) measuredRank=Optional(1) returned=[50020F47-9605-5ED9-BB79-7A2E43DB22B9, 558769EB-54DB-5CB8-B778-154F08891BFB, C3335449-CA92-5B8B-ACAC-1F112E4D3D0F, 3AFA7118-5141-5284-A8C0-AF8148B418FE, 9CE9FE05-F68A-590E-8726-DCE87E9AF7C4, FDD38925-1CFD-5220-A7AE-E03E7C3B7BEA, 0FBC3D58-311E-5BE0-B61C-F4DA9EE649F1, A1CD00FE-6E62-5ABD-B138-DA65A9D42B45, 9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4, 9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6]",
+        "PACIFIC_DESCRIPTION_CASE engine=production-bm25-plus-biological-ranking id=pacific-v1-frog-no-match expected=[] maxRank=nil measuredRank=nil returned=[]"
+      ],
+      "publicationEvidence": [
+        "PUBLICATION_GATE pack=caribbean approved=0 available=false",
+        "PUBLICATION_GATE pack=tropical-pacific approved=0 available=false"
+      ]
+    }
+  },
+  "actualPublication": {
+    "caribbean": {
+      "approvedIDs": [],
+      "available": false
+    },
+    "tropical-pacific": {
+      "approvedIDs": [],
+      "available": false
+    }
+  },
+  "remainingValidation": "Successful search and region switching with real approved records are blocked by outstanding human decisions. Simulator/device behavior is unverified."
+}

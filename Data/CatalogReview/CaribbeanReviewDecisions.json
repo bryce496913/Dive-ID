@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "catalogueID": "caribbean",
+  "decisions": [
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000003:source:1",
+          "1"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:02f48c206737f65b40dcf18034883b68fb587b62476e33cb48a5900f462c34b0",
+      "corrections": {
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "00000000-0000-0000-0000-000000000003:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          },
+          {
+            "stableSourceID": "00000000-0000-0000-0000-000000000003:source:florida-museum",
+            "sourceName": "Florida Museum Atlantic Blue Tang species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+            "citationReference": "Biology; Habitat; Geographical Distribution",
+            "reviewedFields": [
+              "identity",
+              "appearanceVariants",
+              "mouthAndHeadShape",
+              "habitat",
+              "geographicRange"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          }
+        ],
+        "measurements": {
+          "typicalObservedMinimumCentimeters": null,
+          "typicalObservedMaximumCentimeters": null,
+          "maximumRecordedCentimeters": 39,
+          "type": "totalLength"
+        },
+        "minimumSizeCentimeters": null,
+        "maximumDepthMeters": 50,
+        "appearanceVariants": [
+          {
+            "id": "juvenile-yellow",
+            "lifeStage": "juvenile",
+            "colors": [
+              "yellow"
+            ],
+            "markings": [
+              "tail"
+            ],
+            "bodyShapes": [
+              "oval"
+            ],
+            "minimumSizeCentimeters": null,
+            "maximumSizeCentimeters": null,
+            "description": "Yellow juvenile coloration changes through a blue-and-yellow intermediate phase; color transition is not tied to a fixed size.",
+            "distinguishingFeatures": [
+              "yellow juvenile appearance"
+            ]
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "unresolvedQuestions": [
+        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "sourceIdentity": [
+        [
+          "00000000-0000-0000-0000-000000000005:source:1",
+          "1"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:4bbb0baa7aba654a40d525fd007fac90efad594b7c284fb6d6fb8034b442d5d8",
+      "corrections": {
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Sparisoma-viride.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "00000000-0000-0000-0000-000000000005:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          },
+          {
+            "stableSourceID": "00000000-0000-0000-0000-000000000005:source:florida-museum",
+            "sourceName": "Florida Museum Stoplight Parrotfish species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/stoplight-parrotfish/",
+            "citationReference": "Biology; Habitat; Geographical Distribution",
+            "reviewedFields": [
+              "identity",
+              "appearanceVariants",
+              "mouthAndHeadShape",
+              "habitat",
+              "geographicRange"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          }
+        ],
+        "measurements": {
+          "typicalObservedMinimumCentimeters": null,
+          "typicalObservedMaximumCentimeters": null,
+          "maximumRecordedCentimeters": 64,
+          "type": "totalLength"
+        },
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": 64,
+        "minimumDepthMeters": 3,
+        "mouthAndHeadShape": [
+          "beak-like dental plates",
+          "bluntly rounded head"
+        ],
+        "distinguishingFeatures": [
+          "Beak-like dental plates",
+          "Bluntly rounded head"
+        ],
+        "appearanceVariants": [
+          {
+            "id": "juvenile-initial-dark",
+            "lifeStage": "juvenile",
+            "colors": [
+              "brown"
+            ],
+            "markings": [
+              "spots"
+            ],
+            "bodyShapes": [
+              "robust"
+            ],
+            "minimumSizeCentimeters": null,
+            "maximumSizeCentimeters": null,
+            "description": "Juveniles are reddish brown with rows of pale spots and a pale band across the tail.",
+            "distinguishingFeatures": [
+              "dark or reddish-brown body",
+              "pale or white markings"
+            ]
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "unresolvedQuestions": [
+        "Accept FishBase maximum 64 cm total length over Museum 55 cm; confirm life-stage interpretation. Family placement differs between accounts; higher taxonomy remains unset.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    },
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "sourceIdentity": [
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+          "1"
+        ],
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+          "2"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:dded4121be42e6020a7bee8a5873a0b676df1fa82897a76426f0a1516ecf64bd",
+      "corrections": {
+        "dataSources": [
+          {
+            "sourceName": "FishBase species summary",
+            "sourceURL": "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+            "reviewedFields": [
+              "scientificName",
+              "geographicRange",
+              "size",
+              "depth",
+              "habitat",
+              "visualCharacteristics"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
+            "citationReference": "1",
+            "sourceLicense": null
+          },
+          {
+            "sourceName": "Florida Museum Queen Angelfish species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+            "reviewedFields": [
+              "visualCharacteristics",
+              "habitat"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
+            "citationReference": "2",
+            "sourceLicense": null
+          }
+        ],
+        "measurements": {
+          "typicalObservedMinimumCentimeters": null,
+          "typicalObservedMaximumCentimeters": null,
+          "maximumRecordedCentimeters": 45,
+          "type": "totalLength"
+        },
+        "minimumSizeCentimeters": null,
+        "minimumDepthMeters": 1,
+        "maximumDepthMeters": 70,
+        "markings": [
+          "spots"
+        ],
+        "habitats": [
+          "reef"
+        ],
+        "behaviors": [
+          "solitary"
+        ],
+        "distinguishingFeatures": [
+          "Blue body with yellow-edged scales and yellow fins",
+          "Dark forehead spot ringed with bright blue, resembling a crown",
+          "Blue spot at the pectoral-fin base"
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "unresolvedQuestions": [
+        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
+        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ]
+    }
+  ]
+}

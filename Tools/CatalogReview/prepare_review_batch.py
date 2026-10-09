@@ -27,7 +27,7 @@ def packet(record, origin, row=None):
         unresolved.append("Independent species-specific review of identity, traits, range, habitat, size, and source support is required.")
     return {"speciesID":record['id'],"sourceRowIdentity":({"workbook":"DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx","workbookRow":int(row['workbook_row']),"sourceID":row['source_id']} if row else {"catalogue":"caribbean-pack-3","stableSpeciesID":record['id']}),
       "pack":origin,"currentFields":fields(record),"sourceReferences":sources,"originalText":original,"proposedCorrections":{},
-      "unresolvedQuestions":unresolved,"fieldEvidence":evidence,"reviewDecision":"draft","reviewerIdentity":None,"reviewDate":None,
+      "unresolvedQuestions":unresolved,"fieldEvidence":evidence,"reviewDecision":record.get("review",{}).get("status","draft"),"reviewerIdentity":record.get("review",{}).get("verifiedBy"),"reviewDate":record.get("review",{}).get("reviewDate"),
       "reviewedContentFingerprint":content_fingerprint(record),"sourceIdentity":source_identity(record)}
 
 def main():
@@ -36,8 +36,16 @@ def main():
         rows=[r for r in csv.DictReader(f) if r['outcome']=='included' and r['category_diagnostic']]
     by_id={r['id']:r for r in pacific}
     packets=[packet(r,'caribbean') for r in caribbean]+[packet(by_id[r['creature_id']],'tropical-pacific',r) for r in rows]
-    document={"schemaVersion":1,"purpose":"Human-review preparation only; no record in this packet is approved.",
-      "sourcePageAvailability":"The repository contains workbook transcriptions and page/tile locators, but not the original source PDF pages. Category corrections remain unresolved until a reviewer inspects those pages.",
+    inspection=json.loads((ROOT/'Reports/CatalogueSourceReviewPass.json').read_text())
+    inspected={r['speciesID']:r for r in inspection['records']}
+    for item in packets:
+        if item['speciesID'] in inspected:
+            reviewed=inspected[item['speciesID']]
+            item['fieldEvidence']=[{'field':key,'value':value} for key,value in reviewed['fieldEvidence'].items()]
+            item['unresolvedQuestions']=reviewed['requiredHumanDecisions']
+            item['sourceInspectionReferences']=reviewed['references']
+    document={"schemaVersion":1,"purpose":"Human-review preparation only; this generator does not approve records. Current decisions are copied from the catalogue.",
+      "sourcePageAvailability":"Original Pacific book pages remain unavailable. Accessible species-specific accounts inspected in this pass are linked in sourceInspectionReferences; category OCR packets still require original pages or authoritative replacement evidence.",
       "recordCounts":{"caribbean":len(caribbean),"tropicalPacificUnresolvedCategory":len(rows)},"records":packets}
     OUTPUT.write_text(json.dumps(document,indent=2,ensure_ascii=False)+'\n')
     print(f"wrote {len(packets)} review packets")

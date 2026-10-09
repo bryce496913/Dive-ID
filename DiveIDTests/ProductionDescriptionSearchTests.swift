@@ -267,11 +267,40 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         }
     }
 
+    func testExplicitAllDraftFixtureIsUnavailableForPublication() async throws {
+        let root = try temporaryRoot()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let directory = try copyProductionResources(to: root, includeImages: true)
+        let speciesURL = directory.appendingPathComponent("Creatures.json")
+        var records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: speciesURL)) as? [[String: Any]])
+        for index in records.indices { records[index]["review"] = ["status": "draft"] }
+        try JSONSerialization.data(withJSONObject: records).write(to: speciesURL)
+        let manifestURL = directory.appendingPathComponent("PackManifest.json")
+        var manifest = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: manifestURL)) as? [String: Any])
+        manifest["humanReviewedRecordCount"] = 0
+        manifest["publicationEligibleRecordCount"] = 0
+        try JSONSerialization.data(withJSONObject: manifest).write(to: manifestURL)
+        let publication = BundleMarineSpeciesCatalogRepository(
+            bundle: Bundle(for: CatalogueDiagnosticsTests.self),
+            registry: RegionCatalogRegistry(definitions: [RegionCatalogDefinition(id: .caribbean, resourceDirectory: "Caribbean")]),
+            resourceResolutionMode: .bundleThenDevelopmentSource, developmentSourceRoot: root, access: .publication)
+        let available = try await publication.availablePacks()
+        XCTAssertTrue(available.isEmpty)
+        do {
+            _ = try await publication.loadPack(id: .caribbean)
+            XCTFail("All-draft fixture must remain unavailable")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .publicationUnavailable)
+        }
+    }
+
     func testPublicationAccessReturnsOnlySyntheticVerifiedFixture() async throws {
         let root = try temporaryRoot()
         let directory = try copyProductionResources(to: root, includeImages: true)
         let speciesURL = directory.appendingPathComponent("Creatures.json")
         var records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: speciesURL)) as? [[String: Any]])
+        // Explicitly synthetic: future real promotions must not alter this fixture.
+        for index in records.indices { records[index]["review"] = ["status": "draft"] }
         records[0]["review"] = [
             "status": "verified", "reviewerNotes": "Synthetic gate fixture only",
             "reviewDate": "2026-09-24T00:00:00Z", "verifiedBy": "Synthetic test reviewer"
