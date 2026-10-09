@@ -56,7 +56,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
             resources: [.copy("Fixtures")]
         )
     ]
