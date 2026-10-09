@@ -1,53 +1,4 @@
-import Observation
 import SwiftUI
-
-@MainActor @Observable
-final class SpeciesDetailViewModel {
-    let species: Species
-    let match: IdentificationMatch?
-    var isSaved = false
-    var errorMessage: String?
-    private(set) var savedIdentificationID: UUID?
-    private(set) var isUpdatingSavedState = false
-    private let repository: any SavedIdentificationRepository
-
-    init(species: Species, match: IdentificationMatch?, repository: any SavedIdentificationRepository) {
-        self.species = species
-        self.match = match
-        self.repository = repository
-        savedIdentificationID = nil
-    }
-
-    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) { species = saved.species; match = saved.match; self.repository = repository; savedIdentificationID = saved.id; isSaved = true }
-
-    func load() async {
-        guard savedIdentificationID == nil else { return }
-        do { if let session = match?.sourceSessionID { let saved = try await repository.savedIdentification(sourceSessionID: session, speciesID: species.id); savedIdentificationID = saved?.id; isSaved = saved != nil } }
-        catch { errorMessage = "Saved status could not be loaded." }
-    }
-
-    func toggleSaved() async {
-        guard !isUpdatingSavedState else { return }
-        isUpdatingSavedState = true
-        defer { isUpdatingSavedState = false }
-        do {
-            if isSaved {
-                if savedIdentificationID == nil, let session = match?.sourceSessionID { savedIdentificationID = try await repository.savedIdentification(sourceSessionID: session, speciesID: species.id)?.id }
-                guard let id = savedIdentificationID else { errorMessage = "The saved identification could not be found."; return }
-                try await repository.remove(id: id)
-                savedIdentificationID = nil
-                isSaved = false
-            } else if let match {
-                let persisted = try await repository.save(SavedIdentification(match: match))
-                savedIdentificationID = persisted.id
-                isSaved = true
-            }
-            errorMessage = nil
-        } catch {
-            errorMessage = "The saved identification could not be updated. Your previous saved state was kept."
-        }
-    }
-}
 
 struct SpeciesDetailView: View {
     @State var viewModel: SpeciesDetailViewModel
@@ -69,7 +20,11 @@ struct SpeciesDetailView: View {
                 }
                 .accessibilityIdentifier("toggleSaved")
                 .disabled(viewModel.isUpdatingSavedState)
-                if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
+                if let error = viewModel.errorMessage {
+                    Text(error).foregroundStyle(Color.appError)
+                    Button("Retry saved storage") { Task { await viewModel.retry() } }
+                        .disabled(viewModel.isUpdatingSavedState)
+                }
                 DetailSection(title: "Identification summary", text: viewModel.species.summary)
                 DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))
                 DetailSection(title: "Typical habitat", text: viewModel.species.habitat)

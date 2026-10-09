@@ -39,7 +39,7 @@ struct DiveIDApp: App {
             catalogRepository: catalogRepository,
             searchEngine: searchEngine
         )
-        savedRepository = (try? JSONSavedIdentificationRepository()) ?? InMemorySavedIdentificationRepository()
+        savedRepository = PersistentSavedIdentificationRepository()
         sessionStore = InMemoryIdentificationSessionStore()
         photoProcessor = DefaultPhotoProcessingService()
     }
