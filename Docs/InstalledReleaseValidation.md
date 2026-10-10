@@ -55,12 +55,17 @@ export, upload or submission is part of this procedure.
 ```bash
 APP="$EVIDENCE/derived-device/Build/Products/Release-iphoneos/DiveID.app"
 plutil -p "$APP/Info.plist" > "$EVIDENCE/app-info.txt"
+BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")
+printf '%s\n' "$BUNDLE_ID" > "$EVIDENCE/installed-bundle-id.txt"
 codesign -dv --verbose=4 "$APP" 2> "$EVIDENCE/signature.txt"
 codesign -d --entitlements :- "$APP" > "$EVIDENCE/entitlements.plist" 2> "$EVIDENCE/entitlements.log"
 find "$APP" -name '*.json' -exec shasum -a 256 {} \; > "$EVIDENCE/resource-hashes.txt"
 xcrun devicectl device install app --device "$DEVICE_ID" "$APP" > "$EVIDENCE/install.txt"
-xcrun devicectl device process launch --device "$DEVICE_ID" com.brycecameron.DiveID > "$EVIDENCE/launch.txt"
+xcrun devicectl device process launch --device "$DEVICE_ID" "$BUNDLE_ID" > "$EVIDENCE/launch.txt"
 ```
+
+Compare BUNDLE_ID from the built Info.plist to PRODUCT_BUNDLE_IDENTIFIER in the
+resolved DiveID Release settings; stop if they differ.
 
 Inspect each packaged Creatures.json and PackManifest.json, comparing bytes to the
 candidate resources. Count verified records with nonempty categories by pack;
@@ -130,3 +135,33 @@ ENABLE_TESTABILITY=YES simulator build described there, never the device candida
 Record build/unit/packaging/UI independently from manual device checks. Download
 logs/result bundles before artifact expiry. A green hosted run cannot replace
 physical iPhone, offline, persistence or latency evidence.
+
+
+## Concise physical-device worksheet
+
+All rows start **unexecuted**. Record pass/fail only after observation on the named
+physical iPhone. With no approved pack, mark search rows blocked; a disabled search
+is not a passed no-match or out-of-domain test.
+
+| Check | Action and required evidence |
+| --- | --- |
+| Installed identity | Record SHA, Release log/settings, signing, built and installed version/build, bundle ID, phone model/iOS build, approved IDs/counts and runtime engine trace. |
+| Search outcomes | Enter applicable frozen cases verbatim; record case ID, request region, displayed IDs/ranks and distinct mismatch/no-match/loading-error states. Unavailable expected IDs are inapplicable. |
+| Offline repeat | Capture Airplane Mode ON, Wi-Fi OFF and cellular OFF; repeat representative positives and rejection cases with unchanged text. Record any network error separately. |
+| Region association | In region A, search and open details/back; switch to approved region B and search. Record pack context for both requests/results/saved snapshots. Earlier results must retain A's request region. |
+| Unavailable-region recovery | On a dedicated backed-up test installation, first select a region in the previous app where it was available, force-close, then install the candidate in place where that region has zero eligible records. Launch and capture recovery to an available approved region, or the explicit no-approved-catalogue state. Verify Saved access. Do not clear defaults or uninstall, which would bypass the persisted-state case. If no suitable previous installation exists, leave this row unexecuted. |
+| Abandoned search | Start search A, immediately leave its results flow and start search B with a different applicable description. Repeat 10 times, including detail/back and background/foreground. Capture sequence and timing; B must never receive A's late results and UI must stay responsive. If A finishes before navigation every time, cancellation itself remains unverified; controlled async tests are separate evidence. |
+| Durable save/remove | Save, force-close, relaunch, reopen and compare identity/region/notes; remove, force-close and relaunch again. Preserve a previous-version sighting through in-place upgrade and reopen it even if excluded from new searches. |
+| First/warm latency | Five process-relaunch first-search trials and 20 warm trials per selected query/pack. Record tap-to-stable-results boundaries, frame resolution, raw samples, failures, median and nearest-rank p95. For five cold trials p95 is the maximum and unstable; label it descriptive, not a performance guarantee. No samples means no percentile claim. |
+
+Do not use macOS `defaults write` to claim an iPhone preference was changed. Use the
+actual prior installed application for persisted-region setup. The preference key
+is `selectedDiveRegion`; capture its previous UI selection and upgrade path. With
+zero eligible regions, positive recovery into another pack is blocked, while the
+explicit unavailable state and saved access can still be checked once a device exists.
+
+Keep hosted build/unit/packaging/UI outcomes in a separate table with run URL and
+SHA. The standard workflow's test configuration is Debug; a successful Release
+settings check is not a Release app test. Report larger defects separately; do not
+change the production engine, publication gate or frozen expectations to finish
+this checklist. Stop before distribution.
