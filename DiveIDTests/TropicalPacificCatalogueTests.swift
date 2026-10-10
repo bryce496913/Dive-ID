@@ -210,7 +210,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         let available = try await publication.availablePacks()
         for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
             let full = try await development.loadPack(id: id)
-            let approved = full.profiles.filter { $0.review?.status == .verified }
+            let approved = full.profiles.filter { $0.review?.status == .verified && !$0.categories.isEmpty }
+            let drafts = Set(full.profiles.filter { $0.review?.status == .draft }.map(\.id))
             XCTAssertEqual(available.contains { $0.id == id }, !approved.isEmpty)
             if approved.isEmpty {
                 do {
@@ -224,6 +225,12 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 let published = try await publication.loadPack(id: id)
                 XCTAssertEqual(Set(published.profiles.map(\.id)), Set(approved.map(\.id)))
                 XCTAssertTrue(published.profiles.allSatisfy { $0.review?.status == .verified })
+                XCTAssertTrue(drafts.isDisjoint(with: published.profiles.map(\.id)))
+                XCTAssertEqual(published.metadata.availableRecordCount, approved.count)
+                XCTAssertEqual(published.metadata.includedRecordCount, full.profiles.count)
+                XCTAssertEqual(published.metadata.approvedRecordCount, approved.count)
+                let listed = try XCTUnwrap(available.first { $0.id == id })
+                XCTAssertEqual(listed.publicationStatusText, published.metadata.publicationStatusText)
             }
             print("PUBLICATION_GATE pack=\(id.rawValue) approved=\(approved.count) available=\(!approved.isEmpty)")
         }

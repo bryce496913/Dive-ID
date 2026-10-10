@@ -103,6 +103,17 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         XCTAssertEqual(restored.score, 0.74)
         XCTAssertEqual(restored.strength, .good)
         XCTAssertEqual(restored.sourceSessionID, UUID(uuidString: "44444444-4444-4444-4444-444444444444"))
+        // The actual publication repository must not become a dependency for
+        // opening a historical snapshot whose identity is absent from new search.
+        let publication = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
+            resourceResolutionMode: .bundleOnly, access: .publication)
+        var searchable = Set<UUID>()
+        for metadata in try await publication.availablePacks() {
+            let pack = try await publication.loadPack(id: metadata.id)
+            searchable.formUnion(pack.profiles.map(\.id))
+        }
+        XCTAssertFalse(searchable.contains(restored.species.id))
+        XCTAssertEqual(restored.species.commonName, "Spotted Eagle Ray")
     }
 
     func testCorruptFixtureRetainsSafeCorruptionBehavior() async throws {

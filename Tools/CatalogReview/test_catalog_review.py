@@ -52,11 +52,14 @@ class ReviewTests(unittest.TestCase):
 
     def test_material_change_makes_decision_stale(self):
         original = record()
-        changed = copy.deepcopy(original)
-        changed["summary"] = "changed"
-        result = M.apply_decisions([changed], document(decision_item(original)), CATALOGUE)[0]
-        self.assertEqual(result["state"], "stale")
-        self.assertEqual(changed["review"]["status"], "draft")
+        for field, value in {"summary": "changed", "finAndSpineClues": ["tall dorsal fin"],
+                             "maximumDepthMeters": 70, "subregions": ["Bahamas"]}.items():
+            with self.subTest(field=field):
+                changed = copy.deepcopy(original)
+                changed[field] = value
+                result = M.apply_decisions([changed], document(decision_item(original)), CATALOGUE)[0]
+                self.assertEqual(result["state"], "stale")
+                self.assertEqual(changed["review"]["status"], "draft")
 
     def test_unresolved_category_blocks_approval(self):
         current = record()
