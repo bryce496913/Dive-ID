@@ -44,7 +44,7 @@
     "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
     "distinguishingFeatures": [
       "Oval blue adult body",
-      "Small terminal mouth",
+      "Small mouth low on the head",
       "Yellow juvenile or transitional blue-and-yellow phases",
       "Sharp caudal peduncle spine"
     ],
@@ -55,14 +55,9 @@
     ],
     "imageAssetName": null,
     "regionalOccurrence": "common",
-    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+    "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
     "subregions": [
-      "Bahamas",
-      "Belize",
-      "Bonaire",
-      "Cayman Islands",
-      "Florida Keys",
-      "Puerto Rico"
+      "Bahamas"
     ],
     "appearanceVariants": [
       {
@@ -130,7 +125,7 @@
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -836,20 +831,13 @@
     "cautions": [],
     "imageAssetName": null,
     "regionalOccurrence": "common",
-    "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
-    "subregions": [
-      "Bahamas",
-      "Belize",
-      "Bonaire",
-      "Cayman Islands",
-      "Florida Keys",
-      "Puerto Rico"
-    ],
+    "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
+    "subregions": [],
     "appearanceVariants": [],
     "similarSpecies": [
       {
         "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
-        "distinguishingText": "Queen Angelfish has yellow fins and a blue-ringed crown spot; French Angelfish is dark with gold-edged scales and lacks the crown spot."
+        "distinguishingText": "Adult Queen Angelfish has a blue-ringed forehead spot and a yellow tail; adult French Angelfish has dark scales edged in gold and dark fins."
       }
     ],
     "bundledImage": {
@@ -889,11 +877,22 @@
         "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
         "citationReference": "2",
         "sourceLicense": null
+      },
+      {
+        "sourceName": "Florida Museum French Angelfish species profile",
+        "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+        "reviewedFields": [
+          "similarSpecies"
+        ],
+        "accessedDate": "2026-10-10T00:00:00Z",
+        "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+        "citationReference": "Biology: Coloration",
+        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },

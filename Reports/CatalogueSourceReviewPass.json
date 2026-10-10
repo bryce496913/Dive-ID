@@ -20,7 +20,7 @@
       "speciesID": "00000000-0000-0000-0000-000000000003",
       "pack": "caribbean",
       "commonName": "Atlantic Blue Tang",
-      "sourceInspectionDate": "2026-10-09",
+      "sourceInspectionDate": "2026-10-10",
       "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
       "references": [
         {
@@ -55,10 +55,20 @@
       },
       "requiredHumanDecisions": [
         "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
-      "reviewedContentFingerprint": "sha256:02f48c206737f65b40dcf18034883b68fb587b62476e33cb48a5900f462c34b0",
+      "releaseBatch": "caribbean-two-records-v1",
+      "fieldAudit": {
+        "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims.",
+        "structuredAndDescriptiveTraits": "Retained category, colors, body shape, markings, summary and distinguishing features checked against FishBase Short description and Museum Biology / Distinctive Features and Coloration. Unknown extended traits remain unset.",
+        "measurements": "Recorded maximum and depth limits use FishBase Size / Weight / Age and Environment references listed above. No typical-size interval is inferred.",
+        "habitatAndBehavior": "Habitat and behavior checked against FishBase Biology and Museum Habitat; general swimming is not species-specific evidence.",
+        "rangeAndOccurrence": "Museum Geographical Distribution supports broad Caribbean abundance. Removed locality names not explicitly established by these accounts; empty locality coverage means unknown, not absent.",
+        "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
+        "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence."
+      },
+      "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
       "sourceIdentity": [
         [
           "00000000-0000-0000-0000-000000000003:source:1",
@@ -113,7 +123,7 @@
         "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
         "distinguishingFeatures": [
           "Oval blue adult body",
-          "Small terminal mouth",
+          "Small mouth low on the head",
           "Yellow juvenile or transitional blue-and-yellow phases",
           "Sharp caudal peduncle spine"
         ],
@@ -123,14 +133,9 @@
           "Caudal peduncle spine can cut skin; observe without handling"
         ],
         "regionalOccurrence": "common",
-        "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
+        "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
         "subregions": [
-          "Bahamas",
-          "Belize",
-          "Bonaire",
-          "Cayman Islands",
-          "Florida Keys",
-          "Puerto Rico"
+          "Bahamas"
         ],
         "appearanceVariants": [
           {
@@ -209,7 +214,7 @@
       },
       "currentReview": {
         "status": "draft",
-        "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+        "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
         "reviewDate": null,
         "verifiedBy": null
       },
@@ -430,7 +435,7 @@
       "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
       "pack": "caribbean",
       "commonName": "Queen Angelfish",
-      "sourceInspectionDate": "2026-10-09",
+      "sourceInspectionDate": "2026-10-10",
       "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
       "references": [
         {
@@ -454,6 +459,13 @@
             "Biology: Distinctive Features, Coloration, Size, Food Habits",
             "Taxonomy"
           ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+          "role": "authoritative supplementary account for adult comparison only",
+          "sections": [
+            "Biology: Coloration"
+          ]
         }
       ],
       "fieldEvidence": {
@@ -464,11 +476,22 @@
         "range": "Museum: Bermuda to Brazil including Caribbean; FishBase also records St Paul’s Rocks."
       },
       "requiredHumanDecisions": [
-        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
-      "reviewedContentFingerprint": "sha256:dded4121be42e6020a7bee8a5873a0b676df1fa82897a76426f0a1516ecf64bd",
+      "releaseBatch": "caribbean-two-records-v1",
+      "fieldAudit": {
+        "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims. Museum classification list spells the epithet ciliarus; its heading, Taxonomy and FishBase agree on ciliaris, which is retained.",
+        "structuredAndDescriptiveTraits": "Retained category, colors, body shape, markings, summary and distinguishing features checked against FishBase Short description and Museum Biology / Distinctive Features and Coloration. Unknown extended traits remain unset.",
+        "measurements": "Recorded maximum and depth limits use FishBase Size / Weight / Age and Environment references listed above. No typical-size interval is inferred.",
+        "habitatAndBehavior": "Habitat and behavior checked against FishBase Biology and Museum Habitat; general swimming is not species-specific evidence.",
+        "rangeAndOccurrence": "Museum Geographical Distribution supports broad Caribbean abundance. Removed locality names not explicitly established by these accounts; empty locality coverage means unknown, not absent.",
+        "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
+        "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence.",
+        "comparison": "French Museum Biology / Coloration supports dark adult fins and golden scale margins. Removed the negative crown-absence claim; comparison explicitly limited to adults."
+      },
+      "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
       "sourceIdentity": [
         [
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
@@ -477,6 +500,10 @@
         [
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
           "2"
+        ],
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+          "Biology: Coloration"
         ]
       ],
       "currentContent": {
@@ -527,20 +554,13 @@
         "geographicRange": "Tropical western Atlantic and Caribbean dive areas; occurrence varies by island and habitat.",
         "cautions": [],
         "regionalOccurrence": "common",
-        "regionalOccurrenceNotes": "Occurrence varies by subregion and habitat.",
-        "subregions": [
-          "Bahamas",
-          "Belize",
-          "Bonaire",
-          "Cayman Islands",
-          "Florida Keys",
-          "Puerto Rico"
-        ],
+        "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
+        "subregions": [],
         "appearanceVariants": [],
         "similarSpecies": [
           {
             "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
-            "distinguishingText": "Queen Angelfish has yellow fins and a blue-ringed crown spot; French Angelfish is dark with gold-edged scales and lacks the crown spot."
+            "distinguishingText": "Adult Queen Angelfish has a blue-ringed forehead spot and a yellow tail; adult French Angelfish has dark scales edged in gold and dark fins."
           }
         ],
         "taxonomy": {
@@ -590,12 +610,23 @@
             "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
             "citationReference": "2",
             "sourceLicense": null
+          },
+          {
+            "sourceName": "Florida Museum French Angelfish species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+            "reviewedFields": [
+              "similarSpecies"
+            ],
+            "accessedDate": "2026-10-10T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+            "citationReference": "Biology: Coloration",
+            "sourceLicense": null
           }
         ]
       },
       "currentReview": {
         "status": "draft",
-        "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+        "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
         "reviewDate": null,
         "verifiedBy": null
       },

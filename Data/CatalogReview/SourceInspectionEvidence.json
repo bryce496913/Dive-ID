@@ -5,7 +5,7 @@
       "speciesID": "00000000-0000-0000-0000-000000000003",
       "pack": "caribbean",
       "commonName": "Atlantic Blue Tang",
-      "sourceInspectionDate": "2026-10-09",
+      "sourceInspectionDate": "2026-10-10",
       "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
       "references": [
         {
@@ -40,9 +40,19 @@
       },
       "requiredHumanDecisions": [
         "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ]
+      ],
+      "releaseBatch": "caribbean-two-records-v1",
+      "fieldAudit": {
+        "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims.",
+        "structuredAndDescriptiveTraits": "Retained category, colors, body shape, markings, summary and distinguishing features checked against FishBase Short description and Museum Biology / Distinctive Features and Coloration. Unknown extended traits remain unset.",
+        "measurements": "Recorded maximum and depth limits use FishBase Size / Weight / Age and Environment references listed above. No typical-size interval is inferred.",
+        "habitatAndBehavior": "Habitat and behavior checked against FishBase Biology and Museum Habitat; general swimming is not species-specific evidence.",
+        "rangeAndOccurrence": "Museum Geographical Distribution supports broad Caribbean abundance. Removed locality names not explicitly established by these accounts; empty locality coverage means unknown, not absent.",
+        "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
+        "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence."
+      }
     },
     {
       "speciesID": "00000000-0000-0000-0000-000000000005",
@@ -91,7 +101,7 @@
       "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
       "pack": "caribbean",
       "commonName": "Queen Angelfish",
-      "sourceInspectionDate": "2026-10-09",
+      "sourceInspectionDate": "2026-10-10",
       "inspectionType": "automated reading of accessible original and authoritative supplementary pages; not human approval",
       "references": [
         {
@@ -115,6 +125,13 @@
             "Biology: Distinctive Features, Coloration, Size, Food Habits",
             "Taxonomy"
           ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+          "role": "authoritative supplementary account for adult comparison only",
+          "sections": [
+            "Biology: Coloration"
+          ]
         }
       ],
       "fieldEvidence": {
@@ -125,10 +142,21 @@
         "range": "Museum: Bermuda to Brazil including Caribbean; FishBase also records St Paul’s Rocks."
       },
       "requiredHumanDecisions": [
-        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ]
+      ],
+      "releaseBatch": "caribbean-two-records-v1",
+      "fieldAudit": {
+        "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims. Museum classification list spells the epithet ciliarus; its heading, Taxonomy and FishBase agree on ciliaris, which is retained.",
+        "structuredAndDescriptiveTraits": "Retained category, colors, body shape, markings, summary and distinguishing features checked against FishBase Short description and Museum Biology / Distinctive Features and Coloration. Unknown extended traits remain unset.",
+        "measurements": "Recorded maximum and depth limits use FishBase Size / Weight / Age and Environment references listed above. No typical-size interval is inferred.",
+        "habitatAndBehavior": "Habitat and behavior checked against FishBase Biology and Museum Habitat; general swimming is not species-specific evidence.",
+        "rangeAndOccurrence": "Museum Geographical Distribution supports broad Caribbean abundance. Removed locality names not explicitly established by these accounts; empty locality coverage means unknown, not absent.",
+        "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
+        "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence.",
+        "comparison": "French Museum Biology / Coloration supports dark adult fins and golden scale margins. Removed the negative crown-absence claim; comparison explicitly limited to adults."
+      }
     },
     {
       "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",

@@ -10,7 +10,7 @@
           "1"
         ]
       ],
-      "reviewedContentFingerprint": "sha256:02f48c206737f65b40dcf18034883b68fb587b62476e33cb48a5900f462c34b0",
+      "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
       "corrections": {
         "dataSources": [
           {
@@ -73,15 +73,25 @@
               "yellow juvenile appearance"
             ]
           }
+        ],
+        "subregions": [
+          "Bahamas"
+        ],
+        "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
+        "distinguishingFeatures": [
+          "Oval blue adult body",
+          "Small mouth low on the head",
+          "Yellow juvenile or transitional blue-and-yellow phases",
+          "Sharp caudal peduncle spine"
         ]
       },
       "decision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
       "unresolvedQuestions": [
         "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ]
     },
@@ -190,7 +200,7 @@
           "2"
         ]
       ],
-      "reviewedContentFingerprint": "sha256:dded4121be42e6020a7bee8a5873a0b676df1fa82897a76426f0a1516ecf64bd",
+      "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
       "corrections": {
         "dataSources": [
           {
@@ -220,6 +230,17 @@
             "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
             "citationReference": "2",
             "sourceLicense": null
+          },
+          {
+            "sourceName": "Florida Museum French Angelfish species profile",
+            "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+            "reviewedFields": [
+              "similarSpecies"
+            ],
+            "accessedDate": "2026-10-10T00:00:00Z",
+            "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+            "citationReference": "Biology: Coloration",
+            "sourceLicense": null
           }
         ],
         "measurements": {
@@ -244,15 +265,23 @@
           "Blue body with yellow-edged scales and yellow fins",
           "Dark forehead spot ringed with bright blue, resembling a crown",
           "Blue spot at the pectoral-fin base"
+        ],
+        "subregions": [],
+        "regionalOccurrenceNotes": "Common at the broad Caribbean scale according to Florida Museum, Geographical Distribution; this does not establish frequency at individual dive sites.",
+        "similarSpecies": [
+          {
+            "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+            "distinguishingText": "Adult Queen Angelfish has a blue-ringed forehead spot and a yellow tail; adult French Angelfish has dark scales edged in gold and dark fins."
+          }
         ]
       },
       "decision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewerNotes": "Automated source inspection on 2026-10-09; exact sections, conflicts and outstanding human decisions are in Reports/CatalogueSourceReviewPass.json. This correction is not human publication approval.",
+      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
       "unresolvedQuestions": [
-        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ]
     }
