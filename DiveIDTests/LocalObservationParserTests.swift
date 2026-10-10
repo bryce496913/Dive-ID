@@ -192,3 +192,87 @@ final class ObservationEvidenceScopeTests: XCTestCase {
         XCTAssertEqual(additive.colors, ["blue", "yellow"])
     }
 }
+
+final class MorphologyConceptTests: XCTestCase {
+    func testBodyAndFinConceptsRemainIndependent() async {
+        let parser = LocalObservationParser()
+        for text in ["leaflike body", "LEAF-LIKE fish", "body shaped like a leaf", "leaf-shaped animal", "leaflike small fish"] {
+            let value = await parser.parse(text)
+            XCTAssertEqual(value.bodyShapes, ["leaflike"], text)
+            XCTAssertFalse(value.markings.contains("spines"))
+        }
+        for text in ["tall dorsal fin", "high first dorsal fin", "dorsal fin is elevated"] {
+            let value = await parser.parse(text)
+            XCTAssertTrue(value.tokens.contains("tall dorsal fin"), text)
+            XCTAssertTrue(value.bodyShapes.isEmpty)
+            XCTAssertFalse(value.markings.contains("spines"))
+        }
+        for text in ["leaflike dorsal fin", "leaf-like dorsal fin", "fish among leaves", "not a leaflike body", "without a tall dorsal fin"] {
+            let value = await parser.parse(text)
+            XCTAssertFalse(value.bodyShapes.contains("leaflike"), text)
+            XCTAssertFalse(value.tokens.contains("tall dorsal fin"), text)
+        }
+    }
+
+    func testFinParaphrasesAndUnknowns() {
+        XCTAssertEqual(MorphologyVocabulary.concepts(in: "sail-like dorsal fin"),
+                       MorphologyVocabulary.concepts(in: "dorsal fin shaped like a sail"))
+        XCTAssertEqual(MorphologyVocabulary.concepts(in: "threadlike first dorsal fin"), ["filamentous dorsal fin"])
+        XCTAssertTrue(MorphologyVocabulary.concepts(in: "rounded tail and unknown body").isEmpty)
+        XCTAssertEqual(MorphologyVocabulary.concepts(in: "tall dorsal fin and high dorsal fin"), ["tall dorsal fin"])
+    }
+}
+
+
+extension MorphologyConceptTests {
+    func testMultipleSpeciesFinEvidenceAliasesAndUnknownNeutrality() async throws {
+        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
+            access: .experimentalDevelopment).loadPack(id: .tropicalPacific)
+        let observation = await LocalObservationParser().parse("fish with a tall dorsal fin")
+        for name in ["Cockatoo Waspfish", "Fire Dartfish"] {
+            let original = try XCTUnwrap(pack.profiles.first { $0.commonName == name })
+            var unknown = original
+            unknown.finAndSpineClues = []
+            var aliases = original
+            aliases.finAndSpineClues += ["high dorsal fin", "dorsal fin is raised"]
+            let ranker = LocalSpeciesRanker()
+            let knownResults = try await ranker.rank(observation: observation, profiles: [original])
+            let unknownResults = try await ranker.rank(observation: observation, profiles: [unknown])
+            let aliasResults = try await ranker.rank(observation: observation, profiles: [aliases])
+            let known = try XCTUnwrap(knownResults.first)
+            let absent = try XCTUnwrap(unknownResults.first)
+            XCTAssertEqual(known.rawScore - absent.rawScore, 2)
+            XCTAssertEqual(known.rawScore, aliasResults.first?.rawScore)
+            XCTAssertEqual(known.conflictingClues, absent.conflictingClues)
+            XCTAssertTrue(known.matchedClues.contains("tall dorsal fin"))
+            let docs = [SpeciesSearchDocumentBuilder().document(from: original, pack: pack.metadata)]
+            let a = try await BM25SpeciesCandidateRetriever().retrieve(query: "tall dorsal fin", documents: docs, limit: 50)
+            let b = try await BM25SpeciesCandidateRetriever().retrieve(query: "high dorsal fin and elevated dorsal fin", documents: docs, limit: 50)
+            XCTAssertEqual(a.first?.retrievalScore, b.first?.retrievalScore)
+            XCTAssertFalse(a.isEmpty)
+        }
+    }
+}
+
+extension MorphologyConceptTests {
+    func testLeafBodyRanksAsBodyEvidenceWithoutInferringFinOrContradiction() async throws {
+        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
+            access: .experimentalDevelopment).loadPack(id: .caribbean)
+        // Synthetic morphology fixtures, not source claims or publication approval.
+        for base in pack.profiles.prefix(2) {
+            var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(base)) as? [String: Any])
+            object["bodyShapes"] = ["leaflike"]
+            object["categories"] = ["fish"]
+            object["finAndSpineClues"] = []
+            let leaf = try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+            object["bodyShapes"] = []
+            let unknown = try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+            let observation = await LocalObservationParser().parse("leaf-shaped fish")
+            let a = try await LocalSpeciesRanker().rank(observation: observation, profiles: [leaf])
+            let b = try await LocalSpeciesRanker().rank(observation: observation, profiles: [unknown])
+            XCTAssertEqual(try XCTUnwrap(a.first).rawScore - XCTUnwrap(b.first).rawScore, 3)
+            XCTAssertEqual(a.first?.conflictingClues, b.first?.conflictingClues)
+            XCTAssertTrue(observation.markings.isEmpty)
+        }
+    }
+}

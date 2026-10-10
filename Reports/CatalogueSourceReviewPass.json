@@ -674,8 +674,12 @@
         "Approve Fishes of Australia as authoritative replacement for unavailable original book p. 381 (PDF p. 382), including 15 cm TL / 0–80 m recorded limits versus transcription 16 cm / to 20 m; 20 m describes usual habitat, not maximum occurrence.",
         "Reconcile original identification text reporting 17 dorsal spines with Fishes of Australia 17–18 and independently verify taxonomy, range and full corrected fingerprint before publication."
       ],
-      "reviewedContentFingerprint": "sha256:8b994af8cf225b361c937bce9db533aad9adaa91959b5c63892af6c9a754653f",
+      "reviewedContentFingerprint": "sha256:56b276ef632254dc2bc3bc08cd3d2f0a942d2998aeaa4c0fcbce506853e55a45",
       "sourceIdentity": [
+        [
+          "5f4d48f4-6556-50f3-95af-a4d28635f4bb:morphology-2026-10-10",
+          "Summary; Features"
+        ],
         [
           "AM-ABLABYS-TAENIANOTUS",
           "Cockatoo Waspfish: Identification"
@@ -740,7 +744,8 @@
         "tailShape": null,
         "mouthAndHeadShape": [],
         "finAndSpineClues": [
-          "sail-like dorsal fin"
+          "tall dorsal fin",
+          "sail shaped dorsal fin"
         ],
         "dataSources": [
           {
@@ -787,6 +792,17 @@
               "finAndSpineClues"
             ],
             "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          },
+          {
+            "stableSourceID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb:morphology-2026-10-10",
+            "sourceName": "Fishes of Australia morphology account",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
+            "citationReference": "Summary; Features",
+            "reviewedFields": [
+              "finAndSpineClues"
+            ],
+            "accessedDate": "2026-10-10T00:00:00Z",
             "sourceLicense": null
           }
         ]

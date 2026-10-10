@@ -3,9 +3,9 @@
   "sha256": {
     "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "02b10d60656b2b04cd4f8b1183594e485155bd23ab3638bccf3adf295309f6bd",
     "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "bff708376553ca6a9967e2cb85e3a28c9ba65af6c8bf0547225dccd17efb01d2",
-    "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "558fcbb85d6584dfcd5efcb7439839c1de3d1ce4015b42f6016dbb5c02f833e9",
+    "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "2c0b83d1b76d6e362e0d3e0e86d5f62b1a49a8c3d04bf66e37d9ee9ea27d1961",
     "DiveID/Resources/IdentificationPacks/TropicalPacific/PackManifest.json": "fc349035dc21ff034f80972e35d720be729edf5060cf98366344ab387b739bf9",
-    "Reports/CatalogueSourceReviewPass.json": "353bd7e6145ed5e55f07b25f9cbb9b8d365b2459be80e948c0f5d62db4dada2b",
+    "Reports/CatalogueSourceReviewPass.json": "2a31fb99969032b6dfd8c10ab86b14ae550b21577991e2ce8e996a04063cc713",
     "Reports/FirstCatalogueReviewBatch.json": "94183d8c8e7c7457c05192ee3667285600c6777a695958369fd2523f428a94fc",
     "Reports/TropicalPacificImportReport.json": "1d80edf0ca7e5f23acbe79c6a7959094a6039954e24782519d9bb91d3c010398",
     "Reports/TropicalPacificOutcomes.csv": "f3075049727f247ebbadf3bc492b41bd9e719a99630083fd460449dca8344c3a",

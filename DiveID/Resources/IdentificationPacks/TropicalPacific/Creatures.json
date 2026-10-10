@@ -6355,6 +6355,17 @@
         ],
         "accessedDate": "2026-10-09T00:00:00Z",
         "sourceLicense": null
+      },
+      {
+        "stableSourceID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb:morphology-2026-10-10",
+        "sourceName": "Fishes of Australia morphology account",
+        "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
+        "citationReference": "Summary; Features",
+        "reviewedFields": [
+          "finAndSpineClues"
+        ],
+        "accessedDate": "2026-10-10T00:00:00Z",
+        "sourceLicense": null
       }
     ],
     "review": {
@@ -6368,7 +6379,8 @@
     "tailShape": null,
     "mouthAndHeadShape": [],
     "finAndSpineClues": [
-      "sail-like dorsal fin"
+      "tall dorsal fin",
+      "sail shaped dorsal fin"
     ]
   },
   {
@@ -9313,6 +9325,17 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "7a662be3-854f-5819-8d32-cb8b1f19a00b:morphology-2026-10-10",
+        "sourceName": "Fishes of Australia morphology account",
+        "sourceURL": "https://fishesofaustralia.net.au/home/species/2943",
+        "citationReference": "Features",
+        "reviewedFields": [
+          "finAndSpineClues"
+        ],
+        "accessedDate": "2026-10-10T00:00:00Z",
+        "sourceLicense": null
       }
     ],
     "review": {
@@ -9325,7 +9348,10 @@
     "measurements": null,
     "tailShape": null,
     "mouthAndHeadShape": [],
-    "finAndSpineClues": []
+    "finAndSpineClues": [
+      "tall dorsal fin",
+      "filamentous dorsal fin"
+    ]
   },
   {
     "id": "a8a55dc8-805e-569f-ac7b-aa2d40b54b73",

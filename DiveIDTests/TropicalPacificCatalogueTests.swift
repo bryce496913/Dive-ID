@@ -372,12 +372,12 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             } else {
                 XCTAssertTrue(profile.colors.contains("brown"))
                 XCTAssertEqual(profile.bodyShapes, ["compressed"])
-                XCTAssertEqual(profile.finAndSpineClues, ["sail-like dorsal fin"])
+                XCTAssertEqual(profile.finAndSpineClues, ["tall dorsal fin", "sail shaped dorsal fin"])
                 XCTAssertLessThanOrEqual(retrievalRank, 50, "Source-backed record must reach the candidate pool")
                 XCTAssertTrue(displayed.retrievedSpeciesIDs.contains(profile.id), "Retrieval miss, before biological ranking")
                 XCTAssertNotNil(isolated, "Biological ranker rejected the retrieved record")
                 XCTAssertEqual(isolated?.rawScore, 11)
-                XCTAssertTrue(isolated?.matchedClues.contains("fin and spine clues") == true)
+                XCTAssertTrue(isolated?.matchedClues.contains("sail shaped dorsal fin") == true)
                 XCTAssertNotNil(displayedRank, "Eligible candidate was lost during competitive ranking")
                 XCTAssertLessThanOrEqual(try XCTUnwrap(displayedRank), try XCTUnwrap(item.maximumAcceptableRank))
             }

@@ -24,8 +24,11 @@ struct LocalObservationParser: ObservationParsing {
         let traitText = Self.normalize(Self.withoutMeasurementRoleWords(in: affirmative))
         // Keep decimal punctuation in `normalized` for measurement parsing, but do
         // not let sentence punctuation become part of an observation token.
+        let morphology = MorphologyVocabulary.concepts(in: traitText)
         let raw = traitText.split { !$0.isLetter && !$0.isNumber }.map(String.init)
         var tokens = Set(raw.map(Self.singular).filter { !LocalObservationVocabulary.stopWords.contains($0) })
+        tokens.remove("leaflike")
+        tokens.formUnion(morphology)
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
         for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: traitText) }) { tokens.insert(key) }
         // Measurement ranges must refer to the user's original string. In

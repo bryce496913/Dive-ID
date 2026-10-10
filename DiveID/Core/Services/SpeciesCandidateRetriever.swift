@@ -93,9 +93,11 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
     }
 
     private static func terms(_ text: String) -> [String] {
-        text.lowercased().split { !$0.isLetter && !$0.isNumber }.map {
+        var seenMorphology = Set<String>()
+        let canonical = Set(MorphologyVocabulary.patterns.map { $0.0.replacingOccurrences(of: " ", with: "") })
+        return MorphologyVocabulary.scopedText(text).split { !$0.isLetter && !$0.isNumber }.map {
             LocalObservationParser.singular(String($0))
-        }.filter { !$0.isEmpty }
+        }.filter { !$0.isEmpty && (!canonical.contains($0) || seenMorphology.insert($0).inserted) }
     }
 
     private static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }
