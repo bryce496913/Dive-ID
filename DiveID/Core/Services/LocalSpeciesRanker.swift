@@ -155,7 +155,15 @@ struct LocalSpeciesRanker: SpeciesRanking {
             }
             addVisibleClue(profile.tailShape.map { [$0] } ?? [], label: "tail shape", weight: weights.tailShape, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
             addVisibleClue(profile.mouthAndHeadShape, label: "head and mouth shape", weight: weights.headAndMouth, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
-            addVisibleClue(profile.finAndSpineClues, label: "fin and spine clues", weight: weights.finAndSpine, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
+            let finConcepts = profile.finAndSpineClues.reduce(into: Set<String>()) { $0.formUnion(MorphologyVocabulary.concepts(in: $1)) }
+                .subtracting(["leaflike"])
+            let finHits = finConcepts.intersection(observation.tokens)
+            // One fin evidence group, regardless of the number of aliases stored.
+            if !finHits.isEmpty {
+                score += weights.finAndSpine
+                matched.append(contentsOf: finHits.sorted())
+            }
+            addVisibleClue(profile.finAndSpineClues.filter { MorphologyVocabulary.concepts(in: $0).isEmpty && finHits.isEmpty }, label: "fin and spine clues", weight: weights.finAndSpine, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
             let canonicalMinimum = profile.measurements?.typicalObservedMinimumCentimeters ?? profile.minimumSizeCentimeters
             let canonicalMaximum = profile.measurements?.typicalObservedMaximumCentimeters ?? profile.measurements?.maximumRecordedCentimeters ?? profile.maximumSizeCentimeters
             if let size = observation.approximateSizeCentimeters, let min = canonicalMinimum, let max = canonicalMaximum {
@@ -217,7 +225,9 @@ struct LocalSpeciesRanker: SpeciesRanking {
     private static func informationLevel(_ observation: ParsedObservation) -> ObservationInformationLevel {
         // Each boolean is an independent semantic clue group. Expanded synonyms stay
         // inside their source group and therefore never increase the evidence count.
+        let hasFinMorphology = !observation.tokens.isDisjoint(with: Set(MorphologyVocabulary.patterns.dropFirst().map { $0.0 }))
         let groups = [
+            hasFinMorphology,
             !observation.categories.isEmpty,
             !observation.colors.isEmpty,
             !observation.markings.isEmpty,
@@ -233,7 +243,7 @@ struct LocalSpeciesRanker: SpeciesRanking {
 
         // Category, color, and approximate size are broad clues. Two of those alone
         // (for example, "dark fish" or "small fish") are still not identifying.
-        let hasDistinctiveGroup = !observation.markings.isEmpty
+        let hasDistinctiveGroup = hasFinMorphology || !observation.markings.isEmpty
             || !observation.bodyShapes.isEmpty
             || !observation.habitats.isEmpty
             || !observation.behaviors.isEmpty

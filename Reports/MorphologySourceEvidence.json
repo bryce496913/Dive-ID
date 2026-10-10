@@ -1,0 +1,28 @@
+[
+  {
+    "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",
+    "reference": "https://fishesofaustralia.net.au/home/species/3205",
+    "sections": "Summary; Features",
+    "inspectedDate": "2026-10-10",
+    "interpretation": "Elevated anterior dorsal spines support height; Australian Museum Identification supports sail outline. Leaf mimicry is behavior, not sufficient evidence for leaflike body coding.",
+    "correction": [
+      "tall dorsal fin",
+      "sail shaped dorsal fin"
+    ],
+    "fingerprint": "sha256:56b276ef632254dc2bc3bc08cd3d2f0a942d2998aeaa4c0fcbce506853e55a45",
+    "status": "draft; no human approval"
+  },
+  {
+    "speciesID": "7a662be3-854f-5819-8d32-cb8b1f19a00b",
+    "reference": "https://fishesofaustralia.net.au/home/species/2943",
+    "sections": "Features",
+    "inspectedDate": "2026-10-10",
+    "interpretation": "Elevated first dorsal portion is elongate and filamentous. Does not imply a leaflike body.",
+    "correction": [
+      "tall dorsal fin",
+      "filamentous dorsal fin"
+    ],
+    "fingerprint": "sha256:64e51d0733c9370598a05989cf69ccc6b9602261a332a1716ae8f4bf13dad212",
+    "status": "draft; no human approval"
+  }
+]

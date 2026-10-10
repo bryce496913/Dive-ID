@@ -16,7 +16,7 @@ from datetime import datetime
 VOCABULARY = {
     "colors": {"black", "blue", "brown", "gray", "green", "olive", "orange", "red", "silver", "white", "yellow"},
     "markings": {"barbels", "beak", "eye stripe", "fin edge", "patches", "saddles", "shell", "spines", "spots", "stripes", "tail", "teeth"},
-    "bodyShapes": {"compressed", "disk", "elongated", "flat", "oval", "pointed", "robust", "round", "serpentine", "torpedo"},
+    "bodyShapes": {"leaflike", "compressed", "disk", "elongated", "flat", "oval", "pointed", "robust", "round", "serpentine", "torpedo"},
     "habitats": {"anemone", "deep", "lagoon", "mangrove", "open water", "reef", "rubble", "sand", "seagrass", "shallow", "surface", "wall", "wreck"},
     "categories": {"crustacean", "eel", "fish", "mollusk", "octopus", "ray", "seahorse", "shark", "squid", "turtle"},
     "behaviors": {"anemone association", "bottom-swimming", "burrowing", "cleaning", "feeding", "grazing", "hiding", "hovering", "open-water cruising", "resting", "schooling", "solitary", "swimming"},

@@ -10,7 +10,7 @@
           "Reef Fish Identification: Tropical Pacific, species account book p. 282 (PDF p. 283)"
         ]
       ],
-      "reviewedContentFingerprint": "sha256:56b491995c0b7013d8bf97e902c19dcfbe5465318d1db1ade3eb54434f25d9c9",
+      "reviewedContentFingerprint": "sha256:64e51d0733c9370598a05989cf69ccc6b9602261a332a1716ae8f4bf13dad212",
       "corrections": {
         "colors": [
           "brown",
@@ -21,6 +21,41 @@
         "behaviors": [
           "hovering",
           "solitary"
+        ],
+        "finAndSpineClues": [
+          "tall dorsal fin",
+          "filamentous dorsal fin"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-E19DD980",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 282.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 282 (PDF p. 283)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "7a662be3-854f-5819-8d32-cb8b1f19a00b:morphology-2026-10-10",
+            "sourceName": "Fishes of Australia morphology account",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/2943",
+            "citationReference": "Features",
+            "reviewedFields": [
+              "finAndSpineClues"
+            ],
+            "accessedDate": "2026-10-10T00:00:00Z",
+            "sourceLicense": null
+          }
         ]
       },
       "decision": "draft",
@@ -39,7 +74,7 @@
           "Reef Fish Identification: Tropical Pacific, species account book p. 381 (PDF p. 382)"
         ]
       ],
-      "reviewedContentFingerprint": "sha256:8b994af8cf225b361c937bce9db533aad9adaa91959b5c63892af6c9a754653f",
+      "reviewedContentFingerprint": "sha256:56b276ef632254dc2bc3bc08cd3d2f0a942d2998aeaa4c0fcbce506853e55a45",
       "corrections": {
         "colors": [
           "brown",
@@ -51,7 +86,8 @@
           "compressed"
         ],
         "finAndSpineClues": [
-          "sail-like dorsal fin"
+          "tall dorsal fin",
+          "sail shaped dorsal fin"
         ],
         "distinguishingFeatures": [
           "ID: Similar to Spiny Waspfish (previous), difficult to distinguish except for higher number of dorsal spines (17 versus 15). Solitary or in pairs. Sand, mud, rubble and weed bottoms of coastal reefs to 20 m.",
@@ -102,6 +138,17 @@
               "finAndSpineClues"
             ],
             "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          },
+          {
+            "stableSourceID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb:morphology-2026-10-10",
+            "sourceName": "Fishes of Australia morphology account",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/3205",
+            "citationReference": "Summary; Features",
+            "reviewedFields": [
+              "finAndSpineClues"
+            ],
+            "accessedDate": "2026-10-10T00:00:00Z",
             "sourceLicense": null
           }
         ],
