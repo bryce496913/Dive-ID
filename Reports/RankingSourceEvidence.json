@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "speciesID": "b932ea57-be9a-54c9-9036-656dc49e5e2e",
+      "commonName": "Orangeband Surgeonfish",
+      "reference": "https://www.fishbase.se/summary/Acanthurus-olivaceus.html",
+      "sourceName": "FishBase. Acanthurus olivaceus species account.",
+      "sections": [
+        "Short description; body shape"
+      ],
+      "inspectedDate": "2026-10-09",
+      "inspectionType": "automated source inspection, not human publication approval",
+      "fieldCorrections": {
+        "markings": [
+          "patches"
+        ],
+        "bodyShapes": [
+          "compressed"
+        ]
+      },
+      "rationale": "Localized orange horizontal marking behind the upper gill opening maps to patches; cross section is explicitly compressed. No new colors or measurements inferred.",
+      "reviewedContentFingerprint": "sha256:6ee3fae754703ff6d9a4f764a77e458e55d7549a7144f3f899565e55a00ac8f4"
+    },
+    {
+      "speciesID": "987b3653-d83f-54a0-afcf-0b48c75c635e",
+      "commonName": "Redtooth Triggerfish",
+      "reference": "https://www.fishbase.se/summary/Odonus-niger.html",
+      "sourceName": "FishBase. Odonus niger species account.",
+      "sections": [
+        "Biology, refs 48637 and 9770"
+      ],
+      "inspectedDate": "2026-10-09",
+      "inspectionType": "automated source inspection, not human publication approval",
+      "fieldCorrections": {
+        "behaviors": [
+          "feeding",
+          "schooling"
+        ]
+      },
+      "rationale": "Large zooplankton-feeding schools support schooling alongside the existing feeding behavior.",
+      "reviewedContentFingerprint": "sha256:b7af9fc7e0d93121493894c6a4382beeac8bac6e3f127b8d3c7b47c814d0f0dc"
+    },
+    {
+      "speciesID": "12135912-59af-5b63-9015-67e636beea7c",
+      "commonName": "Pinktail Triggerfish",
+      "reference": "https://fishesofaustralia.net.au/home/species/765",
+      "sourceName": "Bray, D.J. Melichthys vidua. Fishes of Australia, Museums Victoria.",
+      "sections": [
+        "Summary"
+      ],
+      "inspectedDate": "2026-10-09",
+      "inspectionType": "automated source inspection, not human publication approval",
+      "fieldCorrections": {
+        "colors": [
+          "black",
+          "brown",
+          "white",
+          "yellow"
+        ]
+      },
+      "rationale": "Yellowish snout and pectoral fin support yellow; retained colors remain supported by the existing record. Pink is not in the controlled color vocabulary and is not coerced into another color.",
+      "reviewedContentFingerprint": "sha256:274112e1b9398de728bd8241cf8cc35c5915449d97f775b6cda5c34dc38ead04"
+    },
+    {
+      "speciesID": "c059528c-f884-5b96-b67b-d912a33846b1",
+      "commonName": "Red and Black Anemonefish",
+      "reference": "https://fishesofaustralia.net.au/home/species/1274",
+      "sourceName": "Bray, D.J. 2025. Amphiprion melanopus. Fishes of Australia, Museums Victoria.",
+      "sections": [
+        "Summary; Colour"
+      ],
+      "inspectedDate": "2026-10-09",
+      "inspectionType": "automated source inspection, not human publication approval",
+      "fieldCorrections": {
+        "colors": [
+          "black",
+          "orange",
+          "red",
+          "white",
+          "yellow"
+        ],
+        "markings": [
+          "stripes"
+        ]
+      },
+      "rationale": "Reddish/yellowish areas support red and yellow. The pale head bar maps to the controlled stripes group. Existing orange is retained from original provenance.",
+      "reviewedContentFingerprint": "sha256:d4a4e24170d807d03c35171edbb275ba36acf5e9df0daa63ca8362374c93c00e"
+    },
+    {
+      "speciesID": "87727436-cafc-58b3-8818-f77fcbf554b7",
+      "commonName": "Spinecheek Anemonefish",
+      "reference": "https://fishesofaustralia.net.au/Home/species/378",
+      "sourceName": "Bray, D.J. 2021. Amphiprion biaculeatus. Fishes of Australia, Museums Victoria.",
+      "sections": [
+        "Summary"
+      ],
+      "inspectedDate": "2026-10-09",
+      "inspectionType": "automated source inspection, not human publication approval",
+      "fieldCorrections": {
+        "colors": [
+          "brown",
+          "gray",
+          "red",
+          "white"
+        ],
+        "markings": [
+          "spines",
+          "stripes"
+        ]
+      },
+      "rationale": "Brownish coloration and three white/grey bars support brown and stripes. Source explicitly identifies the previous name Premnas biaculeatus; existing identity and stable ID are retained.",
+      "reviewedContentFingerprint": "sha256:5eef9acd84b28e5618acc422d75dfa90ced25216d34322505ea106197df72a74"
+    }
+  ],
+  "limitations": [
+    "Original Pacific book pages were not available; their source provenance is retained.",
+    "FishBase does not provide the adult color/band details needed for several records; Fishes of Australia supplies the cited replacement evidence.",
+    "Spinecheek legacy maximum 3 cm conflicts with replacement accounts (16 cm TL in Fishes of Australia, 17 cm TL in FishBase). Reconcile measurement context separately; this pass does not assert a new interval or infer a minimum.",
+    "No review status is promoted."
+  ]
+}

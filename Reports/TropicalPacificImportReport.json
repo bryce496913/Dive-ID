@@ -17,6 +17,31 @@
       "speciesID": "7a662be3-854f-5819-8d32-cb8b1f19a00b",
       "state": "applied",
       "decision": "draft"
+    },
+    {
+      "speciesID": "b932ea57-be9a-54c9-9036-656dc49e5e2e",
+      "state": "applied",
+      "decision": "draft"
+    },
+    {
+      "speciesID": "12135912-59af-5b63-9015-67e636beea7c",
+      "state": "applied",
+      "decision": "draft"
+    },
+    {
+      "speciesID": "c059528c-f884-5b96-b67b-d912a33846b1",
+      "state": "applied",
+      "decision": "draft"
+    },
+    {
+      "speciesID": "987b3653-d83f-54a0-afcf-0b48c75c635e",
+      "state": "applied",
+      "decision": "draft"
+    },
+    {
+      "speciesID": "87727436-cafc-58b3-8818-f77fcbf554b7",
+      "state": "applied",
+      "decision": "draft"
     }
   ],
   "outcomeCounts": {

@@ -220,3 +220,44 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
         XCTAssertEqual(tied.map(\.profile.commonName), ["Alpha", "Beta"])
     }
 }
+
+extension DescriptionSearchArchitectureTests {
+    func testUnknownHabitatIsNeutralButKnownHabitatConflictRemains() async throws {
+        let base = try await pack().profiles[0]
+        let observation = await LocalObservationParser().parse("Blue spotted fish above sand.")
+        func profile(habitats: [String]) throws -> LocalSpeciesProfile {
+            var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(base)) as? [String: Any])
+            object["habitats"] = habitats
+            return try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+        }
+        let ranker = LocalSpeciesRanker()
+        let unknown = try await ranker.rank(observation: observation, profiles: [profile(habitats: [])])
+        let conflicting = try await ranker.rank(observation: observation, profiles: [profile(habitats: ["reef"])])
+        let compatible = try await ranker.rank(observation: observation, profiles: [profile(habitats: ["sand"])])
+        let neutral = try XCTUnwrap(unknown.first)
+        let conflict = try XCTUnwrap(conflicting.first)
+        let match = try XCTUnwrap(compatible.first)
+        XCTAssertFalse(neutral.conflictingClues.contains("habitat"))
+        XCTAssertTrue(conflict.conflictingClues.contains("habitat"))
+        XCTAssertEqual(conflict.rawScore, neutral.rawScore + LocalRankingWeights().habitatConflict)
+        XCTAssertEqual(match.rawScore, neutral.rawScore + LocalRankingWeights().habitat)
+    }
+}
+
+extension DescriptionSearchArchitectureTests {
+    func testPartialIdentityEvidenceIsWeakAndDoesNotDuplicateTraits() async throws {
+        let base = try await pack().profiles[0]
+        let group = try syntheticCopy(base, id: UUID(uuidString: "10000000-0000-0000-0000-000000000001")!, name: "Blue Triggerfish")
+        let other = try syntheticCopy(base, id: UUID(uuidString: "10000000-0000-0000-0000-000000000002")!, name: "Blue Wrasse")
+        let observation = await LocalObservationParser().parse("A spotted triggerfish on a blue reef.")
+        let result = try await LocalSpeciesRanker().rank(observation: observation, profiles: [other, group])
+        XCTAssertEqual(result.map(\.profile.id), [group.id, other.id])
+        XCTAssertEqual(result[0].rawScore - result[1].rawScore, LocalRankingWeights().keyword)
+        XCTAssertTrue(result[0].matchedClues.contains("identity term: triggerfish"))
+        XCTAssertFalse(result[0].matchedClues.contains("identity term: blue"))
+        XCTAssertFalse(result[0].matchedClues.contains("Blue Triggerfish"))
+        let vague = await LocalObservationParser().parse("triggerfish")
+        let insufficient = try await LocalSpeciesRanker().rank(observation: vague, profiles: [group])
+        XCTAssertTrue(insufficient.isEmpty, "A partial name alone must not bypass evidence eligibility")
+    }
+}
