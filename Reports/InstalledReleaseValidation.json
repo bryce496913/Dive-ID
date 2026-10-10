@@ -1,6 +1,6 @@
 {
-  "candidateSHA": "1a8c36e3c59b7195bbca78f4261abe515297f528",
-  "candidateTree": "5fb53e68d78cd29a40a09b50bb74f0b62716641c",
+  "candidateSHA": "2899e3499dcccf894c284ecd01ee8b98fe0d6eaa",
+  "candidateTree": "48b3663d3a6ec211a18a899032a0834c13bfbf81",
   "overall": "blocked: no approved catalogue and no local Mac/iPhone",
   "version": "0.5",
   "build": "2",
@@ -317,40 +317,51 @@
     "saveRelaunchReopenRemove": "unexecuted",
     "historicalSave": "unexecuted",
     "offlineSearch": "unexecuted",
-    "coldWarmLatency": "unexecuted"
+    "coldWarmLatency": "unexecuted",
+    "persistedUnavailableRegionRecovery": "unexecuted",
+    "requestRegionAssociation": "unexecuted",
+    "abandonAndImmediateRestart": "unexecuted",
+    "lateStaleResults": "unexecuted",
+    "backgroundForeground": "unexecuted"
   },
   "latencySamples": [],
-  "hostedRun": "https://github.com/bryce496913/Dive-ID/actions/runs/38030672074",
-  "hostedSnapshot": "completed Xcode job: failure",
+  "hostedRun": "https://github.com/bryce496913/Dive-ID/actions/runs/38055865519",
+  "hostedSnapshot": "Xcode 16.4 selected; Debug and Release settings passed; build in progress; unit/packaging/UI pending at inspection. Not physical-device or hosted Release app execution.",
   "instructions": "Docs/InstalledReleaseValidation.md",
-  "hosted": {
-    "xcode": "16.4 (16F6)",
-    "configuration": "Debug simulator build; Release settings also validated",
-    "debugSettings": "pass",
-    "releaseSettings": "pass",
-    "build": "fail",
-    "unit": "skipped after build failure; 0 executed",
-    "packaging": "skipped after build failure; 0 executed",
-    "ui": "skipped after build failure; 0 executed",
-    "buildErrors": [
-      "DiveIDTests.swift:59,66: main-actor isolated message method called synchronously from nonisolated tests",
-      "DiveIDTests.swift:514,515,521: assignments to immutable colors/bodyShapes"
-    ],
-    "macOSSwiftPM": {
-      "tests": 126,
-      "skipped": 2,
-      "assertionFailures": 2,
-      "case": "v05-17-paraphrase, BM25 and structured diagnostic engines"
-    },
-    "logsAndResults": "Uploaded xcode-test-results and swiftpm-macos-15-logs artifacts in linked run; not physical device evidence"
-  },
   "localPreparationChecks": {
-    "CI tooling": {
+    "optimizedSwiftPMPublicationAndSavedSnapshots": {
+      "executed": 4,
+      "failures": 0,
+      "platform": "Linux; not installed iOS evidence"
+    },
+    "CITooling": {
       "passed": 5
     },
-    "evaluation contract": {
+    "frozenEvaluationContract": {
       "passed": 3
     },
+    "documentedBashSyntax": {
+      "blocksChecked": 3,
+      "status": "pass; commands not executed"
+    },
+    "catalogueInventory": "8 Caribbean + 384 Pacific; approved IDs empty; manifests/status unchanged",
     "diffWhitespace": "pass"
+  },
+  "actualInstalledEngine": null,
+  "configuredProductionEngine": "productionBM25 with biological ranking (source inspection only)",
+  "remainingBlockers": [
+    "No real human-approved catalogue records; PR #94 prepared packets only.",
+    "No accessible Mac/Xcode or physical iPhone in this environment.",
+    "Hosted Release application execution is separate from the standard Debug workflow."
+  ],
+  "hosted": {
+    "xcodeSelected": "16.4",
+    "configuration": "Debug simulator tests; Release settings check only",
+    "debugSettings": "pass",
+    "releaseSettings": "pass",
+    "build": "in progress",
+    "unit": "pending",
+    "packaging": "pending",
+    "ui": "pending"
   }
 }
