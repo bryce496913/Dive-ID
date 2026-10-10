@@ -68,6 +68,33 @@
         "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
         "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence."
       },
+      "finalEvidenceAssessment": {
+        "type": "automated source verification, not a human decision",
+        "identity": "Acanthurus coeruleus agrees between FishBase and Museum.",
+        "measurements": {
+          "disposition": "documented source disagreement; human acceptance outstanding",
+          "assessment": "Retain proposed FishBase recorded maximum 39 cm TL (36453), depth 2–50 m (7345); Museum Biology / Size reports 37 cm and Habitat 2–40 m. The pages do not resolve why the maxima differ. No typical interval inferred.",
+          "references": [
+            "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+            "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/"
+          ]
+        },
+        "localityAndOccurrence": {
+          "disposition": "source support verified; human signoff outstanding",
+          "assessment": "Museum Geographical Distribution explicitly names Bahamas and Caribbean abundance. Retain only Bahamas in locality list and broad regional common label; no dive-site frequency claim.",
+          "reference": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/"
+        },
+        "identification": {
+          "disposition": "source support verified; human signoff outstanding",
+          "assessment": "Museum Biology / Distinctive Features and Coloration support low small mouth, compressed body, caudal spine and age-related color phases; color is not a fixed size interval.",
+          "references": [
+            "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+            "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/"
+          ]
+        },
+        "correctionsThisPass": [],
+        "remainingRequirement": "A real human must accept or revise the documented interpretations/limitations and supply verified decision, identity, actual review date and notes covering this exact current-content fingerprint. Reviewer fields remain null."
+      },
       "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
       "sourceIdentity": [
         [
@@ -490,6 +517,34 @@
         "mediaAndProvenance": "Existing application-owned CC0 stylized marker retained; no source photography copied. Stable species IDs, original source IDs, citation references and original access dates retained; inspection date recorded separately.",
         "limitations": "Traits are not exhaustive life-stage coverage. An omitted trait or locality is unknown, not evidence of absence.",
         "comparison": "French Museum Biology / Coloration supports dark adult fins and golden scale margins. Removed the negative crown-absence claim; comparison explicitly limited to adults."
+      },
+      "finalEvidenceAssessment": {
+        "type": "automated source verification, not a human decision",
+        "identity": "Current scientific name agrees with FishBase heading and Museum Taxonomy. Queen Museum classification spelling ciliarus is not adopted.",
+        "measurements": {
+          "disposition": "corroborated; human signoff outstanding",
+          "assessment": "FishBase Size reference 4858 gives 45 cm TL, Environment reference 9710 gives 1–70 m. Museum Biology / Size and Habitat corroborate maximum length and depth.",
+          "references": [
+            "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+            "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/"
+          ]
+        },
+        "localityAndOccurrence": {
+          "disposition": "source support verified; human signoff outstanding",
+          "assessment": "Museum Geographical Distribution supports broad Caribbean abundance. Keep locality enumeration empty; do not infer specific island occurrence.",
+          "reference": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/"
+        },
+        "identification": {
+          "disposition": "source support verified; human signoff outstanding",
+          "assessment": "FishBase Short description references 26938 and 13442 support forehead and pectoral-base spots and adult colors. Queen Museum Coloration and French Museum Coloration support the adult comparison. Juvenile coverage is explicitly incomplete.",
+          "references": [
+            "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+            "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+            "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/"
+          ]
+        },
+        "correctionsThisPass": [],
+        "remainingRequirement": "A real human must accept or revise the documented interpretations/limitations and supply verified decision, identity, actual review date and notes covering this exact current-content fingerprint. Reviewer fields remain null."
       },
       "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
       "sourceIdentity": [
