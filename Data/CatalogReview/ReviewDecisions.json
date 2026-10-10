@@ -117,6 +117,295 @@
         "Approve Fishes of Australia as authoritative replacement for unavailable original book p. 381 (PDF p. 382), including 15 cm TL / 0–80 m recorded limits versus transcription 16 cm / to 20 m; 20 m describes usual habitat, not maximum occurrence.",
         "Reconcile original identification text reporting 17 dorsal spines with Fishes of Australia 17–18 and independently verify taxonomy, range and full corrected fingerprint before publication."
       ]
+    },
+    {
+      "speciesID": "b932ea57-be9a-54c9-9036-656dc49e5e2e",
+      "sourceIdentity": [
+        [
+          "SRC-3BEEF34E",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 45 (PDF p. 46)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:6ee3fae754703ff6d9a4f764a77e458e55d7549a7144f3f899565e55a00ac8f4",
+      "corrections": {
+        "markings": [
+          "patches"
+        ],
+        "bodyShapes": [
+          "compressed"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-3BEEF34E",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 45.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 45 (PDF p. 46)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FB-ACANTHURUS-OLIVACEUS",
+            "sourceName": "FishBase. Acanthurus olivaceus species account.",
+            "sourceURL": "https://www.fishbase.se/summary/Acanthurus-olivaceus.html",
+            "citationReference": "Short description; body shape",
+            "reviewedFields": [
+              "markings",
+              "bodyShapes"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
+      "unresolvedQuestions": [
+        "Independent full-content human review remains required; only the listed trait fields were inspected in this pass."
+      ]
+    },
+    {
+      "speciesID": "987b3653-d83f-54a0-afcf-0b48c75c635e",
+      "sourceIdentity": [
+        [
+          "SRC-8AA8CA6B",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:b7af9fc7e0d93121493894c6a4382beeac8bac6e3f127b8d3c7b47c814d0f0dc",
+      "corrections": {
+        "behaviors": [
+          "feeding",
+          "schooling"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-8AA8CA6B",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 408.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FB-ODONUS-NIGER",
+            "sourceName": "FishBase. Odonus niger species account.",
+            "sourceURL": "https://www.fishbase.se/summary/Odonus-niger.html",
+            "citationReference": "Biology, refs 48637 and 9770",
+            "reviewedFields": [
+              "behaviors"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": null
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
+      "unresolvedQuestions": [
+        "Independent full-content human review remains required; only the listed trait fields were inspected in this pass."
+      ]
+    },
+    {
+      "speciesID": "12135912-59af-5b63-9015-67e636beea7c",
+      "sourceIdentity": [
+        [
+          "SRC-222174AE",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:274112e1b9398de728bd8241cf8cc35c5915449d97f775b6cda5c34dc38ead04",
+      "corrections": {
+        "colors": [
+          "black",
+          "brown",
+          "white",
+          "yellow"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-222174AE",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 408.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 408 (PDF p. 409)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FOA-765",
+            "sourceName": "Bray, D.J. Melichthys vidua. Fishes of Australia, Museums Victoria.",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/765",
+            "citationReference": "Summary",
+            "reviewedFields": [
+              "colors"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
+      "unresolvedQuestions": [
+        "Independent full-content human review remains required; only the listed trait fields were inspected in this pass."
+      ]
+    },
+    {
+      "speciesID": "c059528c-f884-5b96-b67b-d912a33846b1",
+      "sourceIdentity": [
+        [
+          "SRC-E164A444",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 65 (PDF p. 66)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:d4a4e24170d807d03c35171edbb275ba36acf5e9df0daa63ca8362374c93c00e",
+      "corrections": {
+        "colors": [
+          "black",
+          "orange",
+          "red",
+          "white",
+          "yellow"
+        ],
+        "markings": [
+          "stripes"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-E164A444",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 65.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 65 (PDF p. 66)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FOA-1274",
+            "sourceName": "Bray, D.J. 2025. Amphiprion melanopus. Fishes of Australia, Museums Victoria.",
+            "sourceURL": "https://fishesofaustralia.net.au/home/species/1274",
+            "citationReference": "Summary; Colour",
+            "reviewedFields": [
+              "colors",
+              "markings"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
+      "unresolvedQuestions": [
+        "Independent full-content human review remains required; only the listed trait fields were inspected in this pass."
+      ]
+    },
+    {
+      "speciesID": "87727436-cafc-58b3-8818-f77fcbf554b7",
+      "sourceIdentity": [
+        [
+          "SRC-2D889F83",
+          "Reef Fish Identification: Tropical Pacific, species account book p. 67 (PDF p. 68)"
+        ]
+      ],
+      "reviewedContentFingerprint": "sha256:5eef9acd84b28e5618acc422d75dfa90ced25216d34322505ea106197df72a74",
+      "corrections": {
+        "colors": [
+          "brown",
+          "gray",
+          "red",
+          "white"
+        ],
+        "markings": [
+          "spines",
+          "stripes"
+        ],
+        "dataSources": [
+          {
+            "stableSourceID": "SRC-2D889F83",
+            "sourceName": "Allen, Gerald R.; Steene, Roger; Humann, Paul; DeLoach, Ned. Reef Fish Identification: Tropical Pacific. New World Publications, Inc. / Odyssey Publishing. First edition, October 2003. ISBN 1-878348-36-1. Species account p. 67.",
+            "sourceURL": "",
+            "citationReference": "Reef Fish Identification: Tropical Pacific, species account book p. 67 (PDF p. 68)",
+            "reviewedFields": [
+              "printed common/scientific name",
+              "category/family text",
+              "maximum size",
+              "depth",
+              "identification description",
+              "habitat/behavior",
+              "distribution/range",
+              "photo locator"
+            ],
+            "accessedDate": "2026-08-13T00:00:00Z",
+            "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+          },
+          {
+            "stableSourceID": "FOA-378",
+            "sourceName": "Bray, D.J. 2021. Amphiprion biaculeatus. Fishes of Australia, Museums Victoria.",
+            "sourceURL": "https://fishesofaustralia.net.au/Home/species/378",
+            "citationReference": "Summary",
+            "reviewedFields": [
+              "colors",
+              "markings"
+            ],
+            "accessedDate": "2026-10-09T00:00:00Z",
+            "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
+          }
+        ]
+      },
+      "decision": "draft",
+      "reviewerIdentity": null,
+      "reviewDate": null,
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
+      "unresolvedQuestions": [
+        "Independent full-content human review remains required; only the listed trait fields were inspected in this pass."
+      ]
     }
   ]
 }

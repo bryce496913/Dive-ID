@@ -161,3 +161,34 @@ final class ObservationDomainPolicyTests: XCTestCase {
         }
     }
 }
+
+final class ObservationEvidenceScopeTests: XCTestCase {
+    func testMeasurementRoleWordsDoNotBecomeShapeOrHabitat() async {
+        for text in ["a fish 5 cm long at 8 m deep", "🐠 a fish about 2 inches long at 20 feet deep"] {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertNotNil(observation.approximateSizeCentimeters)
+            XCTAssertNotNil(observation.approximateDepthMeters)
+            XCTAssertFalse(observation.bodyShapes.contains("elongated"), text)
+            XCTAssertFalse(observation.habitats.contains("deep"), text)
+        }
+        let independent = await LocalObservationParser().parse("A long fish in deep water, 20 cm long at 40 m deep.")
+        XCTAssertTrue(independent.bodyShapes.contains("elongated"))
+        XCTAssertTrue(independent.habitats.contains("deep"))
+        XCTAssertEqual(independent.approximateSizeCentimeters, 20)
+        XCTAssertEqual(independent.approximateDepthMeters, 40)
+    }
+
+    func testNegatedCompoundCluesDoNotBecomePositiveTraits() async {
+        for text in ["A blue fish with no bright pink tail.", "A blue fish without spots.", "Not a red fish, but a blue fish."] {
+            let observation = await LocalObservationParser().parse(text)
+            XCTAssertEqual(observation.colors, ["blue"], text)
+            XCTAssertFalse(observation.markings.contains("tail"), text)
+            XCTAssertFalse(observation.markings.contains("spots"), text)
+        }
+        let continued = await LocalObservationParser().parse("No stripes but a red patch and blue spots.")
+        XCTAssertEqual(continued.markings, ["patches", "spots"])
+        XCTAssertEqual(continued.colors, ["red", "blue"])
+        let additive = await LocalObservationParser().parse("Not only blue but yellow spots.")
+        XCTAssertEqual(additive.colors, ["blue", "yellow"])
+    }
+}

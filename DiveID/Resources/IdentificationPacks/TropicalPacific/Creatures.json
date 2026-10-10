@@ -15629,8 +15629,12 @@
       "gray",
       "orange"
     ],
-    "markings": [],
-    "bodyShapes": [],
+    "markings": [
+      "patches"
+    ],
+    "bodyShapes": [
+      "compressed"
+    ],
     "habitats": [
       "reef",
       "sand"
@@ -15676,11 +15680,23 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FB-ACANTHURUS-OLIVACEUS",
+        "sourceName": "FishBase. Acanthurus olivaceus species account.",
+        "sourceURL": "https://www.fishbase.se/summary/Acanthurus-olivaceus.html",
+        "citationReference": "Short description; body shape",
+        "reviewedFields": [
+          "markings",
+          "bodyShapes"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -16835,7 +16851,8 @@
     "colors": [
       "black",
       "brown",
-      "white"
+      "white",
+      "yellow"
     ],
     "markings": [
       "tail"
@@ -16885,11 +16902,22 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FOA-765",
+        "sourceName": "Bray, D.J. Melichthys vidua. Fishes of Australia, Museums Victoria.",
+        "sourceURL": "https://fishesofaustralia.net.au/home/species/765",
+        "citationReference": "Summary",
+        "reviewedFields": [
+          "colors"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -17500,9 +17528,13 @@
     "colors": [
       "black",
       "orange",
-      "white"
+      "red",
+      "white",
+      "yellow"
     ],
-    "markings": [],
+    "markings": [
+      "stripes"
+    ],
     "bodyShapes": [],
     "habitats": [
       "anemone",
@@ -17548,11 +17580,23 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FOA-1274",
+        "sourceName": "Bray, D.J. 2025. Amphiprion melanopus. Fishes of Australia, Museums Victoria.",
+        "sourceURL": "https://fishesofaustralia.net.au/home/species/1274",
+        "citationReference": "Summary; Colour",
+        "reviewedFields": [
+          "colors",
+          "markings"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -18111,7 +18155,8 @@
     ],
     "regions": [],
     "behaviors": [
-      "feeding"
+      "feeding",
+      "schooling"
     ],
     "keywords": [],
     "minimumSizeCentimeters": null,
@@ -18150,11 +18195,22 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FB-ODONUS-NIGER",
+        "sourceName": "FishBase. Odonus niger species account.",
+        "sourceURL": "https://www.fishbase.se/summary/Odonus-niger.html",
+        "citationReference": "Biology, refs 48637 and 9770",
+        "reviewedFields": [
+          "behaviors"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": null
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },
@@ -21447,12 +21503,14 @@
       "fish"
     ],
     "colors": [
+      "brown",
       "gray",
       "red",
       "white"
     ],
     "markings": [
-      "spines"
+      "spines",
+      "stripes"
     ],
     "bodyShapes": [],
     "habitats": [
@@ -21497,11 +21555,23 @@
         ],
         "accessedDate": "2026-08-13T00:00:00Z",
         "sourceLicense": "Copyright © New World Publications, Inc. 2003. All rights reserved."
+      },
+      {
+        "stableSourceID": "FOA-378",
+        "sourceName": "Bray, D.J. 2021. Amphiprion biaculeatus. Fishes of Australia, Museums Victoria.",
+        "sourceURL": "https://fishesofaustralia.net.au/Home/species/378",
+        "citationReference": "Summary",
+        "reviewedFields": [
+          "colors",
+          "markings"
+        ],
+        "accessedDate": "2026-10-09T00:00:00Z",
+        "sourceLicense": "Creative Commons Attribution 3.0 Australia (text; images excluded)"
       }
     ],
     "review": {
       "status": "draft",
-      "reviewerNotes": "Scientific name is the source-printed identity, not an independently accepted taxonomy. Source-page and taxonomy review remain required.",
+      "reviewerNotes": "Automated field-specific source inspection on 2026-10-09; see Reports/RankingSourceEvidence.json. Original provenance retained. This correction does not confer publication approval.",
       "reviewDate": null,
       "verifiedBy": null
     },

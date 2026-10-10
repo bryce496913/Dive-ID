@@ -139,6 +139,20 @@ struct LocalSpeciesRanker: SpeciesRanking {
             add(observation.bodyShapes, profile.bodyShapes, weights.bodyShape, &score, &matched)
             add(observation.behaviors, profile.behaviors, weights.behavior, &score, &matched)
             add(observation.tokens, profile.keywords, weights.keyword, &score, &matched)
+            // Partial identity words (for example an animal-group noun) are
+            // available in both engines, even when a draft's keyword list is
+            // empty. They are weak identity evidence, not an exact-name match
+            // or inferred anatomy. Do not count trait words a second time.
+            if !hasExactName {
+                let identityWords = Set(([profile.commonName, profile.scientificName] + profile.aliases)
+                    .flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }
+                    .map(LocalObservationParser.singular))
+                    .subtracting(Self.nonIdentityTerms)
+                    .subtracting(profile.keywords.flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }.map(LocalObservationParser.singular))
+                let hits = observation.tokens.intersection(identityWords).filter { $0.count > 2 }.sorted()
+                score += Double(hits.count) * weights.keyword
+                matched.append(contentsOf: hits.map { "identity term: " + $0 })
+            }
             addVisibleClue(profile.tailShape.map { [$0] } ?? [], label: "tail shape", weight: weights.tailShape, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
             addVisibleClue(profile.mouthAndHeadShape, label: "head and mouth shape", weight: weights.headAndMouth, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
             addVisibleClue(profile.finAndSpineClues, label: "fin and spine clues", weight: weights.finAndSpine, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
@@ -149,7 +163,7 @@ struct LocalSpeciesRanker: SpeciesRanking {
             }
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
             if observation.categories.contains("fish"), profile.categories.contains("turtle") || profile.categories.contains("ray") { score += weights.waterConflict; conflicts.append("animal group") }
-            if !observation.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
+            if !observation.habitats.isEmpty, !profile.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
             // Retrieval is normalized by its declared scale: cosine maps [-1, 1]
             // to [0, 1], while BM25 uses a saturating transform s/(s+3). This
             // avoids adding incompatible raw values. Semantic retrieval can grant
@@ -172,6 +186,15 @@ struct LocalSpeciesRanker: SpeciesRanking {
             return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, retrievalRelevance: candidate.retrievalRelevance, orderingScore: candidate.orderingScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
         }
     }
+
+    private static let nonIdentityTerms: Set<String> = {
+        let traits = CatalogueVocabulary.colors.union(CatalogueVocabulary.markings)
+            .union(CatalogueVocabulary.bodyShapes).union(CatalogueVocabulary.habitats)
+            .union(CatalogueVocabulary.categories).union(CatalogueVocabulary.behaviors)
+            .union(LocalObservationVocabulary.synonyms.values.flatMap { $0 })
+        return Set(traits.flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }
+            .map(LocalObservationParser.singular)).union(LocalObservationVocabulary.stopWords)
+    }()
 
     private static func normalizedRelevance(_ signal: SpeciesRetrievalSignal) -> Double {
         switch signal.scoreKind {

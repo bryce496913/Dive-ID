@@ -218,3 +218,107 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
         for group in groups { print("V05_EVALUATION \(group["access"]!) \(group["requestedEngine"]!) \(group["counts"]!)") }
     }
 }
+
+extension V05DevelopmentEvaluationTests {
+    /// Opt-in diagnostics: the failure list comes from a fresh evaluation report,
+    /// never a hardcoded species list. Singleton ranking exposes scores outside
+    /// the normal ten-result presentation boundary without increasing app limits.
+    @MainActor
+    func testTraceRetrievedRankFailures() async throws {
+        guard let baselinePath = ProcessInfo.processInfo.environment["DIVEID_RANK_TRACE_BASELINE"],
+              let outputPath = ProcessInfo.processInfo.environment["DIVEID_RANK_TRACE_REPORT"] else {
+            throw XCTSkip("Set DIVEID_RANK_TRACE_BASELINE and DIVEID_RANK_TRACE_REPORT for detailed ranking evidence")
+        }
+        let baseline = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: baselinePath))) as? [String: Any])
+        let groups = try XCTUnwrap(baseline["groups"] as? [[String: Any]])
+        let failedIDs = Set(groups.flatMap { $0["cases"] as? [[String: Any]] ?? [] }.filter {
+            ($0["failures"] as? [String] ?? []).contains("rankRequirement")
+        }.compactMap { $0["id"] as? String })
+        let fixture = try JSONDecoder().decode(V05Fixture.self, from: Data(contentsOf: TestResources.fixture(named: "V05Development.v2")))
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        var rows: [[String: Any]] = []
+        for item in fixture.cases where failedIDs.contains(item.id) {
+            let pack = try await repository.loadPack(id: item.selectedPackID)
+            let observation = await LocalObservationParser().parse(item.description)
+            let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+            let retrieved = try await BM25SpeciesCandidateRetriever().retrieve(query: item.description, documents: documents, limit: pack.profiles.count)
+            let accepted = Set(item.expectedSpeciesIDs + item.acceptableSpeciesIDs)
+            for structured in [false, true] {
+                let pool = structured ? pack.profiles.map(\.id) : Array(retrieved.prefix(50).map(\.speciesID))
+                var all: [RankedLocalSpecies] = []
+                var singletons: [UUID: RankedLocalSpecies] = [:]
+                for profile in pack.profiles where pool.contains(profile.id) || accepted.contains(profile.id) {
+                    let retrievalIndex = retrieved.firstIndex { $0.speciesID == profile.id }
+                    let signal: SpeciesRetrievalSignal? = structured ? nil : retrievalIndex.map { index in
+                        let r = retrieved[index]
+                        return .init(source: r.evidence, scoreKind: r.scoreKind, score: r.retrievalScore, rank: index + 1, evidence: r.matchedTerms)
+                    }
+                    let ranked = try await LocalSpeciesRanker().rank(input: .init(description: item.description, observation: observation,
+                        candidates: [.init(speciesID: profile.id, profile: profile, retrieval: signal)]))
+                    if let value = ranked.first {
+                        singletons[profile.id] = value
+                        if pool.contains(profile.id) { all.append(value) }
+                    }
+                }
+                all.sort {
+                    if $0.orderingScore != $1.orderingScore { return $0.orderingScore > $1.orderingScore }
+                    if $0.profile.commonName != $1.profile.commonName { return $0.profile.commonName < $1.profile.commonName }
+                    return $0.profile.id.uuidString < $1.profile.id.uuidString
+                }
+                let engine: any DescriptionSearching = structured ? StructuredDescriptionSearchEngine() : HybridDescriptionSearchEngine()
+                let result = try await engine.search(description: item.description, pack: pack)
+                let displayed = try await LocalMarineLifeIdentificationService(catalogRepository: repository, searchEngine: engine).identify(
+                    request: .init(source: .description(item.description), context: .init(region: item.selectedPackID)), processedPhoto: nil)
+                XCTAssertEqual(result.candidates.map(\.profile.id), Array(all.prefix(10).map(\.profile.id)), item.id)
+                XCTAssertEqual(displayed.map(\.species.id), result.candidates.map(\.profile.id), item.id)
+                let store = InMemoryIdentificationSessionStore()
+                let sessionID = try await store.createSession(for: .init(source: .description(item.description), context: .init(region: item.selectedPackID)))
+                let model = IdentificationResultsViewModel(sessionID: sessionID,
+                    service: V05TraceReplayService(matches: displayed), sessionStore: store, catalog: repository)
+                await model.loadIfNeeded()
+                let presented: [IdentificationMatch]
+                switch model.state {
+                case .loaded(let values): presented = values
+                case .empty: presented = []
+                default: XCTFail("Result normalization did not complete: \(item.id)"); presented = []
+                }
+                XCTAssertEqual(presented.map(\.species.id), displayed.map(\.species.id), item.id)
+                XCTAssertEqual(presented.map(\.rank), displayed.map(\.rank), item.id)
+                XCTAssertEqual(presented.map(\.score), displayed.map(\.score), item.id)
+                func evidence(_ id: UUID) -> [String: Any] {
+                    let r = retrieved.firstIndex { $0.speciesID == id }
+                    let v = singletons[id]
+                    return ["id": id.uuidString, "name": pack.profiles.first { $0.id == id }!.commonName,
+                        "lexicalRetrievalRank": r.map { $0 + 1 } as Any? ?? NSNull(),
+                        "lexicalRetrievalScore": r.map { retrieved[$0].retrievalScore } as Any? ?? NSNull(),
+                        "retrievalTerms": r.map { retrieved[$0].matchedTerms } ?? [],
+                        "candidateLimit": structured ? pack.profiles.count : 50,
+                        "survivedCandidateSelection": pool.contains(id), "biologicallyEligible": v != nil,
+                        "eligibilityEvaluation": pool.contains(id) ? "selected-candidate" : "diagnostic-only-outside-pool",
+                        "support": v?.matchedClues ?? [], "contradictions": v?.conflictingClues ?? [],
+                        "rawBiologicalScore": v?.rawScore as Any? ?? NSNull(),
+                        "normalizedRetrievalRelevance": v?.retrievalRelevance as Any? ?? NSNull(),
+                        "orderingScore": v?.orderingScore as Any? ?? NSNull(),
+                        "relativeMatchScore": v?.score as Any? ?? NSNull(),
+                        "informationLevel": v?.informationLevel.rawValue as Any? ?? NSNull(),
+                        "rankBeforePresentationLimit": all.firstIndex { $0.profile.id == id }.map { $0 + 1 } as Any? ?? NSNull(),
+                        "displayedRank": displayed.firstIndex { $0.species.id == id }.map { $0 + 1 } as Any? ?? NSNull()]
+                }
+                rows.append(["id": item.id, "description": item.description, "engine": structured ? "structured-full-pack" : "production-bm25-50-biological",
+                    "normalizedText": observation.normalizedText, "tokens": observation.tokens.sorted(),
+                    "categories": observation.categories.sorted(), "colors": observation.colors.sorted(), "markings": observation.markings.sorted(),
+                    "bodyShapes": observation.bodyShapes.sorted(), "habitats": observation.habitats.sorted(), "behaviors": observation.behaviors.sorted(),
+                    "sizeCentimeters": observation.approximateSizeCentimeters as Any? ?? NSNull(), "depthMeters": observation.approximateDepthMeters as Any? ?? NSNull(),
+                    "targets": accepted.sorted { $0.uuidString < $1.uuidString }.map(evidence),
+                    "leaders": all.prefix(10).map { evidence($0.profile.id) }, "servicePreservedOrdering": true, "resultModelPreservedOrderingAndScores": true])
+            }
+        }
+        let data = try JSONSerialization.data(withJSONObject: ["cases": rows], options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
+        try (data + Data([10])).write(to: URL(fileURLWithPath: outputPath))
+    }
+}
+
+private struct V05TraceReplayService: MarineLifeIdentificationService {
+    let matches: [IdentificationMatch]
+    func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] { matches }
+}

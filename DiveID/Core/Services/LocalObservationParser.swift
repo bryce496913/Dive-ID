@@ -8,7 +8,7 @@ enum LocalObservationVocabulary {
     static let stopWords: Set<String> = ["a", "an", "and", "the", "with", "near", "on", "in", "at", "of", "to", "was", "it", "about", "approximately", "saw", "seen"]
     static let synonyms: [String: Set<String>] = [
         "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish"], "white": ["white"], "black": ["black", "dark"], "brown": ["brown"], "olive": ["olive"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
-        "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines", "spiny", "spiky", "needles"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"], "beak": ["beak", "beaked", "beak-like"],
+        "patches": ["patch", "patches"], "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines", "spiny", "spiky", "needles"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"], "beak": ["beak", "beaked", "beak-like"],
         "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
         "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"], "robust": ["robust"],
         "fish": ["fish"], "ray": ["ray", "eagle ray", "flat thing"], "turtle": ["turtle"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
@@ -19,18 +19,41 @@ enum LocalObservationVocabulary {
 
 struct LocalObservationParser: ObservationParsing {
     func parse(_ description: String) async -> ParsedObservation {
-        let normalized = Self.normalize(description)
+        let affirmative = Self.affirmativeEvidence(in: description)
+        let normalized = Self.normalize(affirmative)
+        let traitText = Self.normalize(Self.withoutMeasurementRoleWords(in: affirmative))
         // Keep decimal punctuation in `normalized` for measurement parsing, but do
         // not let sentence punctuation become part of an observation token.
-        let raw = normalized.split { !$0.isLetter && !$0.isNumber }.map(String.init)
+        let raw = traitText.split { !$0.isLetter && !$0.isNumber }.map(String.init)
         var tokens = Set(raw.map(Self.singular).filter { !LocalObservationVocabulary.stopWords.contains($0) })
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
-        for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: normalized) }) { tokens.insert(key) }
+        for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: traitText) }) { tokens.insert(key) }
         // Measurement ranges must refer to the user's original string. In
         // particular, normalization can remove multi-byte Unicode characters
         // and make ranges from the normalized string invalid for the source.
-        let measurements = Self.measurements(in: description, tokens: tokens)
+        let measurements = Self.measurements(in: affirmative, tokens: tokens)
         return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: RegionCompatibilityResolver.locations(in: description), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters, domainContradiction: MarineObservationDomainPolicy.contradiction(in: description))
+    }
+
+    /// Negated clauses do not assert positive traits or exact species names.
+    /// Keep the boundary at punctuation/conjunctions so later positive evidence
+    /// survives. This does not infer absence of every component of a compound
+    /// phrase: "no pink tail" is not evidence that an animal has no tail.
+    static func affirmativeEvidence(in text: String) -> String {
+        text.replacingOccurrences(of: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#,
+            with: " ", options: [.regularExpression, .caseInsensitive])
+    }
+
+    private static func withoutMeasurementRoleWords(in text: String) -> String {
+        var result = text
+        // Work backwards in the original string to preserve all other ranges.
+        for candidate in resolvedMeasurementCandidates(in: text).reversed() {
+            let suffix = text[candidate.sourceRange.upperBound...]
+            if let role = suffix.range(of: #"^\s*(?:long|length|deep|depth)\b"#, options: [.regularExpression, .caseInsensitive]) {
+                result.replaceSubrange(role, with: " ")
+            }
+        }
+        return result
     }
 
     static func normalize(_ text: String) -> String {
