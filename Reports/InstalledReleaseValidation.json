@@ -1,0 +1,356 @@
+{
+  "candidateSHA": "1a8c36e3c59b7195bbca78f4261abe515297f528",
+  "candidateTree": "5fb53e68d78cd29a40a09b50bb74f0b62716641c",
+  "overall": "blocked: no approved catalogue and no local Mac/iPhone",
+  "version": "0.5",
+  "build": "2",
+  "bundleIdentifier": "com.brycecameron.DiveID",
+  "signingTeam": "7ZAXQ2686Z",
+  "signingStyle": "Automatic",
+  "localPlatform": "Linux",
+  "xcodeVersion": null,
+  "physicalIPhone": null,
+  "iOSVersion": null,
+  "staticInspection": "PASS: Release source uses publication access and production BM25 with biological ranking; no DEBUG in project Release configuration. Resolved device settings unexecuted.",
+  "packs": {
+    "caribbean": {
+      "included": 8,
+      "draft": 8,
+      "approvedIDs": []
+    },
+    "tropical-pacific": {
+      "included": 384,
+      "draft": 384,
+      "approvedIDs": []
+    }
+  },
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "cases": [
+    {
+      "id": "v05-01-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-01-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-02-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-02-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-03-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-03-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-04-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-04-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-05-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-05-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-06-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-06-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-07-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-07-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-08-diagnostic",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-08-paraphrase",
+      "selectedPackID": "caribbean",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-09-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-09-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-10-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-10-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-11-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-11-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-12-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-12-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-13-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-13-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-14-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-14-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-15-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-15-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-16-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-16-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-17-diagnostic",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-17-paraphrase",
+      "selectedPackID": "tropical-pacific",
+      "status": "inapplicable: expected species outside approved subset",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-ambiguous-angelfish",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-ambiguous-trigger",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-caribbean-frog",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-caribbean-vague",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-caribbean-terrestrial",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-tropical-pacific-frog",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-tropical-pacific-vague",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-tropical-pacific-terrestrial",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-region-1",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-region-2",
+      "selectedPackID": "caribbean",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-region-3",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    },
+    {
+      "id": "v05-region-4",
+      "selectedPackID": "tropical-pacific",
+      "status": "blocked: no approved selected pack",
+      "deviceOutcome": "unexecuted"
+    }
+  ],
+  "deviceChecks": {
+    "signedReleaseBuild": "unexecuted",
+    "resolvedSettings": "unexecuted",
+    "packagedResources": "unexecuted",
+    "installedCounts": "unexecuted",
+    "runtimeEngineTrace": "unexecuted",
+    "positiveRanks": "unexecuted",
+    "locationConflicts": "unexecuted",
+    "domainContradictions": "unexecuted",
+    "ambiguousNoMatch": "unexecuted",
+    "unavailableRegionRecovery": "unexecuted",
+    "saveRelaunchReopenRemove": "unexecuted",
+    "historicalSave": "unexecuted",
+    "offlineSearch": "unexecuted",
+    "coldWarmLatency": "unexecuted"
+  },
+  "latencySamples": [],
+  "hostedRun": "https://github.com/bryce496913/Dive-ID/actions/runs/38030672074",
+  "hostedSnapshot": "completed Xcode job: failure",
+  "instructions": "Docs/InstalledReleaseValidation.md",
+  "hosted": {
+    "xcode": "16.4 (16F6)",
+    "configuration": "Debug simulator build; Release settings also validated",
+    "debugSettings": "pass",
+    "releaseSettings": "pass",
+    "build": "fail",
+    "unit": "skipped after build failure; 0 executed",
+    "packaging": "skipped after build failure; 0 executed",
+    "ui": "skipped after build failure; 0 executed",
+    "buildErrors": [
+      "DiveIDTests.swift:59,66: main-actor isolated message method called synchronously from nonisolated tests",
+      "DiveIDTests.swift:514,515,521: assignments to immutable colors/bodyShapes"
+    ],
+    "macOSSwiftPM": {
+      "tests": 126,
+      "skipped": 2,
+      "assertionFailures": 2,
+      "case": "v05-17-paraphrase, BM25 and structured diagnostic engines"
+    },
+    "logsAndResults": "Uploaded xcode-test-results and swiftpm-macos-15-logs artifacts in linked run; not physical device evidence"
+  },
+  "localPreparationChecks": {
+    "CI tooling": {
+      "passed": 5
+    },
+    "evaluation contract": {
+      "passed": 3
+    },
+    "diffWhitespace": "pass"
+  }
+}
