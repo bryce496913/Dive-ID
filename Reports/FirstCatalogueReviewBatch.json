@@ -23,7 +23,7 @@
         "summary": "A western Atlantic surgeonfish; adults are blue while juveniles are bright yellow and intermediate fish may show both colors.",
         "distinguishingFeatures": [
           "Oval blue adult body",
-          "Small terminal mouth",
+          "Small mouth low on the head",
           "Yellow juvenile or transitional blue-and-yellow phases",
           "Sharp caudal peduncle spine"
         ],
@@ -66,7 +66,7 @@
       "originalText": {
         "identificationText": [
           "Oval blue adult body",
-          "Small terminal mouth",
+          "Small mouth low on the head",
           "Yellow juvenile or transitional blue-and-yellow phases",
           "Sharp caudal peduncle spine"
         ]
@@ -74,7 +74,7 @@
       "proposedCorrections": {},
       "unresolvedQuestions": [
         "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
       "fieldEvidence": [
@@ -102,7 +102,7 @@
       "reviewDecision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewedContentFingerprint": "sha256:02f48c206737f65b40dcf18034883b68fb587b62476e33cb48a5900f462c34b0",
+      "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
       "sourceIdentity": [
         [
           "00000000-0000-0000-0000-000000000003:source:1",
@@ -575,6 +575,15 @@
             "visualCharacteristics",
             "habitat"
           ]
+        },
+        {
+          "stableSourceID": "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+          "sourceName": "Florida Museum French Angelfish species profile",
+          "sourceURL": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+          "citationReference": "Biology: Coloration",
+          "reviewedFields": [
+            "similarSpecies"
+          ]
         }
       ],
       "originalText": {
@@ -586,8 +595,8 @@
       },
       "proposedCorrections": {},
       "unresolvedQuestions": [
-        "Confirm forehead/pectoral-base trait coding and 1–70 m limits; independently check the French Angelfish comparison before publication.",
-        "Verify the retained subregion list and occurrence frequency against locality evidence; broad geographic range alone does not establish every named island.",
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
         "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
       ],
       "fieldEvidence": [
@@ -615,7 +624,7 @@
       "reviewDecision": "draft",
       "reviewerIdentity": null,
       "reviewDate": null,
-      "reviewedContentFingerprint": "sha256:dded4121be42e6020a7bee8a5873a0b676df1fa82897a76426f0a1516ecf64bd",
+      "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
       "sourceIdentity": [
         [
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:1",
@@ -624,6 +633,10 @@
         [
           "fc213eff-6ba6-53ab-b288-f6e654299e68:source:2",
           "2"
+        ],
+        [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68:source:french-comparison",
+          "Biology: Coloration"
         ]
       ],
       "sourceInspectionReferences": [
@@ -647,6 +660,13 @@
             "Habitat",
             "Biology: Distinctive Features, Coloration, Size, Food Habits",
             "Taxonomy"
+          ]
+        },
+        {
+          "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/",
+          "role": "authoritative supplementary account for adult comparison only",
+          "sections": [
+            "Biology: Coloration"
           ]
         }
       ]
