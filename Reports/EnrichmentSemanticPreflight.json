@@ -1,0 +1,117 @@
+{
+  "fixtureSHA256": "cea70b8ac18076319daf69e36444ba93c7f0897ae84df8238606ae1a297ff21f",
+  "confidenceMeaning": "relative match score; not calibrated probability",
+  "candidateCommit": "dce8db317736caff2d425e1d347a1ca850e035f6",
+  "provenance": "Existing synthetic implementation-exposed regression data; not independent human evidence",
+  "groups": [
+    {
+      "access": "experimentalDevelopment",
+      "requestedEngine": "production-bm25-50-biological",
+      "counts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 46,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 6,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 0,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 27,
+        "top3": 32,
+        "top10": 34
+      }
+    },
+    {
+      "access": "experimentalDevelopment",
+      "requestedEngine": "structured-full-pack",
+      "counts": {
+        "actualEngineInvocations": 46,
+        "ambiguousAccepted": 2,
+        "ambiguousDenominator": 2,
+        "candidateRecallHits": 34,
+        "confidenceCompliant": 46,
+        "confidenceDenominator": 46,
+        "correctNoMatch": 6,
+        "correctRegionConflicts": 4,
+        "coverageBlockedCases": 0,
+        "eligibleCases": 46,
+        "falsePositives": 0,
+        "noMatchDenominator": 6,
+        "positiveDenominator": 34,
+        "regionConflictDenominator": 4,
+        "top1": 24,
+        "top3": 31,
+        "top10": 34
+      }
+    },
+    {
+      "access": "publication",
+      "requestedEngine": "production-bm25-50-biological",
+      "counts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      }
+    },
+    {
+      "access": "publication",
+      "requestedEngine": "structured-full-pack",
+      "counts": {
+        "actualEngineInvocations": 0,
+        "ambiguousAccepted": 0,
+        "ambiguousDenominator": 0,
+        "candidateRecallHits": 0,
+        "confidenceCompliant": 0,
+        "confidenceDenominator": 0,
+        "correctNoMatch": 0,
+        "correctRegionConflicts": 0,
+        "coverageBlockedCases": 46,
+        "eligibleCases": 0,
+        "falsePositives": 0,
+        "noMatchDenominator": 0,
+        "positiveDenominator": 0,
+        "regionConflictDenominator": 0,
+        "top1": 0,
+        "top3": 0,
+        "top10": 0
+      }
+    }
+  ],
+  "caseAcceptanceFailures": 0,
+  "catalogueFiles": {
+    "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "02b10d60656b2b04cd4f8b1183594e485155bd23ab3638bccf3adf295309f6bd",
+    "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "bff708376553ca6a9967e2cb85e3a28c9ba65af6c8bf0547225dccd17efb01d2",
+    "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "2c0b83d1b76d6e362e0d3e0e86d5f62b1a49a8c3d04bf66e37d9ee9ea27d1961",
+    "DiveID/Resources/IdentificationPacks/TropicalPacific/PackManifest.json": "fc349035dc21ff034f80972e35d720be729edf5060cf98366344ab387b739bf9"
+  },
+  "encoderLockSHA256": "3e3d212c588ece68371be9f34580bdb2c8de5ba74a7ec4bfd9d70f6e604acf2b",
+  "independentDataset": null,
+  "enrichedCatalogue": null,
+  "semanticComparison": {
+    "status": "unexecuted",
+    "requested": 0,
+    "genuineCoreML": 0,
+    "fallback": 0,
+    "note": "Zero requests is not a successful zero-fallback evaluation"
+  }
+}
