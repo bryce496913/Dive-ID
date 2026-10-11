@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": "independent-v1",
+  "status": "criteria specified before collection and before independent evaluation",
+  "language": "en",
+  "engine": "production-bm25-50-biological",
+  "candidateLimit": 50,
+  "displayLimit": 10,
+  "assignment": "SHA256('independent-v1:' + cohortID), first 8 hex digits modulo 5: zero holdout, otherwise development. All linked authors/encounters share a cohort. Any exposure promotes the entire cohort to development permanently; never rebalance after observing results.",
+  "positiveRankBound": 3,
+  "ambiguousRankBound": 10,
+  "ambiguousMaximumConfidence": 0.64,
+  "minimumRates": {
+    "candidateRecall": 0.85,
+    "top1": 0.4,
+    "top3": 0.6,
+    "top10": 0.8,
+    "noMatchCorrect": 1.0,
+    "ambiguityCorrect": 1.0,
+    "regionConflictCorrect": 1.0,
+    "confidenceCompliant": 1.0
+  },
+  "minimumSamplePerSplitAndAccess": {"positive": 30, "noMatch": 10, "ambiguous": 10, "regionConflict": 10},
+  "rationale": "Carry forward provisional development floors before seeing human cases, plus strict abstention/ambiguity/confidence contracts. These are screening criteria, not a calibrated accuracy or safety guarantee. Require 30 positives and 10 of each policy class before a pass/fail conclusion; smaller cohorts report descriptive metrics and insufficient sample. The 12-observation pilot checks collection and labelling only.",
+  "confidence": "Finite relativeMatch strengths within [0,1], limited observations capped at 0.64, ambiguous cases capped at 0.64; not probabilities. Publish numerator/denominator and uncertainty caveats, never 0/0 as a pass.",
+  "coverage": "Evaluate development pack and real publication subset separately. No approved target or unavailable selected pack is coverage-blocked, not a search failure or successful no-match. Unresolved labels are retained and excluded from quality denominators.",
+  "holdoutDisclosure": "Only custodian sees wording, identities, case-level ranks/errors and raw logs. Development output receives aggregate numerators/denominators only. Do not enrich or tune from held-out cases; move the entire exposed cohort to development in a new dataset version and retain the old frozen baseline.",
+  "independence": "Authorship attestation and separate identity verification are required, but software cannot prove human independence. No model-authored examples are accepted as independent data. No collection outreach is authorized by this protocol."
+}
