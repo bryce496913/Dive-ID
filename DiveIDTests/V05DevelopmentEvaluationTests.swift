@@ -13,6 +13,7 @@ private struct V05Case: Decodable {
     let maximumConfidence: Double
     let provenance: String
     let evidenceIDs: [String]
+    let split: String?
 }
 
 private struct V05Fixture: Decodable {
@@ -321,4 +322,77 @@ extension V05DevelopmentEvaluationTests {
 private struct V05TraceReplayService: MarineLifeIdentificationService {
     let matches: [IdentificationMatch]
     func identify(request: IdentificationRequest, processedPhoto: ProcessedPhoto?) async throws -> [IdentificationMatch] { matches }
+}
+
+
+extension V05DevelopmentEvaluationTests {
+    /// External custodian data only. No per-case assertions or console diagnostics
+    /// reveal holdout text/identities. The driver retains raw results privately.
+    func testIndependentCustodianBaseline() async throws {
+        guard let input = ProcessInfo.processInfo.environment["DIVEID_INDEPENDENT_INPUT"],
+              let output = ProcessInfo.processInfo.environment["DIVEID_INDEPENDENT_OUTPUT"] else {
+            throw XCTSkip("Independent observations have not been supplied")
+        }
+        XCTAssertEqual(DescriptionRetrievalEngine.productionDefault, .productionBM25)
+        let fixture = try JSONDecoder().decode(V05Fixture.self, from: Data(contentsOf: URL(fileURLWithPath: input)))
+        var rows: [[String: Any]] = []
+        for publication in [false, true] {
+            let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
+                resourceResolutionMode: .bundleOnly, access: publication ? .publication : .experimentalDevelopment)
+            var packs: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
+            for metadata in try await repository.availablePacks() {
+                packs[metadata.id] = try await repository.loadPack(id: metadata.id)
+            }
+            let sizes = Dictionary(uniqueKeysWithValues: [OfflineIdentificationPackID.caribbean, .tropicalPacific].map {
+                ($0.rawValue, packs[$0]?.profiles.count ?? 0)
+            })
+            let capture = V05Capture()
+            let service = LocalMarineLifeIdentificationService(catalogRepository: repository,
+                searchEngine: V05Engine(base: ConfiguredDescriptionSearchEngine(selection: .productionDefault,
+                    bundle: TestResources.productionBundle), capture: capture))
+            for item in fixture.cases {
+                let accepted = Set(item.expectedSpeciesIDs + item.acceptableSpeciesIDs)
+                let known = Set(packs[item.selectedPackID]?.profiles.map(\.id) ?? [])
+                let blocked = packs[item.selectedPackID] == nil || (!accepted.isEmpty && accepted.isDisjoint(with: known))
+                var matches: [IdentificationMatch] = []
+                var errorKind: String? = nil
+                if !blocked && item.kind != "unresolved" {
+                    do {
+                        matches = try await service.identify(request: .init(source: .description(item.description),
+                            context: .init(region: item.selectedPackID)), processedPhoto: nil)
+                    } catch let error as LocalIdentificationError {
+                        if case .regionMismatch = error { errorKind = "regionConflict" }
+                        else { errorKind = "serviceError" }
+                    } catch { errorKind = "serviceError" }
+                }
+                let captured = await capture.take()
+                let rank = matches.firstIndex { accepted.contains($0.species.id) }.map { $0 + 1 }
+                let confidenceOK = matches.allSatisfy { $0.score.isFinite && (0...item.maximumConfidence).contains($0.score)
+                    && $0.scoreKind == .relativeMatch && ($0.informationLevel != .limited || $0.score <= 0.64) }
+                let correct: Bool
+                switch item.kind {
+                case "identification": correct = errorKind == nil && (rank.map { $0 <= 3 } ?? false)
+                case "ambiguous": correct = errorKind == nil && confidenceOK && (matches.isEmpty || (rank.map { $0 <= 10 } ?? false))
+                case "noMatch": correct = errorKind == nil && matches.isEmpty
+                case "regionConflict": correct = errorKind == "regionConflict"
+                default: correct = false
+                }
+                rows.append(["id":item.id, "split":item.split ?? "development", "kind":item.kind,
+                    "access":publication ? "publication" : "experimentalDevelopment", "blocked":blocked,
+                    "packSizes":sizes, "engineInvoked":captured.started,
+                    "actualEngine":captured.started ? "production-bm25-50-biological" : "not-executed",
+                    "recalled":!accepted.isDisjoint(with: captured.result?.retrievedSpeciesIDs ?? []),
+                    "rank":rank as Any? ?? NSNull(), "outcomeCorrect":!blocked && correct, "confidenceOK":confidenceOK,
+                    "serviceError":errorKind as Any? ?? NSNull(), "returnedCount":matches.count,
+                    "relativeStrengths":matches.map(\.score),
+                    "candidateRanks":Dictionary(uniqueKeysWithValues: accepted.compactMap { id in
+                        captured.result?.retrievedSpeciesIDs.firstIndex(of: id).map { (id.uuidString, $0 + 1) }
+                    })])
+            }
+        }
+        let data = try JSONSerialization.data(withJSONObject: ["rows":rows], options: [.sortedKeys])
+        let url = URL(fileURLWithPath: output)
+        try data.write(to: url, options: .withoutOverwriting)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: output)
+    }
 }
