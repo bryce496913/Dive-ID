@@ -53,6 +53,7 @@ struct StubPhotoProcessingService: PhotoProcessingService {
 }
 
 final class DiveIDTests: XCTestCase {
+    @MainActor
     func testCatalogueFailureReleaseMessageRemainsGeneric() {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         XCTAssertEqual(
@@ -61,6 +62,7 @@ final class DiveIDTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testCatalogueFailureDebugMessageShowsOnlyStableCode() {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         let message = IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: true)
@@ -510,15 +512,12 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testCatalogueAcceptsBrownOliveAndRobust() throws {
-        var profile = try productionProfile(named: "Green Sea Turtle")
-        profile.colors = ["brown", "olive"]
-        profile.bodyShapes = ["robust"]
+        let profile = try productionProfile(named: "Green Sea Turtle", overrides: ["colors": ["brown", "olive"], "bodyShapes": ["robust"]])
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
     }
 
     func testCatalogueRejectsUnknownTopLevelColor() throws {
-        var profile = try productionProfile(named: "Green Sea Turtle")
-        profile.colors = ["ultraviolet"]
+        let profile = try productionProfile(named: "Green Sea Turtle", overrides: ["colors": ["ultraviolet"]])
         assertUnknownVocabulary(profile, value: "ultraviolet")
     }
 
@@ -762,11 +761,14 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
 
-    private func productionProfile(named name: String) throws -> LocalSpeciesProfile {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
+    private func productionProfile(named name: String, overrides: [String: [String]] = [:]) throws -> LocalSpeciesProfile {
+        let url = try XCTUnwrap(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
+        let records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [[String: Any]])
+        var record = try XCTUnwrap(records.first { $0["commonName"] as? String == name })
+        // Construct a new decoded fixture; production profile fields remain immutable.
+        for (key, value) in overrides { record[key] = value }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
-        let profiles = try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
-        return try XCTUnwrap(profiles.first { $0.commonName == name })
+        return try decoder.decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: record))
     }
 
     private func variant(colors: [String] = ["brown"], markings: [String] = ["spots"], bodyShapes: [String] = ["robust"]) -> SpeciesAppearanceVariant {
