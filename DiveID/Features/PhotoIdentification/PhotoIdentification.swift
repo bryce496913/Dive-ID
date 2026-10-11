@@ -34,14 +34,15 @@ final class PhotoIdentificationViewModel {
 
     var canSubmit: Bool { processedPhoto != nil && !isLoadingSelection && !isCreatingSession }
 
-    func selectPhoto(loadData: @escaping @Sendable () async throws -> Data) {
+    @discardableResult
+    func selectPhoto(loadData: @escaping @Sendable () async throws -> Data) -> Task<Void, Never> {
         selectionTask?.cancel()
         generation += 1
         let currentGeneration = generation
         processedPhoto = nil
         selectionError = nil
         isLoadingSelection = true
-        selectionTask = Task {
+        let task = Task {
             do {
                 let data = try await loadData()
                 try Task.checkCancellation()
@@ -65,6 +66,8 @@ final class PhotoIdentificationViewModel {
                 isLoadingSelection = false
             }
         }
+        selectionTask = task
+        return task
     }
 
     func cancelSelection() {

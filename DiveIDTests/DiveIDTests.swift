@@ -313,9 +313,8 @@ final class DiveIDTests: XCTestCase {
             photoProcessor: StubPhotoProcessingService(photo: second)
         )
         viewModel.selectionError = .unableToRead
-        viewModel.selectPhoto { Data([22]) }
-        await Task.yield()
-        await Task.yield()
+        let selection = viewModel.selectPhoto { Data([22]) }
+        await selection.value
         XCTAssertEqual(viewModel.processedPhoto, second)
         XCTAssertNil(viewModel.selectionError)
         XCTAssertFalse(viewModel.isLoadingSelection)

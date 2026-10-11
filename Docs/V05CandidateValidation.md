@@ -16,12 +16,20 @@ for `e227ad3b616fda09b90421e0fb4c56efc5ff5cad` passed Debug/Release product
 settings, both SwiftPM jobs and all six Python suites. Hosted build-for-testing
 failed on two actor-isolated formatter calls and immutable profile assignments in
 Xcode-only tests. The repair isolates those tests on MainActor and constructs new
-decoded fixtures without making production fields mutable. Unit/UI execution must
-be confirmed by the repair PR's actual run; portable passes do not establish it.
+decoded fixtures without making production fields mutable. Subsequent hosted runs
+also exposed a retained UserDefaults actor-transfer reference, repository-relative
+fixture paths, obsolete source assertions, lost provenance in copies, and repeated
+species IDs in a sorting fixture. Those repairs preserve the current contracts.
+The Debug diagnostics panel now reserves layout space instead of intercepting search
+controls; both unchanged UI tests passed in run 38139131285. That run still failed a
+photo-selection test that assumed two scheduler yields meant completion. The test now
+awaits the actual returned selection task. All stages must pass on the final SHA;
+portable passes or mixed results from prior commits do not establish acceptance.
 
 ## Record the source and toolchain
 
-Use a clean checkout of the candidate SHA in `Reports/V05CandidateReadiness.json`.
+Use a clean checkout of the exact candidate SHA being validated; older readiness
+reports describe their own recorded commits.
 Record `git rev-parse HEAD`, `git status --short`, `xcodebuild -version`, installed
 SDKs, device OS/build, signed bundle identifier, actual version/build from the built
 Info.plist, and the signing team used. Build 2 only exceeds the known repository
@@ -34,7 +42,7 @@ xcrun simctl list devices available
 xcrun devicectl list devices
 ```
 
-Select an available **iPhone simulator running iOS 18+** by its UDID; do not select
+With Xcode 16.4, select an available **iPhone simulator running iOS 18** by its UDID; do not select
 My Mac, a generic destination for tests, or an unavailable hardcoded model.
 
 ```sh
