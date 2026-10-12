@@ -11,14 +11,15 @@ submitted or published by this repository workflow.
 
 | Pack | Version | Bundled records | Human-reviewed | Publication-eligible |
 | --- | ---: | ---: | ---: | ---: |
-| Caribbean | 3 | 8 | 0 | 0 |
+| Caribbean | 3 | 8 | 2 | 2 |
 | Tropical Pacific | 2 | 384 | 0 | 0 |
 
-All 392 records remain draft. Debug explicitly permits the full development
-catalogue. Release uses only publication-eligible records: **Release currently has
-no searchable regions or species**. Its UI disables new searches and preserves
-access to saved identifications. Do not add `DEBUG` to Release, promote synthetic
-fixtures, or treat search quality as human publication approval.
+Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026;
+390 records remain draft. Debug explicitly permits all 392 development records.
+Release exposes only these two Caribbean species; Tropical Pacific remains
+unavailable. Saved identifications remain accessible independently of search access.
+Do not add `DEBUG` to Release, promote synthetic fixtures, or treat search quality
+as human publication approval.
 
 The production engine is **BM25 retrieval plus biological ranking**, with at most
 50 retrieved candidates and ten displayed matches. Scores describe relative clue

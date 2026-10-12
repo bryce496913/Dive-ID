@@ -1,5 +1,33 @@
 # Catalogue publication and source-review record
 
+## Human decisions applied — 2026-10-12
+
+Bryce explicitly approved both exact PR #99 packets in this task:
+“Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026”.
+`Data/CatalogReview/BryceReview2026-10-12.json` preserves the actual statement,
+source references, resolved questions and approved fingerprints. The supplied date
+has day precision; UTC midnight in the overlay encodes that date, not a known
+review time. No new biological changes or source substitutions accompanied approval.
+
+Both decisions are now `verified` through the validated overlay. Exact Release IDs:
+
+- Atlantic Blue Tang: `00000000-0000-0000-0000-000000000003`
+- Queen Angelfish: `fc213eff-6ba6-53ab-b288-f6e654299e68`
+
+Caribbean: 8 bundled, 2 human-reviewed/eligible, 6 draft. Pacific: 384 bundled,
+0 eligible, all draft. Caribbean is available for publication; Pacific remains
+unavailable. Debug keeps all 392 development records with honest mixed-status labels.
+Validation after approval: all 86 Python tests pass. Debug and optimized Release SwiftPM each run 129 tests
+with 3 documented skips and zero failures. Two complete regenerations are
+byte-identical. Publication evaluation has 4 eligible positive cases: retrieval
+recall 4/4, top-1 3/4, top-3 and top-10 4/4; no-match 3/3, location conflicts 2/2,
+ambiguity 1/1 and confidence checks 10/10 pass. The other 36 frozen cases are
+outside the approved subset; the full development evaluation remains unchanged.
+These are portable service-path results, not installed iPhone evidence.
+
+The earlier pending-decision entry below records the state before Bryce replied;
+it is superseded by this decision and the regenerated evidence packets.
+
 ## Decision completion pass — 2026-10-12 (awaiting human decisions)
 
 Baseline main `f71ce8fd983a0f9c38987d933c018d3f1f4eb2f5`.

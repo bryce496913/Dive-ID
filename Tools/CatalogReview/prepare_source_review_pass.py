@@ -3,11 +3,13 @@
 import json
 from pathlib import Path
 from catalog_review import content_fingerprint, source_identity, PUBLICATION_FIELDS
+from publication_expectations import generate as publication_expectations
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def generate():
+    publication_expectations()  # Reject status-only promotions or stale review evidence.
     evidence = json.loads((ROOT / 'Data/CatalogReview/SourceInspectionEvidence.json').read_text())
     packs = {}
     counts = {}
@@ -29,6 +31,16 @@ def generate():
                             'decision': None, 'reviewerIdentity': None, 'reviewDate': None,
                             'reviewerNotes': None,
                             'instruction': 'Record an actual human decision covering this exact fingerprint; resolve every required question before verified. Source inspection and passing tests are not approval.'}})
+        if record['review']['status'] == 'verified':
+            packet = packets[-1]
+            packet['resolvedHumanDecisions'] = packet['requiredHumanDecisions']
+            packet['requiredHumanDecisions'] = []
+            packet['humanDecisionRequired'] = None
+            packet['humanDecision'] = {
+                'decision': 'verified', 'reviewerIdentity': record['review']['verifiedBy'],
+                'reviewDate': record['review']['reviewDate'], 'reviewerNotes': record['review']['reviewerNotes'],
+                'reviewedContentFingerprint': content_fingerprint(record)}
+            packet['sourceInspectionAssessmentNote'] = 'Earlier automated assessment retained as historical evidence; the explicit human decision above resolves its outstanding signoff requirements.'
     selected = {p['speciesID'] for p in packets}
     deferred = [{'speciesID': r['id'], 'commonName': r['commonName'], 'sourceReferences': r['dataSources'],
                  'reason': 'Full source inspection and human review still required.' +

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-12",
+  "datePrecision": "day; overlay UTC midnight represents the supplied calendar date, not an asserted time of review",
+  "decision": "approved",
+  "provenance": "Explicit human reply in this task to the final review question for PR #99",
+  "reviewReference": "https://github.com/bryce496913/Dive-ID/pull/99",
+  "verbatimDecision": "Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026",
+  "records": [
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
+      "resolvedQuestions": [
+        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/"
+      ]
+    },
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
+      "resolvedQuestions": [
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/Holacanthus-ciliaris.html",
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/queen-angelfish/",
+        "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/french-angelfish/"
+      ]
+    }
+  ],
+  "reviewedCommit": "0dac701c1e1c0f914d55afcd75da76480c8a37b6"
+}
