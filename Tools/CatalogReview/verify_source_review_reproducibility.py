@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def main():
     paths = [
+        ROOT / 'DiveIDTests/Fixtures/PublicationApprovedIDs.json',
         *ROOT.glob('DiveID/Resources/IdentificationPacks/Caribbean/*.json'),
         *ROOT.glob('DiveID/Resources/IdentificationPacks/TropicalPacific/*.json'),
         *(ROOT / 'Reports' / name for name in (
@@ -25,14 +26,15 @@ def main():
         for script in ('Tools/CatalogReview/regenerate_caribbean.py',
                        'Tools/CatalogImport/import_tropical_pacific.py',
                        'Tools/CatalogReview/prepare_source_review_pass.py',
-                       'Tools/CatalogReview/prepare_review_batch.py'):
+                       'Tools/CatalogReview/prepare_review_batch.py',
+                       'Tools/CatalogReview/publication_expectations.py'):
             subprocess.run([sys.executable, str(ROOT / script)], cwd=ROOT,
                            check=True, stdout=subprocess.DEVNULL)
         if hashes() != initial:
             raise SystemExit('Generated artifacts drifted; inspect changes and rerun after committing intended outputs.')
     output = {'identicalRegenerationPasses': 2, 'sha256': initial}
     (ROOT / 'Reports/SourceReviewReproducibility.json').write_text(json.dumps(output, indent=2) + '\n')
-    print('Two byte-identical regenerations; nine catalogue/manifest/report artifacts checked.')
+    print(f'Two byte-identical regenerations; {len(paths)} catalogue/manifest/report artifacts checked.')
 
 
 if __name__ == '__main__':

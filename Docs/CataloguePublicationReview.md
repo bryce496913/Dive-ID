@@ -1,5 +1,53 @@
 # Catalogue publication and source-review record
 
+## Decision completion pass — 2026-10-12 (awaiting human decisions)
+
+Baseline main `f71ce8fd983a0f9c38987d933c018d3f1f4eb2f5`.
+The designated reviewer is the requesting user; their recorded reviewer identity,
+actual decision date and explicit outcome remain outstanding. Automated inspection
+does not satisfy this requirement. This pass is not publication completion.
+
+Reopened both original FishBase summaries, both Florida Museum species accounts,
+and the Museum French Angelfish account linked in the existing packets. Their
+Environment, Size, Biology/Coloration, Habitat, Distribution and Taxonomy sections
+support the current proposed corrections. No further catalogue changes were needed.
+Blue Tang retains FishBase's 39 cm TL / 2–50 m recorded limits, with Museum's
+37 cm / 2–40 m disagreement disclosed. Common length does not establish a typical
+interval. Queen retains 45 cm TL / 1–70 m, forehead and pectoral-base spots, reef
+and solitary coding. Museum's isolated `ciliarus` classification spelling conflicts
+with its own Taxonomy and FishBase's `ciliaris`; the latter is retained. Both are
+fish. Broad Caribbean abundance does not establish individual dive-site frequency.
+Queen's adult comparison is supported by the French account's Coloration section;
+juvenile coverage remains incomplete. Original provenance is unchanged.
+
+The reviewer must approve, reject, or request changes for each complete record in
+`Reports/CatalogueSourceReviewPass.json`, explicitly accepting or revising those
+interpretations and limitations, and provide their identity, actual date and notes:
+
+| Record / ID | Reviewed-content fingerprint |
+| --- | --- |
+| Atlantic Blue Tang / `00000000-0000-0000-0000-000000000003` | `sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd` |
+| Queen Angelfish / `fc213eff-6ba6-53ab-b288-f6e654299e68` | `sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f` |
+
+Current outcomes: both unresolved/draft; no human decisions applied. Caribbean:
+8 draft, 0 eligible. Pacific: 384 draft, 0 eligible. Exact Release ID set: `[]`.
+
+`publication_expectations.py` now derives the checked-in test oracle from all
+validated verified decisions, checks content fingerprints, retained source identities
+and reviewer metadata, and rejects catalogue promotions without matching decisions.
+Python checks the oracle is current; the real Swift publication repository checks
+exact set equality. Dedicated all-draft and mixed fixtures retain accounting,
+publication labels and unavailable-region checks; saved snapshot tests retain access
+outside the searchable subset. Malformed decision types are rejected diagnostically
+before mutation. Existing atomic replacement and re-review tests remain intact.
+
+Validation: 85 Python tests pass (review 23, workbook 9, importer 6, semantic 33,
+CI 5, evaluation 9). Linux Swift 6.2.3: 129 tests, 3 documented opt-in skips,
+0 failures, including the unchanged frozen evaluation and quality gates.
+Two byte-identical regenerations cover 10 artifacts including the approval oracle.
+No local Xcode is available; hosted validation of this change remains outstanding.
+Production BM25 with biological ranking and catalogue content remain unchanged.
+
 ## Current pass — 2026-10-09
 
 Baseline: main `d031795d5414bb6e3c9d47148a1ccb4d0d5c3243` (PR #83 merged).
@@ -53,6 +101,7 @@ python3 Tools/CatalogReview/regenerate_caribbean.py
 python3 Tools/CatalogImport/import_tropical_pacific.py
 python3 Tools/CatalogReview/prepare_source_review_pass.py
 python3 Tools/CatalogReview/prepare_review_batch.py
+python3 Tools/CatalogReview/publication_expectations.py
 python3 Tools/CatalogReview/verify_source_review_reproducibility.py
 ```
 

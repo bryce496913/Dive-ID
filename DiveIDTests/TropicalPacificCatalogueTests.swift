@@ -203,6 +203,10 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     }
 
     func testBundledPublicationAvailabilityTracksActualVerifiedRecords() async throws {
+        // Generated from validated human decisions; Python checks this oracle against
+        // every overlay and fingerprint, independently of catalogue status flags.
+        let expectedURL = try TestResources.fixture(named: "PublicationApprovedIDs")
+        let expectedIDs = try JSONDecoder().decode([String: [UUID]].self, from: Data(contentsOf: expectedURL))
         let publication = BundleMarineSpeciesCatalogRepository(
             bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
         let development = BundleMarineSpeciesCatalogRepository(
@@ -211,6 +215,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
             let full = try await development.loadPack(id: id)
             let approved = full.profiles.filter { $0.review?.status == .verified && !$0.categories.isEmpty }
+            let expected = Set(try XCTUnwrap(expectedIDs[id.rawValue]))
+            XCTAssertEqual(Set(approved.map(\.id)), expected)
             let drafts = Set(full.profiles.filter { $0.review?.status == .draft }.map(\.id))
             XCTAssertEqual(available.contains { $0.id == id }, !approved.isEmpty)
             if approved.isEmpty {
@@ -223,7 +229,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 }
             } else {
                 let published = try await publication.loadPack(id: id)
-                XCTAssertEqual(Set(published.profiles.map(\.id)), Set(approved.map(\.id)))
+                XCTAssertEqual(Set(published.profiles.map(\.id)), expected)
                 XCTAssertTrue(published.profiles.allSatisfy { $0.review?.status == .verified })
                 XCTAssertTrue(drafts.isDisjoint(with: published.profiles.map(\.id)))
                 XCTAssertEqual(published.metadata.availableRecordCount, approved.count)

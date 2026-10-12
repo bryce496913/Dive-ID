@@ -42,6 +42,16 @@ def document(*items, catalogue=CATALOGUE):
 
 
 class ReviewTests(unittest.TestCase):
+    def test_malformed_decision_types_are_rejected_without_mutation(self):
+        for field, value in [('speciesID', []), ('speciesID', {}), ('sourceIdentity', [[]]),
+                             ('sourceIdentity', [[1, 'citation']]), ('unresolvedQuestions', [False])]:
+            with self.subTest(field=field, value=value):
+                current = record()
+                before = copy.deepcopy(current)
+                with self.assertRaises(M.DecisionValidationError):
+                    M.apply_decisions([current], document(decision_item(current, **{field: value})), CATALOGUE)
+                self.assertEqual(current, before)
+
     def test_decision_survives_regeneration(self):
         first = record()
         overlay = document(decision_item(first))
