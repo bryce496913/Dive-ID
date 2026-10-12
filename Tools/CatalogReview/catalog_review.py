@@ -71,7 +71,7 @@ def validate_decisions(records, decision_document, catalogue_id):
     errors = []
     if not isinstance(decision_document, dict):
         raise DecisionValidationError(["document must be a JSON object"])
-    if decision_document.get("schemaVersion") != 1:
+    if type(decision_document.get("schemaVersion")) is not int or decision_document.get("schemaVersion") != 1:
         errors.append("schemaVersion must be 1")
     if not _nonempty(catalogue_id):
         errors.append("target catalogue ID is missing")
@@ -105,7 +105,7 @@ def validate_decisions(records, decision_document, catalogue_id):
             )
         else:
             first_decision[species_id] = index
-        matches = record_positions.get(species_id, [])
+        matches = record_positions.get(species_id, []) if isinstance(species_id, str) else []
         if _nonempty(species_id) and not matches:
             errors.append(f"{label} references unknown speciesID {species_id!r} in catalogue {catalogue_id!r}")
         elif len(matches) > 1:
@@ -121,13 +121,17 @@ def validate_decisions(records, decision_document, catalogue_id):
             for field in corrections:
                 if field not in PUBLICATION_FIELDS:
                     errors.append(f"{label}.corrections contains unsupported field {field!r}")
-        if not isinstance(item.get("sourceIdentity"), list):
-            errors.append(f"{label}.sourceIdentity must be an array")
+        identity = item.get("sourceIdentity")
+        if not isinstance(identity, list) or not identity or any(
+            not isinstance(pair, list) or len(pair) != 2 or not all(_nonempty(part) for part in pair)
+            for pair in identity
+        ):
+            errors.append(f"{label}.sourceIdentity must be a nonempty array of source-ID/citation string pairs")
         if not isinstance(item.get("reviewedContentFingerprint"), str) or not FINGERPRINT.fullmatch(item.get("reviewedContentFingerprint", "")):
             errors.append(f"{label}.reviewedContentFingerprint must be a lowercase sha256 fingerprint")
         unresolved = item.get("unresolvedQuestions", [])
-        if not isinstance(unresolved, list):
-            errors.append(f"{label}.unresolvedQuestions must be an array")
+        if not isinstance(unresolved, list) or any(not _nonempty(question) for question in unresolved):
+            errors.append(f"{label}.unresolvedQuestions must be an array of nonempty strings")
 
         if status == "verified":
             if not _nonempty(item.get("reviewerIdentity")):
@@ -145,6 +149,8 @@ def validate_decisions(records, decision_document, catalogue_id):
 
 def _has_swift_review_evidence(record):
     """Mirror BundleMarineSpeciesCatalogRepository's verified-record evidence gate."""
+    if not isinstance(record.get("dataSources"), list):
+        return False
     return any(
         _nonempty(source.get("stableSourceID"))
         and _nonempty(source.get("sourceURL"))
