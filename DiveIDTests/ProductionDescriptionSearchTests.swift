@@ -181,7 +181,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
     }
 
     private func copyProductionResources(to root: URL, includeImages: Bool = false) throws -> URL {
-        let source = URL(fileURLWithPath: "DiveID/Resources/IdentificationPacks/Caribbean", isDirectory: true)
+        let source = try XCTUnwrap(TestResources.productionBundle.resourceURL).appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         let destination = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
         for name in ["PackManifest.json", "Creatures.json"] {
@@ -225,7 +225,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         let root = try temporaryRoot()
         let directory = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try Data(contentsOf: URL(fileURLWithPath: "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json"))
+        try Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean")))
             .write(to: directory.appendingPathComponent("PackManifest.json"))
         await assertFailure(root: root, code: .speciesResourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
     }
@@ -234,7 +234,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         let root = try temporaryRoot()
         let directory = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try Data(contentsOf: URL(fileURLWithPath: "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json"))
+        try Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean")))
             .write(to: directory.appendingPathComponent("PackManifest.json"))
         try Data("not json".utf8).write(to: directory.appendingPathComponent("Creatures.json"))
         await assertFailure(root: root, code: .decodeFailed, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .decoding)

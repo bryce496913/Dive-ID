@@ -11,16 +11,25 @@ There are zero real approved records. Release must show the no-reviewed-catalogu
 state, disable search and retain Saved Identifications access. Positive Release
 search and Release region switching are blocked until real reviews approve records.
 
-The preceding main Actions run [37948403218](https://github.com/bryce496913/Dive-ID/actions/runs/37948403218)
-failed Xcode build-for-testing on UI-test main-actor isolation. This candidate adds
-`@MainActor` to both UI test methods, preserving every assertion. The annotation
-repair is not locally type-checked against XCTest/iOS; a hosted rerun is required.
-That run's macOS SwiftPM results are prior-baseline evidence, not an installed
-candidate validation or proof of identical Linux/macOS ranking.
+The inspected main Actions run [38101875174](https://github.com/bryce496913/Dive-ID/actions/runs/38101875174)
+for `e227ad3b616fda09b90421e0fb4c56efc5ff5cad` passed Debug/Release product
+settings, both SwiftPM jobs and all six Python suites. Hosted build-for-testing
+failed on two actor-isolated formatter calls and immutable profile assignments in
+Xcode-only tests. The repair isolates those tests on MainActor and constructs new
+decoded fixtures without making production fields mutable. Subsequent hosted runs
+also exposed a retained UserDefaults actor-transfer reference, repository-relative
+fixture paths, obsolete source assertions, lost provenance in copies, and repeated
+species IDs in a sorting fixture. Those repairs preserve the current contracts.
+The Debug diagnostics panel now reserves layout space instead of intercepting search
+controls; both unchanged UI tests passed in run 38139131285. That run still failed a
+photo-selection test that assumed two scheduler yields meant completion. The test now
+awaits the actual returned selection task. All stages must pass on the final SHA;
+portable passes or mixed results from prior commits do not establish acceptance.
 
 ## Record the source and toolchain
 
-Use a clean checkout of the candidate SHA in `Reports/V05CandidateReadiness.json`.
+Use a clean checkout of the exact candidate SHA being validated; older readiness
+reports describe their own recorded commits.
 Record `git rev-parse HEAD`, `git status --short`, `xcodebuild -version`, installed
 SDKs, device OS/build, signed bundle identifier, actual version/build from the built
 Info.plist, and the signing team used. Build 2 only exceeds the known repository
@@ -33,7 +42,7 @@ xcrun simctl list devices available
 xcrun devicectl list devices
 ```
 
-Select an available **iPhone simulator running iOS 18+** by its UDID; do not select
+With Xcode 16.4, select an available **iPhone simulator running iOS 18** by its UDID; do not select
 My Mac, a generic destination for tests, or an unavailable hardcoded model.
 
 ```sh
@@ -65,7 +74,7 @@ xcodebuild -project DiveID.xcodeproj -scheme DiveID -configuration Debug \
 ```
 
 After a successful build, run **each command independently**, even if another
-fails. Do not connect them with `&&` or stop after the known evaluation failure.
+fails. Do not connect them with `&&` or stop after a failure in another stage.
 Use fresh result-bundle paths for repeated runs; preserve previous evidence.
 
 ```sh
@@ -197,3 +206,41 @@ Worksheet (leave values empty until actually observed):
 Current execution evidence and the exact unexecuted checks are listed in
 `Reports/V05CandidateReadiness.json`. No installed iOS build or device performance
 claim may be inferred from portable test results.
+
+## Resolved bundle identifier and separate installation products
+
+Derive the identifier from the app target, not the test runner or an example identifier:
+
+```sh
+xcodebuild -project DiveID.xcodeproj -scheme DiveID -configuration Debug \
+  -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+  -derivedDataPath /tmp/diveid-v05/debug -showBuildSettings -json \
+  > /tmp/diveid-v05/app-settings.json
+APP_BUNDLE_ID=$(python3 -c 'import json; d=json.load(open("/tmp/diveid-v05/app-settings.json")); print(next(x["buildSettings"]["PRODUCT_BUNDLE_IDENTIFIER"] for x in d if x["target"] == "DiveID"))')
+xcrun simctl install "$SIMULATOR_ID" /tmp/diveid-v05/debug/Build/Products/Debug-iphonesimulator/DiveID.app
+xcrun simctl launch "$SIMULATOR_ID" "$APP_BUNDLE_ID"
+```
+
+For a signed physical-device build, resolve settings again for that device and
+configuration; install only its `Release-iphoneos/DiveID.app` from the separate
+`release-device` derived-data directory. Never install a simulator product on a phone.
+
+The Python CI matrix independently discovers all six suites below with fail-fast
+disabled. Run each independently locally and retain each exit status and log:
+
+```sh
+python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt -r Tools/CatalogImport/requirements.txt
+python3 -m unittest discover -s Tools/TropicalPacificWorkbook -p 'test_*.py' -v
+python3 -m unittest discover -s Tools/CatalogImport -p 'test_*.py' -v
+python3 -m unittest discover -s Tools/CatalogReview -p 'test_*.py' -v
+python3 -m unittest discover -s Tools/SemanticSearch/tests -p 'test_*.py' -v
+python3 -m unittest discover -s Tools/CI -p 'test_*.py' -v
+python3 -m unittest discover -s Tools/Evaluation -p 'test_*.py' -v
+```
+
+SwiftPM deliberately excludes UIKit/SwiftUI integration tests. Xcode's synchronized
+DiveIDTests group includes them; its shared scheme includes both complete test targets.
+The app-resource assertion is compiled only with DIVEID_XCODE_HOSTED_TEST and checks
+the actual APPL host before loading bundle-only resources. Missing app resources are
+failures, not reasons to skip. SwiftPM uses its declared library/test resource bundles
+on Linux and macOS; the OS alone never establishes a hosted app bundle.

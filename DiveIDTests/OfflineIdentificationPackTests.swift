@@ -16,7 +16,8 @@ final class OfflineIdentificationPackTests: XCTestCase {
     func testSelectedRegionRoundTripsThroughUserDefaults() async {
         let suite = "OfflineIdentificationPackTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
-        defer { defaults.removePersistentDomain(forName: suite) }
+        // Do not retain the non-Sendable instance after transferring it to the actor.
+        defer { UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite) }
         let repository = UserDefaultsSelectedDiveRegionRepository(defaults: defaults, key: "region")
         let futureID = OfflineIdentificationPackID(rawValue: "future-region")
         await repository.setSelectedRegion(futureID)

@@ -59,9 +59,11 @@ struct DiveIDApp: App {
                 features: features
             )
             .preferredColorScheme(.dark)
-            .overlay(alignment: .bottom) {
+            .safeAreaInset(edge: .bottom, spacing: 0) {
 #if DEBUG
+                // Reserve space so diagnostics cannot cover or intercept search controls.
                 DebugSemanticSearchStatusView(selection: retrievalEngine, reporter: semanticDiagnostics)
+                    .allowsHitTesting(false)
 #endif
             }
         }

@@ -250,6 +250,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
         // This test exists only in the Xcode-hosted iOS test target. A missing app
         // resource is a test failure, never a signal that the test is "not hosted".
+        XCTAssertEqual(Bundle.main.infoDictionary?["CFBundlePackageType"] as? String, "APPL", "This packaging assertion requires the actual application test host")
         let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let value = try await repository.loadPack(id: .tropicalPacific)
         XCTAssertEqual(value.metadata.id, .tropicalPacific)

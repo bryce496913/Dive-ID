@@ -53,6 +53,7 @@ struct StubPhotoProcessingService: PhotoProcessingService {
 }
 
 final class DiveIDTests: XCTestCase {
+    @MainActor
     func testCatalogueFailureReleaseMessageRemainsGeneric() {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         XCTAssertEqual(
@@ -61,6 +62,7 @@ final class DiveIDTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testCatalogueFailureDebugMessageShowsOnlyStableCode() {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         let message = IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: true)
@@ -311,9 +313,8 @@ final class DiveIDTests: XCTestCase {
             photoProcessor: StubPhotoProcessingService(photo: second)
         )
         viewModel.selectionError = .unableToRead
-        viewModel.selectPhoto { Data([22]) }
-        await Task.yield()
-        await Task.yield()
+        let selection = viewModel.selectPhoto { Data([22]) }
+        await selection.value
         XCTAssertEqual(viewModel.processedPhoto, second)
         XCTAssertNil(viewModel.selectionError)
         XCTAssertFalse(viewModel.isLoadingSelection)
@@ -334,12 +335,16 @@ final class DiveIDTests: XCTestCase {
         let store = InMemoryIdentificationSessionStore()
         let request = IdentificationRequest(source: .description("fish"))
         _ = try await store.createSession(for: request, photo: nil)
-        let scores = stride(from: 0.1, through: 1.2, by: 0.1).map { makeMatch(score: $0) }
-        let service = SpyMarineLifeIdentificationService(results: scores)
+        let scores = stride(from: 0.1, through: 1.2, by: 0.1).map { score in
+            let species = Species(id: UUID(), commonName: "Test species", scientificName: "Test species", summary: "Test", visualCharacteristics: [], habitat: "Test", geographicRange: "Test", imageAssetName: nil)
+            return IdentificationMatch(id: species.id, species: species, score: score, scoreKind: .relativeMatch)
+        }
+        let service = SpyMarineLifeIdentificationService(results: scores + [scores[0]])
         let viewModel = IdentificationResultsViewModel(sessionID: request.id, service: service, sessionStore: store)
         await viewModel.loadIfNeeded()
         guard case .loaded(let matches) = viewModel.state else { return XCTFail("Expected matches") }
         XCTAssertEqual(matches.count, 10)
+        XCTAssertEqual(Set(matches.map(\.species.id)).count, 10)
         XCTAssertEqual(matches.map(\.score), matches.map(\.score).sorted(by: >))
 
         let emptyRequest = IdentificationRequest(source: .description("none"))
@@ -510,15 +515,12 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testCatalogueAcceptsBrownOliveAndRobust() throws {
-        var profile = try productionProfile(named: "Green Sea Turtle")
-        profile.colors = ["brown", "olive"]
-        profile.bodyShapes = ["robust"]
+        let profile = try productionProfile(named: "Green Sea Turtle", overrides: ["colors": ["brown", "olive"], "bodyShapes": ["robust"]])
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
     }
 
     func testCatalogueRejectsUnknownTopLevelColor() throws {
-        var profile = try productionProfile(named: "Green Sea Turtle")
-        profile.colors = ["ultraviolet"]
+        let profile = try productionProfile(named: "Green Sea Turtle", overrides: ["colors": ["ultraviolet"]])
         assertUnknownVocabulary(profile, value: "ultraviolet")
     }
 
@@ -546,7 +548,8 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         XCTAssertEqual(profile.appearanceVariants.first?.bodyShapes, ["robust"])
         XCTAssertTrue(profile.markings.contains("beak"))
         XCTAssertTrue(profile.behaviors.contains("grazing"))
-        XCTAssertEqual(profile.mouthAndHeadShape, ["beak-like dental plates", "angular forehead", "squared head"])
+        // Current source correction: Reports/CatalogueSourceReviewPass.json.
+        XCTAssertEqual(profile.mouthAndHeadShape, ["beak-like dental plates", "bluntly rounded head"])
         XCTAssertEqual(profile.review?.status, .draft)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([profile]))
     }
@@ -762,11 +765,14 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
 
-    private func productionProfile(named name: String) throws -> LocalSpeciesProfile {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
+    private func productionProfile(named name: String, overrides: [String: [String]] = [:]) throws -> LocalSpeciesProfile {
+        let url = try XCTUnwrap(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
+        let records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [[String: Any]])
+        var record = try XCTUnwrap(records.first { $0["commonName"] as? String == name })
+        // Construct a new decoded fixture; production profile fields remain immutable.
+        for (key, value) in overrides { record[key] = value }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
-        let profiles = try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
-        return try XCTUnwrap(profiles.first { $0.commonName == name })
+        return try decoder.decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: record))
     }
 
     private func variant(colors: [String] = ["brown"], markings: [String] = ["spots"], bodyShapes: [String] = ["robust"]) -> SpeciesAppearanceVariant {
@@ -920,7 +926,10 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         check(copy(base, scientificName: " "), .emptyScientificName)
         check(copy(base, summary: ""), .emptySummary)
         check(copy(base, distinguishingFeatures: []), .emptyDistinguishingFeatures)
-        check(copy(base, typicalHabitat: ""), .emptyHabitatDescription)
+        // Unknown habitat is intentionally neutral; missing provenance is not.
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate([copy(base, typicalHabitat: "")]))
+        var unsourced = base; unsourced.dataSources = []
+        check(unsourced, .missingDataSource)
         check(copy(base, geographicRange: ""), .emptyGeographicRange)
         check(copy(base, minimumSizeCentimeters: -1), .negativeMeasurement)
         check(copy(base, minimumDepthMeters: 10, maximumDepthMeters: 1), .invalidMeasurementRange)
@@ -1142,6 +1151,6 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         return OfflineIdentificationPackMetadata(id: value.id, schemaVersion: value.schemaVersion, packVersion: value.packVersion, displayName: value.displayName, shortDescription: value.shortDescription, geographicScope: value.geographicScope, regionAliases: value.regionAliases, speciesCount: speciesCount, speciesResourceName: value.speciesResourceName, imageSubdirectory: value.imageSubdirectory, includedWithApp: value.includedWithApp, lastDataReviewDate: value.lastDataReviewDate)
     }
     private func copy(_ p: LocalSpeciesProfile, id: UUID? = nil, commonName: String? = nil, scientificName: String? = nil, aliases: [String]? = nil, categories: [String]? = nil, colors: [String]? = nil, markings: [String]? = nil, bodyShapes: [String]? = nil, habitats: [String]? = nil, regions: [String]? = nil, behaviors: [String]? = nil, keywords: [String]? = nil, minimumSizeCentimeters: Double?? = nil, maximumSizeCentimeters: Double?? = nil, minimumDepthMeters: Double?? = nil, maximumDepthMeters: Double?? = nil, summary: String? = nil, distinguishingFeatures: [String]? = nil, typicalHabitat: String? = nil, geographicRange: String? = nil) -> LocalSpeciesProfile {
-        LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName)
+        LocalSpeciesProfile(id: id ?? p.id, commonName: commonName ?? p.commonName, scientificName: scientificName ?? p.scientificName, aliases: aliases ?? p.aliases, categories: categories ?? p.categories, colors: colors ?? p.colors, markings: markings ?? p.markings, bodyShapes: bodyShapes ?? p.bodyShapes, habitats: habitats ?? p.habitats, regions: regions ?? p.regions, behaviors: behaviors ?? p.behaviors, keywords: keywords ?? p.keywords, minimumSizeCentimeters: minimumSizeCentimeters ?? p.minimumSizeCentimeters, maximumSizeCentimeters: maximumSizeCentimeters ?? p.maximumSizeCentimeters, minimumDepthMeters: minimumDepthMeters ?? p.minimumDepthMeters, maximumDepthMeters: maximumDepthMeters ?? p.maximumDepthMeters, summary: summary ?? p.summary, distinguishingFeatures: distinguishingFeatures ?? p.distinguishingFeatures, typicalHabitat: typicalHabitat ?? p.typicalHabitat, geographicRange: geographicRange ?? p.geographicRange, cautions: p.cautions, imageAssetName: p.imageAssetName, regionalOccurrence: p.regionalOccurrence, regionalOccurrenceNotes: p.regionalOccurrenceNotes, subregions: p.subregions, appearanceVariants: p.appearanceVariants, similarSpecies: p.similarSpecies, bundledImage: p.bundledImage, dataSources: p.dataSources, review: p.review, taxonomy: p.taxonomy, measurements: p.measurements, tailShape: p.tailShape, mouthAndHeadShape: p.mouthAndHeadShape, finAndSpineClues: p.finAndSpineClues)
     }
 }
