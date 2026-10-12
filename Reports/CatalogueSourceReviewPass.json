@@ -4,9 +4,12 @@
   "counts": {
     "caribbean": {
       "included": 8,
-      "humanReviewed": 0,
-      "approvedIDs": [],
-      "draft": 8
+      "humanReviewed": 2,
+      "approvedIDs": [
+        "00000000-0000-0000-0000-000000000003",
+        "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      ],
+      "draft": 6
     },
     "tropical-pacific": {
       "included": 384,
@@ -53,11 +56,7 @@
         "habitat": "Reef, rocky and grassy habitat; algal feeding.",
         "range": "Western Atlantic New York/Bermuda through Gulf of Mexico and Brazil; Ascension also reported. Caribbean coverage supported."
       },
-      "requiredHumanDecisions": [
-        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
-        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ],
+      "requiredHumanDecisions": [],
       "releaseBatch": "caribbean-two-records-v1",
       "fieldAudit": {
         "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims.",
@@ -240,18 +239,25 @@
         ]
       },
       "currentReview": {
-        "status": "draft",
-        "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-        "reviewDate": null,
-        "verifiedBy": null
+        "status": "verified",
+        "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+        "reviewDate": "2026-10-12T00:00:00Z",
+        "verifiedBy": "Bryce"
       },
-      "humanDecisionRequired": {
-        "decision": null,
-        "reviewerIdentity": null,
-        "reviewDate": null,
-        "reviewerNotes": null,
-        "instruction": "Record an actual human decision covering this exact fingerprint; resolve every required question before verified. Source inspection and passing tests are not approval."
-      }
+      "humanDecisionRequired": null,
+      "resolvedHumanDecisions": [
+        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
+        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ],
+      "humanDecision": {
+        "decision": "verified",
+        "reviewerIdentity": "Bryce",
+        "reviewDate": "2026-10-12T00:00:00Z",
+        "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+        "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd"
+      },
+      "sourceInspectionAssessmentNote": "Earlier automated assessment retained as historical evidence; the explicit human decision above resolves its outstanding signoff requirements."
     },
     {
       "speciesID": "00000000-0000-0000-0000-000000000005",
@@ -502,11 +508,7 @@
         "habitat": "Coral reefs, singly or in pairs, sponge feeding.",
         "range": "Museum: Bermuda to Brazil including Caribbean; FishBase also records St Paul’s Rocks."
       },
-      "requiredHumanDecisions": [
-        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
-        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
-        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ],
+      "requiredHumanDecisions": [],
       "releaseBatch": "caribbean-two-records-v1",
       "fieldAudit": {
         "identityAndTaxonomy": "Scientific name and genus agree between FishBase heading and Museum Taxonomy. Higher taxonomy remains unset; names/keywords and legacy alias are identity metadata, not additional biological claims. Museum classification list spells the epithet ciliarus; its heading, Taxonomy and FishBase agree on ciliaris, which is retained.",
@@ -680,18 +682,25 @@
         ]
       },
       "currentReview": {
-        "status": "draft",
-        "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-        "reviewDate": null,
-        "verifiedBy": null
+        "status": "verified",
+        "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+        "reviewDate": "2026-10-12T00:00:00Z",
+        "verifiedBy": "Bryce"
       },
-      "humanDecisionRequired": {
-        "decision": null,
-        "reviewerIdentity": null,
-        "reviewDate": null,
-        "reviewerNotes": null,
-        "instruction": "Record an actual human decision covering this exact fingerprint; resolve every required question before verified. Source inspection and passing tests are not approval."
-      }
+      "humanDecisionRequired": null,
+      "resolvedHumanDecisions": [
+        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
+        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
+        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
+      ],
+      "humanDecision": {
+        "decision": "verified",
+        "reviewerIdentity": "Bryce",
+        "reviewDate": "2026-10-12T00:00:00Z",
+        "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+        "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f"
+      },
+      "sourceInspectionAssessmentNote": "Earlier automated assessment retained as historical evidence; the explicit human decision above resolves its outstanding signoff requirements."
     },
     {
       "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb",

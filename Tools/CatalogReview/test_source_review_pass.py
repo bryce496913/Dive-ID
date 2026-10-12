@@ -12,6 +12,25 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class SourceReviewPassTests(unittest.TestCase):
+    def test_bryce_approval_covers_unchanged_packet_content_and_sources(self):
+        evidence = json.loads((ROOT / 'Data/CatalogReview/BryceReview2026-10-12.json').read_text())
+        decisions = json.loads((ROOT / 'Data/CatalogReview/CaribbeanReviewDecisions.json').read_text())
+        by_id = {d['speciesID']: d for d in decisions['decisions']}
+        records, _, _ = generate()
+        by_record = {r['id']: r for r in records}
+        self.assertEqual(evidence['reviewerIdentity'], 'Bryce')
+        self.assertEqual(evidence['reviewDate'], '2026-10-12')
+        self.assertEqual(len(evidence['records']), 2)
+        for reviewed in evidence['records']:
+            decision = by_id[reviewed['speciesID']]
+            current = by_record[reviewed['speciesID']]
+            self.assertEqual(decision['decision'], 'verified')
+            self.assertEqual(decision['reviewerIdentity'], evidence['reviewerIdentity'])
+            self.assertEqual(decision['reviewDate'][:10], evidence['reviewDate'])
+            self.assertEqual(decision['unresolvedQuestions'], [])
+            self.assertEqual(content_fingerprint(current), reviewed['reviewedContentFingerprint'])
+            self.assertEqual([s['sourceURL'] for s in current['dataSources']], reviewed['sourceReferences'])
+
     def test_caribbean_overlay_regenerates_exact_bundle_and_preserves_provenance(self):
         records, manifest, outcomes = generate()
         baseline = json.loads((ROOT / 'Data/CatalogReview/CaribbeanSourceBaseline.json').read_text())
@@ -43,9 +62,15 @@ class SourceReviewPassTests(unittest.TestCase):
             self.assertEqual(packet['reviewedContentFingerprint'], content_fingerprint(packet['currentContent']))
             self.assertTrue(packet['references'])
             self.assertEqual(set(packet['fieldEvidence']), {'identity', 'structuredTraits', 'measurements', 'habitat', 'range'})
-            self.assertIsNone(packet['humanDecisionRequired']['reviewerIdentity'])
-            self.assertIsNone(packet['humanDecisionRequired']['reviewDate'])
-            self.assertIsNone(packet['humanDecisionRequired']['decision'])
+            if packet['currentReview']['status'] == 'verified':
+                self.assertIsNone(packet['humanDecisionRequired'])
+                self.assertEqual(packet['humanDecision']['reviewerIdentity'], packet['currentReview']['verifiedBy'])
+                self.assertEqual(packet['humanDecision']['reviewedContentFingerprint'], packet['reviewedContentFingerprint'])
+                self.assertEqual(packet['requiredHumanDecisions'], [])
+            else:
+                self.assertIsNone(packet['humanDecisionRequired']['reviewerIdentity'])
+                self.assertIsNone(packet['humanDecisionRequired']['reviewDate'])
+                self.assertIsNone(packet['humanDecisionRequired']['decision'])
 
 
 if __name__ == '__main__':

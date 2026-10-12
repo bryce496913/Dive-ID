@@ -85,15 +85,11 @@
           "Sharp caudal peduncle spine"
         ]
       },
-      "decision": "draft",
-      "reviewerIdentity": null,
-      "reviewDate": null,
-      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-      "unresolvedQuestions": [
-        "Accept FishBase 39 cm total length and 2–50 m as recorded limits despite Museum 37 cm and 2–40 m; do not treat a common length as a typical interval.",
-        "Confirm the restricted Bahamas locality list and broad Caribbean common-occurrence label; no claim of frequency at a particular dive site remains.",
-        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ]
+      "decision": "verified",
+      "reviewerIdentity": "Bryce",
+      "reviewDate": "2026-10-12T00:00:00Z",
+      "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+      "unresolvedQuestions": []
     },
     {
       "speciesID": "00000000-0000-0000-0000-000000000005",
@@ -275,15 +271,11 @@
           }
         ]
       },
-      "decision": "draft",
-      "reviewerIdentity": null,
-      "reviewDate": null,
-      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-      "unresolvedQuestions": [
-        "Confirm adult forehead/pectoral-base coding, 45 cm TL and 1–70 m limits, and the adult French Angelfish comparison against the cited accounts.",
-        "Confirm broad Caribbean common-occurrence label with no enumerated subregions; juvenile identification coverage remains incomplete.",
-        "A named human must inspect the complete corrected content and cited accounts, resolve remaining questions, and approve its exact fingerprint with actual review date and notes."
-      ]
+      "decision": "verified",
+      "reviewerIdentity": "Bryce",
+      "reviewDate": "2026-10-12T00:00:00Z",
+      "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+      "unresolvedQuestions": []
     }
   ]
 }

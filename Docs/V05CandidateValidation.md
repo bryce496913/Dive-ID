@@ -6,10 +6,13 @@ Photo identification is unavailable; Core ML remains experimental and is not a
 candidate requirement. Default engine: BM25 + biological ranking, candidate limit
 50, display limit ten. Do not change defaults or define DEBUG in Release.
 
-Current pack counts are 8 Caribbean (pack 3) and 384 Pacific (pack 2), all draft.
-There are zero real approved records. Release must show the no-reviewed-catalogue
-state, disable search and retain Saved Identifications access. Positive Release
-search and Release region switching are blocked until real reviews approve records.
+Current pack counts are 8 Caribbean (pack 3: 2 approved, 6 draft) and 384 Pacific
+(pack 2: all draft). Bryce approved Atlantic Blue Tang and Queen Angelfish on
+October 12, 2026; exact IDs and source evidence are in CataloguePublicationReview.md.
+Release must offer only those two Caribbean species. Pacific remains unavailable;
+test recovery from a persisted Pacific selection and retain Saved Identifications
+access. Cases targeting other species are inapplicable to this Release subset.
+An approved catalogue does not establish installed-device readiness.
 
 The inspected main Actions run [38101875174](https://github.com/bryce496913/Dive-ID/actions/runs/38101875174)
 for `e227ad3b616fda09b90421e0fb4c56efc5ff5cad` passed Debug/Release product

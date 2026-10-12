@@ -1,13 +1,13 @@
 {
   "identicalRegenerationPasses": 2,
   "sha256": {
-    "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "02b10d60656b2b04cd4f8b1183594e485155bd23ab3638bccf3adf295309f6bd",
-    "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "bff708376553ca6a9967e2cb85e3a28c9ba65af6c8bf0547225dccd17efb01d2",
+    "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "3806279e35c92777d009904f82c0541d29384ecf1813bfea44588f76be7247c5",
+    "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "6ff988905dce0849b4d1a343c0bc459ae8f342958210b642a864d6abfb08da6a",
     "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "2c0b83d1b76d6e362e0d3e0e86d5f62b1a49a8c3d04bf66e37d9ee9ea27d1961",
     "DiveID/Resources/IdentificationPacks/TropicalPacific/PackManifest.json": "fc349035dc21ff034f80972e35d720be729edf5060cf98366344ab387b739bf9",
-    "DiveIDTests/Fixtures/PublicationApprovedIDs.json": "46985d7274ad9096ecb1739943e5d6d4846322d84a938ae9a716d0182bb56d86",
-    "Reports/CatalogueSourceReviewPass.json": "1e311734b7e6c3aeb8cc67f6ba74f52b983ebeadf199c2b885df5b3cc9582a7a",
-    "Reports/FirstCatalogueReviewBatch.json": "94183d8c8e7c7457c05192ee3667285600c6777a695958369fd2523f428a94fc",
+    "DiveIDTests/Fixtures/PublicationApprovedIDs.json": "52e61291374a225f8e0dae46bfee1c20c23c145c6fc8a6e14862d6792868ebea",
+    "Reports/CatalogueSourceReviewPass.json": "188cbae921b2bf8bea9f24a5c7c05ccf01937c439811e25b065c34f1b6e1e314",
+    "Reports/FirstCatalogueReviewBatch.json": "49bc37cfcfd94a3732d15d975e559d893ec0784973742f6cf31376dc328e8790",
     "Reports/TropicalPacificImportReport.json": "1d80edf0ca7e5f23acbe79c6a7959094a6039954e24782519d9bb91d3c010398",
     "Reports/TropicalPacificOutcomes.csv": "f3075049727f247ebbadf3bc492b41bd9e719a99630083fd460449dca8344c3a",
     "Reports/TropicalPacificReviewQueue.csv": "f3075049727f247ebbadf3bc492b41bd9e719a99630083fd460449dca8344c3a"

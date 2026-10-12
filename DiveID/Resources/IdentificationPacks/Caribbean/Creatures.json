@@ -124,10 +124,10 @@
       }
     ],
     "review": {
-      "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-      "reviewDate": null,
-      "verifiedBy": null
+      "status": "verified",
+      "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+      "reviewDate": "2026-10-12T00:00:00Z",
+      "verifiedBy": "Bryce"
     },
     "taxonomy": {
       "wormsAphiaID": null,
@@ -891,10 +891,10 @@
       }
     ],
     "review": {
-      "status": "draft",
-      "reviewerNotes": "Automated source inspection on 2026-10-10; complete content, citations and exact outstanding decisions are in Reports/CatalogueSourceReviewPass.json. No human publication approval.",
-      "reviewDate": null,
-      "verifiedBy": null
+      "status": "verified",
+      "reviewerNotes": "Bryce explicitly approved this exact PR #99 packet on October 12, 2026: \"Approved for both. PR #99 review. Reviewer name: Bryce, Oct 12, 2026\". Approval responds to the final question identifying the documented source interpretations, Blue Tang measurement disagreement and Queen juvenile-coverage limitation. Sources and resolved questions: Data/CatalogReview/BryceReview2026-10-12.json. Date precision is day; UTC midnight encodes the supplied date, not a known review time.",
+      "reviewDate": "2026-10-12T00:00:00Z",
+      "verifiedBy": "Bryce"
     },
     "taxonomy": {
       "wormsAphiaID": null,
