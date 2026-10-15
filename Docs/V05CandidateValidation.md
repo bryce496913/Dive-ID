@@ -14,20 +14,12 @@ test recovery from a persisted Pacific selection and retain Saved Identification
 access. Cases targeting other species are inapplicable to this Release subset.
 An approved catalogue does not establish installed-device readiness.
 
-The inspected main Actions run [38101875174](https://github.com/bryce496913/Dive-ID/actions/runs/38101875174)
-for `e227ad3b616fda09b90421e0fb4c56efc5ff5cad` passed Debug/Release product
-settings, both SwiftPM jobs and all six Python suites. Hosted build-for-testing
-failed on two actor-isolated formatter calls and immutable profile assignments in
-Xcode-only tests. The repair isolates those tests on MainActor and constructs new
-decoded fixtures without making production fields mutable. Subsequent hosted runs
-also exposed a retained UserDefaults actor-transfer reference, repository-relative
-fixture paths, obsolete source assertions, lost provenance in copies, and repeated
-species IDs in a sorting fixture. Those repairs preserve the current contracts.
-The Debug diagnostics panel now reserves layout space instead of intercepting search
-controls; both unchanged UI tests passed in run 38139131285. That run still failed a
-photo-selection test that assumed two scheduler yields meant completion. The test now
-awaits the actual returned selection task. All stages must pass on the final SHA;
-portable passes or mixed results from prior commits do not establish acceptance.
+The approval candidate's hosted run [38299609043](https://github.com/bryce496913/Dive-ID/actions/runs/38299609043)
+passed Xcode unit/UI, both SwiftPM jobs and all Python jobs. Its tested head
+`7315fc7de0482acc4bb9ad1c581ec23e735224f3` has the same tree as merged main
+`10af439db9dc4d3e160a2f9bb0432d4fb2a80ea3`. This is hosted simulator evidence,
+not physical-device validation. Use [PhysicalReleaseValidation.md](PhysicalReleaseValidation.md)
+for the signed device install commands, frozen case checklist and evidence record.
 
 ## Record the source and toolchain
 
@@ -133,7 +125,7 @@ Run the complete unit target and explicit packaging test with `test-without-buil
 as for Debug. Testability enables @testable imports; it is **not** DEBUG and this
 instrumented test build is not the separately built device candidate.
 The existing core-navigation UI test assumes a searchable Debug catalogue; it is
-not a valid successful-search assertion for the empty Release subset. Run the
+not a substitute for the two-species Release checklist. Run the
 photo-disabled/saved-screen UI test in Release and manually verify the Release
 catalogue gate. Do not silently count the unexecuted positive Release flow as passed.
 
@@ -143,12 +135,12 @@ Record each item independently with configuration, device and evidence location.
 Keep Wi-Fi and cellular off while exercising the app; leave saved storage intact.
 
 1. Debug: verify Caribbean 8 / Pacific 384, switch between them, relaunch and
-   confirm selection persists. Release: verify zero reviewed regions, disabled
-   search, accessible saved snapshots and unavailable photo action.
+   confirm selection persists. Release: verify Caribbean with exactly two approved species, unavailable
+   Pacific, accessible saved snapshots and unavailable photo action.
 2. Debug: run the committed Pacific ray/dartfish/waspfish/puffer positive cases and
    freshwater-lily-pad frog no-match. Record actual ranks, engine, pack and labels.
-   Also run the known failing v0.5 freshwater-sand and regional probes; record the
-   failures rather than substituting easier queries.
+   Also run the frozen v0.5 freshwater-sand and regional probes; record actual
+   outcomes rather than substituting easier queries.
 3. Open a result, inspect species/source/pack details, return to results and verify
    cached results. Back out of a loading search and verify no late results replace
    a newer search. Repeat 30 completed search flows and observe session cleanup.
@@ -189,9 +181,8 @@ memory or physical footprint), units, sampling interval and tool. Preserve the
 trace; a bounded session count alone does not prove bounded device memory.
 
 Measure Debug development search as Debug, never as Release performance. Release
-has no approved catalogue and cannot currently produce cold/warm identification
-measurements. Its launch, empty-catalogue and saved-record behavior can still be
-checked. The outstanding publication gate must not be bypassed to obtain numbers.
+measurements use only the two approved Caribbean records. Keep its samples separate
+from Debug development-pack samples. No physical-device timings have been collected.
 
 Worksheet (leave values empty until actually observed):
 
@@ -206,8 +197,9 @@ Worksheet (leave values empty until actually observed):
 | Memory metric / baseline / peaks / settled | |
 | Functional checklist / logs / trace paths | |
 
-Current execution evidence and the exact unexecuted checks are listed in
-`Reports/V05CandidateReadiness.json`. No installed iOS build or device performance
+Current physical-device preparation and the exact unexecuted checks are listed in
+`Reports/PhysicalReleaseValidation.json`; older readiness reports describe their
+own recorded candidates. No installed iOS build or device performance
 claim may be inferred from portable test results.
 
 ## Resolved bundle identifier and separate installation products
