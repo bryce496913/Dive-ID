@@ -20,6 +20,43 @@ def payload():
                     'notes':'Synthetic schema test, not identity evidence.','evidenceReferences':['test-only-evidence']}}]}
 
 class IndependentContracts(unittest.TestCase):
+    def test_pilot_preflight_empty_is_not_collected_or_verified(self):
+        d=payload();d['observations']=[]
+        report=m.pilot_readiness(d)
+        self.assertEqual(report['remainingToCollect'],12)
+        self.assertFalse(report['collectionTargetMet'])
+        self.assertFalse(report['allLabelsVerifiedDeclared'])
+        self.assertEqual(report['baseline'],'not run')
+
+    def test_pilot_preflight_reports_gaps_without_private_details_or_engine(self):
+        d=payload();r=d['observations'][0]
+        r['label']={'kind':'unresolved','acceptableSpeciesIDs':[]}
+        with patch.object(m.subprocess,'run',side_effect=AssertionError('No engine allowed')):
+            report=m.pilot_readiness(d)
+        self.assertEqual(report['unresolvedLabels'],1)
+        self.assertEqual(report['publicationConsentNotRecorded'],1)
+        self.assertEqual(report['observationContextNotRecorded'],1)
+        encoded=json.dumps(report)
+        self.assertNotIn(r['description'],encoded)
+        self.assertNotIn(r['author']['participantID'],encoded)
+        self.assertNotIn(r['observationID'],encoded)
+
+    def test_twelve_synthetic_contract_rows_exercise_pilot_counts_not_human_quality(self):
+        d=payload();base=d['observations'][0];d['observations']=[]
+        for i in range(12):
+            r=copy.deepcopy(base);r.update(observationID=str(uuid.UUID(int=i+1)),
+                description=f'Synthetic contract row {i}; never a collected observation.',
+                region='caribbean' if i<4 else 'tropical-pacific',
+                consentForPublication=False, observationContext={'approximateDepth':'unknown'},
+                usedForDevelopment=True)
+            d['observations'].append(r)
+        report=m.pilot_readiness(d)
+        self.assertTrue(report['collectionTargetMet'])
+        self.assertTrue(report['allLabelsVerifiedDeclared'])
+        self.assertTrue(report['humanEvidenceAuditRequired'])
+        self.assertEqual(report['developmentCases'],12)
+        self.assertEqual(report['accuracyConclusion'],'unavailable')
+
     def test_authorship_and_identity_are_separate_and_required(self):
         for mutation in [lambda r:r['author'].update(kind='model'),lambda r:r['author'].update(attestsOwnUnpromptedWords=False),
                          lambda r:r['label'].update(verifierID='test-author'),lambda r:r['label'].update(verifiedWithoutAppResults=False),
