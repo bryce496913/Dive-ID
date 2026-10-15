@@ -123,3 +123,122 @@ ledger, move it to development in a new version, and preserve the previous manif
 and baseline. Freeze a new independent holdout before evaluating further changes.
 Software checks declarations and immutable hashes; it cannot prove human authorship,
 verifier independence or an undisclosed exposure history. Custodian review is required.
+
+## Twelve-case pilot operations (specified before receiving submissions)
+
+Reuse the form above and `independent-v1`; do not start another dataset format.
+The target remains 12 accounts: 4 Caribbean and 8 Pacific. Prefer one observation
+per diver and independent encounters. Retain linked submissions if necessary,
+record the contributor count and shared cohorts, and do not imply 12 independent
+participants when there are fewer. Recruitment must not select people based on
+app success. No invitation, named recipient or communication channel is authorized
+by these materials. The requesting user must supply submissions or explicitly
+authorize an identified custodian and collection channel before outreach.
+
+1. **Before collection:** name the custodian and separate verifier privately; freeze
+   this procedure and IndependentProtocol.v1.json at a committed SHA. Issue only
+   the Contributor form, without this technical section, examples or target names.
+2. **Intake:** capture the original account first, then assign a UUID observationID,
+   pseudonymous participant/encounter/cohort IDs and actual collection date. Record
+   evaluation and publication consent separately. A refusal of publication does
+   not prevent private evaluation. Store originals/evidence outside Git. Do not
+   repair spelling, grammar, terminology or missing measurements. Obtain an
+   appropriate private submission before intake if it contains unnecessary personal
+   information; do not silently redact an already frozen description.
+3. **Context:** keep an `observationContext` object in private provenance with
+   approximate observation date, broad location, habitat, depth/units and uncertainty
+   as actually supplied; explicit `unknown` is valid. Record language, prior
+   app/catalogue exposure and whether any writing assistance was used. Add boolean
+   `consentForPublication` to the private row (false is fully acceptable). These
+   provenance fields survive freeze but are not appended to the search query.
+4. **Verification:** a different person reviews original photo/video and an
+   authoritative identity reference, or a documented instructor assessment, before
+   seeing app output. Record verifier code, actual date, evidence locators,
+   scientific identity, rationale and limitations in the existing label fields.
+   Confirm the UUID mapping independently against the catalogue's scientific name;
+   catalogue inclusion itself is not proof of the observed identity. Broad taxon
+   only or insufficient evidence remains `unresolved` with explanatory notes;
+   defensible species alternatives remain a nonempty multi-ID/ambiguous label.
+   Do not infer `noMatch` solely from absence in the current catalogue.
+5. **Audit all 12:** custodian checks consent, verbatim preservation, evidence
+   accessibility/permissions, independent author/verifier, appropriate uncertainty
+   and stable ID mapping. Keep a private intake log of rejected/withdrawn records
+   and reasons; do not select replacements based on search outcomes. If an identity
+   cannot be verified, retain it as unresolved and report the verified shortfall.
+6. **Declare pilot use:** this pilot is for collection-process development; before
+   freeze, set `usedForDevelopment: true` for all pilot rows and their linked
+   cohorts. This changes exposure classification, not original wording or labels.
+   It does not make human wording synthetic. Never call this inspected pilot a
+   fresh holdout. Prior-exposure declarations must still be truthful.
+7. **Preflight, freeze, evaluate:** use the commands below from a clean committed
+   checkout. Labels/criteria must be final before search runs. Retain immutable
+   manifests, provenance, catalogue/code hashes, private ranks and abstentions.
+   Inspect pilot failures only as development material. Do not enrich or tune in
+   this pass. Publish aggregate denominators separately for the complete 392-record
+   development pack and actual two-record Caribbean publication subset; rederive
+   sizes if the catalogue changes. Coverage blocks are not abstention successes.
+
+An empty private starting document is:
+
+```json
+{"schemaVersion":1,"protocolVersion":"independent-v1","datasetVersion":"diver-pilot-v1","observations":[]}
+```
+
+Populate only with real, consented submissions using the Custodian import fields.
+Do not use the synthetic unit-test payload as a participant or observation.
+
+```sh
+python3 Tools/Evaluation/independent_divers.py preflight --source /secure/diver-pilot.json
+python3 Tools/Evaluation/independent_divers.py freeze \
+  --source /secure/diver-pilot.json --private-dir /secure/diver-pilot-v1
+python3 Tools/Evaluation/independent_divers.py evaluate \
+  --private-dir /secure/diver-pilot-v1 --swift /path/to/swift
+```
+
+Preflight does not execute search, prove consent/authorship or assess whether cited
+evidence is convincing. It reports counts, unresolved labels, missing context and
+unrecorded publication consent without printing wording, identities or evidence.
+A 12-row schema success is not completion of independent verification. Freeze
+rejects empty input; unresolved labels remain outside quality denominators.
+
+After the real pilot, report intake count, valid consent count, verified/unresolved
+counts, distinct authors/cohorts, exposure flags, missing-context and import errors,
+verifier disagreements and corrections needed to the process. Preserve original
+labels and add versioned adjudications rather than overwriting a frozen baseline.
+Report candidate recall, displayed ranks/top-k, abstentions, ambiguity and confidence
+descriptively with denominators; 12 cases cannot establish identification accuracy.
+
+## Proposed larger collection (not authorized or begun)
+
+Before recruitment, approve a versioned sampling manifest and independent custodian.
+Propose staged intake up to 400 new accounts, roughly balanced Caribbean/Pacific,
+across novice/experienced divers, different sites, depths, habitats and visibility.
+Prefer one independent author/encounter per account; keep all linked groups together.
+Collect recollections prospectively without catalogue prompts; describe missing
+strata rather than manufacturing examples. A label-blind intake coordinator logs
+completion/exclusion before engine use. A separate verifier assigns labels.
+
+Planning targets after verification: about 200 identification cases and the
+remaining 200 spread across naturally ambiguous, independently supported no-match
+and regional-conflict cases. These are recruitment/coverage aims, not permission
+to rewrite observations or force labels. Unresolved observations remain reported.
+Do not manufacture a regional-conflict account by editing its location or selecting
+a wrong pack after observing results; any controlled policy probes remain separate
+synthetic development tests. If natural policy cases are scarce, report that limit.
+
+Keep the existing deterministic cohort split: approximately 80% development / 20%
+holdout by the v1 hash. Do not alter cohort IDs or rebalance after engine results.
+All pilot participants/linked encounters exposed to development stay development;
+reserve new unexposed cohorts for independent evaluation. Only the custodian may
+see holdout wording or per-case failures; release aggregate metrics to developers.
+Before any holdout run, freeze code, catalogue, criteria, case bytes and labels.
+
+With 400 rows these aims might yield roughly 40 positive and 13 cases per policy
+class in holdout, but group assignment, unresolved labels and publication coverage
+can reduce counts. This is a planning estimate, not a power calculation. Existing
+minimum denominators (30 positive and 10 per policy class per split/access) remain
+mandatory. The two-species publication subset may not meet them; report insufficient
+sample rather than changing thresholds or cherry-picking successful species.
+At predeclared 100-row intake checkpoints, audit completeness and strata without
+engine output. Any extension beyond 400 needs a new prospective collection decision;
+do not collect until a quality gate happens to pass.

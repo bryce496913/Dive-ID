@@ -84,6 +84,34 @@ def lock_state():
             'files':{str(p.relative_to(ROOT)):digest(p.read_bytes()) for p in paths},
             'engine':'production-bm25-50-biological', 'displayLimit':10}
 
+def pilot_readiness(document):
+    """Schema preflight only: no engine, freeze, personal data or case-level output."""
+    cases = validate(document)
+    rows = document['observations']
+    regions = {region: sum(r['region'] == region for r in rows)
+               for region in ('caribbean', 'tropical-pacific')}
+    unresolved = sum(c['kind'] == 'unresolved' for c in cases)
+    publication_missing = sum(not isinstance(r.get('consentForPublication'), bool) for r in rows)
+    context_missing = sum(not isinstance(r.get('observationContext'), dict)
+                          or not r['observationContext'] for r in rows)
+    return {
+        'purpose': 'Collection workflow preflight, not independent quality evidence',
+        'collected': len(rows), 'target': 12, 'remainingToCollect': max(0, 12-len(rows)),
+        'regions': regions, 'targetRegions': {'caribbean': 4, 'tropical-pacific': 8},
+        'verifiedLabelsDeclared': len(cases)-unresolved, 'unresolvedLabels': unresolved,
+        'multipleIdentityLabels': sum(len(c['expectedSpeciesIDs']) > 1 for c in cases),
+        'distinctContributors': len({r['author']['participantID'] for r in rows}),
+        'publicationConsentNotRecorded': publication_missing,
+        'observationContextNotRecorded': context_missing,
+        'developmentCases': sum(c['split'] == 'development' for c in cases),
+        'holdoutCases': sum(c['split'] == 'holdout' for c in cases),
+        'collectionTargetMet': len(rows) == 12 and regions == {'caribbean': 4, 'tropical-pacific': 8},
+        'allLabelsVerifiedDeclared': bool(rows) and unresolved == 0,
+        'humanEvidenceAuditRequired': True,
+        'baseline': 'not run', 'accuracyConclusion': 'unavailable',
+        'caseDetailsSuppressed': True,
+    }
+
 def private_directory(path):
     path = path.resolve()
     require(not path.is_relative_to(ROOT.resolve()), 'Custodian data must be outside the repository')
@@ -167,9 +195,14 @@ def evaluate(directory, swift):
     return report
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['freeze','evaluate']);p.add_argument('--source',type=Path);p.add_argument('--private-dir',type=Path,required=True);p.add_argument('--swift',default='swift');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['preflight','freeze','evaluate']);p.add_argument('--source',type=Path);p.add_argument('--private-dir',type=Path);p.add_argument('--swift',default='swift');a=p.parse_args()
     try:
-        result=freeze(a.source,a.private_dir) if a.command=='freeze' else evaluate(a.private_dir,a.swift)
+        if a.command == 'preflight':
+            require(a.source is not None and not a.source.resolve().is_relative_to(ROOT.resolve()), 'Private source required')
+            result = pilot_readiness(json.loads(a.source.read_text()))
+        else:
+            require(a.private_dir is not None, 'Private directory required')
+            result=freeze(a.source,a.private_dir) if a.command=='freeze' else evaluate(a.private_dir,a.swift)
         print(json.dumps(result,indent=2))
     except (ValueError,KeyError,TypeError,AttributeError,OSError,subprocess.SubprocessError) as error:
         # No source text or identifiers echoed from parser exceptions.
