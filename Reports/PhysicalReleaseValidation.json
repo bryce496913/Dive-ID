@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "preparationDate": "2026-10-14",
+  "applicationBaselineSHA": "10af439db9dc4d3e160a2f9bb0432d4fb2a80ea3",
+  "applicationBaselineTree": "6dfb344cb009ae5a84b9b0c97153316211d4cc4d",
+  "physicalDeviceStatus": "unexecuted",
+  "reason": "Linux executor; no Xcode, paired iPhone or remote Mac available",
+  "expected": {
+    "marketingVersion": "0.5",
+    "build": "2",
+    "minimumIOS": "18.0",
+    "configuration": "Release",
+    "projectBundleIdentifier": "com.brycecameron.DiveID",
+    "engine": "production BM25 with biological ranking",
+    "candidateLimit": 50,
+    "displayLimit": 10,
+    "publicationIDs": {
+      "caribbean": [
+        "00000000-0000-0000-0000-000000000003",
+        "fc213eff-6ba6-53ab-b288-f6e654299e68"
+      ],
+      "tropical-pacific": []
+    },
+    "draftCount": 390
+  },
+  "deviceObservations": {
+    "installedCommitSHA": null,
+    "xcodeVersion": null,
+    "deviceModel": null,
+    "iosVersion": null,
+    "resolvedBundleIdentifier": null,
+    "installedVersion": null,
+    "installedBuild": null,
+    "runtimeEngine": null,
+    "airplaneMode": null,
+    "wifiDisabled": null,
+    "cellularDisabled": null
+  },
+  "cases": [
+    {
+      "frozenCase": {
+        "id": "v05-01-diagnostic",
+        "description": "Compressed blue reef fish with a yellow spine beside its tail.",
+        "selectedPackID": "caribbean",
+        "kind": "identification",
+        "expectedSpeciesIDs": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": 3,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "diagnostic"
+        ],
+        "evidenceIDs": [
+          "s01"
+        ],
+        "provenance": "synthetic-source-informed",
+        "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-01-paraphrase",
+        "description": "Yellow juvenile surgeonfish grazing on the Caribbean reef.",
+        "selectedPackID": "caribbean",
+        "kind": "identification",
+        "expectedSpeciesIDs": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": 10,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "paraphrase"
+        ],
+        "evidenceIDs": [
+          "s01"
+        ],
+        "provenance": "synthetic-source-informed",
+        "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-03-diagnostic",
+        "description": "Blue and yellow deep-bodied fish with a blue-ringed crown spot on its forehead.",
+        "selectedPackID": "caribbean",
+        "kind": "identification",
+        "expectedSpeciesIDs": [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68"
+        ],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": 3,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "diagnostic"
+        ],
+        "evidenceIDs": [
+          "s03"
+        ],
+        "provenance": "synthetic-source-informed",
+        "rationale": "Identity follows cited trait combination; rank 3 is a pre-run product requirement, not a claim of unique biological identification."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-03-paraphrase",
+        "description": "An oval blue fish with yellow fins and a dark crown mark, at a depth of 20 meters.",
+        "selectedPackID": "caribbean",
+        "kind": "identification",
+        "expectedSpeciesIDs": [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68"
+        ],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": 10,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "paraphrase",
+          "measurement"
+        ],
+        "evidenceIDs": [
+          "s03"
+        ],
+        "provenance": "synthetic-source-informed",
+        "rationale": "Identity follows cited trait combination; rank 10 is a pre-run product requirement, not a claim of unique biological identification."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-ambiguous-angelfish",
+        "description": "Dark angelfish near a Caribbean reef.",
+        "selectedPackID": "caribbean",
+        "kind": "ambiguous",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [
+          "fc213eff-6ba6-53ab-b288-f6e654299e68",
+          "eff286cc-2c87-5393-b00d-e158fd48e3aa"
+        ],
+        "maximumAcceptableRank": 10,
+        "maximumConfidence": 0.64,
+        "tags": [
+          "ambiguous",
+          "short"
+        ],
+        "evidenceIDs": [
+          "s03",
+          "s04"
+        ],
+        "provenance": "synthetic-source-informed",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-caribbean-frog",
+        "description": "Freshwater frog sitting on a lily pad.",
+        "selectedPackID": "caribbean",
+        "kind": "noMatch",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": null,
+        "maximumConfidence": 0,
+        "tags": [
+          "noMatch",
+          "short"
+        ],
+        "evidenceIDs": [],
+        "provenance": "synthetic-policy-probe",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-caribbean-vague",
+        "description": "A fish moved past me.",
+        "selectedPackID": "caribbean",
+        "kind": "noMatch",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": null,
+        "maximumConfidence": 0,
+        "tags": [
+          "noMatch",
+          "short"
+        ],
+        "evidenceIDs": [],
+        "provenance": "synthetic-policy-probe",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-caribbean-terrestrial",
+        "description": "A spotted freshwater frog on sand, about 5 cm long.",
+        "selectedPackID": "caribbean",
+        "kind": "noMatch",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": null,
+        "maximumConfidence": 0,
+        "tags": [
+          "noMatch",
+          "short"
+        ],
+        "evidenceIDs": [],
+        "provenance": "synthetic-policy-probe",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-region-1",
+        "description": "Blue and yellow striped surgeonfish on a reef in Fiji.",
+        "selectedPackID": "caribbean",
+        "kind": "regionConflict",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": null,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "regionConflict",
+          "short"
+        ],
+        "evidenceIDs": [],
+        "provenance": "synthetic-policy-probe",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "frozenCase": {
+        "id": "v05-region-2",
+        "description": "Brown leaflike fish in the Philippines.",
+        "selectedPackID": "caribbean",
+        "kind": "regionConflict",
+        "expectedSpeciesIDs": [],
+        "acceptableSpeciesIDs": [],
+        "maximumAcceptableRank": null,
+        "maximumConfidence": 1.0,
+        "tags": [
+          "regionConflict",
+          "short"
+        ],
+        "evidenceIDs": [],
+        "provenance": "synthetic-policy-probe",
+        "rationale": "Pre-run ambiguity/region/abstention contract; not an independent diver observation."
+      },
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    }
+  ],
+  "frozenCasesInapplicableToApprovedSubset": 36,
+  "flows": [
+    {
+      "id": "installed-subset",
+      "expected": "Caribbean exactly 2 approved; Pacific unavailable; no draft search access",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "persisted-region",
+      "expected": "Persisted Pacific offers Caribbean choice, not global no-catalogue message",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "cancellation",
+      "expected": "Abandoned search cannot overwrite immediately restarted results or leave spinner stuck",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "detail-back",
+      "expected": "Cached result and original request region retained",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "save-relaunch",
+      "expected": "Saved snapshot survives process termination and reopen",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "remove-relaunch",
+      "expected": "Removed snapshot stays absent after process termination",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "historical-save",
+      "expected": "Excluded species snapshot remains accessible",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    },
+    {
+      "id": "background",
+      "expected": "Screens recover and respond after background/foreground",
+      "status": "unexecuted",
+      "observed": null,
+      "evidencePath": null
+    }
+  ],
+  "timings": {
+    "method": "Tap Find Matches to stable rendered results, timestamped screen video; record frame rate and frame boundaries",
+    "caseID": "v05-01-diagnostic",
+    "plannedFirstSearchTrials": 5,
+    "plannedWarmTrials": 20,
+    "actualSampleSize": 0,
+    "rawSamples": [],
+    "firstSearchMedianMs": null,
+    "firstSearchRangeMs": null,
+    "warmMedianMs": null,
+    "warmP95Ms": null,
+    "p95Method": "nearest rank ceil(0.95*n), warm only with at least 20 samples",
+    "failures": [],
+    "visibleResponsiveness": null
+  },
+  "automatedEvidence": {
+    "portableRelease": {
+      "platform": "Linux Swift 6.2.3",
+      "tests": 129,
+      "skipped": 3,
+      "failures": 0,
+      "scope": "service evaluation, publication IDs, lifecycle and persisted snapshots; no physical-device evidence"
+    },
+    "pythonCI": {
+      "tests": 9,
+      "failures": 0
+    },
+    "regeneration": {
+      "identicalPasses": 2,
+      "artifacts": 10
+    },
+    "hostedBaseline": {
+      "url": "https://github.com/bryce496913/Dive-ID/actions/runs/38299609043",
+      "headSHA": "7315fc7de0482acc4bb9ad1c581ec23e735224f3",
+      "conclusion": "success",
+      "unitTests": 206,
+      "unitSkipped": 3,
+      "uiTests": 2,
+      "failures": 0,
+      "scope": "Prior hosted iOS Simulator Debug app tests, not installed Release iPhone"
+    }
+  },
+  "remaining": [
+    "Execute signed device build and pre-install checker on Mac",
+    "Install and inspect physical app with runtime engine trace",
+    "Perform all offline case and lifecycle rows",
+    "Collect real timing samples and evidence files"
+  ]
+}
