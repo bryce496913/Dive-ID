@@ -1,7 +1,7 @@
 {
   "id": "tropical-pacific",
   "schemaVersion": 1,
-  "packVersion": 2,
+  "packVersion": 3,
   "displayName": "Tropical Pacific (Experimental)",
   "shortDescription": "Source-traceable draft Tropical Pacific catalogue; not verified for publication",
   "geographicScope": "Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.",
@@ -15,12 +15,12 @@
     "Philippines",
     "Indonesia"
   ],
-  "speciesCount": 384,
+  "speciesCount": 1000,
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
   "lastDataReviewDate": null,
-  "includedRecordCount": 384,
+  "includedRecordCount": 1000,
   "humanReviewedRecordCount": 0,
   "publicationEligibleRecordCount": 0
 }

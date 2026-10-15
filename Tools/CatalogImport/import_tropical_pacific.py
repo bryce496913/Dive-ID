@@ -7,13 +7,14 @@ never read because it is reference-only and is not licensed for the application.
 """
 from __future__ import annotations
 
-import argparse, csv, json, re, sys
+import argparse, csv, hashlib, json, re, sys, uuid
 from collections import Counter, defaultdict
 from pathlib import Path
 from openpyxl import load_workbook
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'CatalogReview'))
-from catalog_review import apply_decisions, update_manifest
+from catalog_review import apply_decisions, update_manifest, replace_catalogue_pair
+from catalogue_validation import validate_catalogue
 
 BASELINE_SIZE = 40
 BATCH_SIZE = 100
@@ -91,6 +92,36 @@ def review_reasons(creature, source_traits, source):
     elif not clean(source.get('source_id')) or not clean(source.get('source_locator')): reasons.append('species-account source ID or locator is missing')
     return reasons
 
+def merge_draft_expansion(profiles, additions, audit):
+    """Separate explicit draft supplement; never relax workbook inclusion gates."""
+    if not isinstance(additions, list) or not isinstance(audit, dict):
+        raise ValueError('Expansion and audit must be an array and object')
+    if not isinstance(audit.get('notice'), str) or not audit['notice'].strip():
+        raise ValueError('Expansion audit requires a provenance notice')
+    for key in ('schemaVersion', 'baselineCount', 'proposedAdditionCount', 'proposedDevelopmentTotal'):
+        if type(audit.get(key)) is not int:
+            raise ValueError(f'Expansion audit {key} must be an integer')
+    validate_catalogue(profiles + additions)
+    ids = [str(uuid.UUID(p['id'])) for p in profiles + additions]
+    if len(ids) != len(set(ids)):
+        raise ValueError('Duplicate normalized species UUID in expansion/combined catalogue')
+    if (audit.get('schemaVersion') != 1 or audit.get('catalogue') != 'tropical-pacific'
+            or audit.get('baselineCount') != len(profiles)
+            or audit.get('proposedAdditionCount') != len(additions)
+            or audit.get('proposedDevelopmentTotal') != len(profiles) + len(additions)):
+        raise ValueError('Expansion audit counts/catalogue do not match inputs')
+    selected = audit.get('selectedRecordIDs', [])
+    if not isinstance(selected, list) or not all(isinstance(value, str) for value in selected):
+        raise ValueError('Expansion audit selectedRecordIDs must be an array of strings')
+    if len(selected) != len(additions) or set(selected) != {p['id'] for p in additions}:
+        raise ValueError('Expansion IDs differ from audit selection or contain duplicates')
+    for profile in additions:
+        review = profile['review']
+        if review.get('status') != 'draft' or review.get('verifiedBy') is not None or review.get('reviewDate') is not None:
+            raise ValueError('Development supplement must contain only unapproved draft records')
+    # Keep source records, UUIDs and provenance intact, independent of input ordering.
+    return sorted(profiles + additions, key=lambda p: (p['commonName'].casefold(), p['id']))
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--workbook',default='DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx')
@@ -99,6 +130,8 @@ def main():
     parser.add_argument('--outcomes',default='Reports/TropicalPacificOutcomes.csv')
     parser.add_argument('--review-queue',default='Reports/TropicalPacificReviewQueue.csv')
     parser.add_argument('--review-decisions',default='Data/CatalogReview/ReviewDecisions.json')
+    parser.add_argument('--expansion',default='Data/TropicalPacific/TropicalPacificExpansion616.draft.json')
+    parser.add_argument('--expansion-audit',default='Data/TropicalPacific/TropicalPacificExpansion616.audit.json')
     args=parser.parse_args()
     workbook=load_workbook(args.workbook,data_only=True,read_only=True)
     creatures=rows(workbook['Creatures']); traits=defaultdict(list); sources={}
@@ -146,13 +179,20 @@ def main():
           'taxonomy':None,'measurements':None,'tailShape':None,'mouthAndHeadShape':[],'finAndSpineClues':[]})
 
     profiles.sort(key=lambda profile:(profile['commonName'].casefold(),profile['id']))
+    workbook_included_count = len(profiles)
+    expansion_path, audit_path = Path(args.expansion), Path(args.expansion_audit)
+    expansion_bytes, audit_bytes = expansion_path.read_bytes(), audit_path.read_bytes()
+    additions, audit = json.loads(expansion_bytes), json.loads(audit_bytes)
+    profiles = merge_draft_expansion(profiles, additions, audit)
     output=Path(args.output); output.mkdir(parents=True,exist_ok=True)
-    manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':2,'displayName':'Tropical Pacific (Experimental)','shortDescription':'Source-traceable draft Tropical Pacific catalogue; not verified for publication','geographicScope':'Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None,'includedRecordCount':len(profiles),'humanReviewedRecordCount':0,'publicationEligibleRecordCount':0}
+    manifest={'id':'tropical-pacific','schemaVersion':1,'packVersion':3,'displayName':'Tropical Pacific (Experimental)','shortDescription':'Source-traceable draft Tropical Pacific catalogue; not verified for publication','geographicScope':'Workbook accounts with source-supported Tropical Pacific presence; structural inclusion does not verify identity, biology, or abundance.','regionAliases':['Tropical Pacific','Pacific','Indo-Pacific','Fiji','Hawaii','Australia','Philippines','Indonesia'],'speciesCount':len(profiles),'speciesResourceName':'Creatures','imageSubdirectory':'Images','includedWithApp':True,'lastDataReviewDate':None,'includedRecordCount':len(profiles),'humanReviewedRecordCount':0,'publicationEligibleRecordCount':0}
     decision_path=Path(args.review_decisions)
     decision_outcomes=apply_decisions(profiles,json.loads(decision_path.read_text(encoding='utf-8')),manifest['id']) if decision_path.is_file() else []
+    if any(outcome['state'] != 'applied' for outcome in decision_outcomes):
+        raise ValueError(f'Stale or blocked review overlay; outputs not written: {decision_outcomes}')
     update_manifest(manifest,profiles)
-    (output/'Creatures.json').write_text(json.dumps(profiles,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-    (output/'PackManifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+    validate_catalogue(profiles, manifest)
+    replace_catalogue_pair(output/'Creatures.json', output/'PackManifest.json', profiles, manifest)
     fields=list(outcomes[0]); Path(args.outcomes).parent.mkdir(parents=True,exist_ok=True)
     with Path(args.outcomes).open('w',newline='',encoding='utf-8') as handle:
         writer=csv.DictWriter(handle,fieldnames=fields,lineterminator='\n'); writer.writeheader(); writer.writerows(outcomes)
@@ -165,7 +205,8 @@ def main():
     canonical_category_counts=Counter(row['canonical_category'] or '(unresolved)' for row in outcomes if row['outcome']=='included')
     unresolved_category_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['category_diagnostic'])
     included_unresolved_counts=Counter(row['source_category'] or '(missing)' for row in outcomes if row['outcome']=='included' and row['category_diagnostic'])
-    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'recordCounts':{'structurallyIncluded':len(profiles),'humanReviewed':manifest['humanReviewedRecordCount'],'publicationEligible':manifest['publicationEligibleRecordCount'],'reviewQueue':len(pending)},'reviewDecisionOutcomes':decision_outcomes,'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'publicationPolicy':'Structural import, parsing, normalization, and search testing never confer publication approval. Promotion requires traceable source evidence plus named, dated human review with notes.','categoryNormalization':{'method':'casefolded, collapsed-whitespace exact allow-list; no substring matching','mapping':dict(sorted((key,value) for key,value in GROUP_CATEGORY_MAP.items())),'includedSourceCategoryCounts':dict(sorted(source_category_counts.items())),'includedCanonicalCategoryCounts':dict(sorted(canonical_category_counts.items())),'includedUnresolvedCategoryCounts':dict(sorted(included_unresolved_counts.items())),'unresolvedWorkbookCategoryCounts':dict(sorted(unresolved_category_counts.items()))},'selectionPolicy':{'rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
+    report={'workbook':args.workbook,'workbookRowCount':len(creatures),'recordCounts':{'structurallyIncluded':workbook_included_count,'developmentSupplementIncluded':len(additions),'bundled':len(profiles),'humanReviewed':manifest['humanReviewedRecordCount'],'publicationEligible':manifest['publicationEligibleRecordCount'],'reviewQueue':len(pending)},'reviewDecisionOutcomes':decision_outcomes,'outcomeCounts':{'included':counts['included'],'pendingReview':counts['pending_review'],'excluded':counts['excluded']},'publicationPolicy':'Structural import, parsing, normalization, and search testing never confer publication approval. Promotion requires traceable source evidence plus named, dated human review with notes.','categoryNormalization':{'method':'casefolded, collapsed-whitespace exact allow-list; no substring matching','mapping':dict(sorted((key,value) for key,value in GROUP_CATEGORY_MAP.items())),'includedSourceCategoryCounts':dict(sorted(source_category_counts.items())),'includedCanonicalCategoryCounts':dict(sorted(canonical_category_counts.items())),'includedUnresolvedCategoryCounts':dict(sorted(included_unresolved_counts.items())),'unresolvedWorkbookCategoryCounts':dict(sorted(unresolved_category_counts.items()))},'selectionPolicy':{'ruleScope':'Workbook admission only; explicit draft supplement is accounted separately','rules':['source-supported presence','identity confidence high with score 100','high account transcription confidence','complete printed identity','high-confidence identification description','source ID and locator','unique app identity'],'baselineSize':BASELINE_SIZE,'baselineIDs':baseline_ids,'batchSize':BATCH_SIZE,'batches':[{'number':n//BATCH_SIZE+1,'start':n+1,'end':min(n+BATCH_SIZE,len(profiles)),'recordIDs':[p['id'] for p in profiles[n:n+BATCH_SIZE]]} for n in range(0,len(profiles),BATCH_SIZE)]},'bundledRecordIDs':[p['id'] for p in profiles],'mediaImported':0,'mediaPolicy':'Workbook media remains reference_only_not_licensed_for_app and is never read or imported.','schemaResolution':'Unknown abundance is encoded as regionalOccurrence=unknown. Printed scientific names remain source identity; taxonomy and measurements are null rather than asserting an accepted name or measurement type.','determinism':'Workbook order is used only for row reporting; bundle, baseline, reasons, and batches use explicit stable ordering. Reports contain no run timestamp.'}
+    report['developmentSupplement'] = {'input':args.expansion,'sha256':hashlib.sha256(expansion_bytes).hexdigest(),'audit':args.expansion_audit,'auditSHA256':hashlib.sha256(audit_bytes).hexdigest(),'recordIDs':sorted(p['id'] for p in additions),'recordStatus':'draft','notice':audit['notice'],'policy':'Explicit development supplement; workbook gates and pending-review outcomes remain unchanged. Not source-verified or publication-approved.'}
     Path(args.report).write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-    print(f"processed {len(creatures)} rows: bundled {counts['included']}, pending {counts['pending_review']}, excluded {counts['excluded']}")
+    print(f"processed {len(creatures)} rows: bundled {len(profiles)} (workbook {counts['included']}, draft supplement {len(additions)}), pending {counts['pending_review']}, excluded {counts['excluded']}")
 if __name__=='__main__': main()

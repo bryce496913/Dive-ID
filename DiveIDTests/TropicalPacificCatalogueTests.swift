@@ -90,8 +90,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     ) async throws -> [(id: String, rank: Int?)] {
         let value = try pack()
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.metadata.packVersion, 2)
-        XCTAssertEqual(value.metadata.speciesCount, 384)
+        XCTAssertEqual(value.metadata.packVersion, 3)
+        XCTAssertEqual(value.metadata.speciesCount, 1000)
         XCTAssertEqual(value.profiles.count, value.metadata.speciesCount)
 
         let repository = PacificFixtureCatalogRepository(pack: value)
@@ -125,7 +125,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     func testGeneratedPackPreservesTraceabilityAndHasNoLicensedArtworkClaims() throws {
         let value = try pack()
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.profiles.count, 384)
+        XCTAssertEqual(value.profiles.count, 1000)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
         XCTAssertTrue(value.profiles.allSatisfy { $0.bundledImage == nil && $0.imageAssetName == nil })
         XCTAssertTrue(value.profiles.allSatisfy { !($0.dataSources.first?.stableSourceID ?? "").isEmpty })
@@ -154,8 +154,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         )
         let value = try await repository.loadPack(id: .tropicalPacific)
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.metadata.packVersion, 2)
-        XCTAssertEqual(value.profiles.count, 384)
+        XCTAssertEqual(value.metadata.packVersion, 3)
+        XCTAssertEqual(value.profiles.count, 1000)
         XCTAssertEqual(value.metadata.speciesCount, value.profiles.count)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
     }
@@ -187,6 +187,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         XCTAssertTrue(metadata.isExperimental)
         XCTAssertEqual(metadata.publicationStatusText, "Review accounting unavailable — not approved for publication")
 
+        metadata.speciesCount = 384 // Dedicated mixed-status accounting fixture.
         metadata.includedRecordCount = 384
         metadata.humanReviewedRecordCount = 0
         metadata.publicationEligibleRecordCount = 0
@@ -260,8 +261,8 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let value = try await repository.loadPack(id: .tropicalPacific)
         XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.metadata.packVersion, 2)
-        XCTAssertEqual(value.metadata.speciesCount, 384)
+        XCTAssertEqual(value.metadata.packVersion, 3)
+        XCTAssertEqual(value.metadata.speciesCount, 1000)
         XCTAssertEqual(value.profiles.count, value.metadata.speciesCount)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
     }
