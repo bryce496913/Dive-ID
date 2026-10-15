@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "reportDate": "2026-10-15",
+  "status": "research-only; not human-reviewed or published",
+  "baseline": {
+    "tropicalPacificDevelopmentRecords": 1000,
+    "caribbeanDevelopmentRecords": 8,
+    "caribbeanVerifiedRecords": 2
+  },
+  "newCandidates": 4000,
+  "tropicalPacificPlusResearchInventory": 5000,
+  "notEquivalentToPublishedCatalogue": true,
+  "sources": {
+    "reefLifeSurveySpecies": 3938,
+    "GennerLabFishBaseDerivedSpecies": 62,
+    "MOBS1HistoricalWoRMSAphiaMatches": 3384
+  },
+  "recordFieldCoverage": {
+    "descriptionsAtRLS": 1731,
+    "structuredDepthRange": 1207,
+    "sourceReportedMaxLength": 2891,
+    "sourceReportedBroadDistribution": 1690,
+    "photoReferencesExcluded": 2738,
+    "categoriesUnmapped": 409
+  },
+  "categoryCounts": {
+    "fish": 2372,
+    "mollusk": 746,
+    "crustacean": 256,
+    "eel": 71,
+    "ray": 59,
+    "shark": 53,
+    "octopus": 15,
+    "seahorse": 9,
+    "squid": 7,
+    "turtle": 3,
+    "unmapped": 409
+  },
+  "approved": 0,
+  "humanReviewed": 0,
+  "repositoryCommitAtSelection": "d6bb2667f027cf6cee63ebdae3c5cd83df4d58b1",
+  "dataFiles": [
+    "ResearchProfiles.01.json",
+    "ResearchProfiles.02.json",
+    "ResearchProfiles.03.json",
+    "ResearchProfiles.04.json",
+    "ResearchProfiles.05.json",
+    "ResearchProfiles.06.json",
+    "ResearchProfiles.07.json",
+    "ResearchProfiles.08.json",
+    "ResearchProfiles.09.json",
+    "ResearchProfiles.10.json"
+  ],
+  "provenanceFiles": [
+    "SourceIndex.01.json",
+    "SourceIndex.02.json",
+    "SourceIndex.03.json",
+    "SourceIndex.04.json"
+  ],
+  "sourceRepositories": {
+    "RLS": "https://github.com/reef-life-survey/rls-data/blob/master/output/species.json",
+    "RLSCommit": "47fe46699c996e8a3c0499315c8448343ddb4e03",
+    "MOBS": "https://github.com/crmcclain/MOBS_OPEN/blob/main/data_all_112224.csv",
+    "MOBSdoi": "https://doi.org/10.1111/geb.70062",
+    "MetaFish": "https://github.com/genner-lab/meta-fish-lib/blob/main/assets/species-table.csv"
+  },
+  "validationContract": [
+    "4000 exactly, stable unique UUIDs, common names and scientific names",
+    "all added records status=draft; no auto approval",
+    "no duplicated identity versus Caribbean/TP baseline",
+    "source provenance present for every candidate",
+    "imageAssetName and bundledImage null; no unlicensed photography copied",
+    "fields missing or not uniquely represented by current schema left blank",
+    "cannot be assigned to Tropical Pacific solely by presence in a global marine checklist",
+    "compare frozen baseline rank/abstention cases before enabling in development"
+  ],
+  "limitations": [
+    "Machine-extracted colors/markings from public species descriptions are not human-validated",
+    "Full copyrighted source descriptions and reference photographs were not copied into profile files",
+    "RLS distribution labels are broad and only present for a subset",
+    "Historical MOBS WoRMS AphiaIDs are not guaranteed current as of 2026",
+    "No direct field-level taxonomic reconciliation done for mismatches",
+    "No species-specific legal photo license has been obtained",
+    "Source length is not independently verified as TL/FL/SL; SpeciesMeasurements left null",
+    "Existing controlled category vocabulary does not support 409 draft records",
+    "These are a research corpus, not 4000 new usable diver-facing ID accounts"
+  ]
+}
