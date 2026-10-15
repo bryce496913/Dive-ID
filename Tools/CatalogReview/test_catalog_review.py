@@ -185,6 +185,27 @@ class ReviewTests(unittest.TestCase):
                     M.main()
             self.assertEqual((creatures.read_bytes(), pack_manifest.read_bytes()), before)
 
+    def test_first_generation_pair_and_failure_cleanup(self):
+        for fail in (False, True):
+            with self.subTest(fail=fail), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                creatures, manifest = root / "Creatures.json", root / "PackManifest.json"
+                real_replace = os.replace
+                def replace(source, target):
+                    if fail and target == manifest:
+                        raise OSError("simulated first-generation failure")
+                    return real_replace(source, target)
+                with mock.patch.object(M.os, "replace", side_effect=replace):
+                    if fail:
+                        with self.assertRaises(OSError):
+                            M.replace_catalogue_pair(creatures, manifest, [record()], {"id": CATALOGUE})
+                        self.assertFalse(creatures.exists())
+                        self.assertFalse(manifest.exists())
+                    else:
+                        M.replace_catalogue_pair(creatures, manifest, [record()], {"id": CATALOGUE})
+                        self.assertEqual(json.loads(creatures.read_text()), [record()])
+                        self.assertEqual(json.loads(manifest.read_text()), {"id": CATALOGUE})
+
     def test_second_output_replace_failure_rolls_back_both_files(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

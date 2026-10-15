@@ -235,8 +235,9 @@ def replace_catalogue_pair(creatures_path, manifest_path, records, manifest):
         installed = []
         try:
             for target, backup in zip(targets, backups):
-                os.replace(target, backup)
-                moved_backups.append((target, backup))
+                if target.exists():
+                    os.replace(target, backup)
+                    moved_backups.append((target, backup))
             for source, target in zip(staged, targets):
                 os.replace(source, target)
                 installed.append(target)
