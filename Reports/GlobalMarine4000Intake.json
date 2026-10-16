@@ -1,0 +1,41 @@
+{
+  "bucketCounts": {
+    "dive_site_invertebrates": 324,
+    "eels": 300,
+    "rays": 59,
+    "reef_fish": 3101,
+    "sea_turtles": 6,
+    "seahorses_pipefish": 130,
+    "sharks": 80
+  },
+  "categoryReviewRequired": 59,
+  "existingAppRecords": 1008,
+  "existingWorkbookRows": 1650,
+  "inputSHA256": {
+    "Data/GlobalMarine/Expansion4000_Audit.json": "9075091d03ad85dee7514a386aafbf4b700884b3f23a03263fe953132d23462a",
+    "Data/GlobalMarine/Expansion4000_CandidateQueue.csv": "7a1609c1965286812ec0f1d3fc8eb06bcbf57110197bb485517ea279aa466d39",
+    "Data/GlobalMarine/Expansion4000_ReserveQueue.csv": "70799860deea44477c9ddfef71a17371920ae88bccb95b1a29d9b34f2aab2734",
+    "Data/GlobalMarine/Sources/asfis.csv": "d5bfafbe1ebc608c83c3769017cf403031ce0e62d86e305709b693f2d4b5aa55",
+    "Data/GlobalMarine/Sources/reef.csv": "a2d8adc879e9b363568fd190cb4892ca394d79b2bf60b2da54c988da10135e7c",
+    "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "3806279e35c92777d009904f82c0541d29384ecf1813bfea44588f76be7247c5",
+    "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "6ff988905dce0849b4d1a343c0bc459ae8f342958210b642a864d6abfb08da6a",
+    "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "bd230f0e7aa580afe9e68a08373b3503a776fe3d735a3b866495174f2e281920",
+    "DiveID/Resources/IdentificationPacks/TropicalPacific/PackManifest.json": "1735fa89f27ee943fa3a2ad6984f668e8decea10dc3538c5caa7703098accb42",
+    "DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx": "26e3ae38316a5df3c04026207dc7cf1ff9472a2597dc9fbb4cb2d091f8fa8a27"
+  },
+  "policy": "Provisional IDs are stable candidate IDs, not accepted taxonomy. No application writes or publication promotion.",
+  "primaryCandidates": 4000,
+  "primaryIdentityCounts": {
+    "existing_identity": 307,
+    "new_provisional_identity": 3693
+  },
+  "primarySourceLineageCounts": {
+    "exact_snapshot_name": 3994,
+    "overview_requires_species_account": 6
+  },
+  "reserves": 529,
+  "schemaVersion": 1,
+  "unreadableExistingIdentityIDs": [
+    "42fa741c-5d6f-5be2-bd62-5e0d9e0f6366"
+  ]
+}

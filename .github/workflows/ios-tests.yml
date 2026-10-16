@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [TropicalPacificWorkbook, CatalogImport, CatalogReview, SemanticSearch/tests, CI, Evaluation]
+        suite: [TropicalPacificWorkbook, CatalogImport, CatalogReview, GlobalMarineImport, SemanticSearch/tests, CI, Evaluation]
     steps:
       - uses: actions/checkout@v4
       - name: Install Python test dependencies

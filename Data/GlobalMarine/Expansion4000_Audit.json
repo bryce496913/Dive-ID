@@ -1,0 +1,79 @@
+{
+  "dataset": "Dive-ID Global Marine 4000 Candidate Queue",
+  "createdDate": "2026-10-15",
+  "sourceCodeState": "d6bb2667f027cf6cee63ebdae3c5cd83df4d58b1",
+  "goals": {
+    "currentPacificDevelopment": 1000,
+    "currentCaribbeanDevelopment": 8,
+    "addUniqueCandidates": 4000,
+    "globalTargetLabel": "5,000 development catalogue candidates; baseline scope 1,000 Pacific, 8 Caribbean maintained separately"
+  },
+  "classification": "This file holds 4,000 unverified source-derived candidate names, NOT complete biological profiles or approved species; no AphiaIDs assigned.",
+  "quotas": {
+    "reef_fish": 3101,
+    "eels": 300,
+    "seahorses_pipefish": 130,
+    "sharks": 80,
+    "rays": 59,
+    "sea_turtles": 6,
+    "dive_site_invertebrates": 324
+  },
+  "availableBeforeSelection": {
+    "reef_fish": 3434,
+    "eels": 324,
+    "seahorses_pipefish": 142,
+    "sharks": 83,
+    "rays": 59,
+    "sea_turtles": 6,
+    "dive_site_invertebrates": 481
+  },
+  "produced": 4000,
+  "waitingReserve": 529,
+  "workbookUUIDReused": 307,
+  "candidatesRequireSchemaReview": 59,
+  "missingCommonNames": 3994,
+  "publicationEligible": 0,
+  "regionsAssigned": 0,
+  "wormsChecked": 0,
+  "extractedArtwork": 0,
+  "snapshotSources": [
+    {
+      "url": "https://github.com/valerianoparravicini/Trophic_Fish_2020/blob/master/data/all_reef_fish.csv",
+      "blobSHA": "fa213a24eb4a6d9530d532a149a81cf5a6e78e0d",
+      "license": "MIT (LICENSE.md)",
+      "usage": "Reef fish species names, family, historical FishBase SpecCode and unverified reported maximum size; no current accepted-name claim."
+    },
+    {
+      "url": "https://github.com/WorldFishCenter/asfis-species-list/blob/master/data/processed/species_list_isscaap.csv",
+      "blobSHA": "9e884a25bbd1976fbfec709a56908d031ff0821d",
+      "license": "MIT (LICENSE.md)",
+      "usage": "Marine fishery biodiversity names and family/division associations; 412 of 2,135 full-source dataset matches are genus/family derived."
+    },
+    {
+      "url": "https://oceanservice.noaa.gov/news/june15/sea-turtles.html",
+      "usage": "Sea turtle checklist; green turtle already in Caribbean pack."
+    }
+  ],
+  "existingSourceSnapshots": [
+    {
+      "path": "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json",
+      "blobSHA": "f1cec31e703baed9aaa31c2b91ab18d65a11aa23"
+    },
+    {
+      "path": "Reports/TropicalPacificReviewQueue.csv",
+      "blobSHA": "888947339f9444870e6455bc9f9c2c3b4bca23cc"
+    }
+  ],
+  "limitations": [
+    "Candidate scientific names may be outdated, unaccepted, spelling-variant or taxonomic synonyms; resolve with WoRMS using EXACT matches and accepted_AphiaID before promoting.",
+    "Source sizes in the reef list are not necessarily total length; do not import into app measurement fields without a measurement type and original source check.",
+    "No source-derived descriptions, colors, morphology or regions are claimed; a blank field is unknown.",
+    "WorldFish IHH mapping includes genus/family inferred associations; source division labels are not identity verification.",
+    "Global reef and fishery inclusion is NOT evidence of occurrence in Tropical Pacific or Caribbean.",
+    "No original source images have been imported, and no image rights have been granted.",
+    "Some reef species may be cryptic, deep-water, or not encountered by recreational divers; score dive relevance before publication.",
+    "There may be accepted-taxon duplicates after WoRMS resolution; use reserve queue to replace collisions while keeping actual counts, not fabricate extra records.",
+    "Do not merge global candidates into an existing regional app pack until independent regional-presence evidence is recorded.",
+    "Preserve catalogue 1000 + Caribbean 8 and frozen search evaluation unchanged; separate PRs and halt on regressed results."
+  ]
+}
