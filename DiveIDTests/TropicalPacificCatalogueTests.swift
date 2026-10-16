@@ -383,7 +383,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 XCTAssertEqual(profile.colors, ["brown", "red", "white", "yellow"])
                 XCTAssertEqual(profile.behaviors, ["hovering", "solitary"])
                 XCTAssertLessThanOrEqual(retrievalRank, 50)
-                XCTAssertEqual(displayedRank, 5)
+                XCTAssertEqual(displayedRank, 1)
             } else {
                 XCTAssertTrue(profile.colors.contains("brown"))
                 XCTAssertEqual(profile.bodyShapes, ["compressed"])
@@ -399,4 +399,70 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             print("PACIFIC_SOURCE_TRACE id=\(item.id) categories=\(observation.categories.sorted()) colors=\(observation.colors.sorted()) markings=\(observation.markings.sorted()) shapes=\(observation.bodyShapes.sorted()) habitats=\(observation.habitats.sorted()) behaviors=\(observation.behaviors.sorted()) retrievalRank=\(retrievalRank) retrievalScore=\(expected.retrievalScore) terms=\(expected.matchedTerms) survives50=\(retrievalRank <= 50) rawScore=\(String(describing: isolated?.rawScore)) support=\(isolated?.matchedClues ?? []) conflicts=\(isolated?.conflictingClues ?? []) eligible=\(isolated != nil) displayedRank=\(String(describing: displayedRank))")
         }
     }
+    func testExpansionScoreTrace() async throws {
+        guard let destination = ProcessInfo.processInfo.environment["DIVEID_EXPANSION_TRACE"] else { return }
+        let full = try pack()
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let additions = try JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent("Data/TropicalPacific/TropicalPacificExpansion616.draft.json"))) as! [[String: Any]]
+        let added = Set(additions.compactMap { UUID(uuidString: $0["id"] as! String) })
+        let v05 = try JSONSerialization.jsonObject(with: Data(contentsOf: TestResources.fixture(named: "V05Development.v2"))) as! [String: Any]
+        let surgeon = (v05["cases"] as! [[String: Any]]).first { $0["id"] as? String == "v05-14-paraphrase" }!
+        let fire = try diverDescriptions().first { $0.id == "pacific-v1-fire-dartfish" }!
+        var queries: [(String, String, UUID)] = [(fire.id, fire.description, fire.expectedSpeciesIDs[0]), (surgeon["id"] as! String, surgeon["description"] as! String, UUID(uuidString: (surgeon["expectedSpeciesIDs"] as! [String])[0])!)]
+        let extra = (v05["cases"] as! [[String: Any]]).first { $0["id"] as? String == "v05-09-paraphrase" }!
+        queries.append((extra["id"] as! String, extra["description"] as! String, UUID(uuidString: (extra["expectedSpeciesIDs"] as! [String])[0])!))
+        var traces: [[String: Any]] = []
+        for (label, profiles) in [("preExpansion", full.profiles.filter { !added.contains($0.id) }), ("expanded", full.profiles)] {
+            let documents = profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: full.metadata) }
+            for (caseID, query, expectedID) in queries {
+                let observation = await LocalObservationParser().parse(query)
+                let retrieved = try await BM25SpeciesCandidateRetriever().retrieve(query: query, documents: documents, limit: documents.count)
+                let indexed = documents.map { BM25SpeciesCandidateRetriever.terms($0.combinedText) }
+                let averageLength = Double(indexed.reduce(0) { $0 + $1.count }) / Double(indexed.count)
+                let documentFrequency = indexed.flatMap { Set($0) }.reduce(into: [String: Int]()) { $0[$1, default: 0] += 1 }
+                var rows: [[String: Any]] = []
+                var hybrid: [(UUID, Double)] = []; var structured: [(UUID, Double)] = []
+                for profile in profiles {
+                    let index = retrieved.firstIndex { $0.speciesID == profile.id }
+                    let hit = index.map { retrieved[$0] }
+                    let signal = hit.map { SpeciesRetrievalSignal(source: $0.evidence, scoreKind: $0.scoreKind, score: $0.retrievalScore, rank: index! + 1, evidence: $0.matchedTerms) }
+                    let single = try await LocalSpeciesRanker().rank(input: .init(description: query, observation: observation, candidates: [.init(speciesID: profile.id, profile: profile, retrieval: signal)])).first
+                    let plain = try await LocalSpeciesRanker().rank(observation: observation, profiles: [profile]).first
+                    if let single, let index, index < 50 { hybrid.append((profile.id, single.orderingScore)) }
+                    if let plain { structured.append((profile.id, plain.orderingScore)) }
+                    rows.append(["id": profile.id.uuidString, "name": profile.commonName, "added": added.contains(profile.id), "retrievalRank": index.map { $0 + 1 } as Any? ?? NSNull(), "bm25": hit?.retrievalScore as Any? ?? NSNull(), "matchedTerms": hit?.matchedTerms ?? [], "eligible": single != nil, "raw": single?.rawScore as Any? ?? NSNull(), "ordering": single?.orderingScore as Any? ?? NSNull(), "structuredOrdering": plain?.orderingScore as Any? ?? NSNull(), "support": single?.matchedClues ?? [], "conflicts": single?.conflictingClues ?? [], "document": documents.first { $0.speciesID == profile.id }!.combinedText])
+                }
+                func ordered(_ values: [(UUID, Double)]) -> [UUID] {
+                    values.sorted { a, b in
+                        if a.1 != b.1 { return a.1 > b.1 }
+                        let an = profiles.first { $0.id == a.0 }!.commonName; let bn = profiles.first { $0.id == b.0 }!.commonName
+                        return an == bn ? a.0.uuidString < b.0.uuidString : an < bn
+                    }.map { $0.0 }
+                }
+                for index in rows.indices {
+                    let terms = indexed[index]
+                    let frequencies = Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +)
+                    rows[index]["bm25Terms"] = (rows[index]["matchedTerms"] as! [String]).map { term -> [String: Any] in
+                        let frequency = Double(frequencies[term, default: 0])
+                        let df = Double(documentFrequency[term, default: 0])
+                        let idf = log(1 + (Double(documents.count) - df + 0.5) / (df + 0.5))
+                        let contribution = idf * frequency * 2.2 / (frequency + 1.2 * (0.25 + 0.75 * Double(terms.count) / averageLength))
+                        return ["term": term, "frequency": frequency, "documentFrequency": df, "idf": idf, "contribution": contribution]
+                    }
+                    rows[index]["documentLength"] = terms.count
+                    rows[index]["averageDocumentLength"] = averageLength
+                }
+                let h = ordered(hybrid); let st = ordered(structured)
+                let selected = Set(h.prefix(12)).union(st.prefix(12)).union(retrieved.prefix(12).map(\.speciesID)).union([expectedID])
+                for index in rows.indices {
+                    let id = UUID(uuidString: rows[index]["id"] as! String)!
+                    rows[index]["hybridRank"] = h.firstIndex(of: id).map { $0 + 1 } as Any? ?? NSNull()
+                    rows[index]["structuredRank"] = st.firstIndex(of: id).map { $0 + 1 } as Any? ?? NSNull()
+                }
+                traces.append(["catalogue":label,"count":profiles.count,"fingerprint":SpeciesSearchDocument.catalogueFingerprint(documents),"caseID":caseID,"query":query,"expectedID":expectedID.uuidString,"tokens":observation.tokens.sorted(),"appearanceRelationships":observation.appearanceRelationships.sorted(),"colorEvidenceGroups":observation.colorEvidenceGroups.map { $0.sorted() },"colors":observation.colors.sorted(),"markings":observation.markings.sorted(),"shapes":observation.bodyShapes.sorted(),"habitats":observation.habitats.sorted(),"behaviors":observation.behaviors.sorted(),"categories":observation.categories.sorted(),"candidates":rows.filter { selected.contains(UUID(uuidString:$0["id"] as! String)!) }])
+            }
+        }
+        try JSONSerialization.data(withJSONObject: traces, options: [.prettyPrinted,.sortedKeys]).write(to: URL(fileURLWithPath: destination))
+    }
+
 }

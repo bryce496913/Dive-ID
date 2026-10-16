@@ -66,7 +66,7 @@ extension RankedLocalSpecies {
 
 struct LocalRankingWeights: Sendable {
     let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, regionConflict = -12.0
-    let tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
+    let appearanceRelationship = 2.0, tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
 }
 
@@ -125,12 +125,20 @@ struct LocalSpeciesRanker: SpeciesRanking {
             }
             add(observation.habitats, profile.habitats, weights.habitat, &score, &matched)
             add(observation.markings, profile.markings, weights.marking, &score, &matched)
-            add(observation.colors, profile.colors, weights.color, &score, &matched)
+            addColors(observation, profile.colors, &score, &matched)
+            let sourceAppearance = ([profile.summary] + profile.distinguishingFeatures).joined(separator: " | ")
+            let patterned = observation.appearanceRelationships.intersection(AppearanceEvidenceVocabulary.appearanceRelationships(in: sourceAppearance))
+            if !patterned.isEmpty {
+                // One bounded relation group; aliases and repeated source prose
+                // cannot multiply the evidence. Missing relations stay neutral.
+                score += weights.appearanceRelationship
+                matched.append(contentsOf: patterned.sorted())
+            }
             var bestVariant: SpeciesAppearanceVariant? = nil
             var bestVariantScore = 0.0
             for variant in profile.appearanceVariants {
                 var variantScore = 0.0; var variantHits: [String] = []
-                add(observation.colors, variant.colors, weights.color, &variantScore, &variantHits)
+                addColors(observation, variant.colors, &variantScore, &variantHits)
                 add(observation.markings, variant.markings, weights.marking, &variantScore, &variantHits)
                 add(observation.bodyShapes, variant.bodyShapes, weights.bodyShape, &variantScore, &variantHits)
                 if variantScore > bestVariantScore { bestVariantScore = variantScore; bestVariant = variant }
@@ -256,6 +264,15 @@ struct LocalSpeciesRanker: SpeciesRanking {
     private func unique(_ values: [String]) -> [String] {
         var seen = Set<String>()
         return values.filter { seen.insert($0).inserted }
+    }
+
+    private func addColors(_ observation: ParsedObservation, _ colors: [String], _ score: inout Double, _ matched: inout [String]) {
+        let groups = observation.colorEvidenceGroups.isEmpty ? observation.colors.sorted().map { Set([$0]) } : observation.colorEvidenceGroups
+        let supported = Set(colors.map { $0.lowercased() })
+        for group in groups {
+            let hits = group.intersection(supported)
+            if !hits.isEmpty { score += weights.color; matched.append(contentsOf: hits.sorted()) }
+        }
     }
 
     private func add(_ observed: Set<String>, _ profile: [String], _ weight: Double, _ score: inout Double, _ matched: inout [String]) {

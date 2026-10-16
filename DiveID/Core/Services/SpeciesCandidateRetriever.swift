@@ -35,7 +35,7 @@ extension RetrievedSpeciesCandidate {
 }
 
 /// A small, dependency-free BM25 retriever. It deliberately indexes the complete
-/// canonical document rather than recreating the structured vocabulary as aliases.
+/// canonical document, including deduplicated explicit appearance relationships.
 struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
     let saturation: Double
     let lengthNormalization: Double
@@ -92,12 +92,13 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
         }.prefix(limit).map { $0 }
     }
 
-    private static func terms(_ text: String) -> [String] {
+    static func terms(_ text: String) -> [String] {
         var seenMorphology = Set<String>()
         let canonical = Set(MorphologyVocabulary.patterns.map { $0.0.replacingOccurrences(of: " ", with: "") })
-        return MorphologyVocabulary.scopedText(text).split { !$0.isLetter && !$0.isNumber }.map {
+        let words = MorphologyVocabulary.scopedText(text).split { !$0.isLetter && !$0.isNumber }.map {
             LocalObservationParser.singular(String($0))
         }.filter { !$0.isEmpty && (!canonical.contains($0) || seenMorphology.insert($0).inserted) }
+        return words + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
     }
 
     private static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }

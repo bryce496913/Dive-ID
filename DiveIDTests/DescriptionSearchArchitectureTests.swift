@@ -12,6 +12,69 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
         return try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
     }
 
+    // Synthetic profiles isolate evidence relationships, not species identity.
+    func testCompoundHueDoesNotRewardAnUnorderedColorListTwice() async throws {
+        let seed = try await pack().profiles[0]
+        func profile(_ name: String, _ colors: [String], _ prose: String) throws -> LocalSpeciesProfile {
+            var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(seed)) as? [String: Any])
+            object["id"] = UUID().uuidString
+            object["commonName"] = name
+            object["scientificName"] = name
+            object["categories"] = ["fish"]
+            object["habitats"] = ["reef"]
+            object["colors"] = colors
+            object["summary"] = prose
+            object["distinguishingFeatures"] = [prose, prose]
+            object["appearanceVariants"] = []
+            return try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+        }
+        let single = try profile("Single hue", ["red"], "Reported color: red.")
+        let list = try profile("Unordered list", ["red", "orange"], "Reported colors: red, orange.")
+        let compound = try profile("Source relationship", ["red", "orange"], "Reddish-orange body.")
+        let observation = await LocalObservationParser().parse("orange-red fish over a reef")
+        let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: [single, list, compound])
+        let scores = Dictionary(uniqueKeysWithValues: ranked.map { ($0.profile.id, $0.rawScore) })
+        XCTAssertEqual(scores[single.id], scores[list.id])
+        XCTAssertEqual(try XCTUnwrap(scores[compound.id]) - XCTUnwrap(scores[list.id]), LocalRankingWeights().appearanceRelationship)
+        XCTAssertTrue(ranked.allSatisfy { $0.conflictingClues.isEmpty })
+
+        let separate = await LocalObservationParser().parse("orange and red fish over a reef")
+        let separateRanks = try await LocalSpeciesRanker().rank(observation: separate, profiles: [single, list])
+        XCTAssertEqual(separateRanks.first?.profile.id, list.id)
+    }
+
+    func testPatternRelationshipsDistinguishSharedColorAndMarkingLists() async throws {
+        let pack = try await pack()
+        func profile(_ prose: String) throws -> LocalSpeciesProfile {
+            var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(pack.profiles[0])) as? [String: Any])
+            object["id"] = UUID().uuidString
+            object["commonName"] = "Synthetic pattern fixture"
+            object["scientificName"] = "Synthetic pattern fixture"
+            object["categories"] = ["fish"]
+            object["colors"] = ["blue", "yellow"]
+            object["markings"] = ["stripes"]
+            object["summary"] = prose
+            object["distinguishingFeatures"] = [prose, prose]
+            object["appearanceVariants"] = []
+            return try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+        }
+        let supported = try profile("Blue bands on yellow sides.")
+        let reversed = try profile("Yellow stripes on blue sides.")
+        let unknown = try profile("Reported colors: blue, yellow. Reported markings: stripes.")
+        let profiles = [supported, reversed, unknown]
+        let documents = profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        for query in ["blue-striped fish", "fish with blue bands", "fish with fine blue stripes"] {
+            let observation = await LocalObservationParser().parse(query)
+            let retrieved = try await BM25SpeciesCandidateRetriever().retrieve(query: query, documents: documents, limit: 3)
+            XCTAssertEqual(retrieved.first?.speciesID, supported.id, query)
+            let ranked = try await LocalSpeciesRanker().rank(observation: observation, profiles: profiles)
+            XCTAssertEqual(ranked.first?.profile.id, supported.id, query)
+            let scores = Dictionary(uniqueKeysWithValues: ranked.map { ($0.profile.id, $0.rawScore) })
+            XCTAssertEqual(scores[reversed.id], scores[unknown.id], "Unknown relationship must remain neutral")
+            XCTAssertTrue(ranked.allSatisfy { $0.conflictingClues.isEmpty })
+        }
+    }
+
     private func semantic(_ score: Double, rank: Int) -> SpeciesRetrievalSignal {
         SpeciesRetrievalSignal(source: .semantic, scoreKind: .cosineSimilarity, score: score, rank: rank, evidence: [])
     }
