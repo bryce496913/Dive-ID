@@ -442,13 +442,21 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 for index in rows.indices {
                     let terms = indexed[index]
                     let frequencies = Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +)
-                    rows[index]["bm25Terms"] = (rows[index]["matchedTerms"] as! [String]).map { term -> [String: Any] in
+                    let matchedTerms = rows[index]["matchedTerms"] as! [String]
+                    var termEvidence: [[String: Any]] = []
+                    let corpusCount = Double(documents.count)
+                    let lengthRatio = Double(terms.count) / averageLength
+                    let lengthPenalty = 1.2 * (0.25 + 0.75 * lengthRatio)
+                    for term in matchedTerms {
                         let frequency = Double(frequencies[term, default: 0])
                         let df = Double(documentFrequency[term, default: 0])
-                        let idf = log(1 + (Double(documents.count) - df + 0.5) / (df + 0.5))
-                        let contribution = idf * frequency * 2.2 / (frequency + 1.2 * (0.25 + 0.75 * Double(terms.count) / averageLength))
-                        return ["term": term, "frequency": frequency, "documentFrequency": df, "idf": idf, "contribution": contribution]
+                        let inverseRatio = (corpusCount - df + 0.5) / (df + 0.5)
+                        let idf = log(1.0 + inverseRatio)
+                        let contribution = idf * frequency * 2.2 / (frequency + lengthPenalty)
+                        let evidence: [String: Any] = ["term": term, "frequency": frequency, "documentFrequency": df, "idf": idf, "contribution": contribution]
+                        termEvidence.append(evidence)
                     }
+                    rows[index]["bm25Terms"] = termEvidence
                     rows[index]["documentLength"] = terms.count
                     rows[index]["averageDocumentLength"] = averageLength
                 }
