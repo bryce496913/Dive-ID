@@ -1,0 +1,20 @@
+{
+  "baselineNames": 1649,
+  "baselineTaxonomyComplete": false,
+  "checkpointInputFingerprint": "b89e05b13f2dd5aa6373feb748db12e691c685a8a87dba07c41a3eb6aa5908e1",
+  "humanVerifiedNewProfiles": 0,
+  "inputFingerprint": "b89e05b13f2dd5aa6373feb748db12e691c685a8a87dba07c41a3eb6aa5908e1",
+  "primaryCandidates": 4000,
+  "primaryDiagnostics": {
+    "cache_missing": 4000
+  },
+  "primaryDispositionCounts": {
+    "pending_taxonomy": 4000
+  },
+  "primaryTaxonomicallyConfirmed": 0,
+  "primaryUnresolved": 4000,
+  "publicationEligibleNewProfiles": 0,
+  "reserveCandidates": 529,
+  "schemaVersion": 1,
+  "uniqueCanonicalTaxa": 0
+}
