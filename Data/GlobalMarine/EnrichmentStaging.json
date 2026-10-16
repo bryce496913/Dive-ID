@@ -1,0 +1,101 @@
+[
+  {
+    "blockingReasons": [
+      "taxonomy_pending",
+      "baseline_synonym_comparison_pending",
+      "conflicting_source_fields",
+      "no_supported_regional_assignment"
+    ],
+    "candidateID": "MARINE5K-00001",
+    "conflictingFields": [
+      "depth"
+    ],
+    "evidenceFingerprints": [
+      "d42a5d99fe1bb717becb9404f4139421597166ce0150d3efae797f7f5483bc4f",
+      "65b7e1d5d83f0d01fe19ab0ac81e698d4d22e19dd3d30fc61765e258144ec771",
+      "92025bcd32e945c06c8fc5acdb05ae6554035a330f2dd8063fcee4e3ae55367f",
+      "a6b8b7d4629c095d5282ef144efb1530b8fb72bac898c9c8a2189427151887d3",
+      "021087a77a6e074fcc74e2f246ba9a111a96b4f0ae552d6cf33414fa9ec1c1c4",
+      "672d15edb7f8950a12086427703651745983484dbe44c281b04e5429e2a8c7bb",
+      "43061ea779dab49b8d5c7e06b0c327164cd2232acf762e21b494dfa44efdd3d1",
+      "e84cf44adb32475cd72211dce2606758e6ffc44061dcdb35b3d730b4f29099e9",
+      "546de85737701faf3f266b24232105e329c03283800cdbd0979918ed7b398cdb",
+      "9dfb16bbfb494aee5e63defe93fd8fce036e800a213c59088b948dbffdf03eb9",
+      "1be3108e5d1262c481a4df2f753d2f2d75317a9a166a36afdda3fd1ad4224aa6"
+    ],
+    "humanApprovalCoversCurrentContent": false,
+    "missingCoreFields": [],
+    "researchContentFingerprint": "47f83c3df41eef57fecd237fc1306de1aab3b3bb56dd3987834912d49cb8c755",
+    "reviewStatus": "draft",
+    "sourceScientificName": "Achoerodus gouldii",
+    "supportedFields": {
+      "appearance": "Juveniles green with pale spots; females grey-green to red; males grey to blue.",
+      "categories": [
+        "fish"
+      ],
+      "commonName": "Western Blue Groper",
+      "distribution": "Temperate southern Australia, Victoria to the Houtman Abrolhos in Western Australia.",
+      "habitat": "Adults on rocky reefs; juveniles in sheltered algal reefs and seagrass.",
+      "lookalikes": {
+        "comparison": "Eastern species has more lateral-line scale rows; visual identification can be difficult.",
+        "scientificName": "Achoerodus viridis"
+      },
+      "measurements": {
+        "maximumRecordedCentimeters": 175,
+        "type": "totalLength"
+      },
+      "morphology": "Long dorsal-fin base, fleshy lips, peg-like teeth and a squared tail."
+    }
+  },
+  {
+    "blockingReasons": [
+      "taxonomy_pending",
+      "baseline_synonym_comparison_pending",
+      "conflicting_source_fields"
+    ],
+    "candidateID": "MARINE5K-03673",
+    "conflictingFields": [
+      "measurements"
+    ],
+    "evidenceFingerprints": [
+      "56232744ac38c6417e0facd791d3a0d343144924863907da66e8e8001a28f869",
+      "19df9f4b7c7df7c6e0aff7ed26b2b389e19c63f99031aa9bde0f1d65e986dc02",
+      "f33705d82e13558a8cbb44c1ae058006f765d06d4206bacbbab864637f71142d",
+      "253405cdd1c87b540b5e120f48c7c6bee2c6ca81629ad6e7cc5c4bc25ed6161f",
+      "82e7c8c8753e6cc7bff9bb607e790478e20f1863a003bfdb7feaf43bb2763637",
+      "e767b0bf4497435d7959bd86bf80a187e49aeb7fd0cf91483675dfec43c55baf",
+      "8c0a2eea04ca88ca136497607f25ef295ca7ff44d1797cae1bfa8065084355bf",
+      "2deef79a08aec230bdcf838c0ef32b9a535c741fb8573e5dbf8c5ef27f3f5a69",
+      "c9f0b4a89a7f8a806b92a1e087a3608d313f5607421d52a8ac44966047e5304a",
+      "b44bb90f9c7ed83d5c0de12c147fa80df628ef96997d8e07374d552332045baf"
+    ],
+    "humanApprovalCoversCurrentContent": false,
+    "missingCoreFields": [],
+    "researchContentFingerprint": "2093ed71fa01dfcfd30099b0aad916450068552a62ca62082c4e395b4f811bf8",
+    "reviewStatus": "draft",
+    "sourceScientificName": "Eretmochelys imbricata",
+    "supportedFields": {
+      "appearance": "Mottled shell with overlapping scutes and a serrated edge; tapered head and V-shaped lower jaw.",
+      "categories": [
+        "turtle"
+      ],
+      "commonName": "Hawksbill Turtle",
+      "distribution": "Caribbean nesting includes Puerto Rico and the US Virgin Islands; Pacific nesting includes Hawaii.",
+      "habitat": "Nearshore coral reefs; eastern Pacific populations also use mangrove estuaries.",
+      "lifeStages": "Brown hatchlings initially use pelagic shelter; juveniles move to coastal feeding habitat.",
+      "region.caribbean": {
+        "localities": [
+          "Puerto Rico",
+          "US Virgin Islands"
+        ],
+        "occurrence": "documented"
+      },
+      "region.tropical-pacific": {
+        "localities": [
+          "Hawaii"
+        ],
+        "occurrence": "documented"
+      }
+    }
+  }
+]

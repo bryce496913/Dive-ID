@@ -64,3 +64,37 @@ rejected". The webservice documentation was inspected at
 https://www.marinespecies.org/aphia.php?p=webservice . Do not count mocked tests as
 actual API verification. Research/evidence staging and publication review remain
 separate from taxonomy confirmation.
+
+## Field evidence and regional staging
+
+The dependent evidence pass adds these commands:
+
+```sh
+python3 Tools/GlobalMarineImport/enrichment.py
+python3 Tools/GlobalMarineImport/verify_reproducibility.py
+python3 Tools/GlobalMarineImport/compare_quality.py /tmp/global-before.json /tmp/global-after.json
+```
+
+Research entries carry a candidate scientific name, exact source URL/section,
+access date, supported/conflicting/unsupported status, value, research method and
+content fingerprint. Unknown values stay absent/null. Conflicts block assembly;
+source-reported maxima never become observed size ranges. Re-signing an evidence
+entry records a changed research claim, not publication approval. Typed comparisons
+and life-stage variants stay in the evidence ledger until their exact mapping is
+reviewed. Only explicit species-locality evidence can propose a current region.
+Unsupported categories block assembly instead of being coerced into fish/mollusk.
+
+The stage assembler requires confirmed unique taxonomy, complete baseline collision
+clearance, supported identification fields, no unresolved source conflicts and a
+supported region. It validates assembled profiles through the existing catalogue
+validator and writes only `Data/GlobalMarine/DraftProfiles.json`. Draft status is
+unconditional; named exact-content human decisions must later use the existing
+validated overlay. No production export or automatic publication is implemented.
+Current outputs remain empty; two partial source packets demonstrate the workflow.
+
+Run the existing `Tools/Evaluation/run_v05.py` before changes and after changes with
+separate `--output` and `--log` paths. Retain its nonzero exit on existing failures.
+`compare_quality.py` additionally rejects lost recall, worsening displayed ranks,
+new failure reasons, changed case/engine coverage, degraded metrics or denominators.
+It is an additional comparison, never a replacement for the frozen gates. See
+`Reports/GlobalMarine4000Regression.md` for actual outcomes and blockers.

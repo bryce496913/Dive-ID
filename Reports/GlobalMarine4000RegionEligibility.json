@@ -1,0 +1,40 @@
+{
+  "candidatesWithInspectedEvidence": 2,
+  "candidatesWithoutInspectedEvidence": 3998,
+  "details": [
+    {
+      "blockingReasons": [
+        "taxonomy_pending",
+        "baseline_synonym_comparison_pending",
+        "conflicting_source_fields",
+        "no_supported_regional_assignment"
+      ],
+      "candidateID": "MARINE5K-00001",
+      "documentedRegions": [],
+      "regionalExportEligible": false
+    },
+    {
+      "blockingReasons": [
+        "taxonomy_pending",
+        "baseline_synonym_comparison_pending",
+        "conflicting_source_fields"
+      ],
+      "candidateID": "MARINE5K-03673",
+      "documentedRegions": [
+        "caribbean",
+        "tropical-pacific"
+      ],
+      "regionalExportEligible": false
+    }
+  ],
+  "draftProfileFingerprints": {},
+  "evidenceCompleteDraftProfiles": 0,
+  "existingPublicationEligibleProfiles": 2,
+  "humanVerifiedNewProfiles": 0,
+  "policy": "No app export. Candidate-set approval does not cover newly assembled content. Use validated existing review overlay after exact-content review.",
+  "primaryCandidates": 4000,
+  "publicationEligibleNewProfiles": 0,
+  "regionEligibleProfiles": 0,
+  "reserveCandidates": 529,
+  "schemaVersion": 1
+}
