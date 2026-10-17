@@ -5,8 +5,8 @@ import csv
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
-from intake import ROOT, DATA, atomic_json, digest, intake, normalize, write_csv
-from worms import Cache, resolve, payload_hash
+from intake import ROOT, DATA, atomic_json, intake, normalize, write_csv, fingerprint, INPUT_SCHEMA, BATCH_SIZE
+from worms import Cache, resolve
 
 CROSS_FIELDS = ['candidateID','queue','sourceName','speciesID','identityStatus','taxonomyStatus','acceptedAphiaID','acceptedScientificName','disposition','canonicalSpeciesID','diagnostics','reviewStatus']
 CANONICAL_FIELDS = ['speciesID','acceptedScientificName','acceptedAphiaID','sourceCandidateIDs','genus','family','order','class','authority','rank','isMarine','reviewStatus']
@@ -16,12 +16,25 @@ def checkpoint_path(directory, queue, batch):
     return directory / f'{queue}-{batch:02d}.json'
 
 
-def load_results(directory, input_fingerprint):
+def load_results(directory, input_manifest):
     results = {}
+    expected = fingerprint(input_manifest)
     for path in sorted(directory.glob('*.json')):
         document = json.loads(path.read_text())
-        if document.get('inputFingerprint') != input_fingerprint:
-            raise ValueError(f'Stale checkpoint: {path}; use a separate checkpoint directory')
+        recorded = document.get('inputManifest')
+        recovery = 'Use fresh --checkpoints AND --baseline-checkpoints directories, or restore the exact recorded inputs; do not relabel old checkpoints.'
+        if document.get('schemaVersion') != INPUT_SCHEMA or not isinstance(recorded, dict) or recorded.get('schemaVersion') != INPUT_SCHEMA or not isinstance(recorded.get('files'), dict) or not isinstance(recorded.get('configuration'), dict):
+            raise ValueError(f'Stale checkpoint: {path}; legacy/missing input accounting (schema {INPUT_SCHEMA} required). {recovery}')
+        if document.get('inputFingerprint') != fingerprint(recorded):
+            raise ValueError(f'Stale checkpoint: {path}; corrupt input manifest/fingerprint. {recovery}')
+        if document['inputFingerprint'] != expected:
+            changed = []
+            for section in ('files', 'configuration'):
+                old, new = recorded.get(section, {}), input_manifest[section]
+                for key in sorted(set(old) | set(new)):
+                    if key not in old or key not in new or old[key] != new[key]:
+                        changed.append(f'{section}/{key}: {old.get(key, "<absent>")} -> {new.get(key, "<absent>")}')
+            raise ValueError(f'Stale checkpoint: {path}; changed inputs: {"; ".join(changed)}. {recovery}')
         for row in document['results']:
             cid = row['candidateID']
             if cid in results:
@@ -86,9 +99,10 @@ def canonicalize(candidates, reserves, links, results, existing_by_name, baselin
 
 
 def generate(root, candidates, reserves, links, intake_report, existing, checkpoint_dir, baseline_dir, output, report_dir):
-    fingerprint = payload_hash(intake_report['inputSHA256'])
-    results = load_results(checkpoint_dir, fingerprint)
-    baseline = load_results(baseline_dir, fingerprint)
+    manifest = intake_report['inputManifest']
+    input_fingerprint = fingerprint(manifest)
+    results = load_results(checkpoint_dir, manifest)
+    baseline = load_results(baseline_dir, manifest)
     crosswalk, canonical, duplicates, baseline_complete = canonicalize(candidates,reserves,links,results,existing,baseline)
     baseline_complete = baseline_complete and not intake_report['unreadableExistingIdentityIDs']
     write_csv(output/'OriginalNameCrosswalk.csv',crosswalk,CROSS_FIELDS)
@@ -98,14 +112,14 @@ def generate(root, candidates, reserves, links, intake_report, existing, checkpo
     unresolved = [r for r in crosswalk if r['disposition'] not in ('canonical_draft','duplicate_existing_taxon','duplicate_accepted_taxon','reserve_not_needed')]
     write_csv(report_dir/'GlobalMarine4000Unresolved.csv',unresolved,CROSS_FIELDS)
     primary = crosswalk[:len(candidates)]
-    report = {'schemaVersion':1,'inputFingerprint':fingerprint,'primaryCandidates':len(candidates),'reserveCandidates':len(reserves),
+    report = {'schemaVersion':1,'inputFingerprint':input_fingerprint,'primaryCandidates':len(candidates),'reserveCandidates':len(reserves),
               'primaryTaxonomicallyConfirmed':sum(r['taxonomyStatus']=='confirmed' for r in primary),
               'uniqueCanonicalTaxa':len(canonical),'primaryUnresolved':sum(r['taxonomyStatus']!='confirmed' for r in primary),
               'primaryDispositionCounts':dict(Counter(r['disposition'] for r in primary)),
               'primaryDiagnostics':dict(Counter(r['diagnostics'] for r in primary)),
               'baselineNames':len(existing),'baselineTaxonomyComplete':baseline_complete,
               'humanVerifiedNewProfiles':0,'publicationEligibleNewProfiles':0,
-              'checkpointInputFingerprint':fingerprint}
+              'checkpointInputFingerprint':input_fingerprint}
     atomic_json(report_dir/'GlobalMarine4000Resolution.json',report)
     return report
 
@@ -128,21 +142,24 @@ def main():
         if (ROOT/'DiveID').resolve() in path.resolve().parents or path.resolve() == (ROOT/'DiveID').resolve():
             parser.error('Global staging cannot write into application resources')
     candidates,reserves,links,audit,existing=intake()
-    fingerprint=payload_hash(audit['inputSHA256'])
+    manifest = audit['inputManifest']
+    input_fingerprint = fingerprint(manifest)
+    # Validate both stores before cache/network access or any output/checkpoint write.
+    current = load_results(args.checkpoints, manifest)
+    baseline = load_results(args.baseline_checkpoints, manifest)
     queue = candidates if args.queue=='primary' else reserves if args.queue=='reserve' else [{'candidateID':name,'scientificNameInput':name} for name in sorted(existing)]
-    if args.batch < 1 or (args.batch-1)*250 >= len(queue):
+    if args.batch < 1 or (args.batch-1)*BATCH_SIZE >= len(queue):
         parser.error('Batch is outside this queue')
     if args.queue=='reserve':
-        current=load_results(args.checkpoints,fingerprint)
-        cross,_,duplicates,_=canonicalize(candidates,reserves,links,current,existing,load_results(args.baseline_checkpoints,fingerprint))
+        cross,_,duplicates,_=canonicalize(candidates,reserves,links,current,existing,baseline)
         if not duplicates:
             parser.error('Reserve processing requires a confirmed accepted-taxon collision')
     directory=args.baseline_checkpoints if args.queue=='baseline' else args.checkpoints
     path=checkpoint_path(directory,args.queue,args.batch)
     if path.exists() and not args.resume and not args.dry_run:
         parser.error('Checkpoint exists; use --resume')
-    previous=load_results(directory,fingerprint)
-    batch=queue[(args.batch-1)*250:args.batch*250]
+    previous = baseline if args.queue == 'baseline' else current
+    batch=queue[(args.batch-1)*BATCH_SIZE:args.batch*BATCH_SIZE]
     records=[]
     preserved = {r['candidateID']:previous[r['candidateID']] for r in batch if r['candidateID'] in previous}
     for row in batch:
@@ -153,7 +170,7 @@ def main():
         records.append(result)
         preserved[row['candidateID']] = result
         if not args.dry_run:
-            atomic_json(path,{'schemaVersion':1,'inputFingerprint':fingerprint,'batch':args.batch,'queue':args.queue,'results':[preserved[r['candidateID']] for r in batch if r['candidateID'] in preserved]})
+            atomic_json(path,{'schemaVersion':INPUT_SCHEMA,'inputManifest':manifest,'inputFingerprint':input_fingerprint,'batch':args.batch,'queue':args.queue,'results':[preserved[r['candidateID']] for r in batch if r['candidateID'] in preserved]})
     if args.dry_run:
         print(json.dumps({'dryRun':True,'rows':len(records),'states':dict(Counter(r['status'] for r in records))},sort_keys=True));return
     atomic_json(args.report/'GlobalMarine4000Intake.json',audit)

@@ -12,9 +12,9 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
-from intake import atomic_json, normalize
+from intake import atomic_json, normalize, WORMS_BASE
 
-BASE = 'https://www.marinespecies.org/rest/'
+BASE = WORMS_BASE
 
 
 class Pending(Exception):
