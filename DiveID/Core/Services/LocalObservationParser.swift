@@ -35,7 +35,7 @@ struct LocalObservationParser: ObservationParsing {
         // particular, normalization can remove multi-byte Unicode characters
         // and make ranges from the normalized string invalid for the source.
         let measurements = Self.measurements(in: affirmative, tokens: tokens)
-        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: RegionCompatibilityResolver.locations(in: description), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters, domainContradiction: MarineObservationDomainPolicy.contradiction(in: description))
+        return ParsedObservation(normalizedText: normalized, tokens: tokens, colors: tokens.intersection(CatalogueVocabulary.colors), markings: tokens.intersection(CatalogueVocabulary.markings), bodyShapes: tokens.intersection(CatalogueVocabulary.bodyShapes), habitats: tokens.intersection(CatalogueVocabulary.habitats), regions: RegionCompatibilityResolver.locations(in: description), behaviors: tokens.intersection(CatalogueVocabulary.behaviors), categories: tokens.intersection(CatalogueVocabulary.categories), approximateSizeCentimeters: measurements.sizeCentimeters, approximateDepthMeters: measurements.depthMeters, colorEvidenceGroups: AppearanceEvidenceVocabulary.colorGroups(in: affirmative, colors: tokens.intersection(CatalogueVocabulary.colors)), appearanceRelationships: AppearanceEvidenceVocabulary.appearanceRelationships(in: affirmative), domainContradiction: MarineObservationDomainPolicy.contradiction(in: description))
     }
 
     /// Negated clauses do not assert positive traits or exact species names.
@@ -240,5 +240,65 @@ enum MarineObservationDomainPolicy {
             return .amphibianSubject
         }
         return nil
+    }
+}
+
+
+/// Relational appearance evidence is extracted from affirmative phrases, never
+/// inferred by combining independent catalogue color and marking lists.
+enum AppearanceEvidenceVocabulary {
+    private static let colorWords = LocalObservationVocabulary.synonyms
+        .filter { CatalogueVocabulary.colors.contains($0.key) }
+        .reduce(into: [String: String]()) { result, entry in
+            for word in entry.value { result[word] = entry.key }
+        }
+    private static let markingWords = LocalObservationVocabulary.synonyms
+        .filter { ["stripes", "spots", "patches"].contains($0.key) }
+        .reduce(into: [String: String]()) { result, entry in
+            for word in entry.value { result[word] = entry.key }
+        }
+    private static func alternatives(_ words: [String: String]) -> String {
+        words.keys.sorted().map(NSRegularExpression.escapedPattern).joined(separator: "|")
+    }
+    private static let color = alternatives(colorWords)
+    private static let hueColor = alternatives(colorWords.filter { $0.key != "dark" })
+    private static let marking = alternatives(markingWords)
+    private static let compoundRegex = try! NSRegularExpression(pattern: "\\b(" + hueColor + ")[ -]+(" + hueColor + ")\\b", options: [.caseInsensitive])
+    private static let hyphenatedHueRegex = try! NSRegularExpression(pattern: "\\b(" + hueColor + ")\\s*[-–]\\s*(" + hueColor + ")\\b", options: [.caseInsensitive])
+    private static let markingRegex = try! NSRegularExpression(pattern: "\\b(" + color + ")(?:[ -]+(?:thin|fine|broad|narrow|small|large))?[ -]+(" + marking + ")\\b", options: [.caseInsensitive])
+
+    private static func captures(_ regex: NSRegularExpression, in text: String) -> [[String]] {
+        return regex.matches(in: text, range: NSRange(text.startIndex..., in: text)).map { match in
+            (1..<match.numberOfRanges).map { index in
+                Range(match.range(at: index), in: text).map { String(text[$0]).lowercased() } ?? ""
+            }
+        }
+    }
+    static func colorGroups(in text: String, colors: Set<String>) -> [Set<String>] {
+        var groups = colors.sorted().map { Set([$0]) }
+        // Direct compound hues (orange-red) are one clue. Coordinated colors
+        // (black-and-white, blue and yellow) remain distinct observations.
+        for pair in captures(hyphenatedHueRegex, in: text) {
+            guard let first = colorWords[pair[0]], let second = colorWords[pair[1]] else { continue }
+            let members = Set([first, second]).intersection(colors)
+            let connected = groups.filter { !$0.isDisjoint(with: members) }.reduce(members) { $0.union($1) }
+            groups.removeAll { !$0.isDisjoint(with: connected) }
+            if !connected.isEmpty { groups.append(connected) }
+        }
+        return groups.sorted { $0.sorted().joined() < $1.sorted().joined() }
+    }
+    static func appearanceRelationships(in text: String) -> Set<String> {
+        let affirmative = LocalObservationParser.affirmativeEvidence(in: text)
+        // Only adjacency within a phrase establishes the relationship. Commas,
+        // semicolons and document separators cannot join an unordered trait list.
+        let markings = Set(captures(markingRegex, in: affirmative).compactMap { pair -> String? in
+            guard let color = colorWords[pair[0]], let marking = markingWords[pair[1]] else { return nil }
+            return color + " " + marking
+        })
+        let compounds = captures(compoundRegex, in: affirmative).compactMap { pair -> String? in
+            guard let first = colorWords[pair[0]], let second = colorWords[pair[1]], first != second else { return nil }
+            return [first, second].sorted().joined(separator: "-") + " hue"
+        }
+        return markings.union(compounds)
     }
 }

@@ -4,6 +4,24 @@ import XCTest
 final class LocalObservationParserMeasurementTests: XCTestCase {
     private let parser = LocalObservationParser()
 
+    func testAppearanceRelationshipsAreCanonicalAndDoNotCrossListsOrNegation() async {
+        for phrase in ["blue stripes", "BLUE-striped", "blue bands", "blue fine bars"] {
+            let parsed = await parser.parse(phrase)
+            XCTAssertEqual(parsed.appearanceRelationships, ["blue stripes"], phrase)
+        }
+        XCTAssertEqual(AppearanceEvidenceVocabulary.appearanceRelationships(in: "gold dots; yellow spots; gold-spotted"), ["yellow spots"])
+        for phrase in ["blue, yellow; stripes", "blue | stripes", "no blue stripes", "not blue-striped"] {
+            XCTAssertTrue(AppearanceEvidenceVocabulary.appearanceRelationships(in: phrase).isEmpty, phrase)
+        }
+        let compound = await parser.parse("orange-red fish")
+        XCTAssertEqual(compound.colorEvidenceGroups, [["orange", "red"]])
+        let coordinated = await parser.parse("orange and red fish")
+        XCTAssertEqual(coordinated.colorEvidenceGroups.count, 2)
+        XCTAssertEqual(AppearanceEvidenceVocabulary.appearanceRelationships(in: "blue-green head; green-blue head"), ["blue-green hue"])
+        let tokens = BM25SpeciesCandidateRetriever.terms("blue stripes | blue bands | blue stripes")
+        XCTAssertEqual(tokens.filter { $0 == "appearancebluestripes" }.count, 1)
+    }
+
     func testSpineDescriptionsShareOneEvidenceGroupAndRespectWordBoundaries() async {
         for description in ["fish with dorsal needles", "spiny reef fish", "spiky fins", "fish with spines"] {
             let observation = await parser.parse(description)
