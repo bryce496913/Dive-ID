@@ -225,21 +225,19 @@ class BuildMappingTests(unittest.TestCase):
                          ("Spotted Grouper (Aus one)", "spotted grouper (Bus two)", "Queen Angelfish (Cus three)"))
         self.assertEqual(b["aliases"], ["Blue fish"], "an alias may not be another species' name")
 
-    def test_selection_skips_caribbean_duplicates_and_unresolved(self):
-        rows = [
-            {"inputKind": "existing", "inputID": "tp-1", "pack": "TropicalPacific", "resolution": "corrected", "duplicateOf": ""},
-            {"inputKind": "existing", "inputID": "car-1", "pack": "Caribbean", "resolution": "exact", "duplicateOf": ""},
-            {"inputKind": "candidate", "inputID": "MARINE5K-00001", "pack": "", "resolution": "exact", "duplicateOf": ""},
-            {"inputKind": "candidate", "inputID": "MARINE5K-00002", "pack": "", "resolution": "exact", "duplicateOf": "tp-1"},
-            {"inputKind": "candidate", "inputID": "MARINE5K-00003", "pack": "", "resolution": "ambiguous", "duplicateOf": ""},
-        ]
-        entries = build.select_entries(rows, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}], {"tp-1": ["fish"]})
-        self.assertEqual([e["inputID"] for e in entries], ["tp-1", "MARINE5K-00001"])
-        linked = build.select_entries(rows, [], {"tp-1": ["fish"]}, {"MARINE5K-00001": "workbook-uuid"})
-        self.assertEqual(linked[1]["id"], "workbook-uuid", "a candidate keeps its crosswalk (workbook) identity")
-        self.assertEqual(entries[0]["id"], "tp-1")
-        self.assertEqual(entries[1]["id"], str(build.uuid.uuid5(build.CANDIDATE_NAMESPACE, "MARINE5K-00001")), "same identity scheme as GlobalMarineImport")
-        self.assertEqual(entries[1]["candidateCategory"], "shark")
+    def test_selection_builds_the_merge_plans_kept_uuids_only(self):
+        resolution = [{"inputKind": "existing", "inputID": "tp-1", "resolution": "corrected", "inputName": "Jascyllus x"},
+                      {"inputKind": "existing", "inputID": "car-1", "resolution": "exact", "inputName": "Aus bus"},
+                      {"inputKind": "candidate", "inputID": "MARINE5K-00001", "resolution": "exact", "inputName": "Cus dus"},
+                      {"inputKind": "candidate", "inputID": "MARINE5K-00002", "resolution": "exact", "inputName": "Dascyllus x"}]
+        plan = [{"inputKind": "existing", "inputID": "tp-1", "pack": "TropicalPacific", "role": "keep", "plannedUUID": "tp-1"},
+                {"inputKind": "existing", "inputID": "car-1", "pack": "Caribbean", "role": "keep", "plannedUUID": "car-1"},
+                {"inputKind": "candidate", "inputID": "MARINE5K-00001", "pack": "", "role": "keep", "plannedUUID": "workbook-uuid"},
+                {"inputKind": "candidate", "inputID": "MARINE5K-00002", "pack": "", "role": "retire", "plannedUUID": "tp-1"},
+                {"inputKind": "candidate", "inputID": "MARINE5K-00003", "pack": "", "role": "unresolved", "plannedUUID": ""}]
+        entries = build.select_entries(plan, resolution, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}], {"tp-1": ["fish"]})
+        self.assertEqual([(e["inputID"], e["id"]) for e in entries], [("tp-1", "tp-1"), ("MARINE5K-00001", "workbook-uuid")])
+        self.assertEqual((entries[0]["categories"], entries[1]["categories"], entries[1]["candidateCategory"]), (["fish"], None, "shark"))
 
 
 class DistributionTests(unittest.TestCase):
@@ -296,10 +294,29 @@ class MergePlanTests(unittest.TestCase):
         rows, _ = merge_plan.plan([], crosswalk, [self.resolution("candidate", "C-1", 1), self.resolution("candidate", "C-2", 1, resolution="synonym")])
         self.assertEqual({r["plannedUUID"] for r in rows}, {"wb-2"})
 
-    def test_two_existing_records_for_one_taxon_stop_the_plan(self):
-        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus bus"},
-                    {"id": "app-2", "pack": "TropicalPacific", "scientificName": "Aus oldname"}]
-        rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", 1), self.resolution("existing", "app-2", 1, resolution="synonym")])
+    def test_record_with_accepted_name_settles_several_existing_records(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus oldname"},
+                    {"id": "app-2", "pack": "TropicalPacific", "scientificName": "Aus bus"}]
+        rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", 1, resolution="synonym"), self.resolution("existing", "app-2", 1)])
+        self.assertEqual({r["inputID"]: (r["role"], r["plannedUUID"]) for r in rows}, {"app-1": ("retire", "app-2"), "app-2": ("keep", "app-2")})
+        self.assertEqual((report["status"], len(report["resolvedByAcceptedName"])), ("ready", 1))
+
+    def test_candidate_with_accepted_name_wins_over_renamed_existing_records(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Apogon fuscus"},
+                    {"id": "app-2", "pack": "TropicalPacific", "scientificName": "Apogon guamensis"}]
+        crosswalk = self.crosswalk(("C-1", "Nectamia fusca", "new-1", "new_provisional_identity"))
+        rows, report = merge_plan.plan(existing, crosswalk, [self.resolution("existing", "app-1", 1, "Nectamia fusca", "synonym"),
+                                                             self.resolution("existing", "app-2", 1, "Nectamia fusca", "synonym"),
+                                                             self.resolution("candidate", "C-1", 1, "Nectamia fusca")])
+        self.assertEqual({r["plannedUUID"] for r in rows}, {"new-1"})
+        self.assertEqual(sorted(r["role"] for r in rows), ["keep", "retire", "retire"])
+        self.assertEqual(report["status"], "ready")
+
+    def test_several_existing_records_without_the_accepted_name_stop_the_plan(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus oldname"},
+                    {"id": "app-2", "pack": "TropicalPacific", "scientificName": "Aus othername"}]
+        rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", 1, resolution="synonym"),
+                                                      self.resolution("existing", "app-2", 1, resolution="synonym")])
         self.assertTrue(report["status"].startswith("blocked"))
         self.assertEqual(report["conflicts"][0]["uuids"], ["app-1", "app-2"])
         self.assertEqual({r["role"] for r in rows}, {"conflict"}, "no UUID is chosen for a conflicted taxon")
@@ -313,7 +330,7 @@ class MergePlanTests(unittest.TestCase):
         existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Opistognathus sp."}]
         rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", None, resolution="unresolved")], {"C-1": "pending"})
         self.assertEqual((rows[0]["role"], rows[0]["plannedUUID"]), ("unresolved", ""))
-        self.assertEqual((report["unresolvedInputs"]["existing"], report["wormsConfirmedCandidates"]), (1, 0))
+        self.assertEqual((report["unresolvedInputs"]["existing"], report["wormsConfirmedCandidates"], report["confirmedCandidates"]), (1, 0, 0))
 
 
 if __name__ == "__main__":

@@ -1,10 +1,45 @@
 {
-  "status": "blocked: resolve conflicts before merging",
+  "status": "ready",
   "inputs": {
     "existingAppRecords": 1008,
     "candidates": 4000
   },
-  "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv)",
+  "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv); counts as confirmed (owner decision 2026-10-21)",
+  "confirmedCandidates": 3993,
+  "resolvedByAcceptedName": [
+    {
+      "taxonKey": "fb:5367",
+      "acceptedName": "Epinephelus areolatus",
+      "keptUUID": "974f951b-8c19-5e79-ad6a-e9d9b4988eb1",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
+      "members": [
+        "existing:974f951b-8c19-5e79-ad6a-e9d9b4988eb1 (Epinephelus areolatus)",
+        "existing:6c7c4c7b-0006-587f-b7ad-201cda89feae (Epinephelus waandersi)"
+      ]
+    },
+    {
+      "taxonKey": "fb:5955",
+      "acceptedName": "Hippocampus kuda",
+      "keptUUID": "b21f6b66-e27f-53f5-a189-2b64882a888f",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
+      "members": [
+        "existing:cf7ea288-d448-52f2-8e2b-fe08d17bdb4c (Hippocampus taeniopterus)",
+        "existing:b21f6b66-e27f-53f5-a189-2b64882a888f (Hippocampus kuda)",
+        "existing:f46bd107-d5cd-5c6c-a03c-8b98b69740a4 (Hippocampus moluccensis)"
+      ]
+    },
+    {
+      "taxonKey": "fb:59777",
+      "acceptedName": "Nectamia fusca",
+      "keptUUID": "d9e60f59-0dcc-5675-8802-51f8da334ba8",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
+      "members": [
+        "existing:91224400-e35c-57d1-9d48-7742728b5fe0 (Apogon guamensis)",
+        "existing:f9d21a43-1b8e-558b-99c0-667e4f944646 (Apogon fuscus)",
+        "candidate:MARINE5K-03076 (Nectamia fusca)"
+      ]
+    }
+  ],
   "wormsConfirmedCandidates": 0,
   "wormsTaxonomyStatus": {
     "pending": 4000
@@ -14,57 +49,15 @@
     "existing": 33,
     "candidates": 7
   },
-  "retiredUUIDs": 165,
+  "retiredUUIDs": 170,
   "collisions": 168,
-  "conflicts": [
-    {
-      "kind": "several existing app records for one taxon",
-      "taxonKey": "fb:5367",
-      "acceptedName": "Epinephelus areolatus",
-      "uuids": [
-        "6c7c4c7b-0006-587f-b7ad-201cda89feae",
-        "974f951b-8c19-5e79-ad6a-e9d9b4988eb1"
-      ],
-      "names": [
-        "Epinephelus areolatus",
-        "Epinephelus waandersi"
-      ]
-    },
-    {
-      "kind": "several existing app records for one taxon",
-      "taxonKey": "fb:5955",
-      "acceptedName": "Hippocampus kuda",
-      "uuids": [
-        "b21f6b66-e27f-53f5-a189-2b64882a888f",
-        "cf7ea288-d448-52f2-8e2b-fe08d17bdb4c",
-        "f46bd107-d5cd-5c6c-a03c-8b98b69740a4"
-      ],
-      "names": [
-        "Hippocampus kuda",
-        "Hippocampus moluccensis",
-        "Hippocampus taeniopterus"
-      ]
-    },
-    {
-      "kind": "several existing app records for one taxon",
-      "taxonKey": "fb:59777",
-      "acceptedName": "Nectamia fusca",
-      "uuids": [
-        "91224400-e35c-57d1-9d48-7742728b5fe0",
-        "f9d21a43-1b8e-558b-99c0-667e4f944646"
-      ],
-      "names": [
-        "Apogon fuscus",
-        "Apogon guamensis",
-        "Nectamia fusca"
-      ]
-    }
-  ],
+  "conflicts": [],
   "collisionDetails": [
     {
       "taxonKey": "fb:10277",
       "acceptedName": "Pomacentrus opisthostigma",
       "keptUUID": "8ec65769-c2a0-571c-9e0f-a5d82cb98013",
+      "rule": "default order",
       "members": [
         "existing:8ec65769-c2a0-571c-9e0f-a5d82cb98013 (Pomacentrus opisthostigma)",
         "candidate:MARINE5K-01981 (Pomacentrus armillatus)"
@@ -74,6 +67,7 @@
       "taxonKey": "fb:10350",
       "acceptedName": "Pempheris vanicolensis",
       "keptUUID": "49cf761c-5e26-5613-8a23-83c669a47508",
+      "rule": "default order",
       "members": [
         "existing:49cf761c-5e26-5613-8a23-83c669a47508 (Pemphens vanicolensis)",
         "candidate:MARINE5K-02933 (Pempheris vanicolensis)"
@@ -83,6 +77,7 @@
       "taxonKey": "fb:10473",
       "acceptedName": "Cirrhitichthys aureus",
       "keptUUID": "ad8a2f29-edbf-59de-af13-d2e2e8b797af",
+      "rule": "default order",
       "members": [
         "existing:ad8a2f29-edbf-59de-af13-d2e2e8b797af (Cirhitichthys aureus)",
         "candidate:MARINE5K-01336 (Cirrhitichthys aureus)"
@@ -92,6 +87,7 @@
       "taxonKey": "fb:10990",
       "acceptedName": "Centropyge interrupta",
       "keptUUID": "377c6eca-55a5-5f65-ac1b-47c4be25180e",
+      "rule": "default order",
       "members": [
         "existing:377c6eca-55a5-5f65-ac1b-47c4be25180e (Centropyge interruptus)",
         "candidate:MARINE5K-01223 (Centropyge interrupta)"
@@ -101,6 +97,7 @@
       "taxonKey": "fb:11100",
       "acceptedName": "Centropyge nigriocellus",
       "keptUUID": "c3f85ee6-9c42-5aea-810e-dab98bcafb09",
+      "rule": "default order",
       "members": [
         "existing:c3f85ee6-9c42-5aea-810e-dab98bcafb09 (Centropyge nigriocellus)",
         "candidate:MARINE5K-02239 (Centropyge nigriocella)"
@@ -110,6 +107,7 @@
       "taxonKey": "fb:11189",
       "acceptedName": "Centropyge venusta",
       "keptUUID": "3a484374-e8de-5369-bfdf-b0056fcddb63",
+      "rule": "default order",
       "members": [
         "existing:3a484374-e8de-5369-bfdf-b0056fcddb63 (Paracentropyge venusta)",
         "candidate:MARINE5K-01498 (Centropyge venusta)"
@@ -119,6 +117,7 @@
       "taxonKey": "fb:1134",
       "acceptedName": "Brachygenys chrysargyrea",
       "keptUUID": "1e7d4f14-8fcc-5ff7-b4b5-e3fb0227c110",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-00516 (Haemulon serrula)",
         "candidate:MARINE5K-00855 (Haemulon chrysargyreum)"
@@ -128,6 +127,7 @@
       "taxonKey": "fb:1150",
       "acceptedName": "Heteropriacanthus cruentatus",
       "keptUUID": "08020ee6-f8e6-5442-b240-bd6ebc4da0bf",
+      "rule": "default order",
       "members": [
         "existing:08020ee6-f8e6-5442-b240-bd6ebc4da0bf (Heteropniacanthus cruentatus)",
         "candidate:MARINE5K-02697 (Heteropriacanthus cruentatus)"
@@ -137,6 +137,7 @@
       "taxonKey": "fb:11618",
       "acceptedName": "Pleurosicya elongata",
       "keptUUID": "b45f2c95-076b-5131-a166-792b495ae977",
+      "rule": "default order",
       "members": [
         "existing:b45f2c95-076b-5131-a166-792b495ae977 (Jeurosicya elongata)",
         "candidate:MARINE5K-02506 (Pleurosicya elongata)"
@@ -146,6 +147,7 @@
       "taxonKey": "fb:11966",
       "acceptedName": "Chrysiptera flavipinnis",
       "keptUUID": "a2f9cf11-ab0b-5651-8d7f-68f6fa63e232",
+      "rule": "default order",
       "members": [
         "existing:a2f9cf11-ab0b-5651-8d7f-68f6fa63e232 (Shrysiptera flavipinnis)",
         "candidate:MARINE5K-01951 (Chrysiptera flavipinnis)"
@@ -155,6 +157,7 @@
       "taxonKey": "fb:11972",
       "acceptedName": "Dascyllus flavicaudus",
       "keptUUID": "7b3f6814-62f7-59ba-a832-b0c9b562b8af",
+      "rule": "default order",
       "members": [
         "existing:7b3f6814-62f7-59ba-a832-b0c9b562b8af (Jascyllus flavicaudus)",
         "candidate:MARINE5K-01516 (Dascyllus flavicaudus)"
@@ -164,6 +167,7 @@
       "taxonKey": "fb:12451",
       "acceptedName": "Chrysiptera taupou",
       "keptUUID": "9cbaa455-aa58-53ad-a663-6ed0baaafa56",
+      "rule": "default order",
       "members": [
         "existing:9cbaa455-aa58-53ad-a663-6ed0baaafa56 (Shrysiptera taupou)",
         "candidate:MARINE5K-01952 (Chrysiptera taupou)"
@@ -173,6 +177,7 @@
       "taxonKey": "fb:12484",
       "acceptedName": "Pomacentrus azuremaculatus",
       "keptUUID": "95ddd73c-3416-5f85-865d-c9f85e486668",
+      "rule": "default order",
       "members": [
         "existing:95ddd73c-3416-5f85-865d-c9f85e486668 (Pomacentnis azuremaculatus)",
         "candidate:MARINE5K-01540 (Pomacentrus azuremaculatus)"
@@ -182,6 +187,7 @@
       "taxonKey": "fb:12518",
       "acceptedName": "Stegastes rocasensis",
       "keptUUID": "1ca8bea6-3cd8-5a83-bf89-4463bf688fa7",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-01863 (Stegastes sanctipauli)",
         "candidate:MARINE5K-01903 (Stegastes rocasensis)"
@@ -191,6 +197,7 @@
       "taxonKey": "fb:12555",
       "acceptedName": "Scorpaenopsis neglecta",
       "keptUUID": "565e9c8f-ddd9-5d9d-9bd1-cdfeb7883260",
+      "rule": "default order",
       "members": [
         "existing:565e9c8f-ddd9-5d9d-9bd1-cdfeb7883260 (Scomaenopsis neglecta)",
         "candidate:MARINE5K-01051 (Scorpaenopsis neglecta)"
@@ -200,6 +207,7 @@
       "taxonKey": "fb:1260",
       "acceptedName": "Acanthurus triostegus",
       "keptUUID": "2ac7a63e-58ee-5e5b-a222-40e638be8fc6",
+      "rule": "default order",
       "members": [
         "existing:2ac7a63e-58ee-5e5b-a222-40e638be8fc6 (Acanthurus tniostegus)",
         "candidate:MARINE5K-00736 (Acanthurus triostegus)"
@@ -209,6 +217,7 @@
       "taxonKey": "fb:12622",
       "acceptedName": "Belonoperca chabanaudi",
       "keptUUID": "712b8243-65e6-53eb-9ccc-4ce59b520c10",
+      "rule": "default order",
       "members": [
         "existing:712b8243-65e6-53eb-9ccc-4ce59b520c10 (Jelonoperca chabanaudi)",
         "candidate:MARINE5K-01217 (Belonoperca chabanaudi)"
@@ -218,6 +227,7 @@
       "taxonKey": "fb:12677",
       "acceptedName": "Gunnellichthys curiosus",
       "keptUUID": "ce88cb94-3966-591b-93ff-f296b7d62a6e",
+      "rule": "default order",
       "members": [
         "existing:ce88cb94-3966-591b-93ff-f296b7d62a6e (Gunnelichthys curiosus)",
         "candidate:MARINE5K-03049 (Gunnellichthys curiosus)"
@@ -227,6 +237,7 @@
       "taxonKey": "fb:12678",
       "acceptedName": "Gunnellichthys monostigma",
       "keptUUID": "a0d8de9d-7588-5f3d-9851-70ae65ecc645",
+      "rule": "default order",
       "members": [
         "existing:a0d8de9d-7588-5f3d-9851-70ae65ecc645 (Gunnelichthys monostigma)",
         "candidate:MARINE5K-02989 (Gunnellichthys monostigma)"
@@ -236,6 +247,7 @@
       "taxonKey": "fb:12702",
       "acceptedName": "Notocirrhitus splendens",
       "keptUUID": "b1a5cf85-8dad-52ab-aafb-3e1cde4a949a",
+      "rule": "default order",
       "members": [
         "existing:b1a5cf85-8dad-52ab-aafb-3e1cde4a949a (Cirrhitichthys splendens)",
         "candidate:MARINE5K-00979 (Notocirrhitus splendens)"
@@ -245,6 +257,7 @@
       "taxonKey": "fb:12714",
       "acceptedName": "Manonichthys splendens",
       "keptUUID": "2fdd2d2a-115a-5e1b-96f8-a7c61db005ee",
+      "rule": "default order",
       "members": [
         "existing:2fdd2d2a-115a-5e1b-96f8-a7c61db005ee (Pseudochromis splendens)",
         "candidate:MARINE5K-03033 (Manonichthys splendens)"
@@ -254,6 +267,7 @@
       "taxonKey": "fb:12787",
       "acceptedName": "Plagiotremus phenax",
       "keptUUID": "0eb552ac-8e55-573d-af0f-a9d5c1afdb38",
+      "rule": "default order",
       "members": [
         "existing:0eb552ac-8e55-573d-af0f-a9d5c1afdb38 (Jagiotremus phenax)",
         "candidate:MARINE5K-01980 (Plagiotremus phenax)"
@@ -263,6 +277,7 @@
       "taxonKey": "fb:12799",
       "acceptedName": "Xenanthias winniensis",
       "keptUUID": "3a707b9a-1fcf-53a2-a292-639b92f00ce6",
+      "rule": "default order",
       "members": [
         "existing:3a707b9a-1fcf-53a2-a292-639b92f00ce6 (Jectranthias winniensis)",
         "candidate:MARINE5K-02505 (Plectranthias winniensis)"
@@ -272,6 +287,7 @@
       "taxonKey": "fb:12833",
       "acceptedName": "Chlorurus strongylocephalus",
       "keptUUID": "40651523-1f81-5d80-a593-0668077da6b7",
+      "rule": "default order",
       "members": [
         "existing:40651523-1f81-5d80-a593-0668077da6b7 (Chlorurus strongycephalus)",
         "candidate:MARINE5K-00175 (Chlorurus strongylocephalus)"
@@ -281,6 +297,7 @@
       "taxonKey": "fb:12991",
       "acceptedName": "Sargocentron ensifer",
       "keptUUID": "bd088bfd-c70c-5b46-8861-0a654bec1b22",
+      "rule": "default order",
       "members": [
         "existing:bd088bfd-c70c-5b46-8861-0a654bec1b22 (Sargocentron ensiferum)",
         "candidate:MARINE5K-00868 (Sargocentron ensifer)"
@@ -290,6 +307,7 @@
       "taxonKey": "fb:13003",
       "acceptedName": "Ostorhinchus chrysotaenia",
       "keptUUID": "176c8c3c-69f0-5c6a-9896-a39cb42670e2",
+      "rule": "default order",
       "members": [
         "existing:176c8c3c-69f0-5c6a-9896-a39cb42670e2 (Apogon chrysotaenia)",
         "candidate:MARINE5K-03056 (Ostorhinchus chrysotaenia)"
@@ -299,6 +317,7 @@
       "taxonKey": "fb:13027",
       "acceptedName": "Cirrhilabrus lineatus",
       "keptUUID": "80c1da96-0390-5548-921f-b430992947ab",
+      "rule": "default order",
       "members": [
         "existing:80c1da96-0390-5548-921f-b430992947ab (Cirthilabrus lineatus)",
         "candidate:MARINE5K-01510 (Cirrhilabrus lineatus)"
@@ -308,6 +327,7 @@
       "taxonKey": "fb:13029",
       "acceptedName": "Coris aurilineata",
       "keptUUID": "739fd46f-e885-512d-86f5-4fc485a97efa",
+      "rule": "default order",
       "members": [
         "existing:739fd46f-e885-512d-86f5-4fc485a97efa (Joris aurilineata)",
         "candidate:MARINE5K-01337 (Coris aurilineata)"
@@ -317,6 +337,7 @@
       "taxonKey": "fb:13042",
       "acceptedName": "Cirrhilabrus rubripinnis",
       "keptUUID": "2041c3c9-3cc3-5ef1-aca1-4b75c3986724",
+      "rule": "default order",
       "members": [
         "existing:2041c3c9-3cc3-5ef1-aca1-4b75c3986724 (Cirhilabrus rubripinnis)",
         "candidate:MARINE5K-01814 (Cirrhilabrus rubripinnis)"
@@ -326,6 +347,7 @@
       "taxonKey": "fb:1312",
       "acceptedName": "Sufflamen fraenatum",
       "keptUUID": "438a372a-3451-51e7-89fa-b06d6818741a",
+      "rule": "default order",
       "members": [
         "existing:438a372a-3451-51e7-89fa-b06d6818741a (Sufflamen fraenatus)",
         "candidate:MARINE5K-00512 (Sufflamen fraenatum)"
@@ -335,6 +357,7 @@
       "taxonKey": "fb:13767",
       "acceptedName": "Cryptocentrus leucostictus",
       "keptUUID": "1c1d3290-149c-52f2-8b26-42482b6b61be",
+      "rule": "default order",
       "members": [
         "existing:1c1d3290-149c-52f2-8b26-42482b6b61be (Cryptocentzus leucostictus)",
         "candidate:MARINE5K-02054 (Cryptocentrus leucostictus)"
@@ -344,6 +367,7 @@
       "taxonKey": "fb:14281",
       "acceptedName": "Manonichthys polynemus",
       "keptUUID": "5e5249ab-b3ef-5097-b653-df834ebea274",
+      "rule": "default order",
       "members": [
         "existing:5e5249ab-b3ef-5097-b653-df834ebea274 (Pseudochromis polynemus)",
         "candidate:MARINE5K-03054 (Manonichthys polynemus)"
@@ -353,6 +377,7 @@
       "taxonKey": "fb:14983",
       "acceptedName": "Plesiops corallicola",
       "keptUUID": "079407de-0554-5d7c-b078-6665aeedae53",
+      "rule": "default order",
       "members": [
         "existing:079407de-0554-5d7c-b078-6665aeedae53 (Jesiops corallicola)",
         "candidate:MARINE5K-02961 (Plesiops corallicola)"
@@ -362,6 +387,7 @@
       "taxonKey": "fb:15015",
       "acceptedName": "Oxycercichthys veliferus",
       "keptUUID": "e1fd7e44-dc7c-5996-9834-47232bd4c128",
+      "rule": "default order",
       "members": [
         "existing:e1fd7e44-dc7c-5996-9834-47232bd4c128 (Ogilbyina velifera)",
         "candidate:MARINE5K-03061 (Oxycercichthys veliferus)"
@@ -371,6 +397,7 @@
       "taxonKey": "fb:15118",
       "acceptedName": "Xenanthias nanus",
       "keptUUID": "e669b90d-c8d2-5e59-a563-7bf6f96c8890",
+      "rule": "default order",
       "members": [
         "existing:e669b90d-c8d2-5e59-a563-7bf6f96c8890 (Jectranthias nanus)",
         "candidate:MARINE5K-02512 (Plectranthias nanus)"
@@ -380,6 +407,7 @@
       "taxonKey": "fb:176",
       "acceptedName": "Lutjanus russellii",
       "keptUUID": "5b9651dd-06c3-5292-8386-e16de8155ea3",
+      "rule": "default order",
       "members": [
         "existing:5b9651dd-06c3-5292-8386-e16de8155ea3 (Lutjanus russelli)",
         "candidate:MARINE5K-00326 (Lutjanus russellii)"
@@ -389,6 +417,7 @@
       "taxonKey": "fb:1846",
       "acceptedName": "Lethrinus nebulosus",
       "keptUUID": "fb2ac840-ee73-588f-949f-74c2949f308a",
+      "rule": "default order",
       "members": [
         "existing:fb2ac840-ee73-588f-949f-74c2949f308a (Lethninus nebulosus)",
         "candidate:MARINE5K-02636 (Lethrinus nebulosus)"
@@ -398,6 +427,7 @@
       "taxonKey": "fb:1848",
       "acceptedName": "Lethrinus rubrioperculatus",
       "keptUUID": "31377592-be2f-5087-8cb3-4396652ee704",
+      "rule": "default order",
       "members": [
         "existing:31377592-be2f-5087-8cb3-4396652ee704 (Lethninus rubrioperculatus)",
         "candidate:MARINE5K-02707 (Lethrinus rubrioperculatus)"
@@ -407,6 +437,7 @@
       "taxonKey": "fb:1863",
       "acceptedName": "Lethrinus lentjan",
       "keptUUID": "2eb417ff-7a68-5ea8-8c1d-6677ce1e57fe",
+      "rule": "default order",
       "members": [
         "existing:2eb417ff-7a68-5ea8-8c1d-6677ce1e57fe (Lethnnus lentjan)",
         "candidate:MARINE5K-02690 (Lethrinus lentjan)"
@@ -416,6 +447,7 @@
       "taxonKey": "fb:1864",
       "acceptedName": "Lethrinus olivaceus",
       "keptUUID": "2f41db07-5f70-56e8-b733-968ee8b2fe01",
+      "rule": "default order",
       "members": [
         "existing:2f41db07-5f70-56e8-b733-968ee8b2fe01 (Lethnnus olivaceus)",
         "candidate:MARINE5K-02620 (Lethrinus olivaceus)"
@@ -425,6 +457,7 @@
       "taxonKey": "fb:1865",
       "acceptedName": "Lethrinus genivittatus",
       "keptUUID": "62aae235-813e-5537-97a5-90a240afbdfa",
+      "rule": "default order",
       "members": [
         "existing:62aae235-813e-5537-97a5-90a240afbdfa (Lethninus genivittatus)",
         "candidate:MARINE5K-02871 (Lethrinus genivittatus)"
@@ -434,6 +467,7 @@
       "taxonKey": "fb:1963",
       "acceptedName": "Trachinotus blochii",
       "keptUUID": "a612e8b3-9034-513b-9c40-f4c4b29c0eca",
+      "rule": "default order",
       "members": [
         "existing:a612e8b3-9034-513b-9c40-f4c4b29c0eca (Trachinotus blochi)",
         "candidate:MARINE5K-00060 (Trachinotus blochii)"
@@ -443,6 +477,7 @@
       "taxonKey": "fb:22816",
       "acceptedName": "Hippocampus trimaculatus",
       "keptUUID": "62af111a-c30c-54ed-915d-27cdee4505ff",
+      "rule": "default order",
       "members": [
         "existing:62af111a-c30c-54ed-915d-27cdee4505ff (Hippocampus kampylotrachelos)",
         "candidate:MARINE5K-03405 (Hippocampus trimaculatus)"
@@ -452,6 +487,7 @@
       "taxonKey": "fb:22818",
       "acceptedName": "Hippocampus whitei",
       "keptUUID": "95eb90fd-67df-5572-91c0-a1f21c2b66b6",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03419 (Hippocampus whitei)",
         "candidate:MARINE5K-03423 (Hippocampus procerus)"
@@ -461,6 +497,7 @@
       "taxonKey": "fb:23455",
       "acceptedName": "Pristicon rhodopterus",
       "keptUUID": "c939e05e-b24b-5f1c-9538-227a8446f4e0",
+      "rule": "default order",
       "members": [
         "existing:c939e05e-b24b-5f1c-9538-227a8446f4e0 (Apogon rhodopterus)",
         "candidate:MARINE5K-02999 (Pristicon rhodopterus)"
@@ -470,6 +507,7 @@
       "taxonKey": "fb:25764",
       "acceptedName": "Cirrhilabrus apterygia",
       "keptUUID": "042547cf-2420-5eae-8135-f513b3e6bdf8",
+      "rule": "default order",
       "members": [
         "existing:042547cf-2420-5eae-8135-f513b3e6bdf8 (Conmella apterygia)",
         "candidate:MARINE5K-01956 (Conniella apterygia)"
@@ -479,6 +517,7 @@
       "taxonKey": "fb:25808",
       "acceptedName": "Plectorhinchus multivittatus",
       "keptUUID": "677b0ce9-7f69-59ab-a171-59eb3dc5eab3",
+      "rule": "default order",
       "members": [
         "existing:677b0ce9-7f69-59ab-a171-59eb3dc5eab3 (Plectorhinchus multivittatum)",
         "candidate:MARINE5K-00334 (Plectorhinchus multivittatus)"
@@ -488,6 +527,7 @@
       "taxonKey": "fb:25845",
       "acceptedName": "Rhinopias eschmeyeri",
       "keptUUID": "c8ba8709-708e-5fba-bbdc-33b570b5a81f",
+      "rule": "default order",
       "members": [
         "existing:c8ba8709-708e-5fba-bbdc-33b570b5a81f (Rhinopias eschmeyenri)",
         "candidate:MARINE5K-00866 (Rhinopias eschmeyeri)"
@@ -497,6 +537,7 @@
       "taxonKey": "fb:26684",
       "acceptedName": "Fusigobius inframaculatus",
       "keptUUID": "a7ace94d-e255-537e-8359-bd950ee6abb6",
+      "rule": "default order",
       "members": [
         "existing:a7ace94d-e255-537e-8359-bd950ee6abb6 (Coryphopterus inframaculatus)",
         "candidate:MARINE5K-02434 (Fusigobius inframaculatus)"
@@ -506,6 +547,7 @@
       "taxonKey": "fb:26735",
       "acceptedName": "Xenanthias inermis",
       "keptUUID": "5e9124ad-8ce7-5297-a69b-43388e30f7ec",
+      "rule": "default order",
       "members": [
         "existing:5e9124ad-8ce7-5297-a69b-43388e30f7ec (Jectranthias inermis)",
         "candidate:MARINE5K-02451 (Plectranthias inermis)"
@@ -515,6 +557,7 @@
       "taxonKey": "fb:370",
       "acceptedName": "Exyrias belissimus",
       "keptUUID": "9e22c86e-f0e5-5cdb-8edf-8a45c860d37b",
+      "rule": "default order",
       "members": [
         "existing:9e22c86e-f0e5-5cdb-8edf-8a45c860d37b (Exyrias bellisimus)",
         "candidate:MARINE5K-01244 (Exyrias belissimus)"
@@ -524,6 +567,7 @@
       "taxonKey": "fb:412",
       "acceptedName": "Elagatis bipinnulata",
       "keptUUID": "9546a146-f491-5140-a4d1-3818c5970da6",
+      "rule": "default order",
       "members": [
         "existing:9546a146-f491-5140-a4d1-3818c5970da6 (Elagatis bipinnulatus)",
         "candidate:MARINE5K-00005 (Elagatis bipinnulata)"
@@ -533,6 +577,7 @@
       "taxonKey": "fb:4398",
       "acceptedName": "Cirripectes polyzona",
       "keptUUID": "095554b8-827a-59ab-9ded-bb321130adbf",
+      "rule": "default order",
       "members": [
         "existing:095554b8-827a-59ab-9ded-bb321130adbf (Cimipectes polyzona)",
         "candidate:MARINE5K-01407 (Cirripectes polyzona)"
@@ -542,6 +587,7 @@
       "taxonKey": "fb:4465",
       "acceptedName": "Diagramma pictum",
       "keptUUID": "20534d3f-c1b8-5654-8fb8-c233e035a783",
+      "rule": "default order",
       "members": [
         "existing:20534d3f-c1b8-5654-8fb8-c233e035a783 (Jiagramma pictum)",
         "candidate:MARINE5K-00071 (Diagramma pictum)"
@@ -551,6 +597,7 @@
       "taxonKey": "fb:4485",
       "acceptedName": "Dactyloptena orientalis",
       "keptUUID": "9163f2d4-bdf0-5560-8cb6-f4f3959c096a",
+      "rule": "default order",
       "members": [
         "existing:9163f2d4-bdf0-5560-8cb6-f4f3959c096a (Jactyloptena orientalis)",
         "candidate:MARINE5K-02753 (Dactyloptena orientalis)"
@@ -560,6 +607,7 @@
       "taxonKey": "fb:46415",
       "acceptedName": "Antennablennius variopunctatus",
       "keptUUID": "5d069d00-7cc0-5177-9d82-cdc2024d877b",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-02014 (Antennablennius velifer)",
         "candidate:MARINE5K-02038 (Antennablennius variopunctatus)"
@@ -569,6 +617,7 @@
       "taxonKey": "fb:4747",
       "acceptedName": "Acanthurus nigricauda",
       "keptUUID": "4c541d71-90e9-5f9e-ab57-54039aa093ce",
+      "rule": "default order",
       "members": [
         "existing:4c541d71-90e9-5f9e-ab57-54039aa093ce (Acanthurus nigricaudus)",
         "candidate:MARINE5K-00433 (Acanthurus nigricauda)"
@@ -578,6 +627,7 @@
       "taxonKey": "fb:4826",
       "acceptedName": "Plectropomus leopardus",
       "keptUUID": "4fcb4036-b38d-5a4c-8f4b-a949478ed463",
+      "rule": "default order",
       "members": [
         "existing:4fcb4036-b38d-5a4c-8f4b-a949478ed463 (Jectropomus leopardus)",
         "candidate:MARINE5K-00049 (Plectropomus leopardus)"
@@ -587,6 +637,7 @@
       "taxonKey": "fb:4838",
       "acceptedName": "Ostorhinchus fleurieu",
       "keptUUID": "fe89378e-a014-50d0-8f89-8e687822fcfb",
+      "rule": "default order",
       "members": [
         "existing:fe89378e-a014-50d0-8f89-8e687822fcfb (Apogon fleurieu)",
         "candidate:MARINE5K-03042 (Ostorhinchus fleurieu)"
@@ -596,6 +647,7 @@
       "taxonKey": "fb:4867",
       "acceptedName": "Labropsis micronesica",
       "keptUUID": "21301045-bf09-5ccf-844a-786d220d901d",
+      "rule": "default order",
       "members": [
         "existing:21301045-bf09-5ccf-844a-786d220d901d (Labropsis micrornesica)",
         "candidate:MARINE5K-01530 (Labropsis micronesica)"
@@ -605,6 +657,7 @@
       "taxonKey": "fb:4886",
       "acceptedName": "Plectropomus maculatus",
       "keptUUID": "9f3acc5e-1b33-5d39-a823-ddd7cb9086a6",
+      "rule": "default order",
       "members": [
         "existing:9f3acc5e-1b33-5d39-a823-ddd7cb9086a6 (Jectropomus maculatus)",
         "candidate:MARINE5K-00037 (Plectropomus maculatus)"
@@ -614,6 +667,7 @@
       "taxonKey": "fb:4981",
       "acceptedName": "Scarus longipinnis",
       "keptUUID": "d681dc63-720b-55ae-af88-433aca2dc8a4",
+      "rule": "default order",
       "members": [
         "existing:d681dc63-720b-55ae-af88-433aca2dc8a4 (Scatus longipinnis)",
         "candidate:MARINE5K-00473 (Scarus longipinnis)"
@@ -623,6 +677,7 @@
       "taxonKey": "fb:5107",
       "acceptedName": "Coris pictoides",
       "keptUUID": "f596a6b6-42b2-51eb-8989-1eddf1be67cd",
+      "rule": "default order",
       "members": [
         "existing:f596a6b6-42b2-51eb-8989-1eddf1be67cd (Cons pictoides)",
         "candidate:MARINE5K-01238 (Coris pictoides)"
@@ -632,6 +687,7 @@
       "taxonKey": "fb:5108",
       "acceptedName": "Diproctacanthus xanthurus",
       "keptUUID": "68577542-cd39-5214-b2ad-bc521f5ef3be",
+      "rule": "default order",
       "members": [
         "existing:68577542-cd39-5214-b2ad-bc521f5ef3be (Jiproctacanthus xanthurus)",
         "candidate:MARINE5K-01716 (Diproctacanthus xanthurus)"
@@ -641,6 +697,7 @@
       "taxonKey": "fb:5110",
       "acceptedName": "Dascyllus aruanus",
       "keptUUID": "fccd44ec-cace-5d14-98e6-d74b06dde555",
+      "rule": "default order",
       "members": [
         "existing:fccd44ec-cace-5d14-98e6-d74b06dde555 (Jascyllus aruanus)",
         "candidate:MARINE5K-01715 (Dascyllus aruanus)"
@@ -650,6 +707,7 @@
       "taxonKey": "fb:5111",
       "acceptedName": "Dascyllus melanurus",
       "keptUUID": "407f3be8-7b60-51e8-bf9f-478667072e06",
+      "rule": "default order",
       "members": [
         "existing:407f3be8-7b60-51e8-bf9f-478667072e06 (Jascyllus melanurus)",
         "candidate:MARINE5K-01960 (Dascyllus melanurus)"
@@ -659,6 +717,7 @@
       "taxonKey": "fb:5112",
       "acceptedName": "Dascyllus trimaculatus",
       "keptUUID": "5c2bfdc7-5501-569b-9fc9-1ad139983c51",
+      "rule": "default order",
       "members": [
         "existing:5c2bfdc7-5501-569b-9fc9-1ad139983c51 (Jascyllus trimaculatus)",
         "candidate:MARINE5K-01338 (Dascyllus trimaculatus)"
@@ -668,6 +727,7 @@
       "taxonKey": "fb:5113",
       "acceptedName": "Dascyllus reticulatus",
       "keptUUID": "fde60643-ffe0-58ec-ae74-f98d4929872a",
+      "rule": "default order",
       "members": [
         "existing:fde60643-ffe0-58ec-ae74-f98d4929872a (Jascyllus reticulatus)",
         "candidate:MARINE5K-01832 (Dascyllus reticulatus)"
@@ -677,6 +737,7 @@
       "taxonKey": "fb:52799",
       "acceptedName": "Arcygobius baliurus",
       "keptUUID": "b8de4b9f-df16-58cc-be7b-3fb1f47900f9",
+      "rule": "default order",
       "members": [
         "existing:b8de4b9f-df16-58cc-be7b-3fb1f47900f9 (Oplopomops atherinoides)",
         "candidate:MARINE5K-01671 (Arcygobius baliurus)"
@@ -685,7 +746,8 @@
     {
       "taxonKey": "fb:5367",
       "acceptedName": "Epinephelus areolatus",
-      "keptUUID": null,
+      "keptUUID": "974f951b-8c19-5e79-ad6a-e9d9b4988eb1",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
       "members": [
         "existing:974f951b-8c19-5e79-ad6a-e9d9b4988eb1 (Epinephelus areolatus)",
         "existing:6c7c4c7b-0006-587f-b7ad-201cda89feae (Epinephelus waandersi)"
@@ -695,6 +757,7 @@
       "taxonKey": "fb:54193",
       "acceptedName": "Cirrhilabrus walindi",
       "keptUUID": "f5f6d8e9-5bef-504a-a219-664066bbf4cd",
+      "rule": "default order",
       "members": [
         "existing:f5f6d8e9-5bef-504a-a219-664066bbf4cd (Cirthilabrus walindi)",
         "candidate:MARINE5K-02127 (Cirrhilabrus walindi)"
@@ -704,6 +767,7 @@
       "taxonKey": "fb:5457",
       "acceptedName": "Centropyge flavissima",
       "keptUUID": "d57e2c37-6d4a-50f3-add6-871de33cc8e0",
+      "rule": "default order",
       "members": [
         "existing:d57e2c37-6d4a-50f3-add6-871de33cc8e0 (Centropyge flavissimus)",
         "candidate:MARINE5K-01326 (Centropyge flavissima)"
@@ -713,6 +777,7 @@
       "taxonKey": "fb:5478",
       "acceptedName": "Koumansetta rainfordi",
       "keptUUID": "ec0c16ae-cbcb-5b25-8d67-0e07393d0c42",
+      "rule": "default order",
       "members": [
         "existing:ec0c16ae-cbcb-5b25-8d67-0e07393d0c42 (Amblygobius rainfordi)",
         "candidate:MARINE5K-01894 (Koumansetta rainfordi)"
@@ -722,6 +787,7 @@
       "taxonKey": "fb:5487",
       "acceptedName": "Hemiglyphidodon plagiometopon",
       "keptUUID": "c848aab0-ef51-549b-995f-146a6e3813a5",
+      "rule": "default order",
       "members": [
         "existing:c848aab0-ef51-549b-995f-146a6e3813a5 (Hemigiyphidodon plagiometopon)",
         "candidate:MARINE5K-01089 (Hemiglyphidodon plagiometopon)"
@@ -731,6 +797,7 @@
       "taxonKey": "fb:5539",
       "acceptedName": "Hipposcarus longiceps",
       "keptUUID": "989e7f65-0ec9-5540-adb3-308955f78bb0",
+      "rule": "default order",
       "members": [
         "existing:989e7f65-0ec9-5540-adb3-308955f78bb0 (Tipposcarus longiceps)",
         "candidate:MARINE5K-00237 (Hipposcarus longiceps)"
@@ -740,6 +807,7 @@
       "taxonKey": "fb:5544",
       "acceptedName": "Scarus festivus",
       "keptUUID": "17ac75e3-9f5b-5840-9208-d0cee6f567c9",
+      "rule": "default order",
       "members": [
         "existing:17ac75e3-9f5b-5840-9208-d0cee6f567c9 (Scanus festivus)",
         "candidate:MARINE5K-00390 (Scarus festivus)"
@@ -749,6 +817,7 @@
       "taxonKey": "fb:5546",
       "acceptedName": "Scarus frenatus",
       "keptUUID": "bc077bad-c91f-57fc-8bb6-f5fe435dc718",
+      "rule": "default order",
       "members": [
         "existing:bc077bad-c91f-57fc-8bb6-f5fe435dc718 (Scamus frenatus)",
         "candidate:MARINE5K-00356 (Scarus frenatus)"
@@ -758,6 +827,7 @@
       "taxonKey": "fb:5554",
       "acceptedName": "Scarus quoyi",
       "keptUUID": "05e77f13-d929-56f4-9097-9c9c8ffbe402",
+      "rule": "default order",
       "members": [
         "existing:05e77f13-d929-56f4-9097-9c9c8ffbe402 (Scams quoyi)",
         "candidate:MARINE5K-00474 (Scarus quoyi)"
@@ -767,6 +837,7 @@
       "taxonKey": "fb:5568",
       "acceptedName": "Chaetodon meyeri",
       "keptUUID": "c70d97ae-cd42-5b22-ae93-5fb6f6c5e813",
+      "rule": "default order",
       "members": [
         "existing:c70d97ae-cd42-5b22-ae93-5fb6f6c5e813 (Chaetodon meyersi)",
         "candidate:MARINE5K-00953 (Chaetodon meyeri)"
@@ -776,6 +847,7 @@
       "taxonKey": "fb:5573",
       "acceptedName": "Chaetodon rafflesii",
       "keptUUID": "cb7d0a9f-ce52-5229-b1a5-46dd18934983",
+      "rule": "default order",
       "members": [
         "existing:cb7d0a9f-ce52-5229-b1a5-46dd18934983 (Chaetodon rafflesi)",
         "candidate:MARINE5K-01077 (Chaetodon rafflesii)"
@@ -785,6 +857,7 @@
       "taxonKey": "fb:5596",
       "acceptedName": "Oxycheilinus bimaculatus",
       "keptUUID": "4f8145bb-baa1-5a8a-a3cf-6f636035ded0",
+      "rule": "default order",
       "members": [
         "existing:4f8145bb-baa1-5a8a-a3cf-6f636035ded0 (Oxychellinus bimaculatus)",
         "candidate:MARINE5K-01259 (Oxycheilinus bimaculatus)"
@@ -794,6 +867,7 @@
       "taxonKey": "fb:5597",
       "acceptedName": "Oxycheilinus celebicus",
       "keptUUID": "1dc14e25-e6aa-519c-903b-461de2d4daba",
+      "rule": "default order",
       "members": [
         "existing:1dc14e25-e6aa-519c-903b-461de2d4daba (Oxycheulinus celebicus)",
         "candidate:MARINE5K-00837 (Oxycheilinus celebicus)"
@@ -803,6 +877,7 @@
       "taxonKey": "fb:5599",
       "acceptedName": "Oxycheilinus digramma",
       "keptUUID": "8a54b591-da84-5c46-b970-28fe3caf4962",
+      "rule": "default order",
       "members": [
         "existing:8a54b591-da84-5c46-b970-28fe3caf4962 (Oxycheilinus digrammus)",
         "candidate:MARINE5K-00463 (Oxycheilinus digramma)"
@@ -812,6 +887,7 @@
       "taxonKey": "fb:5607",
       "acceptedName": "Cymolutes praetextatus",
       "keptUUID": "00ce79f8-d243-5a43-9a86-7273fd1d3810",
+      "rule": "default order",
       "members": [
         "existing:00ce79f8-d243-5a43-9a86-7273fd1d3810 (Symolutes praetextatus)",
         "candidate:MARINE5K-00966 (Cymolutes praetextatus)"
@@ -821,6 +897,7 @@
       "taxonKey": "fb:5615",
       "acceptedName": "Pseudocheilinops ataenia",
       "keptUUID": "9dc3dbc6-3d01-54eb-b725-88ea643b6e33",
+      "rule": "default order",
       "members": [
         "existing:9dc3dbc6-3d01-54eb-b725-88ea643b6e33 (Pseudocheilinus ataenia)",
         "candidate:MARINE5K-02198 (Pseudocheilinops ataenia)"
@@ -830,6 +907,7 @@
       "taxonKey": "fb:5624",
       "acceptedName": "Coris aygula",
       "keptUUID": "42ee1491-db15-5490-913f-37a215bc3266",
+      "rule": "default order",
       "members": [
         "existing:42ee1491-db15-5490-913f-37a215bc3266 (Joris aygula)",
         "candidate:MARINE5K-00045 (Coris aygula)"
@@ -839,6 +917,7 @@
       "taxonKey": "fb:56330",
       "acceptedName": "Paracirrhites nisus",
       "keptUUID": "a28759e4-0113-5512-83a9-3bc72b414fa7",
+      "rule": "default order",
       "members": [
         "existing:a28759e4-0113-5512-83a9-3bc72b414fa7 (Paracirthites nisus)",
         "candidate:MARINE5K-01933 (Paracirrhites nisus)"
@@ -848,6 +927,7 @@
       "taxonKey": "fb:56816",
       "acceptedName": "Cryptocentrus cyanotaenia",
       "keptUUID": "0dd03178-a273-509f-a1d8-8de46386a0c4",
+      "rule": "default order",
       "members": [
         "existing:0dd03178-a273-509f-a1d8-8de46386a0c4 (Cryptocentms cyanotaenia)",
         "candidate:MARINE5K-01514 (Cryptocentrus cyanotaenia)"
@@ -857,6 +937,7 @@
       "taxonKey": "fb:5693",
       "acceptedName": "Chrysiptera biocellata",
       "keptUUID": "d2b37ed9-9fb4-5b7f-bde1-d13b8e3aa5c3",
+      "rule": "default order",
       "members": [
         "existing:d2b37ed9-9fb4-5b7f-bde1-d13b8e3aa5c3 (Shrysiptera biocellata)",
         "candidate:MARINE5K-01469 (Chrysiptera biocellata)"
@@ -866,6 +947,7 @@
       "taxonKey": "fb:5695",
       "acceptedName": "Chrysiptera cyanea",
       "keptUUID": "f6f85b88-407d-5b5d-a3dd-fcf1ce4d81a7",
+      "rule": "default order",
       "members": [
         "existing:f6f85b88-407d-5b5d-a3dd-fcf1ce4d81a7 (Shrysiptera cyanea)",
         "candidate:MARINE5K-01889 (Chrysiptera cyanea)"
@@ -875,6 +957,7 @@
       "taxonKey": "fb:5696",
       "acceptedName": "Chrysiptera glauca",
       "keptUUID": "f0aa2ccd-a198-53a8-b853-1999aedfb8dd",
+      "rule": "default order",
       "members": [
         "existing:f0aa2ccd-a198-53a8-b853-1999aedfb8dd (Shrysiptera glauca)",
         "candidate:MARINE5K-01566 (Chrysiptera glauca)"
@@ -884,6 +967,7 @@
       "taxonKey": "fb:5698",
       "acceptedName": "Chrysiptera oxycephala",
       "keptUUID": "22156798-7e62-580e-848d-857612f4e85e",
+      "rule": "default order",
       "members": [
         "existing:22156798-7e62-580e-848d-857612f4e85e (Shrysiptera oxycephala)",
         "candidate:MARINE5K-01830 (Chrysiptera oxycephala)"
@@ -893,6 +977,7 @@
       "taxonKey": "fb:5699",
       "acceptedName": "Chrysiptera rex",
       "keptUUID": "eaa2d138-9135-555b-b7ee-d319478de9be",
+      "rule": "default order",
       "members": [
         "existing:eaa2d138-9135-555b-b7ee-d319478de9be (Shrysiptera rex)",
         "candidate:MARINE5K-02125 (Chrysiptera rex)"
@@ -902,6 +987,7 @@
       "taxonKey": "fb:5703",
       "acceptedName": "Dischistodus melanotus",
       "keptUUID": "4cbffbae-c03a-5b3d-a315-dca531bd2337",
+      "rule": "default order",
       "members": [
         "existing:4cbffbae-c03a-5b3d-a315-dca531bd2337 (Jischistodus melanotus)",
         "candidate:MARINE5K-01174 (Dischistodus melanotus)"
@@ -911,6 +997,7 @@
       "taxonKey": "fb:5704",
       "acceptedName": "Dischistodus perspicillatus",
       "keptUUID": "a181ae3d-5572-5f97-8e15-ff3a86c40b67",
+      "rule": "default order",
       "members": [
         "existing:a181ae3d-5572-5f97-8e15-ff3a86c40b67 (Jischistodus perspicillatus)",
         "candidate:MARINE5K-01082 (Dischistodus perspicillatus)"
@@ -920,6 +1007,7 @@
       "taxonKey": "fb:5710",
       "acceptedName": "Plectroglyphidodon imparipennis",
       "keptUUID": "7d777eae-4892-5b09-b2af-f87d46a6d5b6",
+      "rule": "default order",
       "members": [
         "existing:7d777eae-4892-5b09-b2af-f87d46a6d5b6 (Plectrogiyphidodon imparipennis)",
         "candidate:MARINE5K-02275 (Plectroglyphidodon imparipennis)"
@@ -929,6 +1017,7 @@
       "taxonKey": "fb:5727",
       "acceptedName": "Pomacentrus philippinus",
       "keptUUID": "7c2acba1-7c54-531b-92dd-3434647f5753",
+      "rule": "default order",
       "members": [
         "existing:7c2acba1-7c54-531b-92dd-3434647f5753 (Pomacentnuis philippinus)",
         "candidate:MARINE5K-01746 (Pomacentrus philippinus)"
@@ -938,6 +1027,7 @@
       "taxonKey": "fb:5748",
       "acceptedName": "Pristicon trimaculatus",
       "keptUUID": "409d2c07-0e03-540c-9be9-2263636e855e",
+      "rule": "default order",
       "members": [
         "existing:409d2c07-0e03-540c-9be9-2263636e855e (Apogon trimaculatus)",
         "candidate:MARINE5K-03005 (Pristicon trimaculatus)"
@@ -947,6 +1037,7 @@
       "taxonKey": "fb:57494",
       "acceptedName": "Pseudojuloides kaleidos",
       "keptUUID": "adb01347-975a-5623-a456-7de5ffb53e7d",
+      "rule": "default order",
       "members": [
         "existing:adb01347-975a-5623-a456-7de5ffb53e7d (Pseudojuloides kaleidios)",
         "candidate:MARINE5K-01758 (Pseudojuloides kaleidos)"
@@ -956,6 +1047,7 @@
       "taxonKey": "fb:5750",
       "acceptedName": "Zapogon evermanni",
       "keptUUID": "6c2d1bc6-17a3-53b9-afaf-9929e92a96eb",
+      "rule": "default order",
       "members": [
         "existing:6c2d1bc6-17a3-53b9-afaf-9929e92a96eb (Apogon evermanni)",
         "candidate:MARINE5K-03001 (Zapogon evermanni)"
@@ -965,6 +1057,7 @@
       "taxonKey": "fb:5757",
       "acceptedName": "Pristiapogon fraenatus",
       "keptUUID": "10a7c776-4c9c-5f5d-8e08-2a97bc5938a8",
+      "rule": "default order",
       "members": [
         "existing:10a7c776-4c9c-5f5d-8e08-2a97bc5938a8 (Apogon fraenatus)",
         "candidate:MARINE5K-03088 (Pristiapogon fraenatus)"
@@ -974,6 +1067,7 @@
       "taxonKey": "fb:5758",
       "acceptedName": "Pristiapogon kallopterus",
       "keptUUID": "571cf93b-0359-5486-82c7-27dcca499bad",
+      "rule": "default order",
       "members": [
         "existing:571cf93b-0359-5486-82c7-27dcca499bad (Apogon kallopterus)",
         "candidate:MARINE5K-02982 (Pristiapogon kallopterus)"
@@ -983,6 +1077,7 @@
       "taxonKey": "fb:5766",
       "acceptedName": "Ostorhinchus angustatus",
       "keptUUID": "cdbc6f03-86f2-5960-a21e-36875f9fd47e",
+      "rule": "default order",
       "members": [
         "existing:cdbc6f03-86f2-5960-a21e-36875f9fd47e (Apogon angustatus)",
         "candidate:MARINE5K-03083 (Ostorhinchus angustatus)"
@@ -992,6 +1087,7 @@
       "taxonKey": "fb:5767",
       "acceptedName": "Ostorhinchus taeniophorus",
       "keptUUID": "cef76ddd-4a80-52cf-b168-7a87876ae243",
+      "rule": "default order",
       "members": [
         "existing:cef76ddd-4a80-52cf-b168-7a87876ae243 (Apogon taeniophorus)",
         "candidate:MARINE5K-03072 (Ostorhinchus taeniophorus)"
@@ -1001,6 +1097,7 @@
       "taxonKey": "fb:5769",
       "acceptedName": "Ostorhinchus compressus",
       "keptUUID": "a13969e5-6aa5-599a-8110-73fca8272939",
+      "rule": "default order",
       "members": [
         "existing:a13969e5-6aa5-599a-8110-73fca8272939 (Apogon compressus)",
         "candidate:MARINE5K-03057 (Ostorhinchus compressus)"
@@ -1010,6 +1107,7 @@
       "taxonKey": "fb:5806",
       "acceptedName": "Kyphosus vaigiensis",
       "keptUUID": "f43b661c-a99d-5990-b79a-26f1fb94e2bb",
+      "rule": "default order",
       "members": [
         "existing:f43b661c-a99d-5990-b79a-26f1fb94e2bb (Kyphosus vaigiensis)",
         "candidate:MARINE5K-02734 (Kyphosus analogus)"
@@ -1019,6 +1117,7 @@
       "taxonKey": "fb:5807",
       "acceptedName": "Monodactylus argenteus",
       "keptUUID": "3d1e410c-a786-5140-b769-6aa273aae591",
+      "rule": "default order",
       "members": [
         "existing:3d1e410c-a786-5140-b769-6aa273aae591 (Monodactyus argenteus)",
         "candidate:MARINE5K-02848 (Monodactylus argenteus)"
@@ -1028,6 +1127,7 @@
       "taxonKey": "fb:5832",
       "acceptedName": "Neocirrhites armatus",
       "keptUUID": "7ddbbcf4-6afd-525c-b28c-cebacdbdcb88",
+      "rule": "default order",
       "members": [
         "existing:7ddbbcf4-6afd-525c-b28c-cebacdbdcb88 (Neocirrhitus armatus)",
         "candidate:MARINE5K-01841 (Neocirrhites armatus)"
@@ -1037,6 +1137,7 @@
       "taxonKey": "fb:5833",
       "acceptedName": "Oxycirrhites typus",
       "keptUUID": "56069573-984b-50fb-8863-0b1388447b30",
+      "rule": "default order",
       "members": [
         "existing:56069573-984b-50fb-8863-0b1388447b30 (Ixycirrhites typus)",
         "candidate:MARINE5K-01428 (Oxycirrhites typus)"
@@ -1046,6 +1147,7 @@
       "taxonKey": "fb:58619",
       "acceptedName": "Trimma rubromaculatum",
       "keptUUID": "40e5a6f5-3cd1-54de-b017-adc503b3dc70",
+      "rule": "default order",
       "members": [
         "existing:40e5a6f5-3cd1-54de-b017-adc503b3dc70 (Trimma rubromaculatus)",
         "candidate:MARINE5K-02555 (Trimma rubromaculatum)"
@@ -1055,6 +1157,7 @@
       "taxonKey": "fb:5875",
       "acceptedName": "Scolopsis taenioptera",
       "keptUUID": "8105113a-8586-5f7e-a23c-ff52a8a5d0ac",
+      "rule": "default order",
       "members": [
         "existing:8105113a-8586-5f7e-a23c-ff52a8a5d0ac (Soolopsis taeniopterus)",
         "candidate:MARINE5K-02887 (Scolopsis taenioptera)"
@@ -1064,6 +1167,7 @@
       "taxonKey": "fb:5876",
       "acceptedName": "Scolopsis ciliata",
       "keptUUID": "356512ae-b9f8-5744-9b3d-743cb1371b3e",
+      "rule": "default order",
       "members": [
         "existing:356512ae-b9f8-5744-9b3d-743cb1371b3e (Scolopsis ciliatus)",
         "candidate:MARINE5K-02885 (Scolopsis ciliata)"
@@ -1073,6 +1177,7 @@
       "taxonKey": "fb:5878",
       "acceptedName": "Scolopsis margaritifera",
       "keptUUID": "081b6eca-5346-5a4a-ba7f-9e55e56a7ab7",
+      "rule": "default order",
       "members": [
         "existing:081b6eca-5346-5a4a-ba7f-9e55e56a7ab7 (Scolopsis margaritifer)",
         "candidate:MARINE5K-02841 (Scolopsis margaritifera)"
@@ -1082,6 +1187,7 @@
       "taxonKey": "fb:5881",
       "acceptedName": "Scolopsis trilineata",
       "keptUUID": "e444ca2a-3977-5a1c-99c6-d39a82edf68f",
+      "rule": "default order",
       "members": [
         "existing:e444ca2a-3977-5a1c-99c6-d39a82edf68f (Scolopsis trilineatus)",
         "candidate:MARINE5K-02888 (Scolopsis trilineata)"
@@ -1091,6 +1197,7 @@
       "taxonKey": "fb:59348",
       "acceptedName": "Stonogobiops larsonae",
       "keptUUID": "fca9b667-1745-516f-ae9b-570f6dd54071",
+      "rule": "default order",
       "members": [
         "existing:fca9b667-1745-516f-ae9b-570f6dd54071 (Myersina larsonae)",
         "candidate:MARINE5K-02093 (Stonogobiops larsonae)"
@@ -1100,6 +1207,7 @@
       "taxonKey": "fb:59437",
       "acceptedName": "Pleurosicya labiata",
       "keptUUID": "b2b538de-3c95-5e9d-af30-31ac6fc6dcc9",
+      "rule": "default order",
       "members": [
         "existing:b2b538de-3c95-5e9d-af30-31ac6fc6dcc9 (Jeurosicya labiata)",
         "candidate:MARINE5K-02552 (Pleurosicya labiata)"
@@ -1109,6 +1217,7 @@
       "taxonKey": "fb:59464",
       "acceptedName": "Dascyllus auripinnis",
       "keptUUID": "2b714eb6-89fc-5942-a060-85446510fe4d",
+      "rule": "default order",
       "members": [
         "existing:2b714eb6-89fc-5942-a060-85446510fe4d (Jascyllus auripinnis)",
         "candidate:MARINE5K-01562 (Dascyllus auripinnis)"
@@ -1117,7 +1226,8 @@
     {
       "taxonKey": "fb:5955",
       "acceptedName": "Hippocampus kuda",
-      "keptUUID": null,
+      "keptUUID": "b21f6b66-e27f-53f5-a189-2b64882a888f",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
       "members": [
         "existing:cf7ea288-d448-52f2-8e2b-fe08d17bdb4c (Hippocampus taeniopterus)",
         "existing:b21f6b66-e27f-53f5-a189-2b64882a888f (Hippocampus kuda)",
@@ -1128,6 +1238,7 @@
       "taxonKey": "fb:59562",
       "acceptedName": "Scorpaenodes evides",
       "keptUUID": "1334f447-c6c8-54f2-8891-e6c011df2d77",
+      "rule": "default order",
       "members": [
         "existing:1334f447-c6c8-54f2-8891-e6c011df2d77 (Scorpaenodes littoralis)",
         "candidate:MARINE5K-01650 (Scorpaenodes evides)"
@@ -1137,6 +1248,7 @@
       "taxonKey": "fb:59631",
       "acceptedName": "Pseudocoris bleekeri",
       "keptUUID": "4e161a17-bd1f-5427-858f-467b66aa16fb",
+      "rule": "default order",
       "members": [
         "existing:4e161a17-bd1f-5427-858f-467b66aa16fb (Pseudocoris bleekeni)",
         "candidate:MARINE5K-01271 (Pseudocoris bleekeri)"
@@ -1145,7 +1257,8 @@
     {
       "taxonKey": "fb:59777",
       "acceptedName": "Nectamia fusca",
-      "keptUUID": null,
+      "keptUUID": "d9e60f59-0dcc-5675-8802-51f8da334ba8",
+      "rule": "kept the record with the accepted name (several existing app records for one taxon)",
       "members": [
         "existing:91224400-e35c-57d1-9d48-7742728b5fe0 (Apogon guamensis)",
         "existing:f9d21a43-1b8e-558b-99c0-667e4f944646 (Apogon fuscus)",
@@ -1156,6 +1269,7 @@
       "taxonKey": "fb:59843",
       "acceptedName": "Salarias obscurus",
       "keptUUID": "96b5ed65-f3b1-5240-87dd-e3b660ea911c",
+      "rule": "default order",
       "members": [
         "existing:96b5ed65-f3b1-5240-87dd-e3b660ea911c (Salanas obscurus)",
         "candidate:MARINE5K-01439 (Salarias obscurus)"
@@ -1165,6 +1279,7 @@
       "taxonKey": "fb:5994",
       "acceptedName": "Parupeneus pleurostigma",
       "keptUUID": "c8d75845-81ac-5794-80ca-75975fd369c7",
+      "rule": "default order",
       "members": [
         "existing:c8d75845-81ac-5794-80ca-75975fd369c7 (Panipeneus pleurostigma)",
         "candidate:MARINE5K-00585 (Parupeneus pleurostigma)"
@@ -1174,6 +1289,7 @@
       "taxonKey": "fb:60765",
       "acceptedName": "Chrysiptera cymatilis",
       "keptUUID": "07ac0eaf-bf52-55a6-864b-cd1c9e4fa3ad",
+      "rule": "default order",
       "members": [
         "existing:07ac0eaf-bf52-55a6-864b-cd1c9e4fa3ad (Shrysiptera cymatilis)",
         "candidate:MARINE5K-02531 (Chrysiptera cymatilis)"
@@ -1183,6 +1299,7 @@
       "taxonKey": "fb:6082",
       "acceptedName": "Plectropomus areolatus",
       "keptUUID": "26fc037c-588e-544a-b3a9-1eb65caac49d",
+      "rule": "default order",
       "members": [
         "existing:26fc037c-588e-544a-b3a9-1eb65caac49d (Jectropomus areolatus)",
         "candidate:MARINE5K-00136 (Plectropomus areolatus)"
@@ -1192,6 +1309,7 @@
       "taxonKey": "fb:61022",
       "acceptedName": "Gobiopsis liolepis",
       "keptUUID": "9c73f3cc-8512-5eef-a7e6-f15eeee88b03",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-02151 (Callogobius liolepis)",
         "candidate:MARINE5K-02472 (Gobiopsis aporia)"
@@ -1201,6 +1319,7 @@
       "taxonKey": "fb:61025",
       "acceptedName": "Gobiopsis exigua",
       "keptUUID": "d66dabb2-38ba-51c1-9bf2-f85d0181697f",
+      "rule": "default order",
       "members": [
         "existing:d66dabb2-38ba-51c1-9bf2-f85d0181697f (Gobipsis exigua)",
         "candidate:MARINE5K-01813 (Gobiopsis exigua)"
@@ -1210,6 +1329,7 @@
       "taxonKey": "fb:6524",
       "acceptedName": "Ostorhinchus endekataenia",
       "keptUUID": "96013223-6792-5aa5-9067-af1ca7bea345",
+      "rule": "default order",
       "members": [
         "existing:96013223-6792-5aa5-9067-af1ca7bea345 (Apogon endekataenia)",
         "candidate:MARINE5K-03013 (Ostorhinchus endekataenia)"
@@ -1219,6 +1339,7 @@
       "taxonKey": "fb:6552",
       "acceptedName": "Diodon liturosus",
       "keptUUID": "764e5612-6640-5747-a42d-a0af41b506c0",
+      "rule": "default order",
       "members": [
         "existing:764e5612-6640-5747-a42d-a0af41b506c0 (Jiodon liturosus)",
         "candidate:MARINE5K-00204 (Diodon liturosus)"
@@ -1228,6 +1349,7 @@
       "taxonKey": "fb:6559",
       "acceptedName": "Oxymonacanthus longirostris",
       "keptUUID": "b7a60ce6-392c-572f-ba80-fabe8df0ad80",
+      "rule": "default order",
       "members": [
         "existing:b7a60ce6-392c-572f-ba80-fabe8df0ad80 (Ixymonacanthus longirostris)",
         "candidate:MARINE5K-01532 (Oxymonacanthus longirostris)"
@@ -1237,6 +1359,7 @@
       "taxonKey": "fb:6601",
       "acceptedName": "Chrysiptera starcki",
       "keptUUID": "ce3878f4-d52a-5bf0-be64-685966442643",
+      "rule": "default order",
       "members": [
         "existing:ce3878f4-d52a-5bf0-be64-685966442643 (Shrysiptera starcki)",
         "candidate:MARINE5K-02126 (Chrysiptera starcki)"
@@ -1246,6 +1369,7 @@
       "taxonKey": "fb:6602",
       "acceptedName": "Amblypomacentrus tricinctus",
       "keptUUID": "7e7863ac-1bab-5b3e-90ff-1700fd7fb6ae",
+      "rule": "default order",
       "members": [
         "existing:7e7863ac-1bab-5b3e-90ff-1700fd7fb6ae (Shrysiptera tricincta)",
         "candidate:MARINE5K-02249 (Chrysiptera tricincta)"
@@ -1255,6 +1379,7 @@
       "taxonKey": "fb:6603",
       "acceptedName": "Diploprion bifasciatus",
       "keptUUID": "8796d848-167e-5b72-b53b-799ee26ba039",
+      "rule": "default order",
       "members": [
         "existing:8796d848-167e-5b72-b53b-799ee26ba039 (Jiploprion bifasciatum)",
         "candidate:MARINE5K-00789 (Diploprion bifasciatum)"
@@ -1264,6 +1389,7 @@
       "taxonKey": "fb:6605",
       "acceptedName": "Ostorhinchus fasciatus",
       "keptUUID": "24882309-158b-5d73-8759-9013448c19e1",
+      "rule": "default order",
       "members": [
         "existing:24882309-158b-5d73-8759-9013448c19e1 (Apogon quadrifasciatus)",
         "candidate:MARINE5K-03041 (Ostorhinchus fasciatus)"
@@ -1273,6 +1399,7 @@
       "taxonKey": "fb:6657",
       "acceptedName": "Coris dorsomacula",
       "keptUUID": "7c1b0023-3b5e-54c4-99da-6dd2c51402a4",
+      "rule": "default order",
       "members": [
         "existing:7c1b0023-3b5e-54c4-99da-6dd2c51402a4 (Cons dorsomacula)",
         "candidate:MARINE5K-00497 (Coris dorsomacula)"
@@ -1282,6 +1409,7 @@
       "taxonKey": "fb:6667",
       "acceptedName": "Centropyge ferrugata",
       "keptUUID": "d4efa718-46af-55b9-803c-bb10f4a41f4e",
+      "rule": "default order",
       "members": [
         "existing:d4efa718-46af-55b9-803c-bb10f4a41f4e (Centropyge ferrugatus)",
         "candidate:MARINE5K-01693 (Centropyge ferrugata)"
@@ -1291,6 +1419,7 @@
       "taxonKey": "fb:6670",
       "acceptedName": "Parapercis millepunctata",
       "keptUUID": "5db59da3-5a19-5d9e-bc04-e61b8bf51348",
+      "rule": "default order",
       "members": [
         "existing:5db59da3-5a19-5d9e-bc04-e61b8bf51348 (Parapercis millipunctata)",
         "candidate:MARINE5K-02955 (Parapercis millepunctata)"
@@ -1300,6 +1429,7 @@
       "taxonKey": "fb:6919",
       "acceptedName": "Chrysiptera hemicyanea",
       "keptUUID": "71df0ddc-240a-5792-a99a-495b81a82b48",
+      "rule": "default order",
       "members": [
         "existing:71df0ddc-240a-5792-a99a-495b81a82b48 (Shrysiptera hemicyanea)",
         "candidate:MARINE5K-02122 (Chrysiptera hemicyanea)"
@@ -1309,6 +1439,7 @@
       "taxonKey": "fb:7200",
       "acceptedName": "Asterropteryx semipunctata",
       "keptUUID": "f5ff564f-2f69-5f4a-99ce-734f9274d416",
+      "rule": "default order",
       "members": [
         "existing:f5ff564f-2f69-5f4a-99ce-734f9274d416 (Asterropteryx semipunctatus)",
         "candidate:MARINE5K-02185 (Asterropteryx semipunctata)"
@@ -1318,6 +1449,7 @@
       "taxonKey": "fb:7215",
       "acceptedName": "Fusigobius neophytus",
       "keptUUID": "89c96fd8-32d0-596a-b454-cd596e58fb89",
+      "rule": "default order",
       "members": [
         "existing:89c96fd8-32d0-596a-b454-cd596e58fb89 (Coryphopterus neophytus)",
         "candidate:MARINE5K-02059 (Fusigobius neophytus)"
@@ -1327,6 +1459,7 @@
       "taxonKey": "fb:7216",
       "acceptedName": "Gobiodon histrio",
       "keptUUID": "570644b6-a7e1-5a23-83d3-e2819329bd90",
+      "rule": "default order",
       "members": [
         "existing:570644b6-a7e1-5a23-83d3-e2819329bd90 (Cobiodon histrio)",
         "candidate:MARINE5K-02544 (Gobiodon histrio)"
@@ -1336,6 +1469,7 @@
       "taxonKey": "fb:7242",
       "acceptedName": "Koumansetta hectori",
       "keptUUID": "54ff8265-8dd3-561f-ac8b-3c94d57cd24c",
+      "rule": "default order",
       "members": [
         "existing:54ff8265-8dd3-561f-ac8b-3c94d57cd24c (Amblygobius hectori)",
         "candidate:MARINE5K-01893 (Koumansetta hectori)"
@@ -1345,6 +1479,7 @@
       "taxonKey": "fb:7319",
       "acceptedName": "Plectropomus oligacanthus",
       "keptUUID": "c95d42dc-fe74-565e-9b01-bef6e78f4f57",
+      "rule": "default order",
       "members": [
         "existing:c95d42dc-fe74-565e-9b01-bef6e78f4f57 (Jectropomus oligacanthus)",
         "candidate:MARINE5K-00161 (Plectropomus oligacanthus)"
@@ -1354,6 +1489,7 @@
       "taxonKey": "fb:7322",
       "acceptedName": "Xenanthias longimanus",
       "keptUUID": "1a48eab4-5a5e-5dd6-80f6-2683a071ba0b",
+      "rule": "default order",
       "members": [
         "existing:1a48eab4-5a5e-5dd6-80f6-2683a071ba0b (Jectranthias longimanus)",
         "candidate:MARINE5K-02551 (Plectranthias longimanus)"
@@ -1363,6 +1499,7 @@
       "taxonKey": "fb:7372",
       "acceptedName": "Plectropomus laevis",
       "keptUUID": "42880d02-d179-54d6-ba4f-ff96a15e11a4",
+      "rule": "default order",
       "members": [
         "existing:42880d02-d179-54d6-ba4f-ff96a15e11a4 (Jectropomus laevis)",
         "candidate:MARINE5K-00036 (Plectropomus laevis)"
@@ -1372,6 +1509,7 @@
       "taxonKey": "fb:7430",
       "acceptedName": "Plectropomus pessuliferus",
       "keptUUID": "757d4766-1539-5bd4-8965-89653f23a83b",
+      "rule": "default order",
       "members": [
         "existing:757d4766-1539-5bd4-8965-89653f23a83b (Jectropomus pessuliferus)",
         "candidate:MARINE5K-00050 (Plectropomus pessuliferus)"
@@ -1381,6 +1519,7 @@
       "taxonKey": "fb:7513",
       "acceptedName": "Fusigobius signipinnis",
       "keptUUID": "abc1bcb3-cb9e-5e39-9111-a882112d6dea",
+      "rule": "default order",
       "members": [
         "existing:abc1bcb3-cb9e-5e39-9111-a882112d6dea (Coryphopterus signipinnis)",
         "candidate:MARINE5K-02405 (Fusigobius signipinnis)"
@@ -1390,6 +1529,7 @@
       "taxonKey": "fb:7613",
       "acceptedName": "Rostroraja alba",
       "keptUUID": "422c7c79-e063-566c-adaf-30de8e0ac165",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03658 (Raja alba)",
         "candidate:MARINE5K-03668 (Rostroraja alba)"
@@ -1399,6 +1539,7 @@
       "taxonKey": "fb:7723",
       "acceptedName": "Dunckerocampus pessuliferus",
       "keptUUID": "2f64564c-fd23-5593-972d-ebd376442a2f",
+      "rule": "default order",
       "members": [
         "existing:2f64564c-fd23-5593-972d-ebd376442a2f (Doryrhamphus pessuliferus)",
         "candidate:MARINE5K-03459 (Dunckerocampus pessuliferus)"
@@ -1408,6 +1549,7 @@
       "taxonKey": "fb:7728",
       "acceptedName": "Hippichthys cyanospilos",
       "keptUUID": "585a484d-2d1e-51a7-9905-78b98faf5ed4",
+      "rule": "default order",
       "members": [
         "existing:585a484d-2d1e-51a7-9905-78b98faf5ed4 (Hippichthys cyanospilus)",
         "candidate:MARINE5K-03460 (Hippichthys cyanospilos)"
@@ -1417,6 +1559,7 @@
       "taxonKey": "fb:7747",
       "acceptedName": "Iniistius pentadactylus",
       "keptUUID": "a8a55dc8-805e-569f-ac7b-aa2d40b54b73",
+      "rule": "default order",
       "members": [
         "existing:a8a55dc8-805e-569f-ac7b-aa2d40b54b73 (Inustius pentadactylus)",
         "candidate:MARINE5K-00795 (Iniistius pentadactylus)"
@@ -1426,6 +1569,7 @@
       "taxonKey": "fb:7813",
       "acceptedName": "Centropyge fisheri",
       "keptUUID": "9dd85b0c-3361-59b4-a87d-45b8ac6db4c5",
+      "rule": "default order",
       "members": [
         "existing:9dd85b0c-3361-59b4-a87d-45b8ac6db4c5 (Centropyge flavicauda)",
         "candidate:MARINE5K-01908 (Centropyge fisheri)"
@@ -1435,6 +1579,7 @@
       "taxonKey": "fb:7870",
       "acceptedName": "Uropterygius macrocephalus",
       "keptUUID": "55708cd7-9ccd-5f14-b317-0ec47ebea95b",
+      "rule": "default order",
       "members": [
         "existing:55708cd7-9ccd-5f14-b317-0ec47ebea95b (Uropterygits macrocephalus)",
         "candidate:MARINE5K-03211 (Uropterygius macrocephalus)"
@@ -1444,6 +1589,7 @@
       "taxonKey": "fb:7906",
       "acceptedName": "Hipposcarus harid",
       "keptUUID": "ad349216-696d-5a91-877e-0a91bd733488",
+      "rule": "default order",
       "members": [
         "existing:ad349216-696d-5a91-877e-0a91bd733488 (Tipposcarus harid)",
         "candidate:MARINE5K-00154 (Hipposcarus harid)"
@@ -1453,6 +1599,7 @@
       "taxonKey": "fb:7975",
       "acceptedName": "Chaetodermis penicilligerus",
       "keptUUID": "ef6a57e6-a2aa-534a-9f6b-82720acf1c30",
+      "rule": "default order",
       "members": [
         "existing:ef6a57e6-a2aa-534a-9f6b-82720acf1c30 (Chaetodermis penicilligera)",
         "candidate:MARINE5K-00609 (Chaetodermis penicilligerus)"
@@ -1462,6 +1609,7 @@
       "taxonKey": "fb:8026",
       "acceptedName": "Coris caudimacula",
       "keptUUID": "c8bfa1eb-87db-5103-af93-06adb4c97211",
+      "rule": "default order",
       "members": [
         "existing:c8bfa1eb-87db-5103-af93-06adb4c97211 (Cons caudimacula)",
         "candidate:MARINE5K-00963 (Coris caudimacula)"
@@ -1471,6 +1619,7 @@
       "taxonKey": "fb:8030",
       "acceptedName": "Oxyurichthys papuensis",
       "keptUUID": "3542d6c9-1369-54d4-a25c-030e525b878d",
+      "rule": "default order",
       "members": [
         "existing:3542d6c9-1369-54d4-a25c-030e525b878d (Dxyurichthys papuensis)",
         "candidate:MARINE5K-00983 (Oxyurichthys papuensis)"
@@ -1480,6 +1629,7 @@
       "taxonKey": "fb:8242",
       "acceptedName": "Dischistodus pseudochrysopoecilus",
       "keptUUID": "80f3a629-f926-58c8-8fe4-f7b65fa06e6d",
+      "rule": "default order",
       "members": [
         "existing:80f3a629-f926-58c8-8fe4-f7b65fa06e6d (Jischistodus pseudochrysopoecilus)",
         "candidate:MARINE5K-01083 (Dischistodus pseudochrysopoecilus)"
@@ -1489,6 +1639,7 @@
       "taxonKey": "fb:8288",
       "acceptedName": "Ostracion rhinorhynchos",
       "keptUUID": "3beb3fbc-8402-53ad-85ff-d7339aece637",
+      "rule": "default order",
       "members": [
         "existing:3beb3fbc-8402-53ad-85ff-d7339aece637 (Rhynchostracion rhinorhynchus)",
         "candidate:MARINE5K-02791 (Ostracion rhinorhynchos)"
@@ -1498,6 +1649,7 @@
       "taxonKey": "fb:9",
       "acceptedName": "Abalistes stellatus",
       "keptUUID": "011cdb74-eaa5-5851-8ae7-3bba7319f9d2",
+      "rule": "default order",
       "members": [
         "existing:011cdb74-eaa5-5851-8ae7-3bba7319f9d2 (Abalistes stellatus)",
         "candidate:MARINE5K-00222 (Abalistes stellaris)"
@@ -1507,6 +1659,7 @@
       "taxonKey": "fb:914",
       "acceptedName": "Sphyrna mokarran",
       "keptUUID": "37d27ff0-d026-5d15-ac64-6a6178325368",
+      "rule": "default order",
       "members": [
         "existing:37d27ff0-d026-5d15-ac64-6a6178325368 (Sphyma mokarran)",
         "candidate:MARINE5K-03583 (Sphyrna mokarran)"
@@ -1516,6 +1669,7 @@
       "taxonKey": "fb:9208",
       "acceptedName": "Amphiprion mccullochi",
       "keptUUID": "8439dc39-4aca-5c2a-84a0-9a4f1b0b1052",
+      "rule": "default order",
       "members": [
         "existing:8439dc39-4aca-5c2a-84a0-9a4f1b0b1052 (Amphiprion mecullochi)",
         "candidate:MARINE5K-01484 (Amphiprion mccullochi)"
@@ -1525,6 +1679,7 @@
       "taxonKey": "fb:9982",
       "acceptedName": "Dischistodus fasciatus",
       "keptUUID": "1d0a742f-2143-5447-bf83-e791b2f92588",
+      "rule": "default order",
       "members": [
         "existing:1d0a742f-2143-5447-bf83-e791b2f92588 (Jischistodus fasciatus)",
         "candidate:MARINE5K-01568 (Dischistodus fasciatus)"
@@ -1534,6 +1689,7 @@
       "taxonKey": "slb:14604",
       "acceptedName": "Penaeus indicus",
       "keptUUID": "1d25ee1b-78ba-5f64-8751-05618ebc1673",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03721 (Fenneropenaeus indicus)",
         "candidate:MARINE5K-03773 (Penaeus indicus)"
@@ -1543,6 +1699,7 @@
       "taxonKey": "slb:25248",
       "acceptedName": "Holthuispenaeopsis atlantica",
       "keptUUID": "920acced-9d53-5d87-be96-0eef713f9322",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03722 (Holthuispenaeopsis atlantica)",
         "candidate:MARINE5K-03758 (Parapenaeopsis atlantica)"
@@ -1552,6 +1709,7 @@
       "taxonKey": "slb:47725",
       "acceptedName": "Mimachlamys varia",
       "keptUUID": "060ff3a6-f37b-5073-b7fb-33a4d523a046",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03818 (Chlamys varia)",
         "candidate:MARINE5K-03852 (Mimachlamys varia)"
@@ -1561,6 +1719,7 @@
       "taxonKey": "slb:83495",
       "acceptedName": "Stichopus horrens",
       "keptUUID": "32b40548-22b0-5011-89d3-984547f8fa35",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03708 (Stichopus horrens)",
         "candidate:MARINE5K-03710 (Stichopus variegatus)"
@@ -1570,6 +1729,7 @@
       "taxonKey": "slb:83866",
       "acceptedName": "Thaisella chocolata",
       "keptUUID": "3823c9f2-c95a-57fc-8a49-3017d8fcf3ef",
+      "rule": "default order",
       "members": [
         "candidate:MARINE5K-03899 (Thais chocolata)",
         "candidate:MARINE5K-03900 (Thaisella chocolata)"

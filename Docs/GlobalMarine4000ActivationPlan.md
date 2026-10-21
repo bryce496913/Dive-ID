@@ -272,7 +272,7 @@ candidates, which matches the review batch size. To implement decision 3:
 | 12 | Attribution placement | A catalogue credits screen plus a source link on each species detail screen. |
 
 Consequences for §5.1: a region conflict changes neither eligibility nor ordering.
-Location only adds a boost, both from a place named in the description and from the
+Location only adds a boost (and, per §9.1, an ordering-only out-of-range penalty), both from a place named in the description and from the
 optional dive-region selection. The pack-level `regionMismatch` stop goes away. The
 dive-region selection stays in the UI, but as an optional boost rather than a pack
 switch.
@@ -417,24 +417,17 @@ Each step is a separate, reviewable change.
 - **Fixed:** the step-4 drafts gave 307 candidates new UUIDs instead of their workbook
   identities from the intake crosswalk. `build.py` now uses the crosswalk UUID.
 
-### 9.1 Decisions needed
+### 9.1 Owner decisions (2026-10-21)
 
-1. **Default region for new installs.** Making Global the default now would put new
-   installs on an empty pack: Release would show "Dive region unavailable", Debug would
-   show 0 species, and the UI test expecting "Dive region: Caribbean" would fail.
-   Also, a selection is stored only once a user changes it. Existing users who never
-   chose a region have nothing stored, so they can't be told apart from new installs;
-   a new default would move them too. Proposed: switch the default when Global is
-   populated, and treat "no stored selection" as Global from then on, since that is
-   the catalogue that contains everything.
-2. **Lowering out-of-range species.** That would reverse decision 11 ("no effect at
-   all") and the Location section of `HybridRankingContract.md`, so it is not
-   implemented. If wanted, it should be an ordering-only penalty that never changes
-   eligibility, confidence or explanations, the mirror image of the dive-region boost.
-3. **The 3 merge conflicts.** Which UUID should each species keep? Retired UUIDs stay
-   as aliases, and saved identifications keep their own species snapshot.
-4. **Taxon authority.** Should FishBase/SeaLifeBase resolution count as "confirmed" for
-   the merge, given that WoRMS cannot be reached from these environments?
+| Question | Decision | Status |
+|---|---|---|
+| Default region for new installs | Switch the default when Global is populated, so "nothing stored" simply means Global. | Deferred to the change that populates Global. Until then the default stays Caribbean. |
+| Lowering out-of-range species | Yes. This replaces decision 11 ("no effect at all"). | Done: an ordering-only −3 penalty, applied after eligibility, so it never removes a species and never changes score, confidence or explanations. `HybridRankingContract.md` is updated. |
+| Merge conflicts | Keep the UUID of the record with the accepted species name. | Done, as a rule in `merge_plan.py`. *Hippocampus kuda* and *Epinephelus areolatus* keep their existing records. *Nectamia fusca* keeps the candidate record that carries the accepted name, and both *Apogon* records retire as aliases. The plan is now **ready** (0 conflicts). |
+| Taxonomy authority | FishBase/SeaLifeBase matches count as confirmed for the merge. | Done: 3,993 candidates confirmed; WoRMS stays pending. |
+
+`build.py` now builds exactly the merge plan's kept UUIDs: 962 Tropical Pacific
+records and 3,825 candidates. 5 existing app UUIDs are retired as aliases.
 
 ## Appendix A. Licence confirmation email (draft, not sent)
 

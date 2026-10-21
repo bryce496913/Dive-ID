@@ -1,8 +1,8 @@
 {
   "records": 4787,
   "batches": 20,
-  "fromTropicalPacific": 963,
-  "fromCandidates": 3824,
+  "fromTropicalPacific": 962,
+  "fromCandidates": 3825,
   "commonNamesDisambiguated": 61,
   "excludedFreshwaterOnly": [
     "Caridina nilotica",

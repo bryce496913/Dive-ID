@@ -11,9 +11,14 @@ For each accepted taxon the plan keeps exactly one UUID:
 3. otherwise the first candidate's UUID in queue order.
 Other UUIDs for the taxon are retired into the plan as aliases, never reassigned.
 
-Conflicts stop the plan (exit status 2): two existing app records for one taxon, two
-distinct workbook identities for one taxon, or one UUID claimed by two taxa. Each is
-listed in the report for a decision. Unresolved or ambiguous inputs are listed, not merged.
+When a taxon has two existing app records (or two workbook identities), the owner's
+rule (2026-10-21) keeps the UUID of the one member whose name is the accepted name,
+whichever kind it is. Conflicts stop the plan (exit status 2): such a taxon where no
+member, or more than one, carries the accepted name, and one UUID claimed by two taxa.
+Each is listed in the report. Unresolved or ambiguous inputs are listed, not merged.
+
+FishBase/SeaLifeBase resolution counts as confirmed taxonomy for the merge (owner
+decision, 2026-10-21); WoRMS has not been reachable from these environments.
 """
 import argparse
 import csv
@@ -52,25 +57,32 @@ def plan(existing, crosswalk, resolution, worms_status=None):
             m["taxonKey"], m["acceptedName"] = "", ""
             unresolved.append(m)
 
+    def accepted_name_holder(group):
+        holders = {m["inputUUID"] for m in group if " ".join(m["inputName"].lower().split()) == " ".join(m["acceptedName"].lower().split())}
+        return holders.pop() if len(holders) == 1 else None
+
     conflicts, collisions, owner_of_uuid = [], [], {}
     for key, group in sorted(taxa.items()):
         app = sorted({m["inputUUID"] for m in group if m["inputKind"] == "existing"})
         workbook = sorted({m["inputUUID"] for m in group if m["identityStatus"] == "existing_identity"})
         names = sorted({m["inputName"] for m in group})
-        if len(app) > 1:
-            conflicts.append({"kind": "several existing app records for one taxon", "taxonKey": key, "acceptedName": group[0]["acceptedName"], "uuids": app, "names": names})
-            chosen = None
+        rule = ""
+        if len(app) > 1 or (not app and len(workbook) > 1):
+            chosen = accepted_name_holder(group)
+            kind = "several existing app records for one taxon" if len(app) > 1 else "several workbook identities for one taxon"
+            if chosen is None:
+                conflicts.append({"kind": kind + " and no single record with the accepted name", "taxonKey": key,
+                                  "acceptedName": group[0]["acceptedName"], "uuids": app or workbook, "names": names})
+            else:
+                rule = "kept the record with the accepted name (" + kind + ")"
         elif app:
             chosen = app[0]
-        elif len(workbook) > 1:
-            conflicts.append({"kind": "several workbook identities for one taxon", "taxonKey": key, "acceptedName": group[0]["acceptedName"], "uuids": workbook, "names": names})
-            chosen = None
         elif workbook:
             chosen = workbook[0]
         else:
             chosen = min(group, key=lambda m: m["order"])["inputUUID"]
         if len({m["inputUUID"] for m in group}) > 1:
-            collisions.append({"taxonKey": key, "acceptedName": group[0]["acceptedName"], "keptUUID": chosen,
+            collisions.append({"taxonKey": key, "acceptedName": group[0]["acceptedName"], "keptUUID": chosen, "rule": rule or "default order",
                                "members": [f"{m['inputKind']}:{m['inputID']} ({m['inputName']})" for m in sorted(group, key=lambda m: m["order"])]})
         for m in group:
             m["plannedUUID"] = chosen or ""
@@ -88,7 +100,9 @@ def plan(existing, crosswalk, resolution, worms_status=None):
     report = {
         "status": "blocked: resolve conflicts before merging" if conflicts else "ready",
         "inputs": {"existingAppRecords": len(existing), "candidates": len(crosswalk)},
-        "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv)",
+        "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv); counts as confirmed (owner decision 2026-10-21)",
+        "confirmedCandidates": sum(1 for m in members if m["inputKind"] == "candidate" and m["taxonKey"]),
+        "resolvedByAcceptedName": [c for c in collisions if c["rule"].startswith("kept the record")],
         "wormsConfirmedCandidates": sum(1 for s in worms.values() if s == "confirmed"),
         "wormsTaxonomyStatus": dict(sorted({s: sum(1 for v in worms.values() if v == s) for s in set(worms.values())}.items())),
         "acceptedTaxa": len(taxa),

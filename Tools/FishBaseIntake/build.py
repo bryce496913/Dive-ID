@@ -1,8 +1,8 @@
 """Build draft LocalSpeciesProfile records from the pinned FishBase/SeaLifeBase release.
 
-Input: NameResolution.csv (resolve.py) plus the pinned tables. Every resolved,
-non-duplicate candidate and every resolved Tropical Pacific record becomes one
-draft record. The 8 Caribbean records are kept as they are (2 are human-verified)
+Input: NameResolution.csv (resolve.py), the merge plan (merge_plan.py) and the
+pinned tables. Each accepted taxon becomes one draft record under the UUID the
+merge plan keeps. The 8 Caribbean records are kept as they are (2 are human-verified)
 and only reserve their names. Output: review batches of 250 records,
 Data/GlobalMarine/FishBase/Drafts/batch-NN.json, plus BuildReport.json.
 
@@ -16,7 +16,6 @@ import csv
 import json
 import re
 import sys
-import uuid
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -25,8 +24,6 @@ sys.path.insert(0, str(HERE))
 import fetch  # noqa: E402
 
 BATCH_SIZE = 250
-# The same namespace Tools/GlobalMarineImport uses, so candidate identities stay stable.
-CANDIDATE_NAMESPACE = uuid.uuid5(uuid.NAMESPACE_URL, "https://github.com/bryce496913/Dive-ID/global-marine")
 ACCESSED = "2026-10-21T00:00:00Z"
 LICENSE = "CC BY-NC 4.0"
 SOURCES = {
@@ -318,25 +315,21 @@ def lives_in_sea(species_row):
     return truthy(species_row.get("Saltwater")) or truthy(species_row.get("Brack"))
 
 
-def select_entries(resolution_rows, candidate_rows, existing_categories, crosswalk_ids=None):
-    """Records to build: resolved, non-duplicate Tropical Pacific records and candidates.
-    A candidate keeps its intake-crosswalk UUID, which reuses an existing workbook
-    identity where there is one; uuid5 of the candidate ID is the crosswalk's own rule
-    for new identities."""
-    crosswalk_ids = crosswalk_ids or {}
+def select_entries(plan_rows, resolution_rows, candidate_rows, existing_categories):
+    """One record per accepted taxon, under the UUID the merge plan keeps.
+
+    The 8 Caribbean records stay as they are, so a taxon kept by a Caribbean record is
+    not rebuilt. Retired, unresolved and conflicted inputs are never built."""
     categories = {r["candidateID"]: r["proposedAppCategory"] for r in candidate_rows}
+    resolution = {(r["inputKind"], r["inputID"]): r for r in resolution_rows}
     entries = []
-    for row in resolution_rows:
-        if row["resolution"] not in ("exact", "synonym", "corrected") or row["duplicateOf"]:
+    for plan in plan_rows:
+        if plan["role"] != "keep" or plan["pack"] == "Caribbean":
             continue
-        if row["inputKind"] == "existing" and row["pack"] != "TropicalPacific":
-            continue
-        if row["inputKind"] == "existing":
-            entry_id, cats = row["inputID"], existing_categories.get(row["inputID"], [])
-        else:
-            entry_id = crosswalk_ids.get(row["inputID"]) or str(uuid.uuid5(CANDIDATE_NAMESPACE, row["inputID"]))
-            cats = None
-        entries.append(dict(row, id=entry_id, candidateCategory=categories.get(row["inputID"]), categories=cats))
+        row = resolution[(plan["inputKind"], plan["inputID"])]
+        existing = plan["inputKind"] == "existing"
+        entries.append(dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"]),
+                            categories=existing_categories.get(plan["inputID"], []) if existing else None))
     return entries
 
 
@@ -352,9 +345,11 @@ def main(argv=None):
     packs = REPO / "DiveID/Resources/IdentificationPacks"
     existing = {name: json.loads((packs / name / "Creatures.json").read_text()) for name in ("Caribbean", "TropicalPacific")}
     existing_categories = {r["id"]: r.get("categories", []) for r in existing["TropicalPacific"]}
-    with open(REPO / "Data/GlobalMarine/IntakeCrosswalk.csv", newline="") as f:
-        crosswalk_ids = {r["candidateID"]: r["speciesID"] for r in csv.DictReader(f) if r["queue"] == "primary"}
-    entries = select_entries(resolution, candidates, existing_categories, crosswalk_ids)
+    plan_report = json.loads((output / "MergePlanReport.json").read_text())
+    if plan_report["conflicts"]:
+        raise SystemExit("The merge plan has conflicts; resolve them before building (see MergePlanReport.json).")
+    plan_rows = list(csv.DictReader(open(output / "MergePlan.csv", newline="")))
+    entries = select_entries(plan_rows, resolution, candidates, existing_categories)
     sources = load_sources(fetch.load_manifest(), args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries})
     profiles, freshwater_only = [], []
     for e in entries:
