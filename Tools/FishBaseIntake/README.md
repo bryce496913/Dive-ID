@@ -38,36 +38,39 @@ Every other member of the group gets `duplicateOf`.
 **Outputs** (`Data/GlobalMarine/FishBase/`): `NameResolution.csv` has one row per
 input; `NameResolutionSummary.json` holds the counts.
 
-## Draft records (`build.py`, step 4)
+## Enrichment: draft records (`build.py`)
 
 ```sh
-python3 Tools/FishBaseIntake/build.py --offline   # after fetch.py and resolve.py
+python3 Tools/FishBaseIntake/build.py --offline              # after resolve.py, merge_plan.py, distribution.py
+python3 Tools/FishBaseIntake/build.py --offline --batch 7    # rewrite one batch only
 ```
 
-Builds one draft `LocalSpeciesProfile` per resolved, non-duplicate Tropical Pacific
-record or candidate, and writes review batches of 250 to
-`Data/GlobalMarine/FishBase/Drafts/batch-NN.json` plus `BuildReport.json`. The 8
-Caribbean records are kept as they are (2 are human-verified); the builder only
-reserves their names. Species that live in neither salt nor brackish water are
-excluded and listed in the report. Output is deterministic.
+Builds one draft `LocalSpeciesProfile` per accepted taxon the merge plan keeps, under
+the kept UUID. The rebuilt Tropical Pacific records keep their UUIDs, and none of
+their field-guide text survives. The 8 Caribbean records are kept as they are (2 are
+human-verified). Freshwater-only species are excluded.
 
-The field mapping follows `Docs/GlobalMarine4000ActivationPlan.md` §4:
-- **Categories** come from the candidate queue, else the family, else the class.
-  Existing records keep their categories.
-- **Habitats** come from the `ecology` flags and `DemersPelag`, plus shallow/deep from
-  the depth range. "Open water" is used only for pelagic species.
-- **Regions** come from FAO areas and countries, excluding questionable,
-  misidentified and error records.
-- **Size and depth** use the full recorded ranges, with their length basis.
-- **Text** is made of whole sentences from `Comments` and `AddChars`, with reference
-  markers and HTML removed. Fishing/trade and specimen sentences are dropped.
-- **Colours and markings** are taken from the diagnosis text and reviewed with each
-  batch. Barbels come only from the structured barbel count.
+- **Categories** come from the source taxonomy: Elasmobranchii are rays or sharks by
+  order, Anguilliformes are eels, *Hippocampus* are seahorses, cephalopods go by order,
+  and invertebrates go by class. The candidate queue is used only where taxonomy
+  doesn't settle a category; disagreements are listed in the report.
+- **Summary, distinguishing features, habitat text and the distribution summary** are
+  short original wording assembled from source facts, never copied sentences.
+- **Colours and markings** are vocabulary terms found in the source description.
+  Barbels come only from the structured barbel count.
+- **Similar species** come from `morphdat.SimilarSpecies1/2` when that species is in the
+  pack.
+- **Fields with no source stay empty or null.** For example, a species without any
+  distribution gets an empty range and a `missing_required` risk flag.
+- **`dataSources`** cites the SpecCode, species page, release, main reference and
+  CC BY-NC 4.0 licence, and lists the `reviewedFields` the source supplied.
 
-Every record is `draft`, licensed `CC BY-NC 4.0`, has no image, and cites its
-FishBase/SeaLifeBase SpecCode, species page and main reference. Duplicate common
-names get the scientific name appended; aliases that equal another species' name are
-dropped.
+Batches are written resumably: a batch whose content is unchanged is not rewritten,
+writes are atomic, and `Drafts/manifest.json` records each batch's SHA-256. Output is
+deterministic. `BuildReport.json` gives field coverage and flag rates.
+`RiskReport.json` gives each record's risk score, flags and batch, from
+`Tools/CatalogReview/catalogue_validation.assess_risk`. The verbatim check compares
+each record against the source passages it was built from.
 
 ## Distribution staging (`distribution.py`)
 

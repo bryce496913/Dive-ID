@@ -1,18 +1,26 @@
-"""Build draft LocalSpeciesProfile records from the pinned FishBase/SeaLifeBase release.
+"""Enrichment stage: build draft LocalSpeciesProfile records from the pinned FishBase/SeaLifeBase release.
 
-Input: NameResolution.csv (resolve.py), the merge plan (merge_plan.py) and the
-pinned tables. Each accepted taxon becomes one draft record under the UUID the
-merge plan keeps. The 8 Caribbean records are kept as they are (2 are human-verified)
-and only reserve their names. Output: review batches of 250 records,
-Data/GlobalMarine/FishBase/Drafts/batch-NN.json, plus BuildReport.json.
+Input: NameResolution.csv (resolve.py), the merge plan (merge_plan.py), the staged
+distribution snapshot (distribution.py) and the pinned, integrity-checked tables
+(fetch.py). Each accepted taxon the merge plan keeps becomes one draft record under the
+kept UUID. The rebuilt Tropical Pacific records keep their UUIDs and lose all text that
+came from the field-guide book. The 8 Caribbean records are kept as they are (2 are
+human-verified) and only reserve their names.
 
-Every field is mapped deterministically from the source tables (see
-Docs/GlobalMarine4000ActivationPlan.md §4). Text is adapted only by removing
-FishBase reference markers and picking whole sentences. Colours and markings are
-extracted from the diagnosis text and are reviewed with each batch.
+Every field is mapped deterministically from source facts (Docs/GlobalMarine4000ActivationPlan.md §4):
+- categories come from the source taxonomy (class, order, family);
+- summary, distinguishing features, habitat text and the distribution summary are
+  short original wording assembled from source facts, never copied sentences;
+- colours and markings are vocabulary terms found in the source description;
+- fields with no source stay empty or null; nothing is filled from general knowledge.
+
+Output (staging only): review batches of 250 at Data/GlobalMarine/FishBase/Drafts/,
+written resumably (an unchanged batch is not rewritten), plus BuildReport.json
+(field coverage) and RiskReport.json (per-record risk flags and score).
 """
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -21,8 +29,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent / "CatalogReview"))
+import catalogue_validation  # noqa: E402
+import distribution  # noqa: E402
 import fetch  # noqa: E402
 
+BUILDER_VERSION = 2
 BATCH_SIZE = 250
 ACCESSED = "2026-10-21T00:00:00Z"
 LICENSE = "CC BY-NC 4.0"
@@ -30,19 +42,28 @@ SOURCES = {
     "fb": ("FishBase", "https://www.fishbase.se/summary/SpeciesSummary.php?ID={}"),
     "slb": ("SeaLifeBase", "https://www.sealifebase.se/summary/SpeciesSummary.php?ID={}"),
 }
-EXCLUDED_STATUSES = {"questionable", "misidentification", "error", "not established", "extirpated"}
 
 LENGTH_TYPES = {"TL": "totalLength", "SL": "standardLength", "FL": "forkLength", "WD": "discWidth",
                 "DL": "discLength", "CL": "carapaceLength", "CW": "carapaceWidth", "SHL": "shellLength",
                 "ML": "mantleLength", "BL": "bodyLength"}
-FAMILY_CATEGORIES = {
-    "sea cucumber": {"Holothuriidae", "Stichopodidae", "Cucumariidae", "Phyllophoridae", "Synaptidae"},
-    "sea urchin": {"Strongylocentrotidae", "Echinidae", "Arbaciidae", "Toxopneustidae", "Diadematidae", "Echinometridae"},
-    "jellyfish": {"Pelagiidae", "Ulmaridae", "Stomolophidae", "Cassiopeidae", "Rhizostomatidae", "Cyaneidae"},
-    "worm": {"Arenicolidae", "Onuphidae", "Glyceridae", "Nereididae", "Lumbrineridae", "Urechidae", "Sabellidae", "Serpulidae", "Amphinomidae"},
-    "horseshoe crab": {"Limulidae"},
-    "sea squirt": {"Pyuridae", "Ascidiidae", "Styelidae", "Didemnidae"},
-}
+LENGTH_WORDS = {"totalLength": "total length", "standardLength": "standard length", "forkLength": "fork length",
+                "discWidth": "disc width", "discLength": "disc length", "carapaceLength": "carapace length",
+                "carapaceWidth": "carapace width", "shellLength": "shell length", "mantleLength": "mantle length",
+                "bodyLength": "body length"}
+RAY_ORDERS = {"Myliobatiformes", "Rajiformes", "Rhinopristiformes", "Torpediniformes"}
+CLASS_CATEGORIES = {"Echinoidea": "sea urchin", "Holothuroidea": "sea cucumber", "Scyphozoa": "jellyfish",
+                    "Polychaeta": "worm", "Ascidiacea": "sea squirt", "Merostomata": "horseshoe crab",
+                    "Malacostraca": "crustacean", "Thecostraca": "crustacean", "Bivalvia": "mollusk", "Gastropoda": "mollusk"}
+TURTLE_FAMILIES = {"Cheloniidae", "Dermochelyidae"}
+GROUP_NOUNS = {"fish": "fish", "shark": "shark", "ray": "ray", "eel": "eel", "seahorse": "seahorse", "crustacean": "crustacean",
+               "mollusk": "mollusk", "octopus": "octopus", "squid": "squid", "turtle": "sea turtle", "sea cucumber": "sea cucumber",
+               "sea urchin": "sea urchin", "jellyfish": "jellyfish", "worm": "marine worm", "sea squirt": "sea squirt",
+               "horseshoe crab": "horseshoe crab"}
+LIFESTYLE = {"reef-associated": "reef-associated", "demersal": "bottom-living", "benthic": "bottom-living",
+             "bathydemersal": "deep bottom-living", "benthopelagic": "near-bottom", "pelagic-neritic": "coastal open-water",
+             "pelagic-oceanic": "open-ocean", "pelagic": "open-water", "bathypelagic": "deep open-water", "sessile": "attached"}
+HABITAT_PHRASES = {"reef": "coral reefs", "lagoon": "lagoons", "sand": "sand", "rubble": "rubble", "seagrass": "seagrass beds",
+                   "mangrove": "mangroves", "wall": "drop-offs", "open water": "open water", "anemone": "anemones"}
 # FAO major fishing areas -> controlled vocabulary regions (CatalogueVocabulary.regions).
 FAO_REGIONS = {21: {"atlantic", "western atlantic"}, 31: {"atlantic", "western atlantic"}, 41: {"atlantic", "western atlantic"},
                27: {"atlantic"}, 34: {"atlantic"}, 47: {"atlantic"},
@@ -62,6 +83,7 @@ COUNTRY_REGIONS = {
     "Antigua Barbuda": {"caribbean"}, "Saint Lucia": {"caribbean"}, "Dominica": {"caribbean"},
     "Fiji": {"fiji"}, "Hawaii": {"hawaii"},
 }
+OCEAN_NAMES = ("Atlantic", "Indian", "Pacific", "Arctic", "Southern")
 COLOR_TERMS = {"blue": ["blue", "bluish", "navy", "turquoise", "cyan"], "yellow": ["yellow", "yellowish", "gold", "golden"],
                "red": ["red", "reddish", "scarlet", "crimson"], "white": ["white", "whitish"], "black": ["black", "blackish"],
                "brown": ["brown", "brownish"], "olive": ["olive"], "orange": ["orange", "orangish"],
@@ -75,54 +97,52 @@ BODY_SHAPE_I = {"fusiform / normal": "torpedo", "elongated": "elongated", "eel-l
 BODY_SHAPE_II = {"compressed": "compressed", "oval": "oval", "circular": "round", "flattened": "flat"}
 ECOLOGY_HABITATS = {"CoralReefs": "reef", "Sand": "sand", "Rubble": "rubble", "SeaGrassBeds": "seagrass", "Mangroves": "mangrove",
                     "Lagoons": "lagoon", "DropOffs": "wall"}
-# Classes that settle a category when the candidate queue and family table don't.
-CLASS_CATEGORIES = {"Echinoidea": "sea urchin", "Holothuroidea": "sea cucumber", "Scyphozoa": "jellyfish", "Polychaeta": "worm",
-                    "Ascidiacea": "sea squirt", "Teleostei": "fish", "Actinopteri": "fish", "Actinopterygii": "fish"}
-# Sentences about fishing, trade or husbandry don't help a diver identify an animal.
-NOT_FOR_IDENTIFICATION = re.compile(r"\b(?:from|by|in|see)\s+Refs?\.\s*\d|\b(holotype|paratype|type locality|specimen|harvest|commercial|market|fisher|fishery|fisheries|aquarium|trade|price|value|caught|catch|collected|exported|consumed|eaten|food fish|bait|aquaculture|gamefish|sold)", re.I)
 HAZARDS = {"venomous": "Venomous: avoid touching.", "traumatogenic": "Can injure if handled.",
            "reports of ciguatera poisoning": "Ciguatera poisoning has been reported from eating it.",
            "poisonous to eat": "Poisonous to eat."}
 HTML_TAG = re.compile(r"</?[A-Za-z][A-Za-z0-9]*\s*/?>")  # only real tags: "<6 cm" is a size, not markup
-HABITAT_WORDS = re.compile(r"\b(inhabit|found|occur|live|reef|lagoon|sand|rock|mud|seagrass|mangrove|depth|shallow|deep|coast|bottom|water)", re.I)
-
-
-def clean(text):
-    """Remove FishBase reference markers and HTML tags, and normalise whitespace."""
-    text = re.sub(HTML_TAG, "", str(text or ""))
-    text = re.sub(r"\s*\((?:Refs?\.|Ref)\s*[^)]*\)", "", text)
-    text = re.sub(r"\s+(?:by|in|from|see)\s+Refs?\.\s*\d+(?:\s*,\s*\d+)*", "", text)
-    text = re.sub(r",?\s*Refs?\.\s*\d+(?:\s*,\s*\d+)*", "", text)
-    text = re.sub(r"\(\s*\)", "", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    text = re.sub(r"\s+([.,;:])", r"\1", text)
-    return re.sub(r"([.;,])(?:\s*[.;,])+", r"\1", text).strip()
-
-
-def sentences(text, drop=None):
-    """Whole sentences, cleaned. `drop` is matched against each raw sentence, before
-    cleaning removes the reference markers it may rely on."""
-    raw = re.split(r"(?<=[.!?])\s+(?=[A-Z])", re.sub(r"\s+", " ", re.sub(HTML_TAG, "", str(text or ""))))
-    kept = [clean(s) for s in raw if not (drop and drop.search(s))]
-    return [s for s in kept if len(s) > 3]
-
-
-def terms_in(text, table):
-    lowered = " " + re.sub(r"[^a-z]+", " ", str(text or "").lower()) + " "
-    return sorted(key for key, words in table.items() if any(f" {w} " in lowered for w in words))
+# Fields a source can supply; dataSources.reviewedFields lists the ones it did.
+SOURCED_FIELDS = ("commonName", "aliases", "scientificName", "taxonomy", "categories", "colors", "markings", "bodyShapes",
+                  "habitats", "behaviors", "regions", "subregions", "maximumSizeCentimeters", "measurements",
+                  "minimumDepthMeters", "maximumDepthMeters", "summary", "distinguishingFeatures", "typicalHabitat",
+                  "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies")
 
 
 def truthy(value):
     return value not in (None, 0, "", False)
 
 
-def category_for(candidate_category, family, taxonomic_class=None):
-    if candidate_category and candidate_category != "needs_taxon_group":
-        return [candidate_category]
-    for category, families in FAMILY_CATEGORIES.items():
-        if family in families:
-            return [category]
-    return [CLASS_CATEGORIES[taxonomic_class]] if taxonomic_class in CLASS_CATEGORIES else []
+def terms_in(text, table):
+    lowered = " " + re.sub(r"[^a-z]+", " ", re.sub(HTML_TAG, " ", str(text or "")).lower()) + " "
+    return sorted(key for key, words in table.items() if any(f" {w} " in lowered for w in words))
+
+
+def number(value):
+    return f"{value:g}"
+
+
+def and_list(items):
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1] if items else ""
+
+
+def article(word):
+    return "An" if word[:1].lower() in "aeiou" else "A"
+
+
+def category_from_taxonomy(taxonomic_class, order, family, genus):
+    """The animal group from the source taxonomy, or None when it doesn't settle one."""
+    if family in TURTLE_FAMILIES:
+        return "turtle"
+    if taxonomic_class == "Elasmobranchii":
+        return "ray" if order in RAY_ORDERS else "shark"
+    if taxonomic_class in ("Teleostei", "Actinopteri", "Actinopterygii"):
+        if order == "Anguilliformes":
+            return "eel"
+        return "seahorse" if genus == "Hippocampus" else "fish"
+    if taxonomic_class == "Cephalopoda":
+        return {"Octopoda": "octopus", "Myopsida": "squid", "Oegopsida": "squid"}.get(order, "mollusk")
+    return CLASS_CATEGORIES.get(taxonomic_class)
 
 
 def regions_for(fao_codes, countries):
@@ -134,6 +154,22 @@ def regions_for(fao_codes, countries):
     if "curacao" in regions:
         regions.add("curaçao")
     return sorted(regions)
+
+
+def readable_fao(name):
+    """'Pacific, Western Central' -> 'Western Central Pacific'."""
+    ocean, _, part = name.partition(", ")
+    return f"{part} {ocean}" if part else name
+
+
+def basins_phrase(basins):
+    oceans = [b for b in OCEAN_NAMES if b in basins]
+    parts = []
+    if oceans:
+        parts.append("the " + and_list(oceans) + (" Ocean" if len(oceans) == 1 else " Oceans"))
+    if "Mediterranean and Black Sea" in basins:
+        parts.append("the Mediterranean and Black Sea")
+    return " and ".join(parts)
 
 
 def fin_clues(m):
@@ -152,11 +188,64 @@ def fin_clues(m):
     return clues
 
 
-def build_profile(entry, src):
-    """entry: a NameResolution row plus candidate category. src: this species' source rows."""
+def summary_text(noun, lifestyle, family, family_common, basins, length, length_type, shallow, deep):
+    """Short original summary assembled from source facts."""
+    lead = f"{lifestyle} {noun}" if lifestyle else noun
+    first = f"{article(lead)} {lead}"
+    if family:
+        first += f" of the family {family}" + (f" ({family_common})" if family_common else "")
+    if basins:
+        first += f", recorded from {basins}"
+    sentences = [first + "."]
+    if length:
+        sentences.append(f"Reaches about {number(length)} cm" + (f" {LENGTH_WORDS[length_type]}" if length_type else "") + ".")
+    if shallow is not None and deep is not None:
+        sentences.append(f"Recorded at depths of {number(shallow)}–{number(deep)} m.")
+    return " ".join(sentences)
+
+
+def feature_list(colors, markings, shapes, tail, mouth, fins, family, genus):
+    """Short original distinguishing features, each one source fact."""
+    features = []
+    if colors: features.append(f"Colours: {and_list(colors)}.")
+    if markings: features.append(f"Markings: {and_list(markings)}.")
+    if shapes: features.append(f"Body shape: {and_list(shapes)}.")
+    if tail: features.append(f"Tail: {tail}.")
+    if mouth: features.append(f"Mouth: {and_list([m.removesuffix(' mouth') for m in mouth])}.")
+    features += [f + "." for f in fins]
+    return features or ([f"Family: {family}."] if family else [f"Genus: {genus}."])
+
+
+def habitat_text(lifestyle, habitats, shallow, deep):
+    parts = [lifestyle[:1].upper() + lifestyle[1:]] if lifestyle else []
+    places = [HABITAT_PHRASES[h] for h in ("reef", "lagoon", "seagrass", "mangrove", "sand", "rubble", "wall", "open water", "anemone") if h in habitats]
+    if places:
+        parts.append(and_list(places))
+    if shallow is not None and deep is not None:
+        parts.append(f"{number(shallow)}–{number(deep)} m")
+    return "; ".join(parts) + "." if parts else ""
+
+
+def distribution_text(basins, fao_names, country_count):
+    parts = []
+    if basins:
+        place = basins.removeprefix("the ")
+        parts.append(place[:1].upper() + place[1:])
+    if fao_names:
+        parts.append("FAO areas: " + "; ".join(readable_fao(n) for n in fao_names))
+    if country_count:
+        parts.append(f"Recorded from {country_count} {'country or territory' if country_count == 1 else 'countries and territories'}")
+    return ". ".join(parts) + "." if parts else ""
+
+
+def build_profile(entry, src, similar_targets=None):
+    """entry: a resolution row with id and categories. src: this species' source facts.
+    similar_targets: {(server, SpecCode): (uuid, accepted name)} of records in the pack.
+    Returns (profile, source passages for the verbatim check)."""
     sp, fam, morph = src["species"], src.get("family") or {}, src.get("morphdat") or {}
     server, code = entry["server"], int(entry["specCode"])
     accepted = entry["acceptedName"]
+    genus = accepted.split(" ")[0]
     english = [n for n in src.get("english_names", []) if n]
     common = (sp.get("FBname") or (english[0] if english else "") or accepted).strip()
     aliases = []
@@ -166,39 +255,37 @@ def build_profile(entry, src):
     aliases = aliases[:6]
 
     diagnosis = " ".join(filter(None, [morph.get("AddChars"), morph.get("SexColors")]))
-    comment_sentences = sentences(sp.get("Comments"), drop=NOT_FOR_IDENTIFICATION)
-    summary = " ".join(comment_sentences[:3])[:600].strip()
     demers = (sp.get("DemersPelag") or "").strip()
-    if not summary:
-        summary = f"{fam.get('Family') or 'Marine'} species" + (f"; {demers}." if demers else ".")
-    features = sentences(morph.get("AddChars"), drop=NOT_FOR_IDENTIFICATION)[:4]
+    lifestyle = LIFESTYLE.get(demers, "")
     shapes = sorted({BODY_SHAPE_I.get((sp.get("BodyShapeI") or "").strip()), BODY_SHAPE_II.get((morph.get("BodyShapeII") or "").strip())} - {None})
     fins = fin_clues(morph)
-    if not features:
-        shape = (sp.get("BodyShapeI") or "").strip()
-        features = fins + ([f"Body shape: {shape}."] if shape and shape != "other" else []) or comment_sentences[:1] or [summary]
-    habitats = {h for col, h in ECOLOGY_HABITATS.items() if any(truthy(e.get(col)) for e in src.get("ecology", []))}
+    ecology = src.get("ecology", [])
+    habitats = {h for col, h in ECOLOGY_HABITATS.items() if any(truthy(e.get(col)) for e in ecology)}
     if demers == "reef-associated":
         habitats.add("reef")
     if demers.startswith("pelagic"):
         habitats.add("open water")
     shallow, deep = sp.get("DepthRangeShallow"), sp.get("DepthRangeDeep")
+    depth_ok = shallow is not None and deep is not None and 0 <= shallow <= deep
+    shallow, deep = (round(float(shallow), 2), round(float(deep), 2)) if depth_ok else (None, None)
     if shallow is not None and shallow <= 10:
         habitats.add("shallow")
     if shallow is not None and shallow >= 30:
         habitats.add("deep")
-    associations = " ".join(str(e.get("AssociationsWith") or "") for e in src.get("ecology", [])).lower()
+    associations = " ".join(str(e.get("AssociationsWith") or "") for e in ecology).lower()
     behaviors = set()
-    if any(truthy(e.get("Schooling")) for e in src.get("ecology", [])): behaviors.add("schooling")
-    if any(truthy(e.get("Solitary")) for e in src.get("ecology", [])): behaviors.add("solitary")
-    if any(truthy(e.get("Burrows")) for e in src.get("ecology", [])): behaviors.add("burrowing")
-    if any((e.get("FeedingType") or "") == "grazing on aquatic plants" for e in src.get("ecology", [])): behaviors.add("grazing")
+    if any(truthy(e.get("Schooling")) for e in ecology): behaviors.add("schooling")
+    if any(truthy(e.get("Solitary")) for e in ecology): behaviors.add("solitary")
+    if any(truthy(e.get("Burrows")) for e in ecology): behaviors.add("burrowing")
+    if any((e.get("FeedingType") or "") == "grazing on aquatic plants" for e in ecology): behaviors.add("grazing")
     if "anemone" in associations:
         behaviors.add("anemone association"); habitats.add("anemone")
+    colors = terms_in(diagnosis, COLOR_TERMS)
     markings = set(terms_in(diagnosis, MARKING_TERMS))
     if (morph.get("BarbelsNo") or 0) > 0:
         markings.add("barbels")
     tail = (morph.get("CShape") or "").replace("more or less ", "").strip()
+    tail = tail if tail and not tail.startswith("other") else None
     mouth = []
     position = (morph.get("PosofMouth") or "").strip()
     if position:
@@ -207,39 +294,49 @@ def build_profile(entry, src):
     if mouth_type:
         mouth.append(mouth_type)
     length, ltype = sp.get("Length"), LENGTH_TYPES.get((sp.get("LTypeMaxM") or "").strip())
-    depth_ok = shallow is not None and deep is not None and 0 <= shallow <= deep
-    stock_text = clean(src.get("range_text"))
-    range_text = (stock_text or ", ".join(src.get("fao_names", [])) or ", ".join(src.get("countries", [])[:12])
-                  or f"No range recorded in {SOURCES[server][0]}.")
+    length = round(float(length), 2) if length else None
+    dist = src.get("distribution") or {}
+    fao_codes = [a["code"] for a in dist.get("faoAreas", []) if a["counts"] and a["code"] in MARINE_FAO_AREAS]
+    fao_names = [src["fao_area_names"][str(c)] for c in fao_codes if src["fao_area_names"].get(str(c))]
+    countries = [src["country_names"].get(c["code"], {}).get("name", "") for c in dist.get("countries", []) if c["counts"]]
+    basins = basins_phrase(dist.get("oceanBasins", []))
+    noun = GROUP_NOUNS.get((entry["categories"] or [""])[0], "marine animal")
+    similar = []
+    for other in (morph.get("SimilarSpecies1"), morph.get("SimilarSpecies2")):
+        target = (similar_targets or {}).get((server, other))
+        if target and target[0] != entry["id"] and target[0] not in {s["speciesID"] for s in similar}:
+            similar.append({"speciesID": target[0], "distinguishingText": f"Listed as similar in {SOURCES[server][0]}; compare with {target[1]} before confirming."})
     name, url = SOURCES[server]
-    main_ref = src.get("main_ref")
-    return {
+    profile = {
         "id": entry["id"], "commonName": common, "scientificName": accepted, "aliases": aliases,
-        "categories": entry["categories"], "colors": terms_in(diagnosis, COLOR_TERMS), "markings": sorted(markings),
+        "categories": entry["categories"], "colors": colors, "markings": sorted(markings),
         "bodyShapes": shapes, "habitats": sorted(habitats),
-        "regions": regions_for(src.get("fao_codes", []), src.get("countries", [])), "behaviors": sorted(behaviors), "keywords": [],
-        "minimumSizeCentimeters": None, "maximumSizeCentimeters": round(float(length), 2) if length else None,
-        "minimumDepthMeters": round(float(shallow), 2) if depth_ok else None, "maximumDepthMeters": round(float(deep), 2) if depth_ok else None,
-        "summary": summary, "distinguishingFeatures": features,
-        "typicalHabitat": " ".join([s for s in comment_sentences if HABITAT_WORDS.search(s)][:2]),
-        "geographicRange": range_text, "cautions": [HAZARDS[h] for h in [(sp.get("Dangerous") or "").strip()] if h in HAZARDS],
-        "imageAssetName": None, "regionalOccurrence": "unknown",
-        "regionalOccurrenceNotes": "No global abundance in the source; location only boosts ranking.",
-        "subregions": src.get("fao_names", []), "appearanceVariants": [], "similarSpecies": [], "bundledImage": None,
+        "regions": regions_for(fao_codes, countries), "behaviors": sorted(behaviors), "keywords": [],
+        "minimumSizeCentimeters": None, "maximumSizeCentimeters": length,
+        "minimumDepthMeters": shallow, "maximumDepthMeters": deep,
+        "summary": summary_text(noun, lifestyle, fam.get("Family"), (fam.get("CommonName") or "").strip().lower(), basins, length, ltype, shallow, deep),
+        "distinguishingFeatures": feature_list(colors, sorted(markings), shapes, tail, mouth, fins, fam.get("Family"), genus),
+        "typicalHabitat": habitat_text(lifestyle, habitats, shallow, deep),
+        "geographicRange": distribution_text(basins, fao_names, len([c for c in countries if c])),
+        "cautions": [HAZARDS[h] for h in [(sp.get("Dangerous") or "").strip()] if h in HAZARDS],
+        "imageAssetName": None, "regionalOccurrence": "unknown", "regionalOccurrenceNotes": None,
+        "subregions": [readable_fao(n) for n in fao_names], "appearanceVariants": [], "similarSpecies": similar, "bundledImage": None,
         "dataSources": [{
             "stableSourceID": f"{name}:SpecCode:{code}", "sourceName": f"{name} ({src['release']})",
-            "sourceURL": url.format(code), "citationReference": main_ref, "reviewedFields": [],
+            "sourceURL": url.format(code), "citationReference": src.get("main_ref"), "reviewedFields": [],
             "accessedDate": ACCESSED, "sourceLicense": LICENSE}],
         "review": {"status": "draft", "reviewerNotes": f"Generated from {name} {src['release']} by Tools/FishBaseIntake/build.py; awaiting batch review.",
                    "reviewDate": None, "verifiedBy": None},
         "taxonomy": {"wormsAphiaID": None, "scientificNameAuthority": sp.get("Author"), "taxonomicClass": fam.get("Class"),
-                     "order": fam.get("Order"), "family": fam.get("Family"), "genus": accepted.split(" ")[0],
+                     "order": fam.get("Order"), "family": fam.get("Family"), "genus": genus,
                      "acceptedScientificName": accepted, "sourceScientificName": entry["inputName"]},
         "measurements": ({"typicalObservedMinimumCentimeters": None, "typicalObservedMaximumCentimeters": None,
-                          "maximumRecordedCentimeters": round(float(length), 2), "type": ltype} if length and ltype else None),
-        "tailShape": tail if tail and not tail.startswith("other") else None,
-        "mouthAndHeadShape": mouth, "finAndSpineClues": fins,
+                          "maximumRecordedCentimeters": length, "type": ltype} if length and ltype else None),
+        "tailShape": tail, "mouthAndHeadShape": mouth, "finAndSpineClues": fins,
     }
+    profile["dataSources"][0]["reviewedFields"] = [f for f in SOURCED_FIELDS if profile[f] not in (None, "", [], {})]
+    source_passages = [t for t in (sp.get("Comments"), morph.get("AddChars"), morph.get("SexColors"), src.get("range_text")) if t]
+    return profile, source_passages
 
 
 def enforce_unique_names(profiles, reserved_names):
@@ -262,17 +359,15 @@ def enforce_unique_names(profiles, reserved_names):
     return renamed
 
 
-def load_sources(manifest, cache, offline, wanted):
-    """Index the pinned tables by (server, SpecCode) for the wanted species only."""
+def load_sources(manifest, cache, offline, wanted, staged):
+    """Index the pinned tables and the staged distribution by (server, SpecCode)."""
     read = lambda sv, t, cols: fetch.read_table(manifest, cache, sv, t, cols, offline)
     out = {}
     for sv in sorted(manifest["servers"]):
         codes = {code for server, code in wanted if server == sv}
         release = manifest["servers"][sv]["release"]
-        families = {r["FamCode"]: r for r in read(sv, "families", ["FamCode", "Family", "Order", "Class"])}
-        refs = {r["RefNo"]: r for r in read(sv, "refrens", ["RefNo", "Author", "Year", "Title", "ShortCitation"])}
-        countries = {r["C_Code"]: r["PAESE"] for r in read(sv, "countref", ["C_Code", "PAESE"])}
-        fao_names = {r["AreaCode"]: r["FAO"] for r in read(sv, "faoarref", ["AreaCode", "FAO"])}
+        families = {r["FamCode"]: r for r in read(sv, "families", ["FamCode", "Family", "Order", "Class", "CommonName"])}
+        refs = {r["RefNo"]: r for r in read(sv, "refrens", ["RefNo", "Author", "Year", "ShortCitation"])}
         def per_species(rows, key="SpecCode"):
             grouped = {}
             for r in rows:
@@ -281,31 +376,27 @@ def load_sources(manifest, cache, offline, wanted):
             return grouped
         species = per_species(read(sv, "species", ["SpecCode", "FBname", "Author", "FamCode", "Length", "LTypeMaxM", "DepthRangeShallow",
                                                    "DepthRangeDeep", "DemersPelag", "BodyShapeI", "Dangerous", "Comments", "SpeciesRefNo", "Saltwater", "Brack"]))
-        names = per_species(read(sv, "comnames", ["SpecCode", "ComName", "Language", "PreferredName"]))
+        names = per_species(read(sv, "comnames", ["SpecCode", "ComName", "Language"]))
         ecology = per_species(read(sv, "ecology", ["SpecCode", *ECOLOGY_HABITATS, "Schooling", "Solitary", "Burrows", "FeedingType", "AssociationsWith"]))
         morph = per_species(read(sv, "morphdat", ["Speccode", "AddChars", "SexColors", "BodyShapeII", "CShape", "TypeofMouth", "PosofMouth",
                                                   "DorsalSpinesMin", "DorsalSpinesMax", "DorsalSoftRaysMin", "DorsalSoftRaysMax",
-                                                  "AnalFinSpinesMin", "AnalFinSpinesMax", "Araymin", "Araymax", "BarbelsNo"]), key="Speccode")
+                                                  "AnalFinSpinesMin", "AnalFinSpinesMax", "Araymin", "Araymax", "BarbelsNo",
+                                                  "SimilarSpecies1", "SimilarSpecies2"]), key="Speccode")
         stocks = per_species(read(sv, "stocks", ["SpecCode", "StockDefs", "Level"]))
-        fao = per_species(read(sv, "faoareas", ["SpecCode", "AreaCode", "Status"]))
-        country = per_species(read(sv, "country", ["SpecCode", "C_Code", "Status"]))
-        ok = lambda r: str(r.get("Status") or "").strip().lower() not in EXCLUDED_STATUSES
         for code in codes:
             sp = (species.get(code) or [{}])[0]
             english = sorted({r["ComName"].strip() for r in names.get(code, []) if r.get("Language") == "English" and r.get("ComName")},
                              key=lambda n: (n.lower() != (sp.get("FBname") or "").lower(), n.lower(), n))
             stock_rows = sorted(stocks.get(code, []), key=lambda r: (r.get("Level") != "species in general",))
-            fao_codes = sorted({r["AreaCode"] for r in fao.get(code, []) if ok(r) and r["AreaCode"] in MARINE_FAO_AREAS})
             ref = refs.get(sp.get("SpeciesRefNo")) or {}
             out[(sv, code)] = {
                 "release": release, "species": sp, "family": families.get(sp.get("FamCode")),
-                "english_names": english, "ecology": ecology.get(code, []),
-                "morphdat": (morph.get(code) or [None])[0],
+                "english_names": english, "ecology": ecology.get(code, []), "morphdat": (morph.get(code) or [None])[0],
                 "range_text": next((r["StockDefs"] for r in stock_rows if r.get("StockDefs")), ""),
-                "fao_codes": fao_codes, "fao_names": [fao_names[c] for c in fao_codes if c in fao_names],
-                "countries": sorted({countries.get(r["C_Code"], "") for r in country.get(code, []) if ok(r)} - {""}),
+                "distribution": staged["species"].get(f"{sv}:{code}"),
+                "fao_area_names": staged["faoAreaNames"], "country_names": staged["countries"],
                 "main_ref": (ref.get("ShortCitation") or " ".join(filter(None, [str(ref.get("Author") or ""), str(ref.get("Year") or "")])).strip()
-                             or (f"FishBase/SeaLifeBase reference {sp['SpeciesRefNo']}" if sp.get("SpeciesRefNo") else None)),
+                             or (f"{SOURCES[sv][0]} reference {sp['SpeciesRefNo']}" if sp.get("SpeciesRefNo") else None)),
             }
     return out
 
@@ -315,7 +406,7 @@ def lives_in_sea(species_row):
     return truthy(species_row.get("Saltwater")) or truthy(species_row.get("Brack"))
 
 
-def select_entries(plan_rows, resolution_rows, candidate_rows, existing_categories):
+def select_entries(plan_rows, resolution_rows, candidate_rows):
     """One record per accepted taxon, under the UUID the merge plan keeps.
 
     The 8 Caribbean records stay as they are, so a taxon kept by a Caribbean record is
@@ -327,10 +418,51 @@ def select_entries(plan_rows, resolution_rows, candidate_rows, existing_categori
         if plan["role"] != "keep" or plan["pack"] == "Caribbean":
             continue
         row = resolution[(plan["inputKind"], plan["inputID"])]
-        existing = plan["inputKind"] == "existing"
-        entries.append(dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"]),
-                            categories=existing_categories.get(plan["inputID"], []) if existing else None))
+        entries.append(dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"])))
     return entries
+
+
+def batch_text(batch):
+    return "[\n" + ",\n".join(json.dumps(p, ensure_ascii=False) for p in batch) + "\n]\n"
+
+
+def write_batches(profiles, drafts, only=None):
+    """Write review batches resumably: an existing batch with identical content is left
+    alone; changed batches are replaced atomically. Returns {batch name: action}."""
+    drafts.mkdir(parents=True, exist_ok=True)
+    actions, names = {}, []
+    for i in range(0, len(profiles), BATCH_SIZE):
+        name = f"batch-{i // BATCH_SIZE + 1:02d}"
+        names.append(name)
+        if only is not None and name != f"batch-{only:02d}":
+            continue
+        text = batch_text(profiles[i:i + BATCH_SIZE])
+        path = drafts / f"{name}.json"
+        if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == hashlib.sha256(text.encode()).hexdigest():
+            actions[name] = "unchanged"
+            continue
+        temp = path.with_suffix(".json.tmp")
+        temp.write_text(text)
+        temp.replace(path)
+        actions[name] = "written"
+    if only is None:
+        for stale in drafts.glob("batch-*.json"):
+            if stale.stem not in names:
+                stale.unlink()
+                actions[stale.stem] = "removed"
+    manifest = {"builderVersion": BUILDER_VERSION, "batchSize": BATCH_SIZE,
+                "batches": {n: hashlib.sha256((drafts / f"{n}.json").read_bytes()).hexdigest() for n in names if (drafts / f"{n}.json").exists()}}
+    (drafts / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    return actions
+
+
+def coverage(profiles):
+    filled = lambda f: sum(1 for p in profiles if p[f] not in (None, "", [], {}))
+    fields = ("commonName", "aliases", "categories", "colors", "markings", "bodyShapes", "habitats", "behaviors", "regions",
+              "maximumSizeCentimeters", "measurements", "maximumDepthMeters", "summary", "distinguishingFeatures",
+              "typicalHabitat", "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies")
+    total = len(profiles) or 1
+    return {f: round(filled(f) / total, 4) for f in fields}
 
 
 def main(argv=None):
@@ -338,53 +470,63 @@ def main(argv=None):
     parser.add_argument("--cache", default=fetch.DEFAULT_CACHE)
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--output", default=REPO / "Data/GlobalMarine/FishBase")
+    parser.add_argument("--batch", type=int, help="write only this batch number (resume or rework one batch)")
     args = parser.parse_args(argv)
     output = Path(args.output)
-    resolution = list(csv.DictReader(open(output / "NameResolution.csv", newline="")))
-    candidates = list(csv.DictReader(open(REPO / "Data/GlobalMarine/Expansion4000_CandidateQueue.csv", newline="")))
-    packs = REPO / "DiveID/Resources/IdentificationPacks"
-    existing = {name: json.loads((packs / name / "Creatures.json").read_text()) for name in ("Caribbean", "TropicalPacific")}
-    existing_categories = {r["id"]: r.get("categories", []) for r in existing["TropicalPacific"]}
     plan_report = json.loads((output / "MergePlanReport.json").read_text())
     if plan_report["conflicts"]:
         raise SystemExit("The merge plan has conflicts; resolve them before building (see MergePlanReport.json).")
+    resolution = list(csv.DictReader(open(output / "NameResolution.csv", newline="")))
+    candidates = list(csv.DictReader(open(REPO / "Data/GlobalMarine/Expansion4000_CandidateQueue.csv", newline="")))
     plan_rows = list(csv.DictReader(open(output / "MergePlan.csv", newline="")))
-    entries = select_entries(plan_rows, resolution, candidates, existing_categories)
-    sources = load_sources(fetch.load_manifest(), args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries})
-    profiles, freshwater_only = [], []
-    for e in entries:
+    manifest = fetch.load_manifest()
+    staged = distribution.read_snapshot(output / "Distribution.json", distribution.source_of(manifest))  # fails closed
+    caribbean = json.loads((REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())
+    tropical_ids = {r["id"] for r in json.loads((REPO / "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json").read_text())}
+    entries = select_entries(plan_rows, resolution, candidates)
+    sources = load_sources(manifest, args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries}, staged)
+    kept = [e for e in entries if lives_in_sea(sources[(e["server"], int(e["specCode"]))]["species"])]
+    freshwater_only = sorted(e["acceptedName"] for e in entries if e not in kept)
+    targets = {(e["server"], int(e["specCode"])): (e["id"], e["acceptedName"]) for e in kept}
+    targets.update({(r["taxonKey"].split(":")[0], int(r["taxonKey"].split(":")[1])): (r["plannedUUID"], r["acceptedName"])
+                    for r in plan_rows if r["role"] == "keep" and r["pack"] == "Caribbean"})
+    profiles, passages, disagreements = [], {}, []
+    for e in kept:
         src = sources[(e["server"], int(e["specCode"]))]
-        if not lives_in_sea(src["species"]):
-            freshwater_only.append(e["acceptedName"])
-            continue
-        family = src.get("family") or {}
-        if not e["categories"]:
-            e["categories"] = category_for(e["candidateCategory"], family.get("Family"), family.get("Class"))
-        profiles.append(build_profile(e, src))
-    reserved = {" ".join(n.lower().split()) for r in existing["Caribbean"] for n in (r["commonName"], r["scientificName"])}
+        fam = src.get("family") or {}
+        derived = category_from_taxonomy(fam.get("Class"), fam.get("Order"), fam.get("Family"), e["acceptedName"].split(" ")[0])
+        queued = e["candidateCategory"] if e["candidateCategory"] not in (None, "", "needs_taxon_group") else None
+        e["categories"] = [derived or queued] if (derived or queued) else []
+        if derived and queued and derived != queued:
+            disagreements.append(f"{e['acceptedName']}: taxonomy {derived}, queue {queued}")
+        profile, source_passages = build_profile(e, src, targets)
+        profiles.append(profile)
+        passages[profile["id"]] = source_passages
+    reserved = {" ".join(n.lower().split()) for r in caribbean for n in (r["commonName"], r["scientificName"])}
     renamed = enforce_unique_names(profiles, reserved)
-    drafts = output / "Drafts"
-    drafts.mkdir(parents=True, exist_ok=True)
-    for old in drafts.glob("batch-*.json"):
-        old.unlink()
-    for i in range(0, len(profiles), BATCH_SIZE):
-        batch = profiles[i:i + BATCH_SIZE]
-        text = "[\n" + ",\n".join(json.dumps(p, ensure_ascii=False) for p in batch) + "\n]\n"
-        (drafts / f"batch-{i // BATCH_SIZE + 1:02d}.json").write_text(text)
-    missing = lambda f: sum(1 for p in profiles if not p[f])
+    actions = write_batches(profiles, output / "Drafts", args.batch)
+    risk = catalogue_validation.assess_risk(profiles, passages, [r["commonName"] for r in caribbean])
+    for i, p in enumerate(profiles):
+        risk["records"][p["id"]]["batch"] = i // BATCH_SIZE + 1
     report = {
-        "records": len(profiles), "batches": (len(profiles) + BATCH_SIZE - 1) // BATCH_SIZE,
-        "fromTropicalPacific": sum(p["dataSources"] and p["id"] in existing_categories for p in profiles),
-        "fromCandidates": sum(p["id"] not in existing_categories for p in profiles),
+        "builderVersion": BUILDER_VERSION, "records": len(profiles), "batches": (len(profiles) + BATCH_SIZE - 1) // BATCH_SIZE,
+        "batchActions": actions,
+        "rebuiltTropicalPacific": sum(p["id"] in tropical_ids for p in profiles),
+        "fromCandidates": sum(p["id"] not in tropical_ids for p in profiles),
+        "keptUnchangedCaribbean": len(caribbean),
+        "excludedFreshwaterOnly": freshwater_only,
         "commonNamesDisambiguated": len(renamed),
-        "excludedFreshwaterOnly": sorted(freshwater_only),
-        "missing": {f: missing(f) for f in ("categories", "colors", "markings", "bodyShapes", "habitats", "regions",
-                                            "maximumSizeCentimeters", "maximumDepthMeters", "typicalHabitat", "measurements")},
-        "summaryFromFallback": sum(1 for p in profiles if p["summary"].endswith(" species.") or "species; " in p["summary"]),
+        "categoryFromQueueBecauseTaxonomyUnmapped": sum(1 for e in kept if e["categories"] and category_from_taxonomy(
+            *(lambda f: (f.get("Class"), f.get("Order"), f.get("Family")))(sources[(e["server"], int(e["specCode"]))].get("family") or {}),
+            e["acceptedName"].split(" ")[0]) is None),
+        "categoryDisagreementsWithQueue": disagreements,
+        "fieldCoverage": coverage(profiles),
         "categories": dict(sorted({c: sum(c in p["categories"] for p in profiles) for p in profiles for c in p["categories"]}.items())),
+        "risk": {k: v for k, v in risk.items() if k != "records"},
     }
-    (output / "BuildReport.json").write_text(json.dumps(report, indent=2) + "\n")
-    print(json.dumps(report, indent=2))
+    (output / "BuildReport.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+    (output / "RiskReport.json").write_text(json.dumps(risk, indent=1, ensure_ascii=False, sort_keys=True) + "\n")
+    print(json.dumps({k: v for k, v in report.items() if k not in ("categoryDisagreementsWithQueue", "batchActions")}, indent=2, ensure_ascii=False))
     return 0
 
 
