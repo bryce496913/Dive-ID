@@ -20,12 +20,12 @@ final class IdentificationResultsViewModel {
     }
 
     var loadingMessage: String {
-        guard let packMetadata else { return "Searching the selected offline pack…" }
-        return "Searching the \(packMetadata.displayName) offline pack…"
+        guard let packMetadata else { return "Searching the selected dive region…" }
+        return "Searching the \(packMetadata.displayName) dive region…"
     }
 
     var resultsSummary: String {
-        guard let packMetadata else { return "Matches from the selected offline pack" }
+        guard let packMetadata else { return "Matches from the selected dive region" }
         return "Matches from \(packMetadata.speciesCount.formatted()) locally stored \(packMetadata.displayName) records"
     }
 
@@ -110,15 +110,15 @@ final class IdentificationResultsViewModel {
         case .invalidDescription:
             "Add more detail about the animal before trying again."
         case .catalogUnavailable:
-            "The offline species catalogue could not be loaded."
+            AppCopy.catalogueLoadFailed
         case .catalogueLoadFailed(let failure):
             includesDiagnostics
-                ? "The offline species catalogue could not be loaded.\nDiagnostic: \(failure.code.rawValue)"
-                : "The offline species catalogue could not be loaded."
+                ? "\(AppCopy.catalogueLoadFailed)\nDiagnostic: \(failure.code.rawValue)"
+                : AppCopy.catalogueLoadFailed
         case .unsupportedSource:
             "Photo identification is not available in this offline version yet."
         case .regionMismatch(let selected, let mentioned):
-            "Your description mentions \(mentioned), but the selected offline pack covers the \(selected.rawValue.capitalized). Check the selected dive region and try again."
+            "Your description mentions \(mentioned), but the selected dive region covers the \(selected.rawValue.capitalized). Choose another dive region and try again."
         }
     }
 

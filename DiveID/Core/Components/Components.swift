@@ -20,7 +20,7 @@ struct LoadingStateView: View {
     }
 }
 struct EmptyStateView: View { let title: String; let message: String; var body: some View { ContentUnavailableView(title, systemImage: "fish", description: Text(message)) } }
-struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var body: some View { ContentUnavailableView { Label("Something went wrong", systemImage: "exclamationmark.triangle") } description: { Text(message) } actions: { if let retry { Button("Try Again", action: retry) } } } }
+struct ErrorStateView: View { let message: String; var retry: (() -> Void)?; var body: some View { ContentUnavailableView { Label("Something went wrong", systemImage: "exclamationmark.triangle") } description: { Text(message) } actions: { if let retry { Button(AppCopy.tryAgain, action: retry) } } } }
 
 /// The selected-region states other than a loaded pack, shared by Home and Describe What You Saw.
 struct SelectedPackStatusView: View {
@@ -29,12 +29,12 @@ struct SelectedPackStatusView: View {
     let changeRegion: () -> Void
     var body: some View {
         switch state {
-        case .loadFailed: ErrorStateView(message: "The offline identification catalogue could not be loaded.", retry: retry)
+        case .loadFailed: ErrorStateView(message: AppCopy.catalogueLoadFailed, retry: retry)
         case .selectedRegionUnavailable:
-            EmptyStateView(title: "Selected region unavailable", message: "The selected dive region has no reviewed catalogue available for new searches. Choose another available region to continue.")
+            EmptyStateView(title: AppCopy.diveRegionUnavailableTitle, message: AppCopy.diveRegionUnavailableMessage)
             Button(action: changeRegion) { Label("Change Dive Region", systemImage: "map.fill").frame(minHeight: 44) }
                 .accessibilityIdentifier("changeRegionAction")
-        case .noReviewedCatalogue: EmptyStateView(title: "No reviewed catalogue available anywhere", message: "No human-reviewed identification catalogue is currently available for new searches, so no search can be run. Saved identifications remain available.")
+        case .noReviewedCatalogue: EmptyStateView(title: AppCopy.noReviewedCatalogueTitle, message: AppCopy.noReviewedCatalogueMessage)
         case .notLoaded, .loaded: EmptyView()
         }
     }

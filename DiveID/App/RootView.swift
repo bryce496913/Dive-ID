@@ -37,8 +37,8 @@ struct RootView: View {
             SpeciesDetailView(viewModel: .init(species: species, match: match, repository: savedRepository))
         case .savedIdentification(let saved):
             SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
-        case .savedSpecies:
-            SavedSpeciesView(viewModel: .init(repository: savedRepository), router: router)
+        case .savedIdentifications:
+            SavedIdentificationsView(viewModel: .init(repository: savedRepository), router: router)
         case .offlineRegions:
             OfflineRegionsView(
                 viewModel: .init(catalog: catalogRepository, selection: regionRepository),

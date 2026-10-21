@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SavedSpeciesView: View {
+struct SavedIdentificationsView: View {
     @State var viewModel: SavedSpeciesViewModel
     let router: AppRouter
 
@@ -8,7 +8,7 @@ struct SavedSpeciesView: View {
         VStack {
             if let error = viewModel.errorMessage {
                 Text(error).foregroundStyle(Color.appError)
-                Button("Retry saved storage") { Task { await viewModel.retry() } }
+                Button(AppCopy.tryAgain) { Task { await viewModel.retry() } }
                     .disabled(viewModel.isUpdating)
             }
             if viewModel.isLoading {
