@@ -360,10 +360,21 @@ Each step is a separate, reviewable change.
    while separate region packs exist, removing it would silently return the wrong
    region's species. The app passes the dive-region choice as `preferredRegions` in
    step 6.
-3. **FishBase/SeaLifeBase intake** (`Tools/`): download the pinned `v26.06` tables and
-   verify each ETag/MD5; resolve names (exact match, then synonyms, flagging ambiguous
-   matches); dedupe the 4,000 + 1,008 records by SpecCode and accepted name; fix
-   misspelled names, keeping originals in the crosswalk.
+3. **FishBase/SeaLifeBase intake** (done, `Tools/FishBaseIntake`): downloads the 34
+   pinned `v26.06` tables with ETag/MD5 checks, resolves names (exact, then synonyms,
+   then conservative spelling correction), and de-duplicates by SpecCode. Result on
+   5,008 inputs (`Data/GlobalMarine/FishBase/NameResolutionSummary.json`):
+   - **4,968 resolved:** 4,502 exact, 341 synonym, 125 corrected misspellings
+     (all existing Tropical Pacific records).
+   - **6 flagged ambiguous:** 3 candidates, 3 existing records.
+   - **34 unresolved:** 4 candidates; 30 existing records, including 5 genus-only
+     "sp." records and typos too far from any name.
+   - **170 duplicates:** 155 candidates already exist in the app; 11 candidates
+     duplicate other candidates; and 4 existing records duplicate other existing
+     records now that FishBase treats them as one species (*Hippocampus kuda* /
+     *moluccensis* / *taeniopterus*, *Apogon fuscus* / *guamensis*, *Epinephelus
+     waandersi* / *areolatus*).
+   - **4,798 unique species.**
 4. **Record builder**: map tables to `LocalSpeciesProfile` (§4). Includes animal group
    from taxonomy, full size/depth ranges with their length basis, regions from FAO
    area/country/MEOW, range text from `StockDefs`, and summary/features rewritten from

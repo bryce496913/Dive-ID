@@ -70,7 +70,7 @@ worksheet. No actual iPhone latency or memory measurement is currently available
 python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt \
   -r Tools/CatalogImport/requirements.txt
 suite_failures=0
-for suite in TropicalPacificWorkbook CatalogImport CatalogReview GlobalMarineImport SemanticSearch/tests CI Evaluation; do
+for suite in TropicalPacificWorkbook CatalogImport CatalogReview GlobalMarineImport FishBaseIntake SemanticSearch/tests CI Evaluation; do
   python3 -m unittest discover -s "Tools/$suite" -p 'test_*.py' -v || suite_failures=1
 done
 test "$suite_failures" = 0

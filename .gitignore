@@ -12,3 +12,6 @@ Tools/SemanticSearch/generated/
 # Python developer-tool caches
 __pycache__/
 *.py[cod]
+
+# Pinned FishBase/SeaLifeBase Parquet downloads (CC BY-NC data; re-fetch with Tools/FishBaseIntake/fetch.py)
+Data/GlobalMarine/FishBase/cache/
