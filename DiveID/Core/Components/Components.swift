@@ -31,7 +31,7 @@ struct FeatureActionCard: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 16) {
+            HStack(spacing: AppTheme.Spacing.l) {
                 Image(systemName: symbol)
                     .font(.title)
                     .frame(width: 44, height: 44)
@@ -54,9 +54,9 @@ struct FeatureActionCard: View {
 struct LoadingStateView: View {
     var message = "Loading…"
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppTheme.Spacing.m) {
             ProgressView()
-            Text(message).foregroundStyle(.secondary)
+            Text(message).foregroundStyle(Color.appTextSecondary)
         }
         .frame(maxWidth: .infinity, minHeight: 220)
     }
@@ -127,7 +127,7 @@ struct SpeciesArtwork: View {
                 Text(species.commonName)
                     .font(.caption.bold())
                     .lineLimit(1)
-                    .padding(8)
+                    .padding(AppTheme.Spacing.s)
                     .frame(maxWidth: .infinity)
                     .background(Color.black.opacity(0.35))
             }
@@ -149,7 +149,7 @@ struct SpeciesResultCard: View {
     var body: some View {
         HStack(alignment: .top) {
             SpeciesArtwork(species: match.species).frame(width: 72, height: 72)
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                 Text("#\(match.rank) · \(match.species.commonName)").font(.headline)
                 if !match.species.scientificName.isEmpty {
                     Text(match.species.scientificName).italic().font(.subheadline)

@@ -41,10 +41,13 @@ struct OfflineRegionsView: View {
     var body: some View {
         List {
             if let error = viewModel.errorMessage {
-                Text(error).foregroundStyle(Color.appError)
+                Text(error)
+                    .foregroundStyle(Color.appError)
+                    .listRowBackground(Color.appSurface)
             }
             if viewModel.packs.isEmpty && viewModel.errorMessage == nil {
                 EmptyStateView(title: AppCopy.noReviewedCatalogueTitle, message: AppCopy.noReviewedCatalogueMessage)
+                    .listRowBackground(Color.appSurface)
             }
             ForEach(viewModel.packs) { pack in
                 Button {
@@ -53,11 +56,14 @@ struct OfflineRegionsView: View {
                     RegionRow(pack: pack, isSelected: viewModel.selected == pack.id)
                 }
                 .accessibilityIdentifier("region_\(pack.id.rawValue)")
+                .listRowBackground(Color.appSurface)
             }
             Text("Development builds can expose explicitly selected experimental catalogues. Release catalogues list only records backed by human-review evidence and never substitute another region.")
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
+                .listRowBackground(Color.appSurface)
         }
+        .appScreenBackground()
         .navigationTitle("Dive Region")
         .task { await viewModel.load() }
     }
@@ -68,7 +74,7 @@ private struct RegionRow: View {
     let isSelected: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
             HStack {
                 Text(pack.displayName).font(.headline)
                 Spacer()
@@ -78,7 +84,7 @@ private struct RegionRow: View {
             Label(pack.publicationStatusText, systemImage: pack.isExperimental ? "exclamationmark.triangle.fill" : "checkmark.seal.fill")
                 .foregroundStyle(pack.isExperimental ? Color.appWarning : Color.appTextPrimary)
             Text("Catalogue version \(pack.packVersion)")
-            Text(pack.geographicScope).font(.caption).foregroundStyle(.secondary)
+            Text(pack.geographicScope).font(.caption).foregroundStyle(Color.appTextSecondary)
         }
         .foregroundStyle(Color.appTextPrimary)
     }

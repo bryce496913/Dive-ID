@@ -44,7 +44,7 @@ struct DescriptionSearchView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
                 Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
                     .foregroundStyle(Color.appTextSecondary)
                 if let pack = viewModel.pack { HStack { VStack(alignment: .leading) { Text("Dive region: \(pack.displayName)").font(.headline); Text("\(pack.speciesCount) species available offline") } ; Spacer(); Button("Change") { router.navigate(to: .offlineRegions) } }.padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }
@@ -52,10 +52,10 @@ struct DescriptionSearchView: View {
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
                         Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
-                            .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(12)
+                            .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
                     }
                     TextEditor(text: $viewModel.descriptionText)
-                        .frame(minHeight: 190).scrollContentBackground(.hidden).padding(6)
+                        .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
                         .accessibilityIdentifier("descriptionText")
                 }
                 .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))

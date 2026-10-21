@@ -146,7 +146,7 @@ struct PhotoIdentificationView: View {
             } else if let data = viewModel.processedPhoto?.previewData, let image = UIImage(data: data) {
                 Image(uiImage: image).resizable().scaledToFit()
             } else {
-                VStack(spacing: 12) {
+                VStack(spacing: AppTheme.Spacing.m) {
                     Image(systemName: "photo.badge.plus").font(.system(size: 50))
                     Text("No photo selected")
                 }

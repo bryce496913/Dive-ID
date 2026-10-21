@@ -27,7 +27,7 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxl) {
                 HomeHeader()
                 if let pack = viewModel.pack {
                     Button { router.navigate(to: .offlineRegions) } label: {
@@ -76,13 +76,13 @@ struct HomeView: View {
 
 private struct HomeHeader: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
             Image(systemName: "water.waves")
                 .font(.system(size: 48))
                 .foregroundStyle(Color.appPrimary)
             Text("Dive ID").font(.largeTitle.bold())
             Text("Describe the marine life you saw and review possible matches for your selected dive region.")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
         }
     }
 }
@@ -91,11 +91,11 @@ private struct SelectedPackSummary: View {
     let pack: OfflineIdentificationPackMetadata
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
             Text("Dive Region").font(.headline)
             Text(pack.displayName).font(.title3.bold())
             Text("\(pack.speciesCount) species available offline for the \(pack.displayName)")
-            Text("Included with Dive ID").font(.caption).foregroundStyle(.secondary)
+            Text("Included with Dive ID").font(.caption).foregroundStyle(Color.appTextSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
