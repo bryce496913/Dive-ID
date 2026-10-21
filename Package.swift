@@ -14,7 +14,6 @@ let package = Package(
                 "App/DebugSemanticSearchStatusView.swift", "App/DiveIDApp.swift", "App/RootView.swift", "App/FeatureAvailability.swift", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
-                "Core/Services/SelectedDiveRegionRepository.swift",
                 "Info.plist"
             ],
             sources: [
@@ -30,6 +29,8 @@ let package = Package(
                 "Core/Models/SavedIdentificationViewModels.swift",
                 "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
+                "Core/Models/SelectedPackState.swift",
+                "Core/Services/SelectedDiveRegionRepository.swift",
                 "Core/Models/ParsedObservation.swift",
                 "Core/Models/SpeciesSearchDocument.swift",
                 "Core/Services/IdentificationService.swift",
@@ -56,7 +57,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

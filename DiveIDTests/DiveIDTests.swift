@@ -25,28 +25,6 @@ actor SpyMarineLifeIdentificationService: MarineLifeIdentificationService {
     func setResults(_ value: [IdentificationMatch]) { results = value }
 }
 
-struct ResultsCatalogRepository: MarineSpeciesCatalogRepository {
-    var metadata: [OfflineIdentificationPackMetadata]
-    var error: (any Error)?
-
-    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
-        if let error { throw error }
-        return metadata
-    }
-
-    func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
-        throw LocalCatalogError.unsupportedPack
-    }
-}
-
-actor MutableSelectedDiveRegionRepository: SelectedDiveRegionRepository {
-    private var region: OfflineIdentificationPackID
-
-    init(initialRegion: OfflineIdentificationPackID) { region = initialRegion }
-    func selectedRegion() async -> OfflineIdentificationPackID { region }
-    func setSelectedRegion(_ id: OfflineIdentificationPackID) async { region = id }
-}
-
 struct StubPhotoProcessingService: PhotoProcessingService {
     let photo: ProcessedPhoto
     func processPhotoData(_ data: Data) async throws -> ProcessedPhoto { photo }
@@ -255,6 +233,28 @@ final class DiveIDTests: XCTestCase {
         await search.load()
         XCTAssertEqual(search.pack?.id, .caribbean)
         XCTAssertTrue(search.canSubmit)
+    }
+
+    @MainActor
+    func testHomeAndDescriptionPresentTheSameSelectedPackState() async {
+        let caribbean = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
+        let cases: [(ResultsCatalogRepository, OfflineIdentificationPackID, SelectedPackState)] = [
+            (ResultsCatalogRepository(metadata: [caribbean]), .caribbean, .loaded(caribbean)),
+            (ResultsCatalogRepository(metadata: [caribbean], error: LocalCatalogError.unreadableData), .caribbean, .loadFailed),
+            (ResultsCatalogRepository(metadata: [caribbean]), .tropicalPacific, .selectedRegionUnavailable),
+            (ResultsCatalogRepository(metadata: []), .caribbean, .noReviewedCatalogue)
+        ]
+        for (catalog, region, expected) in cases {
+            let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: region)
+            let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
+            let search = DescriptionSearchViewModel(sessionStore: InMemoryIdentificationSessionStore(), catalog: catalog, regionRepository: regionRepository)
+            search.descriptionText = "striped reef fish"
+            await home.load()
+            await search.load()
+            XCTAssertEqual(home.packState, expected)
+            XCTAssertEqual(search.packState, expected)
+            XCTAssertEqual(search.canSubmit, expected.pack != nil)
+        }
     }
 
     @MainActor
