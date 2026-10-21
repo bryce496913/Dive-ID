@@ -1,0 +1,17 @@
+{
+  "id": "global",
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "displayName": "Global (Experimental)",
+  "shortDescription": "Worldwide draft catalogue from FishBase and SeaLifeBase; not yet populated or verified for publication",
+  "geographicScope": "Worldwide marine and brackish species. Location in a description ranks results; it never excludes a species.",
+  "regionAliases": [],
+  "speciesCount": 0,
+  "speciesResourceName": "Creatures",
+  "imageSubdirectory": "Images",
+  "includedWithApp": true,
+  "lastDataReviewDate": null,
+  "includedRecordCount": 0,
+  "humanReviewedRecordCount": 0,
+  "publicationEligibleRecordCount": 0
+}

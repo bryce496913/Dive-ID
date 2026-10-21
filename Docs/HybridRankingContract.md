@@ -18,10 +18,13 @@ are still scored after provisional admission and can lower or remove a candidate
 
 ## Location
 
-Location is a boost, never a filter. A region named in the description adds evidence
-(“geographic range”) when it matches a species' recorded range. A sighting outside the
-recorded range has no effect at all: it neither lowers the score nor removes the
-candidate, so rare strays can still match.
+Location ranks results but never filters them. A region named in the description adds
+evidence (“geographic range”) when it matches a species' recorded range. A sighting
+outside the recorded range lowers that species' ordering by 3 (owner decision,
+2026-10-21, replacing the earlier “no effect” rule). The penalty is applied only after
+eligibility is decided, so it never removes a candidate. It is not evidence against the
+species: the structured score, confidence and explanations stay exactly as for a
+species with no recorded range. A species with no recorded range is neutral.
 
 `SpeciesRankingInput.preferredRegions` carries the diver's optional “where are you
 diving?” choice. A species recorded in any preferred region gets an ordering-only boost.
@@ -34,7 +37,8 @@ Retrieval scales are normalized separately before fusion:
 * BM25 uses the saturating transform `score / (score + 3)` for positive scores.
 
 The final ordering score is structured evidence score plus eight times normalized
-retrieval relevance plus the catalogue occurrence prior plus the preferred-region boost. Raw BM25 and cosine values
+retrieval relevance plus the catalogue occurrence prior plus the preferred-region boost,
+minus the out-of-range penalty when it applies. Raw BM25 and cosine values
 are never added to each other or directly to structured evidence. The occurrence
 prior affects ordering only; it is not emitted as matched evidence and cannot make a
 candidate eligible.

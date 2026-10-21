@@ -272,7 +272,7 @@ candidates, which matches the review batch size. To implement decision 3:
 | 12 | Attribution placement | A catalogue credits screen plus a source link on each species detail screen. |
 
 Consequences for §5.1: a region conflict changes neither eligibility nor ordering.
-Location only adds a boost, both from a place named in the description and from the
+Location only adds a boost (and, per §9.1, an ordering-only out-of-range penalty), both from a place named in the description and from the
 optional dive-region selection. The pack-level `regionMismatch` stop goes away. The
 dive-region selection stays in the UI, but as an optional boost rather than a pack
 switch.
@@ -395,6 +395,39 @@ Each step is a separate, reviewable change.
    seeded sample of 30; any error in the sample returns the batch.
 6. **Global pack + app**: one global pack replaces Caribbean/Tropical Pacific, with a
    credits screen and a source link on each species detail screen.
+
+## 9. Global pack, distribution and merge plan (2026-10-21)
+
+- **Global pack registered** (`OfflineIdentificationPackID.global`, `GlobalRegion`,
+  registry entry). Its manifest is experimental, declares no region aliases and holds
+  an empty `Creatures.json`. Release builds don't offer it because it has no approved
+  records; Debug lists it with 0 species. The Caribbean and Tropical Pacific packs are
+  unchanged.
+- **Distribution staged** for 4,798 species (`Data/GlobalMarine/FishBase/Distribution.json`,
+  WoRMS-style integrity rules). 4,796 have a known distribution.
+- **Merge plan** (`MergePlan.csv`, `MergePlanReport.json`): 4,798 accepted taxa, 168
+  collisions settled by keeping one UUID and retiring 165 as aliases. It is
+  **blocked by 3 conflicts**, each a pair or trio of existing Tropical Pacific records
+  that FishBase treats as one species:
+  - *Hippocampus kuda* / *moluccensis* / *taeniopterus*;
+  - *Apogon fuscus* / *guamensis* (now *Nectamia fusca*);
+  - *Epinephelus areolatus* / *waandersi*.
+- **WoRMS taxonomy has not run.** All 4,000 candidates are `pending`, so 0 are
+  WoRMS-confirmed. The plan therefore uses FishBase/SeaLifeBase as its taxon authority.
+- **Fixed:** the step-4 drafts gave 307 candidates new UUIDs instead of their workbook
+  identities from the intake crosswalk. `build.py` now uses the crosswalk UUID.
+
+### 9.1 Owner decisions (2026-10-21)
+
+| Question | Decision | Status |
+|---|---|---|
+| Default region for new installs | Switch the default when Global is populated, so "nothing stored" simply means Global. | Deferred to the change that populates Global. Until then the default stays Caribbean. |
+| Lowering out-of-range species | Yes. This replaces decision 11 ("no effect at all"). | Done: an ordering-only −3 penalty, applied after eligibility, so it never removes a species and never changes score, confidence or explanations. `HybridRankingContract.md` is updated. |
+| Merge conflicts | Keep the UUID of the record with the accepted species name. | Done, as a rule in `merge_plan.py`. *Hippocampus kuda* and *Epinephelus areolatus* keep their existing records. *Nectamia fusca* keeps the candidate record that carries the accepted name, and both *Apogon* records retire as aliases. The plan is now **ready** (0 conflicts). |
+| Taxonomy authority | FishBase/SeaLifeBase matches count as confirmed for the merge. | Done: 3,993 candidates confirmed; WoRMS stays pending. |
+
+`build.py` now builds exactly the merge plan's kept UUIDs: 962 Tropical Pacific
+records and 3,825 candidates. 5 existing app UUIDs are retired as aliases.
 
 ## Appendix A. Licence confirmation email (draft, not sent)
 
