@@ -273,7 +273,10 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
         ]))
         XCTAssertEqual(Set(result.map(\.profile.id)).count, result.count)
         XCTAssertEqual(result.first?.profile.id, compatible.id)
-        XCTAssertTrue(result.first { $0.profile.id == conflicting.id }?.conflictingClues.contains("geographic range") == true)
+        // Out-of-range is no longer a conflict: the species stays listed, only unboosted.
+        let outOfRange = try XCTUnwrap(result.first { $0.profile.id == conflicting.id })
+        XCTAssertFalse(outOfRange.conflictingClues.contains("geographic range"))
+        XCTAssertFalse(outOfRange.matchedClues.contains("geographic range"))
 
         let tiedObservation = await LocalObservationParser().parse("sleek creature drifting quietly offshore")
         let tied = try await LocalSpeciesRanker().rank(input: .init(description: "sleek creature drifting quietly offshore", observation: tiedObservation, candidates: [
@@ -324,3 +327,48 @@ extension DescriptionSearchArchitectureTests {
         XCTAssertTrue(insufficient.isEmpty, "A partial name alone must not bypass evidence eligibility")
     }
 }
+
+extension DescriptionSearchArchitectureTests {
+    func testOutOfRangeSightingHasNoEffectOnScoreOrEligibility() async throws {
+        let base = try await pack().profiles[0]
+        let inRange = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000211")!, name: "In Range", regions: ["caribbean"])
+        let outOfRange = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000212")!, name: "Out Of Range", regions: ["indo-pacific"])
+        let noRange = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000213")!, name: "No Range", regions: [])
+        let description = "blue fish on a coral reef in the Caribbean"
+        let observation = await LocalObservationParser().parse(description)
+        let ranked = try await LocalSpeciesRanker().rank(input: .init(description: description, observation: observation, candidates: [inRange, outOfRange, noRange].map {
+            .init(speciesID: $0.id, profile: $0, retrieval: nil)
+        }))
+        let byName = Dictionary(uniqueKeysWithValues: ranked.map { ($0.profile.commonName, $0) })
+        let stray = try XCTUnwrap(byName["Out Of Range"], "an out-of-range species must remain eligible")
+        let unknown = try XCTUnwrap(byName["No Range"])
+        XCTAssertEqual(stray.rawScore, unknown.rawScore, "out of range must score exactly like an unknown range")
+        XCTAssertEqual(stray.orderingScore, unknown.orderingScore)
+        XCTAssertGreaterThan(try XCTUnwrap(byName["In Range"]).rawScore, stray.rawScore, "a named region still boosts in-range species")
+    }
+
+    func testPreferredRegionBoostsOrderingOnly() async throws {
+        let base = try await pack().profiles[0]
+        let pacific = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000221")!, name: "Alpha Pacific", regions: ["indo-pacific"])
+        let caribbean = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000222")!, name: "Beta Caribbean", regions: ["caribbean"])
+        let description = "blue fish on a coral reef"
+        let observation = await LocalObservationParser().parse(description)
+        let candidates: [SpeciesRankingCandidate] = [pacific, caribbean].map { .init(speciesID: $0.id, profile: $0, retrieval: nil) }
+
+        let neutral = try await LocalSpeciesRanker().rank(input: .init(description: description, observation: observation, candidates: candidates))
+        XCTAssertEqual(neutral.map(\.profile.commonName), ["Alpha Pacific", "Beta Caribbean"], "ties sort by name without a preference")
+
+        var preferring = SpeciesRankingInput(description: description, observation: observation, candidates: candidates)
+        preferring.preferredRegions = ["bonaire"]
+        let boosted = try await LocalSpeciesRanker().rank(input: preferring)
+        XCTAssertEqual(boosted.map(\.profile.commonName), ["Beta Caribbean", "Alpha Pacific"], "a Caribbean dive site boosts Caribbean species")
+        for result in boosted {
+            let before = try XCTUnwrap(neutral.first { $0.profile.id == result.profile.id })
+            XCTAssertEqual(result.rawScore, before.rawScore, "the preference is not description evidence")
+            XCTAssertEqual(result.score, before.score, "the preference never changes confidence")
+            XCTAssertEqual(result.matchedClues, before.matchedClues)
+        }
+        XCTAssertEqual(boosted.count, neutral.count, "the preference never excludes a species")
+    }
+}
+

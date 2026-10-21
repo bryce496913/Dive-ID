@@ -13,9 +13,20 @@ A semantic candidate can also be admitted provisionally when its normalized
 relevance is at least `0.65` and the description contains at least three meaningful
 non-generic terms. This is intentionally independent of parser vocabulary coverage:
 it permits useful paraphrases, while rejecting a high-similarity result for a query
-such as “a fish on the reef.” Structured region, animal-group, size, and habitat
-conflicts are still scored after provisional admission and can lower or remove a
-candidate.
+such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
+are still scored after provisional admission and can lower or remove a candidate.
+
+## Location
+
+Location is a boost, never a filter. A region named in the description adds evidence
+(“geographic range”) when it matches a species' recorded range. A sighting outside the
+recorded range has no effect at all: it neither lowers the score nor removes the
+candidate, so rare strays can still match.
+
+`SpeciesRankingInput.preferredRegions` carries the diver's optional “where are you
+diving?” choice. A species recorded in any preferred region gets an ordering-only boost.
+That boost is not description evidence: it never changes eligibility, confidence or
+explanations.
 
 Retrieval scales are normalized separately before fusion:
 
@@ -23,7 +34,7 @@ Retrieval scales are normalized separately before fusion:
 * BM25 uses the saturating transform `score / (score + 3)` for positive scores.
 
 The final ordering score is structured evidence score plus eight times normalized
-retrieval relevance plus the catalogue occurrence prior. Raw BM25 and cosine values
+retrieval relevance plus the catalogue occurrence prior plus the preferred-region boost. Raw BM25 and cosine values
 are never added to each other or directly to structured evidence. The occurrence
 prior affects ordering only; it is not emitted as matched evidence and cannot make a
 candidate eligible.

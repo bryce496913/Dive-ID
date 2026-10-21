@@ -354,9 +354,12 @@ Each step is a separate, reviewable change.
 
 1. **Schema** (done): new length bases and animal groups, in Swift, the Python validator
    and the parser.
-2. **Location as a boost** (§5.1): remove the `regionMismatch` stop and the −12
-   conflict; an out-of-range species gets no effect. Make the dive-region selection
-   optional and use it as a boost. Update `HybridRankingContract.md` and the tests.
+2. **Location as a boost** (§5.1), ranker part done: the −12 conflict is gone, an
+   out-of-range species gets no effect, and `SpeciesRankingInput.preferredRegions`
+   gives an ordering-only boost. The pack-level `regionMismatch` stop stays until step 6:
+   while separate region packs exist, removing it would silently return the wrong
+   region's species. The app passes the dive-region choice as `preferredRegions` in
+   step 6.
 3. **FishBase/SeaLifeBase intake** (`Tools/`): download the pinned `v26.06` tables and
    verify each ETag/MD5; resolve names (exact match, then synonyms, flagging ambiguous
    matches); dedupe the 4,000 + 1,008 records by SpecCode and accepted name; fix
