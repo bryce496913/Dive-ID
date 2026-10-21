@@ -10,6 +10,9 @@ struct SpeciesRankingInput: Sendable {
     let description: String
     let observation: ParsedObservation
     let candidates: [SpeciesRankingCandidate]
+    /// The diver's optional "where are you diving?" choice. It boosts ordering only;
+    /// it is not evidence from the description and never excludes a species.
+    var preferredRegions: Set<String> = []
 }
 
 struct SpeciesRankingCandidate: Sendable {
@@ -65,7 +68,7 @@ extension RankedLocalSpecies {
 }
 
 struct LocalRankingWeights: Sendable {
-    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, regionConflict = -12.0
+    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, preferredRegion = 3.0
     let appearanceRelationship = 2.0, tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
 }
@@ -117,10 +120,9 @@ struct LocalSpeciesRanker: SpeciesRanking {
             case .compatible:
                 score += weights.region
                 matched.append("geographic range")
-            case .conflicting:
-                score += weights.regionConflict
-                conflicts.append("geographic range")
-            case .unspecified:
+            case .conflicting, .unspecified:
+                // Location is a boost, never a filter: a sighting outside the
+                // recorded range has no effect, so rare strays can still match.
                 break
             }
             add(observation.habitats, profile.habitats, weights.habitat, &score, &matched)
@@ -186,7 +188,8 @@ struct LocalSpeciesRanker: SpeciesRanking {
             // provisional eligibility, but never upgrades confidence by itself.
             guard score >= weights.threshold || hasExactName || provisionalSemantic else { return nil }
             let relevanceContribution = (retrievalRelevance ?? 0) * 8
-            let orderingScore = score + relevanceContribution + occurrenceWeight(profile.regionalOccurrence)
+            let preferredRegionBoost = isInPreferredRegion(profile, input.preferredRegions) ? weights.preferredRegion : 0
+            let orderingScore = score + relevanceContribution + occurrenceWeight(profile.regionalOccurrence) + preferredRegionBoost
             guard orderingScore > 0 else { return nil }
             if candidate.retrieval?.source == .semantic { matched.append("catalogue description similarity") }
             return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: orderingScore)
@@ -226,6 +229,10 @@ struct LocalSpeciesRanker: SpeciesRanking {
 
     func regionCompatibility(observedRegions: Set<String>, supportedRegions: Set<String>) -> RegionCompatibility {
         regionResolver.compatibility(observedRegions: observedRegions, supportedRegions: supportedRegions)
+    }
+
+    private func isInPreferredRegion(_ profile: LocalSpeciesProfile, _ preferred: Set<String>) -> Bool {
+        preferred.contains { regionCompatibility(observedRegions: [$0], supportedRegions: Set(profile.regions)) == .compatible }
     }
 
     private func occurrenceWeight(_ status: RegionalOccurrenceStatus) -> Double { switch status { case .common: 3; case .regular: 2; case .introduced: 1; case .unknown, .occasional, .seasonal: 0; case .rare: -3 } }
