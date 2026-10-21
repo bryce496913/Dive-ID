@@ -153,8 +153,10 @@ struct SpeciesTaxonomy: Codable, Hashable, Sendable {
     let sourceScientificName: String
 }
 
+/// Length bases used by FishBase (TL, SL, FL, WD) and SeaLifeBase (CL, CW, SHL, ML, BL, DL).
 enum SpeciesMeasurementType: String, Codable, Hashable, Sendable {
-    case totalLength, forkLength, discWidth, carapaceLength
+    case totalLength, standardLength, forkLength, discWidth, discLength
+    case carapaceLength, carapaceWidth, shellLength, mantleLength, bodyLength
 }
 
 struct SpeciesMeasurements: Codable, Hashable, Sendable {

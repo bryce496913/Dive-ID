@@ -12,6 +12,7 @@ enum LocalObservationVocabulary {
         "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
         "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"], "robust": ["robust"],
         "fish": ["fish"], "ray": ["ray", "eagle ray", "flat thing"], "turtle": ["turtle"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
+        "sea cucumber": ["sea cucumber", "sea cucumbers", "holothurian"], "sea urchin": ["sea urchin", "urchin"], "jellyfish": ["jellyfish", "sea jelly", "sea jellies", "medusa"], "worm": ["worm"], "sea squirt": ["sea squirt", "sea squirts", "tunicate", "ascidian"], "horseshoe crab": ["horseshoe crab", "horseshoe crabs"],
         "schooling": ["school", "schooling"], "solitary": ["alone", "solitary"], "hovering": ["hovering", "hover"], "bottom-swimming": ["bottom", "sand"], "feeding": ["feeding"], "grazing": ["grazer", "grazing", "graze"], "swimming": ["swimming", "cruising"],
         "squared head": ["squared head", "squared looking head", "square head", "square shaped head"]
     ]

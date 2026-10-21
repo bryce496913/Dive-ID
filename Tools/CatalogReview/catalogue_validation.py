@@ -18,7 +18,7 @@ VOCABULARY = {
     "markings": {"barbels", "beak", "eye stripe", "fin edge", "patches", "saddles", "shell", "spines", "spots", "stripes", "tail", "teeth"},
     "bodyShapes": {"leaflike", "compressed", "disk", "elongated", "flat", "oval", "pointed", "robust", "round", "serpentine", "torpedo"},
     "habitats": {"anemone", "deep", "lagoon", "mangrove", "open water", "reef", "rubble", "sand", "seagrass", "shallow", "surface", "wall", "wreck"},
-    "categories": {"crustacean", "eel", "fish", "mollusk", "octopus", "ray", "seahorse", "shark", "squid", "turtle"},
+    "categories": {"crustacean", "eel", "fish", "horseshoe crab", "jellyfish", "mollusk", "octopus", "ray", "sea cucumber", "sea squirt", "sea urchin", "seahorse", "shark", "squid", "turtle", "worm"},
     "behaviors": {"anemone association", "bottom-swimming", "burrowing", "cleaning", "feeding", "grazing", "hiding", "hovering", "open-water cruising", "resting", "schooling", "solitary", "swimming"},
     "regions": {"aruba", "atlantic", "bahamas", "belize", "bermuda", "bonaire", "british virgin islands", "caribbean", "cayman islands", "cozumel", "curaçao", "curacao", "dominican republic", "fiji", "florida", "gulf of mexico", "hawaii", "indian", "indo-pacific", "jamaica", "pacific", "puerto rico", "turks and caicos", "us virgin islands", "western atlantic"},
 }
@@ -29,7 +29,7 @@ OPTIONAL_STRINGS = {"imageAssetName", "regionalOccurrenceNotes", "tailShape"}
 OPTIONAL_NUMBERS = {"minimumSizeCentimeters", "maximumSizeCentimeters", "minimumDepthMeters", "maximumDepthMeters"}
 OCCURRENCES = {"unknown", "common", "regular", "occasional", "rare", "seasonal", "introduced"}
 LIFE_STAGES = {"juvenile", "intermediate", "adult", "initialPhase", "terminalPhase"}
-MEASUREMENT_TYPES = {"totalLength", "forkLength", "discWidth", "carapaceLength"}
+MEASUREMENT_TYPES = {"totalLength", "standardLength", "forkLength", "discWidth", "discLength", "carapaceLength", "carapaceWidth", "shellLength", "mantleLength", "bodyLength"}
 REVIEW_STATUSES = {"draft", "sourceChecked", "verified"}
 IMAGE_LICENSES = {"CC0", "Public Domain", "CC BY 4.0", "CC BY"}
 
