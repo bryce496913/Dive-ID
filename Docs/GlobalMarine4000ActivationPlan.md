@@ -304,10 +304,17 @@ The 59 ungrouped candidates are all invertebrates with known families:
 None of these groups exists in `CatalogueVocabulary.categories` today, so fixing them
 requires new categories (still open below).
 
-### 7.3 Still open
+### 7.3 Licence confirmation and new categories (2026-10-21)
 
-- **New animal-group categories** for the 59 invertebrates (see above).
-- **Written licence confirmation:** the email draft is in Appendix A; it has not been sent.
+- **Licence confirmation:** the owner sent the Appendix A email on 2026-10-21. No reply
+  yet. Per the owner, work continues meanwhile; the reply is not a blocker. The owner
+  expects "yes" to the non-commercial question and "no" to extra attribution. Those are
+  expectations, **not FishBase's reply**. Record the actual reply here when it arrives.
+- **Errors found during review:** fix them in Dive ID's records; don't report them to
+  FishBase (owner decision).
+- **New categories:** added `sea cucumber`, `sea urchin`, `jellyfish`, `worm`,
+  `sea squirt` and `horseshoe crab`, as proposed. The owner did not object, and they are
+  easy to rename.
 
 ### 7.4 Original question list
 
@@ -340,6 +347,29 @@ requires new categories (still open below).
 11. **Out-of-range weighting:** no effect at all, or a small ordering-only penalty?
 12. **Attribution placement:** a catalogue credits screen plus per-species source links on
     the species detail screen. Is that acceptable?
+
+## 8. Build plan
+
+Each step is a separate, reviewable change.
+
+1. **Schema** (done): new length bases and animal groups, in Swift, the Python validator
+   and the parser.
+2. **Location as a boost** (§5.1): remove the `regionMismatch` stop and the −12
+   conflict; an out-of-range species gets no effect. Make the dive-region selection
+   optional and use it as a boost. Update `HybridRankingContract.md` and the tests.
+3. **FishBase/SeaLifeBase intake** (`Tools/`): download the pinned `v26.06` tables and
+   verify each ETag/MD5; resolve names (exact match, then synonyms, flagging ambiguous
+   matches); dedupe the 4,000 + 1,008 records by SpecCode and accepted name; fix
+   misspelled names, keeping originals in the crosswalk.
+4. **Record builder**: map tables to `LocalSpeciesProfile` (§4). Includes animal group
+   from taxonomy, full size/depth ranges with their length basis, regions from FAO
+   area/country/MEOW, range text from `StockDefs`, and summary/features rewritten from
+   `Comments`/`AddChars` with colours and markings extracted for review. `dataSources`
+   carries SpecCode, page URL, Main Ref and CC BY-NC 4.0. No images.
+5. **Review batches**: 250 records per batch. Read flagged records in full, plus a
+   seeded sample of 30; any error in the sample returns the batch.
+6. **Global pack + app**: one global pack replaces Caribbean/Tropical Pacific, with a
+   credits screen and a source link on each species detail screen.
 
 ## Appendix A. Licence confirmation email (draft, not sent)
 
