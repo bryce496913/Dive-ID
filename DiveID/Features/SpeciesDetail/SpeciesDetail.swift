@@ -5,9 +5,9 @@ struct SpeciesDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
                 SpeciesArtwork(species: viewModel.species).frame(height: 250)
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                     Text(viewModel.species.commonName).font(.largeTitle.bold())
                     Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextSecondary)
                     if let match = viewModel.match {
@@ -75,7 +75,7 @@ private struct DetailSection: View {
     let title: String
     let text: String
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
             Text(title).font(.headline)
             Text(text).foregroundStyle(Color.appTextSecondary)
         }

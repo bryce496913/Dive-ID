@@ -17,7 +17,7 @@ struct IdentificationResultsView: View {
                     .accessibilityIdentifier("resultsFailure")
             case .loaded(let matches):
                 ScrollView {
-                    LazyVStack(spacing: 12) {
+                    LazyVStack(spacing: AppTheme.Spacing.m) {
                         Text(viewModel.resultsSummary)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         if viewModel.packMetadata?.isExperimental == true {
