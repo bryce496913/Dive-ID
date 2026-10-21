@@ -254,3 +254,113 @@ def validate_catalogue(records, manifest=None):
             if not isinstance(manifest.get("includedWithApp"), bool): _error(errors, "<manifest>", "manifest.includedWithApp", "boolean", manifest.get("includedWithApp"))
             _date(errors, "<manifest>", "manifest.lastDataReviewDate", manifest.get("lastDataReviewDate"))
     if errors: raise CatalogueValidationError(errors)
+
+
+# ---------------------------------------------------------------------------
+# Per-record risk flags for review triage. These never reject a record; they rank
+# which records a reviewer should read first. Flags are "kind" or "kind:detail";
+# the score sums the weights of the distinct kinds present, capped at 100.
+
+RISK_WEIGHTS = {
+    "missing_required": 30, "vocabulary": 25, "ocr_junk": 20, "near_verbatim": 20,
+    "duplicate_common_name": 15, "distribution_missing": 15, "no_english_common_name": 10,
+    "size_outlier": 10, "depth_outlier": 10,
+}
+# Largest plausible maximum size (cm) per category; above this the size is suspect.
+CATEGORY_MAX_SIZE_CM = {
+    "fish": 600, "shark": 2100, "ray": 950, "eel": 400, "seahorse": 40, "crustacean": 120, "mollusk": 150,
+    "octopus": 600, "squid": 2000, "turtle": 300, "sea cucumber": 300, "sea urchin": 40, "jellyfish": 250,
+    "worm": 300, "sea squirt": 50, "horseshoe crab": 80,
+}
+DEPTH_OUTLIER_MAXIMUM_M = 4000      # deeper than any plausible recorded range for these species
+DEPTH_OUTLIER_SHALLOWEST_M = 200    # never shallower than this: out of reach of any diver
+REQUIRED_CONTENT = ("commonName", "scientificName", "categories", "summary", "distinguishingFeatures", "geographicRange", "dataSources")
+TEXT_FIELDS = ("summary", "typicalHabitat", "geographicRange")
+VERBATIM_WORDS = 8                   # a shared run of this many words counts as copied
+_OCR_SYMBOLS = re.compile(r"[$§¤|~^`@#]")
+_UNIT_TOKEN = re.compile(r"^\d+(?:[.,]\d+)?(?:cm|mm|m|km|kg|g|st|nd|rd|th|s)$", re.I)
+
+
+def _words(text):
+    return re.findall(r"[a-z0-9]+", str(text or "").lower())
+
+
+def _shingles(text, n=VERBATIM_WORDS):
+    words = _words(text)
+    return {" ".join(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
+def _ocr_junk(text):
+    """Characters or tokens that come from bad scans, not from prose."""
+    text = str(text or "")
+    if _OCR_SYMBOLS.search(text) or text.count("(") != text.count(")"):
+        return True
+    for token in re.findall(r"[A-Za-z0-9]+", text):
+        if re.search(r"\d", token) and re.search(r"[A-Za-z]", token) and not _UNIT_TOKEN.match(token):
+            return True
+    return False
+
+
+def risk_flags(record, source_texts=(), duplicate_common_names=frozenset()):
+    """Flags for one record. `source_texts` are the source passages the record was built
+    from; `duplicate_common_names` are normalized common names used more than once."""
+    flags = []
+    for field in REQUIRED_CONTENT:
+        if not record.get(field) or (isinstance(record.get(field), str) and not record[field].strip()):
+            flags.append(f"missing_required:{field}")
+    for field, allowed in VOCABULARY.items():
+        if any(isinstance(v, str) and v.lower() not in allowed for v in record.get(field) or []):
+            flags.append(f"vocabulary:{field}")
+    common = " ".join(str(record.get("commonName") or "").lower().split())
+    if common and common in duplicate_common_names:
+        flags.append("duplicate_common_name")
+    if common and common == " ".join(str(record.get("scientificName") or "").lower().split()):
+        flags.append("no_english_common_name")
+    categories = record.get("categories") or []
+    size = record.get("maximumSizeCentimeters")
+    limit = max((CATEGORY_MAX_SIZE_CM.get(c, 0) for c in categories), default=0)
+    if isinstance(size, (int, float)) and limit and size > limit:
+        flags.append("size_outlier")
+    shallow, deep = record.get("minimumDepthMeters"), record.get("maximumDepthMeters")
+    if (isinstance(deep, (int, float)) and deep > DEPTH_OUTLIER_MAXIMUM_M) or (isinstance(shallow, (int, float)) and shallow > DEPTH_OUTLIER_SHALLOWEST_M):
+        flags.append("depth_outlier")
+    source = set().union(*(_shingles(t) for t in source_texts)) if source_texts else set()
+    for field in TEXT_FIELDS + ("distinguishingFeatures",):
+        values = record.get(field) if field == "distinguishingFeatures" else [record.get(field)]
+        if source and any(_shingles(v) & source for v in values or []):
+            flags.append(f"near_verbatim:{field}")
+    for field in ("commonName", "aliases") + TEXT_FIELDS + ("distinguishingFeatures",):
+        values = record.get(field) if isinstance(record.get(field), list) else [record.get(field)]
+        if any(_ocr_junk(v) for v in values or []):
+            flags.append(f"ocr_junk:{field}")
+    if not record.get("regions") and not record.get("subregions"):
+        flags.append("distribution_missing")
+    return flags
+
+
+def risk_score(flags):
+    return min(100, sum(RISK_WEIGHTS[kind] for kind in {f.split(":", 1)[0] for f in flags}))
+
+
+def assess_risk(records, source_texts_by_id=None, reserved_common_names=()):
+    """Risk flags and score for every record, plus flag rates across the set.
+    `reserved_common_names` are names already used outside these records."""
+    source_texts_by_id = source_texts_by_id or {}
+    counts = {}
+    for name in [" ".join(str(r.get("commonName") or "").lower().split()) for r in records] + [" ".join(n.lower().split()) for n in reserved_common_names]:
+        counts[name] = counts.get(name, 0) + 1
+    duplicates = {name for name, n in counts.items() if n > 1 and name}
+    per_record, kinds = {}, {}
+    for r in records:
+        flags = risk_flags(r, source_texts_by_id.get(r.get("id"), ()), duplicates)
+        per_record[r.get("id")] = {"score": risk_score(flags), "flags": flags}
+        for kind in {f.split(":", 1)[0] for f in flags}:
+            kinds[kind] = kinds.get(kind, 0) + 1
+    total = len(records) or 1
+    return {
+        "records": per_record,
+        "flagRates": {k: round(kinds.get(k, 0) / total, 4) for k in RISK_WEIGHTS},
+        "flaggedRecords": sum(1 for v in per_record.values() if v["flags"]),
+        "scoreHistogram": {band: sum(1 for v in per_record.values() if lo <= v["score"] <= hi)
+                           for band, (lo, hi) in {"0": (0, 0), "1-20": (1, 20), "21-40": (21, 40), "41-60": (41, 60), "61-100": (61, 100)}.items()},
+    }

@@ -138,26 +138,27 @@ class FetchPinTests(unittest.TestCase):
 
 
 class BuildMappingTests(unittest.TestCase):
-    def test_clean_removes_reference_markers_and_html(self):
-        self.assertEqual(build.clean("Found on <i>Acropora</i> reefs (Ref. 1602, 9710) .  Feeds at night (Ref. 4)."),
-                         "Found on Acropora reefs. Feeds at night.")
-        self.assertEqual(build.clean("Juveniles <6 cm SL are <i>blue</i>; adults > 10 cm.<br/>"), "Juveniles <6 cm SL are blue; adults > 10 cm.")
-        self.assertEqual(build.clean("Reports by Heemstra & Randall (1984, Ref. 3153) from Oman; Africa (including Mauritius, Ref. 37792) "
-                                     "to Hawaii, as reported by Ref. 9710, 1602."),
-                         "Reports by Heemstra & Randall (1984) from Oman; Africa (including Mauritius) to Hawaii, as reported.")
-
     def test_colours_and_markings_come_from_whole_words(self):
-        text = "Body bluish with three dark bars and a black ocellus; fins yellowish. Barbels absent? Scarlet-edged."
+        text = "Body bluish with three dark bars and a black <i>ocellus</i>; fins yellowish. Barbels absent? Scarlet-edged."
         self.assertEqual(build.terms_in(text, build.COLOR_TERMS), ["black", "blue", "red", "yellow"])
         self.assertEqual(build.terms_in(text, build.MARKING_TERMS), ["spots", "stripes"], "'barbels absent' must not add barbels")
         self.assertEqual(build.terms_in("barracuda-like body", build.COLOR_TERMS), [])
 
-    def test_category_prefers_queue_then_family_then_class(self):
-        self.assertEqual(build.category_for("shark", "Holothuriidae", "Holothuroidea"), ["shark"])
-        self.assertEqual(build.category_for("needs_taxon_group", "Holothuriidae", None), ["sea cucumber"])
-        self.assertEqual(build.category_for(None, "Parechinidae", "Echinoidea"), ["sea urchin"])
-        self.assertEqual(build.category_for(None, "Gobiidae", "Teleostei"), ["fish"])
-        self.assertEqual(build.category_for(None, "Unknownidae", None), [])
+    def test_category_comes_from_the_source_taxonomy(self):
+        cases = [(("Elasmobranchii", "Myliobatiformes", "Mobulidae", "Mobula"), "ray"),
+                 (("Elasmobranchii", "Carcharhiniformes", "Carcharhinidae", "Carcharhinus"), "shark"),
+                 (("Teleostei", "Anguilliformes", "Muraenidae", "Gymnothorax"), "eel"),
+                 (("Teleostei", "Syngnathiformes", "Syngnathidae", "Hippocampus"), "seahorse"),
+                 (("Teleostei", "Syngnathiformes", "Syngnathidae", "Doryrhamphus"), "fish"),
+                 (("Cephalopoda", "Octopoda", "Octopodidae", "Octopus"), "octopus"),
+                 (("Cephalopoda", "Myopsida", "Loliginidae", "Sepioteuthis"), "squid"),
+                 (("Cephalopoda", "Sepiida", "Sepiidae", "Sepia"), "mollusk"),
+                 (("Not assigned", "Testudines", "Cheloniidae", "Chelonia"), "turtle"),
+                 (("Holothuroidea", "Holothuriida", "Holothuriidae", "Holothuria"), "sea cucumber"),
+                 (("Merostomata", "Xiphosurida", "Limulidae", "Limulus"), "horseshoe crab"),
+                 (("Unknown", None, None, "Xus"), None)]
+        for args, expected in cases:
+            self.assertEqual(build.category_from_taxonomy(*args), expected, args)
 
     def test_regions_from_fao_areas_and_countries(self):
         self.assertEqual(build.regions_for([31], ["Bahamas"]), ["atlantic", "bahamas", "caribbean", "western atlantic"])
@@ -173,47 +174,79 @@ class BuildMappingTests(unittest.TestCase):
         self.assertTrue(build.lives_in_sea({"Saltwater": 0, "Brack": 1}))
         self.assertFalse(build.lives_in_sea({"Saltwater": 0, "Brack": 0}))
 
+    def test_generated_text_is_assembled_from_facts(self):
+        self.assertEqual(build.basins_phrase(["Indian", "Pacific"]), "the Indian and Pacific Oceans")
+        self.assertEqual(build.basins_phrase(["Atlantic", "Mediterranean and Black Sea"]), "the Atlantic Ocean and the Mediterranean and Black Sea")
+        self.assertEqual(build.readable_fao("Pacific, Western Central"), "Western Central Pacific")
+        self.assertEqual(build.summary_text("fish", "reef-associated", "Pomacentridae", "damselfishes", "the Pacific Ocean", 8.0, "standardLength", 1.0, 68.0),
+                         "A reef-associated fish of the family Pomacentridae (damselfishes), recorded from the Pacific Ocean. "
+                         "Reaches about 8 cm standard length. Recorded at depths of 1–68 m.")
+        self.assertEqual(build.summary_text("eel", "open-ocean", None, "", "", None, None, None, None), "An open-ocean eel.")
+        self.assertEqual(build.habitat_text("reef-associated", {"sand", "reef", "shallow"}, 1.0, 68.0), "Reef-associated; coral reefs and sand; 1–68 m.")
+        self.assertEqual(build.habitat_text("", set(), None, None), "", "no source facts, no text")
+        self.assertEqual(build.distribution_text("the Indian and Pacific Oceans", ["Indian Ocean, Eastern"], 1),
+                         "Indian and Pacific Oceans. FAO areas: Eastern Indian Ocean. Recorded from 1 country or territory.")
+        self.assertEqual(build.distribution_text("", [], 0), "", "no distribution, no text")
+        self.assertEqual(build.feature_list(["black"], ["stripes"], ["compressed"], "truncate", ["terminal mouth"], ["Dorsal fin: 12 spines"], "Pomacentridae", "Dascyllus"),
+                         ["Colours: black.", "Markings: stripes.", "Body shape: compressed.", "Tail: truncate.", "Mouth: terminal.", "Dorsal fin: 12 spines."])
+        self.assertEqual(build.feature_list([], [], [], None, [], [], "Pomacentridae", "Dascyllus"), ["Family: Pomacentridae."])
+
     def source(self, **species):
         sp = {"FBname": "Blacktail humbug", "LTypeMaxM": "SL", "DepthRangeShallow": 1, "DepthRangeDeep": 68,
               "DemersPelag": "reef-associated", "BodyShapeI": "short and / or deep", "Dangerous": "venomous", "Author": "Bleeker, 1854",
-              "Comments": "Traditionally harvested for the aquarium trade (Ref. 1). Minimum depth from Ref. 128982. Adults inhabit sheltered lagoons (Ref. 9). Holotype lost. Feeds on plankton (Ref. 4, 5).", "Length": 54.79999923706055}
+              "Comments": "Adults inhabit sheltered lagoons and harbors in small groups near coral heads (Ref. 9).", "Length": 54.79999923706055}
         sp.update(species)
-        return {"release": "v26.06", "species": sp, "family": {"Family": "Pomacentridae", "Order": "Ovalentaria", "Class": "Teleostei"},
+        return {"release": "v26.06", "species": sp, "family": {"Family": "Pomacentridae", "Order": "Ovalentaria", "Class": "Teleostei", "CommonName": "Damselfishes"},
                 "english_names": ["Blacktail humbug", "Black-tailed dascyllus", "Damsel"], "ecology": [{"Epipelagic": -1, "Oceanic": -1, "CoralReefs": -1, "Schooling": -1}],
-                "morphdat": {"AddChars": "White with 3 black bars (Ref. 2).", "CShape": "more or less truncate", "PosofMouth": "terminal", "BarbelsNo": 0},
-                "range_text": "Western Pacific (Ref. 3).", "fao_codes": [71], "fao_names": ["Pacific, Western Central"], "countries": ["Fiji"], "main_ref": "Allen 1991"}
+                "morphdat": {"AddChars": "White with 3 black bars (Ref. 2).", "CShape": "more or less truncate", "PosofMouth": "terminal", "BarbelsNo": 0,
+                             "SimilarSpecies1": 5112, "SimilarSpecies2": 5111},
+                "range_text": "Western Pacific: Sumatra to Vanuatu (Ref. 3).",
+                "distribution": {"oceanBasins": ["Pacific"], "faoAreas": [{"code": 71, "counts": True}, {"code": 61, "counts": False}],
+                                 "countries": [{"code": "242", "counts": True}, {"code": "036", "counts": False}]},
+                "fao_area_names": {"71": "Pacific, Western Central", "61": "Pacific, Northwest"},
+                "country_names": {"242": {"name": "Fiji"}, "036": {"name": "Australia"}}, "main_ref": "Allen 1991"}
 
     def entry(self):
         return {"id": "id-1", "server": "fb", "specCode": "5111", "acceptedName": "Dascyllus melanurus", "inputName": "Jascyllus melanurus",
                 "resolution": "corrected", "categories": ["fish"]}
 
-    def test_build_profile_maps_source_fields(self):
-        p = build.build_profile(self.entry(), self.source())
+    def test_build_profile_maps_source_facts_without_copying_sentences(self):
+        targets = {("fb", 5112): ("id-2", "Dascyllus aruanus"), ("fb", 5111): ("id-1", "Dascyllus melanurus")}
+        p, passages = build.build_profile(self.entry(), self.source(), targets)
         self.assertEqual((p["commonName"], p["aliases"]), ("Blacktail humbug", ["Black-tailed dascyllus", "Damsel"]))
         self.assertEqual((p["colors"], p["markings"], p["bodyShapes"]), (["black", "white"], ["stripes"], ["compressed"]))
         self.assertEqual(p["habitats"], ["reef", "shallow"], "only pelagic species get open water")
-        self.assertEqual((p["behaviors"], p["regions"]), (["schooling"], ["fiji", "indo-pacific", "pacific"]))
-        self.assertEqual(p["measurements"], {"typicalObservedMinimumCentimeters": None, "typicalObservedMaximumCentimeters": None,
-                                             "maximumRecordedCentimeters": 54.8, "type": "standardLength"})
-        self.assertEqual((p["minimumDepthMeters"], p["maximumDepthMeters"], p["minimumSizeCentimeters"]), (1.0, 68.0, None))
-        self.assertEqual(p["summary"], "Adults inhabit sheltered lagoons. Feeds on plankton.", "fisheries, reference and specimen sentences are dropped")
-        self.assertEqual(p["typicalHabitat"], "Adults inhabit sheltered lagoons.")
-        self.assertEqual((p["geographicRange"], p["cautions"]), ("Western Pacific.", ["Venomous: avoid touching."]))
-        self.assertEqual((p["tailShape"], p["mouthAndHeadShape"]), ("truncate", ["terminal mouth"]))
+        self.assertEqual((p["behaviors"], p["regions"], p["subregions"]), (["schooling"], ["fiji", "indo-pacific", "pacific"], ["Western Central Pacific"]))
+        self.assertEqual(p["measurements"]["type"], "standardLength")
+        self.assertEqual((p["maximumSizeCentimeters"], p["minimumDepthMeters"], p["maximumDepthMeters"], p["minimumSizeCentimeters"]), (54.8, 1.0, 68.0, None))
+        self.assertEqual(p["summary"], "A reef-associated fish of the family Pomacentridae (damselfishes), recorded from the Pacific Ocean. "
+                                       "Reaches about 54.8 cm standard length. Recorded at depths of 1–68 m.")
+        self.assertEqual(p["typicalHabitat"], "Reef-associated; coral reefs; 1–68 m.")
+        self.assertEqual(p["geographicRange"], "Pacific Ocean. FAO areas: Western Central Pacific. Recorded from 1 country or territory.",
+                         "questionable areas and countries don't count")
+        self.assertEqual(p["similarSpecies"], [{"speciesID": "id-2", "distinguishingText": "Listed as similar in FishBase; compare with Dascyllus aruanus before confirming."}],
+                         "similar species resolve to pack records and never to the record itself")
+        source = p["dataSources"][0]
+        self.assertEqual((source["stableSourceID"], source["sourceName"], source["sourceLicense"]), ("FishBase:SpecCode:5111", "FishBase (v26.06)", "CC BY-NC 4.0"))
+        self.assertEqual(source["sourceURL"], "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5111")
+        self.assertIn("summary", source["reviewedFields"])
+        self.assertNotIn("appearanceVariants", source["reviewedFields"])
+        self.assertEqual((p["review"]["status"], p["bundledImage"], p["regionalOccurrenceNotes"]), ("draft", None, None))
         self.assertEqual(p["taxonomy"]["sourceScientificName"], "Jascyllus melanurus")
-        self.assertEqual(p["dataSources"][0]["stableSourceID"], "FishBase:SpecCode:5111")
-        self.assertEqual(p["dataSources"][0]["sourceLicense"], "CC BY-NC 4.0")
-        self.assertEqual((p["review"]["status"], p["bundledImage"]), ("draft", None))
+        all_text = " ".join([p["summary"], p["typicalHabitat"], p["geographicRange"], *p["distinguishingFeatures"]])
+        self.assertNotIn("Sumatra", all_text, "no source sentence is copied")
+        self.assertNotIn("sheltered lagoons", all_text)
+        self.assertEqual(len(passages), 3, "source passages are kept for the verbatim check")
 
-    def test_missing_source_text_uses_honest_fallbacks(self):
-        src = self.source(Comments=None, FBname=None, Length=None)
-        src.update(english_names=[], morphdat=None, range_text="", fao_names=[], countries=[])
-        p = build.build_profile(self.entry(), src)
-        self.assertEqual(p["commonName"], "Dascyllus melanurus")
-        self.assertEqual(p["summary"], "Pomacentridae species; reef-associated.")
-        self.assertTrue(p["distinguishingFeatures"])
-        self.assertEqual(p["geographicRange"], "No range recorded in FishBase.")
-        self.assertEqual((p["measurements"], p["maximumSizeCentimeters"]), (None, None))
+    def test_fields_without_a_source_stay_empty(self):
+        src = self.source(FBname=None, Length=None, DepthRangeShallow=None, DepthRangeDeep=None, DemersPelag=None, Dangerous="harmless", BodyShapeI=None)
+        src.update(english_names=[], morphdat=None, ecology=[], distribution=None, family={})
+        p, _ = build.build_profile(self.entry(), src, {})
+        self.assertEqual(p["commonName"], "Dascyllus melanurus", "no English name: the scientific name, flagged by the validator")
+        self.assertEqual((p["maximumSizeCentimeters"], p["measurements"], p["minimumDepthMeters"]), (None, None, None))
+        self.assertEqual((p["typicalHabitat"], p["geographicRange"], p["cautions"], p["habitats"], p["regions"]), ("", "", [], [], []))
+        self.assertEqual(p["summary"], "A fish.")
+        self.assertEqual(p["distinguishingFeatures"], ["Genus: Dascyllus."])
 
     def test_unique_names_and_alias_collisions(self):
         a = {"id": "a", "commonName": "Spotted Grouper", "scientificName": "Aus one", "aliases": ["Reef cod"]}
@@ -235,9 +268,22 @@ class BuildMappingTests(unittest.TestCase):
                 {"inputKind": "candidate", "inputID": "MARINE5K-00001", "pack": "", "role": "keep", "plannedUUID": "workbook-uuid"},
                 {"inputKind": "candidate", "inputID": "MARINE5K-00002", "pack": "", "role": "retire", "plannedUUID": "tp-1"},
                 {"inputKind": "candidate", "inputID": "MARINE5K-00003", "pack": "", "role": "unresolved", "plannedUUID": ""}]
-        entries = build.select_entries(plan, resolution, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}], {"tp-1": ["fish"]})
+        entries = build.select_entries(plan, resolution, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}])
         self.assertEqual([(e["inputID"], e["id"]) for e in entries], [("tp-1", "tp-1"), ("MARINE5K-00001", "workbook-uuid")])
-        self.assertEqual((entries[0]["categories"], entries[1]["categories"], entries[1]["candidateCategory"]), (["fish"], None, "shark"))
+        self.assertEqual(entries[1]["candidateCategory"], "shark")
+
+    def test_batches_are_written_resumably(self):
+        profiles = [{"id": str(i)} for i in range(build.BATCH_SIZE + 3)]
+        with tempfile.TemporaryDirectory() as directory:
+            drafts = Path(directory)
+            self.assertEqual(build.write_batches(profiles, drafts), {"batch-01": "written", "batch-02": "written"})
+            self.assertEqual(build.write_batches(profiles, drafts), {"batch-01": "unchanged", "batch-02": "unchanged"})
+            profiles[-1]["id"] = "changed"
+            self.assertEqual(build.write_batches(profiles, drafts), {"batch-01": "unchanged", "batch-02": "written"})
+            self.assertEqual(build.write_batches(profiles[:2], drafts), {"batch-01": "written", "batch-02": "removed"})
+            self.assertEqual(build.write_batches(profiles[:2], drafts, only=1), {"batch-01": "unchanged"})
+            manifest = __import__("json").loads((drafts / "manifest.json").read_text())
+            self.assertEqual(list(manifest["batches"]), ["batch-01"])
 
 
 class DistributionTests(unittest.TestCase):

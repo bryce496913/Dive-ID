@@ -429,6 +429,28 @@ Each step is a separate, reviewable change.
 `build.py` now builds exactly the merge plan's kept UUIDs: 962 Tropical Pacific
 records and 3,825 candidates. 5 existing app UUIDs are retired as aliases.
 
+## 10. Enrichment rebuild with original wording and risk flags (2026-10-21)
+
+The drafts are rebuilt (`Tools/FishBaseIntake/build.py`, builder version 2). Scope:
+every taxon the merge plan keeps, including the 962 Tropical Pacific records, which
+keep their UUIDs and no longer contain any field-guide text. The 8 Caribbean records
+are unchanged. Result: **4,787 drafts in 20 batches**.
+
+- **All text is original wording assembled from source facts.** The verbatim check
+  finds one 8-word overlap: a range that lists the same FAO area names as its source.
+- **Categories come from the source taxonomy.** They disagree with the candidate queue
+  for 10 cuttlefish (queue: squid; taxonomy: mollusk).
+- **Coverage:**
+  - 100%: categories, summary, distinguishing features, habitat text;
+  - ~100%: regions, range (all but 1);
+  - 96%: size; 92%: body shape; 87%: habitats; 79%: depth;
+  - 58%: colours; 51%: markings;
+  - 7%: similar species.
+- **Risk** (`Tools/CatalogReview/catalogue_validation.py`): 466 records are flagged,
+  almost all for "no English common name" (9.4%). Also: 1 missing required field, 1
+  near-verbatim overlap, 4 distribution missing, 16 depth outliers. No vocabulary or
+  OCR-junk flags. Only 2 records score above 20.
+
 ## Appendix A. Licence confirmation email (draft, not sent)
 
 **To:** fishbase@q-quatics.org
