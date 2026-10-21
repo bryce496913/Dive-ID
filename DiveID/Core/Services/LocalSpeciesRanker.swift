@@ -68,7 +68,7 @@ extension RankedLocalSpecies {
 }
 
 struct LocalRankingWeights: Sendable {
-    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, preferredRegion = 3.0
+    let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, preferredRegion = 3.0, outOfRange = -3.0
     let appearanceRelationship = 2.0, tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
 }
@@ -116,13 +116,14 @@ struct LocalSpeciesRanker: SpeciesRanking {
                 : (provisionalSemantic && observationInformation == .insufficient ? .limited : observationInformation)
             if hasExactName { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
-            switch regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions)) {
+            let described = regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions))
+            switch described {
             case .compatible:
                 score += weights.region
                 matched.append("geographic range")
             case .conflicting, .unspecified:
-                // Location is a boost, never a filter: a sighting outside the
-                // recorded range has no effect, so rare strays can still match.
+                // Location is never evidence against a species: an out-of-range
+                // sighting only lowers ordering below, so rare strays still match.
                 break
             }
             add(observation.habitats, profile.habitats, weights.habitat, &score, &matched)
@@ -191,8 +192,10 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let preferredRegionBoost = isInPreferredRegion(profile, input.preferredRegions) ? weights.preferredRegion : 0
             let orderingScore = score + relevanceContribution + occurrenceWeight(profile.regionalOccurrence) + preferredRegionBoost
             guard orderingScore > 0 else { return nil }
+            // Applied after eligibility, so the out-of-range penalty reorders but never removes.
+            let rangeAdjustedOrdering = orderingScore + (described == .conflicting ? weights.outOfRange : 0)
             if candidate.retrieval?.source == .semantic { matched.append("catalogue description similarity") }
-            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: orderingScore)
+            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: rangeAdjustedOrdering)
         }
         return rawCandidates.sorted { a, b in
             if a.orderingScore != b.orderingScore { return a.orderingScore > b.orderingScore }

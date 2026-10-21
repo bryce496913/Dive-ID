@@ -52,7 +52,10 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertEqual(result.candidates.first?.profile.commonName, "In Range", "in-range species rank first")
         XCTAssertTrue(inRange.matchedEvidence.contains("geographic range"))
         XCTAssertGreaterThan(inRange.rawScore, outOfRange.rawScore)
-        XCTAssertEqual(outOfRange.rawScore, unknown.rawScore, "per the contract, out of range scores exactly like an unknown range")
+        XCTAssertEqual(outOfRange.rawScore, unknown.rawScore, "out of range is not evidence against the species")
+        XCTAssertEqual(outOfRange.score, unknown.score, "confidence is unchanged")
+        XCTAssertLessThan(outOfRange.orderingScore, unknown.orderingScore, "out of range is ordered below unknown range")
+        XCTAssertEqual(result.candidates.map(\.profile.commonName), ["In Range", "Unknown Range", "Out Of Range"])
         XCTAssertFalse(outOfRange.conflictingEvidence.contains("geographic range"))
         XCTAssertFalse(unknown.matchedEvidence.contains("geographic range"))
     }

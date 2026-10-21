@@ -329,7 +329,7 @@ extension DescriptionSearchArchitectureTests {
 }
 
 extension DescriptionSearchArchitectureTests {
-    func testOutOfRangeSightingHasNoEffectOnScoreOrEligibility() async throws {
+    func testOutOfRangeSightingLowersOrderingOnly() async throws {
         let base = try await pack().profiles[0]
         let inRange = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000211")!, name: "In Range", regions: ["caribbean"])
         let outOfRange = try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000212")!, name: "Out Of Range", regions: ["indo-pacific"])
@@ -339,11 +339,15 @@ extension DescriptionSearchArchitectureTests {
         let ranked = try await LocalSpeciesRanker().rank(input: .init(description: description, observation: observation, candidates: [inRange, outOfRange, noRange].map {
             .init(speciesID: $0.id, profile: $0, retrieval: nil)
         }))
+        XCTAssertEqual(ranked.map(\.profile.commonName), ["In Range", "No Range", "Out Of Range"])
         let byName = Dictionary(uniqueKeysWithValues: ranked.map { ($0.profile.commonName, $0) })
         let stray = try XCTUnwrap(byName["Out Of Range"], "an out-of-range species must remain eligible")
         let unknown = try XCTUnwrap(byName["No Range"])
-        XCTAssertEqual(stray.rawScore, unknown.rawScore, "out of range must score exactly like an unknown range")
-        XCTAssertEqual(stray.orderingScore, unknown.orderingScore)
+        XCTAssertEqual(stray.rawScore, unknown.rawScore, "out of range is not evidence against the species")
+        XCTAssertEqual(stray.score, unknown.score, "confidence is unchanged")
+        XCTAssertEqual(stray.matchedClues, unknown.matchedClues)
+        XCTAssertEqual(stray.conflictingClues, unknown.conflictingClues, "no explanation is added")
+        XCTAssertEqual(stray.orderingScore, unknown.orderingScore - 3, accuracy: 1e-9, "only ordering is lowered")
         XCTAssertGreaterThan(try XCTUnwrap(byName["In Range"]).rawScore, stray.rawScore, "a named region still boosts in-range species")
     }
 
@@ -369,6 +373,26 @@ extension DescriptionSearchArchitectureTests {
             XCTAssertEqual(result.matchedClues, before.matchedClues)
         }
         XCTAssertEqual(boosted.count, neutral.count, "the preference never excludes a species")
+    }
+}
+
+extension DescriptionSearchArchitectureTests {
+    func testOutOfRangePenaltyNeverRemovesAMarginalCandidate() async throws {
+        let base = try await pack().profiles[0]
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(
+            try syntheticCopy(base, id: UUID(uuidString: "00000000-0000-0000-0000-000000000231")!, name: "Marginal Stray", regions: ["indo-pacific"]))) as? [String: Any])
+        object["regionalOccurrence"] = "rare"  // −3 ordering prior
+        let stray = try JSONDecoder().decode(LocalSpeciesProfile.self, from: JSONSerialization.data(withJSONObject: object))
+        // Category (6) minus the rare prior (3) leaves an ordering score of exactly 3 before
+        // the penalty, so a penalty applied before the eligibility check would remove it.
+        let description = "a fish in the Caribbean"
+        let observation = await LocalObservationParser().parse(description)
+        let ranked = try await LocalSpeciesRanker().rank(input: .init(description: description, observation: observation, candidates: [
+            .init(speciesID: stray.id, profile: stray, retrieval: nil)
+        ]))
+        let result = try XCTUnwrap(ranked.first, "an eligible out-of-range species is never removed")
+        XCTAssertEqual(result.rawScore, 6, "precondition: category evidence only, so ordering is 3 before the penalty")
+        XCTAssertEqual(result.orderingScore, 0, accuracy: 1e-9, "rare prior and out-of-range penalty lower ordering only")
     }
 }
 
