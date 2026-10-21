@@ -15,7 +15,7 @@ enum CatalogueVocabulary {
         "anemone", "deep", "lagoon", "mangrove", "open water", "reef", "rubble", "sand", "seagrass", "shallow", "surface", "wall", "wreck"
     ]
     static let categories: Set<String> = [
-        "crustacean", "eel", "fish", "mollusk", "octopus", "ray", "seahorse", "shark", "squid", "turtle"
+        "crustacean", "eel", "fish", "horseshoe crab", "jellyfish", "mollusk", "octopus", "ray", "sea cucumber", "sea squirt", "sea urchin", "seahorse", "shark", "squid", "turtle", "worm"
     ]
     static let behaviors: Set<String> = [
         "anemone association", "bottom-swimming", "burrowing", "cleaning", "feeding", "grazing", "hiding", "hovering", "open-water cruising", "resting", "schooling", "solitary", "swimming"

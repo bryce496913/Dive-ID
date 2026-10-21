@@ -255,5 +255,26 @@ class ReviewTests(unittest.TestCase):
             M.apply_decisions([current], document(item), CATALOGUE)
 
 
+class GlobalSchemaVocabularyTests(unittest.TestCase):
+    def setUp(self):
+        spec = importlib.util.spec_from_file_location("catalogue_validation", Path(__file__).with_name("catalogue_validation.py"))
+        self.V = importlib.util.module_from_spec(spec); spec.loader.exec_module(self.V)
+        self.valid = json.loads((Path(__file__).parents[2] / "DiveIDTests/Fixtures/CatalogueValidationCases.json").read_text())["validRecord"]
+
+    def test_every_length_basis_and_invertebrate_group_is_accepted(self):
+        for kind in ["standardLength", "discLength", "carapaceWidth", "shellLength", "mantleLength", "bodyLength"]:
+            with self.subTest(kind=kind):
+                r = copy.deepcopy(self.valid); r["measurements"] = {"typicalObservedMinimumCentimeters": None, "typicalObservedMaximumCentimeters": None, "maximumRecordedCentimeters": 10.0, "type": kind}
+                self.assertEqual(self.V.validate_record(r), [])
+        for group in ["sea cucumber", "sea urchin", "jellyfish", "worm", "sea squirt", "horseshoe crab"]:
+            with self.subTest(group=group):
+                r = copy.deepcopy(self.valid); r["categories"] = [group]
+                self.assertEqual(self.V.validate_record(r), [])
+
+    def test_unknown_length_basis_is_still_rejected(self):
+        r = copy.deepcopy(self.valid); r["measurements"] = {"maximumRecordedCentimeters": 10.0, "type": "notGiven"}
+        self.assertTrue(any("measurements.type" in e for e in self.V.validate_record(r)))
+
+
 if __name__ == "__main__":
     unittest.main()
