@@ -227,9 +227,9 @@ per-species location signal currently never applies to them.
 
 1. Remove the pack-level `regionMismatch` stop for the global pack. With one global pack
    there is no selected region to conflict with.
-2. Make a region conflict unable to change eligibility: compute eligibility without the
-   region term, then apply location only to ordering. A missing match should be a smaller
-   penalty or a lack of boost, not −12.
+2. Make a region conflict have no effect: compute eligibility without the region term,
+   and apply location only as an ordering boost. Per decision 11, an out-of-range species
+   gets no penalty at all; it simply gets no boost.
 3. Keep a match as a boost, and grade it by evidence: native/endemic in the named area >
    neighbouring area > introduced. Never treat `questionable`/`misidentification`/`error`
    rows as support.
@@ -240,9 +240,10 @@ per-species location signal currently never applies to them.
    result.
 6. Update `HybridRankingContract.md` and the ranking/region tests (including the existing
    `regionMismatch` and conflict tests) to the new contract.
-7. Retire the two-pack region selection UI (Home/Describe dive region, Dive Region
-   screen), or turn it into an optional "where are you diving?" boost. This affects the
-   recently built `SelectedPackState` flow.
+7. Per decision 10, turn the dive-region selection into an optional "where are you
+   diving?" setting that boosts species recorded in that region. It no longer switches
+   packs or blocks searches. This replaces the two-pack `SelectedPackState` flow: there is
+   always one global catalogue, and "no region selected" becomes a valid state.
 
 ## 6. Review process (decision 3) against the existing pipeline
 
@@ -252,7 +253,37 @@ candidates, which matches the review batch size. To implement decision 3:
 - the rules for what "flagged" means are written down and versioned (§7);
 - a failed sample marks the whole batch as returned, with the reason recorded.
 
-## 7. Decisions still needed from the owner
+## 7. Follow-up decisions
+
+### 7.1 Owner answers (2026-10-21)
+
+| # | Question | Owner decision |
+|---|---|---|
+| 1 | Licence | The catalogue stays CC BY-NC. No paid tier, ads or sponsorship without a new licence. |
+| 2 | Tropical Pacific text | Rebuild all 1,000 records from FishBase/SeaLifeBase, so every record has the same sourcing. |
+| 3 | Misspelled existing names | Fix them. Keep the original spelling in the crosswalk. |
+| 4 | Release pin | Pin `fb/v26.06` and `slb/v26.06`. |
+| 5 | Measurement types | Add Standard Length and the invertebrate length types to the schema. |
+| 6 | Size and depth ranges | Match on the full recorded ranges. |
+| 7 | Images | No images yet. |
+| 8 | Colours and markings | Extract them from description text, then review them. |
+| 10 | Region UI | Keep an optional "where are you diving?" selection. It boosts species from that region when finding a match. |
+| 11 | Out-of-range species | No effect at all. |
+| 12 | Attribution placement | A catalogue credits screen plus a source link on each species detail screen. |
+
+Consequences for §5.1: a region conflict changes neither eligibility nor ordering.
+Location only adds a boost, both from a place named in the description and from the
+optional dive-region selection. The pack-level `regionMismatch` stop goes away. The
+dive-region selection stays in the UI, but as an optional boost rather than a pack
+switch.
+
+### 7.2 Still open
+
+- **Written confirmation:** do we ask the FishBase/SeaLifeBase team in writing to confirm
+  that free, ad-free, IAP-free App Store distribution is non-commercial? (Recommended.)
+- **"Flagged" for review (item 9 below):** what makes a record flagged?
+
+### 7.3 Original question list
 
 1. **Licence confirmation:** will you ask the FishBase/SeaLifeBase team for written
    confirmation that free, ad-free, IAP-free distribution of derived records in an App
