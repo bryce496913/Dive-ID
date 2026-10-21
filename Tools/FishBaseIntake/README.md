@@ -37,3 +37,34 @@ Every other member of the group gets `duplicateOf`.
 
 **Outputs** (`Data/GlobalMarine/FishBase/`): `NameResolution.csv` has one row per
 input; `NameResolutionSummary.json` holds the counts.
+
+## Draft records (`build.py`, step 4)
+
+```sh
+python3 Tools/FishBaseIntake/build.py --offline   # after fetch.py and resolve.py
+```
+
+Builds one draft `LocalSpeciesProfile` per resolved, non-duplicate Tropical Pacific
+record or candidate, and writes review batches of 250 to
+`Data/GlobalMarine/FishBase/Drafts/batch-NN.json` plus `BuildReport.json`. The 8
+Caribbean records are kept as they are (2 are human-verified); the builder only
+reserves their names. Species that live in neither salt nor brackish water are
+excluded and listed in the report. Output is deterministic.
+
+The field mapping follows `Docs/GlobalMarine4000ActivationPlan.md` §4:
+- **Categories** come from the candidate queue, else the family, else the class.
+  Existing records keep their categories.
+- **Habitats** come from the `ecology` flags and `DemersPelag`, plus shallow/deep from
+  the depth range. "Open water" is used only for pelagic species.
+- **Regions** come from FAO areas and countries, excluding questionable,
+  misidentified and error records.
+- **Size and depth** use the full recorded ranges, with their length basis.
+- **Text** is made of whole sentences from `Comments` and `AddChars`, with reference
+  markers and HTML removed. Fishing/trade and specimen sentences are dropped.
+- **Colours and markings** are taken from the diagnosis text and reviewed with each
+  batch. Barbels come only from the structured barbel count.
+
+Every record is `draft`, licensed `CC BY-NC 4.0`, has no image, and cites its
+FishBase/SeaLifeBase SpecCode, species page and main reference. Duplicate common
+names get the scientific name appended; aliases that equal another species' name are
+dropped.

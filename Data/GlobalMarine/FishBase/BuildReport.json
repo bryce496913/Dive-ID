@@ -1,0 +1,43 @@
+{
+  "records": 4787,
+  "batches": 20,
+  "fromTropicalPacific": 963,
+  "fromCandidates": 3824,
+  "commonNamesDisambiguated": 61,
+  "excludedFreshwaterOnly": [
+    "Caridina nilotica",
+    "Cherax quadricarinatus",
+    "Macrobrachium dux"
+  ],
+  "missing": {
+    "categories": 0,
+    "colors": 2023,
+    "markings": 2334,
+    "bodyShapes": 384,
+    "habitats": 583,
+    "regions": 7,
+    "maximumSizeCentimeters": 177,
+    "maximumDepthMeters": 1002,
+    "typicalHabitat": 650,
+    "measurements": 255
+  },
+  "summaryFromFallback": 516,
+  "categories": {
+    "crustacean": 133,
+    "eel": 311,
+    "fish": 3984,
+    "horseshoe crab": 1,
+    "jellyfish": 5,
+    "mollusk": 86,
+    "octopus": 9,
+    "ray": 64,
+    "sea cucumber": 37,
+    "sea squirt": 1,
+    "sea urchin": 7,
+    "seahorse": 27,
+    "shark": 84,
+    "squid": 26,
+    "turtle": 6,
+    "worm": 6
+  }
+}
