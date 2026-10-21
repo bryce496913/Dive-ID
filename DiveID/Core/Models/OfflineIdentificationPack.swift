@@ -15,6 +15,7 @@ struct OfflineIdentificationPackID: RawRepresentable, Codable, Hashable, Sendabl
     }
     static let caribbean = Self(rawValue: "caribbean")
     static let tropicalPacific = Self(rawValue: "tropical-pacific")
+    static let global = Self(rawValue: "global")
 }
 
 struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Sendable {
@@ -60,9 +61,10 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
         return speciesCount == includedRecordCount || speciesCount == publicationEligibleRecordCount
     }
 
-    /// Missing or inconsistent accounting is deliberately treated as unapproved.
+    /// Missing or inconsistent accounting is deliberately treated as unapproved, and so
+    /// is an empty pack: having no records is not the same as every record being approved.
     var isExperimental: Bool {
-        guard hasValidPublicationAccounting, let publicationEligibleRecordCount else { return true }
+        guard hasValidPublicationAccounting, let publicationEligibleRecordCount, includedRecordCount != 0 else { return true }
         return speciesCount > publicationEligibleRecordCount
     }
 
@@ -71,6 +73,7 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
               let includedRecordCount, let publicationEligibleRecordCount,
               let draftRecordCount
         else { return "Review accounting unavailable — not approved for publication" }
+        if includedRecordCount == 0 { return "No records yet — not approved for publication" }
         if publicationEligibleRecordCount == includedRecordCount {
             return "All \(speciesCount) available records approved for publication"
         }
