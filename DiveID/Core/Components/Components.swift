@@ -137,7 +137,6 @@ struct SpeciesArtwork: View {
 
     private var symbolName: String {
         if species.commonName.contains("Turtle") { return "tortoise.fill" }
-        if species.commonName.contains("Ray") { return "skateboard.fill" }
         if species.commonName.contains("Shark") { return "fish.fill" }
         return "fish.fill"
     }

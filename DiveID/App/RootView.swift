@@ -24,10 +24,17 @@ struct RootView: View {
         case .descriptionSearch:
             DescriptionSearchView(viewModel: .init(sessionStore: sessionStore, catalog: catalogRepository, regionRepository: regionRepository), router: router)
         case .photoIdentification:
-            PhotoIdentificationView(
-                viewModel: .init(sessionStore: sessionStore, photoProcessor: photoProcessor),
-                router: router
-            )
+            // Guard the route itself so a programmatic push cannot open a disabled feature.
+            if features.photoIdentificationEnabled {
+                PhotoIdentificationView(
+                    viewModel: .init(sessionStore: sessionStore, photoProcessor: photoProcessor),
+                    router: router
+                )
+            } else {
+                EmptyStateView(title: "Photo identification unavailable", message: "Photo identification is not yet available.")
+                    .appScreenBackground()
+                    .navigationTitle("Identify From Photo")
+            }
         case .identificationResults(let sessionID):
             IdentificationResultsView(
                 viewModel: router.resultsModel(sessionID: sessionID, service: identificationService, catalog: catalogRepository),
@@ -57,7 +64,7 @@ struct RootView: View {
         sessionStore: store,
         photoProcessor: DefaultPhotoProcessingService(),
         catalogRepository: BundleMarineSpeciesCatalogRepository(),
-        regionRepository: UserDefaultsSelectedDiveRegionRepository()
-        , features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false)
+        regionRepository: UserDefaultsSelectedDiveRegionRepository(),
+        features: .init(photoIdentificationEnabled: false)
     )
 }

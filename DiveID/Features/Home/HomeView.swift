@@ -107,7 +107,7 @@ private struct SelectedPackSummary: View {
     NavigationStack {
         HomeView(
             router: AppRouter(),
-            features: .init(descriptionIdentificationEnabled: true, photoIdentificationEnabled: false),
+            features: .init(photoIdentificationEnabled: false),
             viewModel: .init(catalog: BundleMarineSpeciesCatalogRepository(), regionRepository: UserDefaultsSelectedDiveRegionRepository())
         )
     }
