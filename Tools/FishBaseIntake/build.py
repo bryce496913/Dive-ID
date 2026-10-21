@@ -318,8 +318,12 @@ def lives_in_sea(species_row):
     return truthy(species_row.get("Saltwater")) or truthy(species_row.get("Brack"))
 
 
-def select_entries(resolution_rows, candidate_rows, existing_categories):
-    """Records to build: resolved, non-duplicate Tropical Pacific records and candidates."""
+def select_entries(resolution_rows, candidate_rows, existing_categories, crosswalk_ids=None):
+    """Records to build: resolved, non-duplicate Tropical Pacific records and candidates.
+    A candidate keeps its intake-crosswalk UUID, which reuses an existing workbook
+    identity where there is one; uuid5 of the candidate ID is the crosswalk's own rule
+    for new identities."""
+    crosswalk_ids = crosswalk_ids or {}
     categories = {r["candidateID"]: r["proposedAppCategory"] for r in candidate_rows}
     entries = []
     for row in resolution_rows:
@@ -330,7 +334,8 @@ def select_entries(resolution_rows, candidate_rows, existing_categories):
         if row["inputKind"] == "existing":
             entry_id, cats = row["inputID"], existing_categories.get(row["inputID"], [])
         else:
-            entry_id, cats = str(uuid.uuid5(CANDIDATE_NAMESPACE, row["inputID"])), None
+            entry_id = crosswalk_ids.get(row["inputID"]) or str(uuid.uuid5(CANDIDATE_NAMESPACE, row["inputID"]))
+            cats = None
         entries.append(dict(row, id=entry_id, candidateCategory=categories.get(row["inputID"]), categories=cats))
     return entries
 
@@ -347,7 +352,9 @@ def main(argv=None):
     packs = REPO / "DiveID/Resources/IdentificationPacks"
     existing = {name: json.loads((packs / name / "Creatures.json").read_text()) for name in ("Caribbean", "TropicalPacific")}
     existing_categories = {r["id"]: r.get("categories", []) for r in existing["TropicalPacific"]}
-    entries = select_entries(resolution, candidates, existing_categories)
+    with open(REPO / "Data/GlobalMarine/IntakeCrosswalk.csv", newline="") as f:
+        crosswalk_ids = {r["candidateID"]: r["speciesID"] for r in csv.DictReader(f) if r["queue"] == "primary"}
+    entries = select_entries(resolution, candidates, existing_categories, crosswalk_ids)
     sources = load_sources(fetch.load_manifest(), args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries})
     profiles, freshwater_only = [], []
     for e in entries:

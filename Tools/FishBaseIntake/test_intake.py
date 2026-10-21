@@ -8,7 +8,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # noqa: E402
+import distribution  # noqa: E402
 import fetch  # noqa: E402
+import merge_plan  # noqa: E402
 import resolve  # noqa: E402
 
 
@@ -233,9 +235,85 @@ class BuildMappingTests(unittest.TestCase):
         ]
         entries = build.select_entries(rows, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}], {"tp-1": ["fish"]})
         self.assertEqual([e["inputID"] for e in entries], ["tp-1", "MARINE5K-00001"])
+        linked = build.select_entries(rows, [], {"tp-1": ["fish"]}, {"MARINE5K-00001": "workbook-uuid"})
+        self.assertEqual(linked[1]["id"], "workbook-uuid", "a candidate keeps its crosswalk (workbook) identity")
         self.assertEqual(entries[0]["id"], "tp-1")
         self.assertEqual(entries[1]["id"], str(build.uuid.uuid5(build.CANDIDATE_NAMESPACE, "MARINE5K-00001")), "same identity scheme as GlobalMarineImport")
         self.assertEqual(entries[1]["candidateCategory"], "shark")
+
+
+class DistributionTests(unittest.TestCase):
+    def test_basins_come_only_from_trusted_fao_records(self):
+        entry = distribution.distribution_for(
+            [{"AreaCode": 31, "Status": "native"}, {"AreaCode": 71, "Status": "questionable"}, {"AreaCode": 37, "Status": "introduced"}],
+            [{"C_Code": "044", "Status": "native"}, {"C_Code": "242", "Status": "misidentification"}])
+        self.assertEqual(entry["oceanBasins"], ["Atlantic", "Mediterranean and Black Sea"])
+        self.assertEqual([(a["code"], a["counts"]) for a in entry["faoAreas"]], [(31, True), (37, True), (71, False)])
+        self.assertEqual([(c["code"], c["counts"]) for c in entry["countries"]], [("044", True), ("242", False)])
+        self.assertTrue(entry["distributionKnown"])
+
+    def test_no_trusted_record_means_unknown_distribution(self):
+        entry = distribution.distribution_for([{"AreaCode": 71, "Status": "error"}], [])
+        self.assertEqual((entry["oceanBasins"], entry["distributionKnown"]), ([], False))
+
+    def test_snapshot_round_trips_and_fails_closed(self):
+        source = {"fb/v26.06/faoareas": "etag-1"}
+        payload = {"species": {"fb:1": {"oceanBasins": ["Atlantic"]}}}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "Distribution.json"
+            distribution.write_snapshot(path, source, payload)
+            self.assertEqual(distribution.read_snapshot(path, source), payload)
+            with self.assertRaises(distribution.IntegrityError, msg="a different pinned source"):
+                distribution.read_snapshot(path, {"fb/v26.06/faoareas": "etag-2"})
+            path.write_text(path.read_text().replace("Atlantic", "Pacific"))
+            with self.assertRaises(distribution.IntegrityError, msg="an edited payload"):
+                distribution.read_snapshot(path, source)
+
+    def test_source_names_every_pinned_table_and_etag(self):
+        manifest = {"servers": {"fb": {"release": "v1", "tables": {t: {"etag": f"e-{t}"} for t in distribution.TABLES}}}}
+        self.assertEqual(distribution.source_of(manifest), {f"fb/v1/{t}": f"e-{t}" for t in distribution.TABLES})
+
+
+class MergePlanTests(unittest.TestCase):
+    def resolution(self, kind, input_id, code, name="Aus bus", resolution="exact"):
+        return {"inputKind": kind, "inputID": input_id, "resolution": resolution, "server": "fb" if code else "",
+                "specCode": str(code) if code else "", "acceptedName": name}
+
+    def crosswalk(self, *rows):
+        return {cid: {"sourceName": name, "speciesID": sid, "identityStatus": status} for cid, name, sid, status in rows}
+
+    def test_existing_uuid_wins_and_candidates_retire(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus bus"}]
+        crosswalk = self.crosswalk(("C-1", "Aus bus", "wb-1", "existing_identity"), ("C-2", "Cus dus", "new-2", "new_provisional_identity"))
+        rows, report = merge_plan.plan(existing, crosswalk, [self.resolution("existing", "app-1", 1), self.resolution("candidate", "C-1", 1),
+                                                             self.resolution("candidate", "C-2", 2, "Cus dus")])
+        roles = {r["inputID"]: (r["role"], r["plannedUUID"]) for r in rows}
+        self.assertEqual(roles, {"app-1": ("keep", "app-1"), "C-1": ("retire", "app-1"), "C-2": ("keep", "new-2")})
+        self.assertEqual((report["status"], report["collisions"], report["retiredUUIDs"]), ("ready", 1, 1))
+
+    def test_workbook_identity_wins_over_new_identities(self):
+        crosswalk = self.crosswalk(("C-1", "Aus bus", "new-1", "new_provisional_identity"), ("C-2", "Aus bussa", "wb-2", "existing_identity"))
+        rows, _ = merge_plan.plan([], crosswalk, [self.resolution("candidate", "C-1", 1), self.resolution("candidate", "C-2", 1, resolution="synonym")])
+        self.assertEqual({r["plannedUUID"] for r in rows}, {"wb-2"})
+
+    def test_two_existing_records_for_one_taxon_stop_the_plan(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus bus"},
+                    {"id": "app-2", "pack": "TropicalPacific", "scientificName": "Aus oldname"}]
+        rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", 1), self.resolution("existing", "app-2", 1, resolution="synonym")])
+        self.assertTrue(report["status"].startswith("blocked"))
+        self.assertEqual(report["conflicts"][0]["uuids"], ["app-1", "app-2"])
+        self.assertEqual({r["role"] for r in rows}, {"conflict"}, "no UUID is chosen for a conflicted taxon")
+
+    def test_one_uuid_for_two_taxa_is_a_conflict(self):
+        crosswalk = self.crosswalk(("C-1", "Aus bus", "wb-1", "existing_identity"), ("C-2", "Cus dus", "wb-1", "existing_identity"))
+        _, report = merge_plan.plan([], crosswalk, [self.resolution("candidate", "C-1", 1), self.resolution("candidate", "C-2", 2, "Cus dus")])
+        self.assertEqual(report["conflicts"][0]["kind"], "one UUID claimed by several taxa")
+
+    def test_unresolved_inputs_are_listed_not_merged(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Opistognathus sp."}]
+        rows, report = merge_plan.plan(existing, {}, [self.resolution("existing", "app-1", None, resolution="unresolved")], {"C-1": "pending"})
+        self.assertEqual((rows[0]["role"], rows[0]["plannedUUID"]), ("unresolved", ""))
+        self.assertEqual((report["unresolvedInputs"]["existing"], report["wormsConfirmedCandidates"]), (1, 0))
 
 
 if __name__ == "__main__":

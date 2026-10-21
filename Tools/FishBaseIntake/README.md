@@ -68,3 +68,44 @@ Every record is `draft`, licensed `CC BY-NC 4.0`, has no image, and cites its
 FishBase/SeaLifeBase SpecCode, species page and main reference. Duplicate common
 names get the scientific name appended; aliases that equal another species' name are
 dropped.
+
+## Distribution staging (`distribution.py`)
+
+```sh
+python3 Tools/FishBaseIntake/distribution.py --offline   # after resolve.py
+```
+
+Stages each resolved species' ocean basins, FAO areas and countries in
+`Data/GlobalMarine/FishBase/Distribution.json`. The snapshot follows the WoRMS cache
+rules:
+- it records its exact source (the pinned table keys and ETags), when it was produced,
+  its state and payload, and the payload's SHA-256;
+- every read checks the schema, source and hash, and fails closed on any mismatch;
+- a valid snapshot for the same source is reused; a new source needs a fresh output
+  path, and a snapshot is never edited in place;
+- writes are atomic.
+
+Records with status questionable, misidentification, error, not established or
+extirpated are kept with their status but never count towards ocean basins. Country
+names and FAO area names are stored once, in shared lookups.
+
+## Merge plan (`merge_plan.py`)
+
+```sh
+python3 Tools/FishBaseIntake/merge_plan.py   # exit status 2 when the plan has conflicts
+```
+
+Maps every existing app record and every primary candidate to one UUID per accepted
+taxon (FishBase/SeaLifeBase SpecCode), never changing an existing UUID. The kept UUID
+is, in order:
+1. the existing app record's UUID;
+2. otherwise the one workbook identity among the candidates (`IntakeCrosswalk.csv`);
+3. otherwise the first candidate's UUID in queue order.
+
+Other UUIDs are retired as aliases. These stop the plan for a decision:
+- two existing app records for one taxon;
+- two workbook identities for one taxon;
+- one UUID claimed by two taxa.
+
+Outputs: `MergePlan.csv` and `MergePlanReport.json`. `build.py` gives candidates their
+crosswalk UUID, so workbook identities are kept.

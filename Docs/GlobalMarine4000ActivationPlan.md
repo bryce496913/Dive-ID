@@ -396,6 +396,46 @@ Each step is a separate, reviewable change.
 6. **Global pack + app**: one global pack replaces Caribbean/Tropical Pacific, with a
    credits screen and a source link on each species detail screen.
 
+## 9. Global pack, distribution and merge plan (2026-10-21)
+
+- **Global pack registered** (`OfflineIdentificationPackID.global`, `GlobalRegion`,
+  registry entry). Its manifest is experimental, declares no region aliases and holds
+  an empty `Creatures.json`. Release builds don't offer it because it has no approved
+  records; Debug lists it with 0 species. The Caribbean and Tropical Pacific packs are
+  unchanged.
+- **Distribution staged** for 4,798 species (`Data/GlobalMarine/FishBase/Distribution.json`,
+  WoRMS-style integrity rules). 4,796 have a known distribution.
+- **Merge plan** (`MergePlan.csv`, `MergePlanReport.json`): 4,798 accepted taxa, 168
+  collisions settled by keeping one UUID and retiring 165 as aliases. It is
+  **blocked by 3 conflicts**, each a pair or trio of existing Tropical Pacific records
+  that FishBase treats as one species:
+  - *Hippocampus kuda* / *moluccensis* / *taeniopterus*;
+  - *Apogon fuscus* / *guamensis* (now *Nectamia fusca*);
+  - *Epinephelus areolatus* / *waandersi*.
+- **WoRMS taxonomy has not run.** All 4,000 candidates are `pending`, so 0 are
+  WoRMS-confirmed. The plan therefore uses FishBase/SeaLifeBase as its taxon authority.
+- **Fixed:** the step-4 drafts gave 307 candidates new UUIDs instead of their workbook
+  identities from the intake crosswalk. `build.py` now uses the crosswalk UUID.
+
+### 9.1 Decisions needed
+
+1. **Default region for new installs.** Making Global the default now would put new
+   installs on an empty pack: Release would show "Dive region unavailable", Debug would
+   show 0 species, and the UI test expecting "Dive region: Caribbean" would fail.
+   Also, a selection is stored only once a user changes it. Existing users who never
+   chose a region have nothing stored, so they can't be told apart from new installs;
+   a new default would move them too. Proposed: switch the default when Global is
+   populated, and treat "no stored selection" as Global from then on, since that is
+   the catalogue that contains everything.
+2. **Lowering out-of-range species.** That would reverse decision 11 ("no effect at
+   all") and the Location section of `HybridRankingContract.md`, so it is not
+   implemented. If wanted, it should be an ordering-only penalty that never changes
+   eligibility, confidence or explanations, the mirror image of the dive-region boost.
+3. **The 3 merge conflicts.** Which UUID should each species keep? Retired UUIDs stay
+   as aliases, and saved identifications keep their own species snapshot.
+4. **Taxon authority.** Should FishBase/SeaLifeBase resolution count as "confirmed" for
+   the merge, given that WoRMS cannot be reached from these environments?
+
 ## Appendix A. Licence confirmation email (draft, not sent)
 
 **To:** fishbase@q-quatics.org
