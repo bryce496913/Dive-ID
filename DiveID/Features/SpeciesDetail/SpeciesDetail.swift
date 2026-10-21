@@ -15,14 +15,14 @@ struct SpeciesDetailView: View {
                         if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
                     }
                 }
-                PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved" : "Save Identification") {
+                PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved Identifications" : "Save Identification") {
                     Task { await viewModel.toggleSaved() }
                 }
                 .accessibilityIdentifier("toggleSaved")
                 .disabled(viewModel.isUpdatingSavedState)
                 if let error = viewModel.errorMessage {
                     Text(error).foregroundStyle(Color.appError)
-                    Button("Retry saved storage") { Task { await viewModel.retry() } }
+                    Button(AppCopy.tryAgain) { Task { await viewModel.retry() } }
                         .disabled(viewModel.isUpdatingSavedState)
                 }
                 DetailSection(title: "Identification summary", text: viewModel.species.summary)
@@ -38,14 +38,14 @@ struct SpeciesDetailView: View {
                 if !viewModel.species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: viewModel.species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
                 if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
                 if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
-                if let pack = viewModel.species.packContext { DetailSection(title: "Offline pack", text: pack.displayName) }
+                if let pack = viewModel.species.packContext { DetailSection(title: "Dive region", text: pack.displayName) }
                 if let review = viewModel.species.review {
-                    DetailSection(title: "Record review status", text: review.status == .verified ? "Human-reviewed and approved for publication" : "\(review.status.rawValue.capitalized) — experimental record; identity and biological accuracy are not verified")
+                    DetailSection(title: "Record review status", text: review.status == .verified ? "Human-reviewed and approved for publication" : AppCopy.draftRecordStatus(review.status.rawValue.capitalized))
                 }
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
                 if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
-                DetailSection(title: "Accuracy", text: "Offline match suggestions may be inaccurate. Confirm important sightings with a qualified local guide or trusted reference.")
+                DetailSection(title: "Accuracy", text: AppCopy.accuracyDisclaimer)
             }
             .padding()
         }

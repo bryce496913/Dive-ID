@@ -7,7 +7,7 @@ enum PhotoSelectionError: Equatable {
 
     var message: String {
         switch self {
-        case .sessionLimitReached: "Finish an existing search by going back before starting another."
+        case .sessionLimitReached: AppCopy.sessionCapacityReached
         case .unableToRead: "The selected item could not be read. Please choose another photo."
         case .unsupportedFormat: "That image format is not supported. Please choose a JPEG, PNG, or HEIF photo."
         case .decodingFailed: "The selected image could not be decoded. Please choose another photo."

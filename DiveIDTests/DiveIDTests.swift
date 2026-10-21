@@ -36,7 +36,7 @@ final class DiveIDTests: XCTestCase {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         XCTAssertEqual(
             IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: false),
-            "The offline species catalogue could not be loaded."
+            "The offline catalogue could not be loaded."
         )
     }
 
@@ -44,7 +44,7 @@ final class DiveIDTests: XCTestCase {
     func testCatalogueFailureDebugMessageShowsOnlyStableCode() {
         let failure = CatalogueLoadFailure(packID: .caribbean, code: .speciesResourceMissing, catalogError: .resourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
         let message = IdentificationResultsViewModel.message(for: .catalogueLoadFailed(failure), includesDiagnostics: true)
-        XCTAssertEqual(message, "The offline species catalogue could not be loaded.\nDiagnostic: CATALOG_SPECIES_RESOURCE_MISSING")
+        XCTAssertEqual(message, "The offline catalogue could not be loaded.\nDiagnostic: CATALOG_SPECIES_RESOURCE_MISSING")
         XCTAssertFalse(message.contains("IdentificationPacks"))
         XCTAssertFalse(message.contains("resourceMissing"))
     }
@@ -54,7 +54,7 @@ final class DiveIDTests: XCTestCase {
         let metadata = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 78)
         let viewModel = try await loadedResultsViewModel(requestRegion: .caribbean, metadata: [metadata])
 
-        XCTAssertEqual(viewModel.loadingMessage, "Searching the Caribbean offline pack…")
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the Caribbean dive region…")
         XCTAssertEqual(viewModel.resultsSummary, "Matches from 78 locally stored Caribbean records")
     }
 
@@ -64,7 +64,7 @@ final class DiveIDTests: XCTestCase {
         let metadata = resultPackMetadata(id: tropicalPacific, displayName: "Tropical Pacific", speciesCount: 1_650)
         let viewModel = try await loadedResultsViewModel(requestRegion: tropicalPacific, metadata: [metadata])
 
-        XCTAssertEqual(viewModel.loadingMessage, "Searching the Tropical Pacific offline pack…")
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the Tropical Pacific dive region…")
         XCTAssertEqual(viewModel.resultsSummary, "Matches from \(1_650.formatted()) locally stored Tropical Pacific records")
     }
 
@@ -99,7 +99,7 @@ final class DiveIDTests: XCTestCase {
         await reopenedViewModel.loadIfNeeded()
 
         XCTAssertEqual(initialViewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
-        XCTAssertEqual(reopenedViewModel.loadingMessage, "Searching the Submitted Region offline pack…")
+        XCTAssertEqual(reopenedViewModel.loadingMessage, "Searching the Submitted Region dive region…")
         XCTAssertEqual(reopenedViewModel.resultsSummary, "Matches from 12 locally stored Submitted Region records")
         XCTAssertFalse(reopenedViewModel.resultsSummary.contains("Later Preference"))
         let identificationCallCount = await service.callCount()
@@ -121,8 +121,8 @@ final class DiveIDTests: XCTestCase {
 
         await viewModel.loadIfNeeded()
 
-        XCTAssertEqual(viewModel.loadingMessage, "Searching the selected offline pack…")
-        XCTAssertEqual(viewModel.resultsSummary, "Matches from the selected offline pack")
+        XCTAssertEqual(viewModel.loadingMessage, "Searching the selected dive region…")
+        XCTAssertEqual(viewModel.resultsSummary, "Matches from the selected dive region")
         let identificationCallCount = await service.callCount()
         XCTAssertEqual(identificationCallCount, 1)
         guard case .loaded = viewModel.state else { return XCTFail("Expected identification to remain loaded") }

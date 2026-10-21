@@ -7,7 +7,7 @@ enum AppRoute: Hashable {
     case identificationResults(sessionID: UUID)
     case speciesDetail(Species, IdentificationMatch?)
     case savedIdentification(SavedIdentification)
-    case savedSpecies
+    case savedIdentifications
     case offlineRegions
 }
 

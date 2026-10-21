@@ -27,7 +27,7 @@ final class DescriptionSearchViewModel {
             let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: pack.id))
             return try await sessionStore.createSession(for: request, photo: nil)
         } catch IdentificationSessionStoreError.capacityReached {
-            errorMessage = "Finish an existing search by going back before starting another."
+            errorMessage = AppCopy.sessionCapacityReached
             return nil
         } catch is CancellationError {
             return nil
@@ -62,7 +62,7 @@ struct DescriptionSearchView: View {
                 Text("\(viewModel.descriptionText.count) characters")
                     .font(.caption).frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(Color.appTextSecondary)
-                Label("Your description is processed on this device using Dive ID’s offline marine-life catalogue.", systemImage: "iphone")
+                Label("Your description is processed on this device using Dive ID’s offline catalogue.", systemImage: "iphone")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 Label("Offline results are limited to species currently included with this version of Dive ID.", systemImage: "tray.full")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
