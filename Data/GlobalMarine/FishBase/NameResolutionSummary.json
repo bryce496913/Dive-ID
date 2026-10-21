@@ -1,0 +1,22 @@
+{
+  "release": {
+    "fb": "v26.06",
+    "slb": "v26.06"
+  },
+  "license": "CC BY-NC 4.0 (FishBase.org / SeaLifeBase.org team)",
+  "inputs": 5008,
+  "counts": {
+    "candidate.ambiguous": 3,
+    "candidate.exact": 3799,
+    "candidate.synonym": 194,
+    "candidate.unresolved": 4,
+    "existing.ambiguous": 3,
+    "existing.corrected": 125,
+    "existing.exact": 703,
+    "existing.synonym": 147,
+    "existing.unresolved": 30
+  },
+  "flagged": 6,
+  "duplicates": 170,
+  "uniqueResolvedSpecies": 4798
+}

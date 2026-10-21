@@ -1,0 +1,187 @@
+{
+  "license": "CC BY-NC 4.0 (FishBase.org / SeaLifeBase.org team)",
+  "listedOn": "2026-10-21",
+  "servers": {
+    "fb": {
+      "release": "v26.06",
+      "tables": {
+        "classes": {
+          "etag": "720c7cb9f363b55ffbde791dd9b4452c",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/classes.parquet",
+          "size": 7207
+        },
+        "comnames": {
+          "etag": "f07ec09d6d86cc4c1aa457280ad3052e",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/comnames.parquet",
+          "size": 10260470
+        },
+        "countref": {
+          "etag": "a221fabe71cca42a2b8181ca91cb951f",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/countref.parquet",
+          "size": 293801
+        },
+        "country": {
+          "etag": "59497643a0e3e79151491c9622ca2ecf",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/country.parquet",
+          "size": 6200253
+        },
+        "ecology": {
+          "etag": "e5c130ffeb12f308601f22710c6a5a77",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/ecology.parquet",
+          "size": 923379
+        },
+        "ecosystem": {
+          "etag": "45b1c626578289834124c06e75a4ad66",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/ecosystem.parquet",
+          "size": 2475820
+        },
+        "ecosystemref": {
+          "etag": "2498f46683e672784e5469ed7a1563cc",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/ecosystemref.parquet",
+          "size": 207634
+        },
+        "families": {
+          "etag": "a96f5a7694ad122f019786502d82ba6b",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/families.parquet",
+          "size": 274721
+        },
+        "faoareas": {
+          "etag": "fe660d2ecc820f6d23dc22541f6b0c0c",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/faoareas.parquet",
+          "size": 774455
+        },
+        "faoarref": {
+          "etag": "e48a4daa30a8a9d508ece9a78777b29c",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/faoarref.parquet",
+          "size": 10606
+        },
+        "genera": {
+          "etag": "d2d5921bc9545e0d90832834f5c82025",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/genera.parquet",
+          "size": 993405
+        },
+        "morphdat": {
+          "etag": "4d5b9ce4854d20c5a6e5b52924510d52",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/morphdat.parquet",
+          "size": 4727647
+        },
+        "orders": {
+          "etag": "4057aec3ca9a0009a930209bd989c84f",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/orders.parquet",
+          "size": 39802
+        },
+        "refrens": {
+          "etag": "050dc6933b7ccc0454bcffab0f217023",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/refrens.parquet",
+          "size": 8725945
+        },
+        "species": {
+          "etag": "0208d896c3a75868c1650c04a2eb4330",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/species.parquet",
+          "size": 3469911
+        },
+        "stocks": {
+          "etag": "d6eddaf7d6c4726c50c6afdc29f50c43",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/stocks.parquet",
+          "size": 2452139
+        },
+        "synonyms": {
+          "etag": "42d92d32ee7e71d8b2dd899b7eb69f9e",
+          "key": "cboettig/fishbase/fb/v26.06/parquet/synonyms.parquet",
+          "size": 6461285
+        }
+      }
+    },
+    "slb": {
+      "release": "v26.06",
+      "tables": {
+        "classes": {
+          "etag": "3db0ac611083104ad6440b140c58ff5d",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/classes.parquet",
+          "size": 5706
+        },
+        "comnames": {
+          "etag": "4a9c0cb6af0fc20ce3835686dd8be3dc",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/comnames.parquet",
+          "size": 1543419
+        },
+        "countref": {
+          "etag": "3971893b27bbfb15bb7c60ac367ce496",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/countref.parquet",
+          "size": 289567
+        },
+        "country": {
+          "etag": "d33001196f28762f445541dcced0c327",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/country.parquet",
+          "size": 3708523
+        },
+        "ecology": {
+          "etag": "abadab4a1488d1ec934dd8fa7e89e92b",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/ecology.parquet",
+          "size": 1700151
+        },
+        "ecosystem": {
+          "etag": "428dd139d1d2ca05dc12870173da9a1f",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/ecosystem.parquet",
+          "size": 4540919
+        },
+        "ecosystemref": {
+          "etag": "8852f5788183b7529d3dd3ecf19b6f10",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/ecosystemref.parquet",
+          "size": 212005
+        },
+        "families": {
+          "etag": "5d7052e57a4d58eaac425a4e5fe1e177",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/families.parquet",
+          "size": 240253
+        },
+        "faoareas": {
+          "etag": "dbed46967c9db91e8fd988e15912d2a8",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/faoareas.parquet",
+          "size": 1207759
+        },
+        "faoarref": {
+          "etag": "dfbc4c92375af12fa2e4e92feda2b6a0",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/faoarref.parquet",
+          "size": 10777
+        },
+        "genera": {
+          "etag": "f38840221dec884fc648c661bedcb31a",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/genera.parquet",
+          "size": 611387
+        },
+        "morphdat": {
+          "etag": "842a560260eb29f65b00ed2deb2287a3",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/morphdat.parquet",
+          "size": 295779
+        },
+        "orders": {
+          "etag": "6e34106ea6ba8064d02623ae682ba1f3",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/orders.parquet",
+          "size": 26477
+        },
+        "refrens": {
+          "etag": "8c271adbeaa332c7f3ec064a3cf58c2a",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/refrens.parquet",
+          "size": 5594304
+        },
+        "species": {
+          "etag": "f176abbbc62ee9e22451be155f75f06a",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/species.parquet",
+          "size": 3890724
+        },
+        "stocks": {
+          "etag": "c6cb9339288ec17be88695930869c362",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/stocks.parquet",
+          "size": 1764064
+        },
+        "synonyms": {
+          "etag": "31c5089e191915f881d687322251e9a1",
+          "key": "cboettig/fishbase/slb/v26.06/parquet/synonyms.parquet",
+          "size": 5464165
+        }
+      }
+    }
+  },
+  "source": "https://s3.us-west-2.amazonaws.com/us-west-2.opendata.source.coop"
+}
