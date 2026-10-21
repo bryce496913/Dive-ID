@@ -375,11 +375,22 @@ Each step is a separate, reviewable change.
      *moluccensis* / *taeniopterus*, *Apogon fuscus* / *guamensis*, *Epinephelus
      waandersi* / *areolatus*).
    - **4,798 unique species.**
-4. **Record builder**: map tables to `LocalSpeciesProfile` (§4). Includes animal group
-   from taxonomy, full size/depth ranges with their length basis, regions from FAO
-   area/country/MEOW, range text from `StockDefs`, and summary/features rewritten from
-   `Comments`/`AddChars` with colours and markings extracted for review. `dataSources`
-   carries SpecCode, page URL, Main Ref and CC BY-NC 4.0. No images.
+4. **Record builder** (done, `Tools/FishBaseIntake/build.py`): **4,787 draft records**
+   in 20 review batches (`Data/GlobalMarine/FishBase/Drafts/`). That is 963 rebuilt
+   Tropical Pacific records plus 3,824 candidates; 3 freshwater-only species are
+   excluded. All drafts plus the 8 kept Caribbean records pass both the Python and the
+   Swift catalogue validators as one catalogue. Coverage: categories 100%, regions
+   ~100%, size 96%, depth 79%, body shape 92%, habitats 88%, colours 58%,
+   markings 51%. 61 common names were disambiguated with the scientific name.
+   Known gaps for step 6:
+   - **Minimum size:** FishBase gives only maximum lengths, but the ranker needs both a
+     minimum and a maximum to use a described size. Step 6 must treat a missing
+     minimum as 0 so size still counts with the full recorded range.
+   - **Similar species** (`morphdat.SimilarSpecies1/2`) are not mapped yet; they need
+     cross-references to Dive ID record IDs.
+   - **Source page links** use `…/summary/SpeciesSummary.php?ID=<SpecCode>`. This could
+     not be checked from this environment because FishBase is blocked here; confirm
+     before release.
 5. **Review batches**: 250 records per batch. Read flagged records in full, plus a
    seeded sample of 30; any error in the sample returns the batch.
 6. **Global pack + app**: one global pack replaces Caribbean/Tropical Pacific, with a
