@@ -277,11 +277,39 @@ optional dive-region selection. The pack-level `regionMismatch` stop goes away. 
 dive-region selection stays in the UI, but as an optional boost rather than a pack
 switch.
 
-### 7.2 Still open
+### 7.2 Review flags and data rules (owner answers, 2026-10-21)
 
-- **Written confirmation:** do we ask the FishBase/SeaLifeBase team in writing to confirm
-  that free, ad-free, IAP-free App Store distribution is non-commercial? (Recommended.)
-- **"Flagged" for review (item 9 below):** what makes a record flagged?
+A record is **flagged** (read in full) only if its name matched through a synonym that
+points to more than one species (17 candidates). Everything else is covered by the
+seeded sample of 30 per batch of 250. The other conditions considered are handled as
+data rules, not flags:
+
+| Condition | Rule |
+|---|---|
+| No animal group (59 candidates) | Assign a group from the record's taxonomy and fix it. Not flagged. |
+| No size or depth data | Leave the field blank. Not flagged. |
+| Hazard other than "harmless" | Not flagged. |
+| Range is free text only, with no structured area | Not flagged. |
+| Misspelled existing name (152) | Correct it, keep the original in the crosswalk. Not flagged. |
+| Extracted colours/markings | Not flagged; covered by the sample. The owner did not object to this suggestion. |
+
+The 59 ungrouped candidates are all invertebrates with known families:
+- sea cucumbers: 39 (Holothuriidae, Stichopodidae, Cucumariidae, Phyllophoridae)
+- sea urchins: 7 (Strongylocentrotidae, Echinidae, Arbaciidae, Toxopneustidae)
+- jellyfish: 5 (Pelagiidae, Ulmaridae, Stomolophidae)
+- marine worms: 6 (Arenicolidae, Onuphidae, Glyceridae, Nereididae, Lumbrineridae, Urechidae)
+- horseshoe crab: 1 (Limulidae)
+- sea squirt: 1 (Pyuridae)
+
+None of these groups exists in `CatalogueVocabulary.categories` today, so fixing them
+requires new categories (still open below).
+
+### 7.3 Still open
+
+- **New animal-group categories** for the 59 invertebrates (see above).
+- **Written licence confirmation:** the email draft is in Appendix A; it has not been sent.
+
+### 7.4 Original question list
 
 ### 7.3 Original question list
 
@@ -312,3 +340,52 @@ switch.
 11. **Out-of-range weighting:** no effect at all, or a small ordering-only penalty?
 12. **Attribution placement:** a catalogue credits screen plus per-species source links on
     the species detail screen. Is that acceptable?
+
+## Appendix A. Licence confirmation email (draft, not sent)
+
+**To:** fishbase@q-quatics.org
+
+That address comes from the FishBase team's message in the `rfishbase` README
+(<https://github.com/ropensci/rfishbase>). It invites reports to "FishBase and
+SeaLifeBase team" and is the only contact address published in the sources checked here.
+The FishBase and SeaLifeBase websites were not reachable from this environment, so check
+their "Contact us" pages before sending in case a licensing contact is listed.
+
+**Subject:** Licence confirmation: non-commercial use of FishBase and SeaLifeBase data in a free dive app
+
+> Dear FishBase and SeaLifeBase team,
+>
+> I am developing Dive ID, a free iPhone app that helps recreational divers identify
+> marine life they saw, from a written description. It works offline. Dive ID has no
+> advertising, no in-app purchases, no paid tier and no sponsorship, and I do not plan to
+> add any.
+>
+> I would like to build its species catalogue (about 5,000 marine species: fishes,
+> invertebrates and sea turtles) from FishBase and SeaLifeBase, using the database
+> snapshots published for rfishbase (FishBase v26.06 and SeaLifeBase v26.06). I would use
+> text and numeric data such as names, size, depth, habitat, distribution, morphology and
+> descriptions. I would summarise and normalise them for search, and I would not use any
+> photographs or drawings.
+>
+> I understand this content is licensed under CC BY-NC 4.0. My plan is:
+> - keep the derived catalogue under CC BY-NC 4.0, never use it commercially, and seek a
+>   separate licence before any paid feature, advertising or sponsorship;
+> - show a credits screen in the app with your recommended citations for FishBase and
+>   SeaLifeBase (with version), the licence and a link to it, and a note that the data
+>   was adapted;
+> - link each species in the app to its FishBase or SeaLifeBase species page and cite its
+>   Main Ref.
+>
+> Could you please confirm:
+> 1. that distributing this free app, without ads or purchases, through the Apple App
+>    Store is non-commercial use you are happy with;
+> 2. whether you require anything beyond the attribution above;
+> 3. whether you would like me to report errors I find while reviewing records, and in
+>    what format.
+>
+> Thank you for maintaining these resources.
+>
+> Kind regards,
+> Bryce Cameron
+> Dive ID
+
