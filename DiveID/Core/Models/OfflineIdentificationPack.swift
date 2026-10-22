@@ -87,6 +87,17 @@ struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Senda
 struct OfflineIdentificationPack: Sendable, Hashable {
     let metadata: OfflineIdentificationPackMetadata
     let profiles: [LocalSpeciesProfile]
+    /// Hash of the profiles, computed once when the pack is built, so search caches
+    /// can key on content without rehashing every profile on each query. In-process only.
+    let contentFingerprint: Int
+
+    init(metadata: OfflineIdentificationPackMetadata, profiles: [LocalSpeciesProfile]) {
+        self.metadata = metadata
+        self.profiles = profiles
+        var hasher = Hasher()
+        hasher.combine(profiles)
+        contentFingerprint = hasher.finalize()
+    }
 }
 
 enum RegionalOccurrenceStatus: String, Codable, Hashable, Sendable {

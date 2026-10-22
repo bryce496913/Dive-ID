@@ -46,42 +46,37 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
     }
 
     func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] {
-        guard limit > 0, !documents.isEmpty else { return [] }
+        try await retrieve(query: query, index: BM25Index(documents: documents), limit: limit)
+    }
+
+    /// Scores against a prebuilt index. The arithmetic is exactly the per-query
+    /// computation it replaces, so scores and ordering are unchanged.
+    func retrieve(query: String, index: BM25Index, limit: Int) async throws -> [RetrievedSpeciesCandidate] {
+        guard limit > 0, !index.entries.isEmpty else { return [] }
         let queryTerms = Self.terms(query).filter { !Self.stopWords.contains($0) }
         guard !queryTerms.isEmpty else { return [] }
         let uniqueQueryTerms = Array(Set(queryTerms)).sorted()
-        let indexed = documents.map { document in (document, Self.terms(document.combinedText)) }
-        let averageLength = max(1, Double(indexed.reduce(0) { $0 + $1.1.count }) / Double(indexed.count))
-
-        var documentFrequency: [String: Int] = [:]
-        for (_, terms) in indexed {
-            for term in Set(terms) where uniqueQueryTerms.contains(term) {
-                documentFrequency[term, default: 0] += 1
-            }
-        }
-
         let normalizedQuery = Self.normalizedPhrase(query)
-        let count = Double(indexed.count)
-        return indexed.compactMap { document, terms -> RetrievedSpeciesCandidate? in
-            let frequencies = Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +)
+        let count = Double(index.entries.count)
+        let averageLength = index.averageLength
+        return index.entries.compactMap { entry -> RetrievedSpeciesCandidate? in
             var score = 0.0
             var matches: [String] = []
             for term in uniqueQueryTerms {
-                guard let frequency = frequencies[term], frequency > 0 else { continue }
-                let df = Double(documentFrequency[term, default: 0])
+                guard let frequency = entry.termFrequencies[term], frequency > 0 else { continue }
+                let df = Double(index.documentFrequency[term, default: 0])
                 let inverseFrequency = log(1 + (count - df + 0.5) / (df + 0.5))
                 let tf = Double(frequency)
-                let denominator = tf + saturation * (1 - lengthNormalization + lengthNormalization * Double(terms.count) / averageLength)
+                let denominator = tf + saturation * (1 - lengthNormalization + lengthNormalization * Double(entry.length) / averageLength)
                 score += inverseFrequency * (tf * (saturation + 1)) / denominator
                 matches.append(term)
             }
 
-            let names = document.identityText.components(separatedBy: " | ").map(Self.normalizedPhrase)
-            let exactName = names.contains(normalizedQuery)
+            let exactName = entry.normalizedNames.contains(normalizedQuery)
             if exactName { score += 100 }
             guard score > 0 else { return nil }
             return RetrievedSpeciesCandidate(
-                speciesID: document.speciesID,
+                speciesID: entry.speciesID,
                 retrievalScore: score,
                 evidence: exactName ? .exactName : .fullText,
                 matchedTerms: matches
@@ -101,9 +96,39 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
         return words + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
     }
 
-    private static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }
+    static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }
 
     private static let stopWords: Set<String> = [
         "a", "an", "and", "animal", "at", "by", "in", "is", "it", "near", "of", "on", "the", "to", "with"
     ]
+}
+
+/// Per-document BM25 statistics, built once per catalogue content and reused by every
+/// query: term frequencies, lengths, the average length, document frequencies and the
+/// normalized names used for exact-name matches. Immutable, so safe to share.
+struct BM25Index: Sendable {
+    struct Entry: Sendable {
+        let speciesID: UUID
+        let termFrequencies: [String: Int]
+        let length: Int
+        let normalizedNames: [String]
+    }
+
+    let entries: [Entry]
+    let averageLength: Double
+    let documentFrequency: [String: Int]
+
+    init(documents: [SpeciesSearchDocument]) {
+        var documentFrequency: [String: Int] = [:]
+        entries = documents.map { document in
+            let terms = BM25SpeciesCandidateRetriever.terms(document.combinedText)
+            for term in Set(terms) { documentFrequency[term, default: 0] += 1 }
+            return Entry(speciesID: document.speciesID,
+                         termFrequencies: Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +),
+                         length: terms.count,
+                         normalizedNames: document.identityText.components(separatedBy: " | ").map(BM25SpeciesCandidateRetriever.normalizedPhrase))
+        }
+        averageLength = entries.isEmpty ? 1 : max(1, Double(entries.reduce(0) { $0 + $1.length }) / Double(entries.count))
+        self.documentFrequency = documentFrequency
+    }
 }

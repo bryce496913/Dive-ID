@@ -43,20 +43,55 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         self.access = access
     }
 
+    /// Lists packs from their manifests without decoding or validating every species
+    /// file. Each manifest must decode, match its pack ID, carry complete and consistent
+    /// review accounting and point at a species resource that exists; otherwise this
+    /// throws, as before. Release lists a pack only when its manifest counts approved
+    /// records and reports that count. Full validation, including that the records
+    /// match the manifest's counts, runs once when a pack is first opened (`loadPack`),
+    /// which fails closed exactly as before. A pack already opened is listed from its
+    /// validated records.
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
         var available: [OfflineIdentificationPackMetadata] = []
         for definition in registry.definitions {
-            let pack = try loadRawPack(id: definition.id)
-            let metadata = try accountingMetadata(for: pack)
-            guard case .publication = access else {
-                available.append(metadata)
+            if let raw = cachedRawPacks[definition.id] {
+                let metadata = try accountingMetadata(for: raw)
+                guard case .publication = access else { available.append(metadata); continue }
+                if raw.profiles.contains(where: Self.isPublicationEligible) {
+                    available.append(try publicationPack(from: raw, accounting: metadata).metadata)
+                }
                 continue
             }
-            if pack.profiles.contains(where: Self.isPublicationEligible) {
-                available.append(try publicationPack(from: pack, accounting: metadata).metadata)
+            let metadata = try listedMetadata(definition)
+            guard case .publication = access else { available.append(metadata); continue }
+            if let eligible = metadata.publicationEligibleRecordCount, eligible > 0 {
+                var exposed = metadata
+                exposed.speciesCount = eligible
+                available.append(exposed)
             }
         }
         return available
+    }
+
+    /// The manifest-level checks of a pack, without reading its species records.
+    private func listedMetadata(_ definition: RegionCatalogDefinition) throws -> OfflineIdentificationPackMetadata {
+        let metadata = try loadManifest(definition)
+        guard metadata.id == definition.id else {
+            throw failure(definition.id, .unsupportedPack, .unsupportedPack, manifestResource(definition), .validation)
+        }
+        guard let included = metadata.includedRecordCount, let reviewed = metadata.humanReviewedRecordCount,
+              let eligible = metadata.publicationEligibleRecordCount,
+              included >= 0, eligible >= 0, reviewed >= eligible, reviewed <= included, eligible <= included,
+              metadata.speciesCount == included
+        else {
+            throw failure(definition.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
+                          "IdentificationPacks/\(definition.id.rawValue)/PackManifest.json", .validation)
+        }
+        let root = "IdentificationPacks/" + definition.resourceDirectory
+        guard resourceURL(path: root + "/" + metadata.speciesResourceName, ext: "json") != nil else {
+            throw failure(definition.id, .speciesResourceMissing, .resourceMissing, root + "/" + metadata.speciesResourceName + ".json", .speciesResource)
+        }
+        return metadata
     }
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {

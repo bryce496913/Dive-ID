@@ -215,7 +215,7 @@ Remaining causes, found by inspecting the regressed Lined surgeonfish cases (#1 
 - **Clues with no source:** Bird wrasse colours, Black triggerfish fin-base lines and
   Spinecheek bar count.
 
-## Performance (host proxy, Release)
+## Performance (host measurements, Release)
 
 | Pack | Records | Load (median) | Document build | BM25 retrieval (median) | Query median | Query p95 | First query | RSS after queries (peak) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -242,6 +242,56 @@ Remaining causes, found by inspecting the regressed Lined surgeonfish cases (#1 
    31 ms at Global size.
 3. **Loading decodes and validates 13 MB of JSON,** and publication access does the
    same just to list packs.
+
+### After the BM25 index and manifest-only listing (2026-10-22, finding P2)
+
+**Host measurements** (Linux container, Release, 4 cores, Swift 6.1), not iPhone
+numbers. Raw figures: `Reports/GlobalPackPerformance.release.json`.
+
+**What changed:**
+- **BM25 index:** per-document term frequencies, lengths, the average length,
+  document frequencies and normalized names are built once per catalogue content.
+  The index is cached with the search documents and keyed by the pack's ID, version,
+  record count and a content fingerprint computed once when the pack is built.
+  Changed content gets a new entry.
+- **Cache key:** the search cache no longer hashes every profile on each query.
+- **Listing:** `availablePacks()` reads manifests only.
+
+| Pack | Records | Index build (once) | First query | BM25 retrieval (median) | Query median | Query p95 | RSS after queries (peak) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Caribbean | 8 | 5 ms | 33 ms | 0.3 ms | 12.5 ms (was 17.5) | 21 ms (was 25) | 31 MiB (31) |
+| Tropical Pacific | 1,000 | 724 ms | 803 ms | 2.2 ms | 39 ms (was 753) | 47 ms (was 1,033) | 49 MiB (49) |
+| **Global** | 4,786 | 4,837 ms | **5,869 ms** (was 6,924) | 11.7 ms | **103 ms (was 5,542)** | **153 ms (was 6,567)** | 154 MiB (was 117) |
+| Global batch-1 subset (Release-sized) | 250 | 393 ms | 494 ms | 0.6 ms | 81 ms | 123 ms | see note |
+
+- **Listing:** `availablePacks()` takes **0.35 ms** with Release access (was 942 ms)
+  and 0.32 ms with development access. Each sample uses a fresh repository.
+- **Samples:** 138 queries per pack (46 × 3), with 0 failures. Index build is 3
+  samples, retrieval 46.
+- **Memory:** VmRSS and VmHWM are cumulative in one process. The Global index adds
+  about 35 MiB resident. The subset row follows five more full Global loads, so its
+  memory figures are not comparable.
+- **Release subset:** Release currently exposes no Global records, because the
+  batch-01 approvals lapsed. The 250-record row is batch 1's records taken from
+  development content.
+
+**Ordering is identical.** `SearchGoldenOrderingTests` compares 685 query results
+(137 development queries × 5 packs) against outputs captured on `a687477` before the
+change: exact ranks and every score to 1e-9. A mutation of the index (document
+lengths + 1) fails 27,252 assertions.
+- **Exception, from a pre-existing issue:** one query, "a school of spotted rays
+  crossed the sandy channel", has its ranked scores excluded; its retrieved pool is
+  still compared. On `main` too, `LocalObservationParser` applies synonyms in hash
+  order, so "sandy" → "sand" → "bottom-swimming" happens in some processes and not
+  others. Fixing this would change that query's ranking, so it is left for an owner
+  decision.
+
+**Remaining cost:**
+- **First query on a pack's content** builds its index (Global 4.8 s on the host).
+  It is not persisted to disk.
+- **Warm queries:** about 80–100 ms of each warm Global query is ranking the 50
+  retrieved candidates. The ranker matches morphology patterns against each
+  candidate's fin and head clues on every query, and Global records carry many.
 
 ## Options (none applied; owner decision needed)
 
