@@ -80,4 +80,6 @@ records that went stale, to `Data/CatalogReview/GlobalBatches/AppliedApprovals.j
 | Batch | Generation | Manifest SHA-256 | Seed | Flagged | Sampled | Unread | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | approved 2026-10-22 by Bryce ("I have. approved all"). All 250 approvals lapsed when the builder v3 rebuild changed the records; see batch-01-rereview. |
-| batch-01-rereview | 1 | `d1e7e47d4724cd05f630bf162942734ba2271330bad79b220a15575d7bacfcfd` | 2799262242171053537 | 86 | 30 | 134 | awaiting review. All 250 batch-01 records changed in the builder v3 rebuild (2026-10-22): 221 in identification content and 29 only in the new `dataSources.sourceFields` provenance list. None keeps its approval. |
+| batch-01-rereview | 1 | `d1e7e47d4724cd05f630bf162942734ba2271330bad79b220a15575d7bacfcfd` | 2799262242171053537 | 86 | 30 | 134 | superseded by generation 2, undecided. All 250 batch-01 records changed in the builder v3 rebuild (2026-10-22): 221 in identification content and 29 only in the new `dataSources.sourceFields` provenance list. None keeps its approval. |
+| batch-01-rereview | 2 | `a855aeef9fda952f23a33a4744b447e067a37ac7b6491100e1b2c9e2bfd909ce` | 5457129314686080825 | 87 | 30 | 133 | awaiting review. Prepared after the builder v4 negation repair (2026-10-22) changed 22 of the generation 1 records; page `Reports/GlobalReview/batch-01-rereview-g2-a855aeef9fda.html`. |
+

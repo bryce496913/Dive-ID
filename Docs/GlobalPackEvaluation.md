@@ -116,7 +116,8 @@ Display in the top ten is measured and reported, not asserted.
 ## Asserted gate baseline (2026-10-22)
 
 `testFrozenV05CasesAgainstTheGlobalPack` asserts every frozen V05 v2 floor on the pack
-as written, so **it now fails** when it runs. It is still opt-in, through
+as written, so it failed when it ran (it passes since builder v4; see
+[the negation repair and ranking fix](#negation-repair-and-ranking-fix-builder-v4-2026-10-22)). It is still opt-in, through
 `DIVEID_GLOBAL_EVAL_REPORT`. Run in Release on Linux, the opt-in test takes 443 s:
 
 | Gate | Global as written (v2 → v3) | Floor | Status |
@@ -312,6 +313,121 @@ Remaining causes, found by inspecting the regressed Lined surgeonfish cases (#1 
   variants. Changing this is a ranking change.
 - **Clues with no source:** Bird wrasse colours, Black triggerfish fin-base lines and
   Spinecheek bar count.
+
+## Negation repair and ranking fix (builder v4, 2026-10-22)
+
+**The opt-in Global evaluation now passes every applicable gate,** and exits 0. Its
+cases, expected and acceptable identities, rank bounds, candidate limit, floors,
+denominators and splits are unchanged. These cases were used to find the defects, so
+the result is development evidence, not a held-out measurement.
+
+### What changed
+
+1. **Negation in extraction** (`Tools/FishBaseIntake/traits.py`, builder v4). The
+   three-word window was replaced by a bounded scope, which:
+   - runs over a negated clause and over a coordinated list ("no blue, red, yellow or
+     white spots");
+   - stops at a contrast ("but", "however"), a life-stage word, another negator, a
+     new predicate ("and is nocturnal"), a spaced dash or a comma that starts a new
+     trait;
+   - also handles postfix negators ("spots absent").
+   - When the end of a scope is uncertain, it flags the record
+     (`trait_ambiguous:negation_scope`) and asserts nothing.
+   - Every branch now uses it: diagnostic phrases (gill-opening spot), habitat
+     normalisation (sea grass, drop-off) and every match of the fin-colour rule.
+   - `Data/GlobalMarine/FishBase/ExtractionAudit.json` lists the 184 real records
+     whose traits changed: 51 from the negation scope, 133 from comma boundaries that
+     previously joined one fin's colour to the next fin. Synthetic probes are kept
+     separately in `test_traits.py`.
+2. **Ranking** ([contract](HybridRankingContract.md#group-names-and-appearance-variants-2026-10-22)):
+   - group names and hyphenated compounds no longer count as exact names;
+   - appearance variants count only clues the main profile has not already matched,
+     and only for a stage compatible with the one described;
+   - coordinated colours before a marking, and a front-to-rear contrast, are
+     appearance relationships;
+   - "maroon" is red, and "-like" words yield their stem.
+
+No catalogue fact was added by hand. The regenerated drafts and pack went through
+`build.py` and `publish_global.py`. IDs and provenance are unchanged, and the paired
+pack files were written together. All 250 batch-01 approvals are still lapsed
+(`AppliedApprovals.json`: 0 approved, 250 stale), and Release still exposes no Global
+record. The 87 flagged records, the 30-record sample and the 133 unread records of
+batch 1 are in a new re-review manifest, `batch-01-rereview` generation 2.
+
+### Gates (Global as written, 4,786 records, 18 Tropical Pacific cases)
+
+| Gate | Floor | Before (`dff58fd`) | After |
+| --- | --- | --- | --- |
+| candidateRecall | 0.85 | 16/18 | 17/18 |
+| top1 | 0.4 | 5/18 | **9/18 (0.50)** |
+| top3 | 0.6 | 8/18 | **11/18 (0.61)** |
+| top10 | 0.8 | 12/18 | **15/18 (0.83)** |
+| noMatchCorrect | 1.0 | 6/6 | 6/6 |
+| confidenceCompliant | 1.0 | 28/29 | **29/29** |
+
+- **Margins are thin.** top3 and top10 each pass by a single case.
+- **Exit status:** the gates are XCTest assertions. Both the baseline run on `dff58fd`
+  and an intermediate run of this fix (top1 7/18) exited 1, naming each failed gate.
+- **Other variants** (not gated):
+  - Global + Caribbean 8: recall 33/34, top1 18/34, top3 24/34, top10 30/34,
+    confidence 46/46. Before: 32, 13, 17, 26 and 44/46.
+  - The `v05-ambiguous-angelfish` violation came from the one-word "Angelfish"
+    record and is fixed by the same rule.
+  - Release-approved Global: 0 records, all 46 cases out of scope.
+- **Regional packs (`run_v05.py`): every gate passes.** Production top1 is 26/34
+  (was 27/34), top3 33/34 and top10 34/34; confidence is 46/46.
+  - The one change is `v05-01-paraphrase`, where Atlantic Blue Tang drops from #1 to
+    #2 (bound 10). Its juvenile variant repeated the main profile's yellow and "tail"
+    marking, so before, any mention of a tail scored that evidence twice.
+
+### Per case (rank of the expected species in the displayed ten)
+
+| Case | Before | After | Remaining failure |
+| --- | --- | --- | --- |
+| 09-diagnostic, Bird wrasse | — | — | ranking: retrieved #2, but FishBase gives no colour, so 10 green or solitary reef fish outscore it |
+| 09-paraphrase, Bird wrasse | — | — | ranking: retrieved #21; "pointed nose" does not match "long snout" |
+| 10-diagnostic, Black triggerfish | 3 | **1** | |
+| 10-paraphrase, Black triggerfish | — | — | retrieval: not in the top 50; "pale blue borders at the fin bases" has no source |
+| 11-diagnostic, Pinktail triggerfish | 2 | **1** | |
+| 11-paraphrase | 1 | 1 | |
+| 12-diagnostic, Red-toothed triggerfish | 8 | **1** | |
+| 12-paraphrase | 1 | 1 | |
+| 13-diagnostic, Orangespot surgeonfish | 10 | **2** | |
+| 13-paraphrase | 6 | **5** | top3: ties at raw 25–28 with other oval orange reef fish |
+| 14-diagnostic, Lined surgeonfish | — | **1** | |
+| 14-paraphrase | 9 | **1** | |
+| 15-diagnostic, Fire clownfish | 2 | 4 | top3: eight anemonefish tie at raw 14. It was #2 only because "red-orange anemonefish" named the Orange anemonefish |
+| 15-paraphrase | 1 | 4 | top3: ties at raw 20. Its juvenile "stripes" no longer repeat the main profile's |
+| 16-diagnostic, Spinecheek anemonefish | — | **7** | top3: FishBase gives no white bars |
+| 16-paraphrase | 1 | 1 | |
+| 17-diagnostic, Cockatoo waspfish | 1 | 1 | |
+| 17-paraphrase | — | **2** | was a retrieval failure; "leaflike" now also matches its "Leaf fish" name |
+| ambiguous-trigger (ceiling 0.64) | 0.643 | **0.190** | |
+
+**Cases still outside a gate's rank, by cause.** Retrieval: 1 (10-paraphrase).
+Ranking: 2 outside the top ten (09-diagnostic, 09-paraphrase) and 4 between #4 and #7
+(13-paraphrase, 15-diagnostic, 15-paraphrase, 16-diagnostic). Each remaining cause is
+a clue with no source or a tie among close relatives; neither is fixed by weights.
+
+### Golden ordering
+
+`SearchGoldenOrderingTests` now compares against `SearchGolden.v2.json`, regenerated
+for this approved change. The query set (137 × 5 packs) is unchanged. The v1 → v2
+differences:
+
+| Pack | Ranked order changed | Top result changed | Retrieved pool order changed |
+| --- | --- | --- | --- |
+| Caribbean (development, 8) | 15 | 5 | 0 |
+| Caribbean (Release, 2) | 6 | 6 | 0 |
+| Tropical Pacific | 9 | 0 | 28 |
+| Global | 89 | 53 | 115 |
+| Global batch 1 (250) | 84 | 37 | 113 |
+
+- **Caribbean:** every change is the variant de-duplication. The two Release records
+  no longer place Atlantic Blue Tang first for ray descriptions that mention a tail.
+- **Tropical Pacific:** the pool changes come from the "-like" stem and the new
+  relationships in BM25 terms.
+- **Global:** includes the builder v4 content.
 
 ## Performance (host measurements, Release)
 
