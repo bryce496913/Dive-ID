@@ -46,9 +46,11 @@ struct LocalObservationParser: ObservationParsing {
     /// survives. This does not infer absence of every component of a compound
     /// phrase: "no pink tail" is not evidence that an animal has no tail.
     static func affirmativeEvidence(in text: String) -> String {
-        text.replacingOccurrences(of: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#,
-            with: " ", options: [.regularExpression, .caseInsensitive])
+        negatedPhrase.stringByReplacingMatches(in: text, range: NSRange(text.startIndex..., in: text), withTemplate: " ")
     }
+    // Compiled once: compiling per call dominated building the search index.
+    private static let negatedPhrase = try! NSRegularExpression(
+        pattern: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#, options: [.caseInsensitive])
 
     private static func withoutMeasurementRoleWords(in text: String) -> String {
         var result = text
@@ -62,11 +64,63 @@ struct LocalObservationParser: ObservationParsing {
         return result
     }
 
+    /// Lowercases and trims, then turns every run of characters other than a–z, 0–9 and "."
+    /// into one space. One pass; the same result as the earlier three regex replacements
+    /// (`[-/]+`, `[^a-z0-9. ]+`, `\s+` → " "), which `LocalObservationParserTests` checks.
     static func normalize(_ text: String) -> String {
-        text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: #"[-/]+"#, with: " ", options: .regularExpression)
-            .replacingOccurrences(of: #"[^a-z0-9. ]+"#, with: " ", options: .regularExpression)
-            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+        if let ascii = normalizeASCII(text) { return ascii }
+        var result = String.UnicodeScalarView()
+        var pendingSpace = false
+        for scalar in text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars {
+            switch scalar.value {
+            case 0x61...0x7A, 0x30...0x39, 0x2E:
+                if pendingSpace { result.append(" "); pendingSpace = false }
+                result.append(scalar)
+            default:
+                pendingSpace = true
+            }
+        }
+        if pendingSpace { result.append(" ") }
+        return String(result)
+    }
+
+    /// The same normalization on UTF-8 bytes. Every non-ASCII character is a separator
+    /// either way, except the two whose lowercase is ASCII (İ U+0130, Kelvin sign U+212A)
+    /// and non-ASCII whitespace at either end, which the general path trims; for those
+    /// this returns nil.
+    private static func normalizeASCII(_ text: String) -> String? {
+        let bytes = Array(text.utf8)
+        var start = 0, end = bytes.count
+        // ASCII whitespace and newlines, as trimmed by `.whitespacesAndNewlines`.
+        func isSpace(_ byte: UInt8) -> Bool { byte == 0x20 || (0x09...0x0D).contains(byte) }
+        while start < end, isSpace(bytes[start]) { start += 1 }
+        while start < end, isSpace(bytes[end - 1]) { end -= 1 }
+        if start < end, bytes[start] >= 0x80 || bytes[end - 1] >= 0x80 { return nil }
+        var output: [UInt8] = []
+        output.reserveCapacity(end - start)
+        var pendingSpace = false
+        var index = start
+        while index < end {
+            let byte = bytes[index]
+            if byte >= 0x80 {
+                if byte == 0xC4, index + 1 < end, bytes[index + 1] == 0xB0 { return nil }
+                if byte == 0xE2, index + 2 < end, bytes[index + 1] == 0x84, bytes[index + 2] == 0xAA { return nil }
+                pendingSpace = true
+                index += 1
+                continue
+            }
+            let lower = (0x41...0x5A).contains(byte) ? byte + 0x20 : byte
+            switch lower {
+            case 0x61...0x7A, 0x30...0x39, 0x2E:
+                if pendingSpace { output.append(0x20); pendingSpace = false }
+                output.append(lower)
+            default:
+                pendingSpace = true
+            }
+            index += 1
+        }
+        if pendingSpace { output.append(0x20) }
+        return String(decoding: output, as: UTF8.self)
     }
     /// "birdlike" -> "bird"; nil for words that do not end in a "-like" suffix.
     static func likeStem(_ word: String) -> String? {
