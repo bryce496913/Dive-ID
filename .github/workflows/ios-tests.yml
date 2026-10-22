@@ -116,6 +116,13 @@ jobs:
           xcodebuild -project DiveID.xcodeproj -alltargets -configuration Release -sdk iphonesimulator -showBuildSettings -json > "$RUNNER_TEMP/settings-Release.json" 2> "$RUNNER_TEMP/settings-Release.log"
           python3 Tools/CI/validate_xcode_settings.py "$RUNNER_TEMP/settings-Release.json" Release
 
+      - name: Resolve and validate Internal product settings
+        id: internal_settings
+        if: ${{ always() && steps.simulator.outcome == 'success' }}
+        run: |
+          xcodebuild -project DiveID.xcodeproj -alltargets -configuration Internal -sdk iphonesimulator -showBuildSettings -json > "$RUNNER_TEMP/settings-Internal.json" 2> "$RUNNER_TEMP/settings-Internal.log"
+          python3 Tools/CI/validate_xcode_settings.py "$RUNNER_TEMP/settings-Internal.json" Internal
+
       - name: Build application and tests
         id: build
         if: ${{ always() && steps.simulator.outcome == 'success' }}
@@ -178,6 +185,20 @@ jobs:
             test-without-building \
             -only-testing:DiveIDUITests 2>&1 | tee "$RUNNER_TEMP/ui-tests.log"
 
+      - name: Build the Internal application (optimized, development catalogue)
+        id: internal_build
+        if: ${{ always() && steps.internal_settings.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -configuration Internal \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA-internal" \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee "$RUNNER_TEMP/internal-build.log"
+
       - name: Export hosted result summaries
         if: ${{ always() && steps.build.outcome == 'success' }}
         shell: bash
@@ -199,10 +220,12 @@ jobs:
           | --- | --- |
           | Debug settings | ${{ steps.debug_settings.outcome }} |
           | Release settings | ${{ steps.release_settings.outcome }} |
+          | Internal settings | ${{ steps.internal_settings.outcome }} |
           | Build | ${{ steps.build.outcome }} |
           | Complete unit target | ${{ steps.unit_tests.outcome }} |
           | Hosted packaging | ${{ steps.packaging.outcome }} |
           | UI target | ${{ steps.ui_tests.outcome }} |
+          | Internal build | ${{ steps.internal_build.outcome }} |
           SUMMARY
 
       - name: Upload Xcode logs, settings and result bundles

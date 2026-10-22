@@ -99,13 +99,8 @@ final class IdentificationResultsViewModel {
         }
     }
 
-    static func message(for error: LocalIdentificationError, includesDiagnostics: Bool = {
-#if DEBUG
-        true
-#else
-        false
-#endif
-    }()) -> String {
+    static func message(for error: LocalIdentificationError,
+                        includesDiagnostics: Bool = BuildChannel.current.showsDiagnosticCodes) -> String {
         switch error {
         case .invalidDescription:
             "Add more detail about the animal before trying again."

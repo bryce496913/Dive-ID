@@ -28,13 +28,7 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         registry: RegionCatalogRegistry = .bundled,
         resourceResolutionMode: ResourceResolutionMode = .bundleOnly,
         developmentSourceRoot: URL = URL(fileURLWithPath: "DiveID/Resources", isDirectory: true),
-        access: CatalogueAccess = {
-#if DEBUG
-            .experimentalDevelopment
-#else
-            .publication
-#endif
-        }()
+        access: CatalogueAccess = BuildChannel.current.catalogueAccess
     ) {
         self.bundle = bundle
         self.registry = registry
