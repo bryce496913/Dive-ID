@@ -13,7 +13,8 @@ DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.
   builds expose only verified records, so the pack stays hidden from Release until
   the first batch is approved.
 - Manifest counts are derived from the written records, and the whole pack is validated
-  with the Swift-compatible validator before anything is written. Output is
+  with the Swift-compatible validator before anything is written. The two files are
+  replaced as a pair with rollback (Tools/CatalogReview/paired_write.py). Output is
   deterministic; an unchanged pack is not rewritten.
 """
 import argparse
@@ -27,6 +28,7 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE.parent / "CatalogReview"))
 import catalogue_validation  # noqa: E402
 import global_batches  # noqa: E402
+import paired_write  # noqa: E402
 
 PACK = REPO / "DiveID/Resources/IdentificationPacks/Global"
 PACK_VERSION = 2  # 1 was the empty placeholder; each approved batch adds 1
@@ -79,12 +81,14 @@ def creatures_text(records):
     return "[\n" + ",\n".join(json.dumps(r, ensure_ascii=False) for r in records) + "\n]\n"
 
 
-def write_if_changed(path, text):
-    if path.exists() and path.read_text() == text:
+def write_pack(pack, creatures, manifest_text):
+    """Write Creatures.json and PackManifest.json as one unit (paired_write: both or
+    neither). An unchanged pack is not rewritten."""
+    targets = (Path(pack) / "Creatures.json", Path(pack) / "PackManifest.json")
+    texts = (creatures, manifest_text)
+    if all(t.exists() and t.read_bytes() == text.encode() for t, text in zip(targets, texts)):
         return "unchanged"
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(text)
-    temp.replace(path)
+    paired_write.replace_file_pair(targets, tuple(text.encode() for text in texts))
     return "written"
 
 
@@ -101,11 +105,10 @@ def main(argv=None):
     reviews, review_report = apply_reviews(records, Path(args.batches))
     manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
     catalogue_validation.validate_catalogue(records, manifest)  # raises on any error; nothing written
-    actions = {"Creatures.json": write_if_changed(pack / "Creatures.json", creatures_text(records)),
-               "PackManifest.json": write_if_changed(pack / "PackManifest.json", json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")}
+    action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({"records": len(records), "excludedMissingRequired": excluded, "droppedSimilarSpeciesReferences": dropped,
                       "verifiedByBatchReview": len(reviews), "batchReview": review_report,
-                      "files": actions}, indent=2))
+                      "pack": action}, indent=2))
     return 0
 
 
