@@ -418,4 +418,4 @@ the production BM25 engine with biological ranking; the Core ML opt-in is Debug-
    results, and Global's search quality on them is development evidence only.
 
 A Debug build also opens Global, but report Debug timings only as Debug: Debug keeps
-testability and `DEBUG`-only diagnostics, and CI prints its resolved optimization level.
+testability and `DEBUG`-only diagnostics and is unoptimized (`-Onone`, enforced in CI).

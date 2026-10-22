@@ -76,7 +76,7 @@ xcodebuild -project DiveID.xcodeproj -scheme DiveID -showdestinations
 
 | Configuration | Catalogue | Optimized | `DEBUG` | Bundle ID / name |
 | --- | --- | --- | --- | --- |
-| Debug | all development records | project default | yes | `com.brycecameron.DiveID` / Dive ID |
+| Debug | all development records | no (`-Onone`) | yes | `com.brycecameron.DiveID` / Dive ID |
 | Release | publication-eligible only | `-O`, whole module | no | `com.brycecameron.DiveID` / Dive ID |
 | Internal | all development records | `-O`, whole module | no (`DIVEID_INTERNAL`) | `com.brycecameron.DiveID.internal` / Dive ID Internal |
 

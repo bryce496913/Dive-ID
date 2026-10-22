@@ -2,8 +2,8 @@
 """Fail CI on unresolved/colliding test products or lost compilation conditions.
 
 Also checks the app target's configuration boundary:
-- Debug defines DEBUG and not DIVEID_INTERNAL.
-- Release defines neither DEBUG nor DIVEID_INTERNAL.
+- Debug defines DEBUG and not DIVEID_INTERNAL, and is unoptimized (-Onone).
+- Release defines neither DEBUG nor DIVEID_INTERNAL, and is optimized (-O).
 - Internal defines DIVEID_INTERNAL, never DEBUG, is optimized (-O) and installs
   under its own bundle identifier, so it can never replace or pose as Release.
 """
@@ -32,11 +32,15 @@ def validate_app(settings, configuration):
     if configuration == 'Debug':
         if not has_debug or has_internal:
             raise ValueError('DiveID Debug must define DEBUG and not DIVEID_INTERNAL')
+        if optimization != '-Onone':
+            raise ValueError(f'DiveID Debug must be unoptimized with -Onone, got {optimization!r}')
     elif configuration == 'Release':
         if has_debug or has_internal:
             raise ValueError('DiveID Release must define neither DEBUG nor DIVEID_INTERNAL')
         if bundle_id != RELEASE_BUNDLE_ID:
             raise ValueError(f'DiveID Release bundle identifier must be {RELEASE_BUNDLE_ID}')
+        if optimization != '-O':
+            raise ValueError(f'DiveID Release must be optimized with -O, got {optimization!r}')
     elif configuration == 'Internal':
         if has_debug or not has_internal:
             raise ValueError('DiveID Internal must define DIVEID_INTERNAL and not DEBUG')
