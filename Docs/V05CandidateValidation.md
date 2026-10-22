@@ -239,3 +239,123 @@ The app-resource assertion is compiled only with DIVEID_XCODE_HOSTED_TEST and ch
 the actual APPL host before loading bundle-only resources. Missing app resources are
 failures, not reasons to skip. SwiftPM uses its declared library/test resource bundles
 on Linux and macOS; the OS alone never establishes a hosted app bundle.
+
+## Release device checklist (prepared 2026-10-22; unexecuted)
+
+For Bryce to run on an iPhone with a Release build. **No result below has been
+observed on a device.** The expected results come from running the same Release
+code and data on a Linux host (`main` at `2766a55`). Host timings are not device
+timings, so none are listed as expectations.
+
+### What this Release build contains
+
+- **Approved records:** Release exposes only approved records. At this commit those
+  are **2 Caribbean species**: Atlantic Blue Tang and Queen Angelfish.
+- **Global** has 0 approved records. Batch 1's approvals lapsed in the evidence
+  rebuild and await re-review (`Docs/GlobalBatchReview.md`). Global must not appear
+  in Release.
+- **Tropical Pacific** has 0 approved records and must not appear either.
+- **The region picker** therefore offers Caribbean only, showing 2 species.
+
+### 1. Install
+
+1. **Check out the build:** on the Mac, `git checkout 2766a55` (or the commit being
+   tested). Record the full SHA in the results table below.
+2. **Connect the iPhone:** unlock it and trust the Mac. Developer Mode must be on
+   (Settings → Privacy & Security → Developer Mode).
+3. **Build:** follow "Capture and build on a Mac" in
+   [InstalledReleaseValidation.md](InstalledReleaseValidation.md). It builds with
+   `xcodebuild … -configuration Release -destination "platform=iOS,id=$DEVICE_ID"`,
+   then installs and launches with `xcrun devicectl`.
+   - From the Xcode UI instead: Product → Scheme → Edit Scheme… → Run → Build
+     Configuration: **Release**, then Run on the iPhone.
+4. **Check the build:** confirm in the build log or `release-settings.json` that
+   `DEBUG` is absent from the active compilation conditions.
+5. **Use the installed copy for timings:** after installing, stop the debugger
+   (Product → Stop) and launch the app from the Home Screen. A debugger slows
+   launch and searches.
+
+### 2. Ten searches
+
+Go to Home → Describe What You Saw, type the text exactly, then tap Find Matches.
+The Release catalogue has 2 species, so a list holds at most two entries. Record
+what is shown, in order, and the match-strength label.
+
+| # | Type exactly | Expected results, in order (strength) | Intended species | Note |
+| --- | --- | --- | --- | --- |
+| 1 | Bright blue fish with a yellow spine near the tail | Atlantic Blue Tang (Possible match), Queen Angelfish (Weak match) | Atlantic Blue Tang | |
+| 2 | Atlantic blue tang | Atlantic Blue Tang (Good match), Queen Angelfish (Weak match) | Atlantic Blue Tang | name search |
+| 3 | Oval blue surgeonfish grazing on algae over the reef | Atlantic Blue Tang (Weak match), Queen Angelfish (Weak match) | Atlantic Blue Tang | |
+| 4 | Queen angelfish | Queen Angelfish (Possible match) | Queen Angelfish | name search |
+| 5 | Blue and yellow angelfish with a dark spot ringed in blue on its forehead | Queen Angelfish (Weak match), Atlantic Blue Tang (Weak match) | Queen Angelfish | |
+| 6 | Disc shaped yellow fish with electric blue edges and a yellow tail | Atlantic Blue Tang (Possible match), Queen Angelfish (Weak match) | Queen Angelfish | **known miss**: the intended species ranks second |
+| 7 | Something swimming on the reef | Atlantic Blue Tang (Weak match), Queen Angelfish (Weak match) | none (vague) | both shown weakly |
+| 8 | Angelfish | no possible matches | Queen Angelfish | **known gap**: a bare group name finds nothing |
+| 9 | A green frog sitting on a leaf | no possible matches | none (not marine) | out of domain |
+| 10 | A large grey shark cruising in open water | no possible matches | none (not in the Release catalogue) | must not show a draft species |
+
+**Also check:**
+- Change Dive Region lists Caribbean (2 species) only. Global and Tropical Pacific
+  are absent.
+- Open result 1: Record review status reads "Human-reviewed and approved for
+  publication", and the Source link opens its source page.
+- Home → Data Sources and Credits opens and shows the FishBase and SeaLifeBase
+  citations.
+
+### 3. Timing
+
+Use the iPhone's screen recording (Control Center) with the debugger detached.
+Read times from the recording, and note its frame rate.
+
+- **Cold launch to first result:**
+  1. Force-quit Dive ID from the app switcher.
+  2. Start recording, then tap the app icon.
+  3. Go to Describe What You Saw, type search 1 and tap Find Matches.
+  4. Record two intervals: icon tap → Home visible, and Find Matches tap → results
+     visible. Repeat 5 times.
+- **Warm search:** without quitting, run searches 1, 4 and 5 five times each, going
+  back between runs. Record Find Matches tap → results visible.
+- **Report:** raw samples, median, and nearest-rank p95. With 5 samples, p95 is the
+  maximum; label it descriptive.
+
+### 4. Memory (Xcode)
+
+Run the Release build from Xcode on the iPhone, so the debugger is attached for
+this part only. Open the Debug navigator (⌘7) → Memory and record the gauge at:
+
+- **Launch:** after launch, on Home.
+- **First search:** the peak during the first search (search 1).
+- **Ten searches:** after all ten searches.
+- **Settled:** after returning to Home, 30 s later.
+
+If any value looks high, profile with Instruments → Allocations (or VM Tracker) and
+save the trace. Record the metric name: the gauge shows memory use, Instruments
+shows physical footprint.
+
+### 5. Where to record results
+
+Fill in the table below and save screen recordings and traces outside the
+repository. Copy the summary into `Reports/InstalledReleaseValidation.json` under a
+new run entry with the commit SHA. Do not overwrite earlier runs.
+
+| Field | Result |
+| --- | --- |
+| Commit SHA / version / build | |
+| iPhone model / iOS build / Xcode version | |
+| DEBUG absent (yes/no, where checked) | |
+| Region picker contents | |
+| Searches 1–10: shown results and strengths (match / differs) | |
+| Cold launch → Home (5 samples, median, max) | |
+| Cold Find Matches → results (5 samples, median, max) | |
+| Warm search (15 samples, median, p95) | |
+| Memory: launch / first-search peak / after ten / settled (metric) | |
+| Detail page, source link, credits screen | |
+| Recordings and trace locations | |
+| Problems seen | |
+
+### Optional: Global in a Debug build
+
+Global is development-only, so it can be tried on the device only in a Debug build.
+Time the first Global search: on the host it takes about 5.9 s, mostly building the
+search index. Then time a warm Global search (host median 103 ms). Record these
+separately as Debug numbers; they are not Release results.

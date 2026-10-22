@@ -1885,6 +1885,502 @@
       ],
       "packSize" : 962,
       "variant" : "global-records-for-tropical-pacific-ids (diagnostic)"
+    },
+    {
+      "byRegion" : {
+
+      },
+      "cases" : [
+
+      ],
+      "counts" : {
+
+      },
+      "coverageBlockedCases" : [
+        "v05-01-diagnostic",
+        "v05-01-paraphrase",
+        "v05-02-diagnostic",
+        "v05-02-paraphrase",
+        "v05-03-diagnostic",
+        "v05-03-paraphrase",
+        "v05-04-diagnostic",
+        "v05-04-paraphrase",
+        "v05-05-diagnostic",
+        "v05-05-paraphrase",
+        "v05-06-diagnostic",
+        "v05-06-paraphrase",
+        "v05-07-diagnostic",
+        "v05-07-paraphrase",
+        "v05-08-diagnostic",
+        "v05-08-paraphrase",
+        "v05-09-diagnostic",
+        "v05-09-paraphrase",
+        "v05-10-diagnostic",
+        "v05-10-paraphrase",
+        "v05-11-diagnostic",
+        "v05-11-paraphrase",
+        "v05-12-diagnostic",
+        "v05-12-paraphrase",
+        "v05-13-diagnostic",
+        "v05-13-paraphrase",
+        "v05-14-diagnostic",
+        "v05-14-paraphrase",
+        "v05-15-diagnostic",
+        "v05-15-paraphrase",
+        "v05-16-diagnostic",
+        "v05-16-paraphrase",
+        "v05-17-diagnostic",
+        "v05-17-paraphrase",
+        "v05-ambiguous-angelfish",
+        "v05-ambiguous-trigger",
+        "v05-caribbean-frog",
+        "v05-caribbean-vague",
+        "v05-caribbean-terrestrial",
+        "v05-tropical-pacific-frog",
+        "v05-tropical-pacific-vague",
+        "v05-tropical-pacific-terrestrial",
+        "v05-region-1",
+        "v05-region-2",
+        "v05-region-3",
+        "v05-region-4"
+      ],
+      "gates" : [
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "candidateRecall",
+          "minimumRate" : 0.85,
+          "note" : "",
+          "status" : "not-evaluated"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "confidenceCompliant",
+          "minimumRate" : 1,
+          "note" : "",
+          "status" : "not-evaluated"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "noMatchCorrect",
+          "minimumRate" : 1,
+          "note" : "",
+          "status" : "not-evaluated"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "regionConflictCorrect",
+          "minimumRate" : 1,
+          "note" : "a single global pack has no pack-region mismatch; location never filters",
+          "status" : "not-applicable"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "top1",
+          "minimumRate" : 0.4,
+          "note" : "",
+          "status" : "not-evaluated"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "top10",
+          "minimumRate" : 0.8,
+          "note" : "",
+          "status" : "not-evaluated"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "top3",
+          "minimumRate" : 0.6,
+          "note" : "",
+          "status" : "not-evaluated"
+        }
+      ],
+      "packSize" : 0,
+      "variant" : "global-release-approved"
+    },
+    {
+      "byRegion" : {
+        "tropical-pacific" : {
+          "positive" : 6,
+          "top1" : 3,
+          "top10" : 3
+        }
+      },
+      "cases" : [
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Hound needlefish",
+            "Bluespotted cornetfish",
+            "Bundoon blenny"
+          ],
+          "error" : null,
+          "id" : "v05-09-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0.42857142857142855
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Orange-dotted tuskfish",
+            "Argus wrasse",
+            "Blackstripe coris"
+          ],
+          "error" : null,
+          "id" : "v05-09-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5952380952380952
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Black triggerfish"
+          ],
+          "error" : null,
+          "id" : "v05-10-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5476190476190477
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Bluegirdle angelfish",
+            "Bowtie damselfish",
+            "Pacific gregory"
+          ],
+          "error" : null,
+          "id" : "v05-10-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0.4523809523809524
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Cockatoo waspfish",
+            "Blackvent damsel",
+            "Miller's damsel"
+          ],
+          "error" : null,
+          "id" : "v05-17-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.4523809523809524
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Cockatoo waspfish",
+            "Diana's hogfish",
+            "Yellow-spotted triggerfish"
+          ],
+          "error" : null,
+          "id" : "v05-17-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.30952380952380953
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Yellowstreaked snapper",
+            "Masked triggerfish",
+            "Black triggerfish"
+          ],
+          "error" : null,
+          "id" : "v05-ambiguous-trigger",
+          "kind" : "ambiguous",
+          "outcome" : "evaluated",
+          "rank" : 3,
+          "region" : "tropical-pacific",
+          "topScore" : 0.23809523809523808
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-caribbean-frog",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "caribbean",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-caribbean-vague",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "caribbean",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-caribbean-terrestrial",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "caribbean",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-tropical-pacific-frog",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-tropical-pacific-vague",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+
+          ],
+          "error" : null,
+          "id" : "v05-tropical-pacific-terrestrial",
+          "kind" : "noMatch",
+          "outcome" : "evaluated",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Convict surgeonfish",
+            "Blackstripe coris",
+            "Short-tail bristletooth"
+          ],
+          "error" : null,
+          "id" : "v05-region-1",
+          "kind" : "regionConflict",
+          "outcome" : "results returned (no pack mismatch in Global)",
+          "rank" : null,
+          "region" : "caribbean",
+          "topScore" : 0.8571428571428571
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Crown-of-thorns cardinalfish",
+            "Yellow-spotted triggerfish",
+            "Bluespotted hind"
+          ],
+          "error" : null,
+          "id" : "v05-region-2",
+          "kind" : "regionConflict",
+          "outcome" : "results returned (no pack mismatch in Global)",
+          "rank" : null,
+          "region" : "caribbean",
+          "topScore" : 0.35714285714285715
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Common dolphinfish",
+            "Bluespotted cornetfish",
+            "Devil firefish"
+          ],
+          "error" : null,
+          "id" : "v05-region-3",
+          "kind" : "regionConflict",
+          "outcome" : "results returned (no pack mismatch in Global)",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5238095238095238
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Devil firefish",
+            "Ribbontail stingray",
+            "Sand lizardfish"
+          ],
+          "error" : null,
+          "id" : "v05-region-4",
+          "kind" : "regionConflict",
+          "outcome" : "results returned (no pack mismatch in Global)",
+          "rank" : null,
+          "region" : "tropical-pacific",
+          "topScore" : 0.30952380952380953
+        }
+      ],
+      "counts" : {
+        "ambiguousAccepted" : {
+          "hits" : 1,
+          "total" : 1
+        },
+        "candidateRecall" : {
+          "hits" : 5,
+          "total" : 6
+        },
+        "confidenceCompliant" : {
+          "hits" : 17,
+          "total" : 17
+        },
+        "noMatchCorrect" : {
+          "hits" : 6,
+          "total" : 6
+        },
+        "regionCasesReturnResults" : {
+          "hits" : 4,
+          "total" : 4
+        },
+        "top1" : {
+          "hits" : 3,
+          "total" : 6
+        },
+        "top3" : {
+          "hits" : 3,
+          "total" : 6
+        },
+        "top10" : {
+          "hits" : 3,
+          "total" : 6
+        }
+      },
+      "coverageBlockedCases" : [
+        "v05-01-diagnostic",
+        "v05-01-paraphrase",
+        "v05-02-diagnostic",
+        "v05-02-paraphrase",
+        "v05-03-diagnostic",
+        "v05-03-paraphrase",
+        "v05-04-diagnostic",
+        "v05-04-paraphrase",
+        "v05-05-diagnostic",
+        "v05-05-paraphrase",
+        "v05-06-diagnostic",
+        "v05-06-paraphrase",
+        "v05-07-diagnostic",
+        "v05-07-paraphrase",
+        "v05-08-diagnostic",
+        "v05-08-paraphrase",
+        "v05-11-diagnostic",
+        "v05-11-paraphrase",
+        "v05-12-diagnostic",
+        "v05-12-paraphrase",
+        "v05-13-diagnostic",
+        "v05-13-paraphrase",
+        "v05-14-diagnostic",
+        "v05-14-paraphrase",
+        "v05-15-diagnostic",
+        "v05-15-paraphrase",
+        "v05-16-diagnostic",
+        "v05-16-paraphrase",
+        "v05-ambiguous-angelfish"
+      ],
+      "gates" : [
+        {
+          "denominator" : 6,
+          "hits" : 5,
+          "metric" : "candidateRecall",
+          "minimumRate" : 0.85,
+          "note" : "",
+          "status" : "failed"
+        },
+        {
+          "denominator" : 17,
+          "hits" : 17,
+          "metric" : "confidenceCompliant",
+          "minimumRate" : 1,
+          "note" : "",
+          "status" : "passed"
+        },
+        {
+          "denominator" : 6,
+          "hits" : 6,
+          "metric" : "noMatchCorrect",
+          "minimumRate" : 1,
+          "note" : "",
+          "status" : "passed"
+        },
+        {
+          "denominator" : 0,
+          "hits" : 0,
+          "metric" : "regionConflictCorrect",
+          "minimumRate" : 1,
+          "note" : "a single global pack has no pack-region mismatch; location never filters",
+          "status" : "not-applicable"
+        },
+        {
+          "denominator" : 6,
+          "hits" : 3,
+          "metric" : "top1",
+          "minimumRate" : 0.4,
+          "note" : "",
+          "status" : "passed"
+        },
+        {
+          "denominator" : 6,
+          "hits" : 3,
+          "metric" : "top10",
+          "minimumRate" : 0.8,
+          "note" : "",
+          "status" : "failed"
+        },
+        {
+          "denominator" : 6,
+          "hits" : 3,
+          "metric" : "top3",
+          "minimumRate" : 0.6,
+          "note" : "",
+          "status" : "failed"
+        }
+      ],
+      "packSize" : 250,
+      "variant" : "global-batch-01-pending (what-if; not approved)"
     }
   ],
   "schemaVersion" : 1
