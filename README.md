@@ -9,11 +9,17 @@ submitted or published by this repository workflow.
 
 ## Current catalogue and availability
 
-| Pack | Version | Bundled records | Human-reviewed | Publication-eligible |
-| --- | ---: | ---: | ---: | ---: |
-| Caribbean | 3 | 8 | 2 | 2 |
-| Tropical Pacific | 3 | 1000 | 0 | 0 |
-| Global (Experimental) | 3 | 4786 | 0 | 0 |
+| Pack | Version | Bundled records | Human-reviewed | Publication-eligible | V05 gates (development, top10) |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
+| Tropical Pacific | 3 | 1000 | 0 | 0 | pass (18/18) |
+| Global (Experimental) | 3 | 4786 | 0 | 0 | **fail** (12/18; top1, top3 and confidence also fail) |
+
+**Global is not ready to be the default or main search experience** (2026-10-22). It
+fails four of six applicable V05 gates, and Release contains no approved Global
+record. Regional packs stay the default. Blockers and per-configuration gates are in
+the [readiness report](Docs/GlobalPackEvaluation.md#readiness-report-2026-10-22-main-at-2766a55);
+the iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through

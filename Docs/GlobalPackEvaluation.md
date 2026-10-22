@@ -140,6 +140,104 @@ as written, so **it now fails** when it runs. It is still opt-in, through
 - **Default region:** new installs start in Caribbean, and existing selections
   (Global included) are kept, until these gates pass.
 
+## Readiness report (2026-10-22, `main` at `2766a55`)
+
+**Verdict: Global does not meet the bar to become the default and main search
+experience.** It fails four of the six applicable V05 gates on its full development
+catalogue, and Release contains no approved Global record, so there is nothing to
+ship. Regional packs remain the default (Caribbean for new installs).
+
+All runs below are host runs (Linux, Swift 6.1). Debug and Release produced identical
+gate results. These are search-quality results, not device results.
+
+### Gates per configuration (V05 v2 floors)
+
+| Gate (floor) | (a) Full Global, development (4,786) | (b) Release-approved Global (0) | (c) Regional, development (8 + 1,000) | (c) Regional, Release (2 Caribbean) |
+| --- | --- | --- | --- | --- |
+| candidateRecall (0.85) | 16/18 **pass** | not evaluated | 34/34 pass | 4/4 pass |
+| top1 (0.4) | 5/18 **fail** | not evaluated | 27/34 pass | 3/4 pass |
+| top3 (0.6) | 8/18 **fail** | not evaluated | 33/34 pass | 4/4 pass |
+| top10 (0.8) | 12/18 **fail** | not evaluated | 34/34 pass | 4/4 pass |
+| noMatchCorrect (1.0) | 6/6 pass | not evaluated | 6/6 pass | 3/3 pass |
+| confidenceCompliant (1.0) | 28/29 **fail** | not evaluated | 46/46 pass | 10/10 pass |
+| regionConflictCorrect (1.0) | not applicable (no region aliases) | not applicable | 4/4 pass | 2/2 pass |
+| Cases out of scope | 17 (Caribbean targets not in Global) | **46 of 46** | 0 | 36 of 46 |
+
+Per region, the regional development baseline scores:
+
+| Region | top1 | top3 | top10 |
+| --- | --- | --- | --- |
+| Caribbean | 14/16 | 16/16 | 16/16 |
+| Tropical Pacific | 13/18 | 17/18 | 18/18 |
+
+Global scores 5/18, 8/18 and 12/18 on those same Tropical Pacific cases.
+
+Sources: the opt-in `GlobalPackEvaluationTests` (variants `global-as-written` and
+`global-release-approved`) and `Tools/Evaluation/run_v05.py`, Debug and Release.
+
+### Out of scope in the small Release catalogues
+
+A small catalogue cannot look better or worse than it is: a case is out of scope when
+its target species is not in the catalogue. An empty catalogue evaluates nothing, so
+it cannot pass no-match cases by returning nothing.
+
+- **Release-approved Global (0 records):** all 46 cases are out of scope.
+  - Batch 1's 250 approvals lapsed in the builder v3 rebuild; `batch-01-rereview`
+    awaits review.
+  - The other 4,536 records have never been reviewed.
+- **Release Caribbean (2 records):** 10 cases are in scope:
+  - v05-01 and v05-03, diagnostic and paraphrase (Atlantic Blue Tang and Queen
+    Angelfish);
+  - v05-ambiguous-angelfish;
+  - the 3 Caribbean no-match cases;
+  - v05-region-1 and v05-region-2.
+
+  The other 36 are out of scope: 12 Caribbean cases whose targets are draft, and all
+  24 Tropical Pacific cases. Its 4/4 positives show that search works for the 2
+  approved species; they do not show coverage.
+- **What-if, not approved: batch 1's 250 records** (`global-batch-01-pending`).
+  - **In scope:** 17 cases. The positives are only v05-09, 10 and 17 (Bird wrasse,
+    Black triggerfish, Cockatoo waspfish), so 6 positive cases; 29 cases are out of
+    scope.
+  - **Results:** recall 5/6, top1 3/6, top3 3/6, top10 3/6, no-match 6/6, confidence
+    17/17.
+  - **Caution:** this shows what approving batch 1 would expose; it is not a Release
+    result.
+
+### What still blocks Global as the default
+
+1. **Search quality on the full catalogue.** top1 5/18, top3 8/18 and top10 12/18 are
+   below 0.4, 0.6 and 0.8. Confidence fails on `v05-ambiguous-trigger` (0.643
+   against a 0.64 ceiling). The remaining causes, which need owner decisions:
+   - **Generic aliases:** 65 records carry a bare group word ("Surgeonfish") that
+     counts as an exact name.
+   - **Variant scoring:** appearance-variant scores add to the main colour score.
+   - **Clues with no source:** some lost clues can't be recovered from the source.
+2. **Caribbean coverage.** The 8 Caribbean records, including the 2 approved ones, are
+   not in Global, so 17 Caribbean cases cannot run against it. Global plus those 8
+   (in memory) scores top10 26/34, still below 0.8.
+3. **No approved Global record.** Release would show no Global pack. The
+   `batch-01-rereview` decision is pending, and 4,536 records await review.
+4. **Search behaviour still to decide.** One parser nondeterminism ("sandy" →
+   "bottom-swimming" in some processes) changes one golden query's ranking between
+   runs.
+5. **Device evidence.** No iPhone measurements exist; the checklist is in
+   [V05CandidateValidation.md](V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
+   - **Host only:** the first Global query takes about 5.9 s (index build) and warm
+     queries about 103 ms median.
+6. **Xcode tests.** The Xcode build, unit and UI tests have not run in this
+   environment. The SwiftUI code (credits screen, source links) has never been
+   compiled.
+
+### Checks run for this report
+
+- **Python:** all 8 suites in the README's portable checks pass.
+- **`swift test` and `swift test -c release`:** 172 tests, 5 skipped, 0 failures.
+- **`run_v05.py`**, Debug and Release: every regional gate passes, development and
+  publication.
+- **Opt-in Global evaluation**, Debug and Release: fails on top1, top3, top10 and
+  confidence, as shown above.
+
 ## Evidence rebuild and size fix (builder v3, 2026-10-22; findings P1, P3, P4)
 
 ### What the rebuild lost, case by case

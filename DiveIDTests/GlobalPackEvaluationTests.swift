@@ -105,11 +105,31 @@ final class GlobalPackEvaluationTests: XCTestCase {
         subsetMetadata.speciesCount = subsetProfiles.count
         var composed = global.metadata
         composed.speciesCount += caribbean.profiles.count
+        // The subset Release actually exposes: publication access. Unavailable means no
+        // approved Global record exists, so the subset is empty.
+        let release: OfflineIdentificationPack
+        do {
+            release = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
+        } catch let failure as CatalogueLoadFailure where failure.code == .publicationUnavailable {
+            var empty = global.metadata
+            empty.speciesCount = 0
+            release = OfflineIdentificationPack(metadata: empty, profiles: [])
+        }
+        // What-if only, never approval: batch 1's 250 records, which await re-review.
+        let batchManifest = try XCTUnwrap(FileManager.default.contentsOfDirectory(at: root.appendingPathComponent("Data/CatalogReview/GlobalBatches/batch-01"), includingPropertiesForKeys: nil)
+            .first { $0.lastPathComponent.hasPrefix("manifest-g1-") })
+        let batchIDs = Set(try XCTUnwrap((try JSONSerialization.jsonObject(with: Data(contentsOf: batchManifest)) as? [String: Any])?["records"] as? [[String: Any]])
+            .compactMap { ($0["speciesID"] as? String).flatMap(UUID.init(uuidString:)) })
+        var pendingMetadata = global.metadata
+        let pendingProfiles = global.profiles.filter { batchIDs.contains($0.id) }
+        pendingMetadata.speciesCount = pendingProfiles.count
         let variants: [(String, OfflineIdentificationPack)] = [
             ("global-as-written", global),
             ("global-plus-caribbean-8 (in memory only)", OfflineIdentificationPack(metadata: composed, profiles: global.profiles + caribbean.profiles)),
             // Diagnostic: Global's rebuilt text at regional size, separating text effects from scale effects.
-            ("global-records-for-tropical-pacific-ids (diagnostic)", OfflineIdentificationPack(metadata: subsetMetadata, profiles: subsetProfiles))
+            ("global-records-for-tropical-pacific-ids (diagnostic)", OfflineIdentificationPack(metadata: subsetMetadata, profiles: subsetProfiles)),
+            ("global-release-approved", release),
+            ("global-batch-01-pending (what-if; not approved)", OfflineIdentificationPack(metadata: pendingMetadata, profiles: pendingProfiles))
         ]
         var groups: [[String: Any]] = []
         for (name, pack) in variants {
@@ -122,7 +142,9 @@ final class GlobalPackEvaluationTests: XCTestCase {
             var rows: [[String: Any]] = [], blocked: [String] = [], byRegion: [String: [String: Int]] = [:]
             for item in fixture.cases {
                 let accepted = Set((item.expectedSpeciesIDs + item.acceptableSpeciesIDs).map { kept[$0] ?? $0 })
-                if !accepted.isEmpty && accepted.isDisjoint(with: known) { blocked.append(item.id); continue }
+                // Out of scope: the target species is not in this catalogue. An empty catalogue
+                // evaluates nothing, so it cannot "pass" no-match cases by returning nothing.
+                if (!accepted.isEmpty && accepted.isDisjoint(with: known)) || known.isEmpty { blocked.append(item.id); continue }
                 var matches: [IdentificationMatch] = [], failure: String? = nil
                 await log.record([])
                 do {
