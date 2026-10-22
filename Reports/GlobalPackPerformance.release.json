@@ -1,8 +1,8 @@
 {
   "configuration" : "release",
   "developmentAvailablePacksMs" : {
-    "median" : 0.318912,
-    "p95" : 0.412768,
+    "median" : 0.186542,
+    "p95" : 0.286958,
     "samples" : 5
   },
   "host" : "Ubuntu 24.04.5 LTS",
@@ -10,197 +10,284 @@
   "packs" : [
     {
       "bm25IndexedRetrievalMs" : {
-        "median" : 0.258808,
-        "p95" : 0.335153,
+        "median" : 0.157621,
+        "p95" : 0.206602,
         "samples" : 46
       },
-      "contentFingerprintMs" : 0.041067,
+      "contentFingerprintMs" : 0.066814,
       "documentBuildMs" : {
-        "median" : 1.051485,
+        "median" : 0.967886,
         "samples" : 3
       },
-      "firstQueryMs" : 32.694342,
+      "firstQueryMs" : 12.532941,
       "indexBuildMs" : {
-        "median" : 5.434133,
+        "median" : 3.821628,
         "samples" : 3
       },
       "loadMs" : {
-        "median" : 2.02331,
-        "p95" : 6.084535,
+        "median" : 2.202657,
+        "p95" : 6.105258,
         "samples" : 5
       },
       "memoryMiB" : {
         "afterLoad" : {
-          "VmHWM" : 30.140625,
-          "VmRSS" : 30.140625
+          "VmHWM" : 29.96484375,
+          "VmRSS" : 29.96484375
         },
         "afterQueries" : {
-          "VmHWM" : 30.77734375,
-          "VmRSS" : 30.77734375
+          "VmHWM" : 30.96875,
+          "VmRSS" : 30.96875
         },
         "beforeLoad" : {
-          "VmHWM" : 28.3203125,
-          "VmRSS" : 28.3203125
+          "VmHWM" : 28.16796875,
+          "VmRSS" : 28.16796875
         },
         "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
       },
       "pack" : "caribbean",
       "queryMs" : {
         "failures" : 0,
-        "max" : 28.865652,
-        "median" : 12.473483,
-        "p95" : 21.348919,
+        "max" : 14.098578,
+        "median" : 6.436618,
+        "p95" : 10.38884,
         "samples" : 138
+      },
+      "readiness" : {
+        "freshInstall" : {
+          "archiveBytes" : 6603,
+          "firstQueryAfterReadyMs" : 6.970091,
+          "firstQueryWithoutPreparationMs" : 14.484287,
+          "indexBuilt" : 1,
+          "indexLoadedFromDisk" : 0,
+          "launchToSearchReadyMs" : 7.514196,
+          "warmQueryMs" : {
+            "median" : 6.298291,
+            "p95" : 7.158843,
+            "samples" : 46
+          }
+        },
+        "laterLaunch" : {
+          "archiveBytes" : 6603,
+          "firstQueryAfterReadyMs" : 6.875512,
+          "firstQueryWithoutPreparationMs" : 11.441424,
+          "indexBuilt" : 0,
+          "indexLoadedFromDisk" : 1,
+          "launchToSearchReadyMs" : 4.565912,
+          "warmQueryMs" : {
+            "median" : 6.360056,
+            "p95" : 7.05434,
+            "samples" : 46
+          }
+        }
       },
       "records" : 8
     },
     {
       "bm25IndexedRetrievalMs" : {
-        "median" : 2.236626,
-        "p95" : 3.573081,
+        "median" : 2.422451,
+        "p95" : 6.004166,
         "samples" : 46
       },
-      "contentFingerprintMs" : 3.781831,
+      "contentFingerprintMs" : 4.150924,
       "documentBuildMs" : {
-        "median" : 122.749515,
+        "median" : 112.804542,
         "samples" : 3
       },
-      "firstQueryMs" : 802.584988,
+      "firstQueryMs" : 760.246767,
       "indexBuildMs" : {
-        "median" : 724.4672,
+        "median" : 464.441458,
         "samples" : 3
       },
       "loadMs" : {
-        "median" : 78.890952,
-        "p95" : 85.59515,
+        "median" : 78.965724,
+        "p95" : 106.077542,
         "samples" : 5
       },
       "memoryMiB" : {
         "afterLoad" : {
-          "VmHWM" : 44.71484375,
-          "VmRSS" : 44.71484375
+          "VmHWM" : 45.88671875,
+          "VmRSS" : 45.88671875
         },
         "afterQueries" : {
-          "VmHWM" : 49.109375,
-          "VmRSS" : 49.109375
+          "VmHWM" : 54.078125,
+          "VmRSS" : 54.078125
         },
         "beforeLoad" : {
-          "VmHWM" : 30.77734375,
-          "VmRSS" : 30.77734375
+          "VmHWM" : 31.79296875,
+          "VmRSS" : 31.79296875
         },
         "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
       },
       "pack" : "tropical-pacific",
       "queryMs" : {
         "failures" : 0,
-        "max" : 59.57982,
-        "median" : 38.925437,
-        "p95" : 47.177997,
+        "max" : 55.450556,
+        "median" : 31.644126,
+        "p95" : 49.518868,
         "samples" : 138
+      },
+      "readiness" : {
+        "freshInstall" : {
+          "archiveBytes" : 459845,
+          "firstQueryAfterReadyMs" : 32.465238,
+          "firstQueryWithoutPreparationMs" : 736.907565,
+          "indexBuilt" : 1,
+          "indexLoadedFromDisk" : 0,
+          "launchToSearchReadyMs" : 704.442327,
+          "warmQueryMs" : {
+            "median" : 33.324272,
+            "p95" : 45.194536,
+            "samples" : 46
+          }
+        },
+        "laterLaunch" : {
+          "archiveBytes" : 459845,
+          "firstQueryAfterReadyMs" : 37.02513,
+          "firstQueryWithoutPreparationMs" : 177.797803,
+          "indexBuilt" : 0,
+          "indexLoadedFromDisk" : 1,
+          "launchToSearchReadyMs" : 140.772673,
+          "warmQueryMs" : {
+            "median" : 30.449152,
+            "p95" : 47.322183,
+            "samples" : 46
+          }
+        }
       },
       "records" : 1000
     },
     {
       "bm25IndexedRetrievalMs" : {
-        "median" : 11.654023,
-        "p95" : 15.973909,
+        "median" : 11.870332,
+        "p95" : 16.751591,
         "samples" : 46
       },
-      "contentFingerprintMs" : 40.469616,
+      "contentFingerprintMs" : 43.465237,
       "documentBuildMs" : {
-        "median" : 943.064804,
+        "median" : 1082.117805,
         "samples" : 3
       },
-      "firstQueryMs" : 5869.408074,
+      "firstQueryMs" : 5254.429355,
       "indexBuildMs" : {
-        "median" : 4836.566784,
+        "median" : 3152.498278,
         "samples" : 3
       },
       "loadMs" : {
-        "median" : 749.423527,
-        "p95" : 761.897005,
+        "median" : 743.919924,
+        "p95" : 885.896082,
         "samples" : 5
       },
       "memoryMiB" : {
         "afterLoad" : {
-          "VmHWM" : 143.19140625,
-          "VmRSS" : 125.00390625
+          "VmHWM" : 165.31640625,
+          "VmRSS" : 122.72265625
         },
         "afterQueries" : {
-          "VmHWM" : 154.09765625,
-          "VmRSS" : 154.09765625
+          "VmHWM" : 186.1328125,
+          "VmRSS" : 186.1328125
         },
         "beforeLoad" : {
-          "VmHWM" : 49.109375,
-          "VmRSS" : 49.109375
+          "VmHWM" : 70.84375,
+          "VmRSS" : 70.84375
         },
         "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
       },
       "pack" : "global",
       "queryMs" : {
         "failures" : 0,
-        "max" : 190.857792,
-        "median" : 103.207951,
-        "p95" : 153.037264,
+        "max" : 98.613163,
+        "median" : 57.077654,
+        "p95" : 87.037582,
         "samples" : 138
+      },
+      "readiness" : {
+        "freshInstall" : {
+          "archiveBytes" : 2985561,
+          "firstQueryAfterReadyMs" : 62.883473,
+          "firstQueryWithoutPreparationMs" : 4988.411321,
+          "indexBuilt" : 1,
+          "indexLoadedFromDisk" : 0,
+          "launchToSearchReadyMs" : 4925.527848,
+          "warmQueryMs" : {
+            "median" : 54.209579,
+            "p95" : 88.147763,
+            "samples" : 46
+          }
+        },
+        "laterLaunch" : {
+          "archiveBytes" : 2985561,
+          "firstQueryAfterReadyMs" : 52.669127,
+          "firstQueryWithoutPreparationMs" : 941.035762,
+          "indexBuilt" : 0,
+          "indexLoadedFromDisk" : 1,
+          "launchToSearchReadyMs" : 888.366635,
+          "warmQueryMs" : {
+            "median" : 53.536876,
+            "p95" : 83.421115,
+            "samples" : 46
+          }
+        }
       },
       "records" : 4786
     },
     {
       "bm25IndexedRetrievalMs" : {
-        "median" : 0.552157,
-        "p95" : 0.716606,
+        "median" : 0.407175,
+        "p95" : 0.50829,
         "samples" : 46
       },
-      "contentFingerprintMs" : 1.935529,
+      "contentFingerprintMs" : 2.381764,
       "documentBuildMs" : {
-        "median" : 68.089946,
+        "median" : 54.115209,
         "samples" : 3
       },
-      "firstQueryMs" : 494.06766,
+      "firstQueryMs" : 296.177434,
       "indexBuildMs" : {
-        "median" : 392.621505,
+        "median" : 200.859605,
         "samples" : 3
       },
       "loadMs" : {
-        "median" : 737.562759,
-        "p95" : 827.146695,
+        "median" : 750.273457,
+        "p95" : 787.060672,
         "samples" : 5
       },
       "memoryMiB" : {
         "afterLoad" : {
-          "VmHWM" : 206.984375,
-          "VmRSS" : 188.734375
+          "VmHWM" : 357.70703125,
+          "VmRSS" : 314.96875
         },
         "afterQueries" : {
-          "VmHWM" : 206.984375,
-          "VmRSS" : 188.734375
+          "VmHWM" : 357.70703125,
+          "VmRSS" : 314.96875
         },
         "beforeLoad" : {
-          "VmHWM" : 154.09765625,
-          "VmRSS" : 154.09765625
+          "VmHWM" : 281.18359375,
+          "VmRSS" : 262.9609375
         },
         "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
       },
       "pack" : "global-batch-01-subset",
       "queryMs" : {
         "failures" : 0,
-        "max" : 144.122951,
-        "median" : 81.32607,
-        "p95" : 123.394646,
+        "max" : 67.989025,
+        "median" : 34.69914,
+        "p95" : 39.976843,
         "samples" : 138
+      },
+      "readiness" : {
+
       },
       "records" : 250
     }
   ],
   "processMemoryAtStartMiB" : {
-    "VmHWM" : 26.84375,
-    "VmRSS" : 26.84375
+    "VmHWM" : 26.7265625,
+    "VmRSS" : 26.7265625
   },
   "processors" : 4,
   "publicationAvailablePacksMs" : {
-    "median" : 0.34519,
-    "p95" : 1.133599,
+    "median" : 0.227681,
+    "p95" : 0.437691,
     "samples" : 5
   },
   "queries" : 46,

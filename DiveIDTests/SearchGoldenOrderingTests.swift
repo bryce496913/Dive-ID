@@ -2,8 +2,11 @@ import Foundation
 import XCTest
 @testable import DiveID
 
-/// Golden search outputs captured before the BM25 index and lazy pack listing
-/// (Fixtures/SearchGolden.v1.json, from commit a687477). Every development query of the
+/// Golden search outputs (Fixtures/SearchGolden.v2.json). v1 was captured at commit a687477,
+/// before the BM25 index and lazy pack listing, which reproduced it exactly. v2 was
+/// regenerated for the intended ranking change of Docs/HybridRankingContract.md
+/// ("Group names and appearance variants") and the builder v4 Global content; the
+/// change is described in Docs/GlobalPackEvaluation.md. Every development query of the
 /// evaluation fixtures (the frozen Caribbean holdout stays closed) is run against each
 /// pack; ranks and scores must match exactly, scores to 1e-9.
 /// Set DIVEID_WRITE_SEARCH_GOLDEN=<path> to write a new golden file instead of comparing.
@@ -89,7 +92,7 @@ final class SearchGoldenOrderingTests: XCTestCase {
             try JSONSerialization.data(withJSONObject: document, options: [.sortedKeys]).write(to: URL(fileURLWithPath: path))
             return
         }
-        let golden = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: TestResources.fixture(named: "SearchGolden.v1"))) as? [String: Any])
+        let golden = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: TestResources.fixture(named: "SearchGolden.v2"))) as? [String: Any])
         XCTAssertEqual(golden["queries"] as? [String], queries, "the golden file covers exactly these queries")
         var compared = 0
         for (name, pack) in packs {

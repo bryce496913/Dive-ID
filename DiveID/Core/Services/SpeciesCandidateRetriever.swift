@@ -93,7 +93,7 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
         let words = MorphologyVocabulary.scopedText(text).split { !$0.isLetter && !$0.isNumber }.map {
             LocalObservationParser.singular(String($0))
         }.filter { !$0.isEmpty && (!canonical.contains($0) || seenMorphology.insert($0).inserted) }
-        return words + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
+        return words + words.compactMap(LocalObservationParser.likeStem) + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
     }
 
     static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }
@@ -106,8 +106,8 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
 /// Per-document BM25 statistics, built once per catalogue content and reused by every
 /// query: term frequencies, lengths, the average length, document frequencies and the
 /// normalized names used for exact-name matches. Immutable, so safe to share.
-struct BM25Index: Sendable {
-    struct Entry: Sendable {
+struct BM25Index: Sendable, Equatable {
+    struct Entry: Sendable, Equatable {
         let speciesID: UUID
         let termFrequencies: [String: Int]
         let length: Int
@@ -119,16 +119,26 @@ struct BM25Index: Sendable {
     let documentFrequency: [String: Int]
 
     init(documents: [SpeciesSearchDocument]) {
+        self.init(entries: documents.map(Self.entry))
+    }
+
+    /// The collection statistics are derived from the entries, so an index rebuilt from
+    /// stored entries (`SearchIndexArchive`) is identical to the one built from documents.
+    init(entries: [Entry]) {
         var documentFrequency: [String: Int] = [:]
-        entries = documents.map { document in
-            let terms = BM25SpeciesCandidateRetriever.terms(document.combinedText)
-            for term in Set(terms) { documentFrequency[term, default: 0] += 1 }
-            return Entry(speciesID: document.speciesID,
-                         termFrequencies: Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +),
-                         length: terms.count,
-                         normalizedNames: document.identityText.components(separatedBy: " | ").map(BM25SpeciesCandidateRetriever.normalizedPhrase))
+        for entry in entries {
+            for term in entry.termFrequencies.keys { documentFrequency[term, default: 0] += 1 }
         }
+        self.entries = entries
         averageLength = entries.isEmpty ? 1 : max(1, Double(entries.reduce(0) { $0 + $1.length }) / Double(entries.count))
         self.documentFrequency = documentFrequency
+    }
+
+    static func entry(_ document: SpeciesSearchDocument) -> Entry {
+        let terms = BM25SpeciesCandidateRetriever.terms(document.combinedText)
+        return Entry(speciesID: document.speciesID,
+                     termFrequencies: Dictionary(terms.map { ($0, 1) }, uniquingKeysWith: +),
+                     length: terms.count,
+                     normalizedNames: document.identityText.components(separatedBy: " | ").map(BM25SpeciesCandidateRetriever.normalizedPhrase))
     }
 }

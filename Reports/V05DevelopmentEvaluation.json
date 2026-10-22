@@ -11,17 +11,17 @@
           "ambiguousAccepted" : 1,
           "ambiguousDenominator" : 1,
           "candidateRecallHits" : 16,
-          "confidenceCompliant" : 21,
+          "confidenceCompliant" : 22,
           "confidenceDenominator" : 22,
-          "correctNoMatch" : 2,
-          "correctRegionConflicts" : 1,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
           "coverageBlockedCases" : 0,
           "eligibleCases" : 22,
-          "falsePositives" : 1,
+          "falsePositives" : 0,
           "noMatchDenominator" : 3,
           "positiveDenominator" : 16,
           "regionConflictDenominator" : 2,
-          "top1" : 14,
+          "top1" : 13,
           "top3" : 16,
           "top10" : 16
         },
@@ -29,20 +29,20 @@
           "actualEngineInvocations" : 24,
           "ambiguousAccepted" : 1,
           "ambiguousDenominator" : 1,
-          "candidateRecallHits" : 17,
-          "confidenceCompliant" : 23,
+          "candidateRecallHits" : 18,
+          "confidenceCompliant" : 24,
           "confidenceDenominator" : 24,
-          "correctNoMatch" : 2,
-          "correctRegionConflicts" : 1,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
           "coverageBlockedCases" : 0,
           "eligibleCases" : 24,
-          "falsePositives" : 1,
+          "falsePositives" : 0,
           "noMatchDenominator" : 3,
           "positiveDenominator" : 18,
           "regionConflictDenominator" : 2,
-          "top1" : 8,
-          "top3" : 12,
-          "top10" : 14
+          "top1" : 13,
+          "top3" : 17,
+          "top10" : 18
         }
       },
       "cases" : [
@@ -50,7 +50,7 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.7142857142857143,
+            0.5714285714285714,
             0.4523809523809524,
             0.38095238095238093,
             0.3333333333333333,
@@ -97,8 +97,8 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.35714285714285715,
             0.3333333333333333,
+            0.2857142857142857,
             0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
@@ -108,15 +108,15 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000006"
           ],
-          "displayedRank" : 1,
+          "displayedRank" : 2,
           "failures" : [
 
           ],
@@ -139,7 +139,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 8,
           "retrievedTargetRanks" : {
-            "00000000-0000-0000-0000-000000000003" : 2
+            "00000000-0000-0000-0000-000000000003" : 1
           },
           "serviceError" : null
         },
@@ -149,8 +149,8 @@
           "confidence" : [
             0.47619047619047616,
             0.2619047619047619,
-            0.23809523809523808,
             0.19047619047619047,
+            0.16666666666666666,
             0.19047619047619047,
             0.16666666666666666,
             0.09523809523809523
@@ -160,8 +160,8 @@
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000005",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000010",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000006"
@@ -199,16 +199,20 @@
           "confidence" : [
             0.30952380952380953,
             0.23809523809523808,
-            0.23809523809523808,
-            0.16666666666666666
+            0.16666666666666666,
+            0.14285714285714285,
+            0.16666666666666666,
+            0.09523809523809523
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000005",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000008",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000006",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
+            "00000000-0000-0000-0000-000000000010"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -216,6 +220,8 @@
           ],
           "id" : "v05-02-paraphrase",
           "informationLevels" : [
+            "sufficient",
+            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient",
@@ -228,7 +234,7 @@
           "pack" : "caribbean",
           "packRegionCompatibility" : "unspecified",
           "retrievalLimit" : 50,
-          "retrievedCandidateCount" : 6,
+          "retrievedCandidateCount" : 7,
           "retrievedTargetRanks" : {
             "00000000-0000-0000-0000-000000000005" : 1
           },
@@ -239,7 +245,7 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.35714285714285715,
-            0.35714285714285715,
+            0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
             0.19047619047619047,
@@ -285,7 +291,7 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5714285714285714,
+            0.5,
             0.40476190476190477,
             0.40476190476190477,
             0.2619047619047619,
@@ -333,8 +339,8 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.16666666666666666,
-            0.19047619047619047,
             0.09523809523809523,
+            0.11904761904761904,
             0.11904761904761904,
             0.09523809523809523
           ],
@@ -342,8 +348,8 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
-            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000009"
           ],
@@ -377,7 +383,7 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.35714285714285715,
-            0.35714285714285715,
+            0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
             0.14285714285714285,
@@ -387,8 +393,8 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
-            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000006"
@@ -423,7 +429,7 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.6666666666666666,
+            0.7142857142857143,
             0.47619047619047616,
             0.30952380952380953,
             0.23809523809523808,
@@ -437,8 +443,8 @@
             "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000008",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
-            "00000000-0000-0000-0000-000000000003"
+            "00000000-0000-0000-0000-000000000003",
+            "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -564,22 +570,16 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5952380952380952,
-            0.35714285714285715,
-            0.2857142857142857,
-            0.11904761904761904,
-            0.09523809523809523,
-            0.11904761904761904
+            0.5238095238095238,
+            0.19047619047619047,
+            0.19047619047619047
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000003",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "00000000-0000-0000-0000-000000000006",
-            "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
+            "00000000-0000-0000-0000-000000000005"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -587,9 +587,6 @@
           ],
           "id" : "v05-06-paraphrase",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient"
@@ -612,8 +609,8 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.3333333333333333,
-            0.14285714285714285,
-            0.09523809523809523
+            0.21428571428571427,
+            0.16666666666666666
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
@@ -650,23 +647,17 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.5,
-            0.2619047619047619,
-            0.23809523809523808,
             0.16666666666666666,
             0.16666666666666666,
-            0.09523809523809523,
             0.09523809523809523
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000009",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000010",
-            "00000000-0000-0000-0000-000000000005",
-            "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
+            "00000000-0000-0000-0000-000000000003",
+            "00000000-0000-0000-0000-000000000010"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -674,9 +665,6 @@
           ],
           "id" : "v05-07-paraphrase",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient",
@@ -699,11 +687,11 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5,
+            0.5476190476190477,
             0.23809523809523808,
-            0.19047619047619047,
             0.16666666666666666,
             0.14285714285714285,
+            0.09523809523809523,
             0.09523809523809523
           ],
           "coverageBlocked" : false,
@@ -711,9 +699,9 @@
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000006",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : 1,
@@ -747,9 +735,9 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.5952380952380952,
-            0.40476190476190477,
             0.38095238095238093,
             0.38095238095238093,
+            0.30952380952380953,
             0.2857142857142857,
             0.30952380952380953,
             0.21428571428571427
@@ -758,9 +746,9 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000010",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000005",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000006",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
@@ -796,16 +784,16 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.38095238095238093,
             0.35714285714285715,
             0.35714285714285715,
             0.35714285714285715,
             0.35714285714285715,
             0.35714285714285715,
             0.35714285714285715,
-            0.35714285714285715,
-            0.35714285714285715,
-            0.35714285714285715,
-            0.35714285714285715
+            0.30952380952380953,
+            0.30952380952380953,
+            0.2857142857142857
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
@@ -817,9 +805,9 @@
             "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD",
             "C3335449-CA92-5B8B-ACAC-1F112E4D3D0F",
             "1EB658A5-9530-5575-9E6B-CA78D2786DF1",
-            "17AC75E3-9F5B-5840-9208-D0CEE6F567C9",
-            "90B99F85-A0AF-56DC-A9AA-0E080B1696EA",
-            "558769EB-54DB-5CB8-B778-154F08891BFB"
+            "00F689E6-CFC3-55E7-88C9-C4265A122E53",
+            "7F3B2B53-75FC-5B1A-B8E7-5F4E2A6AA865",
+            "5EC416BC-7421-54C8-99E0-2BECA1C062E9"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -858,31 +846,31 @@
             0.16666666666666666,
             0.16666666666666666,
             0.14285714285714285,
+            0.14285714285714285,
+            0.11904761904761904,
+            0.14285714285714285,
             0.11904761904761904,
             0.11904761904761904,
             0.11904761904761904,
-            0.11904761904761904,
-            0.11904761904761904,
-            0.09523809523809523,
-            0.09523809523809523
+            0.11904761904761904
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
             "00F689E6-CFC3-55E7-88C9-C4265A122E53",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
-            "5F33A92F-7E8B-5085-B157-180624CE6921",
             "96B39A71-6C8F-515D-B5E6-1AC30C834A8C",
-            "14EC2F60-3934-5716-A5BF-10022EE21B6C",
-            "97F65116-33B9-5DE2-A3E4-42234157AAFF",
-            "7BE902AD-2415-55C0-A87D-4098D9E286C1"
+            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B",
+            "8D2D0075-7E71-51A4-81F7-FC4844EA91BA",
+            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+            "7F3B2B53-75FC-5B1A-B8E7-5F4E2A6AA865",
+            "44773A33-AC23-5C9F-BF7C-14DE597E5840",
+            "90B99F85-A0AF-56DC-A9AA-0E080B1696EA",
+            "D279F87C-6853-5D85-AFC4-7274B314AE50",
+            "558769EB-54DB-5CB8-B778-154F08891BFB"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 3,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-09-paraphrase",
           "informationLevels" : [
@@ -946,34 +934,34 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.30952380952380953,
+            0.30952380952380953,
+            0.30952380952380953,
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
+            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
             "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+            "DED990CC-3044-5F31-98D4-D388267B0167",
             "B9051029-84C1-5B09-8BF2-992304454F80",
+            "A7B5ABC3-0287-5179-A878-46A46E30492A",
+            "90B99F85-A0AF-56DC-A9AA-0E080B1696EA",
             "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
-            "CC4394D7-CE81-515E-B22A-22D5892C0913",
-            "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
-            "5EDE4248-968A-506A-BE19-71A06B8CE2A2",
-            "8D2D0075-7E71-51A4-81F7-FC4844EA91BA"
+            "41B762FA-3283-5542-8175-3189042B5ACB"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 5,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-10-paraphrase",
           "informationLevels" : [
@@ -997,7 +985,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "DED990CC-3044-5F31-98D4-D388267B0167" : 23
+            "DED990CC-3044-5F31-98D4-D388267B0167" : 31
           },
           "serviceError" : null
         },
@@ -1005,12 +993,12 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.3333333333333333,
             0.30952380952380953,
             0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
             0.23809523809523808,
             0.23809523809523808,
             0.23809523809523808,
@@ -1019,18 +1007,18 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
             "629E2FFF-4829-5385-B9B9-7C547D9005D8",
             "571CF93B-0359-5486-82C7-27DCCA499BAD",
-            "12135912-59AF-5B63-9015-67E636BEEA7C",
             "1BB0B6B9-1BD1-5AEC-A7DD-1F99A4EA0E43",
+            "72C9D5D0-47B8-540D-87CF-B4F31E15F342",
+            "DCEDE37F-54E9-5E70-86EC-89419FEA87E9",
             "A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA",
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
             "A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0",
-            "CA1F8CD6-E40B-54EC-97D2-7D40E425C304",
-            "50E8B5F2-0196-5811-8C51-2D1366AC10CE",
-            "72C9D5D0-47B8-540D-87CF-B4F31E15F342"
+            "50E8B5F2-0196-5811-8C51-2D1366AC10CE"
           ],
-          "displayedRank" : 3,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -1064,11 +1052,11 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
+            0.30952380952380953,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.23809523809523808,
             0.21428571428571427,
             0.21428571428571427,
             0.21428571428571427,
@@ -1079,15 +1067,15 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "12135912-59AF-5B63-9015-67E636BEEA7C",
-            "C7D77E9A-9578-589B-BF4B-22BE6121E46B",
-            "D5553B11-8B22-5531-ACCC-CC6DE9ADD6BC",
-            "0EFB6DA7-1078-5F70-844B-B1B324969C2B",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
             "5E8BBBF9-AED7-530E-894D-58494FBEF5EC",
-            "A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA",
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
             "4C541D71-90E9-5F9E-AB57-54039AA093CE",
-            "898FA51C-DBB2-5FA1-8E95-AD69A9395323"
+            "A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA",
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E",
+            "C9812414-91F9-5969-982C-0BBFF8C5B1DF",
+            "7F3B2B53-75FC-5B1A-B8E7-5F4E2A6AA865",
+            "44773A33-AC23-5C9F-BF7C-14DE597E5840",
+            "B5173597-6AE9-5941-9A76-20DF2C7BC93E",
+            "50020F47-9605-5ED9-BB79-7A2E43DB22B9"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1115,7 +1103,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "12135912-59AF-5B63-9015-67E636BEEA7C" : 4
+            "12135912-59AF-5B63-9015-67E636BEEA7C" : 6
           },
           "serviceError" : null
         },
@@ -1123,32 +1111,32 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.3333333333333333,
             0.2619047619047619,
             0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.2619047619047619
+            0.21428571428571427,
+            0.21428571428571427,
+            0.21428571428571427,
+            0.19047619047619047,
+            0.21428571428571427,
+            0.21428571428571427,
+            0.21428571428571427
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "D0D75A40-D5D5-5500-88DE-551F29847498",
             "987B3653-D83F-54A0-AFCF-0B48C75C635E",
+            "D0D75A40-D5D5-5500-88DE-551F29847498",
             "CC4394D7-CE81-515E-B22A-22D5892C0913",
-            "9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6",
-            "5EDE4248-968A-506A-BE19-71A06B8CE2A2",
-            "8D2D0075-7E71-51A4-81F7-FC4844EA91BA",
-            "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "558769EB-54DB-5CB8-B778-154F08891BFB"
+            "DCEDE37F-54E9-5E70-86EC-89419FEA87E9",
+            "C7D77E9A-9578-589B-BF4B-22BE6121E46B",
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
+            "5F52E714-6058-54B8-BE54-304C90D2A8DE",
+            "D279F87C-6853-5D85-AFC4-7274B314AE50",
+            "C51A3EA1-4C82-58DA-8FCF-B0FDE5A62FA3",
+            "C4324FDC-688D-5DA3-9FA0-5A3E4C6C4864"
           ],
-          "displayedRank" : 2,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -1174,7 +1162,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 4
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 1
           },
           "serviceError" : null
         },
@@ -1182,32 +1170,32 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.47619047619047616,
+            0.6190476190476191,
             0.30952380952380953,
-            0.2619047619047619,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
             0.23809523809523808,
             0.23809523809523808,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.14285714285714285
+            0.23809523809523808,
+            0.23809523809523808,
+            0.21428571428571427
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "1E867B08-420F-5D06-ABEB-6A45377E5159",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "72FD34A5-3577-51A4-987E-D99C8C6D8AE5",
-            "1DFF4911-9BC2-519B-AB00-32EE2D0E084F",
-            "CA2342DA-D2FE-503C-9232-83315B7EC9A8",
-            "A61A04FD-0159-51D6-A385-B1C7BAF193A5",
-            "987B3653-D83F-54A0-AFCF-0B48C75C635E"
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E",
+            "9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6",
+            "4FCB4036-B38D-5A4C-8F4B-A949478ED463",
+            "44773A33-AC23-5C9F-BF7C-14DE597E5840",
+            "1E10CF2D-3B49-5BF7-A2EF-4A59AA10C916",
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
+            "3ECD3903-C9B4-5920-9377-79C62F4D5674",
+            "E52E42ED-4497-5EA0-9858-CDCEA4520CFF",
+            "A612E8B3-9034-513B-9C40-F4C4B29C0ECA"
           ],
-          "displayedRank" : 10,
+          "displayedRank" : 2,
           "failures" : [
 
           ],
@@ -1241,20 +1229,47 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-
+            0.2619047619047619,
+            0.19047619047619047,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.14285714285714285,
+            0.14285714285714285,
+            0.14285714285714285,
+            0.14285714285714285,
+            0.14285714285714285,
+            0.14285714285714285
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "allCandidatesRejectedByRanker",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E",
+            "89AD863A-8F3D-5754-BEE9-0692E0332C38",
+            "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
+            "A515F207-F215-55EB-88C8-90402E50D46B",
+            "0AA59113-0FE6-5F3A-9F19-C08B36BE7CCB",
+            "EDEF176B-14D2-546D-AF3F-C385CC0ADF20",
+            "AF402440-19B6-5AC3-A052-F548682214AE",
+            "6BD1ACFA-74D9-5AAD-8BEA-653DFFDBA88D",
+            "D2B7404C-DF37-5067-A8E4-E24992358DFB",
+            "5C4647BA-2339-5075-9D81-759852CC6616"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-13-diagnostic",
           "informationLevels" : [
-
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
@@ -1265,7 +1280,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 11
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 21
           },
           "serviceError" : null
         },
@@ -1273,30 +1288,30 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.47619047619047616,
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
-            0.3333333333333333,
-            0.3333333333333333,
-            0.3333333333333333,
-            0.3333333333333333
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "B932EA57-BE9A-54C9-9036-656DC49E5E2E",
             "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
-            "368CE0A4-9C3F-59E7-96E0-7FCE888DF4A6",
-            "84FA676D-BFE7-5022-84E1-9C52C857862E",
-            "9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E",
-            "14548B26-3ECE-526F-AB9C-AB5293546DBF",
-            "8D861B0C-A526-5999-A44F-2175616616E1",
-            "24882309-158B-5D73-8759-9013448C19E1",
-            "F5F18976-ED6C-5013-93FD-93ADDF9CEA0E",
-            "6D7E2241-7164-5ADA-BEB1-D3D4BA6E31E3"
+            "DE64CCCA-726F-5143-9C66-5EF16DBB2467",
+            "2F64564C-FD23-5593-972D-EBD376442A2F",
+            "24BC853E-A29D-52FC-9C26-9743ED203BB0",
+            "05C58FA8-0BA9-57D7-B86C-FE21B4CC88E5",
+            "D78C432A-0F21-52A8-8259-299AC77AA5FB",
+            "DC0A196C-63DA-51E3-BED2-F932F86222D2",
+            "356512AE-B9F8-5744-9B3D-743CB1371B3E",
+            "A7ACE94D-E255-537E-8359-BD950EE6ABB6"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1332,30 +1347,30 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.7857142857142857,
+            0.8333333333333334,
+            0.35714285714285715,
+            0.35714285714285715,
+            0.3333333333333333,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
-            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
             "5A54DA12-AC3D-577D-8CBD-645D6A3B3F55",
             "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
-            "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD",
-            "A388889A-8816-5616-9B14-7B606E7A7137",
-            "20E5BE0E-FE6C-55C6-AB19-09D8F8F8A99F",
-            "992317FC-5564-5699-A562-2BEC0CA27CA4"
+            "5E247EFE-3B89-56A7-81BE-13DD291AD573",
+            "79EE29ED-0749-55FC-9132-285F86D5431B",
+            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
+            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
+            "6BD1ACFA-74D9-5AAD-8BEA-653DFFDBA88D",
+            "B562A1AC-CDD6-5532-9752-CB481B696E8A",
+            "8D2D0075-7E71-51A4-81F7-FC4844EA91BA"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1391,32 +1406,32 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.5476190476190477,
             0.5,
             0.5,
-            0.4523809523809524,
-            0.4523809523809524,
-            0.4523809523809524,
+            0.47619047619047616,
+            0.47619047619047616,
+            0.47619047619047616,
             0.4523809523809524,
             0.42857142857142855,
-            0.42857142857142855,
-            0.42857142857142855,
-            0.42857142857142855
+            0.4523809523809524,
+            0.4523809523809524
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "5A54DA12-AC3D-577D-8CBD-645D6A3B3F55",
-            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
             "FE89378E-A014-50D0-8F89-8E687822FCFB",
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
             "6BD1ACFA-74D9-5AAD-8BEA-653DFFDBA88D",
-            "3BA21389-15BA-55A2-B0F7-11AB6E3731C9",
-            "571CF93B-0359-5486-82C7-27DCCA499BAD",
-            "B562A1AC-CDD6-5532-9752-CB481B696E8A"
+            "B562A1AC-CDD6-5532-9752-CB481B696E8A",
+            "E4AA0D64-4005-5F09-9319-40248FE943E1",
+            "558769EB-54DB-5CB8-B778-154F08891BFB",
+            "176C8C3C-69F0-5C6A-9896-A39CB42670E2",
+            "86469BC1-8F0A-59DB-B4EF-F884CAE83E48",
+            "EBA081B8-B191-523E-A92F-01C3C91B3E69"
           ],
-          "displayedRank" : 6,
+          "displayedRank" : 3,
           "failures" : [
 
           ],
@@ -1442,7 +1457,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 16
+            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 14
           },
           "serviceError" : null
         },
@@ -1450,32 +1465,32 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.30952380952380953,
+            0.38095238095238093,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
             0.23809523809523808,
-            0.21428571428571427,
             0.23809523809523808,
-            0.23809523809523808,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
             0.21428571428571427
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "F8D905FE-124C-5FA2-B3AA-7A60FAF106D9",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
             "C059528C-F884-5B96-B67B-D912A33846B1",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
+            "7EBE7F91-C40D-5A59-9BA7-AE78B9F3B207",
+            "24E5EA29-F314-5073-B0F1-33CAE6AA1DCD",
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "87727436-CAFC-58B3-8818-F77FCBF554B7",
+            "5A9D2557-1AC8-5A27-A207-A10CD805A8ED",
+            "558769EB-54DB-5CB8-B778-154F08891BFB",
             "DA1E2342-481C-5F18-83BA-C49F12195024",
-            "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "5784208A-308B-59D4-A2BE-EA82BFCC18E9",
-            "9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E",
-            "83FAC933-9800-5185-B064-1537DD378D2B",
-            "2BC7B96E-5CD4-5968-872B-BA8E4427F15D",
-            "51B78D70-F02A-5B0A-9E46-7A9A6B009C6E"
+            "83FAC933-9800-5185-B064-1537DD378D2B"
           ],
-          "displayedRank" : 3,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -1509,30 +1524,30 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.47619047619047616,
+            0.47619047619047616,
+            0.47619047619047616,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
             0.38095238095238093,
+            0.3333333333333333,
             0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "C059528C-F884-5B96-B67B-D912A33846B1",
-            "8439DC39-4ACA-5C2A-84A0-9A4F1B0B1052",
+            "24E5EA29-F314-5073-B0F1-33CAE6AA1DCD",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
+            "204FAA4F-48E4-554F-A24A-64711EC1042D",
+            "5A9D2557-1AC8-5A27-A207-A10CD805A8ED",
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
             "5E5249AB-B3EF-5097-B653-DF834EBEA274",
-            "6C756E8E-318B-5FC6-9CDF-0C7E9721A186",
-            "2FDD2D2A-115A-5E1B-96F8-A7C61DB005EE",
-            "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
             "87727436-CAFC-58B3-8818-F77FCBF554B7",
-            "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
-            "D2B7404C-DF37-5067-A8E4-E24992358DFB"
+            "8439DC39-4ACA-5C2A-84A0-9A4F1B0B1052",
+            "2B714EB6-89FC-5942-A060-85446510FE4D"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1568,32 +1583,32 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.35714285714285715,
+            0.30952380952380953,
+            0.3333333333333333,
+            0.2857142857142857,
             0.2619047619047619,
             0.2619047619047619,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.16666666666666666,
-            0.16666666666666666
+            0.2619047619047619,
+            0.2619047619047619,
+            0.23809523809523808,
+            0.21428571428571427
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "20E5BE0E-FE6C-55C6-AB19-09D8F8F8A99F",
-            "9AE1DC66-105E-5D1B-B462-CC7999484B93",
             "87727436-CAFC-58B3-8818-F77FCBF554B7",
-            "548B5397-A694-5BCD-8B0B-47898DF4A675",
+            "C059528C-F884-5B96-B67B-D912A33846B1",
+            "C3FCBCE4-797E-5753-B18E-1681B1DB8570",
+            "F8D905FE-124C-5FA2-B3AA-7A60FAF106D9",
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
+            "96D5B9F2-DD8A-5025-8B0A-B5BBB66A6D28",
+            "4C7E4A16-70D6-5142-9DED-5832A998B89F",
             "1B5A82D9-C4E1-58C7-AC20-7FC9A968F69E",
-            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
-            "E4AA0D64-4005-5F09-9319-40248FE943E1",
-            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
-            "72C9D5D0-47B8-540D-87CF-B4F31E15F342",
-            "9CE9FE05-F68A-590E-8726-DCE87E9AF7C4"
+            "439B85D7-E784-5A22-AC4E-85C85B666B0D"
           ],
-          "displayedRank" : 3,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -1627,30 +1642,30 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
+            0.5714285714285714,
             0.40476190476190477,
             0.40476190476190477,
-            0.3333333333333333,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.2619047619047619,
-            0.2619047619047619,
-            0.23809523809523808
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.35714285714285715,
+            0.35714285714285715,
+            0.3333333333333333
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "87727436-CAFC-58B3-8818-F77FCBF554B7",
-            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
+            "C059528C-F884-5B96-B67B-D912A33846B1",
             "9AE1DC66-105E-5D1B-B462-CC7999484B93",
-            "8439DC39-4ACA-5C2A-84A0-9A4F1B0B1052",
+            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
+            "204FAA4F-48E4-554F-A24A-64711EC1042D",
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
             "1EB658A5-9530-5575-9E6B-CA78D2786DF1",
-            "272ECBE8-9FBA-5D1F-94BE-AD98867994B8",
-            "1B5A82D9-C4E1-58C7-AC20-7FC9A968F69E",
-            "E4AA0D64-4005-5F09-9319-40248FE943E1",
-            "20E5BE0E-FE6C-55C6-AB19-09D8F8F8A99F",
-            "C059528C-F884-5B96-B67B-D912A33846B1"
+            "C3937D91-8158-5379-BC35-1E53584F3BD1",
+            "5A9D2557-1AC8-5A27-A207-A10CD805A8ED"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1686,7 +1701,8 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.38095238095238093,
+            0.42857142857142855,
+            0.35714285714285715,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
@@ -1694,8 +1710,7 @@
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
-            0.30952380952380953,
-            0.23809523809523808
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
@@ -1703,13 +1718,13 @@
             "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
             "7A662BE3-854F-5819-8D32-CB8B1F19A00B",
             "82BE7083-5E34-590D-9C20-5992B0F867FE",
-            "0AA59113-0FE6-5F3A-9F19-C08B36BE7CCB",
-            "B16558C8-C88A-5367-BF59-474E803A4F83",
-            "D4EFA718-46AF-55B9-803C-BB10F4A41F4E",
-            "0EFB6DA7-1078-5F70-844B-B1B324969C2B",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "7C1B0023-3B5E-54C4-99DA-6DD2C51402A4",
-            "CE88CB94-3966-591B-93FF-F296B7D62A6E"
+            "4673D5C5-E2DE-5C4F-B29B-B8F362DBDC5F",
+            "F596A6B6-42B2-51EB-8989-1EDDF1BE67CD",
+            "FE218DCC-8FE2-5B85-B91D-9FEE5A75A984",
+            "1C357276-B569-5BF7-86F0-11B20716CFFB",
+            "61C2E589-525C-5505-9681-458F3F13CAD1",
+            "FE105937-98CD-5E29-AC6B-417A66121C7F",
+            "442B5310-FEFC-5583-8BBA-57E03E22BE38"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -1737,42 +1752,42 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 2
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 3
           },
           "serviceError" : null
         },
         {
           "actualEngine" : "production-bm25-50-biological",
-          "candidateRecalled" : false,
+          "candidateRecalled" : true,
           "confidence" : [
-            0.2857142857142857,
-            0.2857142857142857,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.11904761904761904,
-            0.11904761904761904,
-            0.11904761904761904,
-            0.11904761904761904
+            0.30952380952380953,
+            0.30952380952380953,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "97F65116-33B9-5DE2-A3E4-42234157AAFF",
-            "CA2342DA-D2FE-503C-9232-83315B7EC9A8",
-            "1DFF4911-9BC2-519B-AB00-32EE2D0E084F",
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
+            "7A662BE3-854F-5819-8D32-CB8B1F19A00B",
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
             "FF5AEAB3-BED4-5262-B6DD-27D8B2449F39",
+            "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
+            "E3EBFEC1-B865-5CAA-8038-2F5B30DF41C5",
+            "14548B26-3ECE-526F-AB9C-AB5293546DBF",
             "C8C1235D-283F-56C7-BE3B-B4D0CFAF5E87",
-            "EF324852-C4C5-53B0-95EC-8C3CBE8414AF",
-            "B97B5AB6-7DA6-528F-916D-0BDB5854C15B"
+            "7CD9818F-540B-59DE-AE59-45C0527414E3",
+            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
+            "053466E0-679C-570D-8108-5DCFA48F2282"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 2,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-17-paraphrase",
           "informationLevels" : [
@@ -1796,7 +1811,7 @@
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
-
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 22
           },
           "serviceError" : null
         },
@@ -1858,10 +1873,10 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : true,
           "confidence" : [
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
+            0.19047619047619047,
+            0.19047619047619047,
+            0.19047619047619047,
+            0.19047619047619047,
             0.16666666666666666,
             0.16666666666666666,
             0.16666666666666666,
@@ -1872,10 +1887,10 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "12135912-59AF-5B63-9015-67E636BEEA7C",
             "DED990CC-3044-5F31-98D4-D388267B0167",
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
+            "6B7CC03F-9B7C-5A84-A2E2-0AA00EB67A7F",
             "DCEDE37F-54E9-5E70-86EC-89419FEA87E9",
-            "C7D77E9A-9578-589B-BF4B-22BE6121E46B",
             "AF3278F2-A161-51BE-9088-BB410B71E8AC",
             "1522698F-BA51-51F7-90C7-5539E5FA7C02",
             "2BC7B96E-5CD4-5968-872B-BA8E4427F15D",
@@ -1910,8 +1925,8 @@
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
             "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 1,
-            "12135912-59AF-5B63-9015-67E636BEEA7C" : 2,
-            "DED990CC-3044-5F31-98D4-D388267B0167" : 3
+            "12135912-59AF-5B63-9015-67E636BEEA7C" : 3,
+            "DED990CC-3044-5F31-98D4-D388267B0167" : 2
           },
           "serviceError" : null
         },
@@ -1983,21 +1998,20 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-            0.16666666666666666
+
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "rankedCandidates",
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000010"
+
           ],
           "displayedRank" : null,
           "failures" : [
-            "noMatch",
-            "confidenceLimit"
+
           ],
           "id" : "v05-caribbean-terrestrial",
           "informationLevels" : [
-            "sufficient"
+
           ],
           "kind" : "noMatch",
           "observedRegions" : [
@@ -2080,48 +2094,20 @@
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047
+
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "rankedCandidates",
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
-            "50020F47-9605-5ED9-BB79-7A2E43DB22B9",
-            "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
-            "14548B26-3ECE-526F-AB9C-AB5293546DBF",
-            "5EC416BC-7421-54C8-99E0-2BECA1C062E9",
-            "C8C1235D-283F-56C7-BE3B-B4D0CFAF5E87",
-            "E74C1781-F03C-5378-B8C9-6184AA16BD6C",
-            "62015454-381B-5A12-B3BA-AFB5AA41EABA",
-            "C5C35E73-5A99-5868-BB94-81FA7C2A8A89",
-            "7ACC216E-6E3F-5228-BF2B-51CB4CF7C597",
-            "368CE0A4-9C3F-59E7-96E0-7FCE888DF4A6"
+
           ],
           "displayedRank" : null,
           "failures" : [
-            "noMatch",
-            "confidenceLimit"
+
           ],
           "id" : "v05-tropical-pacific-terrestrial",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient"
+
           ],
           "kind" : "noMatch",
           "observedRegions" : [
@@ -2143,7 +2129,7 @@
 
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "allCandidatesRejectedByRanker",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -2175,13 +2161,13 @@
 
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "allCandidatesRejectedByRanker",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
           "displayedRank" : null,
           "failures" : [
-            "regionConflict"
+
           ],
           "id" : "v05-region-2",
           "informationLevels" : [
@@ -2189,75 +2175,48 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "philippines"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "unspecified",
+          "packRegionCompatibility" : "conflicting",
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 7,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : null
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477
+
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6",
-            "F947DD86-AA8B-58BC-8E14-7539CD219B3D",
-            "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
-            "B562A1AC-CDD6-5532-9752-CB481B696E8A",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
-            "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
-            "5EDE4248-968A-506A-BE19-71A06B8CE2A2",
-            "1E867B08-420F-5D06-ABEB-6A45377E5159",
-            "A515F207-F215-55EB-88C8-90402E50D46B",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3"
+
           ],
           "displayedRank" : null,
           "failures" : [
-            "regionConflict"
+
           ],
           "id" : "v05-region-3",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient"
+
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "bahamas"
           ],
           "pack" : "tropical-pacific",
-          "packRegionCompatibility" : "unspecified",
+          "packRegionCompatibility" : "conflicting",
           "retrievalLimit" : 50,
           "retrievedCandidateCount" : 50,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : null
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "production-bm25-50-biological",
@@ -2296,79 +2255,80 @@
         "actualEngineInvocations" : 46,
         "ambiguousAccepted" : 2,
         "ambiguousDenominator" : 2,
-        "candidateRecallHits" : 33,
-        "confidenceCompliant" : 44,
+        "candidateRecallHits" : 34,
+        "confidenceCompliant" : 46,
         "confidenceDenominator" : 46,
-        "correctNoMatch" : 4,
-        "correctRegionConflicts" : 2,
+        "correctNoMatch" : 6,
+        "correctRegionConflicts" : 4,
         "coverageBlockedCases" : 0,
         "eligibleCases" : 46,
-        "falsePositives" : 2,
+        "falsePositives" : 0,
         "noMatchDenominator" : 6,
         "positiveDenominator" : 34,
         "regionConflictDenominator" : 4,
-        "top1" : 22,
-        "top3" : 28,
-        "top10" : 30
+        "top1" : 26,
+        "top3" : 33,
+        "top10" : 34
       },
       "gates" : [
         {
           "denominator" : 34,
-          "hits" : 33,
+          "hits" : 34,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
           "status" : "passed"
         },
         {
           "denominator" : 46,
-          "hits" : 44,
+          "hits" : 46,
           "metric" : "confidenceCompliant",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 6,
-          "hits" : 4,
+          "hits" : 6,
           "metric" : "noMatchCorrect",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 4,
-          "hits" : 2,
+          "hits" : 4,
           "metric" : "regionConflictCorrect",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 22,
+          "hits" : 26,
           "metric" : "top1",
           "minimumRate" : 0.4,
           "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 30,
+          "hits" : 34,
           "metric" : "top10",
           "minimumRate" : 0.8,
           "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 28,
+          "hits" : 33,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "status" : "passed"
         }
       ],
       "loadedProfileFingerprints" : {
-        "caribbean" : "a0e8e5908c1d2d4b3b8c5e5a2e6de543aed0062a0d0e429711fe6af33e4c784e",
-        "tropical-pacific" : "a078c9a5f2c84be32403ef026b4a81e7dfe3c110122dc95281a19c5fc06fceb7"
+        "caribbean" : "d714b61bf2cd6b31cbe125a7d7b0afc0c5d4ac035cc257cec62f3ede6efb39c9",
+        "global" : "fddf1c1d54fdc96bd55506a6b89ed19d7c566e5fcd53fcdcb4a206a774d1aa67",
+        "tropical-pacific" : "5d53c3f61d2a2fd5601a46bc2fd5a5318f4f7394dd502d936b22f393e8d56a5a"
       },
       "packSizes" : {
         "caribbean" : 8,
-        "tropical-pacific" : 384
+        "tropical-pacific" : 1000
       },
       "requestedEngine" : "production-bm25-50-biological"
     },
@@ -2380,38 +2340,38 @@
           "ambiguousAccepted" : 1,
           "ambiguousDenominator" : 1,
           "candidateRecallHits" : 16,
-          "confidenceCompliant" : 21,
+          "confidenceCompliant" : 22,
           "confidenceDenominator" : 22,
-          "correctNoMatch" : 2,
-          "correctRegionConflicts" : 1,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
           "coverageBlockedCases" : 0,
           "eligibleCases" : 22,
-          "falsePositives" : 1,
+          "falsePositives" : 0,
           "noMatchDenominator" : 3,
           "positiveDenominator" : 16,
           "regionConflictDenominator" : 2,
-          "top1" : 11,
+          "top1" : 13,
           "top3" : 15,
           "top10" : 16
         },
         "tropical-pacific" : {
           "actualEngineInvocations" : 24,
-          "ambiguousAccepted" : 0,
+          "ambiguousAccepted" : 1,
           "ambiguousDenominator" : 1,
           "candidateRecallHits" : 18,
-          "confidenceCompliant" : 23,
+          "confidenceCompliant" : 24,
           "confidenceDenominator" : 24,
-          "correctNoMatch" : 2,
-          "correctRegionConflicts" : 1,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
           "coverageBlockedCases" : 0,
           "eligibleCases" : 24,
-          "falsePositives" : 1,
+          "falsePositives" : 0,
           "noMatchDenominator" : 3,
           "positiveDenominator" : 18,
           "regionConflictDenominator" : 2,
-          "top1" : 5,
-          "top3" : 6,
-          "top10" : 8
+          "top1" : 13,
+          "top3" : 16,
+          "top10" : 18
         }
       },
       "cases" : [
@@ -2419,7 +2379,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.7142857142857143,
+            0.5714285714285714,
             0.4523809523809524,
             0.38095238095238093,
             0.3333333333333333,
@@ -2466,8 +2426,8 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.35714285714285715,
             0.3333333333333333,
+            0.2857142857142857,
             0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
@@ -2477,15 +2437,15 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000006"
           ],
-          "displayedRank" : 1,
+          "displayedRank" : 2,
           "failures" : [
 
           ],
@@ -2518,8 +2478,8 @@
           "confidence" : [
             0.47619047619047616,
             0.2619047619047619,
-            0.23809523809523808,
             0.19047619047619047,
+            0.16666666666666666,
             0.19047619047619047,
             0.16666666666666666,
             0.09523809523809523
@@ -2529,8 +2489,8 @@
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000005",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000010",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000006"
@@ -2568,16 +2528,22 @@
           "confidence" : [
             0.30952380952380953,
             0.23809523809523808,
-            0.23809523809523808,
-            0.16666666666666666
+            0.16666666666666666,
+            0.14285714285714285,
+            0.14285714285714285,
+            0.16666666666666666,
+            0.09523809523809523
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000005",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000008",
+            "00000000-0000-0000-0000-000000000003",
+            "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000006",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
+            "00000000-0000-0000-0000-000000000010"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -2585,6 +2551,9 @@
           ],
           "id" : "v05-02-paraphrase",
           "informationLevels" : [
+            "sufficient",
+            "sufficient",
+            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient",
@@ -2608,7 +2577,7 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.35714285714285715,
-            0.35714285714285715,
+            0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
             0.19047619047619047,
@@ -2617,14 +2586,14 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000008",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
             "00000000-0000-0000-0000-000000000006"
           ],
-          "displayedRank" : 2,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -2654,7 +2623,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5714285714285714,
+            0.5,
             0.40476190476190477,
             0.40476190476190477,
             0.2619047619047619,
@@ -2701,8 +2670,8 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.19047619047619047,
             0.16666666666666666,
+            0.11904761904761904,
             0.09523809523809523,
             0.11904761904761904,
             0.09523809523809523
@@ -2710,13 +2679,13 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000003",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000009"
           ],
-          "displayedRank" : 2,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -2746,7 +2715,7 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.35714285714285715,
-            0.35714285714285715,
+            0.2857142857142857,
             0.2857142857142857,
             0.21428571428571427,
             0.14285714285714285,
@@ -2755,14 +2724,14 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000003",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000006"
           ],
-          "displayedRank" : 2,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -2792,7 +2761,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.6666666666666666,
+            0.7142857142857143,
             0.47619047619047616,
             0.30952380952380953,
             0.23809523809523808,
@@ -2933,22 +2902,16 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5952380952380952,
-            0.35714285714285715,
-            0.2857142857142857,
-            0.11904761904761904,
-            0.11904761904761904,
-            0.09523809523809523
+            0.5238095238095238,
+            0.19047619047619047,
+            0.19047619047619047
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000005",
             "00000000-0000-0000-0000-000000000003",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "EFF286CC-2C87-5393-B00D-E158FD48E3AA",
-            "00000000-0000-0000-0000-000000000006"
+            "00000000-0000-0000-0000-000000000005"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -2956,9 +2919,6 @@
           ],
           "id" : "v05-06-paraphrase",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient"
@@ -2981,8 +2941,8 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.3333333333333333,
-            0.14285714285714285,
-            0.09523809523809523
+            0.21428571428571427,
+            0.16666666666666666
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
@@ -3019,11 +2979,8 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.5,
-            0.2619047619047619,
-            0.23809523809523808,
             0.16666666666666666,
             0.16666666666666666,
-            0.09523809523809523,
             0.09523809523809523
           ],
           "coverageBlocked" : false,
@@ -3032,10 +2989,7 @@
             "00000000-0000-0000-0000-000000000009",
             "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000010",
-            "00000000-0000-0000-0000-000000000005",
-            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
-            "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
+            "00000000-0000-0000-0000-000000000010"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -3043,9 +2997,6 @@
           ],
           "id" : "v05-07-paraphrase",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
             "sufficient",
             "sufficient",
             "sufficient",
@@ -3068,10 +3019,10 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.5,
+            0.5476190476190477,
             0.23809523809523808,
-            0.19047619047619047,
             0.16666666666666666,
+            0.09523809523809523,
             0.09523809523809523,
             0.14285714285714285
           ],
@@ -3080,8 +3031,8 @@
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000010",
             "00000000-0000-0000-0000-000000000008",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000005",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000006"
           ],
@@ -3116,9 +3067,9 @@
           "candidateRecalled" : true,
           "confidence" : [
             0.5952380952380952,
-            0.40476190476190477,
             0.38095238095238093,
             0.38095238095238093,
+            0.30952380952380953,
             0.30952380952380953,
             0.2857142857142857,
             0.21428571428571427
@@ -3127,9 +3078,9 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "00000000-0000-0000-0000-000000000010",
-            "00000000-0000-0000-0000-000000000003",
             "00000000-0000-0000-0000-000000000008",
             "00000000-0000-0000-0000-000000000005",
+            "00000000-0000-0000-0000-000000000003",
             "FC213EFF-6BA6-53AB-B288-F6E654299E68",
             "00000000-0000-0000-0000-000000000006",
             "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
@@ -3165,7 +3116,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.35714285714285715,
+            0.38095238095238093,
             0.35714285714285715,
             0.35714285714285715,
             0.35714285714285715,
@@ -3181,14 +3132,14 @@
           "displayedIDs" : [
             "5AF89B7E-AC74-545C-9A78-CD3B0E91101B",
             "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
+            "1410FB17-8E94-5EB9-9B3B-EEABCD521F7F",
+            "C51A3EA1-4C82-58DA-8FCF-B0FDE5A62FA3",
+            "BC077BAD-C91F-57FC-8BB6-F5FE435DC718",
+            "B3636817-1B6D-5D34-A4A2-34B7524573A1",
             "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD",
             "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
             "5F33A92F-7E8B-5085-B157-180624CE6921",
-            "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
-            "90B99F85-A0AF-56DC-A9AA-0E080B1696EA",
-            "C3335449-CA92-5B8B-ACAC-1F112E4D3D0F",
-            "17AC75E3-9F5B-5840-9208-D0CEE6F567C9",
-            "0ED08B3F-CA79-51F3-9A4E-D945C0201E84"
+            "A4A864F3-E1F2-51DF-87D3-4DF02B109326"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -3213,10 +3164,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B" : 32
+            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B" : 63
           },
           "serviceError" : null
         },
@@ -3228,30 +3179,30 @@
             0.16666666666666666,
             0.14285714285714285,
             0.14285714285714285,
+            0.14285714285714285,
             0.11904761904761904,
             0.11904761904761904,
             0.11904761904761904,
             0.11904761904761904,
-            0.11904761904761904,
-            0.09523809523809523
+            0.11904761904761904
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
             "96B39A71-6C8F-515D-B5E6-1AC30C834A8C",
-            "5F33A92F-7E8B-5085-B157-180624CE6921",
             "00F689E6-CFC3-55E7-88C9-C4265A122E53",
-            "14EC2F60-3934-5716-A5BF-10022EE21B6C",
-            "A61A04FD-0159-51D6-A385-B1C7BAF193A5"
+            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B",
+            "7F3B2B53-75FC-5B1A-B8E7-5F4E2A6AA865",
+            "8D2D0075-7E71-51A4-81F7-FC4844EA91BA",
+            "F87EBE23-093B-5ACD-9312-C17AE82B112E",
+            "B16558C8-C88A-5367-BF59-474E803A4F83",
+            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+            "71DF0DDC-240A-5792-A99A-495B81A82B48",
+            "D11F5668-8CA7-5D21-B732-8663C51CA45E"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 3,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-09-paraphrase",
           "informationLevels" : [
@@ -3272,10 +3223,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B" : 32
+            "5AF89B7E-AC74-545C-9A78-CD3B0E91101B" : 63
           },
           "serviceError" : null
         },
@@ -3304,10 +3255,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "DED990CC-3044-5F31-98D4-D388267B0167" : 36
+            "DED990CC-3044-5F31-98D4-D388267B0167" : 69
           },
           "serviceError" : null
         },
@@ -3315,34 +3266,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616,
-            0.47619047619047616
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093,
+            0.38095238095238093
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "64F4DAC1-B963-5AD5-9C5D-6E840096A363",
             "712B8243-65E6-53EB-9CCC-4CE59B520C10",
             "D0D75A40-D5D5-5500-88DE-551F29847498",
+            "DED990CC-3044-5F31-98D4-D388267B0167",
+            "7686F017-9D28-5A92-B56E-93EBE88A334C",
             "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
-            "1E10CF2D-3B49-5BF7-A2EF-4A59AA10C916",
-            "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "6D7E2241-7164-5ADA-BEB1-D3D4BA6E31E3",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
-            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
-            "B9051029-84C1-5B09-8BF2-992304454F80"
+            "5C8427C1-CB07-545D-803D-83DD092DB6C8",
+            "5F6AB60C-F588-5974-AE05-E7F152A99746",
+            "7E2F0AC3-B76A-5F88-BD0F-28856A003446",
+            "1E10CF2D-3B49-5BF7-A2EF-4A59AA10C916"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 4,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-10-paraphrase",
           "informationLevels" : [
@@ -3363,10 +3314,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "DED990CC-3044-5F31-98D4-D388267B0167" : 36
+            "DED990CC-3044-5F31-98D4-D388267B0167" : 69
           },
           "serviceError" : null
         },
@@ -3374,34 +3325,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.3333333333333333,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
             0.23809523809523808
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
             "629E2FFF-4829-5385-B9B9-7C547D9005D8",
             "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD",
             "571CF93B-0359-5486-82C7-27DCCA499BAD",
             "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
-            "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8",
-            "2EA4BDAC-4EC4-5F2E-AFFC-5CE389BB62B2",
-            "B16558C8-C88A-5367-BF59-474E803A4F83",
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
-            "561EE9EC-5568-5EED-BCF7-A0AA8C26E770"
+            "72C9D5D0-47B8-540D-87CF-B4F31E15F342",
+            "1BB0B6B9-1BD1-5AEC-A7DD-1F99A4EA0E43",
+            "011CDB74-EAA5-5851-8AE7-3BBA7319F9D2",
+            "DCEDE37F-54E9-5E70-86EC-89419FEA87E9",
+            "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-11-diagnostic",
           "informationLevels" : [
@@ -3422,10 +3373,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "12135912-59AF-5B63-9015-67E636BEEA7C" : 228
+            "12135912-59AF-5B63-9015-67E636BEEA7C" : 605
           },
           "serviceError" : null
         },
@@ -3433,34 +3384,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427,
-            0.21428571428571427
+            0.30952380952380953,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8",
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
             "629E2FFF-4829-5385-B9B9-7C547D9005D8",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
-            "561EE9EC-5568-5EED-BCF7-A0AA8C26E770",
-            "D0D75A40-D5D5-5500-88DE-551F29847498",
-            "A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0",
             "73A903AE-9475-5188-9636-87FD4DB52B72",
-            "E8AB5E70-BC16-512E-BE7B-91A61ED8DEA6",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1"
+            "1E47CE96-2CAE-52FF-B122-EACE100E73A2",
+            "4C541D71-90E9-5F9E-AB57-54039AA093CE",
+            "FFADF689-450A-5699-A5AA-F363E72C7EB0",
+            "96B39A71-6C8F-515D-B5E6-1AC30C834A8C",
+            "5E8BBBF9-AED7-530E-894D-58494FBEF5EC",
+            "F5F18976-ED6C-5013-93FD-93ADDF9CEA0E",
+            "A931EF27-AE4E-5DAE-891E-8DFE24C7E3EA"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-11-paraphrase",
           "informationLevels" : [
@@ -3481,10 +3432,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "12135912-59AF-5B63-9015-67E636BEEA7C" : 228
+            "12135912-59AF-5B63-9015-67E636BEEA7C" : 605
           },
           "serviceError" : null
         },
@@ -3492,7 +3443,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.2619047619047619,
+            0.3333333333333333,
             0.2619047619047619,
             0.2619047619047619,
             0.2619047619047619,
@@ -3506,6 +3457,7 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E",
             "F87EBE23-093B-5ACD-9312-C17AE82B112E",
             "712B8243-65E6-53EB-9CCC-4CE59B520C10",
             "71DF0DDC-240A-5792-A99A-495B81A82B48",
@@ -3514,12 +3466,11 @@
             "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
             "1E10CF2D-3B49-5BF7-A2EF-4A59AA10C916",
             "7CD9818F-540B-59DE-AE59-45C0527414E3",
-            "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
-            "5F33A92F-7E8B-5085-B157-180624CE6921"
+            "F6A3D454-371B-55D7-A18D-3540CADF5CC6"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-12-diagnostic",
           "informationLevels" : [
@@ -3540,10 +3491,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 245
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 660
           },
           "serviceError" : null
         },
@@ -3551,34 +3502,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.47619047619047616,
+            0.6190476190476191,
             0.30952380952380953,
-            0.2619047619047619,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.14285714285714285
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857,
+            0.2857142857142857
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "1E867B08-420F-5D06-ABEB-6A45377E5159",
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
-            "A61A04FD-0159-51D6-A385-B1C7BAF193A5",
-            "CA2342DA-D2FE-503C-9232-83315B7EC9A8",
-            "1DFF4911-9BC2-519B-AB00-32EE2D0E084F",
-            "72FD34A5-3577-51A4-987E-D99C8C6D8AE5",
-            "F87EBE23-093B-5ACD-9312-C17AE82B112E"
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E",
+            "96B39A71-6C8F-515D-B5E6-1AC30C834A8C",
+            "50020F47-9605-5ED9-BB79-7A2E43DB22B9",
+            "5F33A92F-7E8B-5085-B157-180624CE6921",
+            "C9812414-91F9-5969-982C-0BBFF8C5B1DF",
+            "4FCB4036-B38D-5A4C-8F4B-A949478ED463",
+            "44773A33-AC23-5C9F-BF7C-14DE597E5840",
+            "9F3ACC5E-1B33-5D39-A823-DDD7CB9086A6",
+            "B5173597-6AE9-5941-9A76-20DF2C7BC93E"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 2,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-12-paraphrase",
           "informationLevels" : [
@@ -3599,10 +3550,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 245
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 660
           },
           "serviceError" : null
         },
@@ -3610,20 +3561,47 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-
+            0.2619047619047619,
+            0.23809523809523808,
+            0.19047619047619047,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.16666666666666666,
+            0.16666666666666666
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "allCandidatesRejectedByRanker",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E",
+            "17C4DD40-21B9-51AE-BEF0-F8E93A4B7C0C",
+            "89AD863A-8F3D-5754-BEE9-0692E0332C38",
+            "A7ACE94D-E255-537E-8359-BD950EE6ABB6",
+            "47231FC4-5CE8-50EF-9C76-33E00A6E107A",
+            "1DC14E25-E6AA-519C-903B-461DE2D4DABA",
+            "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
+            "5784208A-308B-59D4-A2BE-EA82BFCC18E9",
+            "1040D730-F310-50DB-954C-D67F5C3714B8",
+            "15280CC8-8B36-5C84-8870-A8765B4D4D4E"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-13-diagnostic",
           "informationLevels" : [
-
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
@@ -3631,10 +3609,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 212
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 551
           },
           "serviceError" : null
         },
@@ -3642,6 +3620,7 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.47619047619047616,
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
@@ -3649,25 +3628,24 @@
             0.40476190476190477,
             0.40476190476190477,
             0.40476190476190477,
-            0.3333333333333333,
-            0.3333333333333333,
-            0.3333333333333333
+            0.40476190476190477,
+            0.40476190476190477
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E",
+            "A7ACE94D-E255-537E-8359-BD950EE6ABB6",
             "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
             "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
+            "C3D9D1CA-8C2E-55B9-BCE5-691E23592C5F",
+            "15280CC8-8B36-5C84-8870-A8765B4D4D4E",
             "14548B26-3ECE-526F-AB9C-AB5293546DBF",
             "84FA676D-BFE7-5022-84E1-9C52C857862E",
-            "B932EA57-BE9A-54C9-9036-656DC49E5E2E",
-            "9C8FE317-AAFB-52C3-9DBB-350A74EF8A5E",
-            "368CE0A4-9C3F-59E7-96E0-7FCE888DF4A6",
-            "2B95B491-9872-5F3F-841E-E5744949D683",
-            "1D0A742F-2143-5447-BF83-E791B2F92588",
-            "1D3E78D8-05DF-5778-AF5B-6568F1847926"
+            "DE64CCCA-726F-5143-9C66-5EF16DBB2467",
+            "DC0A196C-63DA-51E3-BED2-F932F86222D2"
           ],
-          "displayedRank" : 5,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -3690,10 +3668,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "compatible",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 212
+            "B932EA57-BE9A-54C9-9036-656DC49E5E2E" : 551
           },
           "serviceError" : null
         },
@@ -3701,30 +3679,30 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.7857142857142857,
+            0.8333333333333334,
+            0.35714285714285715,
+            0.35714285714285715,
+            0.3333333333333333,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
             "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
-            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
             "5A54DA12-AC3D-577D-8CBD-645D6A3B3F55",
-            "4DBEE47B-5654-5195-B668-14417A8E3FCD",
-            "992317FC-5564-5699-A562-2BEC0CA27CA4",
-            "1E47CE96-2CAE-52FF-B122-EACE100E73A2",
-            "3BA21389-15BA-55A2-B0F7-11AB6E3731C9"
+            "5E247EFE-3B89-56A7-81BE-13DD291AD573",
+            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
+            "FFEBB95A-B8A6-5541-BD3D-60AF99475E78",
+            "739FD46F-E885-512D-86F5-4FC485A97EFA",
+            "DD2F3443-0EA0-5857-AB10-0E75BF2904B0",
+            "86469BC1-8F0A-59DB-B4EF-F884CAE83E48",
+            "EBA081B8-B191-523E-A92F-01C3C91B3E69"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -3749,10 +3727,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 308
+            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 819
           },
           "serviceError" : null
         },
@@ -3760,32 +3738,32 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.5476190476190477,
             0.5,
             0.5,
+            0.5,
+            0.47619047619047616,
+            0.47619047619047616,
+            0.47619047619047616,
             0.4523809523809524,
             0.4523809523809524,
-            0.4523809523809524,
-            0.4523809523809524,
-            0.42857142857142855,
-            0.42857142857142855,
-            0.42857142857142855,
-            0.42857142857142855
+            0.4523809523809524
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
             "5A54DA12-AC3D-577D-8CBD-645D6A3B3F55",
-            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
             "FE89378E-A014-50D0-8F89-8E687822FCFB",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
+            "8B9F723E-09A2-5FA9-BF3E-646A2FFE9D4E",
             "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
-            "992317FC-5564-5699-A562-2BEC0CA27CA4",
-            "1E47CE96-2CAE-52FF-B122-EACE100E73A2",
-            "3BA21389-15BA-55A2-B0F7-11AB6E3731C9",
-            "96B39A71-6C8F-515D-B5E6-1AC30C834A8C"
+            "B562A1AC-CDD6-5532-9752-CB481B696E8A",
+            "6BD1ACFA-74D9-5AAD-8BEA-653DFFDBA88D",
+            "E4AA0D64-4005-5F09-9319-40248FE943E1",
+            "BA1D3F62-8D9C-5C79-A7BE-D78C35EFBC9A",
+            "5E247EFE-3B89-56A7-81BE-13DD291AD573",
+            "FFEBB95A-B8A6-5541-BD3D-60AF99475E78"
           ],
-          "displayedRank" : 6,
+          "displayedRank" : 4,
           "failures" : [
 
           ],
@@ -3808,10 +3786,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 308
+            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4" : 819
           },
           "serviceError" : null
         },
@@ -3819,34 +3797,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.38095238095238093,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808
+            0.30952380952380953,
+            0.30952380952380953,
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "C059528C-F884-5B96-B67B-D912A33846B1",
+            "24E5EA29-F314-5073-B0F1-33CAE6AA1DCD",
+            "7EBE7F91-C40D-5A59-9BA7-AE78B9F3B207",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
+            "DD55DD5F-8A17-5291-AEAC-6118B9D7B167",
+            "E205C9BB-1E87-523B-AD31-7BD9C1A0F6C5",
             "CE88CB94-3966-591B-93FF-F296B7D62A6E",
-            "F8D905FE-124C-5FA2-B3AA-7A60FAF106D9",
-            "9AE1DC66-105E-5D1B-B462-CC7999484B93",
-            "B8D5EFEE-68AC-5AF1-86B9-CEE82E54FB46",
-            "D2B7404C-DF37-5067-A8E4-E24992358DFB",
-            "992317FC-5564-5699-A562-2BEC0CA27CA4",
-            "60ED229F-97B6-59E0-9D81-4F5B68100913",
-            "FFADF689-450A-5699-A5AA-F363E72C7EB0",
-            "DA1E2342-481C-5F18-83BA-C49F12195024",
-            "6C756E8E-318B-5FC6-9CDF-0C7E9721A186"
+            "0DE44CDE-50CA-5A0C-B39E-77CDB7DB7E81",
+            "F2D70D23-A7F7-5FA6-8AFD-E112A7785A04",
+            "DC0A196C-63DA-51E3-BED2-F932F86222D2"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-15-diagnostic",
           "informationLevels" : [
@@ -3867,10 +3845,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "C059528C-F884-5B96-B67B-D912A33846B1" : 237
+            "C059528C-F884-5B96-B67B-D912A33846B1" : 633
           },
           "serviceError" : null
         },
@@ -3878,32 +3856,32 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.47619047619047616,
+            0.47619047619047616,
+            0.47619047619047616,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
             0.38095238095238093,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.23809523809523808,
-            0.23809523809523808
+            0.38095238095238093,
+            0.3333333333333333,
+            0.30952380952380953
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "24E5EA29-F314-5073-B0F1-33CAE6AA1DCD",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
             "C059528C-F884-5B96-B67B-D912A33846B1",
-            "6C756E8E-318B-5FC6-9CDF-0C7E9721A186",
-            "CE88CB94-3966-591B-93FF-F296B7D62A6E",
-            "FE89378E-A014-50D0-8F89-8E687822FCFB",
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "5A9D2557-1AC8-5A27-A207-A10CD805A8ED",
+            "204FAA4F-48E4-554F-A24A-64711EC1042D",
             "5E5249AB-B3EF-5097-B653-DF834EBEA274",
-            "8439DC39-4ACA-5C2A-84A0-9A4F1B0B1052",
-            "558769EB-54DB-5CB8-B778-154F08891BFB",
-            "2FDD2D2A-115A-5E1B-96F8-A7C61DB005EE",
-            "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8",
-            "B8D5EFEE-68AC-5AF1-86B9-CEE82E54FB46"
+            "5EB2BE4C-61F3-596C-B14A-2BCB20449C30",
+            "87727436-CAFC-58B3-8818-F77FCBF554B7",
+            "0D174396-5637-5CAD-BCC3-BE7AFCEF66E1"
           ],
-          "displayedRank" : 1,
+          "displayedRank" : 3,
           "failures" : [
 
           ],
@@ -3926,10 +3904,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "C059528C-F884-5B96-B67B-D912A33846B1" : 237
+            "C059528C-F884-5B96-B67B-D912A33846B1" : 633
           },
           "serviceError" : null
         },
@@ -3937,34 +3915,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.35714285714285715,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333,
+            0.30952380952380953,
+            0.2857142857142857,
+            0.2857142857142857,
             0.2619047619047619,
-            0.2619047619047619,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666
+            0.2619047619047619
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "20E5BE0E-FE6C-55C6-AB19-09D8F8F8A99F",
+            "87727436-CAFC-58B3-8818-F77FCBF554B7",
+            "E205C9BB-1E87-523B-AD31-7BD9C1A0F6C5",
+            "C3FCBCE4-797E-5753-B18E-1681B1DB8570",
+            "968E5A55-163C-57A6-AF33-70E4CB63D52D",
             "9AE1DC66-105E-5D1B-B462-CC7999484B93",
-            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
-            "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4",
-            "E4AA0D64-4005-5F09-9319-40248FE943E1",
-            "439B85D7-E784-5A22-AC4E-85C85B666B0D",
-            "30A04345-D339-52DE-B737-BCAD5E91CFD8",
-            "4DBEE47B-5654-5195-B668-14417A8E3FCD",
-            "E74C1781-F03C-5378-B8C9-6184AA16BD6C",
-            "D2B7404C-DF37-5067-A8E4-E24992358DFB"
+            "C059528C-F884-5B96-B67B-D912A33846B1",
+            "17A3C302-BDBF-5761-A198-217C802BAA89",
+            "F8D905FE-124C-5FA2-B3AA-7A60FAF106D9",
+            "BDDC616B-4FF4-588C-A9E7-1F36C75ED5CB",
+            "5E9124AD-8CE7-5297-A69B-43388E30F7EC"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-16-diagnostic",
           "informationLevels" : [
@@ -3985,10 +3963,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "87727436-CAFC-58B3-8818-F77FCBF554B7" : 290
+            "87727436-CAFC-58B3-8818-F77FCBF554B7" : 768
           },
           "serviceError" : null
         },
@@ -3996,32 +3974,32 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
+            0.5714285714285714,
             0.40476190476190477,
             0.40476190476190477,
-            0.3333333333333333,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953,
-            0.30952380952380953
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.40476190476190477,
+            0.38095238095238093,
+            0.38095238095238093
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
             "87727436-CAFC-58B3-8818-F77FCBF554B7",
+            "C3FCBCE4-797E-5753-B18E-1681B1DB8570",
+            "F647C25C-6BF5-53F9-BB4E-1B5694B0F6A6",
+            "C059528C-F884-5B96-B67B-D912A33846B1",
+            "1522698F-BA51-51F7-90C7-5539E5FA7C02",
             "9AE1DC66-105E-5D1B-B462-CC7999484B93",
-            "B8D5EFEE-68AC-5AF1-86B9-CEE82E54FB46",
-            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
-            "8439DC39-4ACA-5C2A-84A0-9A4F1B0B1052",
-            "764E5612-6640-5747-A42D-A0AF41B506C0",
-            "96013223-6792-5AA5-9067-AF1CA7BEA345",
-            "1B5A82D9-C4E1-58C7-AC20-7FC9A968F69E",
-            "1EB658A5-9530-5575-9E6B-CA78D2786DF1"
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "204FAA4F-48E4-554F-A24A-64711EC1042D",
+            "330CEF09-E521-5934-A943-D8D7FD312AB8",
+            "EF382C6F-CF06-5815-86DD-F09683C2D30F"
           ],
-          "displayedRank" : 2,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
@@ -4044,10 +4022,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "87727436-CAFC-58B3-8818-F77FCBF554B7" : 290
+            "87727436-CAFC-58B3-8818-F77FCBF554B7" : 768
           },
           "serviceError" : null
         },
@@ -4055,8 +4033,8 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.38095238095238093,
-            0.30952380952380953,
+            0.42857142857142855,
+            0.35714285714285715,
             0.30952380952380953,
             0.30952380952380953,
             0.30952380952380953,
@@ -4070,15 +4048,15 @@
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
             "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
+            "7A662BE3-854F-5819-8D32-CB8B1F19A00B",
             "B16558C8-C88A-5367-BF59-474E803A4F83",
+            "1410FB17-8E94-5EB9-9B3B-EEABCD521F7F",
+            "61C2E589-525C-5505-9681-458F3F13CAD1",
+            "438A372A-3451-51E7-89FA-B06D6818741A",
+            "F596A6B6-42B2-51EB-8989-1EDDF1BE67CD",
             "1CEF7D51-E7ED-5153-839F-555AB9E728FD",
             "82BE7083-5E34-590D-9C20-5992B0F867FE",
-            "7A662BE3-854F-5819-8D32-CB8B1F19A00B",
-            "7C1B0023-3B5E-54C4-99DA-6DD2C51402A4",
-            "00F689E6-CFC3-55E7-88C9-C4265A122E53",
-            "767092C2-CD61-5319-AAE4-1D912EBE25C7",
-            "D4EFA718-46AF-55B9-803C-BB10F4A41F4E",
-            "8B4CFEF7-02CE-5CDC-8974-FBFEA352A9AC"
+            "C3D9D1CA-8C2E-55B9-BCE5-691E23592C5F"
           ],
           "displayedRank" : 1,
           "failures" : [
@@ -4103,10 +4081,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 86
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 192
           },
           "serviceError" : null
         },
@@ -4114,34 +4092,34 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.2857142857142857,
-            0.2857142857142857,
-            0.2857142857142857,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.23809523809523808,
-            0.11904761904761904
+            0.30952380952380953,
+            0.30952380952380953,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619,
+            0.2619047619047619
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "65A2BC6F-F09D-53A8-AA73-97BF0212BDD3",
-            "847370AB-A43C-5A2A-8169-2A2F037A0F46",
-            "04B73CE8-FF43-52C9-A10E-87D282E3A6AD",
-            "A61A04FD-0159-51D6-A385-B1C7BAF193A5",
-            "CA2342DA-D2FE-503C-9232-83315B7EC9A8",
-            "F067FF58-EEB1-5FB8-A038-33C12D4A7535",
-            "1DFF4911-9BC2-519B-AB00-32EE2D0E084F",
-            "97F65116-33B9-5DE2-A3E4-42234157AAFF",
-            "72FD34A5-3577-51A4-987E-D99C8C6D8AE5",
-            "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8"
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB",
+            "7A662BE3-854F-5819-8D32-CB8B1F19A00B",
+            "B8D5EFEE-68AC-5AF1-86B9-CEE82E54FB46",
+            "B16558C8-C88A-5367-BF59-474E803A4F83",
+            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
+            "629E2FFF-4829-5385-B9B9-7C547D9005D8",
+            "E3EBFEC1-B865-5CAA-8038-2F5B30DF41C5",
+            "D11F5668-8CA7-5D21-B732-8663C51CA45E",
+            "ED4A355E-E3E6-59EE-BE7E-0B5FC46DCC6B",
+            "1D3E78D8-05DF-5778-AF5B-6568F1847926"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-17-paraphrase",
           "informationLevels" : [
@@ -4162,10 +4140,10 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 86
+            "5F4D48F4-6556-50F3-95AF-A4D28635F4BB" : 192
           },
           "serviceError" : null
         },
@@ -4227,11 +4205,11 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
-            0.16666666666666666,
+            0.19047619047619047,
+            0.19047619047619047,
+            0.19047619047619047,
+            0.19047619047619047,
+            0.19047619047619047,
             0.16666666666666666,
             0.16666666666666666,
             0.16666666666666666,
@@ -4241,20 +4219,20 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
+            "DED990CC-3044-5F31-98D4-D388267B0167",
+            "C7D77E9A-9578-589B-BF4B-22BE6121E46B",
+            "6B7CC03F-9B7C-5A84-A2E2-0AA00EB67A7F",
+            "12135912-59AF-5B63-9015-67E636BEEA7C",
+            "DCEDE37F-54E9-5E70-86EC-89419FEA87E9",
             "396E2D8E-AD37-5CD1-BEEA-64A470EE09D8",
             "B8D5EFEE-68AC-5AF1-86B9-CEE82E54FB46",
             "2EA4BDAC-4EC4-5F2E-AFFC-5CE389BB62B2",
-            "2B95B491-9872-5F3F-841E-E5744949D683",
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
-            "629E2FFF-4829-5385-B9B9-7C547D9005D8",
-            "4691113C-5444-53E7-8DB9-3088C11723AD",
-            "561EE9EC-5568-5EED-BCF7-A0AA8C26E770",
-            "D0D75A40-D5D5-5500-88DE-551F29847498",
-            "1FE0EFC9-AEE1-50D4-9060-CE8FC6FBBF25"
+            "64F4DAC1-B963-5AD5-9C5D-6E840096A363",
+            "2B95B491-9872-5F3F-841E-E5744949D683"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
-            "rankRequirement"
+
           ],
           "id" : "v05-ambiguous-trigger",
           "informationLevels" : [
@@ -4275,12 +4253,12 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
-            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 245,
-            "12135912-59AF-5B63-9015-67E636BEEA7C" : 228,
-            "DED990CC-3044-5F31-98D4-D388267B0167" : 36
+            "987B3653-D83F-54A0-AFCF-0B48C75C635E" : 660,
+            "12135912-59AF-5B63-9015-67E636BEEA7C" : 605,
+            "DED990CC-3044-5F31-98D4-D388267B0167" : 69
           },
           "serviceError" : null
         },
@@ -4352,24 +4330,20 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-            0.16666666666666666,
-            0.09523809523809523
+
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "rankedCandidates",
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
-            "00000000-0000-0000-0000-000000000010",
-            "00000000-0000-0000-0000-000000000005"
+
           ],
           "displayedRank" : null,
           "failures" : [
-            "noMatch",
-            "confidenceLimit"
+
           ],
           "id" : "v05-caribbean-terrestrial",
           "informationLevels" : [
-            "sufficient",
-            "sufficient"
+
           ],
           "kind" : "noMatch",
           "observedRegions" : [
@@ -4409,8 +4383,8 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
 
           },
@@ -4441,68 +4415,8 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
-          "retrievedTargetRanks" : {
-
-          },
-          "serviceError" : null
-        },
-        {
-          "actualEngine" : "structured-full-pack",
-          "candidateRecalled" : false,
-          "confidence" : [
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047,
-            0.19047619047619047
-          ],
-          "coverageBlocked" : false,
-          "diagnostic" : "rankedCandidates",
-          "displayedIDs" : [
-            "B16558C8-C88A-5367-BF59-474E803A4F83",
-            "2236AFD6-7658-5782-B578-3985F74BEFFD",
-            "A08DE5BF-B125-57ED-B5C6-07F2CF88F7E0",
-            "E74C1781-F03C-5378-B8C9-6184AA16BD6C",
-            "50020F47-9605-5ED9-BB79-7A2E43DB22B9",
-            "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
-            "1CEF7D51-E7ED-5153-839F-555AB9E728FD",
-            "86D21865-E1BD-56C8-A7E1-DCCA1DDBF9B1",
-            "CE88CB94-3966-591B-93FF-F296B7D62A6E",
-            "9177B115-C1AC-5765-B426-6448E27E61EA"
-          ],
-          "displayedRank" : null,
-          "failures" : [
-            "noMatch",
-            "confidenceLimit"
-          ],
-          "id" : "v05-tropical-pacific-terrestrial",
-          "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient"
-          ],
-          "kind" : "noMatch",
-          "observedRegions" : [
-
-          ],
-          "pack" : "tropical-pacific",
-          "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
 
           },
@@ -4516,6 +4430,38 @@
           ],
           "coverageBlocked" : false,
           "diagnostic" : "allCandidatesRejectedByRanker",
+          "displayedIDs" : [
+
+          ],
+          "displayedRank" : null,
+          "failures" : [
+
+          ],
+          "id" : "v05-tropical-pacific-terrestrial",
+          "informationLevels" : [
+
+          ],
+          "kind" : "noMatch",
+          "observedRegions" : [
+
+          ],
+          "pack" : "tropical-pacific",
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
+          "retrievedTargetRanks" : {
+
+          },
+          "serviceError" : null
+        },
+        {
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : false,
+          "confidence" : [
+
+          ],
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -4547,13 +4493,13 @@
 
           ],
           "coverageBlocked" : false,
-          "diagnostic" : "allCandidatesRejectedByRanker",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
           "displayedRank" : null,
           "failures" : [
-            "regionConflict"
+
           ],
           "id" : "v05-region-2",
           "informationLevels" : [
@@ -4561,75 +4507,48 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "philippines"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "unspecified",
+          "packRegionCompatibility" : "conflicting",
           "retrievalLimit" : 8,
           "retrievedCandidateCount" : 8,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : null
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477,
-            0.40476190476190477
+
           ],
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "712B8243-65E6-53EB-9CCC-4CE59B520C10",
-            "6B449B85-1344-554C-965E-F2FCE0B6E9E9",
-            "D8672E57-58D4-5216-AFCB-BB299BC7BFB1",
-            "F6F85B88-407D-5B5D-A3DD-FCF1CE4D81A7",
-            "1E867B08-420F-5D06-ABEB-6A45377E5159",
-            "22156798-7E62-580E-848D-857612F4E85E",
-            "7E2F0AC3-B76A-5F88-BD0F-28856A003446",
-            "F6A3D454-371B-55D7-A18D-3540CADF5CC6",
-            "A4A864F3-E1F2-51DF-87D3-4DF02B109326",
-            "5EDE4248-968A-506A-BE19-71A06B8CE2A2"
+
           ],
           "displayedRank" : null,
           "failures" : [
-            "regionConflict"
+
           ],
           "id" : "v05-region-3",
           "informationLevels" : [
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient",
-            "sufficient"
+
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "bahamas"
           ],
           "pack" : "tropical-pacific",
-          "packRegionCompatibility" : "unspecified",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "packRegionCompatibility" : "conflicting",
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : null
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "structured-full-pack",
@@ -4656,8 +4575,8 @@
           ],
           "pack" : "tropical-pacific",
           "packRegionCompatibility" : "conflicting",
-          "retrievalLimit" : 384,
-          "retrievedCandidateCount" : 384,
+          "retrievalLimit" : 1000,
+          "retrievedCandidateCount" : 1000,
           "retrievedTargetRanks" : {
 
           },
@@ -4666,22 +4585,22 @@
       ],
       "counts" : {
         "actualEngineInvocations" : 46,
-        "ambiguousAccepted" : 1,
+        "ambiguousAccepted" : 2,
         "ambiguousDenominator" : 2,
         "candidateRecallHits" : 34,
-        "confidenceCompliant" : 44,
+        "confidenceCompliant" : 46,
         "confidenceDenominator" : 46,
-        "correctNoMatch" : 4,
-        "correctRegionConflicts" : 2,
+        "correctNoMatch" : 6,
+        "correctRegionConflicts" : 4,
         "coverageBlockedCases" : 0,
         "eligibleCases" : 46,
-        "falsePositives" : 2,
+        "falsePositives" : 0,
         "noMatchDenominator" : 6,
         "positiveDenominator" : 34,
         "regionConflictDenominator" : 4,
-        "top1" : 16,
-        "top3" : 21,
-        "top10" : 24
+        "top1" : 26,
+        "top3" : 31,
+        "top10" : 34
       },
       "gates" : [
         {
@@ -4693,54 +4612,55 @@
         },
         {
           "denominator" : 46,
-          "hits" : 44,
+          "hits" : 46,
           "metric" : "confidenceCompliant",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 6,
-          "hits" : 4,
+          "hits" : 6,
           "metric" : "noMatchCorrect",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 4,
-          "hits" : 2,
+          "hits" : 4,
           "metric" : "regionConflictCorrect",
           "minimumRate" : 1,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 16,
+          "hits" : 26,
           "metric" : "top1",
           "minimumRate" : 0.4,
           "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 24,
+          "hits" : 34,
           "metric" : "top10",
           "minimumRate" : 0.8,
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 21,
+          "hits" : 31,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "status" : "passed"
         }
       ],
       "loadedProfileFingerprints" : {
-        "caribbean" : "a0e8e5908c1d2d4b3b8c5e5a2e6de543aed0062a0d0e429711fe6af33e4c784e",
-        "tropical-pacific" : "a078c9a5f2c84be32403ef026b4a81e7dfe3c110122dc95281a19c5fc06fceb7"
+        "caribbean" : "d714b61bf2cd6b31cbe125a7d7b0afc0c5d4ac035cc257cec62f3ede6efb39c9",
+        "global" : "fddf1c1d54fdc96bd55506a6b89ed19d7c566e5fcd53fcdcb4a206a774d1aa67",
+        "tropical-pacific" : "5d53c3f61d2a2fd5601a46bc2fd5a5318f4f7394dd502d936b22f393e8d56a5a"
       },
       "packSizes" : {
         "caribbean" : 8,
-        "tropical-pacific" : 384
+        "tropical-pacific" : 1000
       },
       "requestedEngine" : "structured-full-pack"
     },
@@ -4748,23 +4668,23 @@
       "access" : "publication",
       "byRegion" : {
         "caribbean" : {
-          "actualEngineInvocations" : 0,
-          "ambiguousAccepted" : 0,
-          "ambiguousDenominator" : 0,
-          "candidateRecallHits" : 0,
-          "confidenceCompliant" : 0,
-          "confidenceDenominator" : 0,
-          "correctNoMatch" : 0,
-          "correctRegionConflicts" : 0,
-          "coverageBlockedCases" : 22,
-          "eligibleCases" : 0,
+          "actualEngineInvocations" : 22,
+          "ambiguousAccepted" : 1,
+          "ambiguousDenominator" : 1,
+          "candidateRecallHits" : 4,
+          "confidenceCompliant" : 10,
+          "confidenceDenominator" : 10,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
+          "coverageBlockedCases" : 12,
+          "eligibleCases" : 10,
           "falsePositives" : 0,
-          "noMatchDenominator" : 0,
-          "positiveDenominator" : 0,
-          "regionConflictDenominator" : 0,
-          "top1" : 0,
-          "top3" : 0,
-          "top10" : 0
+          "noMatchDenominator" : 3,
+          "positiveDenominator" : 4,
+          "regionConflictDenominator" : 2,
+          "top1" : 3,
+          "top3" : 4,
+          "top10" : 4
         },
         "tropical-pacific" : {
           "actualEngineInvocations" : 0,
@@ -4788,79 +4708,87 @@
       },
       "cases" : [
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "production-bm25-50-biological",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.5714285714285714,
+            0.4523809523809524
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-01-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "00000000-0000-0000-0000-000000000003" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "production-bm25-50-biological",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.2857142857142857,
+            0.2857142857142857
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-01-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "00000000-0000-0000-0000-000000000003" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.2619047619047619,
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -4868,31 +4796,34 @@
           ],
           "id" : "v05-02-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -4900,95 +4831,104 @@
           ],
           "id" : "v05-02-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "production-bm25-50-biological",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.35714285714285715,
+            0.2857142857142857
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-03-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "production-bm25-50-biological",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.5,
+            0.40476190476190477
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 2,
           "failures" : [
 
           ],
           "id" : "v05-03-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.09523809523809523,
+            0.11904761904761904
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -4996,31 +4936,34 @@
           ],
           "id" : "v05-04-diagnostic",
           "informationLevels" : [
-
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.2857142857142857,
+            0.2857142857142857
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5028,31 +4971,34 @@
           ],
           "id" : "v05-04-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.23809523809523808
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5060,31 +5006,34 @@
           ],
           "id" : "v05-05-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5092,31 +5041,34 @@
           ],
           "id" : "v05-05-paraphrase",
           "informationLevels" : [
-
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5124,31 +5076,32 @@
           ],
           "id" : "v05-06-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.19047619047619047
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5156,31 +5109,31 @@
           ],
           "id" : "v05-06-paraphrase",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5188,31 +5141,31 @@
           ],
           "id" : "v05-07-diagnostic",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 1,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5220,31 +5173,33 @@
           ],
           "id" : "v05-07-paraphrase",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.09523809523809523,
+            0.09523809523809523
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5252,31 +5207,34 @@
           ],
           "id" : "v05-08-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.30952380952380953,
+            0.30952380952380953
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -5284,20 +5242,21 @@
           ],
           "id" : "v05-08-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -5876,36 +5835,39 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "production-bm25-50-biological",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.23809523809523808,
+            0.21428571428571427
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-ambiguous-angelfish",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "ambiguous",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -5940,13 +5902,13 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "noRetrievedCandidates",
           "displayedIDs" : [
 
           ],
@@ -5963,22 +5925,22 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
           "retrievedCandidateCount" : 0,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
 
           ],
@@ -5995,22 +5957,22 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "noRetrievedCandidates",
           "displayedIDs" : [
 
           ],
@@ -6027,13 +5989,13 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 50,
           "retrievedCandidateCount" : 0,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -6132,13 +6094,13 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -6152,25 +6114,25 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "fiji"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "conflicting",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : "regionConflict"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "production-bm25-50-biological",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -6184,16 +6146,16 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "philippines"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "conflicting",
+          "retrievalLimit" : 50,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "not-executed",
@@ -6261,80 +6223,80 @@
         }
       ],
       "counts" : {
-        "actualEngineInvocations" : 0,
-        "ambiguousAccepted" : 0,
-        "ambiguousDenominator" : 0,
-        "candidateRecallHits" : 0,
-        "confidenceCompliant" : 0,
-        "confidenceDenominator" : 0,
-        "correctNoMatch" : 0,
-        "correctRegionConflicts" : 0,
-        "coverageBlockedCases" : 46,
-        "eligibleCases" : 0,
+        "actualEngineInvocations" : 22,
+        "ambiguousAccepted" : 1,
+        "ambiguousDenominator" : 1,
+        "candidateRecallHits" : 4,
+        "confidenceCompliant" : 10,
+        "confidenceDenominator" : 10,
+        "correctNoMatch" : 3,
+        "correctRegionConflicts" : 2,
+        "coverageBlockedCases" : 36,
+        "eligibleCases" : 10,
         "falsePositives" : 0,
-        "noMatchDenominator" : 0,
-        "positiveDenominator" : 0,
-        "regionConflictDenominator" : 0,
-        "top1" : 0,
-        "top3" : 0,
-        "top10" : 0
+        "noMatchDenominator" : 3,
+        "positiveDenominator" : 4,
+        "regionConflictDenominator" : 2,
+        "top1" : 3,
+        "top3" : 4,
+        "top10" : 4
       },
       "gates" : [
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 10,
+          "hits" : 10,
           "metric" : "confidenceCompliant",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 3,
+          "hits" : 3,
           "metric" : "noMatchCorrect",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 2,
+          "hits" : 2,
           "metric" : "regionConflictCorrect",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 3,
           "metric" : "top1",
           "minimumRate" : 0.4,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "top10",
           "minimumRate" : 0.8,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "top3",
           "minimumRate" : 0.6,
-          "status" : "not-evaluated"
+          "status" : "passed"
         }
       ],
       "loadedProfileFingerprints" : {
-
+        "caribbean" : "fa03fdb6563aec978b5218fd887b73789a41207f112c83e0b15b8d6b2fa66856"
       },
       "packSizes" : {
-        "caribbean" : 0,
+        "caribbean" : 2,
         "tropical-pacific" : 0
       },
       "requestedEngine" : "production-bm25-50-biological"
@@ -6343,23 +6305,23 @@
       "access" : "publication",
       "byRegion" : {
         "caribbean" : {
-          "actualEngineInvocations" : 0,
-          "ambiguousAccepted" : 0,
-          "ambiguousDenominator" : 0,
-          "candidateRecallHits" : 0,
-          "confidenceCompliant" : 0,
-          "confidenceDenominator" : 0,
-          "correctNoMatch" : 0,
-          "correctRegionConflicts" : 0,
-          "coverageBlockedCases" : 22,
-          "eligibleCases" : 0,
+          "actualEngineInvocations" : 22,
+          "ambiguousAccepted" : 1,
+          "ambiguousDenominator" : 1,
+          "candidateRecallHits" : 4,
+          "confidenceCompliant" : 10,
+          "confidenceDenominator" : 10,
+          "correctNoMatch" : 3,
+          "correctRegionConflicts" : 2,
+          "coverageBlockedCases" : 12,
+          "eligibleCases" : 10,
           "falsePositives" : 0,
-          "noMatchDenominator" : 0,
-          "positiveDenominator" : 0,
-          "regionConflictDenominator" : 0,
-          "top1" : 0,
-          "top3" : 0,
-          "top10" : 0
+          "noMatchDenominator" : 3,
+          "positiveDenominator" : 4,
+          "regionConflictDenominator" : 2,
+          "top1" : 3,
+          "top3" : 4,
+          "top10" : 4
         },
         "tropical-pacific" : {
           "actualEngineInvocations" : 0,
@@ -6383,79 +6345,87 @@
       },
       "cases" : [
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.5714285714285714,
+            0.4523809523809524
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-01-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "00000000-0000-0000-0000-000000000003" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.2857142857142857,
+            0.2857142857142857
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-01-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "00000000-0000-0000-0000-000000000003" : 1
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.2619047619047619,
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6463,31 +6433,34 @@
           ],
           "id" : "v05-02-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6495,95 +6468,104 @@
           ],
           "id" : "v05-02-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.35714285714285715,
+            0.2857142857142857
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-03-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 2
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.5,
+            0.40476190476190477
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 2,
           "failures" : [
 
           ],
           "id" : "v05-03-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 2
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.11904761904761904,
+            0.09523809523809523
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6591,31 +6573,34 @@
           ],
           "id" : "v05-04-diagnostic",
           "informationLevels" : [
-
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.2857142857142857,
+            0.2857142857142857
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6623,31 +6608,34 @@
           ],
           "id" : "v05-04-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.23809523809523808
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6655,31 +6643,34 @@
           ],
           "id" : "v05-05-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6687,31 +6678,34 @@
           ],
           "id" : "v05-05-paraphrase",
           "informationLevels" : [
-
+            "limited",
+            "limited"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.23809523809523808,
+            0.14285714285714285
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6719,31 +6713,32 @@
           ],
           "id" : "v05-06-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.19047619047619047
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6751,31 +6746,31 @@
           ],
           "id" : "v05-06-paraphrase",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6783,31 +6778,31 @@
           ],
           "id" : "v05-07-diagnostic",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.16666666666666666
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6815,31 +6810,33 @@
           ],
           "id" : "v05-07-paraphrase",
           "informationLevels" : [
-
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.09523809523809523,
+            0.09523809523809523
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6847,31 +6844,34 @@
           ],
           "id" : "v05-08-diagnostic",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
-
+            0.30952380952380953,
+            0.30952380952380953
           ],
           "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "00000000-0000-0000-0000-000000000003",
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -6879,20 +6879,21 @@
           ],
           "id" : "v05-08-paraphrase",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "identification",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -7471,36 +7472,39 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
-          "candidateRecalled" : false,
+          "actualEngine" : "structured-full-pack",
+          "candidateRecalled" : true,
           "confidence" : [
-
+            0.23809523809523808,
+            0.21428571428571427
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68",
+            "00000000-0000-0000-0000-000000000003"
           ],
-          "displayedRank" : null,
+          "displayedRank" : 1,
           "failures" : [
 
           ],
           "id" : "v05-ambiguous-angelfish",
           "informationLevels" : [
-
+            "sufficient",
+            "sufficient"
           ],
           "kind" : "ambiguous",
           "observedRegions" : [
-
+            "caribbean"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "compatible",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
-
+            "FC213EFF-6BA6-53AB-B288-F6E654299E68" : 2
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -7535,13 +7539,13 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
 
           ],
@@ -7558,22 +7562,22 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
 
           ],
@@ -7590,22 +7594,22 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "allCandidatesRejectedByRanker",
           "displayedIDs" : [
 
           ],
@@ -7622,13 +7626,13 @@
 
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "unspecified",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : null
         },
         {
           "actualEngine" : "not-executed",
@@ -7727,13 +7731,13 @@
           "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -7747,25 +7751,25 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "fiji"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "conflicting",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : "regionConflict"
         },
         {
-          "actualEngine" : "not-executed",
+          "actualEngine" : "structured-full-pack",
           "candidateRecalled" : false,
           "confidence" : [
 
           ],
-          "coverageBlocked" : true,
-          "diagnostic" : "engine-not-executed",
+          "coverageBlocked" : false,
+          "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
 
           ],
@@ -7779,16 +7783,16 @@
           ],
           "kind" : "regionConflict",
           "observedRegions" : [
-
+            "philippines"
           ],
           "pack" : "caribbean",
-          "packRegionCompatibility" : "not-evaluated",
-          "retrievalLimit" : null,
-          "retrievedCandidateCount" : 0,
+          "packRegionCompatibility" : "conflicting",
+          "retrievalLimit" : 2,
+          "retrievedCandidateCount" : 2,
           "retrievedTargetRanks" : {
 
           },
-          "serviceError" : "CATALOG_PUBLICATION_UNAVAILABLE"
+          "serviceError" : "regionConflict"
         },
         {
           "actualEngine" : "not-executed",
@@ -7856,80 +7860,80 @@
         }
       ],
       "counts" : {
-        "actualEngineInvocations" : 0,
-        "ambiguousAccepted" : 0,
-        "ambiguousDenominator" : 0,
-        "candidateRecallHits" : 0,
-        "confidenceCompliant" : 0,
-        "confidenceDenominator" : 0,
-        "correctNoMatch" : 0,
-        "correctRegionConflicts" : 0,
-        "coverageBlockedCases" : 46,
-        "eligibleCases" : 0,
+        "actualEngineInvocations" : 22,
+        "ambiguousAccepted" : 1,
+        "ambiguousDenominator" : 1,
+        "candidateRecallHits" : 4,
+        "confidenceCompliant" : 10,
+        "confidenceDenominator" : 10,
+        "correctNoMatch" : 3,
+        "correctRegionConflicts" : 2,
+        "coverageBlockedCases" : 36,
+        "eligibleCases" : 10,
         "falsePositives" : 0,
-        "noMatchDenominator" : 0,
-        "positiveDenominator" : 0,
-        "regionConflictDenominator" : 0,
-        "top1" : 0,
-        "top3" : 0,
-        "top10" : 0
+        "noMatchDenominator" : 3,
+        "positiveDenominator" : 4,
+        "regionConflictDenominator" : 2,
+        "top1" : 3,
+        "top3" : 4,
+        "top10" : 4
       },
       "gates" : [
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 10,
+          "hits" : 10,
           "metric" : "confidenceCompliant",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 3,
+          "hits" : 3,
           "metric" : "noMatchCorrect",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 2,
+          "hits" : 2,
           "metric" : "regionConflictCorrect",
           "minimumRate" : 1,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 3,
           "metric" : "top1",
           "minimumRate" : 0.4,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "top10",
           "minimumRate" : 0.8,
-          "status" : "not-evaluated"
+          "status" : "passed"
         },
         {
-          "denominator" : 0,
-          "hits" : 0,
+          "denominator" : 4,
+          "hits" : 4,
           "metric" : "top3",
           "minimumRate" : 0.6,
-          "status" : "not-evaluated"
+          "status" : "passed"
         }
       ],
       "loadedProfileFingerprints" : {
-
+        "caribbean" : "fa03fdb6563aec978b5218fd887b73789a41207f112c83e0b15b8d6b2fa66856"
       },
       "packSizes" : {
-        "caribbean" : 0,
+        "caribbean" : 2,
         "tropical-pacific" : 0
       },
       "requestedEngine" : "structured-full-pack"

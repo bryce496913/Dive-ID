@@ -35,30 +35,33 @@ enum MorphologyVocabulary {
         ("filamentous dorsal fin", #"\b(?:filamentous|thread like|threadlike)\s+(?:first )?dorsal fin\b|\bdorsal (?:fin )?(?:filament|streamer)\b"#)
     ]
 
+    // Compiled once: compiling per call dominated building the search index.
+    private static let compiled: [(concept: String, regex: NSRegularExpression)] = patterns.map { ($0.0, try! NSRegularExpression(pattern: $0.1)) }
+    private static let leafWording = try! NSRegularExpression(pattern: #"leaf(?: like| shaped|like)|shaped like a leaf"#)
+
     static func concepts(in text: String) -> Set<String> {
         let normalized = LocalObservationParser.normalize(LocalObservationParser.affirmativeEvidence(in: text))
-        return Set(patterns.compactMap { concept, pattern in
-            normalized.range(of: pattern, options: .regularExpression) == nil ? nil : concept
+        let range = NSRange(normalized.startIndex..., in: normalized)
+        return Set(compiled.compactMap { concept, regex in
+            regex.firstMatch(in: normalized, range: range) == nil ? nil : concept
         })
     }
 
     static func scopedText(_ text: String) -> String {
         var normalized = LocalObservationParser.normalize(text)
-        for (concept, pattern) in patterns {
+        for (concept, regex) in compiled {
             if concept == "leaflike" {
                 // Preserve the subject and its modifiers: morphology normalization
                 // must not erase "fish" or habitat words from retrieval.
-                let regex = try! NSRegularExpression(pattern: pattern)
                 for match in regex.matches(in: normalized, range: NSRange(normalized.startIndex..., in: normalized)).reversed() {
                     guard let range = Range(match.range, in: normalized) else { continue }
                     let phrase = String(normalized[range])
-                        .replacingOccurrences(of: #"leaf(?: like| shaped|like)|shaped like a leaf"#,
-                                              with: "leaflike", options: .regularExpression)
-                    normalized.replaceSubrange(range, with: phrase)
+                    let replaced = leafWording.stringByReplacingMatches(in: phrase, range: NSRange(phrase.startIndex..., in: phrase), withTemplate: "leaflike")
+                    normalized.replaceSubrange(range, with: replaced)
                 }
             } else {
-                normalized = normalized.replacingOccurrences(of: pattern,
-                    with: concept.replacingOccurrences(of: " ", with: ""), options: .regularExpression)
+                normalized = regex.stringByReplacingMatches(in: normalized, range: NSRange(normalized.startIndex..., in: normalized),
+                                                            withTemplate: concept.replacingOccurrences(of: " ", with: ""))
             }
         }
         return normalized

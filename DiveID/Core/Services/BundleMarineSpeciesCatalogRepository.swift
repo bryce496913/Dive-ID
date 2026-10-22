@@ -145,7 +145,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             throw failure(id, context.code, error, context.resource ?? speciesResource, context.phase)
         }
         let sorted = profiles.sorted { $0.commonName.localizedStandardCompare($1.commonName) == .orderedAscending }
-        let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted)
+        let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted,
+                                             persistentContentKey: "development-" + StableDigest.fnv1a64Hex(data))
         cachedRawPacks[id] = pack
         return pack
     }
@@ -187,7 +188,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         }
         var metadata = accounting
         metadata.speciesCount = eligible.count
-        let exposed = OfflineIdentificationPack(metadata: metadata, profiles: eligible)
+        // The same resource filtered by review status, so the same digest under its own name.
+        let exposed = OfflineIdentificationPack(metadata: metadata, profiles: eligible,
+                                                persistentContentKey: pack.persistentContentKey.map { "publication-" + $0.replacingOccurrences(of: "development-", with: "") })
         guard exposed.profiles.count == exposed.metadata.speciesCount else {
             throw failure(pack.metadata.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
                           "IdentificationPacks/\(pack.metadata.id.rawValue)/PackManifest.json", .validation)

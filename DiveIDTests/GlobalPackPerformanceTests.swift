@@ -91,6 +91,35 @@ final class GlobalPackPerformanceTests: XCTestCase {
                 for query in queries { let (_, ms) = try await time { try await engine.search(description: query, pack: pack) }; latencies.append(ms) }
             }
             let afterQueries = memory()
+            // Readiness as a diver meets it, in a fresh repository and index store (the app's
+            // state after launch): a fresh install has no stored index; a later launch loads
+            // the one the first launch wrote. Same process, so the file cache is warm.
+            var readiness: [String: Any] = [:]
+            if !subset {
+                let directory = FileManager.default.temporaryDirectory.appendingPathComponent("perf-index-\(UUID().uuidString)")
+                defer { try? FileManager.default.removeItem(at: directory) }
+                for launch in ["freshInstall", "laterLaunch"] {
+                    let store = SearchIndexStore(directory: directory)
+                    let (ready, readyMs) = try await time { () -> OfflineIdentificationPack in
+                        let loaded = try await repository(.experimentalDevelopment).loadPack(id: id)
+                        _ = try await store.index(pack: loaded, builder: SpeciesSearchDocumentBuilder())
+                        return loaded
+                    }
+                    let readyEngine = HybridDescriptionSearchEngine(indexStore: store)
+                    let (_, firstMs) = try await time { try await readyEngine.search(description: queries[0], pack: ready) }
+                    var warm: [Double] = []
+                    for query in queries { let (_, ms) = try await time { try await readyEngine.search(description: query, pack: ready) }; warm.append(ms) }
+                    await store.waitForPendingWrites()
+                    let statistics = await store.statistics
+                    let archiveBytes = ((try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.fileSizeKey])) ?? [])
+                        .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }.reduce(0, +)
+                    readiness[launch] = ["launchToSearchReadyMs": readyMs, "firstQueryAfterReadyMs": firstMs,
+                                         "firstQueryWithoutPreparationMs": readyMs + firstMs,
+                                         "warmQueryMs": ["median": percentile(warm, 50), "p95": percentile(warm, 95), "samples": warm.count],
+                                         "indexBuilt": statistics.builds, "indexLoadedFromDisk": statistics.archiveLoads, "archiveBytes": archiveBytes]
+                    print("GLOBAL_PERF \(configuration) \(label) \(launch) ready=\(readyMs)ms first=\(firstMs)ms warm median=\(percentile(warm, 50))ms built=\(statistics.builds) loaded=\(statistics.archiveLoads)")
+                }
+            }
             let row: [String: Any] = [
                 "pack": label, "records": pack.profiles.count,
                 "loadMs": ["median": percentile(loads, 50), "p95": percentile(loads, 95), "samples": loads.count],
@@ -100,6 +129,7 @@ final class GlobalPackPerformanceTests: XCTestCase {
                 "bm25IndexedRetrievalMs": ["median": percentile(retrieval, 50), "p95": percentile(retrieval, 95), "samples": retrieval.count],
                 "firstQueryMs": coldMs,
                 "queryMs": ["median": percentile(latencies, 50), "p95": percentile(latencies, 95), "max": latencies.max() ?? 0, "samples": latencies.count, "failures": 0],
+                "readiness": readiness,
                 "memoryMiB": ["metric": "VmRSS (resident set) and VmHWM (peak resident) from /proc/self/status", "beforeLoad": before, "afterLoad": afterLoad, "afterQueries": afterQueries]
             ]
             print("GLOBAL_PERF \(configuration) \(label) n=\(pack.profiles.count) load=\(percentile(loads, 50))ms docs=\(percentile(builds, 50))ms index=\(percentile(indexBuilds, 50))ms bm25=\(percentile(retrieval, 50))ms first=\(coldMs)ms query median=\(percentile(latencies, 50))ms p95=\(percentile(latencies, 95))ms rss=\(afterQueries["VmRSS"] ?? -1)MiB")

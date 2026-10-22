@@ -244,8 +244,10 @@ on Linux and macOS; the OS alone never establishes a hosted app bundle.
 
 For Bryce to run on an iPhone with a Release build. **No result below has been
 observed on a device.** The expected results come from running the same Release
-code and data on a Linux host (`main` at `2766a55`). Host timings are not device
-timings, so none are listed as expectations.
+code and data on a Linux host: first at `main` `2766a55`, then re-checked unchanged
+(Debug and Release) after the ranking and index changes of 2026-10-22 on
+`claude/quirky-darwin-hjjg7c` (`6a10cb4`). Host timings are not device timings, so
+none are listed as expectations.
 
 ### What this Release build contains
 
@@ -318,6 +320,26 @@ Read times from the recording, and note its frame rate.
 - **Report:** raw samples, median, and nearest-rank p95. With 5 samples, p95 is the
   maximum; label it descriptive.
 
+### 3b. First search after install, later launches, cancellation, offline (unexecuted)
+
+The search index is now prepared in the background when Describe What You Saw
+opens, and stored in the app's Caches folder for later launches
+([GlobalPackEvaluation.md](GlobalPackEvaluation.md#cold-index-loading-2026-10-22)).
+
+1. **Fresh install:** delete Dive ID, install the build, and launch from the Home
+   Screen. Open Describe What You Saw and tap Find Matches on search 1 **at once**.
+   Record Find Matches tap → results visible. This is the cold case: the index is
+   still being prepared.
+2. **Later launch:** force-quit, relaunch and repeat. The index now loads from the
+   Caches folder. Record the same interval, 5 times.
+3. **Waited:** relaunch, open Describe What You Saw, wait 10 s, then search. Record
+   the interval.
+4. **Responsiveness:** while step 1 is preparing, type and scroll. Note any stutter.
+5. **Cancellation:** submit search 1, then tap Back before results appear, and submit
+   search 4. Only search 4's results may appear, and the app must stay responsive.
+6. **Offline:** turn on Airplane Mode (Wi-Fi and cellular off), force-quit,
+   relaunch and run searches 1 and 4. Results must match the table above.
+
 ### 4. Memory (Xcode)
 
 Run the Release build from Xcode on the iPhone, so the debugger is attached for
@@ -341,6 +363,8 @@ new run entry with the commit SHA. Do not overwrite earlier runs.
 | Field | Result |
 | --- | --- |
 | Commit SHA / version / build | |
+| Configuration and engine (Release, production BM25 with biological ranking) | |
+| Catalogue fingerprint (see below) | |
 | iPhone model / iOS build / Xcode version | |
 | DEBUG absent (yes/no, where checked) | |
 | Region picker contents | |
@@ -348,14 +372,35 @@ new run entry with the commit SHA. Do not overwrite earlier runs.
 | Cold launch → Home (5 samples, median, max) | |
 | Cold Find Matches → results (5 samples, median, max) | |
 | Warm search (15 samples, median, p95) | |
+| Fresh install, first search at once / later launch (5) / after waiting 10 s | |
+| Typing while preparing; cancellation; offline searches 1 and 4 | |
 | Memory: launch / first-search peak / after ten / settled (metric) | |
 | Detail page, source link, credits screen | |
 | Recordings and trace locations | |
 | Problems seen | |
 
-### Optional: Global in a Debug build
+**Catalogue fingerprint.** On the Mac, at the tested commit, record the stable
+content key the app uses for each pack:
 
-Global is development-only, so it can be tried on the device only in a Debug build.
-Time the first Global search: on the host it takes about 5.9 s, mostly building the
-search index. Then time a warm Global search (host median 103 ms). Record these
+```sh
+python3 -c 'import sys
+for p in sys.argv[1:]:
+    h = 0xcbf29ce484222325
+    for b in open(p, "rb").read(): h = ((h ^ b) * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF
+    print(p, format(h, "016x"))' DiveID/Resources/IdentificationPacks/*/Creatures.json
+```
+
+### Optional: Global in a Debug build (experimental only)
+
+Global is development-only. It can be tried on the device only in a **Debug** build,
+where it appears in Change Dive Region; it must never appear in Release. Record these
 separately as Debug numbers; they are not Release results.
+
+- **Fresh install:** delete the app first, then time the first Global search
+  submitted at once. On the Linux host, readiness takes 4.9 s in Release.
+- **Later launch:** time it again after a relaunch. The stored index makes the
+  host figure 0.9 s.
+- **Warm search:** host median 54 ms.
+- **Engine:** the status strip at the bottom of a Debug build names it. Record it;
+  it must read the production BM25 engine unless `DiveIDExperimentalSemanticSearch`
+  was set.

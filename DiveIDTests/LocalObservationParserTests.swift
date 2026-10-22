@@ -293,4 +293,30 @@ extension MorphologyConceptTests {
             XCTAssertTrue(observation.markings.isEmpty)
         }
     }
+
+    // MARK: Normalization
+
+    /// The regex implementation `normalize` replaced, kept as the reference.
+    private func referenceNormalize(_ text: String) -> String {
+        text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: #"[-/]+"#, with: " ", options: .regularExpression)
+            .replacingOccurrences(of: #"[^a-z0-9. ]+"#, with: " ", options: .regularExpression)
+            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+    }
+
+    func testNormalizeMatchesTheRegexImplementation() async throws {
+        var samples = [
+            "", " ", "  Blue-Green Wrasse  ", "A/B--c", "Dorsal fin: 17–18 spines, 6–7 soft rays.", "..x..", "\tTab\nnew\r\nline ",
+            "\u{00A0}non-breaking\u{00A0}", "İstanbul", "Kelvin \u{212A} sign", "ÉCOLE élève", "e\u{0301}clair", "🐠 fish 🐟", "x\u{2028}y",
+            "-leading", "trailing-", "Ünïcödé–mixed / ASCII", "\u{3000}ideographic space\u{3000}", "100 × 20 cm", "ﬁsh ligature", "ß STRASSE"
+        ]
+        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+            .loadPack(id: .tropicalPacific)
+        for profile in pack.profiles.prefix(400) {
+            samples += [profile.commonName, profile.scientificName, profile.summary] + profile.aliases + profile.distinguishingFeatures
+        }
+        for sample in samples {
+            XCTAssertEqual(LocalObservationParser.normalize(sample), referenceNormalize(sample), sample.debugDescription)
+        }
+    }
 }

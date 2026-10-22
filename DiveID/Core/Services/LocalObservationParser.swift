@@ -7,7 +7,7 @@ protocol ObservationParsing: Sendable {
 enum LocalObservationVocabulary {
     static let stopWords: Set<String> = ["a", "an", "and", "the", "with", "near", "on", "in", "at", "of", "to", "was", "it", "about", "approximately", "saw", "seen"]
     static let synonyms: [String: Set<String>] = [
-        "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish"], "white": ["white"], "black": ["black", "dark"], "brown": ["brown"], "olive": ["olive"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
+        "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish", "maroon"], "white": ["white"], "black": ["black", "dark"], "brown": ["brown"], "olive": ["olive"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
         "patches": ["patch", "patches"], "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines", "spiny", "spiky", "needles"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"], "beak": ["beak", "beaked", "beak-like"],
         "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
         "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"], "robust": ["robust"],
@@ -29,6 +29,8 @@ struct LocalObservationParser: ObservationParsing {
         let raw = traitText.split { !$0.isLetter && !$0.isNumber }.map(String.init)
         var tokens = Set(raw.map(Self.singular).filter { !LocalObservationVocabulary.stopWords.contains($0) })
         tokens.remove("leaflike")
+        // "Birdlike" or "leaf-like" also names the thing it resembles.
+        tokens.formUnion(raw.compactMap(Self.likeStem))
         tokens.formUnion(morphology)
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
         for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: traitText) }) { tokens.insert(key) }
@@ -44,9 +46,11 @@ struct LocalObservationParser: ObservationParsing {
     /// survives. This does not infer absence of every component of a compound
     /// phrase: "no pink tail" is not evidence that an animal has no tail.
     static func affirmativeEvidence(in text: String) -> String {
-        text.replacingOccurrences(of: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#,
-            with: " ", options: [.regularExpression, .caseInsensitive])
+        negatedPhrase.stringByReplacingMatches(in: text, range: NSRange(text.startIndex..., in: text), withTemplate: " ")
     }
+    // Compiled once: compiling per call dominated building the search index.
+    private static let negatedPhrase = try! NSRegularExpression(
+        pattern: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#, options: [.caseInsensitive])
 
     private static func withoutMeasurementRoleWords(in text: String) -> String {
         var result = text
@@ -60,11 +64,69 @@ struct LocalObservationParser: ObservationParsing {
         return result
     }
 
+    /// Lowercases and trims, then turns every run of characters other than a–z, 0–9 and "."
+    /// into one space. One pass; the same result as the earlier three regex replacements
+    /// (`[-/]+`, `[^a-z0-9. ]+`, `\s+` → " "), which `LocalObservationParserTests` checks.
     static func normalize(_ text: String) -> String {
-        text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: #"[-/]+"#, with: " ", options: .regularExpression)
-            .replacingOccurrences(of: #"[^a-z0-9. ]+"#, with: " ", options: .regularExpression)
-            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+        if let ascii = normalizeASCII(text) { return ascii }
+        var result = String.UnicodeScalarView()
+        var pendingSpace = false
+        for scalar in text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars {
+            switch scalar.value {
+            case 0x61...0x7A, 0x30...0x39, 0x2E:
+                if pendingSpace { result.append(" "); pendingSpace = false }
+                result.append(scalar)
+            default:
+                pendingSpace = true
+            }
+        }
+        if pendingSpace { result.append(" ") }
+        return String(result)
+    }
+
+    /// The same normalization on UTF-8 bytes. Every non-ASCII character is a separator
+    /// either way, except the two whose lowercase is ASCII (İ U+0130, Kelvin sign U+212A)
+    /// and non-ASCII whitespace at either end, which the general path trims; for those
+    /// this returns nil.
+    private static func normalizeASCII(_ text: String) -> String? {
+        let bytes = Array(text.utf8)
+        var start = 0, end = bytes.count
+        // ASCII whitespace and newlines, as trimmed by `.whitespacesAndNewlines`.
+        func isSpace(_ byte: UInt8) -> Bool { byte == 0x20 || (0x09...0x0D).contains(byte) }
+        while start < end, isSpace(bytes[start]) { start += 1 }
+        while start < end, isSpace(bytes[end - 1]) { end -= 1 }
+        if start < end, bytes[start] >= 0x80 || bytes[end - 1] >= 0x80 { return nil }
+        var output: [UInt8] = []
+        output.reserveCapacity(end - start)
+        var pendingSpace = false
+        var index = start
+        while index < end {
+            let byte = bytes[index]
+            if byte >= 0x80 {
+                if byte == 0xC4, index + 1 < end, bytes[index + 1] == 0xB0 { return nil }
+                if byte == 0xE2, index + 2 < end, bytes[index + 1] == 0x84, bytes[index + 2] == 0xAA { return nil }
+                pendingSpace = true
+                index += 1
+                continue
+            }
+            let lower = (0x41...0x5A).contains(byte) ? byte + 0x20 : byte
+            switch lower {
+            case 0x61...0x7A, 0x30...0x39, 0x2E:
+                if pendingSpace { output.append(0x20); pendingSpace = false }
+                output.append(lower)
+            default:
+                pendingSpace = true
+            }
+            index += 1
+        }
+        if pendingSpace { output.append(0x20) }
+        return String(decoding: output, as: UTF8.self)
+    }
+    /// "birdlike" -> "bird"; nil for words that do not end in a "-like" suffix.
+    static func likeStem(_ word: String) -> String? {
+        let lower = word.lowercased()
+        guard lower.count > 6, lower.hasSuffix("like") else { return nil }
+        return singular(String(lower.dropLast(4)))
     }
     static func singular(_ token: String) -> String { token.count > 3 && token.hasSuffix("s") ? String(token.dropLast()) : token }
     static func matches(_ synonym: String, inTokens tokens: Set<String>, normalizedText: String) -> Bool {
@@ -267,6 +329,9 @@ enum AppearanceEvidenceVocabulary {
     private static let compoundRegex = try! NSRegularExpression(pattern: "\\b(" + hueColor + ")[ -]+(" + hueColor + ")\\b", options: [.caseInsensitive])
     private static let hyphenatedHueRegex = try! NSRegularExpression(pattern: "\\b(" + hueColor + ")\\s*[-–]\\s*(" + hueColor + ")\\b", options: [.caseInsensitive])
     private static let markingRegex = try! NSRegularExpression(pattern: "\\b(" + color + ")(?:[ -]+(?:thin|fine|broad|narrow|small|large))?[ -]+(" + marking + ")\\b", options: [.caseInsensitive])
+    /// Coordinated colours before one marking noun ("blue and yellow stripes", "black, white
+    /// or gray spots"): the marking applies to each colour.
+    private static let coordinatedMarkingRegex = try! NSRegularExpression(pattern: "\\b(" + color + ")(?:\\s*,\\s*(" + color + "))?\\s*,?[ -]+(?:and|or)[ -]+(" + color + ")(?:[ -]+(?:thin|fine|broad|narrow|small|large))?[ -]+(" + marking + ")\\b", options: [.caseInsensitive])
 
     private static func captures(_ regex: NSRegularExpression, in text: String) -> [[String]] {
         return regex.matches(in: text, range: NSRange(text.startIndex..., in: text)).map { match in
@@ -295,11 +360,29 @@ enum AppearanceEvidenceVocabulary {
         let markings = Set(captures(markingRegex, in: affirmative).compactMap { pair -> String? in
             guard let color = colorWords[pair[0]], let marking = markingWords[pair[1]] else { return nil }
             return color + " " + marking
+        }).union(captures(coordinatedMarkingRegex, in: affirmative).flatMap { groups -> [String] in
+            guard let marking = markingWords[groups[3]] else { return [] }
+            return groups[0..<3].compactMap { colorWords[$0] }.map { $0 + " " + marking }
         })
         let compounds = captures(compoundRegex, in: affirmative).compactMap { pair -> String? in
             guard let first = colorWords[pair[0]], let second = colorWords[pair[1]], first != second else { return nil }
             return [first, second].sorted().joined(separator: "-") + " hue"
         }
-        return markings.union(compounds)
+        let contrasts = bodyContrastPatterns.compactMap { pattern, relation in
+            pattern.firstMatch(in: affirmative, range: NSRange(affirmative.startIndex..., in: affirmative)) == nil ? nil : relation
+        }
+        return markings.union(compounds).union(contrasts)
     }
+
+    /// A body paler at the front than at the rear (or the reverse), stated either way round.
+    private static let bodyContrastPatterns: [(NSRegularExpression, String)] = {
+        let front = "(?:front|fore|anterior)", rear = "(?:rear|hind|posterior)"
+        let pale = "(?:pale|paler|light|lighter|whitish)", dark = "(?:dark|darker|blackish)"
+        let half = "(?:\\s+(?:half|part|portion))?(?:\\s+of(?:\\s+the)?\\s+body)?\\s+(?:is\\s+)?(?:[a-z]+ly\\s+)?"
+        func regex(_ pattern: String) -> NSRegularExpression { try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) }
+        return [
+            (regex("\\b" + pale + "\\s+" + front + "\\b|\\b" + front + half + "(?:paler|lighter)\\b|\\b" + dark + "\\s+" + rear + "\\b|\\b" + rear + half + "darker\\b"), "paler front"),
+            (regex("\\b" + pale + "\\s+" + rear + "\\b|\\b" + rear + half + "(?:paler|lighter)\\b|\\b" + dark + "\\s+" + front + "\\b|\\b" + front + half + "darker\\b"), "paler rear")
+        ]
+    }()
 }

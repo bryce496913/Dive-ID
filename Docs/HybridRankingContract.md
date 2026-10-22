@@ -16,6 +16,49 @@ it permits useful paraphrases, while rejecting a high-similarity result for a qu
 such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
 are still scored after provisional admission and can lower or remove a candidate.
 
+## Group names and appearance variants (2026-10-22)
+
+Changed to fix the Global ranking defects found in the V05 traces. Before, a bare group
+alias ("Surgeonfish") gave every record that carried it the +20 exact-name credit and
+`sufficient` information. Separately, an appearance variant re-scored colours and
+markings the main profile had already matched.
+
+- **Exact names.** The scientific name always counts. A common name or alias does not
+  count when it names a group in the searched pack
+  (`OfflineIdentificationPack.groupNames`, passed as `SpeciesRankingInput.groupNames`).
+  - **A group name is** the last word of any multi-word common name ("surgeonfish"
+    from "Twospot surgeonfish"), or an alias carried by more than one record ("coral
+    trout").
+  - **One-word common names:** these count unless other records' names end in them.
+    "Angelfish" (*Holacanthus bermudensis*) and the Tropical Pacific "Shark" (*Rhina
+    ancylostoma*) lose exact credit; "Hogfish" keeps it.
+  - **What group names still give:** retrieval, and the +1 partial identity term every
+    member of the group shares. A group name alone no longer makes a vague description
+    identifying or lifts its confidence ceiling.
+- **Hyphenated compounds.** A name found only as the tail of a hyphenated compound is
+  not named: "red-orange anemonefish" does not name the Orange anemonefish, and
+  "blue-lined surgeonfish" does not name the Lined surgeonfish.
+- **Variants are alternatives.** Only the best variant counts, as before. It now scores
+  only colour groups, markings and body shapes the main profile did not already match,
+  so no clue counts twice.
+- **Life stage.** A stage or sex named in the description ("juvenile", "male",
+  "female", "adult") limits the variants that can count to compatible ones. No stage
+  named leaves every variant possible; an unknown stage is never a conflict.
+- **Appearance relationships** (`AppearanceEvidenceVocabulary`, used by the query, by
+  the species prose and by BM25):
+  - Coordinated colours before one marking apply to each colour: "blue and yellow
+    stripes" gives blue stripes and yellow stripes.
+  - A front-to-rear body contrast is one relationship whichever way it is stated:
+    "pale front half and darker rear" and "front half paler than the rear" both give
+    "paler front".
+- **Vocabulary.**
+  - "Maroon" is a red shade.
+  - A "-like" word also yields its stem ("birdlike" gives "bird"), in parsing and in
+    BM25 terms.
+
+No weight, threshold, floor or species-specific value changed. The golden fixture was
+regenerated as `SearchGolden.v2.json`; see Docs/GlobalPackEvaluation.md.
+
 ## Location
 
 Location ranks results but never filters them. A region named in the description adds

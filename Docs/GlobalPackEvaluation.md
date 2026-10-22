@@ -116,7 +116,8 @@ Display in the top ten is measured and reported, not asserted.
 ## Asserted gate baseline (2026-10-22)
 
 `testFrozenV05CasesAgainstTheGlobalPack` asserts every frozen V05 v2 floor on the pack
-as written, so **it now fails** when it runs. It is still opt-in, through
+as written, so it failed when it ran (it passes since builder v4; see
+[the negation repair and ranking fix](#negation-repair-and-ranking-fix-builder-v4-2026-10-22)). It is still opt-in, through
 `DIVEID_GLOBAL_EVAL_REPORT`. Run in Release on Linux, the opt-in test takes 443 s:
 
 | Gate | Global as written (v2 → v3) | Floor | Status |
@@ -206,8 +207,11 @@ it cannot pass no-match cases by returning nothing.
 
 ### What still blocks Global as the default
 
-1. **Search quality on the full catalogue.** top1 5/18, top3 8/18 and top10 12/18 are
-   below 0.4, 0.6 and 0.8. Confidence fails on `v05-ambiguous-trigger` (0.643
+1. **Search quality on the full catalogue.** *Update (builder v4): the gates now pass
+   on the development catalogue (top1 9/18, top3 11/18, top10 15/18, confidence
+   29/29); see [the negation repair and ranking fix](#negation-repair-and-ranking-fix-builder-v4-2026-10-22).
+   Release still has no approved Global record.* At the time of this report, top1
+   5/18, top3 8/18 and top10 12/18 were below 0.4, 0.6 and 0.8. Confidence fails on `v05-ambiguous-trigger` (0.643
    against a 0.64 ceiling). The remaining causes, which need owner decisions:
    - **Generic aliases:** 65 records carry a bare group word ("Surgeonfish") that
      counts as an exact name.
@@ -224,7 +228,8 @@ it cannot pass no-match cases by returning nothing.
 5. **Device evidence.** No iPhone measurements exist; the checklist is in
    [V05CandidateValidation.md](V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
    - **Host only:** the first Global query takes about 5.9 s (index build) and warm
-     queries about 103 ms median.
+     queries about 103 ms median. *Update: see
+     [cold index loading](#cold-index-loading-2026-10-22).*
 6. **Xcode tests.** The Xcode build, unit and UI tests have not run in this
    environment. The SwiftUI code (credits screen, source links) has never been
    compiled.
@@ -313,6 +318,121 @@ Remaining causes, found by inspecting the regressed Lined surgeonfish cases (#1 
 - **Clues with no source:** Bird wrasse colours, Black triggerfish fin-base lines and
   Spinecheek bar count.
 
+## Negation repair and ranking fix (builder v4, 2026-10-22)
+
+**The opt-in Global evaluation now passes every applicable gate,** and exits 0. Its
+cases, expected and acceptable identities, rank bounds, candidate limit, floors,
+denominators and splits are unchanged. These cases were used to find the defects, so
+the result is development evidence, not a held-out measurement.
+
+### What changed
+
+1. **Negation in extraction** (`Tools/FishBaseIntake/traits.py`, builder v4). The
+   three-word window was replaced by a bounded scope, which:
+   - runs over a negated clause and over a coordinated list ("no blue, red, yellow or
+     white spots");
+   - stops at a contrast ("but", "however"), a life-stage word, another negator, a
+     new predicate ("and is nocturnal"), a spaced dash or a comma that starts a new
+     trait;
+   - also handles postfix negators ("spots absent").
+   - When the end of a scope is uncertain, it flags the record
+     (`trait_ambiguous:negation_scope`) and asserts nothing.
+   - Every branch now uses it: diagnostic phrases (gill-opening spot), habitat
+     normalisation (sea grass, drop-off) and every match of the fin-colour rule.
+   - `Data/GlobalMarine/FishBase/ExtractionAudit.json` lists the 184 real records
+     whose traits changed: 51 from the negation scope, 133 from comma boundaries that
+     previously joined one fin's colour to the next fin. Synthetic probes are kept
+     separately in `test_traits.py`.
+2. **Ranking** ([contract](HybridRankingContract.md#group-names-and-appearance-variants-2026-10-22)):
+   - group names and hyphenated compounds no longer count as exact names;
+   - appearance variants count only clues the main profile has not already matched,
+     and only for a stage compatible with the one described;
+   - coordinated colours before a marking, and a front-to-rear contrast, are
+     appearance relationships;
+   - "maroon" is red, and "-like" words yield their stem.
+
+No catalogue fact was added by hand. The regenerated drafts and pack went through
+`build.py` and `publish_global.py`. IDs and provenance are unchanged, and the paired
+pack files were written together. All 250 batch-01 approvals are still lapsed
+(`AppliedApprovals.json`: 0 approved, 250 stale), and Release still exposes no Global
+record. The 87 flagged records, the 30-record sample and the 133 unread records of
+batch 1 are in a new re-review manifest, `batch-01-rereview` generation 2.
+
+### Gates (Global as written, 4,786 records, 18 Tropical Pacific cases)
+
+| Gate | Floor | Before (`dff58fd`) | After |
+| --- | --- | --- | --- |
+| candidateRecall | 0.85 | 16/18 | 17/18 |
+| top1 | 0.4 | 5/18 | **9/18 (0.50)** |
+| top3 | 0.6 | 8/18 | **11/18 (0.61)** |
+| top10 | 0.8 | 12/18 | **15/18 (0.83)** |
+| noMatchCorrect | 1.0 | 6/6 | 6/6 |
+| confidenceCompliant | 1.0 | 28/29 | **29/29** |
+
+- **Margins are thin.** top3 and top10 each pass by a single case.
+- **Exit status:** the gates are XCTest assertions. Both the baseline run on `dff58fd`
+  and an intermediate run of this fix (top1 7/18) exited 1, naming each failed gate.
+- **Other variants** (not gated):
+  - Global + Caribbean 8: recall 33/34, top1 18/34, top3 24/34, top10 30/34,
+    confidence 46/46. Before: 32, 13, 17, 26 and 44/46.
+  - The `v05-ambiguous-angelfish` violation came from the one-word "Angelfish"
+    record and is fixed by the same rule.
+  - Release-approved Global: 0 records, all 46 cases out of scope.
+- **Regional packs (`run_v05.py`): every gate passes.** Production top1 is 26/34
+  (was 27/34), top3 33/34 and top10 34/34; confidence is 46/46.
+  - The one change is `v05-01-paraphrase`, where Atlantic Blue Tang drops from #1 to
+    #2 (bound 10). Its juvenile variant repeated the main profile's yellow and "tail"
+    marking, so before, any mention of a tail scored that evidence twice.
+
+### Per case (rank of the expected species in the displayed ten)
+
+| Case | Before | After | Remaining failure |
+| --- | --- | --- | --- |
+| 09-diagnostic, Bird wrasse | — | — | ranking: retrieved #2, but FishBase gives no colour, so 10 green or solitary reef fish outscore it |
+| 09-paraphrase, Bird wrasse | — | — | ranking: retrieved #21; "pointed nose" does not match "long snout" |
+| 10-diagnostic, Black triggerfish | 3 | **1** | |
+| 10-paraphrase, Black triggerfish | — | — | retrieval: not in the top 50; "pale blue borders at the fin bases" has no source |
+| 11-diagnostic, Pinktail triggerfish | 2 | **1** | |
+| 11-paraphrase | 1 | 1 | |
+| 12-diagnostic, Red-toothed triggerfish | 8 | **1** | |
+| 12-paraphrase | 1 | 1 | |
+| 13-diagnostic, Orangespot surgeonfish | 10 | **2** | |
+| 13-paraphrase | 6 | **5** | top3: ties at raw 25–28 with other oval orange reef fish |
+| 14-diagnostic, Lined surgeonfish | — | **1** | |
+| 14-paraphrase | 9 | **1** | |
+| 15-diagnostic, Fire clownfish | 2 | 4 | top3: eight anemonefish tie at raw 14. It was #2 only because "red-orange anemonefish" named the Orange anemonefish |
+| 15-paraphrase | 1 | 4 | top3: ties at raw 20. Its juvenile "stripes" no longer repeat the main profile's |
+| 16-diagnostic, Spinecheek anemonefish | — | **7** | top3: FishBase gives no white bars |
+| 16-paraphrase | 1 | 1 | |
+| 17-diagnostic, Cockatoo waspfish | 1 | 1 | |
+| 17-paraphrase | — | **2** | was a retrieval failure; "leaflike" now also matches its "Leaf fish" name |
+| ambiguous-trigger (ceiling 0.64) | 0.643 | **0.190** | |
+
+**Cases still outside a gate's rank, by cause.** Retrieval: 1 (10-paraphrase).
+Ranking: 2 outside the top ten (09-diagnostic, 09-paraphrase) and 4 between #4 and #7
+(13-paraphrase, 15-diagnostic, 15-paraphrase, 16-diagnostic). Each remaining cause is
+a clue with no source or a tie among close relatives; neither is fixed by weights.
+
+### Golden ordering
+
+`SearchGoldenOrderingTests` now compares against `SearchGolden.v2.json`, regenerated
+for this approved change. The query set (137 × 5 packs) is unchanged. The v1 → v2
+differences:
+
+| Pack | Ranked order changed | Top result changed | Retrieved pool order changed |
+| --- | --- | --- | --- |
+| Caribbean (development, 8) | 15 | 5 | 0 |
+| Caribbean (Release, 2) | 6 | 6 | 0 |
+| Tropical Pacific | 9 | 0 | 28 |
+| Global | 89 | 53 | 115 |
+| Global batch 1 (250) | 84 | 37 | 113 |
+
+- **Caribbean:** every change is the variant de-duplication. The two Release records
+  no longer place Atlantic Blue Tang first for ray descriptions that mention a tail.
+- **Tropical Pacific:** the pool changes come from the "-like" stem and the new
+  relationships in BM25 terms.
+- **Global:** includes the builder v4 content.
+
 ## Performance (host measurements, Release)
 
 | Pack | Records | Load (median) | Document build | BM25 retrieval (median) | Query median | Query p95 | First query | RSS after queries (peak) |
@@ -390,6 +510,77 @@ lengths + 1) fails 27,252 assertions.
 - **Warm queries:** about 80–100 ms of each warm Global query is ranking the 50
   retrieved candidates. The ranker matches morphology patterns against each
   candidate's fin and head clues on every query, and Global records carry many.
+
+### Cold index loading (2026-10-22)
+
+**Profile first.** Global first search, Linux host, Release, after the builder v4
+ranking change:
+
+| Step | Cost |
+| --- | --- |
+| Catalogue decode and validation | 1.54 s |
+| Pack construction (fingerprint, group names) | 0.41 s |
+| Search documents | 1.12 s |
+| BM25 index build | 6.47 s |
+| Search once built | 21 ms |
+
+Inside the index build:
+- **`normalize`:** 1.4 s, three regex replacements per call.
+- **Morphology `scopedText`:** 1.9 s; it compiled four patterns on every call.
+- **Appearance relationships:** 1.7 s.
+- **Re-tokenising every name:** 2.3 s, through the same per-call compilation.
+
+**What changed:**
+1. **Cheaper tokenisation, same output.**
+   - Regexes are compiled once (morphology, negated phrases).
+   - `normalize` is one pass over bytes, with the earlier Unicode path kept for the two
+     characters whose lowercase is ASCII and for non-ASCII whitespace at either end.
+   - `SearchIndexStoreTests` checks `normalize` against the old regex implementation,
+     and the golden test checks every result.
+2. **`SearchIndexStore`** replaces the in-memory document cache.
+   - **One build per catalogue content,** run outside the store's actor and off the
+     main thread; concurrent requests share it.
+   - **Cancellation:** a cancelled request returns at once, and the build carries on
+     for the next one.
+3. **Background preparation.** Opening the Describe screen starts loading or building
+   the selected pack's index (`SearchIndexPreparation`) at utility priority. It is not
+   started at app launch, and nothing waits for it.
+4. **A validated persisted index** in the app's Caches directory, written after the
+   index is returned so no search waits for the disk. It is used only when:
+   - its header matches the format, document schema, a tokenizer probe, the app
+     version and build, the document builder, and the pack ID, version and record count;
+   - it matches the pack's stable content key: an FNV-1a digest of the species
+     resource, plus whether it was the development or Release-filtered set;
+   - its checksum is intact;
+   - its records are exactly the pack's records;
+   - sampled entries rebuilt from their profiles are identical.
+
+   Anything else is deleted and rebuilt. Other archives for the same pack are removed
+   when a new one is written. The SwiftPM build never persists, so tests and
+   evaluations do not touch user caches unless they pass a directory.
+
+**Host timings** (Linux container, Release, 4 cores; `GlobalPackPerformanceTests`,
+`Reports/GlobalPackPerformance.release.json`). Each launch is a fresh repository and
+index store in the same process, so the file cache is warm. **These are not iPhone
+numbers.**
+
+| Pack | Fresh install: launch to search-ready | Later launch (stored index) | First query once ready | Warm query median (p95) | Stored index |
+| --- | --- | --- | --- | --- | --- |
+| Global (4,786) | 4.93 s (was 9.6 s) | **0.89 s** | 63 ms | 54 ms (87 ms) (was 119 ms) | 2.99 MB |
+| Tropical Pacific (1,000) | 704 ms | 141 ms | 32 ms | 33 ms | 0.46 MB |
+| Caribbean (8) | 7.5 ms | 4.6 ms | 7.0 ms | 6.3 ms | 6.6 kB |
+
+- **"Was" figures** come from the same test on the builder v4 code, before this
+  change: 1.30 s decode, 1.19 s documents, 7.16 s index, and a 119 ms warm median.
+  The earlier 4.8 s index (5.9 s first query) predates the new relationship patterns.
+- **Readiness** is pack decode plus index load or build. The Global later launch is
+  about 0.74 s of decoding plus 0.15 s of reading the stored index.
+- **Index build** (Global) is 3.15 s, down from 6.47 s. Appearance relationships
+  (1.35 s) are now its largest part.
+- **With preparation,** the first search waits only for whatever part of readiness is
+  still running when it is submitted.
+- **Memory:** the Global index is held once per content. The resident figures in the
+  report are cumulative for one test process.
 
 ## Options (none applied; owner decision needed)
 
