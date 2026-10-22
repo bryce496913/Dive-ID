@@ -151,5 +151,72 @@ class CluePatternTests(unittest.TestCase):
         self.assertIn({"target": "main", "kind": "behaviors", "value": "solitary", "source": B}, result["trace"])
 
 
+class NegationScopeTests(unittest.TestCase):
+    """Regression statements from the PR #121-124 review (dff58fd): a negated phrase never
+    becomes a positive diagnostic, habitat, colour or pattern fact."""
+
+    def assertNothing(self, result):
+        main = result["main"]
+        self.assertEqual((main.colors, main.markings, main.habitats, main.behaviors, main.head, main.fins, main.features),
+                         (set(), set(), set(), set(), [], [], []))
+        self.assertEqual(result["variants"], {})
+
+    def test_no_spot_behind_the_gill_opening(self):
+        self.assertNothing(x("No spot behind the gill opening."))
+
+    def test_does_not_live_in_sea_grass(self):
+        self.assertNothing(x(biology="Does not live in sea grass."))
+        self.assertNothing(x(biology="Never found in seagrass or on drop-offs."))
+
+    def test_no_blue_red_yellow_or_white_spots(self):
+        self.assertNothing(x("No blue, red, yellow or white spots."))
+
+    def test_positive_facts_outside_the_scope_survive(self):
+        mixed = x("No spots on the body; dark bars on the flank.")
+        self.assertEqual((mixed["main"].markings, mixed["main"].colors), ({"stripes"}, set()))
+        contrast = x("Without spots, but with yellow bars.")
+        self.assertEqual((contrast["main"].markings, contrast["main"].colors), ({"stripes"}, {"yellow"}))
+        listed = x("No spots, yellow pectoral fins and a white caudal fin.")
+        self.assertNotIn("spots", listed["main"].markings)
+        self.assertIn("Yellow pectoral fins", listed["main"].fins)
+        self.assertIn("White tail", listed["main"].fins)
+        habitat = x(biology="Not in lagoons, but on outer reef slopes over sand.")
+        self.assertEqual(habitat["main"].habitats, {"sand"})
+
+    def test_punctuation_and_postfix_negation(self):
+        self.assertEqual(x("Dark bars present, spots absent.")["main"].markings, {"stripes"})
+        self.assertEqual(x("Spots and bars absent.")["main"].markings, set())
+        self.assertEqual(x("Barbels absent; body with blue spots.")["main"].colors, {"blue"})
+
+    def test_catalogue_cases_found_in_the_audit(self):
+        naso = x("Lacks a horn, has numerous black close-set spots on the upper half of its body and tail, and is white ventrally.")
+        self.assertEqual((naso["main"].colors, naso["main"].markings), ({"black", "white"}, {"spots"}))
+        puffer = x("Noteworthy are the many small yellow spots, and the lack of blue spots - blue only between yellow markings around eye.")
+        self.assertEqual(puffer["main"].colors, {"yellow", "blue"})
+        self.assertEqual(x("Generally uniformly dark brownish, lacking spots on pectoral and caudal fins.")["main"].colors, {"brown"})
+        tang = x("Color in life dark brown without lines on body or spots on head.")
+        self.assertEqual((tang["main"].colors, tang["main"].markings), ({"brown"}, set()))
+        self.assertEqual(x("Females without bars, yellow on the upper sides.")["variants"]["female"].colors, {"yellow"})
+        lobster = x(biology="The species is not gregarious and is nocturnal, hiding in the daytime in crevices.")
+        self.assertIn("Active at night", lobster["main"].features)
+
+    def test_life_stage_boundary_ends_the_scope(self):
+        result = x("Adults without spots, juveniles with yellow spots.")
+        self.assertEqual(result["main"].markings, set())
+        self.assertEqual((result["variants"]["juvenile"].colors, result["variants"]["juvenile"].markings), ({"yellow"}, {"spots"}))
+
+    def test_one_negative_clause_does_not_suppress_the_description(self):
+        result = x("Body silvery with blue spots. No black bars. Pectoral fins yellow.")
+        self.assertEqual(result["main"].colors, {"silver", "blue", "yellow"})
+        self.assertEqual(result["main"].markings, {"spots"})
+        self.assertIn("Yellow pectoral fins", result["main"].fins)
+
+    def test_uncertain_scope_is_flagged_not_asserted(self):
+        result = x("No spots and white bars.")
+        self.assertNotIn("spots", result["main"].markings)
+        self.assertNotIn("white", result["main"].colors)
+        self.assertIn("trait_ambiguous:negation_scope", result["flags"])
+
+
 if __name__ == "__main__":
     unittest.main()

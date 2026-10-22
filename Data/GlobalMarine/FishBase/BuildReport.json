@@ -1,5 +1,5 @@
 {
-  "builderVersion": 3,
+  "builderVersion": 4,
   "records": 4787,
   "batches": 20,
   "batchActions": {
@@ -21,8 +21,8 @@
     "batch-16": "written",
     "batch-17": "written",
     "batch-18": "written",
-    "batch-19": "written",
-    "batch-20": "written"
+    "batch-19": "unchanged",
+    "batch-20": "unchanged"
   },
   "rebuiltTropicalPacific": 962,
   "fromCandidates": 3825,
@@ -50,8 +50,8 @@
     "commonName": 1.0,
     "aliases": 0.6664,
     "categories": 1.0,
-    "colors": 0.5433,
-    "markings": 0.545,
+    "colors": 0.5427,
+    "markings": 0.5423,
     "bodyShapes": 0.9198,
     "habitats": 0.9018,
     "behaviors": 0.3227,
@@ -65,32 +65,32 @@
     "geographicRange": 0.9998,
     "cautions": 0.0913,
     "tailShape": 0.4103,
-    "mouthAndHeadShape": 0.3524,
-    "finAndSpineClues": 0.6465,
+    "mouthAndHeadShape": 0.3512,
+    "finAndSpineClues": 0.6459,
     "similarSpecies": 0.0725,
-    "appearanceVariants": 0.1492
+    "appearanceVariants": 0.1481
   },
   "recordsChangedByRule": {
     "hedge": 634,
-    "negation": 164,
-    "stage": 827
+    "negation": 193,
+    "stage": 822
   },
   "recordsWithAppearanceVariants": {
-    "juvenile": 493,
+    "juvenile": 488,
     "male": 249,
-    "female": 154
+    "female": 155
   },
-  "recordsWithTraitAmbiguousFlag": 918,
+  "recordsWithTraitAmbiguousFlag": 927,
   "changedSincePreviousBuild": {
-    "colors": 558,
-    "markings": 1293,
-    "habitats": 1597,
-    "behaviors": 1108,
-    "tailShape": 387,
-    "mouthAndHeadShape": 253,
-    "finAndSpineClues": 551,
-    "appearanceVariants": 714,
-    "distinguishingFeatures": 2327
+    "colors": 20,
+    "markings": 38,
+    "habitats": 0,
+    "behaviors": 1,
+    "tailShape": 0,
+    "mouthAndHeadShape": 18,
+    "finAndSpineClues": 90,
+    "appearanceVariants": 30,
+    "distinguishingFeatures": 155
   },
   "categories": {
     "crustacean": 133,
@@ -121,12 +121,12 @@
       "no_english_common_name": 0.0936,
       "size_outlier": 0.0,
       "depth_outlier": 0.0033,
-      "trait_ambiguous": 0.1918
+      "trait_ambiguous": 0.1936
     },
-    "flaggedRecords": 1356,
+    "flaggedRecords": 1364,
     "scoreHistogram": {
-      "0": 3431,
-      "1-20": 1354,
+      "0": 3423,
+      "1-20": 1362,
       "21-40": 1,
       "41-60": 1,
       "61-100": 0

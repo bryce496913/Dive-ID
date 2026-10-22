@@ -4,8 +4,13 @@ Every trait is found in a named source field and written in short original wordi
 nothing is inferred from general knowledge. Three rules keep text from becoming false
 clues:
 
-- Negation: a term after "no", "not", "without", "lacks", "never" (within three
-  words), or followed by "absent"/"lacking", is not asserted.
+- Negation: a negator ("no", "not", "without", "lacks", "never", ...) opens a scope
+  that runs to the next boundary: a contrastive word ("but", "however"), a life-stage
+  word, a comma once the negated phrase has its head noun (unless an "or" list
+  follows), or 10 words. "absent", "lacking", "missing" and "none" negate the phrase
+  before them. Nothing inside a scope is asserted, by any rule. An "and" after a
+  complete negated phrase ("no spots and white bars") is ambiguous: neither side is
+  asserted and a trait_ambiguous:negation_scope flag is raised.
 - Life stage and sex: a clause about juveniles, males or females feeds that
   appearance variant, never the main profile. "Adult" clauses feed the main profile.
 - Ambiguity: a hedged clause ("may", "sometimes", "with or without") or a clause
@@ -37,8 +42,14 @@ FIN_RE = "(?:pectoral|pelvic|ventral|dorsal|anal|caudal)"
 HABITAT_WORDS = {"sand": "sand", "sandy": "sand", "rubble": "rubble", "lagoon": "lagoon", "lagoons": "lagoon", "seagrass": "seagrass",
                  "seagrasses": "seagrass", "eelgrass": "seagrass", "mangrove": "mangrove", "mangroves": "mangrove", "wreck": "wreck",
                  "wrecks": "wreck", "anemone": "anemone", "anemones": "anemone"}
-NEGATORS = {"no", "not", "without", "lacks", "lack", "lacking", "never", "non", "nor"}
-POST_NEGATORS = {"absent", "lacking", "missing"}
+NEGATORS = {"no", "not", "without", "lacks", "lack", "lacking", "never", "non", "nor", "neither"}
+POST_NEGATORS = {"absent", "lacking", "missing", "none"}
+SCOPE_BOUNDARIES = {"but", "however", "although", "though", "whereas", "while", "yet", "except"}
+STAGE_WORDS = {"juvenile", "juveniles", "young", "subadult", "subadults", "adult", "adults", "male", "males", "female", "females"}
+SCOPE_LIMIT = 10
+# "and" followed by one of these starts a new predicate: "is not gregarious and is nocturnal".
+PREDICATE_STARTS = {"is", "are", "was", "were", "has", "have", "had", "occurs", "occur", "lives", "live", "feeds", "feed", "forms",
+                    "form", "found", "often", "usually", "also", "then", "becomes", "become"}
 # "can be seen/found" reports an observation, not uncertainty about the trait.
 HEDGE_RE = re.compile(r"\b(?:may|might|sometimes|occasionally|rarely|with or without|or not|in some|some individuals|possibly)\b|\bcan be\b(?!\s+(?:seen|found|observed))")
 STAGE_RE = {"juvenile": re.compile(r"\b(?:juveniles?|young|subadults?|juv)\b"),
@@ -54,9 +65,11 @@ RULES = frozenset({"negation", "stage", "hedge"})
 
 
 def normalize(text):
+    """Lower case words; a comma is kept as its own token so negation scope can see it."""
     text = TAG_RE.sub(" ", str(text or ""))
-    text = text.lower().replace("colour", "color").replace("-", " ").replace("/", " ")
-    return re.sub(r"[^a-z0-9 ]+", " ", text)
+    text = re.sub(r"\s[-–—]\s", " , ", text)  # a spaced dash separates phrases like a comma
+    text = text.lower().replace("colour", "color").replace("-", " ").replace("/", " ").replace(",", " , ")
+    return re.sub(r"[^a-z0-9, ]+", " ", text)
 
 
 def clauses(text):
@@ -68,7 +81,8 @@ def clauses(text):
     text = re.sub(r"\([^()]*\)", " ", text)
     for sentence in re.split(r"[.;:]\s+|\n+|\.$", text):
         parts.extend(p for p in re.split(r",\s+(?=(?:juveniles?|males?|females?|adults?|young)\b)", sentence, flags=re.I))
-    return [" ".join(normalize(p).split()) for p in parts if normalize(p).strip()]
+    cleaned = [" ".join(normalize(p).split()).strip(" ,") for p in parts]
+    return [c for c in cleaned if c.replace(",", "").strip()]
 
 
 def stages_of(clause):
@@ -76,12 +90,64 @@ def stages_of(clause):
     return found
 
 
+def _trait_token(token):
+    return token in COLOR_WORD or token in MARKING_WORD or token in HABITAT_WORDS or token in FIN_WORDS
+
+
+HEAD_NOUNS = set(MARKING_WORD) | set(HABITAT_WORDS) | {"fin", "fins", "snout", "spine", "spines", "teeth", "tail", "head", "barbels",
+                                                       "scales", "grass", "seagrass", "groove", "margin", "margins", "lobe", "lobes",
+                                                       "mark", "marks", "body", "offs", "off", "reef", "reefs"}
+
+
+def negation_scopes(tokens):
+    """(negated token indices, ambiguous token indices) for one clause."""
+    negated_at, ambiguous = set(), set()
+    for start, token in enumerate(tokens):
+        if token not in NEGATORS:
+            continue
+        head_seen, i = False, start + 1
+        while i < len(tokens) and i - start <= SCOPE_LIMIT:
+            t = tokens[i]
+            if t in SCOPE_BOUNDARIES or t in STAGE_WORDS or t in NEGATORS and t != "nor":
+                break
+            if t == ",":
+                # A comma continues only a list of trait words: "no blue, red or white spots",
+                # "no spots, bars or blotches". "Lacks a horn, has spots" starts a new phrase.
+                rest = tokens[i + 1:]
+                stop = next((k for k, u in enumerate(rest) if u == "," or u in SCOPE_BOUNDARIES), len(rest))
+                listed = "or" in rest[:stop] or "nor" in rest[:stop]
+                if not rest or not _trait_token(rest[0]) or (head_seen and not listed):
+                    break
+                i += 1
+                continue
+            if t in ("and", "or") and i + 1 < len(tokens) and tokens[i + 1] in PREDICATE_STARTS:
+                break
+            if t == "and" and head_seen:
+                # "no spots and white bars": does the negation cover the bars? Unknown.
+                j = i + 1
+                while j < len(tokens) and tokens[j] != "," and tokens[j] not in SCOPE_BOUNDARIES and j - i <= SCOPE_LIMIT:
+                    ambiguous.add(j)
+                    j += 1
+                break
+            negated_at.add(i)
+            head_seen = head_seen or t in HEAD_NOUNS
+            i += 1
+    for end, token in enumerate(tokens):
+        if token not in POST_NEGATORS:
+            continue
+        i = end - 1
+        while i >= 0 and end - i <= 6 and tokens[i] != "," and tokens[i] not in SCOPE_BOUNDARIES and tokens[i] not in STAGE_WORDS:
+            negated_at.add(i)
+            i -= 1
+    return negated_at, ambiguous
+
+
 def negated(tokens, index, rules):
+    """True when the token at index is inside a negated (or ambiguous) scope."""
     if "negation" not in rules:
         return False
-    before = tokens[max(0, index - 3):index]
-    after = tokens[index + 1:index + 3]
-    return any(t in NEGATORS for t in before) or any(t in POST_NEGATORS for t in after)
+    negated_at, ambiguous = negation_scopes(tokens)
+    return index in negated_at or index in ambiguous
 
 
 def fin_phrase(fins):
@@ -132,12 +198,17 @@ def _clue_patterns(clause, tokens, rules):
         index = len(clause[:m.start()].split())
         span = len(m.group(0).split())
         return None if any(negated(tokens, index + k, rules) for k in range(span)) else m
+    def hits(pattern):
+        """Every non-negated match, for rules that can occur more than once in a clause."""
+        for m in re.finditer(pattern, clause):
+            index = len(clause[:m.start()].split())
+            if not any(negated(tokens, index + k, rules) for k in range(len(m.group(0).split()))):
+                yield m
     def colour(word):
         return COLOR_WORD.get(word, word)
     if hit(r"\b(?:long|elongate|elongated|prolonged|produced)\s+snout\b|\bsnout\s+(?:very\s+)?(?:long|elongate|elongated|prolonged)\b"):
         out.append(("head", "Long snout"))
-    m = hit(rf"\b(?P<c>{COLOR_RE})\s+(?P<parts>(?:(?:snout|forehead|head|{FIN_RE})\s+(?:and\s+)?)+)(?:fins?\b)?")
-    if m:
+    for m in hits(rf"\b(?P<c>{COLOR_RE})\s+(?P<parts>(?:(?:snout|forehead|head|{FIN_RE})\s+(?:and\s+)?)+)(?:fins?\b)?"):
         parts = m.group("parts").split()
         c = title(colour(m.group("c")))
         heads = [p for p in parts if p in ("snout", "forehead")]
@@ -192,10 +263,10 @@ def _clue_patterns(clause, tokens, rules):
     if hit(r"\bhead\s+bar\b"):
         out.append(("head", "Bar across the head"))
         out.append(("markings", "stripes"))
-    if re.search(r"\b(?:band|bar|stripe|patch|spot|mark)\b", clause) and re.search(r"\bgill\s+(?:opening|cover|slit)", clause) and re.search(r"\b(?:posterior|behind|after)\b", clause):
+    noun_match = hit(r"\b(?:band|bar|stripe|patch|spot|mark)\b")
+    if noun_match and hit(r"\bgill\s+(?:opening|cover|slit)") and re.search(r"\b(?:posterior|behind|after)\b", clause):
         cs = _colors_in(clause, tokens, rules)
-        noun = re.search(r"\b(band|bar|stripe|patch|spot|mark)\b", clause).group(1)
-        out.append(("features", f"{title(cs[0]) + ' ' if cs else ''}{noun} behind the gill opening".capitalize()))
+        out.append(("features", f"{title(cs[0]) + ' ' if cs else ''}{noun_match.group(0)} behind the gill opening".capitalize()))
     if hit(r"\b(?:head\s+and\s+)?(?:anterior|front)\s+(?:half|part)\b.*\b(?:paler|lighter)\b"):
         out.append(("features", "Front half paler than the rear"))
     m = hit(rf"\b(?P<cols>(?:{COLOR_RE}(?:\s+edged)?\s+(?:and\s+)?)+)(?P<noun>stripes|bands|bars|lines)\b")
@@ -235,7 +306,7 @@ def _biology_patterns(clause, tokens, rules):
         if not m:
             return False
         index = len(clause[:m.start()].split())
-        return not negated(tokens, index, rules)
+        return not any(negated(tokens, index + k, rules) for k in range(len(m.group(0).split())))
     if found(r"\b(?:forms?|forming|in)\s+(?:large\s+|small\s+|loose\s+)*(?:schools?|aggregations?|shoals?)\b|\bschooling\b|(?<!spawning )\baggregations?\b"):
         if not re.search(r"\bspawning\s+aggregations?\b", clause) or re.search(r"\bschool", clause):
             out.append(("behaviors", "schooling"))
@@ -259,9 +330,9 @@ def _biology_patterns(clause, tokens, rules):
     for i, t in enumerate(tokens):
         if t in HABITAT_WORDS and not negated(tokens, i, rules):
             out.append(("habitats", HABITAT_WORDS[t]))
-    if re.search(r"\bsea\s+grass", clause):
+    if found(r"\bsea\s+grass"):
         out.append(("habitats", "seagrass"))
-    if re.search(r"\bdrop\s+offs?\b", clause):
+    if found(r"\bdrop\s+offs?\b"):
         out.append(("habitats", "wall"))
     return out
 
@@ -286,6 +357,11 @@ def extract(fields, rules=RULES):
                             + _clue_patterns(clause, tokens, active))
                 return _biology_patterns(clause, tokens, active)
             found = scan(rules)
+            if "negation" in rules and negation_scopes(tokens)[1]:
+                unscoped = scan(rules - {"negation"})
+                if any(item not in found for item in unscoped):
+                    flags.append("trait_ambiguous:negation_scope")
+                    trace.append({"clause": clause, "source": field, "ambiguous": "negation scope"})
             hedged = "hedge" in rules and HEDGE_RE.search(clause)
             if hedged and not found:
                 found = scan(rules - {"negation"})  # "with or without spots" is still about spots

@@ -8,10 +8,10 @@
   "no_english_common_name": 0.0936,
   "ocr_junk": 0.0,
   "size_outlier": 0.0,
-  "trait_ambiguous": 0.1918,
+  "trait_ambiguous": 0.1936,
   "vocabulary": 0.0
  },
- "flaggedRecords": 1356,
+ "flaggedRecords": 1364,
  "records": {
   "000948be-40ec-5fac-a83a-e4f64ecc1d8e": {
    "batch": 13,
@@ -885,7 +885,8 @@
   "081b6eca-5346-5a4a-ba7f-9e55e56a7ab7": {
    "batch": 3,
    "flags": [
-    "trait_ambiguous:features"
+    "trait_ambiguous:features",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -2367,7 +2368,7 @@
    "batch": 10,
    "flags": [
     "trait_ambiguous:behaviors",
-    "trait_ambiguous:colors/features/markings"
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -2639,10 +2640,8 @@
   },
   "18f447e6-6ccb-5fe7-8e42-53fd93ce0e8d": {
    "batch": 8,
-   "flags": [
-    "trait_ambiguous:markings"
-   ],
-   "score": 10
+   "flags": [],
+   "score": 0
   },
   "18f88e0f-2d64-5701-b7b2-3fa3ea40fdec": {
    "batch": 15,
@@ -2774,7 +2773,7 @@
   "19e031ad-a383-536f-b8f0-aab537da538b": {
    "batch": 15,
    "flags": [
-    "trait_ambiguous:colors/features",
+    "trait_ambiguous:colors",
     "trait_ambiguous:habitats"
    ],
    "score": 10
@@ -4475,7 +4474,9 @@
   "295df1f2-1895-59e0-b57f-be5dda36a742": {
    "batch": 6,
    "flags": [
-    "trait_ambiguous:colors/markings"
+    "trait_ambiguous:colors",
+    "trait_ambiguous:colors/markings",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -5883,7 +5884,7 @@
   "35e0e36c-4a45-5d3b-805e-0b477d20f5d4": {
    "batch": 6,
    "flags": [
-    "trait_ambiguous:colors/fins/tail_shapes"
+    "trait_ambiguous:colors/tail_shapes"
    ],
    "score": 10
   },
@@ -8860,7 +8861,7 @@
    "batch": 2,
    "flags": [
     "trait_ambiguous:colors",
-    "trait_ambiguous:colors/fins/markings",
+    "trait_ambiguous:colors/markings",
     "trait_ambiguous:features"
    ],
    "score": 10
@@ -8941,7 +8942,7 @@
   "53eecfda-a960-502b-a4b1-d696ddbec5f2": {
    "batch": 13,
    "flags": [
-    "trait_ambiguous:colors/fins/markings"
+    "trait_ambiguous:colors/markings"
    ],
    "score": 10
   },
@@ -8960,7 +8961,8 @@
   "54428e34-e267-574d-a54b-08850134ed90": {
    "batch": 12,
    "flags": [
-    "trait_ambiguous:behaviors/features"
+    "trait_ambiguous:behaviors/features",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -9329,7 +9331,6 @@
    "flags": [
     "trait_ambiguous:behaviors",
     "trait_ambiguous:colors",
-    "trait_ambiguous:colors/markings",
     "trait_ambiguous:habitats"
    ],
    "score": 10
@@ -9825,7 +9826,6 @@
    "batch": 3,
    "flags": [
     "trait_ambiguous:behaviors",
-    "trait_ambiguous:colors",
     "trait_ambiguous:colors/fins/markings"
    ],
    "score": 10
@@ -10176,7 +10176,7 @@
   "5eab798c-486d-509c-9816-0c722108978b": {
    "batch": 3,
    "flags": [
-    "trait_ambiguous:colors/fins/markings"
+    "trait_ambiguous:colors/markings"
    ],
    "score": 10
   },
@@ -11596,6 +11596,7 @@
   "6b449b85-1344-554c-965e-f2fce0b6e9e9": {
    "batch": 1,
    "flags": [
+    "trait_ambiguous:negation_scope",
     "trait_ambiguous:tail_shapes"
    ],
    "score": 10
@@ -12287,7 +12288,8 @@
   "71539b4d-5698-51bd-b011-608464b4cbcd": {
    "batch": 5,
    "flags": [
-    "trait_ambiguous:colors"
+    "trait_ambiguous:colors",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -13564,7 +13566,7 @@
   "7c886bbf-0679-562d-9bfe-82fc5d25bccf": {
    "batch": 10,
    "flags": [
-    "trait_ambiguous:colors/fins"
+    "trait_ambiguous:colors"
    ],
    "score": 10
   },
@@ -14235,7 +14237,8 @@
    "batch": 19,
    "flags": [
     "trait_ambiguous:colors",
-    "trait_ambiguous:colors/markings"
+    "trait_ambiguous:colors/markings",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -14592,8 +14595,10 @@
   },
   "85c03932-d673-57d0-a837-570cede2a467": {
    "batch": 9,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "85c488eb-c682-59f8-9cb9-05139a5d2e21": {
    "batch": 19,
@@ -14613,7 +14618,7 @@
   "85db1c57-5a28-50bf-ba36-1715f863256f": {
    "batch": 10,
    "flags": [
-    "trait_ambiguous:colors/head/markings"
+    "trait_ambiguous:colors/markings"
    ],
    "score": 10
   },
@@ -15918,8 +15923,10 @@
   },
   "940cb829-1442-51ac-bc1c-a79c21d4aa4a": {
    "batch": 2,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "940ce7b5-8587-5fe0-9523-a98ce264346a": {
    "batch": 17,
@@ -16223,8 +16230,10 @@
   },
   "96b5ed65-f3b1-5240-87dd-e3b660ea911c": {
    "batch": 3,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "96b944d1-9f04-5d6f-ac63-44be3340f4a2": {
    "batch": 4,
@@ -18187,8 +18196,10 @@
   },
   "aa4b0a99-75d5-518c-9a2c-2cc4f7565292": {
    "batch": 10,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "aa5cf74a-5585-5385-ace2-24ee90827e98": {
    "batch": 5,
@@ -18498,7 +18509,7 @@
   "ad345055-a422-5b0e-b8d6-1589c6e8d592": {
    "batch": 11,
    "flags": [
-    "trait_ambiguous:colors/markings",
+    "trait_ambiguous:colors",
     "trait_ambiguous:markings"
    ],
    "score": 10
@@ -18835,8 +18846,9 @@
   "b08b3f04-c429-532e-a5c1-dbdd1d11e346": {
    "batch": 18,
    "flags": [
-    "trait_ambiguous:colors/markings/tail_shapes",
-    "trait_ambiguous:habitats"
+    "trait_ambiguous:colors/tail_shapes",
+    "trait_ambiguous:habitats",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -19170,8 +19182,10 @@
   },
   "b4c46321-b021-5146-b16b-4d6a6fa74b21": {
    "batch": 8,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "b4c6a6f8-dd7d-55bb-b7d8-acf75bbfd2de": {
    "batch": 12,
@@ -19379,7 +19393,7 @@
    "batch": 8,
    "flags": [
     "trait_ambiguous:behaviors",
-    "trait_ambiguous:markings"
+    "trait_ambiguous:colors/markings"
    ],
    "score": 10
   },
@@ -19756,6 +19770,7 @@
   "ba4d6c14-920f-5b5e-9c03-cd0de25aea36": {
    "batch": 5,
    "flags": [
+    "trait_ambiguous:negation_scope",
     "trait_ambiguous:tailShape"
    ],
    "score": 10
@@ -20214,8 +20229,10 @@
   },
   "bf37b51d-e820-57de-8d7b-f28d97deb67b": {
    "batch": 7,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "bf46580c-6b09-5e7a-992d-5f0d5e02c796": {
    "batch": 7,
@@ -20420,8 +20437,10 @@
   },
   "c13f4081-d73a-5a8f-90a1-bac957bda976": {
    "batch": 9,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "c1486768-6d97-5616-8433-7aecca18ed33": {
    "batch": 17,
@@ -20485,7 +20504,7 @@
   "c230e018-a971-5f64-ada1-e8b6ce5e3fe0": {
    "batch": 16,
    "flags": [
-    "trait_ambiguous:colors/markings"
+    "trait_ambiguous:colors"
    ],
    "score": 10
   },
@@ -21103,8 +21122,10 @@
   },
   "c7ea7b83-6de6-59b4-8fbb-a3d1992fa4b1": {
    "batch": 1,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "c7f9e87c-431d-5be6-997d-3fd1c40529df": {
    "batch": 9,
@@ -22428,7 +22449,8 @@
   "d474b044-d582-572b-8862-132f38c30352": {
    "batch": 3,
    "flags": [
-    "trait_ambiguous:colors/head/markings"
+    "trait_ambiguous:colors/head/markings",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -22572,9 +22594,10 @@
   "d6258f66-292b-5cc3-a4d7-ea276f3dc5dc": {
    "batch": 16,
    "flags": [
-    "no_english_common_name"
+    "no_english_common_name",
+    "trait_ambiguous:negation_scope"
    ],
-   "score": 10
+   "score": 20
   },
   "d6316399-569e-5143-b352-99b2e3bc9e38": {
    "batch": 12,
@@ -23943,7 +23966,8 @@
    "batch": 15,
    "flags": [
     "trait_ambiguous:behaviors",
-    "trait_ambiguous:markings"
+    "trait_ambiguous:markings",
+    "trait_ambiguous:negation_scope"
    ],
    "score": 10
   },
@@ -25828,8 +25852,10 @@
   },
   "f6c9e75d-7711-5355-97db-ea72936d19d6": {
    "batch": 7,
-   "flags": [],
-   "score": 0
+   "flags": [
+    "trait_ambiguous:negation_scope"
+   ],
+   "score": 10
   },
   "f6d449e0-ed6f-52af-bcb2-f0ca91c9a836": {
    "batch": 15,
@@ -26222,7 +26248,7 @@
   "fa303326-89f6-593b-a0d3-9dd60f335f5b": {
    "batch": 1,
    "flags": [
-    "trait_ambiguous:colors/fins",
+    "trait_ambiguous:colors",
     "trait_ambiguous:colors/markings"
    ],
    "score": 10
@@ -26876,8 +26902,8 @@
   }
  },
  "scoreHistogram": {
-  "0": 3431,
-  "1-20": 1354,
+  "0": 3423,
+  "1-20": 1362,
   "21-40": 1,
   "41-60": 1,
   "61-100": 0

@@ -1,0 +1,2423 @@
+{
+ "schemaVersion": 1,
+ "purpose": "Records whose extracted traits change with the bounded negation scope and comma-aware clauses (builder v4), compared with builder v3 (dff58fd). Synthetic regression probes are in Tools/FishBaseIntake/test_traits.py, not here.",
+ "negationScope": [
+  {
+   "id": "0d174396-5637-5cad-bcc3-be7afcef66e1",
+   "name": "Acanthurus achilles",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "3b15fa37-c6d7-5f51-9d7e-fd5391a37bdd",
+   "name": "Genicanthus melanospilos",
+   "diff": {
+    "variant:female": {
+     "removed": [],
+     "added": [
+      "yellow"
+     ]
+    }
+   }
+  },
+  {
+   "id": "4c541d71-90e9-5f9e-ab57-54039aa093ce",
+   "name": "Acanthurus nigricauda",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "black",
+      "stripes",
+      "Black band behind the gill opening"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "13c144f2-d192-5105-860c-309da8601078",
+   "name": "Ostorhinchus doederleini",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "96b5ed65-f3b1-5240-87dd-e3b660ea911c",
+   "name": "Salarias obscurus",
+   "diff": {
+    "colors": {
+     "removed": [],
+     "added": [
+      "brown"
+     ]
+    }
+   }
+  },
+  {
+   "id": "ff5aeab3-bed4-5262-b6dd-27d8b2449f39",
+   "name": "Halichoeres ornatissimus",
+   "diff": {
+    "colors": {
+     "removed": [
+      "white"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "91387cef-9e00-514c-8b70-ff5b7d4a5070",
+   "name": "Cheilio inermis",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "black",
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6f33188a-d7a4-545d-b21e-b764e069a1bc",
+   "name": "Oplopomus oplopomus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "yellow"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5db59da3-5a19-5d9e-bc04-e61b8bf51348",
+   "name": "Parapercis millepunctata",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "0aa59113-0fe6-5f3a-9f19-c08b36be7ccb",
+   "name": "Pseudochromis howsoni",
+   "diff": {
+    "colors": {
+     "removed": [
+      "white"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "04b73ce8-ff43-52c9-a10e-87d282e3a6ad",
+   "name": "Epinephelus multinotatus",
+   "diff": {
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "26c4be9a-3e72-59f5-bfb4-2a153dd64ebd",
+   "name": "Chiloscyllium plagiosum",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "e52e42ed-4497-5ea0-9858-cdcea4520cff",
+   "name": "Caesio cuning",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b76b43d6-a52d-5ef8-a267-9ac2e5f70dd7",
+   "name": "Caranx latus",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "be28f7c8-c266-528d-817a-be1b6600afb2",
+   "name": "Pseudocaranx wrighti",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4926baf3-40d3-5bc3-a0a8-74b8cbfa1479",
+   "name": "Trachinotus teraia",
+   "diff": {
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "71539b4d-5698-51bd-b011-608464b4cbcd",
+   "name": "Scarus trispinosus",
+   "diff": {
+    "colors": {
+     "removed": [
+      "blue"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "007f6dc1-cdf1-5912-8d8c-7a4cd4efcfd2",
+   "name": "Naso reticulatus",
+   "diff": {
+    "fins": {
+     "removed": [],
+     "added": [
+      "Tall front dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "73c365d9-255a-57e8-942b-70ed18831fed",
+   "name": "Abalistes filamentosus",
+   "diff": {
+    "colors": {
+     "removed": [
+      "yellow"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "9e6282db-a335-55ae-a4a5-3d5f5204d267",
+   "name": "Pseudogramma megamyctera",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "a5276950-6815-5fa5-b8d9-64605937a03d",
+   "name": "Chilomycterus schoepfii",
+   "diff": {
+    "markings": {
+     "removed": [],
+     "added": [
+      "spots"
+     ]
+    }
+   }
+  },
+  {
+   "id": "99ab3350-998f-532d-9b14-a7d3f53e942f",
+   "name": "Myripristis vittata",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "96c9e73f-7a5c-5346-8c7f-2382635a0d7b",
+   "name": "Pseudanthias fasciatus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "33790826-c321-5a3e-8536-0b89775ba9a0",
+   "name": "Cymolutes torquatus",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "860e0c66-ec6c-5b7c-9f67-2caadd4b59ef",
+   "name": "Sargocentron lepros",
+   "diff": {
+    "colors": {
+     "removed": [
+      "white"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c13f4081-d73a-5a8f-90a1-bac957bda976",
+   "name": "Iniistius jacksonensis",
+   "diff": {
+    "colors": {
+     "removed": [
+      "white"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "198f4c8b-5bb5-5443-a54c-cd00c7a66c7d",
+   "name": "Chromis notata",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "55062c79-63e5-5cd3-9f52-51616510e631",
+   "name": "Plectrypops lima",
+   "diff": {
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c00a5bb5-9aa1-590e-bd27-8e1d653074b6",
+   "name": "Suezichthys gracilis",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "ba6d45dd-84c1-56c3-9285-b17540da0e7a",
+   "name": "Chaetodon tinkeri",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "d307c347-2bf4-58cd-b4a6-ed1d016fd920",
+   "name": "Haemulon squamipinna",
+   "diff": {
+    "head": {
+     "removed": [],
+     "added": [
+      "Silver head"
+     ]
+    }
+   }
+  },
+  {
+   "id": "4e72f297-466e-56d6-91d8-ae53ff54f1f2",
+   "name": "Stegastes leucostictus",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "54428e34-e267-574d-a54b-08850134ed90",
+   "name": "Meiacanthus smithi",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "fc11aed8-6820-587c-b957-617562344e5d",
+   "name": "Suttonia lineata",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6c97e514-395d-5f01-a4b1-d11e0cc60de4",
+   "name": "Amblyeleotris fasciata",
+   "diff": {
+    "colors": {
+     "removed": [
+      "red"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6f23f677-79e8-5838-a769-103268d504fc",
+   "name": "Pseudogramma astigma",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "ecff1d53-21dc-5cf3-acc3-1e924ad45e70",
+   "name": "Vanderhorstia bella",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f082a4b2-547a-58b5-9b54-b2cac7221f1f",
+   "name": "Gobiosoma hemigymnum",
+   "diff": {
+    "behaviors": {
+     "removed": [
+      "solitary"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c70ce4dc-7f26-5142-a7e1-2fb9a5e5bbb5",
+   "name": "Chromogobius britoi",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "0d1310d3-e941-533f-b51f-d9dab4f02c1c",
+   "name": "Sillago ciliata",
+   "diff": {
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "eb322e70-80fa-5802-80d5-f7f21051e425",
+   "name": "Calamus penna",
+   "diff": {
+    "colors": {
+     "removed": [
+      "gray"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "21172668-4f0e-5847-8429-bf40d605c7c5",
+   "name": "Hemiramphus lutkei",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "18e87ec3-9294-53e5-9df7-719ba5947b8f",
+   "name": "Sillago bassensis",
+   "diff": {
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7bd44091-74b3-5833-8b84-187e7215009c",
+   "name": "Parapercis hexophtalma",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "patches"
+     ],
+     "added": [
+      "spots"
+     ]
+    }
+   }
+  },
+  {
+   "id": "e406b4bc-ca55-5760-ad3d-0dd521dbdb7e",
+   "name": "Scolopsis vosmeri",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "white",
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "bf9d9a63-b93c-59fb-99fd-3070740047fa",
+   "name": "Gerres nigri",
+   "diff": {
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "df4209a7-8585-549f-af53-0f4d98fb3abb",
+   "name": "Sardinella albella",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "12983bdc-159c-5411-87b2-3628b87a904d",
+   "name": "Opistognathus maxillosus",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "eb1f80cc-f8e2-5fed-98bc-b781acd31437",
+   "name": "Chiloscyllium punctatum",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "spots"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "cf88172c-402c-54b6-980b-39fb7f0cfce9",
+   "name": "Fontitrygon margaritella",
+   "diff": {
+    "markings": {
+     "removed": [
+      "stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "983125ad-c389-5e31-8066-6cba81bd1689",
+   "name": "Taeniurops meyeni",
+   "diff": {
+    "colors": {
+     "removed": [],
+     "added": [
+      "black"
+     ]
+    }
+   }
+  }
+ ],
+ "commaBoundary": [
+  {
+   "id": "36f4cf39-dee5-5af1-aea1-3f5671a42028",
+   "name": "Seriola rivoliana",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f87ebe23-093b-5acd-9312-c17ae82b112e",
+   "name": "Pomacentrus alleni",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue anal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "3268af9a-5a26-508a-849f-33b9197beeab",
+   "name": "Forcipiger longirostris",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow anal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "73a903ae-9475-5188-9636-87fd4db52b72",
+   "name": "Chaetodontoplus melanosoma",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins",
+      "Black margins on the dorsal and anal fins and tail"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "679c645e-8ac3-511f-96bd-37d887584af9",
+   "name": "Pomacentrus nigromarginatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "093cefad-cf93-547e-bd71-9053b6f5f163",
+   "name": "Chaetodon wiebeli",
+   "diff": {
+    "head": {
+     "removed": [
+      "Red snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "2ec4adc8-2ea0-53f1-870b-9e01d58bd8ad",
+   "name": "Neoniphon opercularis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Pink pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "60ed229f-97b6-59e0-9d81-4f5b68100913",
+   "name": "Pseudochromis perspicillatus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Gray snout and forehead"
+     ],
+     "added": [
+      "Gray snout"
+     ]
+    }
+   }
+  },
+  {
+   "id": "eaa2d138-9135-555b-b7ee-d319478de9be",
+   "name": "Chrysiptera rex",
+   "diff": {
+    "head": {
+     "removed": [
+      "White forehead"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "3323198f-ca7c-5131-8318-2ce2403fff86",
+   "name": "Ctenochaetus cyanocheilus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7e2f0ac3-b76a-5f88-bd0f-28856a003446",
+   "name": "Cephalopholis cyanostigma",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Yellow dorsal, anal and pelvic fins"
+     ],
+     "added": [
+      "Yellow dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "1e10cf2d-3b49-5bf7-a2ef-4a59aa10c916",
+   "name": "Pterocaesio tile",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White pelvic and anal fins"
+     ],
+     "added": [
+      "White anal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "988b4abb-6e97-5e8b-a7e1-24e937c3369d",
+   "name": "Pomacentrus taeniometopon",
+   "diff": {
+    "head": {
+     "removed": [
+      "Brown forehead"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "fa543287-dce6-5618-b388-490e1d1ddeed",
+   "name": "Lutjanus boutton",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown dorsal fin",
+      "Yellow pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5ede4248-968a-506a-be19-71a06b8ce2a2",
+   "name": "Neopomacentrus nemurus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "feaed10c-2653-5d0f-805a-c247a688e53b",
+   "name": "Chromis cinerascens",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "70c4269a-36fa-5de2-93b0-2e2f741dfff0",
+   "name": "Plectorhinchus lineatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow anal fin and tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "8bd545ad-e7b7-5a7f-8dd4-a44ecdfc7e58",
+   "name": "Coryphaena hippurus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "White pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "0dc6da64-a7a8-5ad9-a36e-fac980ee5dd5",
+   "name": "Scomberoides lysan",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "9e22c86e-f0e5-5cdb-8edf-8a45c860d37b",
+   "name": "Exyrias belissimus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "2e8858e2-a90b-5fd3-a8a1-17bf6bb1dcff",
+   "name": "Neopomacentrus taeniurus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "22a1fb9d-bec4-5aff-9027-4398ff276a65",
+   "name": "Parupeneus cyclostomus",
+   "diff": {
+    "features": {
+     "removed": [
+      "Gray margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7c0272d4-0ba0-5954-beab-2d3599c10f24",
+   "name": "Pomachromis richardsoni",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b9835fd1-efad-5c39-ab1b-8d199053028e",
+   "name": "Genicanthus semicinctus",
+   "diff": {
+    "variant:female": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "e339fd91-9e0c-5fb4-9208-3164a4c339e0",
+   "name": "Chaetodon trifasciatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black margins on the anal fin"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "59943aa2-6bef-5da4-8470-f9c98271cab0",
+   "name": "Chaetodon nippon",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "62015454-381b-5a12-b3ba-afb5aa41eaba",
+   "name": "Ophichthus polyophthalmus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Yellow head"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f26c7a11-c197-5f04-b6f7-119598cdee5c",
+   "name": "Macrodontogobius wilburi",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "68c43aa4-d30f-5e1f-a4be-82b5e2c4085b",
+   "name": "Lutjanus fulvus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black dorsal fin and tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "80f3a629-f926-58c8-8fe4-f7b65fa06e6d",
+   "name": "Dischistodus pseudochrysopoecilus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "White dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b3867d1c-f163-5fa7-8b45-a1839e8efb95",
+   "name": "Ecsenius prooculis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "d022ddd2-e41c-50aa-a18a-b80c2c87a421",
+   "name": "Scarus psittacus",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "Blue snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "459fc72f-14d1-56f2-9afb-99c3f31713a9",
+   "name": "Chaetodontoplus dimidiatus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Black forehead"
+     ],
+     "added": []
+    },
+    "fins": {
+     "removed": [
+      "Black margins on the dorsal and anal fins and tail"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "3a484374-e8de-5369-bfdf-b0056fcddb63",
+   "name": "Centropyge venusta",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6de2af00-8cfb-5f30-9636-c8e771d1d1ae",
+   "name": "Neopomacentrus cyanomos",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow margins on the tail"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c8d75845-81ac-5794-80ca-75975fd369c7",
+   "name": "Parupeneus pleurostigma",
+   "diff": {
+    "head": {
+     "removed": [
+      "Rounded snout profile"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "febfe7d3-75c4-56ea-9c7c-89749099b5b4",
+   "name": "Acanthurus bariene",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Orange dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f383ce69-4f02-5095-a7b8-9253d39ba821",
+   "name": "Chaetodontoplus duboulayi",
+   "diff": {
+    "head": {
+     "removed": [
+      "Blue snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5c007627-9677-5756-a218-3b8127e24c9e",
+   "name": "Epibulus insidiator",
+   "diff": {
+    "variant:female": {
+     "removed": [],
+     "added": [
+      "brown",
+      "yellow"
+     ]
+    }
+   }
+  },
+  {
+   "id": "d859dc09-8a49-586d-b8b0-e4327b3b2200",
+   "name": "Trachinotus baillonii",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "44773a33-ac23-5c9f-bf7c-14de597e5840",
+   "name": "Aphareus furca",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "fb2ac840-ee73-588f-949f-74c2949f308a",
+   "name": "Lethrinus nebulosus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5eab798c-486d-509c-9816-0c722108978b",
+   "name": "Lutjanus carponotatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b9051029-84c1-5b09-8bf2-992304454f80",
+   "name": "Pomacentrus bankanensis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "9ae1dc66-105e-5d1b-b462-cc7999484b93",
+   "name": "Neoniphon sammara",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Pink pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "73bc04f2-d3ed-537c-97b8-821a01ad0914",
+   "name": "Plectorhinchus lessonii",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black dorsal and anal fins and tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6bd1acfa-74d9-5aad-8bea-653dffdba88d",
+   "name": "Pseudochromis cyanotaenia",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "Yellow pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b3ce7084-ac80-50c8-b0c1-1025945530db",
+   "name": "Neopomacentrus aquadulcis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "d8f0f50e-3ef1-5979-9577-f9c2e4dd22a5",
+   "name": "Sargocentron caudimaculatum",
+   "diff": {
+    "features": {
+     "removed": [
+      "Red margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "a53a5b91-8dbf-5803-a7b1-dd86da08943c",
+   "name": "Pterocaesio trilineata",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "215295d6-b3da-57ad-81b8-e10f798f921e",
+   "name": "Lethrinus harak",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White dorsal and anal fins"
+     ],
+     "added": [
+      "White anal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "a032cd6b-3923-5b0f-88b2-1595ba56862c",
+   "name": "Galeocerdo cuvier",
+   "diff": {
+    "head": {
+     "removed": [
+      "Long snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4f5c2236-1b06-58fc-83af-3db20fef0fd5",
+   "name": "Lutjanus biguttatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5f52e714-6058-54b8-be54-304c90d2a8de",
+   "name": "Pseudanthias bimaculatus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Yellow dorsal and anal fins and tail"
+     ],
+     "added": [
+      "Yellow dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "1e742610-0e6d-5610-8be7-a3cd4f6b1936",
+   "name": "Chaetodontoplus mesoleucus",
+   "diff": {
+    "head": {
+     "removed": [
+      "White snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6c289ff8-f107-563b-b056-b44e1270720c",
+   "name": "Neopomacentrus violascens",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "04c94bac-4519-5a1a-a0e5-5f9d50d9f43c",
+   "name": "Naso annulatus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [],
+     "added": [
+      "White tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "e6962491-2081-514a-a932-02b039bab10a",
+   "name": "Uraspis helvola",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f9414f38-e8eb-5b28-ae57-731db7defcba",
+   "name": "Chromis alpha",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "a2f9cf11-ab0b-5651-8d7f-68f6fa63e232",
+   "name": "Chrysiptera flavipinnis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow dorsal and anal fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "8e7606d3-7c68-5884-af54-06f6f2cf81c6",
+   "name": "Luzonichthys whitleyi",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "1d37bd79-d8d8-520f-8cbd-2774c2754f4c",
+   "name": "Plectorhinchus albovittatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "af4ebf71-9c61-5f92-9ebb-e3422604dc20",
+   "name": "Atropus mentalis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Green pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "d666c399-2bbc-5d21-b4b2-407133094aef",
+   "name": "Trachinotus africanus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "454ba7ab-dabc-5717-a7f2-0a3685080bfb",
+   "name": "Selar crumenophthalmus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "9f4f977d-0527-51d8-b401-d072cf1025e6",
+   "name": "Trachinotus rhodopus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow anal fin and tail"
+     ],
+     "added": [
+      "Yellow tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "04cbf9ce-2ac9-529d-b3cb-72e81dc79ef9",
+   "name": "Myripristis murdjan",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White pelvic fins and tail"
+     ],
+     "added": [
+      "White pelvic fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "24271ad7-5898-52b6-b038-f5ed5df18b62",
+   "name": "Pomadasys rogerii",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "ad950ec5-7c5a-5908-b67c-c2e4d0d01727",
+   "name": "Epinephelus retouti",
+   "diff": {
+    "head": {
+     "removed": [
+      "Red snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "13d03197-2640-5545-8849-58b7805cc4be",
+   "name": "Pinjalo lewisi",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Red pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "cc9a1d20-3312-54ee-87d2-b04820427292",
+   "name": "Naso lituratus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "fe5ae623-9f77-5f84-8199-03f7e4e206f9",
+   "name": "Sparisoma chrysopterum",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Red anal and pelvic fins"
+     ],
+     "added": [
+      "Red pelvic fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "d2214e51-cbab-5552-adbd-173d6d88ca7d",
+   "name": "Cheilinus trilobatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow anal and pectoral fins"
+     ],
+     "added": [
+      "Yellow pectoral fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "258b44f1-0798-50e4-82c8-929199d46587",
+   "name": "Sparisoma axillare",
+   "diff": {
+    "fins": {
+     "removed": [],
+     "added": [
+      "Yellow dorsal and anal fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "e979a8ba-3092-51e7-977c-0c8f3166cd31",
+   "name": "Anampses caeruleopunctatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "86eee499-ef64-5b30-b15a-41f4b80eb4f5",
+   "name": "Bodianus rufus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue anal and pelvic fins"
+     ],
+     "added": [
+      "Blue pelvic fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "9c1df7cd-49f9-5437-b839-37b7e4b6068e",
+   "name": "Gobioides sagitta",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "e861868f-9551-5c50-b0df-9625ba2104b5",
+   "name": "Cephalopholis panamensis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Tall front dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7e2c59e3-8ab1-53bf-82de-47731ad3c82d",
+   "name": "Acanthistius sebastoides",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f6c9e75d-7711-5355-97db-ea72936d19d6",
+   "name": "Sparisoma frondosum",
+   "diff": {
+    "colors": {
+     "removed": [
+      "blue"
+     ],
+     "added": []
+    },
+    "fins": {
+     "removed": [
+      "Red dorsal, anal and pelvic fins and tail"
+     ],
+     "added": [
+      "Red dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "faf3150c-c41d-55b9-a6fe-b1e3ff13a1f9",
+   "name": "Apolemichthys griffisi",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "cbe71b88-8fa3-5770-993f-aa7a92b54b83",
+   "name": "Choerodon fasciatus",
+   "diff": {
+    "features": {
+     "removed": [
+      "Red, blue, white and black bands"
+     ],
+     "added": [
+      "White and black bands"
+     ]
+    }
+   }
+  },
+  {
+   "id": "9fb25006-203c-5134-a188-ba524dbcefa1",
+   "name": "Prionurus chrysurus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "a97e6cbf-8de9-5472-9dde-d0c49b55a0fa",
+   "name": "Plectorhinchus macrospilus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "White dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c2034a1c-92f7-599c-ab31-46ab9aae5976",
+   "name": "Novaculops koteamea",
+   "diff": {
+    "features": {
+     "removed": [
+      "Red margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7c317492-f692-5b9f-8e7c-41847d2d8416",
+   "name": "Apolemichthys xanthopunctatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black anal fin and tail"
+     ],
+     "added": [
+      "Black anal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "d4c7bcc6-3eb1-52ad-ab41-ae92a9598381",
+   "name": "Selar boops",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Green pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7158cb74-4a84-551b-a3a5-a8cfef6f0ff3",
+   "name": "Forcipiger flavissimus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow anal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "e3bdd803-5d25-542e-bf65-a0248b980594",
+   "name": "Selaroides leptolepis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "45c51970-3766-595c-8f3e-a04e46bcdd8e",
+   "name": "Chaetodon lunula",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "62743b23-d83f-5474-8269-b2d32a48b2bf",
+   "name": "Valenciennea puellaris",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Tall front dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "973fbf2f-cb8b-59b6-a3c7-3c41d953d28f",
+   "name": "Labrichthys unilineatus",
+   "diff": {
+    "variant:female": {
+     "removed": [
+      "Yellow and brown stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "bed750e2-ba97-57be-b79f-77071361aa61",
+   "name": "Parupeneus diagonalis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Tall front dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "fcc3058e-309c-5799-a258-3e56ec426e4a",
+   "name": "Chromis scotochiloptera",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown anal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "11d7defd-4ebe-5ba1-aeba-81eef1aa1526",
+   "name": "Chaetodon ocellicaudus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f254274f-2509-5ed0-a19f-b0f55f3a56b7",
+   "name": "Amphiprion omanensis",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [],
+     "added": [
+      "Black tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "9b8a4b5a-ce64-598e-9617-aa5407a04bd1",
+   "name": "Halichoeres stigmaticus",
+   "diff": {
+    "features": {
+     "removed": [
+      "Yellow margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "ace67dc2-30e8-5c1d-b39d-58c1cf891272",
+   "name": "Chaetodontoplus vanderloosi",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Yellow forehead"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7eb4cb71-b109-5130-b80f-d888ff7e20a9",
+   "name": "Choerodon gomoni",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "32b4d3dd-8e04-5e64-b6cd-65a76c60bb73",
+   "name": "Neoglyphidodon crossi",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Orange pelvic fins"
+     ],
+     "added": []
+    },
+    "fins": {
+     "removed": [
+      "Brown pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c88209b2-7523-5d2b-bce3-7c152993afc8",
+   "name": "Pomacentrus proteus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Brown forehead"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "b4f766d2-bed8-5ed7-89f5-7fcfa7e2bd34",
+   "name": "Scorpaenodes quadrispinosus",
+   "diff": {
+    "features": {
+     "removed": [
+      "White margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "1aba09ac-cfb2-5c6b-b797-9ea99f96561d",
+   "name": "Chromis xouthos",
+   "diff": {
+    "fins": {
+     "removed": [],
+     "added": [
+      "Gray pelvic fins"
+     ]
+    }
+   }
+  },
+  {
+   "id": "99cb9c8a-6087-5af7-9a05-6d8c5b20d78f",
+   "name": "Cirripectes castaneus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c9baa03a-6465-5e36-863d-8b294ef4d36a",
+   "name": "Pomacentrus grammorhynchus",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Yellow dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "87f2bbc1-174f-50c7-8c98-0168da86dfd3",
+   "name": "Pomacentrus reidi",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "3a2e300a-1b62-5a3d-bae1-19963acac71c",
+   "name": "Stethojulis marquesensis",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Olive pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4255dcd1-4813-5a9d-a1f9-3956eb114acb",
+   "name": "Cirrhilabrus joanallenae",
+   "diff": {
+    "variant:male": {
+     "removed": [],
+     "added": [
+      "Blue tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "dfbbf5a8-64ca-56d0-9d41-db18b0d7f875",
+   "name": "Centropyge acanthops",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow dorsal fin and tail"
+     ],
+     "added": [
+      "Yellow tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "da030c51-ab37-5023-843b-7972e8c421c6",
+   "name": "Cirrhilabrus filamentosus",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "White dorsal, anal and pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "87cdbf35-3b9a-5705-9746-a39a24fc777c",
+   "name": "Pomacentrus javanicus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Brown pelvic fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "1c964125-2a60-5366-9897-ed053afaf3d7",
+   "name": "Chrysiptera niger",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4b4f5abb-868b-5755-a05c-38e8fa17e2ed",
+   "name": "Paracheilinus cyaneus",
+   "diff": {
+    "colors": {
+     "removed": [
+      "black"
+     ],
+     "added": []
+    },
+    "fins": {
+     "removed": [
+      "Red dorsal fin"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "e191ff72-3e76-531d-aa73-5e1369f04d41",
+   "name": "Pomacentrus colini",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Gray dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "d482e765-701a-5dc4-a9d2-2b324b04b1d4",
+   "name": "Meiacanthus reticulatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Black dorsal, anal and pelvic fins"
+     ],
+     "added": [
+      "Black dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "90739e0b-7a91-5a75-9883-d5b9e84e00b5",
+   "name": "Pomacentrus aurifrons",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Blue dorsal and anal fins and tail"
+     ],
+     "added": [
+      "Blue dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "4eba7b9d-c49f-5e74-bba8-df7375b09536",
+   "name": "Cirrhilabrus morrisoni",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "Black dorsal, anal and pelvic fins"
+     ],
+     "added": [
+      "Black dorsal fin"
+     ]
+    }
+   }
+  },
+  {
+   "id": "79f69cc1-8491-58f0-b5fb-acd9bb0a0787",
+   "name": "Vanderhorstia dorsomacula",
+   "diff": {
+    "variant:male": {
+     "removed": [
+      "Yellow head"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "65ec464f-2200-5869-9219-c3722c6bbb23",
+   "name": "Cirrisalarias bunares",
+   "diff": {
+    "features": {
+     "removed": [
+      "Gray stripes"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "da121025-ee5c-5c49-b6e7-a2bd0e989364",
+   "name": "Ecsenius taeniatus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Yellow dorsal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "a965f762-8919-54cc-9ba3-b5b1357a4b10",
+   "name": "Kyphosus sandwicensis",
+   "diff": {
+    "features": {
+     "removed": [
+      "Gray margins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "fin edge"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "1589f9ad-f693-5fc0-a6fd-9f49cb748044",
+   "name": "Lethrinus erythracanthus",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Orange dorsal and anal fins"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "32cb964a-aece-5494-84f7-e6296895606a",
+   "name": "Priacanthus sagittarius",
+   "diff": {
+    "fins": {
+     "removed": [
+      "Pink anal fin and tail"
+     ],
+     "added": [
+      "Pink tail"
+     ]
+    }
+   }
+  },
+  {
+   "id": "0f04f8b3-b3f8-5be3-bec1-ed1cbb348d02",
+   "name": "Parapercis flavolineata",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White margins on the tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "84984731-0af8-5e9a-97dc-335317046a0b",
+   "name": "Ostorhinchus griffini",
+   "diff": {
+    "variant:juvenile": {
+     "removed": [
+      "Yellow tail"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "f65ab3ce-fafe-554a-a039-beccc581e9c2",
+   "name": "Echidna catenata",
+   "diff": {
+    "head": {
+     "removed": [
+      "Yellow snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "6542f620-3f9a-5117-9e30-6e66e30be0b7",
+   "name": "Myrichthys pantostigmius",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White anal fin"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "c8700bab-91bd-58ca-8b6f-6e94da536464",
+   "name": "Carcharhinus altimus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Long snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4e3e4d22-5282-586d-8ce4-e557be428f62",
+   "name": "Carcharhinus brevipinna",
+   "diff": {
+    "head": {
+     "removed": [
+      "Long snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "7ea81c52-592f-5bb0-bcfc-725520a8d7ae",
+   "name": "Carcharhinus limbatus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Long snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "5d9f857e-c002-527a-b4cf-b12b34d23b33",
+   "name": "Lamna nasus",
+   "diff": {
+    "head": {
+     "removed": [
+      "Long snout"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "60c710e0-710a-523e-bfa1-7ed27df975c6",
+   "name": "Aetomylaeus nichofii",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White pectoral fins"
+     ],
+     "added": []
+    },
+    "markings": {
+     "removed": [
+      "patches"
+     ],
+     "added": []
+    }
+   }
+  },
+  {
+   "id": "4eac5490-66a3-5fc4-8a02-989fbb9c5f1b",
+   "name": "Dasyatis pastinaca",
+   "diff": {
+    "fins": {
+     "removed": [
+      "White pectoral fins"
+     ],
+     "added": []
+    }
+   }
+  }
+ ]
+}

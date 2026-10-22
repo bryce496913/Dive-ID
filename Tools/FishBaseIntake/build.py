@@ -40,7 +40,7 @@ import distribution  # noqa: E402
 import fetch  # noqa: E402
 import traits  # noqa: E402
 
-BUILDER_VERSION = 3
+BUILDER_VERSION = 4
 BATCH_SIZE = 250
 ACCESSED = "2026-10-21T00:00:00Z"
 LICENSE = "CC BY-NC 4.0"
