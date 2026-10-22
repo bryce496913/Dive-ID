@@ -451,6 +451,22 @@ are unchanged. Result: **4,787 drafts in 20 batches**.
   near-verbatim overlap, 4 distribution missing, 16 depth outliers. No vocabulary or
   OCR-junk flags. Only 2 records score above 20.
 
+## 11. Global pack written; quality and performance at full size (2026-10-22)
+
+`Tools/FishBaseIntake/publish_global.py` writes the drafts into the Global pack:
+**4,786 records**. One record missing a required field stays in staging. The pack is
+Debug-only, because Release exposes only verified records; a test proves this.
+
+The results block activation. See [GlobalPackEvaluation.md](GlobalPackEvaluation.md).
+
+- **Tropical Pacific cases against Global:** top10 8/18. The regional pack scores
+  18/18. The cause is the rebuilt factual text, not the pack size.
+- **Query latency at full size:** 5.5 s median and 6.6 s p95 (host, Release). BM25
+  re-tokenises every document on every query.
+- **An out-of-range clue can push a rank-10 species out of the results.**
+
+The default-region switch to Global (decision 11) stays pending until these are resolved.
+
 ## Appendix A. Licence confirmation email (draft, not sent)
 
 **To:** fishbase@q-quatics.org

@@ -1,0 +1,146 @@
+{
+  "configuration" : "release",
+  "host" : "Ubuntu 24.04.5 LTS",
+  "kind" : "host-side proxy; not the iPhone search-to-visible measurement",
+  "packs" : [
+    {
+      "bm25RetrievalMs" : {
+        "median" : 6.031631,
+        "p95" : 7.247091,
+        "samples" : 10
+      },
+      "cacheKeyHashMs" : 0.051357,
+      "documentBuildMs" : {
+        "median" : 1.089111,
+        "samples" : 3
+      },
+      "firstQueryMs" : 24.055868,
+      "loadMs" : {
+        "median" : 2.203039,
+        "p95" : 6.256736,
+        "samples" : 5
+      },
+      "memoryMiB" : {
+        "afterLoad" : {
+          "VmHWM" : 28.9765625,
+          "VmRSS" : 28.9765625
+        },
+        "afterQueries" : {
+          "VmHWM" : 29.9453125,
+          "VmRSS" : 29.9453125
+        },
+        "beforeLoad" : {
+          "VmHWM" : 26.75,
+          "VmRSS" : 26.75
+        },
+        "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
+      },
+      "pack" : "caribbean",
+      "queryMs" : {
+        "failures" : 0,
+        "max" : 29.73079,
+        "median" : 17.532308,
+        "p95" : 25.3247,
+        "samples" : 138
+      },
+      "records" : 8
+    },
+    {
+      "bm25RetrievalMs" : {
+        "median" : 657.963059,
+        "p95" : 1055.569482,
+        "samples" : 10
+      },
+      "cacheKeyHashMs" : 2.757086,
+      "documentBuildMs" : {
+        "median" : 136.163748,
+        "samples" : 3
+      },
+      "firstQueryMs" : 1030.637864,
+      "loadMs" : {
+        "median" : 67.657018,
+        "p95" : 69.778358,
+        "samples" : 5
+      },
+      "memoryMiB" : {
+        "afterLoad" : {
+          "VmHWM" : 44.13671875,
+          "VmRSS" : 44.13671875
+        },
+        "afterQueries" : {
+          "VmHWM" : 44.33984375,
+          "VmRSS" : 44.33984375
+        },
+        "beforeLoad" : {
+          "VmHWM" : 30.0078125,
+          "VmRSS" : 30.0078125
+        },
+        "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
+      },
+      "pack" : "tropical-pacific",
+      "queryMs" : {
+        "failures" : 0,
+        "max" : 1114.224151,
+        "median" : 753.336201,
+        "p95" : 1032.589483,
+        "samples" : 138
+      },
+      "records" : 1000
+    },
+    {
+      "bm25RetrievalMs" : {
+        "median" : 5677.833823,
+        "p95" : 6298.587328,
+        "samples" : 10
+      },
+      "cacheKeyHashMs" : 31.231353,
+      "documentBuildMs" : {
+        "median" : 1042.519641,
+        "samples" : 3
+      },
+      "firstQueryMs" : 6924.009821,
+      "loadMs" : {
+        "median" : 845.447568,
+        "p95" : 1047.33519,
+        "samples" : 5
+      },
+      "memoryMiB" : {
+        "afterLoad" : {
+          "VmHWM" : 131.9921875,
+          "VmRSS" : 116.46484375
+        },
+        "afterQueries" : {
+          "VmHWM" : 131.9921875,
+          "VmRSS" : 117.4296875
+        },
+        "beforeLoad" : {
+          "VmHWM" : 44.33984375,
+          "VmRSS" : 44.33984375
+        },
+        "metric" : "VmRSS (resident set) and VmHWM (peak resident) from \/proc\/self\/status"
+      },
+      "pack" : "global",
+      "queryMs" : {
+        "failures" : 0,
+        "max" : 6825.450121,
+        "median" : 5542.094713,
+        "p95" : 6567.43836,
+        "samples" : 138
+      },
+      "records" : 4786
+    }
+  ],
+  "processMemoryAtStartMiB" : {
+    "VmHWM" : 26.49609375,
+    "VmRSS" : 26.49609375
+  },
+  "processors" : 4,
+  "publicationAvailablePacksMs" : {
+    "median" : 942.277266,
+    "p95" : 1065.903164,
+    "samples" : 5
+  },
+  "queries" : 46,
+  "repetitions" : 3,
+  "schemaVersion" : 1
+}

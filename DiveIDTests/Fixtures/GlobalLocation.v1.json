@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "pack": "global",
+  "purpose": "Location is a ranking signal, never a filter: a species described from outside its recorded range must still be returned, with unchanged eligibility score and lower ordering. Descriptions are written without location; the location sentence is appended per case.",
+  "cases": [
+    {
+      "id": "clown-triggerfish-caribbean",
+      "speciesID": "b5eba818-aaac-584c-867c-0826a67224e2",
+      "scientificName": "Balistoides conspicillum",
+      "description": "Black triggerfish with large white spots on the belly and a yellow mouth",
+      "outOfRangeLocation": "Seen in the Caribbean.",
+      "recordedRegions": [
+        "fiji",
+        "indian",
+        "indo-pacific",
+        "pacific"
+      ]
+    },
+    {
+      "id": "moorish-idol-florida",
+      "speciesID": "5f7f428a-5382-5056-af3c-c86af81e06d1",
+      "scientificName": "Zanclus cornutus",
+      "description": "Disc-shaped fish with black, white and yellow vertical bands and a long trailing white dorsal filament",
+      "outOfRangeLocation": "Seen off Florida.",
+      "recordedRegions": [
+        "hawaii",
+        "indian",
+        "indo-pacific",
+        "pacific"
+      ]
+    },
+    {
+      "id": "clown-anemonefish-belize",
+      "speciesID": "7ebe7f91-c40d-5a59-9ba7-ae78b9f3b207",
+      "scientificName": "Amphiprion ocellaris",
+      "description": "Small orange fish with three white bands living in an anemone",
+      "outOfRangeLocation": "Seen in Belize.",
+      "recordedRegions": [
+        "indian",
+        "indo-pacific",
+        "pacific"
+      ]
+    },
+    {
+      "id": "regal-angelfish-bonaire",
+      "speciesID": "d582fb16-98f1-55bb-916d-03ccfccb5e75",
+      "scientificName": "Pygoplites diacanthus",
+      "description": "Angelfish with an orange body crossed by blue and white bars",
+      "outOfRangeLocation": "Seen in Bonaire.",
+      "recordedRegions": [
+        "fiji",
+        "indian",
+        "indo-pacific",
+        "pacific"
+      ]
+    },
+    {
+      "id": "queen-triggerfish-fiji",
+      "speciesID": "e1b498e9-8539-5b26-85de-85e80c14dacc",
+      "scientificName": "Balistes vetula",
+      "description": "Triggerfish with blue lines on the face and a yellowish body",
+      "outOfRangeLocation": "Seen in Fiji.",
+      "recordedRegions": [
+        "aruba",
+        "atlantic",
+        "bahamas",
+        "belize",
+        "bermuda",
+        "british virgin islands",
+        "caribbean",
+        "cayman islands",
+        "curacao",
+        "curaçao",
+        "dominican republic",
+        "jamaica",
+        "puerto rico",
+        "turks and caicos",
+        "us virgin islands",
+        "western atlantic"
+      ]
+    },
+    {
+      "id": "spanish-hogfish-hawaii",
+      "speciesID": "86eee499-ef64-5b30-b15a-41f4b80eb4f5",
+      "scientificName": "Bodianus rufus",
+      "description": "Wrasse with a purple upper body and a yellow lower body",
+      "outOfRangeLocation": "Seen in Hawaii.",
+      "recordedRegions": [
+        "aruba",
+        "atlantic",
+        "bahamas",
+        "belize",
+        "bermuda",
+        "british virgin islands",
+        "caribbean",
+        "cayman islands",
+        "curacao",
+        "curaçao",
+        "dominican republic",
+        "jamaica",
+        "puerto rico",
+        "turks and caicos",
+        "us virgin islands",
+        "western atlantic"
+      ]
+    }
+  ]
+}

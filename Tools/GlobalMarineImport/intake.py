@@ -43,8 +43,11 @@ class InputSnapshot:
         required = [WORKBOOK, *['Data/GlobalMarine/' + name for name in (
             'Expansion4000_CandidateQueue.csv', 'Expansion4000_ReserveQueue.csv',
             'Expansion4000_Audit.json', 'Sources/reef.csv', 'Sources/asfis.csv')]]
+        # The Global pack is this pipeline's output (Tools/FishBaseIntake/publish_global.py),
+        # so it is never an input: reading it would turn every candidate into an existing identity.
         pack_paths = {p.relative_to(self.root).as_posix()
-                      for p in self.root.glob('DiveID/Resources/IdentificationPacks/*/*.json')}
+                      for p in self.root.glob('DiveID/Resources/IdentificationPacks/*/*.json')
+                      if p.parent.name != 'Global'}
         # The supplement and pack membership are optional, but their presence is
         # part of the baseline. Missing required inputs fail before any writes.
         self.content = {}

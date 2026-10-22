@@ -141,9 +141,14 @@ class NameIndex:
         return "corrected", codes, names[0], f"{best} edit(s)"
 
 
+# The regional packs whose records feed the global merge. Global itself is this
+# pipeline's output, so reading it back as input would be circular.
+SOURCE_PACKS = ("Caribbean", "TropicalPacific")
+
+
 def load_inputs(repo=REPO):
     inputs = []
-    for pack_dir in sorted((repo / "DiveID/Resources/IdentificationPacks").iterdir()):
+    for pack_dir in [repo / "DiveID/Resources/IdentificationPacks" / name for name in SOURCE_PACKS]:
         path = pack_dir / "Creatures.json"
         if not path.exists():
             continue

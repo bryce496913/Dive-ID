@@ -29,16 +29,32 @@ final class GlobalPackTests: XCTestCase {
         ])
     }
 
-    func testGlobalPackIsRegisteredEmptyAndHiddenFromPublication() async throws {
+    func testGlobalPackIsPopulatedWithDraftsAndVisibleInDevelopment() async throws {
         let development = try await repository(.experimentalDevelopment).availablePacks()
         let global = try XCTUnwrap(development.first { $0.id == .global })
-        XCTAssertEqual(global.speciesCount, 0)
+        XCTAssertGreaterThan(global.speciesCount, 4_000)
+        XCTAssertEqual(global.includedRecordCount, global.speciesCount)
+        XCTAssertEqual(global.publicationEligibleRecordCount, 0)
         XCTAssertTrue(global.isExperimental)
-        XCTAssertEqual(global.publicationStatusText, "No records yet — not approved for publication")
         XCTAssertTrue(global.regionAliases.isEmpty, "the global pack never conflicts with a described location")
         XCTAssertEqual(Set(development.map(\.id)), [.caribbean, .tropicalPacific, .global], "existing packs stay in place")
-        let publication = try await repository(.publication).availablePacks()
-        XCTAssertFalse(publication.contains { $0.id == .global }, "no approved records, so Release doesn't offer it")
+        let pack = try await repository(.experimentalDevelopment).loadPack(id: .global)
+        XCTAssertTrue(pack.profiles.allSatisfy { $0.review?.status == .draft })
+    }
+
+    /// Release (publication access) only ever exposes verified records, and every Global
+    /// record is a draft, so Release can neither list nor load the Global pack.
+    func testReleaseExcludesTheDraftGlobalPack() async throws {
+        let release = repository(.publication)
+        let available = try await release.availablePacks()
+        XCTAssertFalse(available.contains { $0.id == .global })
+        XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
+        do {
+            _ = try await release.loadPack(id: .global)
+            XCTFail("Release must not load the draft Global pack")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .publicationUnavailable)
+        }
     }
 
     func testDescribedLocationBoostsInRangeKeepsOutOfRangeAndUnknownIsNeutral() async throws {
