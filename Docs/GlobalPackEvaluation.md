@@ -207,8 +207,11 @@ it cannot pass no-match cases by returning nothing.
 
 ### What still blocks Global as the default
 
-1. **Search quality on the full catalogue.** top1 5/18, top3 8/18 and top10 12/18 are
-   below 0.4, 0.6 and 0.8. Confidence fails on `v05-ambiguous-trigger` (0.643
+1. **Search quality on the full catalogue.** *Update (builder v4): the gates now pass
+   on the development catalogue (top1 9/18, top3 11/18, top10 15/18, confidence
+   29/29); see [the negation repair and ranking fix](#negation-repair-and-ranking-fix-builder-v4-2026-10-22).
+   Release still has no approved Global record.* At the time of this report, top1
+   5/18, top3 8/18 and top10 12/18 were below 0.4, 0.6 and 0.8. Confidence fails on `v05-ambiguous-trigger` (0.643
    against a 0.64 ceiling). The remaining causes, which need owner decisions:
    - **Generic aliases:** 65 records carry a bare group word ("Surgeonfish") that
      counts as an exact name.
@@ -225,7 +228,8 @@ it cannot pass no-match cases by returning nothing.
 5. **Device evidence.** No iPhone measurements exist; the checklist is in
    [V05CandidateValidation.md](V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
    - **Host only:** the first Global query takes about 5.9 s (index build) and warm
-     queries about 103 ms median.
+     queries about 103 ms median. *Update: see
+     [cold index loading](#cold-index-loading-2026-10-22).*
 6. **Xcode tests.** The Xcode build, unit and UI tests have not run in this
    environment. The SwiftUI code (credits screen, source links) has never been
    compiled.
