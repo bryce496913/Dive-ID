@@ -63,11 +63,11 @@ The tool is `Tools/CatalogReview/global_batches.py`.
   including `Data/GlobalMarine/CandidateApprovalContext.json`, counts as a decision.
 - **Release visibility.** Release builds show only verified records. **Approving the
   first batch therefore makes the Global pack visible in Release,** showing that
-  batch's approved records. `GlobalPackTests` currently asserts that Global is
-  Debug-only and will fail at that point, deliberately, until the change is accepted.
+  batch's approved records. Since batch 1 was approved, `GlobalPackTests` asserts that
+  Release exposes exactly the records the recorded approvals cover.
 
 ## Status
 
 | Batch | Generation | Manifest SHA-256 | Seed | Flagged | Sampled | Unread | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | awaiting review |
+| batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | approved 2026-10-22 by Bryce ("I have. approved all"); 250 verified |

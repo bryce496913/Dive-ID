@@ -38,6 +38,7 @@ struct SpeciesDetailView: View {
                 if !viewModel.species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: viewModel.species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
                 if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
                 if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
+                if !viewModel.species.dataSources.isEmpty { SourceSection(sources: viewModel.species.dataSources) }
                 if let pack = viewModel.species.packContext { DetailSection(title: "Dive region", text: pack.displayName) }
                 if let review = viewModel.species.review {
                     DetailSection(title: "Record review status", text: AppCopy.recordReviewStatus(review))
@@ -79,5 +80,23 @@ private struct DetailSection: View {
             Text(title).font(.headline)
             Text(text).foregroundStyle(Color.appTextSecondary)
         }
+    }
+}
+
+/// The source page link and reference that the source licence asks for on each record.
+private struct SourceSection: View {
+    let sources: [SpeciesDataSourceReference]
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+            Text("Source").font(.headline)
+            ForEach(Array(CatalogueAttribution.sourceLines(for: sources).enumerated()), id: \.offset) { _, line in
+                if let url = line.url {
+                    Link(line.text, destination: url)
+                } else {
+                    Text(line.text).foregroundStyle(Color.appTextSecondary)
+                }
+            }
+        }
+        .accessibilityIdentifier("speciesSources")
     }
 }

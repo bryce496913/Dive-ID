@@ -29,32 +29,72 @@ final class GlobalPackTests: XCTestCase {
         ])
     }
 
-    func testGlobalPackIsPopulatedWithDraftsAndVisibleInDevelopment() async throws {
+    /// The record IDs and methods approved in the recorded batch overlays
+    /// (Data/CatalogReview/GlobalBatches), the only source of Global approvals.
+    private func approvedInOverlays() throws -> [UUID: RecordReviewMethod] {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("Data/CatalogReview/GlobalBatches")
+        var approved: [UUID: RecordReviewMethod] = [:]
+        let batches = try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+        for batch in batches {
+            for file in try FileManager.default.contentsOfDirectory(at: batch, includingPropertiesForKeys: nil) where file.lastPathComponent.contains("Review") {
+                let overlay = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: file)) as? [String: Any])
+                guard overlay["decision"] as? String == "approved" else { continue }
+                for record in try XCTUnwrap(overlay["records"] as? [[String: Any]]) {
+                    let id = try XCTUnwrap(UUID(uuidString: try XCTUnwrap(record["speciesID"] as? String)))
+                    approved[id] = try XCTUnwrap(RecordReviewMethod(rawValue: try XCTUnwrap(record["reviewMethod"] as? String)))
+                }
+            }
+        }
+        return approved
+    }
+
+    func testDevelopmentShowsTheWholeGlobalPackWithApprovedRecordsMarked() async throws {
         let development = try await repository(.experimentalDevelopment).availablePacks()
         let global = try XCTUnwrap(development.first { $0.id == .global })
+        let approved = try approvedInOverlays()
         XCTAssertGreaterThan(global.speciesCount, 4_000)
         XCTAssertEqual(global.includedRecordCount, global.speciesCount)
-        XCTAssertEqual(global.publicationEligibleRecordCount, 0)
+        XCTAssertEqual(global.publicationEligibleRecordCount, approved.count)
         XCTAssertTrue(global.isExperimental)
+        XCTAssertEqual(global.displayName, "Global (Experimental)", "experimental until every record is approved")
         XCTAssertTrue(global.regionAliases.isEmpty, "the global pack never conflicts with a described location")
         XCTAssertEqual(Set(development.map(\.id)), [.caribbean, .tropicalPacific, .global], "existing packs stay in place")
         let pack = try await repository(.experimentalDevelopment).loadPack(id: .global)
-        XCTAssertTrue(pack.profiles.allSatisfy { $0.review?.status == .draft })
+        for profile in pack.profiles {
+            if let method = approved[profile.id] {
+                XCTAssertEqual(profile.review?.status, .verified)
+                XCTAssertEqual(profile.review?.reviewMethod, method)
+                XCTAssertEqual(profile.review?.verifiedBy, "Bryce")
+            } else {
+                XCTAssertEqual(profile.review?.status, .draft, "\(profile.commonName) has no approval")
+                XCTAssertNil(profile.review?.reviewMethod)
+            }
+        }
     }
 
-    /// Release (publication access) only ever exposes verified records, and every Global
-    /// record is a draft, so Release can neither list nor load the Global pack.
-    func testReleaseExcludesTheDraftGlobalPack() async throws {
+    /// Release (publication access) exposes exactly the records a recorded approval
+    /// covers, and no draft.
+    func testReleaseExposesExactlyTheApprovedGlobalRecords() async throws {
+        let approved = try approvedInOverlays()
         let release = repository(.publication)
         let available = try await release.availablePacks()
-        XCTAssertFalse(available.contains { $0.id == .global })
         XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
-        do {
-            _ = try await release.loadPack(id: .global)
-            XCTFail("Release must not load the draft Global pack")
-        } catch let failure as CatalogueLoadFailure {
-            XCTAssertEqual(failure.code, .publicationUnavailable)
+        guard !approved.isEmpty else {
+            XCTAssertFalse(available.contains { $0.id == .global }, "no approval, no Global pack in Release")
+            return
         }
+        let listed = try XCTUnwrap(available.first { $0.id == .global })
+        XCTAssertEqual(listed.speciesCount, approved.count)
+        XCTAssertEqual(listed.displayName, "Global (Experimental)")
+        let pack = try await release.loadPack(id: .global)
+        XCTAssertEqual(Set(pack.profiles.map(\.id)), Set(approved.keys))
+        XCTAssertTrue(pack.profiles.allSatisfy { $0.review?.status == .verified })
+        let full = try await repository(.experimentalDevelopment).loadPack(id: .global)
+        let unapproved = Set(full.profiles.map(\.id)).subtracting(approved.keys)
+        XCTAssertEqual(unapproved.count, full.profiles.count - approved.count)
+        XCTAssertTrue(unapproved.isDisjoint(with: pack.profiles.map(\.id)), "unapproved records are absent from Release")
+        print("GLOBAL_RELEASE exposed=\(pack.profiles.count) unapproved=\(unapproved.count) individually=\(pack.profiles.filter { $0.review?.reviewMethod == .individuallyReviewed }.count) sample=\(pack.profiles.filter { $0.review?.reviewMethod == .sampleApproved }.count)")
     }
 
     func testDescribedLocationBoostsInRangeKeepsOutOfRangeAndUnknownIsNeutral() async throws {

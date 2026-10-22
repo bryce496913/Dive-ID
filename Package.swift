@@ -32,6 +32,7 @@ let package = Package(
                 "Core/Models/OfflineIdentificationPack.swift",
                 "Core/Models/SelectedPackState.swift",
                 "Core/Models/AppCopy.swift",
+                "Core/Models/CatalogueAttribution.swift",
                 "Core/Services/SelectedDiveRegionRepository.swift",
                 "Core/Models/ParsedObservation.swift",
                 "Core/Models/SpeciesSearchDocument.swift",
@@ -59,7 +60,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

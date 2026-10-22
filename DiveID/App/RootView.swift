@@ -51,6 +51,8 @@ struct RootView: View {
                 viewModel: .init(catalog: catalogRepository, selection: regionRepository),
                 selectionDidChange: { router.goBack() }
             )
+        case .credits:
+            CreditsView()
         }
     }
 }

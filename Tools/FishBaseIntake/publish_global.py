@@ -29,7 +29,7 @@ import catalogue_validation  # noqa: E402
 import global_batches  # noqa: E402
 
 PACK = REPO / "DiveID/Resources/IdentificationPacks/Global"
-PACK_VERSION = 2  # 1 was the empty placeholder
+PACK_VERSION = 2  # 1 was the empty placeholder; each approved batch adds 1
 
 
 def compose(drafts, risk_records):
@@ -59,13 +59,19 @@ def apply_reviews(records, batches):
     return reviews, report
 
 
-def manifest_for(records, template):
+def manifest_for(records, template, approved_batches=0):
+    """Counts come from the records. The pack stays "(Experimental)" until every record
+    is publication-eligible; its version rises with each approved batch, whose review
+    changes the records."""
     reviewed = sum(r["review"]["status"] in ("sourceChecked", "verified") for r in records)
     eligible = sum(r["review"]["status"] == "verified" and bool(r["categories"]) for r in records)
+    complete = bool(records) and eligible == len(records)
     manifest = dict(template)
-    manifest.update({"packVersion": PACK_VERSION, "speciesCount": len(records), "includedRecordCount": len(records),
+    manifest.update({"packVersion": PACK_VERSION + approved_batches, "speciesCount": len(records), "includedRecordCount": len(records),
                      "humanReviewedRecordCount": reviewed, "publicationEligibleRecordCount": eligible,
-                     "shortDescription": "Worldwide draft catalogue from FishBase and SeaLifeBase; not verified for publication"})
+                     "displayName": "Global" if complete else "Global (Experimental)",
+                     "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase" if complete else
+                     f"Worldwide catalogue from FishBase and SeaLifeBase; {eligible} of {len(records)} records approved for publication"})
     return manifest
 
 
@@ -93,7 +99,7 @@ def main(argv=None):
     risk = json.loads((staging / "RiskReport.json").read_text())["records"]
     records, excluded, dropped = compose(drafts, risk)
     reviews, review_report = apply_reviews(records, Path(args.batches))
-    manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()))
+    manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
     catalogue_validation.validate_catalogue(records, manifest)  # raises on any error; nothing written
     actions = {"Creatures.json": write_if_changed(pack / "Creatures.json", creatures_text(records)),
                "PackManifest.json": write_if_changed(pack / "PackManifest.json", json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")}
