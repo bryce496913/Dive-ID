@@ -90,10 +90,16 @@ struct OfflineIdentificationPack: Sendable, Hashable {
     /// Hash of the profiles, computed once when the pack is built, so search caches
     /// can key on content without rehashing every profile on each query. In-process only.
     let contentFingerprint: Int
+    /// A digest of the catalogue resource this pack was decoded from and of how it was
+    /// filtered, stable across launches (unlike `contentFingerprint`, which uses the
+    /// per-process seeded `Hasher`). Set by the catalogue repository; nil for packs
+    /// assembled in memory, whose search index is then never persisted.
+    let persistentContentKey: String?
 
-    init(metadata: OfflineIdentificationPackMetadata, profiles: [LocalSpeciesProfile]) {
+    init(metadata: OfflineIdentificationPackMetadata, profiles: [LocalSpeciesProfile], persistentContentKey: String? = nil) {
         self.metadata = metadata
         self.profiles = profiles
+        self.persistentContentKey = persistentContentKey
         var hasher = Hasher()
         hasher.combine(profiles)
         contentFingerprint = hasher.finalize()

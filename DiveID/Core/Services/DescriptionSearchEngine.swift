@@ -111,6 +111,7 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
     let parser: any ObservationParsing
     let ranker: any SpeciesRanking
     let candidateLimit: Int
+    let indexStore: SearchIndexStore
     private let regionResolver = RegionCompatibilityResolver()
 
     init(
@@ -118,13 +119,15 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         documentBuilder: any SpeciesSearchDocumentBuilding = SpeciesSearchDocumentBuilder(),
         parser: any ObservationParsing = LocalObservationParser(),
         ranker: any SpeciesRanking = LocalSpeciesRanker(),
-        candidateLimit: Int = 50
+        candidateLimit: Int = 50,
+        indexStore: SearchIndexStore = .shared
     ) {
         self.retriever = retriever
         self.documentBuilder = documentBuilder
         self.parser = parser
         self.ranker = ranker
         self.candidateLimit = candidateLimit
+        self.indexStore = indexStore
     }
 
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
@@ -134,10 +137,10 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         let retrieved: [RetrievedSpeciesCandidate]
         if let bm25 = retriever as? BM25SpeciesCandidateRetriever {
             // The production path: the BM25 index is built once per catalogue content.
-            let index = await SearchDocumentCache.shared.index(pack: pack, builder: documentBuilder)
+            let index = try await indexStore.index(pack: pack, builder: documentBuilder)
             retrieved = try await bm25.retrieve(query: description, index: index, limit: candidateLimit)
         } else {
-            let documents = await SearchDocumentCache.shared.documents(pack: pack, builder: documentBuilder)
+            let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
             retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
         }
         try Task.checkCancellation()
@@ -183,45 +186,6 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
             retrievalLimit: candidateLimit
         )
-    }
-}
-
-/// Search documents and the BM25 index for each catalogue content, built once and
-/// reused by every query. The key is the pack's identity and version plus the content
-/// fingerprint computed when the pack was built, so edited or filtered catalogues
-/// (for example the Release subset) get their own entry. A few entries are kept.
-private actor SearchDocumentCache {
-    static let shared = SearchDocumentCache()
-    private struct Entry { let documents: [SpeciesSearchDocument]; var index: BM25Index? }
-    private var values: [String: Entry] = [:]
-    private var order: [String] = []
-    private let capacity = 6
-
-    private func key(_ pack: OfflineIdentificationPack, _ builder: any SpeciesSearchDocumentBuilding) -> String {
-        "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion):\(pack.profiles.count):\(pack.contentFingerprint):\(String(reflecting: type(of: builder)))"
-    }
-
-    private func entry(_ pack: OfflineIdentificationPack, _ builder: any SpeciesSearchDocumentBuilding) -> (String, Entry) {
-        let key = key(pack, builder)
-        if let cached = values[key] { return (key, cached) }
-        let entry = Entry(documents: pack.profiles.map { builder.document(from: $0, pack: pack.metadata) }, index: nil)
-        values[key] = entry
-        order.append(key)
-        if order.count > capacity { values.removeValue(forKey: order.removeFirst()) }
-        return (key, entry)
-    }
-
-    func documents(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> [SpeciesSearchDocument] {
-        entry(pack, builder).1.documents
-    }
-
-    func index(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> BM25Index {
-        var (key, entry) = entry(pack, builder)
-        if let index = entry.index { return index }
-        let index = BM25Index(documents: entry.documents)
-        entry.index = index
-        values[key] = entry
-        return index
     }
 }
 

@@ -12,7 +12,12 @@ final class DescriptionSearchViewModel {
 
     init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.sessionStore = sessionStore; packLoader = SelectedPackLoader(catalog: catalog, regionRepository: regionRepository) }
 
-    func load() async { packState = await packLoader.load() }
+    /// Loads the selected pack's metadata, then starts preparing its search index in the
+    /// background (off the main thread), so the first search usually finds it ready.
+    func load() async {
+        packState = await packLoader.load()
+        if let pack { SearchIndexPreparation.start(packID: pack.id, catalog: packLoader.catalog) }
+    }
 
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }

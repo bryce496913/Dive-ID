@@ -507,6 +507,77 @@ lengths + 1) fails 27,252 assertions.
   retrieved candidates. The ranker matches morphology patterns against each
   candidate's fin and head clues on every query, and Global records carry many.
 
+### Cold index loading (2026-10-22)
+
+**Profile first.** Global first search, Linux host, Release, after the builder v4
+ranking change:
+
+| Step | Cost |
+| --- | --- |
+| Catalogue decode and validation | 1.54 s |
+| Pack construction (fingerprint, group names) | 0.41 s |
+| Search documents | 1.12 s |
+| BM25 index build | 6.47 s |
+| Search once built | 21 ms |
+
+Inside the index build:
+- **`normalize`:** 1.4 s, three regex replacements per call.
+- **Morphology `scopedText`:** 1.9 s; it compiled four patterns on every call.
+- **Appearance relationships:** 1.7 s.
+- **Re-tokenising every name:** 2.3 s, through the same per-call compilation.
+
+**What changed:**
+1. **Cheaper tokenisation, same output.**
+   - Regexes are compiled once (morphology, negated phrases).
+   - `normalize` is one pass over bytes, with the earlier Unicode path kept for the two
+     characters whose lowercase is ASCII and for non-ASCII whitespace at either end.
+   - `SearchIndexStoreTests` checks `normalize` against the old regex implementation,
+     and the golden test checks every result.
+2. **`SearchIndexStore`** replaces the in-memory document cache.
+   - **One build per catalogue content,** run outside the store's actor and off the
+     main thread; concurrent requests share it.
+   - **Cancellation:** a cancelled request returns at once, and the build carries on
+     for the next one.
+3. **Background preparation.** Opening the Describe screen starts loading or building
+   the selected pack's index (`SearchIndexPreparation`) at utility priority. It is not
+   started at app launch, and nothing waits for it.
+4. **A validated persisted index** in the app's Caches directory, written after the
+   index is returned so no search waits for the disk. It is used only when:
+   - its header matches the format, document schema, a tokenizer probe, the app
+     version and build, the document builder, and the pack ID, version and record count;
+   - it matches the pack's stable content key: an FNV-1a digest of the species
+     resource, plus whether it was the development or Release-filtered set;
+   - its checksum is intact;
+   - its records are exactly the pack's records;
+   - sampled entries rebuilt from their profiles are identical.
+
+   Anything else is deleted and rebuilt. Other archives for the same pack are removed
+   when a new one is written. The SwiftPM build never persists, so tests and
+   evaluations do not touch user caches unless they pass a directory.
+
+**Host timings** (Linux container, Release, 4 cores; `GlobalPackPerformanceTests`,
+`Reports/GlobalPackPerformance.release.json`). Each launch is a fresh repository and
+index store in the same process, so the file cache is warm. **These are not iPhone
+numbers.**
+
+| Pack | Fresh install: launch to search-ready | Later launch (stored index) | First query once ready | Warm query median (p95) | Stored index |
+| --- | --- | --- | --- | --- | --- |
+| Global (4,786) | 4.93 s (was 9.6 s) | **0.89 s** | 63 ms | 54 ms (87 ms) (was 119 ms) | 2.99 MB |
+| Tropical Pacific (1,000) | 704 ms | 141 ms | 32 ms | 33 ms | 0.46 MB |
+| Caribbean (8) | 7.5 ms | 4.6 ms | 7.0 ms | 6.3 ms | 6.6 kB |
+
+- **"Was" figures** come from the same test on the builder v4 code, before this
+  change: 1.30 s decode, 1.19 s documents, 7.16 s index, and a 119 ms warm median.
+  The earlier 4.8 s index (5.9 s first query) predates the new relationship patterns.
+- **Readiness** is pack decode plus index load or build. The Global later launch is
+  about 0.74 s of decoding plus 0.15 s of reading the stored index.
+- **Index build** (Global) is 3.15 s, down from 6.47 s. Appearance relationships
+  (1.35 s) are now its largest part.
+- **With preparation,** the first search waits only for whatever part of readiness is
+  still running when it is submitted.
+- **Memory:** the Global index is held once per content. The resident figures in the
+  report are cumulative for one test process.
+
 ## Options (none applied; owner decision needed)
 
 **Quality**
