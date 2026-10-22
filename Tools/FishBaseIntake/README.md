@@ -72,6 +72,28 @@ deterministic. `BuildReport.json` gives field coverage and flag rates.
 `Tools/CatalogReview/catalogue_validation.assess_risk`. The verbatim check compares
 each record against the source passages it was built from.
 
+## Writing the Global pack (`publish_global.py`)
+
+```sh
+python3 Tools/FishBaseIntake/publish_global.py   # after build.py
+```
+
+Writes the drafts into `DiveID/Resources/IdentificationPacks/Global/Creatures.json` and
+derives every `PackManifest.json` count from the written records.
+
+- **Left out:** records with a `missing_required` risk flag (the app rejects a pack
+  containing one). They stay in staging.
+- **Similar species** that point outside the written pack are dropped, along with
+  `similarSpecies` in `reviewedFields` when none remain.
+- **Drafts only.** Anything else stops the script. Release builds expose only
+  verified records, so the pack stays Debug-only; `GlobalPackTests` proves it.
+- **Validated before writing** with `Tools/CatalogReview/catalogue_validation.py`.
+  Output is deterministic (one record per line), writes are atomic and an unchanged
+  file is not rewritten.
+
+`resolve.py` and `Tools/GlobalMarineImport/intake.py` never read the Global pack:
+it is this pipeline's output, not an input.
+
 ## Distribution staging (`distribution.py`)
 
 ```sh
