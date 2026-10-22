@@ -13,12 +13,12 @@ import json
 import os
 import re
 import sys
-import tempfile
 from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from catalogue_validation import CatalogueValidationError, validate_catalogue
+from paired_write import replace_file_pair
 
 PUBLICATION_FIELDS = (
     "commonName", "scientificName", "aliases", "categories", "colors", "markings",
@@ -224,31 +224,7 @@ def _json_bytes(document):
 
 def replace_catalogue_pair(creatures_path, manifest_path, records, manifest):
     """Stage both outputs, then replace the pair with rollback on any failure."""
-    targets = (creatures_path, manifest_path)
-    with tempfile.TemporaryDirectory(prefix=".catalog-review-", dir=creatures_path.parent) as temporary:
-        stage = Path(temporary)
-        staged = (stage / creatures_path.name, stage / manifest_path.name)
-        for path, payload in zip(staged, (_json_bytes(records), _json_bytes(manifest))):
-            path.write_bytes(payload)
-        backups = (stage / (creatures_path.name + ".bak"), stage / (manifest_path.name + ".bak"))
-        moved_backups = []
-        installed = []
-        try:
-            for target, backup in zip(targets, backups):
-                if target.exists():
-                    os.replace(target, backup)
-                    moved_backups.append((target, backup))
-            for source, target in zip(staged, targets):
-                os.replace(source, target)
-                installed.append(target)
-        except BaseException:
-            for target in reversed(installed):
-                if target.exists():
-                    target.unlink()
-            for target, backup in reversed(moved_backups):
-                if backup.exists():
-                    os.replace(backup, target)
-            raise
+    replace_file_pair((creatures_path, manifest_path), (_json_bytes(records), _json_bytes(manifest)))
 
 
 def main():

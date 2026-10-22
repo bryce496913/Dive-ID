@@ -1,8 +1,10 @@
 """Tests for writing the draft records into the Global pack. Records are synthetic except the final check."""
 import json
+import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -65,11 +67,33 @@ class OutputTests(unittest.TestCase):
         self.assertEqual(text, publish_global.creatures_text([draft("a"), draft("b")]))
         self.assertEqual(len(json.loads(text)), 2)
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "Creatures.json"
-            self.assertEqual(publish_global.write_if_changed(path, text), "written")
-            self.assertEqual(publish_global.write_if_changed(path, text), "unchanged")
-            self.assertEqual(path.read_text(), text)
-            self.assertEqual(list(Path(directory).iterdir()), [path], "no temporary file left behind")
+            pack = Path(directory)
+            self.assertEqual(publish_global.write_pack(pack, text, "{}\n"), "written")
+            self.assertEqual(publish_global.write_pack(pack, text, "{}\n"), "unchanged")
+            self.assertEqual(((pack / "Creatures.json").read_text(), (pack / "PackManifest.json").read_text()), (text, "{}\n"))
+            self.assertEqual(sorted(p.name for p in pack.iterdir()), ["Creatures.json", "PackManifest.json"], "no staging left behind")
+
+    def test_a_failed_second_replacement_restores_both_files_to_their_original_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            pack = Path(directory)
+            (pack / "Creatures.json").write_bytes(b"[old creatures]\n")
+            (pack / "PackManifest.json").write_bytes(b"{old manifest}\n")
+            real_replace, calls = os.replace, []
+
+            def fail_manifest_install(source, target):
+                calls.append((Path(source).name, Path(target).name))
+                # Two backups, then Creatures.json is installed; installing the manifest fails.
+                if len(calls) == 4:
+                    raise OSError("simulated manifest replacement failure")
+                return real_replace(source, target)
+
+            with mock.patch.object(os, "replace", side_effect=fail_manifest_install):
+                with self.assertRaisesRegex(OSError, "simulated"):
+                    publish_global.write_pack(pack, "[new creatures]\n", "{new manifest}\n")
+            self.assertEqual(calls[3], ("PackManifest.json", "PackManifest.json"))
+            self.assertEqual((pack / "Creatures.json").read_bytes(), b"[old creatures]\n")
+            self.assertEqual((pack / "PackManifest.json").read_bytes(), b"{old manifest}\n")
+            self.assertEqual(sorted(p.name for p in pack.iterdir()), ["Creatures.json", "PackManifest.json"])
 
     def test_committed_global_pack_matches_a_fresh_publish(self):
         staging = publish_global.REPO / "Data/GlobalMarine/FishBase"

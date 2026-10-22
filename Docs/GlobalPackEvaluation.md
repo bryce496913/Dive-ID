@@ -82,22 +82,62 @@ Going to full size then adds competitors (top1 6 → 4).
 
 ### Location clues (out-of-range species)
 
-| Case | Species | Out-of-range clue | Rank without | Rank with |
-| --- | --- | --- | --- | --- |
-| clown-triggerfish-caribbean | *Balistoides conspicillum* | Caribbean | 10 | **not returned** |
-| clown-anemonefish-belize | *Amphiprion ocellaris* | Belize | 3 | 4 |
-| regal-angelfish-bonaire | *Pygoplites diacanthus* | Bonaire | 3 | 7 |
-| queen-triggerfish-fiji | *Balistes vetula* | Fiji | 2 | 5 |
-| moorish-idol-florida | *Zanclus cornutus* | Florida | not returned | not returned |
-| spanish-hogfish-hawaii | *Bodianus rufus* | Hawaii | not returned | not returned |
+Checked against [the ranking contract](HybridRankingContract.md#location): location
+never filters, and the −3 out-of-range penalty applies only after eligibility, so it
+never removes a candidate. The contract caps results at ten and promises nothing
+about display.
 
-- **Where the species is returned with an out-of-range clue,** eligibility score and
-  confidence are unchanged and ordering is lower, as designed.
-- **The engine returns at most 10 results.** A species at rank 10 drops out entirely
-  under the −3 penalty, so "never a filter" does not hold for marginal matches.
-- **Two cases are invalid at present.** The Moorish idol and Spanish hogfish are not
-  returned even without a location: the same text cause as above.
-- The test asserts the requirement, so **it fails today (3 of 6 cases)**.
+`testOutOfRangeLocationCluesStillReturnTheSpecies` therefore checks two things:
+- **Pool:** the species stays in the retrieved pool (BM25 top 50) when a location is added.
+- **Eligibility:** with the out-of-range clue, the species stays eligible, its evidence
+  score and confidence are unchanged, and its ordering is exactly 3 lower than with
+  no location.
+
+Display in the top ten is measured and reported, not asserted.
+
+| Case | Species | Out-of-range clue | Pool rank | Displayed without | Displayed with |
+| --- | --- | --- | --- | --- | --- |
+| clown-triggerfish-caribbean | *Balistoides conspicillum* | Caribbean | 8 | #10 | **no** |
+| clown-anemonefish-belize | *Amphiprion ocellaris* | Belize | 5 | #3 | #4 |
+| regal-angelfish-bonaire | *Pygoplites diacanthus* | Bonaire | 3 | #3 | #7 |
+| queen-triggerfish-fiji | *Balistes vetula* | Fiji | 26 | #2 | #5 |
+| moorish-idol-florida | *Zanclus cornutus* | Florida | not retrieved | no | no |
+| spanish-hogfish-hawaii | *Bodianus rufus* | Hawaii | not retrieved | no | no |
+
+- **The policy holds for all 4 applicable cases.** The test passes.
+- **The Clown triggerfish leaves the displayed ten** under the −3 penalty. The contract
+  allows this.
+- **The Moorish idol and Spanish hogfish cannot test location.** They are not
+  retrieved even without one, which is the text cause above. They are reported as
+  inapplicable.
+- The test requires at least 4 applicable cases, so it cannot pass on nothing. A
+  temporary mutation that removed out-of-range candidates failed all 4.
+
+## Asserted gate baseline (2026-10-22)
+
+`testFrozenV05CasesAgainstTheGlobalPack` asserts every frozen V05 v2 floor on the pack
+as written, so **it now fails** when it runs. It is still opt-in, through
+`DIVEID_GLOBAL_EVAL_REPORT`. Run in Release on Linux, the opt-in test takes 443 s:
+
+| Gate | Global as written | Floor | Status |
+| --- | --- | --- | --- |
+| candidateRecall (BM25 top 50) | 14/18 = 0.778 | 0.85 | **failed** |
+| top1 | 4/18 = 0.222 | 0.4 | **failed** |
+| top3 | 7/18 = 0.389 | 0.6 | **failed** |
+| top10 | 8/18 = 0.444 | 0.8 | **failed** |
+| noMatchCorrect | 6/6 | 1.0 | passed |
+| confidenceCompliant | 28/29 = 0.966 | 1.0 | **failed**: `v05-ambiguous-trigger` scores 0.643 against its 0.64 ceiling |
+| regionConflictCorrect | none | 1.0 | not applicable |
+
+- **Region conflicts:** a single Global pack has no region aliases, so a described
+  location never mismatches it; it ranks instead. Any other gate with no applicable case fails
+  as "not evaluated", except this one gate.
+- **Positive cases:** these are the 18 Tropical Pacific identification cases. The 17
+  Caribbean cases are blocked by coverage, because their expected records are not in
+  Global.
+- **Unchanged:** floors, frozen expectations, ranking and content.
+- **Default region:** new installs start in Caribbean, and existing selections
+  (Global included) are kept, until these gates pass.
 
 ## Performance (host proxy, Release)
 

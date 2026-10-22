@@ -30,6 +30,32 @@ final class GlobalPackEvaluationTests: XCTestCase {
         }
     }
 
+    /// Keeps the retrieved pool of the latest search, so candidate recall can be measured
+    /// through the application service.
+    private actor RetrievalLog {
+        var last: [UUID] = []
+        func record(_ ids: [UUID]) { last = ids }
+    }
+
+    private struct RecordingEngine: DescriptionSearching {
+        let inner: any DescriptionSearching
+        let log: RetrievalLog
+        func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+            let result = try await inner.search(description: description, pack: pack)
+            await log.record(result.retrievedSpeciesIDs)
+            return result
+        }
+    }
+
+    /// Gates are asserted on the pack as written. The other variants are diagnostics.
+    private static let assertedVariant = "global-as-written"
+    /// A single global pack has no region aliases, so a described location can never
+    /// conflict with it (Docs/HybridRankingContract.md: location never filters). The
+    /// regional pack-mismatch gate has no applicable case; it is reported, not asserted.
+    private static let notApplicableGates: [String: String] = [
+        "regionConflictCorrect": "a single global pack has no pack-region mismatch; location never filters"
+    ]
+
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent() }
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
@@ -87,8 +113,9 @@ final class GlobalPackEvaluationTests: XCTestCase {
         ]
         var groups: [[String: Any]] = []
         for (name, pack) in variants {
+            let log = RetrievalLog()
             let service = LocalMarineLifeIdentificationService(catalogRepository: InMemoryCatalog(pack: pack),
-                searchEngine: ConfiguredDescriptionSearchEngine(selection: .productionDefault, bundle: TestResources.productionBundle))
+                searchEngine: RecordingEngine(inner: ConfiguredDescriptionSearchEngine(selection: .productionDefault, bundle: TestResources.productionBundle), log: log))
             let known = Set(pack.profiles.map(\.id))
             var tally: [String: (hits: Int, total: Int)] = [:]
             func count(_ key: String, _ hit: Bool) { tally[key, default: (0, 0)].total += 1; if hit { tally[key, default: (0, 0)].hits += 1 } }
@@ -97,6 +124,7 @@ final class GlobalPackEvaluationTests: XCTestCase {
                 let accepted = Set((item.expectedSpeciesIDs + item.acceptableSpeciesIDs).map { kept[$0] ?? $0 })
                 if !accepted.isEmpty && accepted.isDisjoint(with: known) { blocked.append(item.id); continue }
                 var matches: [IdentificationMatch] = [], failure: String? = nil
+                await log.record([])
                 do {
                     matches = try await service.identify(request: .init(source: .description(item.description), context: .init(region: .global)), processedPhoto: nil)
                 } catch { failure = String(describing: error) }
@@ -106,6 +134,7 @@ final class GlobalPackEvaluationTests: XCTestCase {
                 var outcome = "evaluated"
                 switch item.kind {
                 case "identification":
+                    count("candidateRecall", !accepted.isDisjoint(with: await log.last))
                     count("top1", rank.map { $0 <= 1 } ?? false); count("top3", rank.map { $0 <= 3 } ?? false); count("top10", rank.map { $0 <= 10 } ?? false)
                     byRegion[item.selectedPackID.rawValue, default: [:]]["positive", default: 0] += 1
                     if rank.map({ $0 <= 1 }) == true { byRegion[item.selectedPackID.rawValue, default: [:]]["top1", default: 0] += 1 }
@@ -124,15 +153,28 @@ final class GlobalPackEvaluationTests: XCTestCase {
                              "displayed": matches.prefix(3).map { $0.species.commonName }, "error": failure as Any? ?? NSNull(), "outcome": outcome,
                              "confidenceCompliant": confidenceOK, "topScore": matches.first?.score ?? 0])
             }
-            let gates = floors.keys.sorted().compactMap { key -> [String: Any]? in
-                guard let value = tally[key] else { return nil }
-                return ["metric": key, "hits": value.hits, "denominator": value.total, "minimumRate": floors[key]!,
-                        "status": value.total == 0 ? "not-evaluated" : (Double(value.hits) / Double(value.total) >= floors[key]! ? "passed" : "failed")]
+            let gates = floors.keys.sorted().map { key -> [String: Any] in
+                let value = tally[key] ?? (0, 0)
+                let status = Self.notApplicableGates[key] != nil ? "not-applicable"
+                    : value.total == 0 ? "not-evaluated"
+                    : Double(value.hits) / Double(value.total) >= floors[key]! ? "passed" : "failed"
+                return ["metric": key, "hits": value.hits, "denominator": value.total, "minimumRate": floors[key]!, "status": status,
+                        "note": Self.notApplicableGates[key] ?? ""]
             }
             groups.append(["variant": name, "packSize": pack.profiles.count, "coverageBlockedCases": blocked, "gates": gates,
                            "counts": tally.mapValues { ["hits": $0.hits, "total": $0.total] }, "byRegion": byRegion, "cases": rows])
             print("GLOBAL_EVALUATION \(name) size=\(pack.profiles.count) blocked=\(blocked.count) " + gates.map { "\($0["metric"]!)=\($0["hits"]!)/\($0["denominator"]!):\($0["status"]!)" }.joined(separator: " "))
             XCTAssertTrue(rows.allSatisfy { ($0["error"] as? String) == nil || ($0["kind"] as? String) == "noMatch" }, "\(name): the service must not fail on Global")
+            guard name == Self.assertedVariant else { continue }
+            for gate in gates where gate["status"] as? String != "not-applicable" {
+                let metric = gate["metric"] as! String, hits = gate["hits"] as! Int, denominator = gate["denominator"] as! Int
+                let floor = gate["minimumRate"] as! Double
+                if denominator == 0 {
+                    XCTFail("\(name): gate \(metric) was not evaluated (no applicable cases); floor \(floor)")
+                } else if gate["status"] as? String != "passed" {
+                    XCTFail("\(name): gate \(metric) failed: \(hits)/\(denominator) = \(String(format: "%.3f", Double(hits) / Double(denominator))) is below the floor \(floor)")
+                }
+            }
         }
         if let path = ProcessInfo.processInfo.environment["DIVEID_GLOBAL_EVAL_REPORT"] {
             let data = try JSONSerialization.data(withJSONObject: ["schemaVersion": 1, "fixture": "V05Development.v2", "groups": groups], options: [.prettyPrinted, .sortedKeys])
@@ -148,29 +190,62 @@ final class GlobalPackEvaluationTests: XCTestCase {
     }
     private struct LocationFixture: Decodable { let cases: [LocationCase] }
 
-    /// Location is a ranking signal, never a filter: describing a species from outside
-    /// its recorded range must keep it a candidate, with the same eligibility score and
-    /// confidence and a lower ordering. Whether it stays in the displayed top 10 is
-    /// reported, not asserted: the approved -3 penalty can move a marginal species below it.
+    /// Docs/HybridRankingContract.md: location ranks but never filters. An out-of-range
+    /// clue lowers ordering by 3 only after eligibility is decided, so it never removes a
+    /// candidate, and the score and confidence stay as for a species with no range.
+    /// Results are capped at ten, so a demoted species can fall below the display cut;
+    /// the contract does not promise display, so display is measured and reported.
     func testOutOfRangeLocationCluesStillReturnTheSpecies() async throws {
         let fixture = try JSONDecoder().decode(LocationFixture.self, from: Data(contentsOf: TestResources.fixture(named: "GlobalLocation.v1")))
         let pack = try await repository().loadPack(id: .global)
+        let builder = SpeciesSearchDocumentBuilder()
+        let documents = pack.profiles.map { builder.document(from: $0, pack: pack.metadata) }
+        let profiles = Dictionary(uniqueKeysWithValues: pack.profiles.map { ($0.id, $0) })
+        let retriever = BM25SpeciesCandidateRetriever(), parser = LocalObservationParser(), ranker = LocalSpeciesRanker()
         let engine = HybridDescriptionSearchEngine()
         XCTAssertGreaterThanOrEqual(fixture.cases.count, 6)
-        var displayedBefore = 0, displayedAfter = 0
+        var display: [String] = [], inapplicable: [String] = []
         for item in fixture.cases {
-            XCTAssertTrue(pack.profiles.contains { $0.id == item.speciesID }, "\(item.id): species missing from Global")
-            let plain = try await engine.search(description: item.description, pack: pack).candidates
-            let located = try await engine.search(description: item.description + ". " + item.outOfRangeLocation, pack: pack).candidates
-            let before = plain.firstIndex { $0.profile.id == item.speciesID }, after = located.firstIndex { $0.profile.id == item.speciesID }
-            print("GLOBAL_LOCATION \(item.id) rank without location=\(before.map { "\($0 + 1)" } ?? "-") with=\(after.map { "\($0 + 1)" } ?? "-") of \(located.count)")
-            guard let before else { XCTFail("\(item.id): not a candidate even without a location; the case is invalid"); continue }
-            guard let after else { XCTFail("\(item.id): an out-of-range location removed the species from the candidates"); continue }
-            XCTAssertEqual(located[after].rawScore, plain[before].rawScore, accuracy: 1e-9, "\(item.id): location must not change eligibility")
-            XCTAssertEqual(located[after].score, plain[before].score, accuracy: 1e-9, "\(item.id): location must not change confidence")
-            XCTAssertLessThan(located[after].orderingScore, plain[before].orderingScore, "\(item.id): out-of-range ordering is lowered")
-            if before < 10 { displayedBefore += 1; if after < 10 { displayedAfter += 1 } else { print("GLOBAL_LOCATION \(item.id) left the displayed top 10") } }
+            let located = item.description + ". " + item.outOfRangeLocation
+            let profile = try XCTUnwrap(profiles[item.speciesID], "\(item.id): species missing from Global")
+            // Retrieved pool (the engine's top 50): adding a location must not push the species out.
+            let plainPool = try await retriever.retrieve(query: item.description, documents: documents, limit: 50)
+            let locatedPool = try await retriever.retrieve(query: located, documents: documents, limit: 50)
+            // A species not retrieved even without a location cannot test location; that is a
+            // retrieval-quality miss, which the frozen gates measure, not a location failure.
+            guard plainPool.contains(where: { $0.speciesID == item.speciesID }) else {
+                inapplicable.append("\(item.id): not in the retrieved pool even without a location"); continue
+            }
+            guard let hit = locatedPool.enumerated().first(where: { $0.element.speciesID == item.speciesID }) else {
+                XCTFail("\(item.id): the location sentence pushed the species out of the retrieved pool"); continue
+            }
+            // Eligibility and demotion: the ranker decides each candidate on its own, before the
+            // ten-result cap, so the candidate is ranked alone. The baseline is the same
+            // observation with the described location removed (a neutral range).
+            let candidate = SpeciesRankingCandidate(speciesID: item.speciesID, profile: profile, retrieval: SpeciesRetrievalSignal(
+                source: hit.element.evidence, scoreKind: hit.element.scoreKind, score: hit.element.retrievalScore,
+                rank: hit.offset + 1, evidence: hit.element.matchedTerms))
+            let observation = await parser.parse(located)
+            XCTAssertFalse(observation.regions.isEmpty, "\(item.id): the location was not recognised")
+            let neutral = ParsedObservation(normalizedText: observation.normalizedText, tokens: observation.tokens, colors: observation.colors,
+                markings: observation.markings, bodyShapes: observation.bodyShapes, habitats: observation.habitats, regions: [],
+                behaviors: observation.behaviors, categories: observation.categories, approximateSizeCentimeters: observation.approximateSizeCentimeters,
+                approximateDepthMeters: observation.approximateDepthMeters, colorEvidenceGroups: observation.colorEvidenceGroups,
+                appearanceRelationships: observation.appearanceRelationships, domainContradiction: observation.domainContradiction)
+            let baseline = try await ranker.rank(input: .init(description: located, observation: neutral, candidates: [candidate])).first
+            let ranked = try await ranker.rank(input: .init(description: located, observation: observation, candidates: [candidate])).first
+            guard let baseline else { inapplicable.append("\(item.id): not eligible even with a neutral range"); continue }
+            guard let ranked else { XCTFail("\(item.id): the out-of-range location removed an eligible candidate"); continue }
+            XCTAssertEqual(ranked.rawScore, baseline.rawScore, accuracy: 1e-9, "\(item.id): location must not change the evidence score")
+            XCTAssertEqual(ranked.score, baseline.score, accuracy: 1e-9, "\(item.id): location must not change confidence")
+            XCTAssertEqual(ranked.orderingScore, baseline.orderingScore - 3, accuracy: 1e-9, "\(item.id): out of range lowers ordering by exactly 3")
+            // Display (the ten results shown): measured separately, not asserted.
+            let shownWithout = try await engine.search(description: item.description, pack: pack).candidates.firstIndex { $0.profile.id == item.speciesID }
+            let shownWith = try await engine.search(description: located, pack: pack).candidates.firstIndex { $0.profile.id == item.speciesID }
+            display.append("\(item.id): pool rank \(hit.offset + 1); displayed without location \(shownWithout.map { "#\($0 + 1)" } ?? "no"), with \(shownWith.map { "#\($0 + 1)" } ?? "no")")
         }
-        print("GLOBAL_LOCATION displayed (top 10) without location=\(displayedBefore) with=\(displayedAfter)")
+        for line in display { print("GLOBAL_LOCATION_DISPLAY \(line)") }
+        for line in inapplicable { print("GLOBAL_LOCATION_INAPPLICABLE \(line)") }
+        XCTAssertGreaterThanOrEqual(display.count, 4, "too few cases can test location: \(inapplicable)")
     }
 }
