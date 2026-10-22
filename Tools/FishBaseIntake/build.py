@@ -11,7 +11,12 @@ Every field is mapped deterministically from source facts (Docs/GlobalMarine4000
 - categories come from the source taxonomy (class, order, family);
 - summary, distinguishing features, habitat text and the distribution summary are
   short original wording assembled from source facts, never copied sentences;
-- colours and markings are vocabulary terms found in the source description;
+- colours, markings, head, fin and tail clues, behaviours and habitats come from the
+  source text clause by clause (traits.py): negated traits are not asserted,
+  juvenile/male/female traits become appearance variants, and hedged or comparative
+  passages assert nothing and raise a trait_ambiguous risk flag;
+- every derived value is traced to its source field (ClueTrace.json), and each record's
+  dataSources lists the source fields it used;
 - fields with no source stay empty or null; nothing is filled from general knowledge.
 
 Output (staging only): review batches of 250 at Data/GlobalMarine/FishBase/Drafts/,
@@ -33,8 +38,9 @@ sys.path.insert(0, str(HERE.parent / "CatalogReview"))
 import catalogue_validation  # noqa: E402
 import distribution  # noqa: E402
 import fetch  # noqa: E402
+import traits  # noqa: E402
 
-BUILDER_VERSION = 2
+BUILDER_VERSION = 3
 BATCH_SIZE = 250
 ACCESSED = "2026-10-21T00:00:00Z"
 LICENSE = "CC BY-NC 4.0"
@@ -84,15 +90,12 @@ COUNTRY_REGIONS = {
     "Fiji": {"fiji"}, "Hawaii": {"hawaii"},
 }
 OCEAN_NAMES = ("Atlantic", "Indian", "Pacific", "Arctic", "Southern")
-COLOR_TERMS = {"blue": ["blue", "bluish", "navy", "turquoise", "cyan"], "yellow": ["yellow", "yellowish", "gold", "golden"],
-               "red": ["red", "reddish", "scarlet", "crimson"], "white": ["white", "whitish"], "black": ["black", "blackish"],
-               "brown": ["brown", "brownish"], "olive": ["olive"], "orange": ["orange", "orangish"],
-               "silver": ["silver", "silvery"], "green": ["green", "greenish"], "gray": ["gray", "grey", "grayish", "greyish"]}
-MARKING_TERMS = {"spots": ["spot", "spots", "spotted", "dots", "dotted", "ocellus", "ocelli"],
-                 "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars", "barred"],
-                 "patches": ["patch", "patches", "blotch", "blotches"], "saddles": ["saddle", "saddles"],
-                 "eye stripe": ["eye stripe", "stripe through the eye", "stripe through eye", "bar through the eye", "bar through eye"],
-                 "beak": ["beak"]}  # barbels come only from morphdat.BarbelsNo: text often says "barbels absent"
+# Structured morphdat appearance codes -> markings. Barbels come only from BarbelsNo:
+# text often says "barbels absent".
+STRIPE_CODES = ("HorStripesTTI", "VerStripesTTI", "DiaStripesTTI", "CurStripesTTI")
+SPOT_CODES = {"one spot only", "more than one spot"}
+MARGIN_CODES = ("DorsalFinII", "CaudalFinII", "AnalFinII")
+STAGE_LABELS = {"juvenile": "Juvenile", "male": "Male", "female": "Female"}
 BODY_SHAPE_I = {"fusiform / normal": "torpedo", "elongated": "elongated", "eel-like": "serpentine", "short and / or deep": "compressed"}
 BODY_SHAPE_II = {"compressed": "compressed", "oval": "oval", "circular": "round", "flattened": "flat"}
 ECOLOGY_HABITATS = {"CoralReefs": "reef", "Sand": "sand", "Rubble": "rubble", "SeaGrassBeds": "seagrass", "Mangroves": "mangrove",
@@ -100,21 +103,16 @@ ECOLOGY_HABITATS = {"CoralReefs": "reef", "Sand": "sand", "Rubble": "rubble", "S
 HAZARDS = {"venomous": "Venomous: avoid touching.", "traumatogenic": "Can injure if handled.",
            "reports of ciguatera poisoning": "Ciguatera poisoning has been reported from eating it.",
            "poisonous to eat": "Poisonous to eat."}
-HTML_TAG = re.compile(r"</?[A-Za-z][A-Za-z0-9]*\s*/?>")  # only real tags: "<6 cm" is a size, not markup
 # Fields a source can supply; dataSources.reviewedFields lists the ones it did.
 SOURCED_FIELDS = ("commonName", "aliases", "scientificName", "taxonomy", "categories", "colors", "markings", "bodyShapes",
                   "habitats", "behaviors", "regions", "subregions", "maximumSizeCentimeters", "measurements",
                   "minimumDepthMeters", "maximumDepthMeters", "summary", "distinguishingFeatures", "typicalHabitat",
-                  "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies")
+                  "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies",
+                  "appearanceVariants")
 
 
 def truthy(value):
     return value not in (None, 0, "", False)
-
-
-def terms_in(text, table):
-    lowered = " " + re.sub(r"[^a-z]+", " ", re.sub(HTML_TAG, " ", str(text or "")).lower()) + " "
-    return sorted(key for key, words in table.items() if any(f" {w} " in lowered for w in words))
 
 
 def number(value):
@@ -238,10 +236,34 @@ def distribution_text(basins, fao_names, country_count):
     return ". ".join(parts) + "." if parts else ""
 
 
+def trait_fields(src):
+    """The source text fields traits are read from."""
+    sp, morph, ecology = src["species"], src.get("morphdat") or {}, src.get("ecology", [])
+    return {"morphdat.AddChars": morph.get("AddChars"), "morphdat.RemarkSex": morph.get("RemarkSex"),
+            "species.Comments": sp.get("Comments"),
+            "ecology.AddRems": " ".join(str(e.get("AddRems") or "") for e in ecology),
+            "ecology.AssociationsWith": " ".join(str(e.get("AssociationsWith") or "") for e in ecology)}
+
+
+def trait_signature(extracted):
+    main = extracted["main"]
+    return (tuple(sorted(main.colors)), tuple(sorted(main.markings)), tuple(sorted(main.habitats)), tuple(sorted(main.behaviors)),
+            tuple(main.head), tuple(main.fins), tuple(main.features), tuple(main.tail_shapes),
+            tuple(sorted((k, tuple(sorted(v.colors)), tuple(sorted(v.markings)), tuple(v.head + v.fins + v.features)) for k, v in extracted["variants"].items())),
+            tuple(extracted["flags"]))
+
+
+def rule_effects(src):
+    """Which extraction rules change this record's traits (each rule switched off in turn)."""
+    fields = trait_fields(src)
+    full = trait_signature(traits.extract(fields))
+    return [rule for rule in sorted(traits.RULES) if trait_signature(traits.extract(fields, traits.RULES - {rule})) != full]
+
+
 def build_profile(entry, src, similar_targets=None):
     """entry: a resolution row with id and categories. src: this species' source facts.
     similar_targets: {(server, SpecCode): (uuid, accepted name)} of records in the pack.
-    Returns (profile, source passages for the verbatim check)."""
+    Returns (profile, source passages for the verbatim check, {"flags", "trace"})."""
     sp, fam, morph = src["species"], src.get("family") or {}, src.get("morphdat") or {}
     server, code = entry["server"], int(entry["specCode"])
     accepted = entry["acceptedName"]
@@ -254,12 +276,18 @@ def build_profile(entry, src, similar_targets=None):
             aliases.append(name.strip())
     aliases = aliases[:6]
 
-    diagnosis = " ".join(filter(None, [morph.get("AddChars"), morph.get("SexColors")]))
     demers = (sp.get("DemersPelag") or "").strip()
     lifestyle = LIFESTYLE.get(demers, "")
     shapes = sorted({BODY_SHAPE_I.get((sp.get("BodyShapeI") or "").strip()), BODY_SHAPE_II.get((morph.get("BodyShapeII") or "").strip())} - {None})
     fins = fin_clues(morph)
     ecology = src.get("ecology", [])
+    extracted = traits.extract(trait_fields(src))
+    found, flags = extracted["main"], list(extracted["flags"])
+    used = {t["source"] for t in extracted["trace"] if "value" in t}
+    trace = list(extracted["trace"])
+    def structured(kind, value, field):
+        trace.append({"target": "main", "kind": kind, "value": value, "source": field})
+        used.add(field)
     habitats = {h for col, h in ECOLOGY_HABITATS.items() if any(truthy(e.get(col)) for e in ecology)}
     if demers == "reef-associated":
         habitats.add("reef")
@@ -272,20 +300,38 @@ def build_profile(entry, src, similar_targets=None):
         habitats.add("shallow")
     if shallow is not None and shallow >= 30:
         habitats.add("deep")
-    associations = " ".join(str(e.get("AssociationsWith") or "") for e in ecology).lower()
-    behaviors = set()
-    if any(truthy(e.get("Schooling")) for e in ecology): behaviors.add("schooling")
+    habitats |= found.habitats
+    behaviors = set(found.behaviors)
+    juvenile_only = lambda e, col: "juv" in str(e.get(col) or "").lower() and "adult" not in str(e.get(col) or "").lower()
+    if any(truthy(e.get("Schooling")) and not juvenile_only(e, "SchoolingLifestage") for e in ecology): behaviors.add("schooling")
     if any(truthy(e.get("Solitary")) for e in ecology): behaviors.add("solitary")
     if any(truthy(e.get("Burrows")) for e in ecology): behaviors.add("burrowing")
     if any((e.get("FeedingType") or "") == "grazing on aquatic plants" for e in ecology): behaviors.add("grazing")
-    if "anemone" in associations:
-        behaviors.add("anemone association"); habitats.add("anemone")
-    colors = terms_in(diagnosis, COLOR_TERMS)
-    markings = set(terms_in(diagnosis, MARKING_TERMS))
+    if "anemone association" in behaviors:
+        habitats.add("anemone")
+    features = list(found.features)
+    if any(str(e.get("Circadian1") or "").strip() == "nocturnal" for e in ecology) and "Active at night" not in features:
+        features.append("Active at night"); structured("features", "Active at night", "ecology.Circadian1")
+    colors = sorted(found.colors)
+    markings = set(found.markings)
     if (morph.get("BarbelsNo") or 0) > 0:
-        markings.add("barbels")
-    tail = (morph.get("CShape") or "").replace("more or less ", "").strip()
-    tail = tail if tail and not tail.startswith("other") else None
+        markings.add("barbels"); structured("markings", "barbels", "morphdat.BarbelsNo")
+    for field in STRIPE_CODES:
+        if (morph.get(field) or "").strip() == "present":
+            markings.add("stripes"); structured("markings", "stripes", f"morphdat.{field}")
+    if (morph.get("SpotsTTI") or "").strip() in SPOT_CODES:
+        markings.add("spots"); structured("markings", "spots", "morphdat.SpotsTTI")
+    for field in MARGIN_CODES:
+        if (morph.get(field) or "").strip() == "colored margin":
+            markings.add("fin edge"); structured("markings", "fin edge", f"morphdat.{field}")
+    coded_tail = (morph.get("CShape") or "").replace("more or less ", "").strip()
+    coded_tail = coded_tail if coded_tail and not coded_tail.startswith("other") else None
+    text_tail = found.tail_shapes[0] if found.tail_shapes else None
+    if coded_tail and text_tail and coded_tail != text_tail:
+        tail = None  # the coded shape and the description disagree: assert neither
+        flags.append("trait_ambiguous:tailShape")
+    else:
+        tail = coded_tail or text_tail
     mouth = []
     position = (morph.get("PosofMouth") or "").strip()
     if position:
@@ -293,6 +339,18 @@ def build_profile(entry, src, similar_targets=None):
     mouth_type = {"tube-like": "tube-like mouth", "sucker-like": "sucker-like mouth", "clearly protrusible": "protrusible mouth"}.get((morph.get("TypeofMouth") or "").strip())
     if mouth_type:
         mouth.append(mouth_type)
+    mouth += [h for h in found.head if h not in mouth]
+    fins += [f for f in found.fins if f not in fins]
+    variants = []
+    for stage in ("juvenile", "male", "female"):
+        v = extracted["variants"].get(stage)
+        if not v:
+            continue
+        notes = v.head + v.fins + v.features + sorted(v.behaviors) + [f"Found on {h}" if h in ("sand", "rubble") else f"Found in {h}s" if h in ("lagoon", "mangrove", "wreck") else f"Found with {h}s" if h == "anemone" else f"Found in {h}" for h in sorted(v.habitats)]
+        parts = ([and_list(sorted(v.colors))] if v.colors else []) + ([and_list(sorted(v.markings))] if v.markings else []) + [n[:1].lower() + n[1:] for n in notes]
+        variants.append({"id": stage, "lifeStage": stage, "colors": sorted(v.colors), "markings": sorted(v.markings), "bodyShapes": [],
+                         "minimumSizeCentimeters": None, "maximumSizeCentimeters": None,
+                         "description": f"{STAGE_LABELS[stage]}: " + "; ".join(parts) + ".", "distinguishingFeatures": notes})
     length, ltype = sp.get("Length"), LENGTH_TYPES.get((sp.get("LTypeMaxM") or "").strip())
     length = round(float(length), 2) if length else None
     dist = src.get("distribution") or {}
@@ -315,12 +373,12 @@ def build_profile(entry, src, similar_targets=None):
         "minimumSizeCentimeters": None, "maximumSizeCentimeters": length,
         "minimumDepthMeters": shallow, "maximumDepthMeters": deep,
         "summary": summary_text(noun, lifestyle, fam.get("Family"), (fam.get("CommonName") or "").strip().lower(), basins, length, ltype, shallow, deep),
-        "distinguishingFeatures": feature_list(colors, sorted(markings), shapes, tail, mouth, fins, fam.get("Family"), genus),
+        "distinguishingFeatures": feature_list(colors, sorted(markings), shapes, tail, mouth, fins, fam.get("Family"), genus) + [f + "." for f in features],
         "typicalHabitat": habitat_text(lifestyle, habitats, shallow, deep),
         "geographicRange": distribution_text(basins, fao_names, len([c for c in countries if c])),
         "cautions": [HAZARDS[h] for h in [(sp.get("Dangerous") or "").strip()] if h in HAZARDS],
         "imageAssetName": None, "regionalOccurrence": "unknown", "regionalOccurrenceNotes": None,
-        "subregions": [readable_fao(n) for n in fao_names], "appearanceVariants": [], "similarSpecies": similar, "bundledImage": None,
+        "subregions": [readable_fao(n) for n in fao_names], "appearanceVariants": variants, "similarSpecies": similar, "bundledImage": None,
         "dataSources": [{
             "stableSourceID": f"{name}:SpecCode:{code}", "sourceName": f"{name} ({src['release']})",
             "sourceURL": url.format(code), "citationReference": src.get("main_ref"), "reviewedFields": [],
@@ -335,8 +393,9 @@ def build_profile(entry, src, similar_targets=None):
         "tailShape": tail, "mouthAndHeadShape": mouth, "finAndSpineClues": fins,
     }
     profile["dataSources"][0]["reviewedFields"] = [f for f in SOURCED_FIELDS if profile[f] not in (None, "", [], {})]
-    source_passages = [t for t in (sp.get("Comments"), morph.get("AddChars"), morph.get("SexColors"), src.get("range_text")) if t]
-    return profile, source_passages
+    profile["dataSources"][0]["sourceFields"] = sorted(used)
+    source_passages = [t for t in (sp.get("Comments"), morph.get("AddChars"), morph.get("RemarkSex"), src.get("range_text")) if t]
+    return profile, source_passages, {"flags": sorted(set(flags)), "trace": trace}
 
 
 def enforce_unique_names(profiles, reserved_names):
@@ -361,7 +420,8 @@ def enforce_unique_names(profiles, reserved_names):
 
 def load_sources(manifest, cache, offline, wanted, staged):
     """Index the pinned tables and the staged distribution by (server, SpecCode)."""
-    read = lambda sv, t, cols: fetch.read_table(manifest, cache, sv, t, cols, offline)
+    optional = ("Circadian1", "SchoolingLifestage", "RemarkSex", "AddRems", *STRIPE_CODES, "SpotsTTI", *MARGIN_CODES)
+    read = lambda sv, t, cols: fetch.read_table(manifest, cache, sv, t, cols, offline, optional)
     out = {}
     for sv in sorted(manifest["servers"]):
         codes = {code for server, code in wanted if server == sv}
@@ -377,8 +437,10 @@ def load_sources(manifest, cache, offline, wanted, staged):
         species = per_species(read(sv, "species", ["SpecCode", "FBname", "Author", "FamCode", "Length", "LTypeMaxM", "DepthRangeShallow",
                                                    "DepthRangeDeep", "DemersPelag", "BodyShapeI", "Dangerous", "Comments", "SpeciesRefNo", "Saltwater", "Brack"]))
         names = per_species(read(sv, "comnames", ["SpecCode", "ComName", "Language"]))
-        ecology = per_species(read(sv, "ecology", ["SpecCode", *ECOLOGY_HABITATS, "Schooling", "Solitary", "Burrows", "FeedingType", "AssociationsWith"]))
-        morph = per_species(read(sv, "morphdat", ["Speccode", "AddChars", "SexColors", "BodyShapeII", "CShape", "TypeofMouth", "PosofMouth",
+        ecology = per_species(read(sv, "ecology", ["SpecCode", *ECOLOGY_HABITATS, "Schooling", "SchoolingLifestage", "Solitary", "Burrows",
+                                                   "FeedingType", "AssociationsWith", "AddRems", "Circadian1"]))
+        morph = per_species(read(sv, "morphdat", ["Speccode", "AddChars", "RemarkSex", "BodyShapeII", "CShape", "TypeofMouth", "PosofMouth",
+                                                  *STRIPE_CODES, "SpotsTTI", *MARGIN_CODES,
                                                   "DorsalSpinesMin", "DorsalSpinesMax", "DorsalSoftRaysMin", "DorsalSoftRaysMax",
                                                   "AnalFinSpinesMin", "AnalFinSpinesMax", "Araymin", "Araymax", "BarbelsNo",
                                                   "SimilarSpecies1", "SimilarSpecies2"]), key="Speccode")
@@ -460,7 +522,8 @@ def coverage(profiles):
     filled = lambda f: sum(1 for p in profiles if p[f] not in (None, "", [], {}))
     fields = ("commonName", "aliases", "categories", "colors", "markings", "bodyShapes", "habitats", "behaviors", "regions",
               "maximumSizeCentimeters", "measurements", "maximumDepthMeters", "summary", "distinguishingFeatures",
-              "typicalHabitat", "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies")
+              "typicalHabitat", "geographicRange", "cautions", "tailShape", "mouthAndHeadShape", "finAndSpineClues", "similarSpecies",
+              "appearanceVariants")
     total = len(profiles) or 1
     return {f: round(filled(f) / total, 4) for f in fields}
 
@@ -490,7 +553,10 @@ def main(argv=None):
     targets = {(e["server"], int(e["specCode"])): (e["id"], e["acceptedName"]) for e in kept}
     targets.update({(r["taxonKey"].split(":")[0], int(r["taxonKey"].split(":")[1])): (r["plannedUUID"], r["acceptedName"])
                     for r in plan_rows if r["role"] == "keep" and r["pack"] == "Caribbean"})
-    profiles, passages, disagreements = [], {}, []
+    profiles, passages, disagreements, extra_flags, clue_trace, effects = [], {}, [], {}, {}, {}
+    previous = {}
+    for path in sorted((output / "Drafts").glob("batch-*.json")):
+        previous.update({r["id"]: r for r in json.loads(path.read_text())})
     for e in kept:
         src = sources[(e["server"], int(e["specCode"]))]
         fam = src.get("family") or {}
@@ -499,13 +565,17 @@ def main(argv=None):
         e["categories"] = [derived or queued] if (derived or queued) else []
         if derived and queued and derived != queued:
             disagreements.append(f"{e['acceptedName']}: taxonomy {derived}, queue {queued}")
-        profile, source_passages = build_profile(e, src, targets)
+        profile, source_passages, info = build_profile(e, src, targets)
         profiles.append(profile)
         passages[profile["id"]] = source_passages
+        extra_flags[profile["id"]] = info["flags"]
+        clue_trace[profile["id"]] = info["trace"]
+        for rule in rule_effects(src):
+            effects.setdefault(rule, []).append(profile["id"])
     reserved = {" ".join(n.lower().split()) for r in caribbean for n in (r["commonName"], r["scientificName"])}
     renamed = enforce_unique_names(profiles, reserved)
     actions = write_batches(profiles, output / "Drafts", args.batch)
-    risk = catalogue_validation.assess_risk(profiles, passages, [r["commonName"] for r in caribbean])
+    risk = catalogue_validation.assess_risk(profiles, passages, [r["commonName"] for r in caribbean], extra_flags)
     for i, p in enumerate(profiles):
         risk["records"][p["id"]]["batch"] = i // BATCH_SIZE + 1
     report = {
@@ -521,11 +591,20 @@ def main(argv=None):
             e["acceptedName"].split(" ")[0]) is None),
         "categoryDisagreementsWithQueue": disagreements,
         "fieldCoverage": coverage(profiles),
+        "recordsChangedByRule": {rule: len(effects.get(rule, [])) for rule in sorted(traits.RULES)},
+        "recordsWithAppearanceVariants": {stage: sum(any(v["lifeStage"] == stage for v in p["appearanceVariants"]) for p in profiles)
+                                          for stage in ("juvenile", "male", "female")},
+        "recordsWithTraitAmbiguousFlag": sum(any(f.startswith("trait_ambiguous") for f in fl) for fl in extra_flags.values()),
+        "changedSincePreviousBuild": {f: sum(1 for p in profiles if p["id"] in previous and previous[p["id"]].get(f) != p.get(f))
+                                      for f in ("colors", "markings", "habitats", "behaviors", "tailShape", "mouthAndHeadShape",
+                                                "finAndSpineClues", "appearanceVariants", "distinguishingFeatures")},
         "categories": dict(sorted({c: sum(c in p["categories"] for p in profiles) for p in profiles for c in p["categories"]}.items())),
         "risk": {k: v for k, v in risk.items() if k != "records"},
     }
     (output / "BuildReport.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     (output / "RiskReport.json").write_text(json.dumps(risk, indent=1, ensure_ascii=False, sort_keys=True) + "\n")
+    (output / "ClueTrace.json").write_text(json.dumps({"builderVersion": BUILDER_VERSION, "records": clue_trace},
+                                                      ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
     print(json.dumps({k: v for k, v in report.items() if k not in ("categoryDisagreementsWithQueue", "batchActions")}, indent=2, ensure_ascii=False))
     return 0
 

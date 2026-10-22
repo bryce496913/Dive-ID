@@ -140,9 +140,10 @@ class FetchPinTests(unittest.TestCase):
 class BuildMappingTests(unittest.TestCase):
     def test_colours_and_markings_come_from_whole_words(self):
         text = "Body bluish with three dark bars and a black <i>ocellus</i>; fins yellowish. Barbels absent? Scarlet-edged."
-        self.assertEqual(build.terms_in(text, build.COLOR_TERMS), ["black", "blue", "red", "yellow"])
-        self.assertEqual(build.terms_in(text, build.MARKING_TERMS), ["spots", "stripes"], "'barbels absent' must not add barbels")
-        self.assertEqual(build.terms_in("barracuda-like body", build.COLOR_TERMS), [])
+        main = build.traits.extract({"morphdat.AddChars": text})["main"]
+        self.assertEqual(sorted(main.colors), ["black", "blue", "red", "yellow"])
+        self.assertEqual(sorted(main.markings), ["spots", "stripes"], "'barbels absent' must not add barbels")
+        self.assertEqual(build.traits.extract({"morphdat.AddChars": "barracuda-like body"})["main"].colors, set())
 
     def test_category_comes_from_the_source_taxonomy(self):
         cases = [(("Elasmobranchii", "Myliobatiformes", "Mobulidae", "Mobula"), "ray"),
@@ -212,16 +213,16 @@ class BuildMappingTests(unittest.TestCase):
 
     def test_build_profile_maps_source_facts_without_copying_sentences(self):
         targets = {("fb", 5112): ("id-2", "Dascyllus aruanus"), ("fb", 5111): ("id-1", "Dascyllus melanurus")}
-        p, passages = build.build_profile(self.entry(), self.source(), targets)
+        p, passages, info = build.build_profile(self.entry(), self.source(), targets)
         self.assertEqual((p["commonName"], p["aliases"]), ("Blacktail humbug", ["Black-tailed dascyllus", "Damsel"]))
         self.assertEqual((p["colors"], p["markings"], p["bodyShapes"]), (["black", "white"], ["stripes"], ["compressed"]))
-        self.assertEqual(p["habitats"], ["reef", "shallow"], "only pelagic species get open water")
+        self.assertEqual(p["habitats"], ["lagoon", "reef", "shallow"], "only pelagic species get open water; adults' lagoons come from Comments")
         self.assertEqual((p["behaviors"], p["regions"], p["subregions"]), (["schooling"], ["fiji", "indo-pacific", "pacific"], ["Western Central Pacific"]))
         self.assertEqual(p["measurements"]["type"], "standardLength")
         self.assertEqual((p["maximumSizeCentimeters"], p["minimumDepthMeters"], p["maximumDepthMeters"], p["minimumSizeCentimeters"]), (54.8, 1.0, 68.0, None))
         self.assertEqual(p["summary"], "A reef-associated fish of the family Pomacentridae (damselfishes), recorded from the Pacific Ocean. "
                                        "Reaches about 54.8 cm standard length. Recorded at depths of 1–68 m.")
-        self.assertEqual(p["typicalHabitat"], "Reef-associated; coral reefs; 1–68 m.")
+        self.assertEqual(p["typicalHabitat"], "Reef-associated; coral reefs and lagoons; 1–68 m.")
         self.assertEqual(p["geographicRange"], "Pacific Ocean. FAO areas: Western Central Pacific. Recorded from 1 country or territory.",
                          "questionable areas and countries don't count")
         self.assertEqual(p["similarSpecies"], [{"speciesID": "id-2", "distinguishingText": "Listed as similar in FishBase; compare with Dascyllus aruanus before confirming."}],
@@ -231,6 +232,9 @@ class BuildMappingTests(unittest.TestCase):
         self.assertEqual(source["sourceURL"], "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5111")
         self.assertIn("summary", source["reviewedFields"])
         self.assertNotIn("appearanceVariants", source["reviewedFields"])
+        self.assertEqual(source["sourceFields"], ["morphdat.AddChars", "species.Comments"], "each derived value names its source field")
+        self.assertIn({"target": "main", "kind": "habitats", "value": "lagoon", "source": "species.Comments"}, info["trace"])
+        self.assertEqual(info["flags"], [])
         self.assertEqual((p["review"]["status"], p["bundledImage"], p["regionalOccurrenceNotes"]), ("draft", None, None))
         self.assertEqual(p["taxonomy"]["sourceScientificName"], "Jascyllus melanurus")
         all_text = " ".join([p["summary"], p["typicalHabitat"], p["geographicRange"], *p["distinguishingFeatures"]])
@@ -239,9 +243,10 @@ class BuildMappingTests(unittest.TestCase):
         self.assertEqual(len(passages), 3, "source passages are kept for the verbatim check")
 
     def test_fields_without_a_source_stay_empty(self):
-        src = self.source(FBname=None, Length=None, DepthRangeShallow=None, DepthRangeDeep=None, DemersPelag=None, Dangerous="harmless", BodyShapeI=None)
+        src = self.source(FBname=None, Length=None, DepthRangeShallow=None, DepthRangeDeep=None, DemersPelag=None, Dangerous="harmless", BodyShapeI=None,
+                          Comments=None)
         src.update(english_names=[], morphdat=None, ecology=[], distribution=None, family={})
-        p, _ = build.build_profile(self.entry(), src, {})
+        p, _, _ = build.build_profile(self.entry(), src, {})
         self.assertEqual(p["commonName"], "Dascyllus melanurus", "no English name: the scientific name, flagged by the validator")
         self.assertEqual((p["maximumSizeCentimeters"], p["measurements"], p["minimumDepthMeters"]), (None, None, None))
         self.assertEqual((p["typicalHabitat"], p["geographicRange"], p["cautions"], p["habitats"], p["regions"]), ("", "", [], [], []))

@@ -65,10 +65,13 @@ def batch_name(batch):
     return f"batch-{batch:02d}"
 
 
-def build_manifest(records, risk, batch, seed, generation, pack_metadata):
-    members = sorted((r for r in records if risk.get(r["id"], {}).get("batch") == batch), key=lambda r: r["id"])
+def build_manifest(records, risk, batch, seed, generation, pack_metadata, member_ids=None, batch_id=None, rereview_of=None):
+    """member_ids/batch_id select a re-review batch instead of a numbered batch."""
+    batch_id = batch_id or batch_name(batch)
+    members = sorted((r for r in records if (r["id"] in member_ids if member_ids is not None else risk.get(r["id"], {}).get("batch") == batch)),
+                     key=lambda r: r["id"])
     if not members:
-        raise ReviewError(f"{batch_name(batch)} has no records in the pack")
+        raise ReviewError(f"{batch_id} has no records in the pack")
     flagged = {r["id"] for r in members if risk[r["id"]].get("flags")}
     unflagged = sorted(r["id"] for r in members if r["id"] not in flagged)
     sampled = set(random.Random(seed).sample(unflagged, min(SAMPLE_SIZE, len(unflagged))))
@@ -76,14 +79,32 @@ def build_manifest(records, risk, batch, seed, generation, pack_metadata):
                 "reviewedContentFingerprint": content_fingerprint(r),
                 "selection": "flagged" if r["id"] in flagged else "sampled" if r["id"] in sampled else "unread",
                 "riskScore": risk[r["id"]].get("score", 0), "flags": risk[r["id"]].get("flags", [])} for r in members]
-    manifest = {"schemaVersion": SCHEMA_VERSION, "batchID": batch_name(batch), "generation": generation,
+    manifest = {"schemaVersion": SCHEMA_VERSION, "batchID": batch_id, "generation": generation,
                 "pack": pack_metadata["id"], "packVersion": pack_metadata["packVersion"], "seed": seed,
                 "sampleSize": len(sampled), "sampling": SAMPLING,
                 "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json",
                 "counts": {s: sum(e["selection"] == s for e in entries) for s in ("flagged", "sampled", "unread")},
                 "records": entries}
+    if rereview_of:
+        manifest["rereviewOf"] = rereview_of
     manifest["manifestSHA256"] = manifest_hash(manifest)
     return manifest
+
+
+def changed_approvals(records, root, batch_id):
+    """Records an approved generation of batch_id covered whose content has changed since:
+    they lost their approval and need re-review. Unchanged records keep theirs."""
+    manifests, overlays = load_manifests(root), load_overlays(root)
+    history = _batch_history(manifests, batch_id)
+    if not history:
+        raise ReviewError(f"no manifest for {batch_id}")
+    latest = history[-1]
+    _, overlay = overlays.get(latest["manifestSHA256"], (None, None))
+    if not overlay or overlay["decision"] != "approved":
+        raise ReviewError(f"{batch_id} generation {latest['generation']} is not approved; nothing to re-review")
+    current = {r["id"]: content_fingerprint(r) for r in records}
+    changed = sorted(item["speciesID"] for item in overlay["records"] if current.get(item["speciesID"]) != item["reviewedContentFingerprint"])
+    return changed, {"batchID": batch_id, "generation": latest["generation"], "manifestSHA256": latest["manifestSHA256"]}
 
 
 def load_manifests(root):
@@ -126,25 +147,34 @@ def _write_new(path, text):
     temp.replace(path)
 
 
-def prepare(batch, seed=None, force_new=False, root=BATCHES, pages=PAGES, pack=PACK, risk_path=RISK_REPORT):
+def prepare(batch, seed=None, force_new=False, root=BATCHES, pages=PAGES, pack=PACK, risk_path=RISK_REPORT, rereview=False):
+    """rereview: a separate batch (batch-NN-rereview) of only the records whose approved
+    content in batch-NN changed. batch-NN itself is left alone, so its unchanged records
+    keep their approval."""
     records = json.loads((Path(pack) / "Creatures.json").read_text())
     metadata = json.loads((Path(pack) / "PackManifest.json").read_text())
     risk = json.loads(Path(risk_path).read_text())["records"]
+    member_ids, batch_id, rereview_of = None, batch_name(batch), None
+    if rereview:
+        changed, rereview_of = changed_approvals(records, root, batch_name(batch))
+        if not changed:
+            raise ReviewError(f"no approved record in {batch_name(batch)} has changed; nothing to re-review")
+        member_ids, batch_id = set(changed), f"{batch_name(batch)}-rereview"
     manifests, overlays = load_manifests(root), load_overlays(root)
-    history = _batch_history(manifests, batch_name(batch))
+    history = _batch_history(manifests, batch_id)
     if history:
         latest = history[-1]
         decision = overlays.get(latest["manifestSHA256"], (None, {}))[1].get("decision")
         if decision != "rejected" and not force_new:
             state = "approved" if decision == "approved" else "awaiting a decision"
-            raise ReviewError(f"{batch_name(batch)} generation {latest['generation']} is {state}; "
+            raise ReviewError(f"{batch_id} generation {latest['generation']} is {state}; "
                               "a new generation replaces it (pass --force-new to do so deliberately)")
         if seed is not None and seed in {m["seed"] for m in history}:
-            raise ReviewError(f"seed {seed} was already used for {batch_name(batch)}; a regenerated batch needs a new seed")
+            raise ReviewError(f"seed {seed} was already used for {batch_id}; a regenerated batch needs a new seed")
     used = {m["seed"] for m in history}
     while seed is None or seed in used:
         seed = secrets.randbelow(2 ** 63)
-    manifest = build_manifest(records, risk, batch, seed, len(history) + 1, metadata)
+    manifest = build_manifest(records, risk, batch, seed, len(history) + 1, metadata, member_ids, batch_id, rereview_of)
     short = manifest["manifestSHA256"][:12]
     manifest_path = Path(root) / manifest["batchID"] / f"manifest-g{manifest['generation']}-{short}.json"
     page_path = Path(pages) / f"{manifest['batchID']}-g{manifest['generation']}-{short}.html"
@@ -344,8 +374,13 @@ def _record_html(entry, record):
         value = record.get(field)
         if value in (None, "", [], {}) or field == "dataSources":
             continue
+        if field == "appearanceVariants":
+            value = [v.get("description") or v.get("lifeStage") for v in value]
         rows.append(f"<tr><th>{html.escape(FIELD_LABELS.get(field, field))}</th><td>{_value_html(value)}</td></tr>")
     flags = "".join(f"<span class='flag'>{html.escape(f)}</span>" for f in entry["flags"]) or "<span class='muted'>no flags</span>"
+    used = sorted({f for source in record.get("dataSources", []) for f in source.get("sourceFields", [])})
+    if used:
+        links.append("<span class='muted'>source fields: " + html.escape(", ".join(used)) + "</span>")
     return (f"<article id='{entry['speciesID']}'><h3>{html.escape(entry['commonName'])} "
             f"<em>{html.escape(entry['scientificName'])}</em></h3>"
             f"<p class='meta'>Risk score {entry['riskScore']} · {flags}<br><code>{entry['speciesID']}</code> · "
@@ -360,6 +395,10 @@ def review_page(manifest, by_id):
     unread = sorted((e for e in entries if e["selection"] == "unread"), key=lambda e: (e["commonName"].lower(), e["speciesID"]))
     key = manifest["manifestSHA256"]
     title = f"Global {manifest['batchID']} review (generation {manifest['generation']})"
+    origin = manifest.get("rereviewOf")
+    rereview = (f"<p><strong>Re-review.</strong> These {len(entries)} records were approved in {html.escape(origin['batchID'])} "
+                f"generation {origin['generation']} and their content has changed since, so that approval no longer covers them. "
+                "Records in that batch whose content did not change keep their approval.</p>") if origin else ""
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)}</title>
@@ -384,7 +423,7 @@ a {{ color:inherit; }}
 <p><strong>Manifest SHA-256:</strong> <code>{key}</code><br>
 Pack {html.escape(manifest['pack'])} v{manifest['packVersion']} · {len(entries)} records · {len(flagged)} flagged · {len(sampled)} sampled · {len(unread)} not shown<br>
 Sample seed <code>{manifest['seed']}</code> ({html.escape(manifest['sampling'])})</p>
-<p><strong>Batch rule.</strong> Read every record below. If any sampled record has an error, the whole batch is not
+{rereview}<p><strong>Batch rule.</strong> Read every record below. If any sampled record has an error, the whole batch is not
 approved; it is fixed and regenerated with a new seed. Records you read are recorded as individually reviewed;
 the {len(unread)} records not shown are recorded as sample-approved. You may exclude or reject specific IDs with a note.
 To decide, reply with your decision in your own words and this manifest hash.</p>
@@ -406,6 +445,7 @@ def main(argv=None):
     p.add_argument("--batch", type=int, required=True)
     p.add_argument("--seed", type=int, help="default: a fresh random seed, recorded in the manifest")
     p.add_argument("--force-new", action="store_true", help="replace an undecided or approved generation")
+    p.add_argument("--rereview", action="store_true", help="only the batch's approved records whose content changed, as batch-NN-rereview")
     g = commands.add_parser("page", help="re-render the review page of an existing manifest")
     g.add_argument("--manifest-sha256", required=True)
     r = commands.add_parser("record", help="record the reviewer's decision for one manifest")
@@ -420,7 +460,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
-            manifest, manifest_path, page_path = prepare(args.batch, args.seed, args.force_new)
+            manifest, manifest_path, page_path = prepare(args.batch, args.seed, args.force_new, rereview=args.rereview)
             print(json.dumps({"manifest": str(manifest_path.relative_to(REPO)), "page": str(page_path.relative_to(REPO)),
                               "manifestSHA256": manifest["manifestSHA256"], "seed": manifest["seed"], "counts": manifest["counts"]}, indent=2))
         elif args.command == "page":

@@ -95,8 +95,9 @@ enum RegionalOccurrenceStatus: String, Codable, Hashable, Sendable {
     case common, regular, occasional, rare, seasonal, introduced
 }
 
+/// A life stage or sex with its own appearance (males and females can differ).
 enum SpeciesLifeStage: String, Codable, Hashable, Sendable {
-    case juvenile, intermediate, adult, initialPhase, terminalPhase
+    case juvenile, intermediate, adult, initialPhase, terminalPhase, male, female
 }
 
 struct SpeciesAppearanceVariant: Identifiable, Codable, Hashable, Sendable {
@@ -167,6 +168,9 @@ struct SpeciesTaxonomy: Codable, Hashable, Sendable {
 enum SpeciesMeasurementType: String, Codable, Hashable, Sendable {
     case totalLength, standardLength, forkLength, discWidth, discLength
     case carapaceLength, carapaceWidth, shellLength, mantleLength, bodyLength
+
+    /// Widths are not lengths: a described length is never compared with them.
+    var isWidth: Bool { self == .discWidth || self == .carapaceWidth }
 }
 
 struct SpeciesMeasurements: Codable, Hashable, Sendable {

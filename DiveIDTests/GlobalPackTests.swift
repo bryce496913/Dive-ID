@@ -29,22 +29,16 @@ final class GlobalPackTests: XCTestCase {
         ])
     }
 
-    /// The record IDs and methods approved in the recorded batch overlays
-    /// (Data/CatalogReview/GlobalBatches), the only source of Global approvals.
-    private func approvedInOverlays() throws -> [UUID: RecordReviewMethod] {
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
-            .appendingPathComponent("Data/CatalogReview/GlobalBatches")
+    /// The approvals the published pack applied (written by publish_global.py from the
+    /// recorded batch overlays): an approval whose record content changed since is stale
+    /// and absent here. Python computes the fingerprints; test_publish_global keeps this file current.
+    private func appliedApprovals() throws -> [UUID: RecordReviewMethod] {
+        let file = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("Data/CatalogReview/GlobalBatches/AppliedApprovals.json")
+        let document = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: file)) as? [String: Any])
         var approved: [UUID: RecordReviewMethod] = [:]
-        let batches = try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
-        for batch in batches {
-            for file in try FileManager.default.contentsOfDirectory(at: batch, includingPropertiesForKeys: nil) where file.lastPathComponent.contains("Review") {
-                let overlay = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: file)) as? [String: Any])
-                guard overlay["decision"] as? String == "approved" else { continue }
-                for record in try XCTUnwrap(overlay["records"] as? [[String: Any]]) {
-                    let id = try XCTUnwrap(UUID(uuidString: try XCTUnwrap(record["speciesID"] as? String)))
-                    approved[id] = try XCTUnwrap(RecordReviewMethod(rawValue: try XCTUnwrap(record["reviewMethod"] as? String)))
-                }
-            }
+        for (id, method) in try XCTUnwrap(document["approved"] as? [String: String]) {
+            approved[try XCTUnwrap(UUID(uuidString: id))] = try XCTUnwrap(RecordReviewMethod(rawValue: method))
         }
         return approved
     }
@@ -52,7 +46,7 @@ final class GlobalPackTests: XCTestCase {
     func testDevelopmentShowsTheWholeGlobalPackWithApprovedRecordsMarked() async throws {
         let development = try await repository(.experimentalDevelopment).availablePacks()
         let global = try XCTUnwrap(development.first { $0.id == .global })
-        let approved = try approvedInOverlays()
+        let approved = try appliedApprovals()
         XCTAssertGreaterThan(global.speciesCount, 4_000)
         XCTAssertEqual(global.includedRecordCount, global.speciesCount)
         XCTAssertEqual(global.publicationEligibleRecordCount, approved.count)
@@ -76,7 +70,7 @@ final class GlobalPackTests: XCTestCase {
     /// Release (publication access) exposes exactly the records a recorded approval
     /// covers, and no draft.
     func testReleaseExposesExactlyTheApprovedGlobalRecords() async throws {
-        let approved = try approvedInOverlays()
+        let approved = try appliedApprovals()
         let release = repository(.publication)
         let available = try await release.availablePacks()
         XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")

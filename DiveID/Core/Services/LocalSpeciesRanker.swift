@@ -175,10 +175,15 @@ struct LocalSpeciesRanker: SpeciesRanking {
                 matched.append(contentsOf: finHits.sorted())
             }
             addVisibleClue(profile.finAndSpineClues.filter { MorphologyVocabulary.concepts(in: $0).isEmpty && finHits.isEmpty }, label: "fin and spine clues", weight: weights.finAndSpine, observation: observation, legacyTerms: profile.markings + profile.bodyShapes + profile.keywords, score: &score, matched: &matched)
+            // A described size is a length. A width-type measurement (disc or carapace width)
+            // is never compared with it. A maximum-only record is compatible up to the same
+            // 1.5 × tolerance and has no lower bound; no minimum is invented.
+            let measuresWidth = profile.measurements?.type.isWidth ?? false
             let canonicalMinimum = profile.measurements?.typicalObservedMinimumCentimeters ?? profile.minimumSizeCentimeters
             let canonicalMaximum = profile.measurements?.typicalObservedMaximumCentimeters ?? profile.measurements?.maximumRecordedCentimeters ?? profile.maximumSizeCentimeters
-            if let size = observation.approximateSizeCentimeters, let min = canonicalMinimum, let max = canonicalMaximum {
-                if (min * 0.5)...(max * 1.5) ~= size { score += weights.size; matched.append("compatible size") } else { score += weights.sizeConflict; conflicts.append("described size") }
+            if let size = observation.approximateSizeCentimeters, !measuresWidth, let max = canonicalMaximum {
+                let lowest = canonicalMinimum.map { $0 * 0.5 } ?? 0
+                if (lowest...(max * 1.5)) ~= size { score += weights.size; matched.append("compatible size") } else { score += weights.sizeConflict; conflicts.append("described size") }
             }
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
             if observation.categories.contains("fish"), profile.categories.contains("turtle") || profile.categories.contains("ray") { score += weights.waterConflict; conflicts.append("animal group") }

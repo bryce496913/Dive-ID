@@ -119,12 +119,12 @@ Display in the top ten is measured and reported, not asserted.
 as written, so **it now fails** when it runs. It is still opt-in, through
 `DIVEID_GLOBAL_EVAL_REPORT`. Run in Release on Linux, the opt-in test takes 443 s:
 
-| Gate | Global as written | Floor | Status |
+| Gate | Global as written (v2 → v3) | Floor | Status |
 | --- | --- | --- | --- |
-| candidateRecall (BM25 top 50) | 14/18 = 0.778 | 0.85 | **failed** |
-| top1 | 4/18 = 0.222 | 0.4 | **failed** |
-| top3 | 7/18 = 0.389 | 0.6 | **failed** |
-| top10 | 8/18 = 0.444 | 0.8 | **failed** |
+| candidateRecall (BM25 top 50) | 14/18 → 16/18 = 0.889 | 0.85 | passed |
+| top1 | 4/18 → 5/18 = 0.278 | 0.4 | **failed** |
+| top3 | 7/18 → 8/18 = 0.444 | 0.6 | **failed** |
+| top10 | 8/18 → 12/18 = 0.667 | 0.8 | **failed** |
 | noMatchCorrect | 6/6 | 1.0 | passed |
 | confidenceCompliant | 28/29 = 0.966 | 1.0 | **failed**: `v05-ambiguous-trigger` scores 0.643 against its 0.64 ceiling |
 | regionConflictCorrect | none | 1.0 | not applicable |
@@ -135,9 +135,85 @@ as written, so **it now fails** when it runs. It is still opt-in, through
 - **Positive cases:** these are the 18 Tropical Pacific identification cases. The 17
   Caribbean cases are blocked by coverage, because their expected records are not in
   Global.
-- **Unchanged:** floors, frozen expectations, ranking and content.
+- **Unchanged:** floors and frozen expectations. Content and the size rule changed
+  in builder v3 (above).
 - **Default region:** new installs start in Caribbean, and existing selections
   (Global included) are kept, until these gates pass.
+
+## Evidence rebuild and size fix (builder v3, 2026-10-22; findings P1, P3, P4)
+
+### What the rebuild lost, case by case
+
+These are the clues each Tropical Pacific case relies on that the regional record
+carried and the v2 Global record did not. A clue is "recovered" when FishBase
+supports it; the source field for each one is in `DiveIDTests/Fixtures/GlobalEvidence.v1.json`.
+
+| Species (cases) | Lost clue and field (v2) | v3 |
+| --- | --- | --- |
+| Cockatoo waspfish (17) | swaying with the surge (features); tall front dorsal fin (finAndSpineClues); rubble, sand (habitats); solitary (behaviors); leaf-like (features) | all recovered except **leaf**: FishBase never describes leaf mimicry |
+| Bird wrasse (09) | long snout (head); solitary (behaviors); green and blue (colors) | snout and solitary recovered; **colours have no source** |
+| Black triggerfish (10) | groove in front of the eye; groups (behaviors); pale lines at the fin bases | first two recovered; **fin-base lines have no source** |
+| Pinktail triggerfish (11) | pink tail; yellow pectoral fins; black fin margins; juvenile eye lines | all recovered (eye lines as a juvenile variant) |
+| Red-toothed triggerfish (12) | lunate tail and long lobes; red teeth; schooling | all recovered |
+| Orangespot surgeonfish (13) | orange band behind the gill opening; front half paler; yellow wrongly in adult colours | recovered; yellow moved to the juvenile variant |
+| Lined surgeonfish (14) | black-edged blue and yellow stripes; tail spine; schooling (adults) | recovered; juvenile solitary moved to a variant |
+| Fire clownfish (15) | white band behind the eye; black pelvic fins; anemone; red juveniles | all recovered |
+| Spinecheek anemonefish (16) | cheek spine; anemone; male red, female dark | all recovered; **three white bars have no source** |
+
+### Extraction rules: records changed
+
+Each count is the number of the 4,787 drafts whose traits change when that rule is
+switched off. They come from `Data/GlobalMarine/FishBase/BuildReport.json`.
+
+| Rule | Records changed |
+| --- | --- |
+| Life stage and sex: juvenile, male and female traits go to appearance variants | 827 |
+| Hedge: "may", "sometimes", "with or without" assert nothing | 634 |
+| Negation: "without", "no", "lacks", "absent" | 164 |
+
+- **Variants:** 493 records now have juvenile variants, 249 male and 154 female.
+- **Ambiguity flags:** 918 records carry a `trait_ambiguous` risk flag. This includes
+  coded and described tail shapes that disagree; neither shape is then asserted.
+- **Changes from v2:**
+  - colours in 558 records, markings 1,293, habitats 1,597, behaviours 1,108;
+  - tail shape 387, head clues 253, fin clues 551;
+  - appearance variants 714, features 2,327.
+
+### Size
+
+Maximum-only records are now compared (see the
+[ranking contract](HybridRankingContract.md#size)). Widths are never compared as
+lengths.
+
+### Results before and after (Release)
+
+| Variant | Records | Recall | top1 | top3 | top10 | Confidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| Global, 18 Tropical Pacific cases (before) | 4,786 | 14/18 | 4/18 | 7/18 | 8/18 | 28/29 |
+| **Global, 18 Tropical Pacific cases (after)** | 4,786 | **16/18** | **5/18** | **8/18** | **12/18** | 28/29 |
+| Rebuilt regional records only (before) | 962 | 15/18 | 6/18 | 7/18 | 9/18 | 28/29 |
+| **Rebuilt regional records only (after)** | 962 | **17/18** | 6/18 | **9/18** | **14/18** | 28/29 |
+| Global + Caribbean 8, all 46 cases (before) | 4,794 | 30/34 | 14/34 | 19/34 | 22/34 | 44/46 |
+| **Global + Caribbean 8, all 46 cases (after)** | 4,794 | **32/34** | 13/34 | 17/34 | **26/34** | 44/46 |
+
+**Regional packs:** all V05 gates still pass, in Debug and Release. Expected-species
+ranks are unchanged. The size fix reorders some lower results; the structured
+engine's top-1 rises from 23 to 24.
+
+**Global gates that still fail:** top1 (5/18 against 0.4), top3 (8/18 against 0.6),
+top10 (12/18 against 0.8) and confidence (28/29). Candidate recall now passes (16/18).
+
+Remaining causes, found by inspecting the regressed Lined surgeonfish cases (#1 → #9 and #5 → out):
+
+- **Generic aliases.** 65 Global records carry a bare group word as an alias, such as
+  "Surgeonfish" or "Wrasse", taken from FishBase's English common names. Any
+  description that mentions the group then counts as an exact-name match for every
+  one of them. This predates this pass.
+- **Variant scoring adds to the main colours.** A matching appearance variant adds
+  up to +6 on top of main-profile colour matches, and many more records now have
+  variants. Changing this is a ranking change.
+- **Clues with no source:** Bird wrasse colours, Black triggerfish fin-base lines and
+  Spinecheek bar count.
 
 ## Performance (host proxy, Release)
 

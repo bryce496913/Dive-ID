@@ -3,11 +3,12 @@
 This procedure supplements V05CandidateValidation.md. Last commit-bound outcome:
 `Reports/InstalledReleaseValidation.json`, recorded before any Global approval.
 
-**Current publication subset (2026-10-22): 252 records.**
+**Current publication subset (2026-10-22, after the builder v3 rebuild): 2 records.**
 - **Caribbean:** 2 records, approved 2026-10-12.
-- **Global (Experimental):** 250 records, batch 1, approved 2026-10-22 through
-  `Data/CatalogReview/GlobalBatches`. 4,536 Global records and all 1,000 Tropical
-  Pacific records remain draft and must be absent from Release.
+- **Global (Experimental):** none. Batch 1's 250 approvals lapsed when the rebuild
+  changed those records; they wait in `batch-01-rereview`. All 4,786 Global records
+  and all 1,000 Tropical Pacific records are draft and must be absent from Release,
+  so Global is not listed there.
 
 Approvals come only from fingerprint-bound human decisions; merging a review PR is
 not record approval. Rebind the device record to the new SHA before testing. Never
@@ -152,7 +153,7 @@ is not a passed no-match or out-of-domain test.
 | Check | Action and required evidence |
 | --- | --- |
 | Installed identity | Record SHA, Release log/settings, signing, built and installed version/build, bundle ID, phone model/iOS build, approved IDs/counts and runtime engine trace. |
-| Global subset | In Change Dive Region, Global (Experimental) shows 250 species; Caribbean shows 2; Tropical Pacific is absent or unavailable. In Global, search for approved species (individually reviewed: Banded damsel, Arcfin shrimpgoby; sample-approved: Achilles tang, Meteor cardinalfish) and confirm they can appear. Search for draft species (Clown triggerfish, Moorish idol, Regal angelfish) by name and confirm they never appear. Banded damsel's review status reads "Approved for publication — individually reviewed"; Achilles tang's says it was not individually reviewed. Each Source link opens its FishBase page. Open Data Sources and Credits from Home. |
+| Global subset | Until batch-01-rereview is approved, Global must not be listed in Release. Once it is approved, run this row: In Change Dive Region, Global (Experimental) shows the approved count; Caribbean shows 2; Tropical Pacific is absent or unavailable. In Global, search for approved species (individually reviewed: Banded damsel, Arcfin shrimpgoby; sample-approved: Achilles tang, Meteor cardinalfish) and confirm they can appear. Search for draft species (Clown triggerfish, Moorish idol, Regal angelfish) by name and confirm they never appear. Banded damsel's review status reads "Approved for publication — individually reviewed"; Achilles tang's says it was not individually reviewed. Each Source link opens its FishBase page. Open Data Sources and Credits from Home. |
 | Search outcomes | Enter applicable frozen cases verbatim; record case ID, request region, displayed IDs/ranks and distinct mismatch/no-match/loading-error states. Unavailable expected IDs are inapplicable. |
 | Offline repeat | Capture Airplane Mode ON, Wi-Fi OFF and cellular OFF; repeat representative positives and rejection cases with unchanged text. Record any network error separately. |
 | Region association | In region A, search and open details/back; switch to approved region B and search. Record pack context for both requests/results/saved snapshots. Earlier results must retain A's request region. |

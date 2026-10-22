@@ -26,6 +26,24 @@ eligibility is decided, so it never removes a candidate. It is not evidence agai
 species: the structured score, confidence and explanations stay exactly as for a
 species with no recorded range. A species with no recorded range is neutral.
 
+## Size
+
+A described size is a length. It adds evidence ("compatible size", +3) when it fits
+the species' range and counts against it ("described size", −4) when it does not.
+The tolerance is unchanged: from half the minimum to 1.5 × the maximum.
+
+- **Range:** the typical observed range is used when present, otherwise the
+  recorded maximum and minimum.
+- **Maximum only** (2026-10-22, owner-requested size fix): FishBase records give a
+  maximum length and no minimum, so a record with only a maximum is now compatible
+  from 0 up to 1.5 × that maximum, and conflicts above it. No minimum or typical
+  range is invented. Before this, such records were skipped: a described size could
+  neither support nor count against 4,610 Global, 384 Tropical Pacific and 4 Caribbean
+  records.
+- **Widths are never compared as lengths.** A record measured as a disc or carapace
+  width gets no size evidence either way.
+- **No size:** a record with no size stays neutral.
+
 `SpeciesRankingInput.preferredRegions` carries the diver's optional “where are you
 diving?” choice. A species recorded in any preferred region gets an ordering-only boost.
 That boost is not description evidence: it never changes eligibility, confidence or

@@ -56,8 +56,27 @@ human-verified). Freshwater-only species are excluded.
   doesn't settle a category; disagreements are listed in the report.
 - **Summary, distinguishing features, habitat text and the distribution summary** are
   short original wording assembled from source facts, never copied sentences.
-- **Colours and markings** are vocabulary terms found in the source description.
-  Barbels come only from the structured barbel count.
+- **Traits** (builder version 3, `traits.py`) come from the source text clause by clause:
+  - **Text fields:** `morphdat.AddChars` and `RemarkSex` for appearance;
+    `species.Comments`, `ecology.AddRems` and `AssociationsWith` for behaviour and habitat.
+  - **Coded fields:** stripes, spots, coloured fin margins, barbels and night activity
+    come from the structured morphdat and ecology codes.
+  - **What comes out:** colours, markings, head and mouth clues ("Long snout", "Red
+    teeth", "Prominent cheek spine"), fin clues ("Tall front dorsal fin", "Pink tail",
+    "Black margins on the dorsal and anal fins"), tail shape, behaviours (schooling,
+    solitary, anemone association) and features such as "Sways back and forth with
+    the surge". All are short original wording.
+  - **Negation:** a negated trait ("without spots", "lacks the snout", "barbels
+    absent") is not asserted.
+  - **Life stage and sex:** juvenile, male and female clauses become
+    `appearanceVariants`; adult clauses feed the main profile.
+  - **Ambiguity:** a hedged clause ("may", "sometimes", "with or without") or a
+    comparative one ("males brighter than females") asserts nothing and raises a
+    `trait_ambiguous` risk flag. So does a coded tail shape that disagrees with the
+    description; neither shape is then asserted.
+  - **Traceability:** every value is traced to its source field in `ClueTrace.json`,
+    and each record's `dataSources[0].sourceFields` lists the fields it used.
+    `BuildReport.json` counts the records each rule changes.
 - **Similar species** come from `morphdat.SimilarSpecies1/2` when that species is in the
   pack.
 - **Fields with no source stay empty or null.** For example, a species without any
