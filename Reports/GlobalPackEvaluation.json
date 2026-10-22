@@ -5,17 +5,17 @@
       "byRegion" : {
         "tropical-pacific" : {
           "positive" : 18,
-          "top1" : 4,
-          "top10" : 8
+          "top1" : 5,
+          "top10" : 12
         }
       },
       "cases" : [
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Long green wrasse",
-            "Hound needlefish",
-            "Wolfsnout goby"
+            "Roundhead parrotfish",
+            "Canary fangblenny",
+            "Bundoon blenny"
           ],
           "error" : null,
           "id" : "v05-09-diagnostic",
@@ -28,9 +28,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Christmas wrasse",
             "Slender wrasse",
-            "Ring wrasse",
-            "Christmas wrasse"
+            "Ring wrasse"
           ],
           "error" : null,
           "id" : "v05-09-paraphrase",
@@ -38,13 +38,13 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.6190476190476191
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Redtail triggerfish",
             "Pinktail triggerfish",
+            "Redtail triggerfish",
             "Black triggerfish"
           ],
           "error" : null,
@@ -58,9 +58,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Darktail parrotfish",
             "Paletail chromis",
-            "Palelipped surgeonfish",
-            "Darkcap parrotfish"
+            "Palelipped surgeonfish"
           ],
           "error" : null,
           "id" : "v05-10-paraphrase",
@@ -68,29 +68,29 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
+          "topScore" : 0.4523809523809524
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Yellow-spotted triggerfish",
             "Pinktail triggerfish",
-            "Unicorn leatherjacket filefish",
-            "Masked triggerfish"
+            "Yellowmargin triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 2,
           "region" : "tropical-pacific",
-          "topScore" : 0.6904761904761905
+          "topScore" : 0.7619047619047619
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Pinktail triggerfish",
-            "Redtail triggerfish",
-            "Yellowmargin triggerfish"
+            "Yellowmargin triggerfish",
+            "Rough triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-paraphrase",
@@ -98,7 +98,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
@@ -111,16 +111,16 @@
           "id" : "v05-12-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 8,
           "region" : "tropical-pacific",
-          "topScore" : 0.6428571428571429
+          "topScore" : 0.6904761904761905
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Red-toothed triggerfish",
-            "Redtail triggerfish",
-            "Queen triggerfish"
+            "Queen triggerfish",
+            "Redtail triggerfish"
           ],
           "error" : null,
           "id" : "v05-12-paraphrase",
@@ -128,7 +128,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
@@ -141,54 +141,54 @@
           "id" : "v05-13-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 10,
           "region" : "tropical-pacific",
           "topScore" : 0.6428571428571429
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Whitetail damsel",
-            "Clown triggerfish",
-            "Pacific yellowtail emperor"
+            "Orange-lined triggerfish",
+            "Redbreasted wrasse",
+            "Clown triggerfish"
           ],
           "error" : null,
           "id" : "v05-13-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 6,
           "region" : "tropical-pacific",
           "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Twospot surgeonfish",
             "Yellowspotted sawtail",
-            "White-freckled surgeonfish",
-            "Doubleband surgeonfish"
+            "White-freckled surgeonfish"
           ],
           "error" : null,
           "id" : "v05-14-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 5,
+          "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.7857142857142857
+          "topScore" : 0.9285714285714286
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Lined surgeonfish",
-            "Regal angelfish",
-            "Powderblue surgeonfish"
+            "Splendid dottyback",
+            "Bluering angelfish",
+            "New Guinea wrasse"
           ],
           "error" : null,
           "id" : "v05-14-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 9,
           "region" : "tropical-pacific",
-          "topScore" : 0.5714285714285714
+          "topScore" : 0.6904761904761905
         },
         {
           "confidenceCompliant" : true,
@@ -208,57 +208,27 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Maroon clownfish",
-            "Orange clownfish",
-            "Fire clownfish"
+            "Fire clownfish",
+            "Tomato clownfish",
+            "Barrier reef anemonefish"
           ],
           "error" : null,
           "id" : "v05-15-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 3,
+          "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.47619047619047616
+          "topScore" : 0.5714285714285714
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Maroon clownfish",
-            "Barhead damsel",
-            "Vosmaer's monocle bream"
+            "Fire clownfish",
+            "Sixbar angelfish",
+            "Oman anemonefish"
           ],
           "error" : null,
           "id" : "v05-16-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.23809523809523808
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Whitebonnet anemonefish",
-            "Orangefin anemonefish",
-            "Saddleback clownfish"
-          ],
-          "error" : null,
-          "id" : "v05-16-paraphrase",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Sulu eelblenny",
-            "Colombo damsel",
-            "Halfbarred goby"
-          ],
-          "error" : null,
-          "id" : "v05-17-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
           "rank" : null,
@@ -268,9 +238,39 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Longnose hawkfish",
-            "Forcepsfish",
-            "Whipfin silverbiddy"
+            "Spinecheek anemonefish",
+            "Amphiprion barberi",
+            "Fire clownfish"
+          ],
+          "error" : null,
+          "id" : "v05-16-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5238095238095238
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Cockatoo waspfish",
+            "Seychelles shrimpgoby",
+            "Tapertail shrimpgoby"
+          ],
+          "error" : null,
+          "id" : "v05-17-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.4523809523809524
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Sabre squirrelfish",
+            "Scorpaenopsis eschmeyeri",
+            "Bignose unicornfish"
           ],
           "error" : null,
           "id" : "v05-17-paraphrase",
@@ -278,20 +278,20 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.19047619047619047
+          "topScore" : 0.30952380952380953
         },
         {
           "confidenceCompliant" : false,
           "displayed" : [
-            "Redtail triggerfish",
             "Pinktail triggerfish",
-            "Yellowmargin triggerfish"
+            "Redtail triggerfish",
+            "Rough triggerfish"
           ],
           "error" : null,
           "id" : "v05-ambiguous-trigger",
           "kind" : "ambiguous",
           "outcome" : "evaluated",
-          "rank" : 2,
+          "rank" : 1,
           "region" : "tropical-pacific",
           "topScore" : 0.6428571428571429
         },
@@ -376,9 +376,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Twospot surgeonfish",
             "Yellowspotted sawtail",
-            "Doubleband surgeonfish",
-            "White-freckled surgeonfish"
+            "Yellowfin surgeonfish"
           ],
           "error" : null,
           "id" : "v05-region-1",
@@ -386,14 +386,14 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "caribbean",
-          "topScore" : 0.9285714285714286
+          "topScore" : 1
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Philippine damsel",
-            "Bluespotted angelfish",
-            "Crown-of-thorns cardinalfish"
+            "Philippines chromis",
+            "Crown-of-thorns cardinalfish",
+            "Bluespotted angelfish"
           ],
           "error" : null,
           "id" : "v05-region-2",
@@ -406,9 +406,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Angelfish",
-            "Golden hamlet",
-            "Flameback angelfish"
+            "Green razorfish",
+            "Longfin damselfish",
+            "Rock beauty"
           ],
           "error" : null,
           "id" : "v05-region-3",
@@ -416,14 +416,14 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.5238095238095238
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Spotted goatfish",
-            "Lined seahorse",
-            "Yellow boxfish"
+            "Spotted ray",
+            "Yellow boxfish",
+            "Corocoro grunt"
           ],
           "error" : null,
           "id" : "v05-region-4",
@@ -431,7 +431,7 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.30952380952380953
+          "topScore" : 0.9285714285714286
         }
       ],
       "counts" : {
@@ -440,7 +440,7 @@
           "total" : 1
         },
         "candidateRecall" : {
-          "hits" : 14,
+          "hits" : 16,
           "total" : 18
         },
         "confidenceCompliant" : {
@@ -456,15 +456,15 @@
           "total" : 4
         },
         "top1" : {
-          "hits" : 4,
+          "hits" : 5,
           "total" : 18
         },
         "top3" : {
-          "hits" : 7,
+          "hits" : 8,
           "total" : 18
         },
         "top10" : {
-          "hits" : 8,
+          "hits" : 12,
           "total" : 18
         }
       },
@@ -490,11 +490,11 @@
       "gates" : [
         {
           "denominator" : 18,
-          "hits" : 14,
+          "hits" : 16,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 29,
@@ -522,7 +522,7 @@
         },
         {
           "denominator" : 18,
-          "hits" : 4,
+          "hits" : 5,
           "metric" : "top1",
           "minimumRate" : 0.4,
           "note" : "",
@@ -530,7 +530,7 @@
         },
         {
           "denominator" : 18,
-          "hits" : 8,
+          "hits" : 12,
           "metric" : "top10",
           "minimumRate" : 0.8,
           "note" : "",
@@ -538,7 +538,7 @@
         },
         {
           "denominator" : 18,
-          "hits" : 7,
+          "hits" : 8,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "note" : "",
@@ -552,13 +552,13 @@
       "byRegion" : {
         "caribbean" : {
           "positive" : 16,
-          "top1" : 10,
+          "top1" : 8,
           "top10" : 14
         },
         "tropical-pacific" : {
           "positive" : 18,
-          "top1" : 4,
-          "top10" : 8
+          "top1" : 5,
+          "top10" : 12
         }
       },
       "cases" : [
@@ -566,8 +566,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Atlantic Blue Tang",
-            "Goldtail demoiselle",
-            "Blue-and-yellow grouper"
+            "Acanthurus reversus",
+            "Bluespot damsel"
           ],
           "error" : null,
           "id" : "v05-01-diagnostic",
@@ -581,14 +581,14 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Convict surgeonfish",
-            "Yellowfin surgeonfish",
-            "White-freckled surgeonfish"
+            "Twospot surgeonfish",
+            "Yellowfin surgeonfish"
           ],
           "error" : null,
           "id" : "v05-01-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 7,
+          "rank" : 8,
           "region" : "caribbean",
           "topScore" : 0.8095238095238095
         },
@@ -596,8 +596,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Stoplight Parrotfish",
-            "Eye-spot blenny",
-            "Yellow-eyed comb-tooth"
+            "Blackeye thicklip",
+            "Goldlined coris"
           ],
           "error" : null,
           "id" : "v05-02-diagnostic",
@@ -610,9 +610,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Dusky parrotfish",
-            "Viridescent parrotfish",
-            "Spinytooth parrotfish"
+            "Tripletail wrasse",
+            "Spotted parrotfish",
+            "Carolines parrotfish"
           ],
           "error" : null,
           "id" : "v05-02-paraphrase",
@@ -620,14 +620,14 @@
           "outcome" : "evaluated",
           "rank" : 6,
           "region" : "caribbean",
-          "topScore" : 0.3333333333333333
+          "topScore" : 0.47619047619047616
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Yellow-spotted triggerfish",
-            "Leopard sharpnose puffer",
-            "Minute goatfish"
+            "Dot-dash grouper",
+            "Leopard sharpnose puffer"
           ],
           "error" : null,
           "id" : "v05-03-diagnostic",
@@ -635,59 +635,59 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "caribbean",
-          "topScore" : 0.5238095238095238
+          "topScore" : 0.5952380952380952
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Atlantic Blue Tang",
-            "Mauritian gregory",
-            "Queen Angelfish"
+            "Blueback damsel",
+            "Chinamanfish"
           ],
           "error" : null,
           "id" : "v05-03-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 3,
+          "rank" : 8,
           "region" : "caribbean",
           "topScore" : 0.5714285714285714
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "French Angelfish",
-            "Queen Angelfish",
-            "Spotted Eagle Ray"
+            "Yellow-edged lyretail",
+            "Emperor angelfish",
+            "Squaretail mullet"
           ],
           "error" : null,
           "id" : "v05-04-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 4,
           "region" : "caribbean",
-          "topScore" : 0.16666666666666666
+          "topScore" : 0.30952380952380953
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "French Angelfish",
-            "Whitecheek surgeonfish",
+            "Golden trevally",
+            "Gray angelfish",
             "Paletail chromis"
           ],
           "error" : null,
           "id" : "v05-04-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 4,
           "region" : "caribbean",
-          "topScore" : 0.35714285714285715
+          "topScore" : 0.5
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Red Lionfish",
-            "Pectoral podge",
-            "Longnose hawkfish"
+            "Redbreasted wrasse",
+            "Vosmaer's monocle bream"
           ],
           "error" : null,
           "id" : "v05-05-diagnostic",
@@ -701,8 +701,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Striped rockskipper",
-            "Broadstriped cardinalfish",
-            "Goldenstriped soapfish"
+            "Many-lined cardinalfish",
+            "Broadstriped cardinalfish"
           ],
           "error" : null,
           "id" : "v05-05-paraphrase",
@@ -710,14 +710,14 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "caribbean",
-          "topScore" : 0.3333333333333333
+          "topScore" : 0.47619047619047616
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Great Barracuda",
-            "Yellow-eyed comb-tooth",
-            "Target shrimp goby"
+            "Achilles tang",
+            "Mahogany snapper"
           ],
           "error" : null,
           "id" : "v05-06-diagnostic",
@@ -731,8 +731,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Great Barracuda",
-            "Reef croaker",
-            "Striped large-eye bream"
+            "Trumpet emperor",
+            "Grey snapper"
           ],
           "error" : null,
           "id" : "v05-06-paraphrase",
@@ -746,8 +746,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Green Sea Turtle",
-            "Hawksbill turtle",
-            "Greenblotch parrotfish"
+            "Greenblotch parrotfish",
+            "Hawksbill turtle"
           ],
           "error" : null,
           "id" : "v05-07-diagnostic",
@@ -777,7 +777,7 @@
           "displayed" : [
             "Bull ray",
             "Spotted Eagle Ray",
-            "Triplespot shrimpgoby"
+            "Spotted parrotfish"
           ],
           "error" : null,
           "id" : "v05-08-diagnostic",
@@ -805,9 +805,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Great Barracuda",
-            "Long green wrasse",
-            "Hound needlefish"
+            "Roundhead parrotfish",
+            "Canary fangblenny",
+            "Bundoon blenny"
           ],
           "error" : null,
           "id" : "v05-09-diagnostic",
@@ -815,14 +815,14 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.35714285714285715
+          "topScore" : 0.38095238095238093
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Christmas wrasse",
             "Slender wrasse",
-            "Ring wrasse",
-            "Christmas wrasse"
+            "Ring wrasse"
           ],
           "error" : null,
           "id" : "v05-09-paraphrase",
@@ -830,13 +830,13 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.6190476190476191
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Redtail triggerfish",
             "Pinktail triggerfish",
+            "Redtail triggerfish",
             "Black triggerfish"
           ],
           "error" : null,
@@ -850,9 +850,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Darktail parrotfish",
             "Paletail chromis",
-            "Atlantic Blue Tang",
-            "Palelipped surgeonfish"
+            "Atlantic Blue Tang"
           ],
           "error" : null,
           "id" : "v05-10-paraphrase",
@@ -860,29 +860,29 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
+          "topScore" : 0.4523809523809524
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Yellow-spotted triggerfish",
             "Pinktail triggerfish",
-            "Unicorn leatherjacket filefish",
-            "Masked triggerfish"
+            "Yellowmargin triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 2,
           "region" : "tropical-pacific",
-          "topScore" : 0.6904761904761905
+          "topScore" : 0.7619047619047619
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Pinktail triggerfish",
-            "Redtail triggerfish",
-            "Yellowmargin triggerfish"
+            "Yellowmargin triggerfish",
+            "Rough triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-paraphrase",
@@ -890,7 +890,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
@@ -903,16 +903,16 @@
           "id" : "v05-12-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 8,
           "region" : "tropical-pacific",
-          "topScore" : 0.6428571428571429
+          "topScore" : 0.6904761904761905
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Red-toothed triggerfish",
-            "Redtail triggerfish",
-            "Queen triggerfish"
+            "Queen triggerfish",
+            "Redtail triggerfish"
           ],
           "error" : null,
           "id" : "v05-12-paraphrase",
@@ -920,7 +920,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
@@ -933,54 +933,54 @@
           "id" : "v05-13-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 10,
           "region" : "tropical-pacific",
           "topScore" : 0.6428571428571429
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Whitetail damsel",
-            "Clown triggerfish",
-            "Pacific yellowtail emperor"
+            "Orange-lined triggerfish",
+            "Redbreasted wrasse",
+            "Clown triggerfish"
           ],
           "error" : null,
           "id" : "v05-13-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 6,
           "region" : "tropical-pacific",
           "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Twospot surgeonfish",
             "Yellowspotted sawtail",
-            "White-freckled surgeonfish",
-            "Doubleband surgeonfish"
+            "White-freckled surgeonfish"
           ],
           "error" : null,
           "id" : "v05-14-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 5,
+          "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.7857142857142857
+          "topScore" : 0.9285714285714286
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Lined surgeonfish",
-            "Regal angelfish",
-            "Powderblue surgeonfish"
+            "Splendid dottyback",
+            "Bluering angelfish",
+            "New Guinea wrasse"
           ],
           "error" : null,
           "id" : "v05-14-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 9,
           "region" : "tropical-pacific",
-          "topScore" : 0.5714285714285714
+          "topScore" : 0.6904761904761905
         },
         {
           "confidenceCompliant" : true,
@@ -1000,57 +1000,27 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Maroon clownfish",
-            "Orange clownfish",
-            "Fire clownfish"
+            "Fire clownfish",
+            "Tomato clownfish",
+            "Barrier reef anemonefish"
           ],
           "error" : null,
           "id" : "v05-15-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 3,
+          "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.47619047619047616
+          "topScore" : 0.5714285714285714
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Red Lionfish",
-            "Maroon clownfish",
-            "Barhead damsel"
+            "Fire clownfish",
+            "Sixbar angelfish",
+            "Oman anemonefish"
           ],
           "error" : null,
           "id" : "v05-16-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.30952380952380953
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Whitebonnet anemonefish",
-            "Orangefin anemonefish",
-            "Saddleback clownfish"
-          ],
-          "error" : null,
-          "id" : "v05-16-paraphrase",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Sulu eelblenny",
-            "Colombo damsel",
-            "Halfbarred goby"
-          ],
-          "error" : null,
-          "id" : "v05-17-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
           "rank" : null,
@@ -1060,9 +1030,39 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Red Lionfish",
-            "Longnose hawkfish",
-            "Forcepsfish"
+            "Spinecheek anemonefish",
+            "Amphiprion barberi",
+            "Fire clownfish"
+          ],
+          "error" : null,
+          "id" : "v05-16-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5238095238095238
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Cockatoo waspfish",
+            "Seychelles shrimpgoby",
+            "Tapertail shrimpgoby"
+          ],
+          "error" : null,
+          "id" : "v05-17-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.4523809523809524
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Sabre squirrelfish",
+            "Scorpaenopsis eschmeyeri",
+            "Bignose unicornfish"
           ],
           "error" : null,
           "id" : "v05-17-paraphrase",
@@ -1070,14 +1070,14 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.2619047619047619
+          "topScore" : 0.30952380952380953
         },
         {
           "confidenceCompliant" : false,
           "displayed" : [
             "Angelfish",
             "French Angelfish",
-            "Spotted Eagle Ray"
+            "Gray angelfish"
           ],
           "error" : null,
           "id" : "v05-ambiguous-angelfish",
@@ -1090,15 +1090,15 @@
         {
           "confidenceCompliant" : false,
           "displayed" : [
-            "Redtail triggerfish",
             "Pinktail triggerfish",
-            "Yellowmargin triggerfish"
+            "Redtail triggerfish",
+            "Rough triggerfish"
           ],
           "error" : null,
           "id" : "v05-ambiguous-trigger",
           "kind" : "ambiguous",
           "outcome" : "evaluated",
-          "rank" : 2,
+          "rank" : 1,
           "region" : "tropical-pacific",
           "topScore" : 0.6428571428571429
         },
@@ -1183,9 +1183,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Twospot surgeonfish",
             "Yellowspotted sawtail",
-            "Doubleband surgeonfish",
-            "White-freckled surgeonfish"
+            "Yellowfin surgeonfish"
           ],
           "error" : null,
           "id" : "v05-region-1",
@@ -1193,14 +1193,14 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "caribbean",
-          "topScore" : 0.9285714285714286
+          "topScore" : 1
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Philippine damsel",
-            "Bluespotted angelfish",
-            "Crown-of-thorns cardinalfish"
+            "Philippines chromis",
+            "Crown-of-thorns cardinalfish",
+            "Bluespotted angelfish"
           ],
           "error" : null,
           "id" : "v05-region-2",
@@ -1213,9 +1213,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Queen Angelfish",
-            "Angelfish",
-            "Golden hamlet"
+            "Green razorfish",
+            "Longfin damselfish",
+            "Rock beauty"
           ],
           "error" : null,
           "id" : "v05-region-3",
@@ -1223,13 +1223,13 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.5238095238095238
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Spotted ray",
             "Spotted Eagle Ray",
-            "Spotted goatfish",
             "Yellow boxfish"
           ],
           "error" : null,
@@ -1238,7 +1238,7 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.5476190476190477
+          "topScore" : 0.9285714285714286
         }
       ],
       "counts" : {
@@ -1247,7 +1247,7 @@
           "total" : 2
         },
         "candidateRecall" : {
-          "hits" : 30,
+          "hits" : 32,
           "total" : 34
         },
         "confidenceCompliant" : {
@@ -1263,15 +1263,15 @@
           "total" : 4
         },
         "top1" : {
-          "hits" : 14,
+          "hits" : 13,
           "total" : 34
         },
         "top3" : {
-          "hits" : 19,
+          "hits" : 17,
           "total" : 34
         },
         "top10" : {
-          "hits" : 22,
+          "hits" : 26,
           "total" : 34
         }
       },
@@ -1281,7 +1281,7 @@
       "gates" : [
         {
           "denominator" : 34,
-          "hits" : 30,
+          "hits" : 32,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
           "note" : "",
@@ -1313,15 +1313,15 @@
         },
         {
           "denominator" : 34,
-          "hits" : 14,
+          "hits" : 13,
           "metric" : "top1",
           "minimumRate" : 0.4,
           "note" : "",
-          "status" : "passed"
+          "status" : "failed"
         },
         {
           "denominator" : 34,
-          "hits" : 22,
+          "hits" : 26,
           "metric" : "top10",
           "minimumRate" : 0.8,
           "note" : "",
@@ -1329,7 +1329,7 @@
         },
         {
           "denominator" : 34,
-          "hits" : 19,
+          "hits" : 17,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "note" : "",
@@ -1344,7 +1344,7 @@
         "tropical-pacific" : {
           "positive" : 18,
           "top1" : 6,
-          "top10" : 9
+          "top10" : 14
         }
       },
       "cases" : [
@@ -1352,8 +1352,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Hound needlefish",
-            "Multicolour dottyback",
-            "Wolfsnout goby"
+            "Christmas wrasse",
+            "Bundoon blenny"
           ],
           "error" : null,
           "id" : "v05-09-diagnostic",
@@ -1361,14 +1361,14 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.38095238095238093
+          "topScore" : 0.42857142857142855
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Christmas wrasse",
             "Goldstripe wrasse",
-            "Pastel-green wrasse"
+            "Blackspotted wrasse"
           ],
           "error" : null,
           "id" : "v05-09-paraphrase",
@@ -1376,7 +1376,7 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
@@ -1396,9 +1396,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Pink-belly wrasse",
             "Paletail chromis",
-            "Palelipped surgeonfish",
-            "Darkcap parrotfish"
+            "Palelipped surgeonfish"
           ],
           "error" : null,
           "id" : "v05-10-paraphrase",
@@ -1406,29 +1406,29 @@
           "outcome" : "evaluated",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
+          "topScore" : 0.4523809523809524
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Yellow-spotted triggerfish",
             "Pinktail triggerfish",
-            "Unicorn leatherjacket filefish",
-            "Masked triggerfish"
+            "Unicorn leatherjacket filefish"
           ],
           "error" : null,
           "id" : "v05-11-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 2,
           "region" : "tropical-pacific",
-          "topScore" : 0.6904761904761905
+          "topScore" : 0.7619047619047619
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Pinktail triggerfish",
-            "Wedgetail triggerfish",
-            "Indian triggerfish"
+            "Yellowstreaked snapper",
+            "Wedgetail triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-paraphrase",
@@ -1436,20 +1436,20 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.6666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Unicorn leatherjacket filefish",
             "Pinktail triggerfish",
-            "Bluefin trevally"
+            "Leopard coralgrouper"
           ],
           "error" : null,
           "id" : "v05-12-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 5,
           "region" : "tropical-pacific",
           "topScore" : 0.6190476190476191
         },
@@ -1466,35 +1466,35 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.5952380952380952
+          "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Orange-socket surgeonfish",
-            "Elongate unicornfish",
-            "Yellowfin surgeonfish"
+            "Yellowfin surgeonfish",
+            "Convict surgeonfish"
           ],
           "error" : null,
           "id" : "v05-13-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 10,
+          "rank" : 7,
           "region" : "tropical-pacific",
           "topScore" : 0.6428571428571429
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Whitetail damsel",
-            "Pacific longnose parrotfish",
-            "Orange-striped emperor"
+            "Redbreasted wrasse",
+            "Goldlined coris",
+            "Goldstripe wrasse"
           ],
           "error" : null,
           "id" : "v05-13-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 5,
           "region" : "tropical-pacific",
           "topScore" : 0.6666666666666666
         },
@@ -1502,38 +1502,38 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "White-freckled surgeonfish",
-            "Convict surgeonfish",
-            "Yellowfin surgeonfish"
+            "Yellowfin surgeonfish",
+            "Blackstripe coris"
           ],
           "error" : null,
           "id" : "v05-14-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 4,
+          "rank" : null,
           "region" : "tropical-pacific",
           "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Lined surgeonfish",
-            "Regal angelfish",
-            "Powderblue surgeonfish"
+            "Goldlined coris",
+            "Twotone wrasse",
+            "Splendid dottyback"
           ],
           "error" : null,
           "id" : "v05-14-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 10,
           "region" : "tropical-pacific",
-          "topScore" : 0.5714285714285714
+          "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Fire clownfish",
             "Tomato clownfish",
-            "Yellowtail clownfish"
+            "Redbreasted wrasse"
           ],
           "error" : null,
           "id" : "v05-15-diagnostic",
@@ -1541,7 +1541,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.3333333333333333
+          "topScore" : 0.47619047619047616
         },
         {
           "confidenceCompliant" : true,
@@ -1556,74 +1556,74 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "tropical-pacific",
-          "topScore" : 0.47619047619047616
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Barhead damsel",
-            "Spotted coralgrouper",
-            "Pink anemonefish"
-          ],
-          "error" : null,
-          "id" : "v05-16-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.19047619047619047
+          "topScore" : 0.5714285714285714
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
             "Fire clownfish",
-            "Clown anemonefish",
-            "Dotted dwarfgoby"
+            "Pearly monocle bream",
+            "Smallmouth squirrelfish"
           ],
           "error" : null,
-          "id" : "v05-16-paraphrase",
+          "id" : "v05-16-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "tropical-pacific",
-          "topScore" : 0.40476190476190477
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Halfbarred goby",
-            "Bubblefin wrasse",
-            "Zigzag wrasse"
-          ],
-          "error" : null,
-          "id" : "v05-17-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 8,
           "region" : "tropical-pacific",
           "topScore" : 0.38095238095238093
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Deep reef chromis",
-            "Longnose hawkfish",
-            "Thorny flathead"
+            "Spinecheek anemonefish",
+            "Fire clownfish",
+            "White-spotted puffer"
+          ],
+          "error" : null,
+          "id" : "v05-16-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.5238095238095238
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Cockatoo waspfish",
+            "Blackvent damsel",
+            "Miller's damsel"
+          ],
+          "error" : null,
+          "id" : "v05-17-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "tropical-pacific",
+          "topScore" : 0.4523809523809524
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Sabre squirrelfish",
+            "Spiny waspfish",
+            "Cockatoo waspfish"
           ],
           "error" : null,
           "id" : "v05-17-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 3,
           "region" : "tropical-pacific",
-          "topScore" : 0.19047619047619047
+          "topScore" : 0.30952380952380953
         },
         {
           "confidenceCompliant" : false,
           "displayed" : [
             "Pinktail triggerfish",
             "Unicorn leatherjacket filefish",
-            "Masked triggerfish"
+            "Yellowstreaked snapper"
           ],
           "error" : null,
           "id" : "v05-ambiguous-trigger",
@@ -1714,9 +1714,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Yellowfin surgeonfish",
             "White-freckled surgeonfish",
-            "Convict surgeonfish",
-            "Humpback unicornfish"
+            "Convict surgeonfish"
           ],
           "error" : null,
           "id" : "v05-region-1",
@@ -1729,9 +1729,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Philippine damsel",
             "Crown-of-thorns cardinalfish",
-            "Philippines wrasse"
+            "Two-spot banded snapper",
+            "White-streaked grouper"
           ],
           "error" : null,
           "id" : "v05-region-2",
@@ -1745,8 +1745,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Blue tuskfish",
-            "Scrawled Filefish",
-            "Common dolphinfish"
+            "Triangular boxfish",
+            "Yellow boxfish"
           ],
           "error" : null,
           "id" : "v05-region-3",
@@ -1761,7 +1761,7 @@
           "displayed" : [
             "Yellow boxfish",
             "Devil firefish",
-            "Ribbontail stingray"
+            "White-spotted puffer"
           ],
           "error" : null,
           "id" : "v05-region-4",
@@ -1769,7 +1769,7 @@
           "outcome" : "results returned (no pack mismatch in Global)",
           "rank" : null,
           "region" : "tropical-pacific",
-          "topScore" : 0.30952380952380953
+          "topScore" : 0.40476190476190477
         }
       ],
       "counts" : {
@@ -1778,7 +1778,7 @@
           "total" : 1
         },
         "candidateRecall" : {
-          "hits" : 15,
+          "hits" : 17,
           "total" : 18
         },
         "confidenceCompliant" : {
@@ -1798,11 +1798,11 @@
           "total" : 18
         },
         "top3" : {
-          "hits" : 7,
+          "hits" : 9,
           "total" : 18
         },
         "top10" : {
-          "hits" : 9,
+          "hits" : 14,
           "total" : 18
         }
       },
@@ -1828,11 +1828,11 @@
       "gates" : [
         {
           "denominator" : 18,
-          "hits" : 15,
+          "hits" : 17,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 29,
@@ -1868,7 +1868,7 @@
         },
         {
           "denominator" : 18,
-          "hits" : 9,
+          "hits" : 14,
           "metric" : "top10",
           "minimumRate" : 0.8,
           "note" : "",
@@ -1876,7 +1876,7 @@
         },
         {
           "denominator" : 18,
-          "hits" : 7,
+          "hits" : 9,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "note" : "",

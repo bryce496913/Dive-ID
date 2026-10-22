@@ -257,5 +257,35 @@ class FailClosedTests(unittest.TestCase):
             catalogue_validation.validate_catalogue([dict(real, review=dict(review, reviewMethod="skimmed"))])
 
 
+class RereviewTests(unittest.TestCase):
+    def setUp(self):
+        self.w = Workspace()
+        self.addCleanup(self.w.temp.cleanup)
+        self.manifest = self.w.prepare(seed=7)[0]
+        self.w.record(self.manifest)
+
+    def test_rereview_covers_only_changed_records_and_unchanged_ones_keep_their_approval(self):
+        changed = [ID(3), ID(40)]
+        for r in self.w.records:
+            if r["id"] in changed:
+                r["summary"] = "Rebuilt with more evidence."
+        self.w.save()
+        manifest, _, page = G.prepare(1, None, False, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path, rereview=True)
+        self.assertEqual((manifest["batchID"], manifest["generation"]), ("batch-01-rereview", 1))
+        self.assertEqual(sorted(e["speciesID"] for e in manifest["records"]), changed)
+        self.assertEqual(manifest["rereviewOf"], {"batchID": "batch-01", "generation": 1, "manifestSHA256": self.manifest["manifestSHA256"]})
+        self.assertIn("Re-review.", page.read_text())
+        reviews, report = self.w.approved()
+        self.assertEqual(len(reviews), 78, "the 78 unchanged records keep their approval")
+        self.assertEqual(sorted(report["staleRecords"]), changed)
+        self.assertEqual(report["pendingBatches"], ["batch-01-rereview g1"])
+        G.record(manifest["manifestSHA256"], "Bryce", "Approved the re-review.", "approve", "2026-10-23", root=self.w.root, pack=self.w.pack, commit="x")
+        self.assertEqual(len(self.w.approved()[0]), 80)
+
+    def test_nothing_to_rereview_when_no_approved_record_changed(self):
+        with self.assertRaises(G.ReviewError):
+            G.prepare(1, None, False, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path, rereview=True)
+
+
 if __name__ == "__main__":
     unittest.main()

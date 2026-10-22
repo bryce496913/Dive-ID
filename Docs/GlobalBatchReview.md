@@ -66,8 +66,18 @@ The tool is `Tools/CatalogReview/global_batches.py`.
   batch's approved records. Since batch 1 was approved, `GlobalPackTests` asserts that
   Release exposes exactly the records the recorded approvals cover.
 
+## Re-review after a rebuild
+
+A rebuild that changes an approved record's content changes its fingerprint, so its
+approval lapses. `prepare --batch N --rereview` writes a separate batch,
+`batch-NN-rereview`, holding only those records, with the same flagged-plus-sample
+rule. batch-NN itself is left alone, so its unchanged records keep their approval.
+`publish_global.py` writes the approvals it actually applied, and the approved
+records that went stale, to `Data/CatalogReview/GlobalBatches/AppliedApprovals.json`.
+
 ## Status
 
 | Batch | Generation | Manifest SHA-256 | Seed | Flagged | Sampled | Unread | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | approved 2026-10-22 by Bryce ("I have. approved all"); 250 verified |
+| batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | approved 2026-10-22 by Bryce ("I have. approved all"). All 250 approvals lapsed when the builder v3 rebuild changed the records; see batch-01-rereview. |
+| batch-01-rereview | 1 | `d1e7e47d4724cd05f630bf162942734ba2271330bad79b220a15575d7bacfcfd` | 2799262242171053537 | 86 | 30 | 134 | awaiting review. All 250 batch-01 records changed in the builder v3 rebuild (2026-10-22): 221 in identification content and 29 only in the new `dataSources.sourceFields` provenance list. None keeps its approval. |

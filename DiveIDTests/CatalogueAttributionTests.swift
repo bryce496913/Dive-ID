@@ -10,8 +10,9 @@ final class CatalogueAttributionTests: XCTestCase {
         XCTAssertTrue(CatalogueAttribution.modificationNotice.contains("changed"))
     }
 
-    func testEveryApprovedGlobalRecordLinksToItsSourcePage() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
+    /// Every Global record, approved or not, links to its source page and licence.
+    func testEveryGlobalRecordLinksToItsSourcePage() async throws {
+        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let pack = try await repository.loadPack(id: .global)
         XCTAssertFalse(pack.profiles.isEmpty)
         for profile in pack.profiles {

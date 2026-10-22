@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Identification evidence the Tropical Pacific records carried that the Global rebuild lost, limited to clues the pinned FishBase v26.06 source supports. Each expectation names the source field that supports it. Clues with no source support are listed as unrecoverable and are never expected.",
+  "species": [
+    {
+      "name": "Cockatoo waspfish", "speciesID": "5f4d48f4-6556-50f3-95af-a4d28635f4bb", "cases": ["v05-17-diagnostic", "v05-17-paraphrase"],
+      "expect": [
+        {"field": "finAndSpineClues", "includes": "tall front dorsal fin", "source": "morphdat.AddChars: second dorsal spine longest; spinous dorsal fin held erect"},
+        {"field": "distinguishingFeatures", "includes": "sways", "source": "species.Comments: rocking back and forth in response to surge"},
+        {"field": "habitats", "includes": "rubble", "source": "species.Comments: sand rubble and weed"},
+        {"field": "habitats", "includes": "sand", "source": "species.Comments: sand rubble and weed"},
+        {"field": "behaviors", "includes": "solitary", "source": "species.Comments: solitary or in pairs"},
+        {"field": "mouthAndHeadShape", "includes": "white snout", "source": "morphdat.AddChars: snout and forehead abruptly white"}
+      ],
+      "unrecoverable": ["leaf / leaflike: FishBase does not describe leaf mimicry"]
+    },
+    {
+      "name": "Bird wrasse", "speciesID": "5af89b7e-ac74-545c-9a78-cd3b0e91101b", "cases": ["v05-09-diagnostic", "v05-09-paraphrase"],
+      "expect": [
+        {"field": "mouthAndHeadShape", "includes": "long snout", "source": "morphdat.AddChars: long snout when adult"},
+        {"field": "behaviors", "includes": "solitary", "source": "species.Comments: a solitary species"}
+      ],
+      "unrecoverable": ["green and blue colours: the source names no colours"]
+    },
+    {
+      "name": "Black triggerfish", "speciesID": "ded990cc-3044-5f31-98d4-d388267b0167", "cases": ["v05-10-diagnostic", "v05-10-paraphrase"],
+      "expect": [
+        {"field": "mouthAndHeadShape", "includes": "groove in front of the eye", "source": "morphdat.AddChars: deep groove in front of eye"},
+        {"field": "behaviors", "includes": "schooling", "source": "species.Comments: small but loose aggregations"}
+      ],
+      "unrecoverable": ["pale lines along the dorsal and anal fin bases: not in the source"]
+    },
+    {
+      "name": "Pinktail triggerfish", "speciesID": "12135912-59af-5b63-9015-67e636beea7c", "cases": ["v05-11-diagnostic", "v05-11-paraphrase"],
+      "expect": [
+        {"field": "finAndSpineClues", "includes": "pink tail", "source": "morphdat.AddChars: caudal fin pink"},
+        {"field": "finAndSpineClues", "includes": "yellow pectoral fins", "source": "morphdat.AddChars: yellowish snout and pectoral fins"},
+        {"field": "finAndSpineClues", "includes": "black margins", "source": "morphdat.AddChars: dorsal and anal fins white with black margins"},
+        {"variant": "juvenile", "field": "distinguishingFeatures", "includes": "lines radiating from the eye", "source": "morphdat.AddChars: juveniles with dark lines radiating from eye"}
+      ]
+    },
+    {
+      "name": "Red-toothed triggerfish", "speciesID": "987b3653-d83f-54a0-afcf-0b48c75c635e", "cases": ["v05-12-diagnostic", "v05-12-paraphrase"],
+      "expect": [
+        {"field": "tailShape", "includes": "lunate", "source": "morphdat.AddChars: lunate caudal fin"},
+        {"field": "finAndSpineClues", "includes": "long tail lobes", "source": "morphdat.AddChars: prolonged lobes in large adult"},
+        {"field": "mouthAndHeadShape", "includes": "red teeth", "source": "morphdat.AddChars: teeth red"},
+        {"field": "behaviors", "includes": "schooling", "source": "species.Comments: form large schools"}
+      ]
+    },
+    {
+      "name": "Orangespot surgeonfish (Orangeband)", "speciesID": "b932ea57-be9a-54c9-9036-656dc49e5e2e", "cases": ["v05-13-diagnostic", "v05-13-paraphrase"],
+      "expect": [
+        {"field": "distinguishingFeatures", "includes": "orange band behind the gill opening", "source": "morphdat.AddChars: bright orange horizontal band posterior to the gill opening"},
+        {"field": "distinguishingFeatures", "includes": "front half paler", "source": "morphdat.AddChars: anterior half abruptly paler than the posterior half"},
+        {"field": "colors", "excludes": "yellow", "source": "morphdat.AddChars: juveniles yellow (a juvenile trait, not an adult one)"},
+        {"variant": "juvenile", "field": "colors", "includes": "yellow", "source": "morphdat.AddChars: juveniles yellow"}
+      ]
+    },
+    {
+      "name": "Lined surgeonfish (Striped)", "speciesID": "9353ee92-eaa7-5bcb-b2f8-8b3a0577d5b4", "cases": ["v05-14-diagnostic", "v05-14-paraphrase"],
+      "expect": [
+        {"field": "distinguishingFeatures", "includes": "blue and yellow stripes", "source": "morphdat.AddChars: alternating black-edged blue and yellow stripes"},
+        {"field": "finAndSpineClues", "includes": "spine on each side of the tail base", "source": "morphdat.AddChars: lancet-like spine on each side of caudal peduncle"},
+        {"field": "behaviors", "includes": "schooling", "source": "species.Comments: adults usually form schools"},
+        {"field": "behaviors", "excludes": "solitary", "source": "species.Comments: juveniles solitary (a juvenile trait)"}
+      ]
+    },
+    {
+      "name": "Fire clownfish (Red and Black Anemonefish)", "speciesID": "c059528c-f884-5b96-b67b-d912a33846b1", "cases": ["v05-15-diagnostic", "v05-15-paraphrase"],
+      "expect": [
+        {"field": "mouthAndHeadShape", "includes": "band behind the eye", "source": "morphdat.AddChars: black-edged bluish white band behind the eye"},
+        {"field": "finAndSpineClues", "includes": "black pelvic fins", "source": "morphdat.AddChars: black ventral fins"},
+        {"field": "habitats", "includes": "anemone", "source": "species.Comments: associated with the anemones"},
+        {"variant": "juvenile", "field": "colors", "includes": "red", "source": "morphdat.AddChars: small juveniles red"}
+      ]
+    },
+    {
+      "name": "Spinecheek anemonefish", "speciesID": "87727436-cafc-58b3-8818-f77fcbf554b7", "cases": ["v05-16-diagnostic", "v05-16-paraphrase"],
+      "expect": [
+        {"field": "mouthAndHeadShape", "includes": "cheek spine", "source": "morphdat.AddChars: prominent preopercular spine"},
+        {"field": "habitats", "includes": "anemone", "source": "species.Comments: associated with the anemone"},
+        {"field": "behaviors", "includes": "anemone association", "source": "species.Comments: associated with the anemone"},
+        {"variant": "female", "field": "colors", "includes": "black", "source": "morphdat.AddChars: females become maroon to nearly black"},
+        {"variant": "male", "field": "colors", "includes": "red", "source": "morphdat.AddChars: juveniles and males bright red"}
+      ],
+      "unrecoverable": ["three narrow white bars: the source does not give bar count or colour"]
+    }
+  ]
+}

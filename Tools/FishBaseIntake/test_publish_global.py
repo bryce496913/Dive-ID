@@ -105,7 +105,10 @@ class OutputTests(unittest.TestCase):
         self.assertEqual((publish_global.PACK / "Creatures.json").read_text(), publish_global.creatures_text(records))
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
         self.assertEqual(manifest, publish_global.manifest_for(records, manifest, len(report["approvedBatches"])))
-        self.assertEqual(report["staleRecords"], [])
+        applied = publish_global.global_batches.BATCHES / "AppliedApprovals.json"
+        self.assertEqual(applied.read_text(), publish_global.applied_approvals_text(reviews, report), "AppliedApprovals.json is current")
+        stale = set(report["staleRecords"])
+        self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] in stale), "changed content keeps no approval")
         verified = {r["id"] for r in records if r["review"]["status"] == "verified"}
         self.assertEqual(verified, set(reviews), "only records an approval covers are verified")
         self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] not in verified))

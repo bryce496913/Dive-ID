@@ -61,6 +61,13 @@ def apply_reviews(records, batches):
     return reviews, report
 
 
+def applied_approvals_text(reviews, report):
+    """What the pack actually applied: approved IDs with their review method, and the
+    approved records whose content changed since (stale, so not approved)."""
+    return json.dumps({"approved": {i: reviews[i]["reviewMethod"] for i in sorted(reviews)},
+                       "approvedBatches": report["approvedBatches"], "stale": report["staleRecords"]}, indent=1) + "\n"
+
+
 def manifest_for(records, template, approved_batches=0):
     """Counts come from the records. The pack stays "(Experimental)" until every record
     is publication-eligible; its version rises with each approved batch, whose review
@@ -106,6 +113,9 @@ def main(argv=None):
     manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
     catalogue_validation.validate_catalogue(records, manifest)  # raises on any error; nothing written
     action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    applied = Path(args.batches) / "AppliedApprovals.json"
+    if not applied.exists() or applied.read_text() != applied_approvals_text(reviews, review_report):
+        applied.write_text(applied_approvals_text(reviews, review_report))
     print(json.dumps({"records": len(records), "excludedMissingRequired": excluded, "droppedSimilarSpeciesReferences": dropped,
                       "verifiedByBatchReview": len(reviews), "batchReview": review_report,
                       "pack": action}, indent=2))

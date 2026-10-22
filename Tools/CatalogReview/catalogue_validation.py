@@ -28,7 +28,7 @@ REQUIRED_STRINGS = {"id", "commonName", "scientificName", "summary", "typicalHab
 OPTIONAL_STRINGS = {"imageAssetName", "regionalOccurrenceNotes", "tailShape"}
 OPTIONAL_NUMBERS = {"minimumSizeCentimeters", "maximumSizeCentimeters", "minimumDepthMeters", "maximumDepthMeters"}
 OCCURRENCES = {"unknown", "common", "regular", "occasional", "rare", "seasonal", "introduced"}
-LIFE_STAGES = {"juvenile", "intermediate", "adult", "initialPhase", "terminalPhase"}
+LIFE_STAGES = {"juvenile", "intermediate", "adult", "initialPhase", "terminalPhase", "male", "female"}
 MEASUREMENT_TYPES = {"totalLength", "standardLength", "forkLength", "discWidth", "discLength", "carapaceLength", "carapaceWidth", "shellLength", "mantleLength", "bodyLength"}
 REVIEW_STATUSES = {"draft", "sourceChecked", "verified"}
 # How a verified record was approved; only "individually-reviewed" claims a person read it.
@@ -270,7 +270,7 @@ def validate_catalogue(records, manifest=None):
 RISK_WEIGHTS = {
     "missing_required": 30, "vocabulary": 25, "ocr_junk": 20, "near_verbatim": 20,
     "duplicate_common_name": 15, "distribution_missing": 15, "no_english_common_name": 10,
-    "size_outlier": 10, "depth_outlier": 10,
+    "size_outlier": 10, "depth_outlier": 10, "trait_ambiguous": 10,
 }
 # Largest plausible maximum size (cm) per category; above this the size is suspect.
 CATEGORY_MAX_SIZE_CM = {
@@ -348,17 +348,18 @@ def risk_score(flags):
     return min(100, sum(RISK_WEIGHTS[kind] for kind in {f.split(":", 1)[0] for f in flags}))
 
 
-def assess_risk(records, source_texts_by_id=None, reserved_common_names=()):
+def assess_risk(records, source_texts_by_id=None, reserved_common_names=(), extra_flags_by_id=None):
     """Risk flags and score for every record, plus flag rates across the set.
-    `reserved_common_names` are names already used outside these records."""
-    source_texts_by_id = source_texts_by_id or {}
+    `reserved_common_names` are names already used outside these records;
+    `extra_flags_by_id` adds flags raised while building (for example trait_ambiguous)."""
+    source_texts_by_id, extra_flags_by_id = source_texts_by_id or {}, extra_flags_by_id or {}
     counts = {}
     for name in [" ".join(str(r.get("commonName") or "").lower().split()) for r in records] + [" ".join(n.lower().split()) for n in reserved_common_names]:
         counts[name] = counts.get(name, 0) + 1
     duplicates = {name for name, n in counts.items() if n > 1 and name}
     per_record, kinds = {}, {}
     for r in records:
-        flags = risk_flags(r, source_texts_by_id.get(r.get("id"), ()), duplicates)
+        flags = risk_flags(r, source_texts_by_id.get(r.get("id"), ()), duplicates) + list(extra_flags_by_id.get(r.get("id"), ()))
         per_record[r.get("id")] = {"score": risk_score(flags), "flags": flags}
         for kind in {f.split(":", 1)[0] for f in flags}:
             kinds[kind] = kinds.get(kind, 0) + 1

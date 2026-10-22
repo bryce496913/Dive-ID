@@ -13,16 +13,15 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: |
 | Caribbean | 3 | 8 | 2 | 2 |
 | Tropical Pacific | 3 | 1000 | 0 | 0 |
-| Global (Experimental) | 3 | 4786 | 250 | 250 |
+| Global (Experimental) | 3 | 4786 | 0 | 0 |
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through
-  [batch review](Docs/GlobalBatchReview.md). 34 records were individually reviewed
-  (4 flagged, 30 sampled); 216 were sample-approved. 4,536 records remain draft, so
-  the pack keeps "(Experimental)" in its name.
-- **Release** exposes 252 records: the 2 Caribbean species and the 250 approved Global
-  records. Tropical Pacific remains unavailable. **Debug** permits all 5,794
-  development records.
+  [batch review](Docs/GlobalBatchReview.md). The builder v3 rebuild changed all 250,
+  so none keeps its approval. They wait in the re-review batch `batch-01-rereview`.
+  All 4,786 records are draft, and the pack keeps "(Experimental)" in its name.
+- **Release** exposes 2 records, the 2 Caribbean species; Global and Tropical Pacific
+  are unavailable. **Debug** permits all 5,794 development records.
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).

@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "packVersion": 3,
   "displayName": "Global (Experimental)",
-  "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase; 250 of 4786 records approved for publication",
+  "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase; 0 of 4786 records approved for publication",
   "geographicScope": "Worldwide marine and brackish species. Location in a description ranks results; it never excludes a species.",
   "regionAliases": [],
   "speciesCount": 4786,
@@ -12,6 +12,6 @@
   "includedWithApp": true,
   "lastDataReviewDate": null,
   "includedRecordCount": 4786,
-  "humanReviewedRecordCount": 250,
-  "publicationEligibleRecordCount": 250
+  "humanReviewedRecordCount": 0,
+  "publicationEligibleRecordCount": 0
 }

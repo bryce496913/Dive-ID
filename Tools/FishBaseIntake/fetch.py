@@ -59,11 +59,14 @@ def fetch(manifest, cache_dir, server, table, offline=False, opener=urllib.reque
     return path
 
 
-def read_table(manifest, cache_dir, server, table, columns, offline=False):
-    """Return the table's rows as dicts. pyarrow is only needed here."""
+def read_table(manifest, cache_dir, server, table, columns, offline=False, optional=()):
+    """Return the table's rows as dicts. Columns in `optional` may be missing from one
+    server's table (for example SeaLifeBase has no ecology.Circadian1); they are then
+    left out. pyarrow is only needed here."""
     import pyarrow.parquet as pq
     path = fetch(manifest, cache_dir, server, table, offline=offline)
-    return pq.read_table(path, columns=columns).to_pylist()
+    present = set(pq.read_schema(path).names)
+    return pq.read_table(path, columns=[c for c in columns if c in present or c not in optional]).to_pylist()
 
 
 def main(argv=None):
