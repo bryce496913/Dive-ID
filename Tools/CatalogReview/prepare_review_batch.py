@@ -4,8 +4,8 @@ import csv, json
 from pathlib import Path
 from catalog_review import content_fingerprint, source_identity
 ROOT=Path(__file__).resolve().parents[2]
-CARIBBEAN=ROOT/'DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json'
-PACIFIC=ROOT/'DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json'
+CARIBBEAN=ROOT/'Data/CatalogArchive/v3/Caribbean/Creatures.json'
+PACIFIC=ROOT/'Data/CatalogArchive/v3/TropicalPacific/Creatures.json'
 OUTCOMES=ROOT/'Reports/TropicalPacificOutcomes.csv'
 OUTPUT=ROOT/'Reports/FirstCatalogueReviewBatch.json'
 

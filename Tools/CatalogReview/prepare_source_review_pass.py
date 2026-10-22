@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 from catalog_review import content_fingerprint, source_identity, PUBLICATION_FIELDS
-from publication_expectations import generate as publication_expectations
+from publication_expectations import generate_archived as publication_expectations
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -14,7 +14,7 @@ def generate():
     packs = {}
     counts = {}
     for key, directory in [('caribbean', 'Caribbean'), ('tropical-pacific', 'TropicalPacific')]:
-        records = json.loads((ROOT / f'DiveID/Resources/IdentificationPacks/{directory}/Creatures.json').read_text())
+        records = json.loads((ROOT / f'Data/CatalogArchive/v3/{directory}/Creatures.json').read_text())
         packs[key] = {r['id']: r for r in records}
         counts[key] = {'included': len(records),
                       'humanReviewed': sum(r['review']['status'] in ('sourceChecked', 'verified') for r in records),

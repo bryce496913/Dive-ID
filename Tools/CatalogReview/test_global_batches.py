@@ -1,3 +1,5 @@
+import contextlib
+import io
 """Batch review of the Global pack: seeded samples, manifests, recorded decisions and fail-closed approval.
 
 Records are synthetic; every test works in a temporary directory."""
@@ -53,6 +55,47 @@ class Workspace:
 
     def ids(self, manifest, selection):
         return [e["speciesID"] for e in manifest["records"] if e["selection"] == selection]
+
+
+class NamedBatchTests(unittest.TestCase):
+    """A named batch of explicit IDs, e.g. the 8 Caribbean records rebuilt from FishBase."""
+    def setUp(self):
+        self.w = Workspace()
+        self.addCleanup(self.w.temp.cleanup)
+        self.members = [r["id"] for r in self.w.records[80:88]]
+
+    def prepare(self, **kwargs):
+        return G.prepare(None, None, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path,
+                         members=self.members, name="caribbean", **kwargs)
+
+    def test_named_batch_shows_every_record_and_its_approval_covers_exactly_them(self):
+        manifest, path, page = self.prepare()
+        self.assertEqual(manifest["batchID"], "batch-caribbean")
+        self.assertEqual(sorted(e["speciesID"] for e in manifest["records"]), sorted(self.members))
+        self.assertEqual(manifest["counts"]["unread"], 0, "a small batch puts every record on the page")
+        self.assertTrue(path.exists() and page.exists())
+        self.w.record(manifest, text="Approve the 8 Caribbean records.")
+        reviews, report = self.w.approved()
+        self.assertEqual(set(reviews), set(self.members))
+        self.assertTrue(all(r["reviewMethod"] == "individually-reviewed" for r in reviews.values()))
+        self.assertEqual(report["approvedBatches"], ["batch-caribbean g1"])
+
+    def test_named_batch_rejects_bad_names_unknown_ids_and_rereview(self):
+        for name in (None, "", "7", "07-rereview", "Caribbean", "a_b"):
+            with self.assertRaises(G.ReviewError):
+                G.prepare(None, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path,
+                          members=self.members, name=name)
+        with self.assertRaises(G.ReviewError):
+            G.prepare(None, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path,
+                      members=["not-in-pack"], name="caribbean")
+        with self.assertRaises(G.ReviewError):
+            self.prepare(rereview=True)
+        with self.assertRaises(G.ReviewError):
+            G.prepare(None, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path)
+
+    def test_cli_requires_name_and_ids_together(self):
+        with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+            self.assertNotEqual(G.main(["prepare", "--name", "caribbean"]), 0)
 
 
 class PrepareTests(unittest.TestCase):

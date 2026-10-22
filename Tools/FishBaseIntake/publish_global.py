@@ -1,7 +1,12 @@
-"""Write the enriched draft records into the Global pack (Debug-only while they are drafts).
+"""Write the FishBase-built records into the Global pack and the two regional packs.
 
 Reads Data/GlobalMarine/FishBase/Drafts/batch-*.json and RiskReport.json and writes
-DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.json.
+Creatures.json and PackManifest.json for Global, Caribbean and Tropical Pacific.
+
+- Every pack uses the same record text: Caribbean and Tropical Pacific are the subsets
+  of the Global records the merge plan keeps for that pack (MergePlan.csv, role keep).
+  One review therefore covers a species in every pack it appears in, because approval
+  is tied to the record's content fingerprint.
 
 - Records whose source lacks a required field (risk flag `missing_required`) are left
   out: the app rejects a pack containing them. They stay in staging.
@@ -18,6 +23,7 @@ DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.
   deterministic; an unchanged pack is not rewritten.
 """
 import argparse
+import csv
 import glob
 import json
 import sys
@@ -32,6 +38,19 @@ import paired_write  # noqa: E402
 
 PACK = REPO / "DiveID/Resources/IdentificationPacks/Global"
 PACK_VERSION = 2  # 1 was the empty placeholder; each approved batch adds 1
+PACKS_ROOT = REPO / "DiveID/Resources/IdentificationPacks"
+MERGE_PLAN = REPO / "Data/GlobalMarine/FishBase/MergePlan.csv"
+# Regional pack directory -> (merge-plan pack name, base version). Version 4 is the
+# FishBase rebuild (3 was the last hand-written / field-guide version); each approved
+# batch adds 1, as for Global, so changed review status always changes the version.
+REGIONAL = {"Caribbean": ("Caribbean", 4), "TropicalPacific": ("TropicalPacific", 4)}
+REGIONAL_TEXT = {
+    "Caribbean": {"shortDescription": "Caribbean starter catalogue from FishBase and SeaLifeBase"},
+    "TropicalPacific": {
+        "shortDescription": "Tropical Pacific records from FishBase and SeaLifeBase; not verified for publication",
+        "geographicScope": "Species with source-supported Tropical Pacific presence, described from FishBase and "
+                           "SeaLifeBase; inclusion does not verify identity, biology or abundance."},
+}
 
 
 def compose(drafts, risk_records):
@@ -84,6 +103,36 @@ def manifest_for(records, template, approved_batches=0):
     return manifest
 
 
+def regional_members(plan_rows, pack_name):
+    """UUIDs the merge plan keeps for one regional pack."""
+    return {r["plannedUUID"] for r in plan_rows if r["role"] == "keep" and r["pack"] == pack_name}
+
+
+def regional_records(records, members):
+    """The regional subset, in Global order. similarSpecies must resolve inside the pack,
+    so references to species outside it are dropped (as compose does for Global)."""
+    subset = [json.loads(json.dumps(r)) for r in records if r["id"] in members]
+    ids = {r["id"] for r in subset}
+    for r in subset:
+        kept = [x for x in r["similarSpecies"] if x["speciesID"] in ids]
+        if len(kept) != len(r["similarSpecies"]) and not kept and "similarSpecies" in r["dataSources"][0]["reviewedFields"]:
+            r["dataSources"][0]["reviewedFields"].remove("similarSpecies")
+        r["similarSpecies"] = kept
+    return subset
+
+
+def regional_manifest(records, template, directory, approved_batches=0):
+    """Counts come from the records; the pack keeps its id, name and region aliases."""
+    reviewed = sum(r["review"]["status"] in ("sourceChecked", "verified") for r in records)
+    eligible = sum(r["review"]["status"] == "verified" and bool(r["categories"]) for r in records)
+    manifest = dict(template)
+    manifest.update(REGIONAL_TEXT.get(directory, {}))
+    manifest.update({"packVersion": REGIONAL[directory][1] + approved_batches, "speciesCount": len(records),
+                     "includedRecordCount": len(records), "humanReviewedRecordCount": reviewed,
+                     "publicationEligibleRecordCount": eligible})
+    return manifest
+
+
 def creatures_text(records):
     return "[\n" + ",\n".join(json.dumps(r, ensure_ascii=False) for r in records) + "\n]\n"
 
@@ -104,6 +153,8 @@ def main(argv=None):
     parser.add_argument("--staging", default=REPO / "Data/GlobalMarine/FishBase")
     parser.add_argument("--pack", default=PACK)
     parser.add_argument("--batches", default=global_batches.BATCHES)
+    parser.add_argument("--packs-root", default=PACKS_ROOT, help="parent of the regional pack directories")
+    parser.add_argument("--merge-plan", default=MERGE_PLAN)
     args = parser.parse_args(argv)
     staging, pack = Path(args.staging), Path(args.pack)
     drafts = [r for f in sorted(glob.glob(str(staging / "Drafts" / "batch-*.json"))) for r in json.loads(Path(f).read_text())]
@@ -112,13 +163,28 @@ def main(argv=None):
     reviews, review_report = apply_reviews(records, Path(args.batches))
     manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
     catalogue_validation.validate_catalogue(records, manifest)  # raises on any error; nothing written
+    plan_rows = list(csv.DictReader(open(args.merge_plan, newline="")))
+    regional = {}
+    for directory, (pack_name, _) in REGIONAL.items():
+        target = Path(args.packs_root) / directory
+        subset = regional_records(records, regional_members(plan_rows, pack_name))
+        if not subset:
+            raise SystemExit(f"{directory}: the merge plan keeps no published record for this pack")
+        regional_manifest_ = regional_manifest(subset, json.loads((target / "PackManifest.json").read_text()), directory,
+                                               len(review_report["approvedBatches"]))
+        catalogue_validation.validate_catalogue(subset, regional_manifest_)  # validate every pack before writing any
+        regional[directory] = (target, subset, regional_manifest_)
     action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    regional_actions = {directory: {"records": len(subset), "verified": sum(r["review"]["status"] == "verified" for r in subset),
+                                    "pack": write_pack(target, creatures_text(subset),
+                                                       json.dumps(m, indent=2, ensure_ascii=False) + "\n")}
+                        for directory, (target, subset, m) in regional.items()}
     applied = Path(args.batches) / "AppliedApprovals.json"
     if not applied.exists() or applied.read_text() != applied_approvals_text(reviews, review_report):
         applied.write_text(applied_approvals_text(reviews, review_report))
     print(json.dumps({"records": len(records), "excludedMissingRequired": excluded, "droppedSimilarSpeciesReferences": dropped,
                       "verifiedByBatchReview": len(reviews), "batchReview": review_report,
-                      "pack": action}, indent=2))
+                      "pack": action, "regionalPacks": regional_actions}, indent=2))
     return 0
 
 

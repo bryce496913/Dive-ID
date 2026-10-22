@@ -114,6 +114,56 @@ class OutputTests(unittest.TestCase):
         self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] not in verified))
 
 
+class RegionalPackTests(unittest.TestCase):
+    PLAN = [{"pack": "Caribbean", "role": "keep", "plannedUUID": "a"},
+            {"pack": "Caribbean", "role": "retire", "plannedUUID": "b"},
+            {"pack": "TropicalPacific", "role": "keep", "plannedUUID": "c"},
+            {"pack": "", "role": "keep", "plannedUUID": "d"}]
+
+    def test_members_are_the_merge_plans_kept_uuids_for_that_pack(self):
+        self.assertEqual(publish_global.regional_members(self.PLAN, "Caribbean"), {"a"})
+        self.assertEqual(publish_global.regional_members(self.PLAN, "TropicalPacific"), {"c"})
+
+    def test_subset_shares_global_text_and_review_and_resolves_similar_species_inside_the_pack(self):
+        approved = dict(draft("a", ["c", "d"]), review={"status": "verified", "reviewMethod": "individually-reviewed"})
+        records = [approved, draft("c", ["a"]), draft("d")]
+        subset = publish_global.regional_records(records, {"a", "c"})
+        self.assertEqual([r["id"] for r in subset], ["a", "c"])
+        self.assertEqual(subset[0]["review"], approved["review"], "one approval covers the species in every pack")
+        self.assertEqual([[s["speciesID"] for s in r["similarSpecies"]] for r in subset], [["c"], ["a"]])
+        self.assertEqual(records[0]["similarSpecies"][1]["speciesID"], "d", "Global records are not modified")
+        lonely = publish_global.regional_records([draft("a", ["d"]), draft("d")], {"a"})[0]
+        self.assertEqual(lonely["similarSpecies"], [])
+        self.assertNotIn("similarSpecies", lonely["dataSources"][0]["reviewedFields"])
+
+    def test_regional_manifest_keeps_identity_and_derives_counts(self):
+        template = {"id": "caribbean", "displayName": "Caribbean", "regionAliases": ["Caribbean"], "packVersion": 3,
+                    "speciesCount": 0, "shortDescription": "old"}
+        approved = dict(draft("a"), review={"status": "verified"})
+        manifest = publish_global.regional_manifest([approved, draft("b")], template, "Caribbean", 1)
+        self.assertEqual((manifest["id"], manifest["displayName"], manifest["regionAliases"]), ("caribbean", "Caribbean", ["Caribbean"]))
+        self.assertEqual((manifest["speciesCount"], manifest["includedRecordCount"], manifest["humanReviewedRecordCount"],
+                          manifest["publicationEligibleRecordCount"], manifest["packVersion"]), (2, 2, 1, 1, 5))
+        self.assertIn("FishBase", manifest["shortDescription"])
+        self.assertEqual(template["speciesCount"], 0, "the template is not modified")
+
+    def test_committed_regional_packs_match_a_fresh_publish(self):
+        staging = publish_global.REPO / "Data/GlobalMarine/FishBase"
+        if not (staging / "RiskReport.json").exists():
+            self.skipTest("staging data not present")
+        drafts = [r for f in sorted((staging / "Drafts").glob("batch-*.json")) for r in json.loads(f.read_text())]
+        records, _, _ = publish_global.compose(drafts, json.loads((staging / "RiskReport.json").read_text())["records"])
+        _, report = publish_global.apply_reviews(records, publish_global.global_batches.BATCHES)
+        import csv
+        plan = list(csv.DictReader(open(publish_global.MERGE_PLAN, newline="")))
+        for directory, (name, _) in publish_global.REGIONAL.items():
+            pack = publish_global.PACKS_ROOT / directory
+            subset = publish_global.regional_records(records, publish_global.regional_members(plan, name))
+            self.assertEqual((pack / "Creatures.json").read_text(), publish_global.creatures_text(subset), directory)
+            manifest = json.loads((pack / "PackManifest.json").read_text())
+            self.assertEqual(manifest, publish_global.regional_manifest(subset, manifest, directory, len(report["approvedBatches"])))
+
+
 class BatchReviewTests(unittest.TestCase):
     def test_only_records_a_current_approval_covers_become_verified_and_counted(self):
         import test_global_batches

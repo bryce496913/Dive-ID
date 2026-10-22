@@ -38,7 +38,7 @@ class CategoryNormalizationTests(unittest.TestCase):
 
     def test_every_mapped_bundled_fish_retains_canonical_category(self):
         report = json.loads((ROOT / "Reports/TropicalPacificImportReport.json").read_text())
-        profiles = json.loads((ROOT / "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json").read_text())
+        profiles = json.loads((ROOT / "Data/CatalogArchive/v3/TropicalPacific/Creatures.json").read_text())
         profile_by_id = {profile["id"]: profile for profile in profiles}
         import csv
         with (ROOT / "Reports/TropicalPacificOutcomes.csv").open(newline="", encoding="utf-8") as handle:
@@ -70,7 +70,7 @@ class DraftExpansionTests(unittest.TestCase):
     def setUp(self):
         self.additions = json.loads((ROOT / "Data/TropicalPacific/TropicalPacificExpansion616.draft.json").read_text())
         self.audit = json.loads((ROOT / "Data/TropicalPacific/TropicalPacificExpansion616.audit.json").read_text())
-        self.bundled = json.loads((ROOT / "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json").read_text())
+        self.bundled = json.loads((ROOT / "Data/CatalogArchive/v3/TropicalPacific/Creatures.json").read_text())
         ids = {p["id"] for p in self.additions}
         self.baseline = [p for p in self.bundled if p["id"] not in ids]
 

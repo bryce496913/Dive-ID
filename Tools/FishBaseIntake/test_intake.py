@@ -263,7 +263,7 @@ class BuildMappingTests(unittest.TestCase):
                          ("Spotted Grouper (Aus one)", "spotted grouper (Bus two)", "Queen Angelfish (Cus three)"))
         self.assertEqual(b["aliases"], ["Blue fish"], "an alias may not be another species' name")
 
-    def test_selection_builds_the_merge_plans_kept_uuids_only(self):
+    def test_selection_builds_every_kept_uuid_with_caribbean_last(self):
         resolution = [{"inputKind": "existing", "inputID": "tp-1", "resolution": "corrected", "inputName": "Jascyllus x"},
                       {"inputKind": "existing", "inputID": "car-1", "resolution": "exact", "inputName": "Aus bus"},
                       {"inputKind": "candidate", "inputID": "MARINE5K-00001", "resolution": "exact", "inputName": "Cus dus"},
@@ -274,7 +274,9 @@ class BuildMappingTests(unittest.TestCase):
                 {"inputKind": "candidate", "inputID": "MARINE5K-00002", "pack": "", "role": "retire", "plannedUUID": "tp-1"},
                 {"inputKind": "candidate", "inputID": "MARINE5K-00003", "pack": "", "role": "unresolved", "plannedUUID": ""}]
         entries = build.select_entries(plan, resolution, [{"candidateID": "MARINE5K-00001", "proposedAppCategory": "shark"}])
-        self.assertEqual([(e["inputID"], e["id"]) for e in entries], [("tp-1", "tp-1"), ("MARINE5K-00001", "workbook-uuid")])
+        # Caribbean records are rebuilt too, after every other record (batches keep membership).
+        self.assertEqual([(e["inputID"], e["id"]) for e in entries],
+                         [("tp-1", "tp-1"), ("MARINE5K-00001", "workbook-uuid"), ("car-1", "car-1")])
         self.assertEqual(entries[1]["candidateCategory"], "shark")
 
     def test_batches_are_written_resumably(self):
