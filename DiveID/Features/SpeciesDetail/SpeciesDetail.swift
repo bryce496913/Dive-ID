@@ -40,7 +40,7 @@ struct SpeciesDetailView: View {
                 if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
                 if let pack = viewModel.species.packContext { DetailSection(title: "Dive region", text: pack.displayName) }
                 if let review = viewModel.species.review {
-                    DetailSection(title: "Record review status", text: review.status == .verified ? "Human-reviewed and approved for publication" : AppCopy.draftRecordStatus(review.status.rawValue.capitalized))
+                    DetailSection(title: "Record review status", text: AppCopy.recordReviewStatus(review))
                 }
                 if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }

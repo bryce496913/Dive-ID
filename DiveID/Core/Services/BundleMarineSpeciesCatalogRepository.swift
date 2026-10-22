@@ -239,6 +239,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             // Search still uses source-backed summary and distinguishing features.
             guard !p.geographicRange.isEmpty else { throw LocalCatalogError.emptyGeographicRange }
             guard !p.dataSources.isEmpty else { throw LocalCatalogError.missingDataSource }
+            // A review method describes an approval, so it never appears on an unapproved record.
+            if p.review?.reviewMethod != nil, p.review?.status != .verified { throw LocalCatalogError.unverifiedRecord }
             if p.review?.status == .verified {
                 guard let reviewer = p.review?.verifiedBy, !reviewer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       p.review?.reviewDate != nil,

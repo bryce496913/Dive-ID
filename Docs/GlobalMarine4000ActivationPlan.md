@@ -467,6 +467,13 @@ The results block activation. See [GlobalPackEvaluation.md](GlobalPackEvaluation
 
 The default-region switch to Global (decision 11) stays pending until these are resolved.
 
+## 12. Batch review tooling (2026-10-22)
+
+Batches of about 250 are reviewed by reading every flagged record plus a seeded
+sample of 30 (decision 3); see [GlobalBatchReview.md](GlobalBatchReview.md).
+Approvals are recorded only from the reviewer's own decision for a manifest hash,
+and they fail closed on any content change. Batch 1 is prepared and awaiting review.
+
 ## Appendix A. Licence confirmation email (draft, not sent)
 
 **To:** fishbase@q-quatics.org

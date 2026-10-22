@@ -31,6 +31,8 @@ OCCURRENCES = {"unknown", "common", "regular", "occasional", "rare", "seasonal",
 LIFE_STAGES = {"juvenile", "intermediate", "adult", "initialPhase", "terminalPhase"}
 MEASUREMENT_TYPES = {"totalLength", "standardLength", "forkLength", "discWidth", "discLength", "carapaceLength", "carapaceWidth", "shellLength", "mantleLength", "bodyLength"}
 REVIEW_STATUSES = {"draft", "sourceChecked", "verified"}
+# How a verified record was approved; only "individually-reviewed" claims a person read it.
+REVIEW_METHODS = {"individually-reviewed", "sample-approved"}
 IMAGE_LICENSES = {"CC0", "Public Domain", "CC BY 4.0", "CC BY"}
 
 
@@ -151,6 +153,10 @@ def validate_record(record, position=1):
         _enum(errors, sid, "review.status", review.get("status"), REVIEW_STATUSES)
         for field in ("reviewerNotes", "verifiedBy"): _string(errors, sid, "review." + field, review.get(field), True)
         _date(errors, sid, "review.reviewDate", review.get("reviewDate"))
+        method = review.get("reviewMethod")
+        if method is not None:
+            _enum(errors, sid, "review.reviewMethod", method, REVIEW_METHODS)
+            if review.get("status") != "verified": _error(errors, sid, "review.reviewMethod", "null unless status is verified", method)
 
     taxonomy = record.get("taxonomy")
     if _object(errors, sid, "taxonomy", taxonomy):
