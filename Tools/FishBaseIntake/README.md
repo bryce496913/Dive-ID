@@ -40,6 +40,10 @@ input; `NameResolutionSummary.json` holds the counts.
 
 ## Enrichment: draft records (`build.py`)
 
+On a machine that can reach the pinned release and PyPI, `./Tools/FishBaseIntake/rebuild_drafts.sh`
+does the network-dependent part in one go (throwaway venv with pyarrow, `fetch.py`,
+`build.py --offline`, unit tests). It publishes nothing; run `publish_global.py` after.
+
 ```sh
 python3 Tools/FishBaseIntake/build.py --offline              # after resolve.py, merge_plan.py, distribution.py
 python3 Tools/FishBaseIntake/build.py --offline --batch 7    # rewrite one batch only
