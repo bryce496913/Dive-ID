@@ -64,8 +64,27 @@ struct DiveIDApp: App {
                 // Reserve space so diagnostics cannot cover or intercept search controls.
                 DebugSemanticSearchStatusView(selection: retrievalEngine, reporter: semanticDiagnostics)
                     .allowsHitTesting(false)
+#elseif DIVEID_INTERNAL
+                // An Internal build must never be mistaken for Release on screen.
+                InternalBuildBanner().allowsHitTesting(false)
 #endif
             }
         }
     }
 }
+
+#if DIVEID_INTERNAL && !DEBUG
+/// Shown on every screen of the Internal configuration: optimized like Release, but
+/// opening the draft development catalogue. Never compiled into Release or Debug.
+private struct InternalBuildBanner: View {
+    var body: some View {
+        Text("Internal build · draft catalogue · not Release")
+            .font(.caption2.monospaced().bold())
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 6)
+            .background(Color.appWarning)
+            .foregroundStyle(.black)
+            .accessibilityIdentifier("internalBuildBanner")
+    }
+}
+#endif

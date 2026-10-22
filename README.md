@@ -13,12 +13,14 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
 | Tropical Pacific | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global (Experimental) | 3 | 4786 | 0 | 0 | **fail** (12/18; top1, top3 and confidence also fail) |
+| Global (Experimental) | 3 | 4786 | 0 | 0 | pass, opt-in (15/18; top3 and top10 pass by one case) |
 
-**Global is not ready to be the default or main search experience** (2026-10-22). It
-fails four of six applicable V05 gates, and Release contains no approved Global
-record. Regional packs stay the default. Blockers and per-configuration gates are in
-the [readiness report](Docs/GlobalPackEvaluation.md#readiness-report-2026-10-22-main-at-2766a55);
+**Global is not ready to be the default or main search experience** (2026-10-22).
+After the negation and ranking fixes (builder v4) its opt-in evaluation passes every
+applicable gate, but top3 and top10 each pass by a single case, the cases were used to
+find the defects (development evidence, not a holdout), and Release contains no
+approved Global record. Regional packs stay the default. Gates and remaining causes are
+in [GlobalPackEvaluation.md](Docs/GlobalPackEvaluation.md#negation-repair-and-ranking-fix-builder-v4-2026-10-22);
 the iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
@@ -70,6 +72,21 @@ open DiveID.xcodeproj
 xcodebuild -project DiveID.xcodeproj -scheme DiveID -showdestinations
 ```
 
+**Build configurations.** The shared scheme runs **Debug** and archives **Release**.
+
+| Configuration | Catalogue | Optimized | `DEBUG` | Bundle ID / name |
+| --- | --- | --- | --- | --- |
+| Debug | all development records | project default | yes | `com.brycecameron.DiveID` / Dive ID |
+| Release | publication-eligible only | `-O`, whole module | no | `com.brycecameron.DiveID` / Dive ID |
+| Internal | all development records | `-O`, whole module | no (`DIVEID_INTERNAL`) | `com.brycecameron.DiveID.internal` / Dive ID Internal |
+
+**Internal** is for measuring draft packs (for example Global) on an iPhone at
+Release-like speed. It installs beside the Release app, never replaces it, shows an
+"Internal build" banner on every screen, uses the production BM25 engine and has no
+Core ML opt-in. It is not a distribution build and its results are not Release
+results. Select it with Product → Scheme → Edit Scheme… → Run → Build Configuration,
+or `xcodebuild -configuration Internal`. CI validates its settings and builds it.
+
 Do not open `Package.swift` expecting an app destination. SwiftPM builds the
 portable core and test resources, including the catalogues; it excludes the
 SwiftUI application entry point and feature views. A successful SwiftPM build
@@ -96,7 +113,7 @@ python3 Tools/Evaluation/run_v05.py --configuration debug
 
 CI runs Python, Linux/macOS SwiftPM and hosted Xcode validation independently and
 requires every job to succeed. The v0.5 evaluation currently exposes failures;
-these commands must retain their nonzero exit status. The shell loop runs all six suites and aggregates their status. Existing Caribbean/Pacific gates pass, but the new source-informed
+these commands must retain their nonzero exit status. The shell loop runs all eight suites and aggregates their status. Existing Caribbean/Pacific gates pass, but the new source-informed
 46-case development evaluation fails on paraphrase retrieval/ranking, freshwater
 false positives and regional conflicts. See [full results and limitations](Docs/V05DevelopmentEvaluation.md).
 Its descriptions are synthetic, not independent diver holdout data. The legacy

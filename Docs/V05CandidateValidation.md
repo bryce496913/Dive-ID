@@ -261,8 +261,8 @@ none are listed as expectations.
 
 ### 1. Install
 
-1. **Check out the build:** on the Mac, `git checkout 2766a55` (or the commit being
-   tested). Record the full SHA in the results table below.
+1. **Check out the build:** on the Mac, check out the commit being tested
+   (`755efea` was current `main` on 2026-10-22). Record the full SHA in the results table below.
 2. **Connect the iPhone:** unlock it and trust the Mac. Developer Mode must be on
    (Settings → Privacy & Security → Developer Mode).
 3. **Build:** follow "Capture and build on a Mac" in
@@ -390,17 +390,32 @@ for p in sys.argv[1:]:
     print(p, format(h, "016x"))' DiveID/Resources/IdentificationPacks/*/Creatures.json
 ```
 
-### Optional: Global in a Debug build (experimental only)
+### Optional: Global in an Internal build (experimental only)
 
-Global is development-only. It can be tried on the device only in a **Debug** build,
-where it appears in Change Dive Region; it must never appear in Release. Record these
-separately as Debug numbers; they are not Release results.
+Global is development-only and must never appear in Release. To time it on the iPhone,
+use the **Internal** configuration rather than Debug: it is optimized like Release
+(`-O`, whole module) and has no `DEBUG`, but it opens the development catalogue. It
+installs as a separate app, **Dive ID Internal** (`com.brycecameron.DiveID.internal`),
+beside the Release app, so it cannot disturb the Release checks above or their saved
+identifications. Every screen shows a yellow "Internal build" banner. It always uses
+the production BM25 engine with biological ranking; the Core ML opt-in is Debug-only.
 
-- **Fresh install:** delete the app first, then time the first Global search
-  submitted at once. On the Linux host, readiness takes 4.9 s in Release.
-- **Later launch:** time it again after a relaunch. The stored index makes the
-  host figure 0.9 s.
-- **Warm search:** host median 54 ms.
-- **Engine:** the status strip at the bottom of a Debug build names it. Record it;
-  it must read the production BM25 engine unless `DiveIDExperimentalSemanticSearch`
-  was set.
+1. **Build:** Product → Scheme → Edit Scheme… → Run → Build Configuration:
+   **Internal**, then Run on the iPhone. Or
+   `xcodebuild … -configuration Internal -destination "platform=iOS,id=$DEVICE_ID"`.
+   Stop the debugger and launch **Dive ID Internal** from the Home Screen for timings.
+2. **Check:** the banner is visible, and Change Dive Region lists Global
+   (Experimental), Tropical Pacific and Caribbean with their full record counts.
+3. **Select Global**, then time it:
+   - **Fresh install:** delete Dive ID Internal first, then time the first Global
+     search submitted at once. On the Linux host, readiness takes 4.9 s in Release.
+   - **Later launch:** time it again after a relaunch. The stored index makes the
+     host figure 0.9 s.
+   - **Warm search:** host median 54 ms.
+   - **Memory:** the gauge at launch, the first-search peak and after ten searches.
+     On the host, the full Global pack peaks at about 186 MiB.
+4. **Record** these as Internal numbers with the commit SHA. They are not Release
+   results, and Global's search quality on them is development evidence only.
+
+A Debug build also opens Global, but report Debug timings only as Debug: Debug keeps
+testability and `DEBUG`-only diagnostics, and CI prints its resolved optimization level.
