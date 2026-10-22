@@ -138,11 +138,18 @@ struct SpeciesDataSourceReference: Codable, Hashable, Sendable {
 
 enum RecordReviewStatus: String, Codable, Hashable, Sendable { case draft, sourceChecked, verified }
 
+/// How a verified record was approved in batch review (Tools/CatalogReview/global_batches.py).
+enum RecordReviewMethod: String, Codable, Hashable, Sendable {
+    case individuallyReviewed = "individually-reviewed"
+    case sampleApproved = "sample-approved"
+}
+
 struct RecordReview: Codable, Hashable, Sendable {
     let status: RecordReviewStatus
     let reviewerNotes: String?
     let reviewDate: Date?
     var verifiedBy: String? = nil
+    var reviewMethod: RecordReviewMethod? = nil
 }
 
 struct SpeciesTaxonomy: Codable, Hashable, Sendable {

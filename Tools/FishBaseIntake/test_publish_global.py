@@ -8,6 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import publish_global  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "CatalogReview"))
+
 
 def draft(record_id, similar=(), status="draft"):
     return {"id": record_id, "categories": ["fish"], "review": {"status": status},
@@ -69,6 +71,23 @@ class OutputTests(unittest.TestCase):
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
         self.assertEqual(manifest, publish_global.manifest_for(records, manifest))
         self.assertTrue(all(r["review"]["status"] == "draft" for r in records))
+
+
+class BatchReviewTests(unittest.TestCase):
+    def test_only_records_a_current_approval_covers_become_verified_and_counted(self):
+        import test_global_batches
+        w = test_global_batches.Workspace()
+        self.addCleanup(w.temp.cleanup)
+        manifest = w.prepare(seed=7)[0]
+        stale = [e["speciesID"] for e in manifest["records"] if e["selection"] == "unread"][0]
+        w.record(manifest)
+        next(r for r in w.records if r["id"] == stale)["summary"] = "Changed after approval."
+        reviews, report = publish_global.apply_reviews(w.records, w.root)
+        verified = {r["id"] for r in w.records if r["review"]["status"] == "verified"}
+        self.assertEqual(len(verified), 79)
+        self.assertNotIn(stale, verified)
+        self.assertEqual(report["staleRecords"], [stale])
+        self.assertEqual(publish_global.manifest_for(w.records, {"id": "global"})["publicationEligibleRecordCount"], 79)
 
 
 if __name__ == "__main__":
