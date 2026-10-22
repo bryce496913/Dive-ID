@@ -84,6 +84,14 @@ class ResolvedSettingsTests(unittest.TestCase):
     def test_internal_installs_separately_from_release(self):
         self.app_fails('Internal', PRODUCT_BUNDLE_IDENTIFIER='com.brycecameron.DiveID')
 
+    def test_debug_is_unoptimized(self):
+        for level in ('-O', '-Osize', None):
+            self.app_fails('Debug', SWIFT_OPTIMIZATION_LEVEL=level)
+
+    def test_release_is_optimized(self):
+        for level in ('-Onone', '-Osize', None):
+            self.app_fails('Release', SWIFT_OPTIMIZATION_LEVEL=level)
+
     def test_debug_never_defines_internal(self):
         self.app_fails('Debug', SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG DIVEID_INTERNAL')
 
