@@ -13,6 +13,9 @@ struct SpeciesRankingInput: Sendable {
     /// The diver's optional "where are you diving?" choice. It boosts ordering only;
     /// it is not evidence from the description and never excludes a species.
     var preferredRegions: Set<String> = []
+    /// Normalized aliases that name a group rather than one species in the searched pack
+    /// (see `OfflineIdentificationPack.groupNames`). They never count as an exact name.
+    var groupNames: Set<String> = []
 }
 
 struct SpeciesRankingCandidate: Sendable {
@@ -104,9 +107,17 @@ struct LocalSpeciesRanker: SpeciesRanking {
             var score = 0.0
             var matched: [String] = []
             var conflicts: [String] = []
-            let nameTerms = ([profile.commonName, profile.scientificName] + profile.aliases).map(LocalObservationParser.normalize)
+            // A group name in this pack ("Surgeonfish", "Grouper") helps retrieval and partial
+            // identity matching, but does not name one species. That includes a one-word common
+            // name that other records' names end in ("Angelfish"). Scientific names always count.
+            let commonName = LocalObservationParser.normalize(profile.commonName)
+            let isGroupCommonName = !commonName.contains(" ") && input.groupNames.contains(commonName)
+            let nameTerms = ([profile.scientificName] + (isGroupCommonName ? [] : [profile.commonName])
+                             + profile.aliases.filter { !input.groupNames.contains(LocalObservationParser.normalize($0)) })
+                .map(LocalObservationParser.normalize)
             let hasExactName = nameTerms.contains {
                 LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
+                    && Self.namesSubject($0, in: input.description)
             }
             let retrievalRelevance = candidate.retrieval.map(Self.normalizedRelevance)
             let provisionalSemantic = candidate.retrieval?.scoreKind == .cosineSimilarity
@@ -137,13 +148,20 @@ struct LocalSpeciesRanker: SpeciesRanking {
                 score += weights.appearanceRelationship
                 matched.append(contentsOf: patterned.sorted())
             }
+            // Variants are alternatives (a fish is juvenile or adult, male or female), so only
+            // the best compatible one counts, and only for clues the main profile has not
+            // already credited. A named life stage excludes other stages; no stage named
+            // leaves every variant possible.
+            let namedStages = Self.namedLifeStages(observation.tokens)
+            let mainColorGroups = colorHits(observation, profile.colors)
             var bestVariant: SpeciesAppearanceVariant? = nil
             var bestVariantScore = 0.0
-            for variant in profile.appearanceVariants {
+            for variant in profile.appearanceVariants where namedStages.isEmpty || namedStages.contains(variant.lifeStage) {
                 var variantScore = 0.0; var variantHits: [String] = []
-                addColors(observation, variant.colors, &variantScore, &variantHits)
-                add(observation.markings, variant.markings, weights.marking, &variantScore, &variantHits)
-                add(observation.bodyShapes, variant.bodyShapes, weights.bodyShape, &variantScore, &variantHits)
+                let colorGroups = colorHits(observation, variant.colors).filter { group in !mainColorGroups.contains { $0.group == group.group } }
+                variantScore += Double(colorGroups.count) * weights.color
+                add(observation.markings.subtracting(profile.markings.map { $0.lowercased() }), variant.markings, weights.marking, &variantScore, &variantHits)
+                add(observation.bodyShapes.subtracting(profile.bodyShapes.map { $0.lowercased() }), variant.bodyShapes, weights.bodyShape, &variantScore, &variantHits)
                 if variantScore > bestVariantScore { bestVariantScore = variantScore; bestVariant = variant }
             }
             if let bestVariant, bestVariantScore >= weights.color { score += min(bestVariantScore, 6); matched.append("\(bestVariant.lifeStage.rawValue) appearance") }
@@ -281,13 +299,50 @@ struct LocalSpeciesRanker: SpeciesRanking {
         return values.filter { seen.insert($0).inserted }
     }
 
-    private func addColors(_ observation: ParsedObservation, _ colors: [String], _ score: inout Double, _ matched: inout [String]) {
+    /// Each observed colour group supported by `colors`, with the matching colours.
+    private func colorHits(_ observation: ParsedObservation, _ colors: [String]) -> [(group: Set<String>, hits: Set<String>)] {
         let groups = observation.colorEvidenceGroups.isEmpty ? observation.colors.sorted().map { Set([$0]) } : observation.colorEvidenceGroups
         let supported = Set(colors.map { $0.lowercased() })
-        for group in groups {
+        return groups.compactMap { group in
             let hits = group.intersection(supported)
-            if !hits.isEmpty { score += weights.color; matched.append(contentsOf: hits.sorted()) }
+            return hits.isEmpty ? nil : (group, hits)
         }
+    }
+
+    private func addColors(_ observation: ParsedObservation, _ colors: [String], _ score: inout Double, _ matched: inout [String]) {
+        for (_, hits) in colorHits(observation, colors) { score += weights.color; matched.append(contentsOf: hits.sorted()) }
+    }
+
+    /// False when every occurrence of the name is the tail of a hyphenated compound, so
+    /// "red-orange anemonefish" does not name the Orange anemonefish and "blue-lined
+    /// surgeonfish" does not name the Lined surgeonfish.
+    static func namesSubject(_ normalizedName: String, in description: String) -> Bool {
+        let words = normalizedName.split(separator: " ").map { NSRegularExpression.escapedPattern(for: String($0)) }
+        guard !words.isEmpty else { return false }
+        let text = description.lowercased()
+        let pattern = "(?<![a-z0-9])" + words.joined(separator: "[\\s\\-–/]+") + "s?(?![a-z0-9])"
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return true }
+        let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
+        // A name the regex cannot find verbatim (for example matched through a singular
+        // token) is left to the token match.
+        guard !matches.isEmpty else { return true }
+        return matches.contains { match in
+            guard let range = Range(match.range, in: text), range.lowerBound > text.startIndex else { return true }
+            let before = text[text.index(before: range.lowerBound)]
+            guard before == "-" || before == "–" else { return true }
+            let previous = text[..<text.index(before: range.lowerBound)].last
+            return !(previous?.isLetter ?? false || previous?.isNumber ?? false)
+        }
+    }
+
+    /// Life stages or sexes the description names, mapped to the variant stages they allow.
+    static func namedLifeStages(_ tokens: Set<String>) -> Set<SpeciesLifeStage> {
+        var stages = Set<SpeciesLifeStage>()
+        if !tokens.isDisjoint(with: ["juvenile", "juveniles", "young"]) { stages.insert(.juvenile) }
+        if !tokens.isDisjoint(with: ["male", "males"]) { stages.formUnion([.male, .terminalPhase]) }
+        if !tokens.isDisjoint(with: ["female", "females"]) { stages.formUnion([.female, .initialPhase]) }
+        if !tokens.isDisjoint(with: ["adult", "adults"]) { stages.formUnion([.adult, .male, .female, .initialPhase, .terminalPhase]) }
+        return stages
     }
 
     private func add(_ observed: Set<String>, _ profile: [String], _ weight: Double, _ score: inout Double, _ matched: inout [String]) {

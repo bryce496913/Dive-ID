@@ -97,6 +97,24 @@ struct OfflineIdentificationPack: Sendable, Hashable {
         var hasher = Hasher()
         hasher.combine(profiles)
         contentFingerprint = hasher.finalize()
+        groupNames = Self.groupNames(in: profiles)
+    }
+
+    /// Normalized aliases that name a group in this pack rather than one species: the head
+    /// noun of any multi-word common name ("surgeonfish" from "Twospot surgeonfish"), and
+    /// any alias carried by more than one record ("coral trout", "grouper").
+    let groupNames: Set<String>
+
+    static func groupNames(in profiles: [LocalSpeciesProfile]) -> Set<String> {
+        var names = Set<String>()
+        var aliasOwners: [String: Int] = [:]
+        for profile in profiles {
+            let words = LocalObservationParser.normalize(profile.commonName).split(separator: " ")
+            if words.count > 1, let head = words.last { names.insert(String(head)) }
+            for alias in Set(profile.aliases.map(LocalObservationParser.normalize)) { aliasOwners[alias, default: 0] += 1 }
+        }
+        names.formUnion(aliasOwners.filter { $0.value > 1 }.keys)
+        return names
     }
 }
 

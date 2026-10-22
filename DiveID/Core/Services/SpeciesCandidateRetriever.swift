@@ -93,7 +93,7 @@ struct BM25SpeciesCandidateRetriever: SpeciesCandidateRetrieving {
         let words = MorphologyVocabulary.scopedText(text).split { !$0.isLetter && !$0.isNumber }.map {
             LocalObservationParser.singular(String($0))
         }.filter { !$0.isEmpty && (!canonical.contains($0) || seenMorphology.insert($0).inserted) }
-        return words + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
+        return words + words.compactMap(LocalObservationParser.likeStem) + AppearanceEvidenceVocabulary.appearanceRelationships(in: text).sorted().map { "appearance" + $0.filter(\.isLetter) }
     }
 
     static func normalizedPhrase(_ text: String) -> String { terms(text).joined(separator: " ") }

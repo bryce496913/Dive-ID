@@ -76,7 +76,8 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
         let ranked = try await ranker.rank(input: SpeciesRankingInput(
             description: description,
             observation: observation,
-            candidates: pack.profiles.map { SpeciesRankingCandidate(speciesID: $0.id, profile: $0, retrieval: nil) }
+            candidates: pack.profiles.map { SpeciesRankingCandidate(speciesID: $0.id, profile: $0, retrieval: nil) },
+            groupNames: pack.groupNames
         ))
         return DescriptionSearchResult(
             candidates: ranked.map {
@@ -156,7 +157,7 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
                 )
             )
         }
-        let ranked = try await ranker.rank(input: SpeciesRankingInput(description: description, observation: observation, candidates: pool))
+        let ranked = try await ranker.rank(input: SpeciesRankingInput(description: description, observation: observation, candidates: pool, groupNames: pack.groupNames))
         let compatibility = regionResolver.compatibility(
             observedRegions: observation.regions,
             supportedRegions: Set(pack.metadata.regionAliases)
