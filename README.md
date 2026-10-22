@@ -13,11 +13,21 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: |
 | Caribbean | 3 | 8 | 2 | 2 |
 | Tropical Pacific | 3 | 1000 | 0 | 0 |
+| Global (Experimental) | 3 | 4786 | 250 | 250 |
 
-Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026;
-1006 records remain draft. Debug explicitly permits all 1008 development records.
-Release exposes only these two Caribbean species; Tropical Pacific remains
-unavailable. Saved identifications remain accessible independently of search access.
+- **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
+- **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through
+  [batch review](Docs/GlobalBatchReview.md). 34 records were individually reviewed
+  (4 flagged, 30 sampled); 216 were sample-approved. 4,536 records remain draft, so
+  the pack keeps "(Experimental)" in its name.
+- **Release** exposes 252 records: the 2 Caribbean species and the 250 approved Global
+  records. Tropical Pacific remains unavailable. **Debug** permits all 5,794
+  development records.
+
+Saved identifications remain accessible independently of search access.
+Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).
+The app credits both on its Data Sources and Credits screen and links each species
+to its source page.
 Do not add `DEBUG` to Release, promote synthetic fixtures, or treat search quality
 as human publication approval.
 
@@ -95,7 +105,13 @@ python3 Tools/CatalogImport/import_tropical_pacific.py
 python3 Tools/CatalogReview/prepare_source_review_pass.py
 python3 Tools/CatalogReview/prepare_review_batch.py
 python3 Tools/CatalogReview/verify_source_review_reproducibility.py
+python3 Tools/FishBaseIntake/publish_global.py   # Global: drafts plus recorded batch approvals
 ```
+
+Global approvals come only from batch decisions recorded with
+`Tools/CatalogReview/global_batches.py record` ([batch review](Docs/GlobalBatchReview.md)).
+`publish_global.py` marks a record verified only while its content matches the
+approved fingerprint.
 
 Use the validated overlay/import inputs rather than editing generated records.
 Stable IDs, original provenance and named human review decisions must survive

@@ -46,7 +46,17 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual((manifest["speciesCount"], manifest["includedRecordCount"], manifest["humanReviewedRecordCount"],
                           manifest["publicationEligibleRecordCount"], manifest["packVersion"]), (2, 2, 0, 0, publish_global.PACK_VERSION))
         self.assertEqual(manifest["regionAliases"], [])
+        self.assertEqual(manifest["displayName"], "Global (Experimental)")
+        self.assertIn("0 of 2 records approved", manifest["shortDescription"])
         self.assertEqual(template["speciesCount"], 0, "the template is not modified")
+
+    def test_experimental_until_every_record_is_approved(self):
+        approved = dict(draft("a"), review={"status": "verified"})
+        partial = publish_global.manifest_for([approved, draft("b")], {"id": "global"}, 1)
+        self.assertEqual((partial["displayName"], partial["publicationEligibleRecordCount"], partial["packVersion"]),
+                         ("Global (Experimental)", 1, publish_global.PACK_VERSION + 1))
+        complete = publish_global.manifest_for([approved, dict(approved, id="b")], {"id": "global"}, 2)
+        self.assertEqual(complete["displayName"], "Global")
 
 
 class OutputTests(unittest.TestCase):
@@ -67,10 +77,14 @@ class OutputTests(unittest.TestCase):
             self.skipTest("staging data not present")
         drafts = [r for f in sorted((staging / "Drafts").glob("batch-*.json")) for r in json.loads(f.read_text())]
         records, _, _ = publish_global.compose(drafts, json.loads((staging / "RiskReport.json").read_text())["records"])
+        reviews, report = publish_global.apply_reviews(records, publish_global.global_batches.BATCHES)
         self.assertEqual((publish_global.PACK / "Creatures.json").read_text(), publish_global.creatures_text(records))
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
-        self.assertEqual(manifest, publish_global.manifest_for(records, manifest))
-        self.assertTrue(all(r["review"]["status"] == "draft" for r in records))
+        self.assertEqual(manifest, publish_global.manifest_for(records, manifest, len(report["approvedBatches"])))
+        self.assertEqual(report["staleRecords"], [])
+        verified = {r["id"] for r in records if r["review"]["status"] == "verified"}
+        self.assertEqual(verified, set(reviews), "only records an approval covers are verified")
+        self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] not in verified))
 
 
 class BatchReviewTests(unittest.TestCase):

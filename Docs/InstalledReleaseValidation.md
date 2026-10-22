@@ -1,11 +1,17 @@
 # Physical iPhone Release validation
 
-This procedure supplements V05CandidateValidation.md. Current commit-bound outcome:
-`Reports/InstalledReleaseValidation.json`. No real approval exists at that candidate;
-stop positive Release testing until actual fingerprint-bound human decisions have
-been applied and the regenerated publication subset is nonempty. Merging a source
-review PR does not constitute record approval. Rebind this record to the new SHA
-when that prerequisite changes. Never enable DEBUG or alter the evaluation.
+This procedure supplements V05CandidateValidation.md. Last commit-bound outcome:
+`Reports/InstalledReleaseValidation.json`, recorded before any Global approval.
+
+**Current publication subset (2026-10-22): 252 records.**
+- **Caribbean:** 2 records, approved 2026-10-12.
+- **Global (Experimental):** 250 records, batch 1, approved 2026-10-22 through
+  `Data/CatalogReview/GlobalBatches`. 4,536 Global records and all 1,000 Tropical
+  Pacific records remain draft and must be absent from Release.
+
+Approvals come only from fingerprint-bound human decisions; merging a review PR is
+not record approval. Rebind the device record to the new SHA before testing. Never
+enable DEBUG or alter the evaluation.
 
 ## Capture and build on a Mac
 
@@ -146,6 +152,7 @@ is not a passed no-match or out-of-domain test.
 | Check | Action and required evidence |
 | --- | --- |
 | Installed identity | Record SHA, Release log/settings, signing, built and installed version/build, bundle ID, phone model/iOS build, approved IDs/counts and runtime engine trace. |
+| Global subset | In Change Dive Region, Global (Experimental) shows 250 species; Caribbean shows 2; Tropical Pacific is absent or unavailable. In Global, search for approved species (individually reviewed: Banded damsel, Arcfin shrimpgoby; sample-approved: Achilles tang, Meteor cardinalfish) and confirm they can appear. Search for draft species (Clown triggerfish, Moorish idol, Regal angelfish) by name and confirm they never appear. Banded damsel's review status reads "Approved for publication — individually reviewed"; Achilles tang's says it was not individually reviewed. Each Source link opens its FishBase page. Open Data Sources and Credits from Home. |
 | Search outcomes | Enter applicable frozen cases verbatim; record case ID, request region, displayed IDs/ranks and distinct mismatch/no-match/loading-error states. Unavailable expected IDs are inapplicable. |
 | Offline repeat | Capture Airplane Mode ON, Wi-Fi OFF and cellular OFF; repeat representative positives and rejection cases with unchanged text. Record any network error separately. |
 | Region association | In region A, search and open details/back; switch to approved region B and search. Record pack context for both requests/results/saved snapshots. Earlier results must retain A's request region. |

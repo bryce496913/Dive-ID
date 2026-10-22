@@ -65,6 +65,10 @@ struct HomeView: View {
                     Label("Saved Identifications", systemImage: "bookmark.fill").frame(minHeight: 44)
                 }
                 .accessibilityIdentifier("savedAction")
+                Button { router.navigate(to: .credits) } label: {
+                    Label("Data Sources and Credits", systemImage: "info.circle").frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("creditsAction")
             }
             .padding()
         }
