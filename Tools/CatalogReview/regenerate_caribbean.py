@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def generate():
     records = json.loads((ROOT / 'Data/CatalogReview/CaribbeanSourceBaseline.json').read_text())
     decisions = json.loads((ROOT / 'Data/CatalogReview/CaribbeanReviewDecisions.json').read_text())
-    pack = ROOT / 'Data/CatalogArchive/v3/Caribbean'
+    pack = ROOT / 'DiveID/Resources/IdentificationPacks/Caribbean'
     manifest = json.loads((pack / 'PackManifest.json').read_text())
     outcomes = apply_decisions(records, decisions, manifest['id'])
     if any(outcome['state'] != 'applied' for outcome in outcomes):
@@ -27,7 +27,7 @@ def generate():
 
 def main():
     records, manifest, outcomes = generate()
-    pack = ROOT / 'Data/CatalogArchive/v3/Caribbean'
+    pack = ROOT / 'DiveID/Resources/IdentificationPacks/Caribbean'
     replace_catalogue_pair(pack / 'Creatures.json', pack / 'PackManifest.json', records, manifest)
     print(json.dumps(outcomes, indent=2))
 

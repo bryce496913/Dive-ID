@@ -125,7 +125,7 @@ def merge_draft_expansion(profiles, additions, audit):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--workbook',default='DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx')
-    parser.add_argument('--output',default='Data/CatalogArchive/v3/TropicalPacific')
+    parser.add_argument('--output',default='DiveID/Resources/IdentificationPacks/TropicalPacific')
     parser.add_argument('--report',default='Reports/TropicalPacificImportReport.json')
     parser.add_argument('--outcomes',default='Reports/TropicalPacificOutcomes.csv')
     parser.add_argument('--review-queue',default='Reports/TropicalPacificReviewQueue.csv')

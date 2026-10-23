@@ -34,9 +34,9 @@ class SourceReviewPassTests(unittest.TestCase):
     def test_caribbean_overlay_regenerates_exact_bundle_and_preserves_provenance(self):
         records, manifest, outcomes = generate()
         baseline = json.loads((ROOT / 'Data/CatalogReview/CaribbeanSourceBaseline.json').read_text())
-        bundled = json.loads((ROOT / 'Data/CatalogArchive/v3/Caribbean/Creatures.json').read_text())
+        bundled = json.loads((ROOT / 'DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json').read_text())
         self.assertEqual(records, bundled)
-        self.assertEqual(manifest, json.loads((ROOT / 'Data/CatalogArchive/v3/Caribbean/PackManifest.json').read_text()))
+        self.assertEqual(manifest, json.loads((ROOT / 'DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json').read_text()))
         self.assertEqual([r['id'] for r in records], [r['id'] for r in baseline])
         for before, after in zip(baseline, records):
             for source in before['dataSources']:
