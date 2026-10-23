@@ -45,6 +45,9 @@ actor SearchIndexStore {
     private var order: [String] = []
     private var pendingWrites: [Task<Void, Never>] = []
     private(set) var statistics = Statistics()
+#if DEBUG || DIVEID_INTERNAL
+    private var outcomes: [String: SearchIndexOutcome] = [:]
+#endif
 
     init(directory: URL?, appBuild: String = SearchIndexStore.currentAppBuild, capacity: Int = 6) {
         self.directory = directory
@@ -88,9 +91,28 @@ actor SearchIndexStore {
 
     /// Starts loading or building the index in the background and returns at once. Used
     /// when the search screen opens, so the first search usually finds it ready.
-    func prepare(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) {
-        _ = indexTask(pack: pack, builder: builder, priority: .utility)
+    @discardableResult
+    func prepare(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> Task<BM25Index, Never> {
+        indexTask(pack: pack, builder: builder, priority: .utility)
     }
+
+#if DEBUG || DIVEID_INTERNAL
+    /// How this content's index was obtained on this launch (Internal diagnostics).
+    func indexOutcome(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> SearchIndexOutcome? {
+        outcomes[key(pack, builder)]
+    }
+
+    private func recordOutcome(_ source: SearchIndexSource, since start: ContinuousClock.Instant, key: String) {
+        outcomes[key] = SearchIndexOutcome(source: source, duration: start.duration(to: .now))
+    }
+
+    /// This pack's stored index files (Internal delete and corrupt actions).
+    func storedIndexURLs(for packID: OfflineIdentificationPackID) -> [URL] {
+        guard let directory else { return [] }
+        return ((try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? [])
+            .filter { $0.lastPathComponent.hasPrefix(packID.rawValue + "-") && $0.pathExtension == "bm25" }
+    }
+#endif
 
     /// Waits for archive writes started by earlier builds (tests).
     func waitForPendingWrites() async {
@@ -106,17 +128,26 @@ actor SearchIndexStore {
         let header = archiveHeader(pack, builder)
         let url = header.flatMap { archiveURL(pack, $0) }
         let task = Task.detached(priority: priority) { [weak self] () -> BM25Index in
-            if let url, let header, let stored = SearchIndexArchive.read(url, header: header, pack: pack, builder: builder) {
+#if DEBUG || DIVEID_INTERNAL
+            let started = ContinuousClock.now
+#endif
+            if let stored = Self.storedIndex(url, header: header, pack: pack, builder: builder) {
                 await self?.record(\.archiveLoads)
+#if DEBUG || DIVEID_INTERNAL
+                await self?.recordOutcome(.loadedFromStore, since: started, key: key)
+#endif
                 return stored
             }
-            if let url, FileManager.default.fileExists(atPath: url.path) {
+            let invalidStore = url.map { FileManager.default.fileExists(atPath: $0.path) } ?? false
+            if let url, invalidStore {
                 try? FileManager.default.removeItem(at: url)
                 await self?.record(\.archiveRejections)
             }
-            let documents = pack.profiles.map { builder.document(from: $0, pack: pack.metadata) }
-            let index = BM25Index(documents: documents)
+            let index = Self.build(pack: pack, builder: builder)
             await self?.record(\.builds)
+#if DEBUG || DIVEID_INTERNAL
+            await self?.recordOutcome(invalidStore ? .rebuiltAfterInvalidStore : .built, since: started, key: key)
+#endif
             if let url, let header { await self?.write(index, header: header, to: url, packID: pack.metadata.id) }
             return index
         }
@@ -125,6 +156,27 @@ actor SearchIndexStore {
     }
 
     private func record(_ counter: WritableKeyPath<Statistics, Int>) { statistics[keyPath: counter] += 1 }
+
+    /// The validated stored index, or nil when there is none or it is not valid.
+    private static func storedIndex(_ url: URL?, header: String?, pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> BM25Index? {
+        guard let url, let header, FileManager.default.fileExists(atPath: url.path) else { return nil }
+#if DEBUG || DIVEID_INTERNAL
+        let interval = SearchSignposts.begin(.indexLoadFromStore, pack.metadata.id.rawValue)
+        let stored = SearchIndexArchive.read(url, header: header, pack: pack, builder: builder)
+        SearchSignposts.end(interval, stored == nil ? "rejected" : "loaded")
+        return stored
+#else
+        return SearchIndexArchive.read(url, header: header, pack: pack, builder: builder)
+#endif
+    }
+
+    private static func build(pack: OfflineIdentificationPack, builder: any SpeciesSearchDocumentBuilding) -> BM25Index {
+#if DEBUG || DIVEID_INTERNAL
+        let interval = SearchSignposts.begin(.indexBuild, pack.metadata.id.rawValue)
+        defer { SearchSignposts.end(interval) }
+#endif
+        return BM25Index(documents: pack.profiles.map { builder.document(from: $0, pack: pack.metadata) })
+    }
 
     /// Written after the index is returned, so the first search never waits for the disk.
     private func write(_ index: BM25Index, header: String, to url: URL, packID: OfflineIdentificationPackID) {
@@ -204,7 +256,7 @@ enum SearchIndexPreparation {
                       store: SearchIndexStore = .shared, builder: any SpeciesSearchDocumentBuilding = SpeciesSearchDocumentBuilder()) {
         Task.detached(priority: .utility) {
             guard let pack = try? await catalog.loadPack(id: packID) else { return }
-            await store.prepare(pack: pack, builder: builder)
+            _ = await store.prepare(pack: pack, builder: builder)
         }
     }
 }

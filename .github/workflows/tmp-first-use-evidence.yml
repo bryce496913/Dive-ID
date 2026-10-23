@@ -1,0 +1,68 @@
+# TEMPORARY: evidence for the Internal device performance test PR. Removed before review.
+name: Temporary first-use evidence
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  release-and-baseline:
+    name: Release suite and host baseline (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Select Xcode 16.4
+        if: ${{ runner.os == 'macOS' }}
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Host
+        shell: bash
+        run: |
+          swift --version
+          uname -a
+          if [ "$RUNNER_OS" = macOS ]; then sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize; else nproc; grep -m1 'model name' /proc/cpuinfo; free -m; fi
+      - name: Full suite in Release (swift test -c release)
+        shell: bash
+        run: |
+          set -o pipefail
+          swift test -c release 2>&1 | tee "$RUNNER_TEMP/release.log" | grep -E 'error:|failed|passed|skipped|Executed' | tail -80
+      - name: First-use and instrumentation tests in Debug
+        shell: bash
+        run: |
+          set -o pipefail
+          swift test --filter 'FirstUsePerformanceTests|InternalInstrumentationTests|SearchIndexStoreTests' 2>&1 | tail -60
+      - name: Host baseline at this branch (4,794 Global records)
+        shell: bash
+        run: |
+          set -o pipefail
+          git log -1 --format='HEAD %H'
+          DIVEID_PERF_REPORT="$RUNNER_TEMP/perf-head.json" swift test -c release --filter GlobalPackPerformanceTests 2>&1 | grep -E 'GLOBAL_PERF|error|failed|passed'
+          cat "$RUNNER_TEMP/perf-head.json"
+      - name: Host baseline before the 8 Caribbean records (4,786 Global records), same runner
+        shell: bash
+        run: |
+          set -o pipefail
+          git worktree add "$RUNNER_TEMP/before" 6336db0^
+          cd "$RUNNER_TEMP/before"
+          git log -1 --format='BEFORE %H'
+          DIVEID_PERF_REPORT="$RUNNER_TEMP/perf-before.json" swift test -c release --filter GlobalPackPerformanceTests 2>&1 | grep -E 'GLOBAL_PERF|error|failed|passed'
+      - name: Host baseline at this branch, second run
+        shell: bash
+        run: |
+          set -o pipefail
+          DIVEID_PERF_REPORT="$RUNNER_TEMP/perf-head-2.json" swift test -c release --filter GlobalPackPerformanceTests 2>&1 | grep -E 'GLOBAL_PERF|error|failed|passed'
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: first-use-evidence-${{ matrix.os }}
+          path: ${{ runner.temp }}/*.json
+          retention-days: 14

@@ -9,6 +9,9 @@ final class DescriptionSearchViewModel {
     var packState: SelectedPackState = .notLoaded
     private let sessionStore: any IdentificationSessionStore
     private let packLoader: SelectedPackLoader
+#if DEBUG || DIVEID_INTERNAL
+    let diagnostics = InternalSearchDiagnostics.shared
+#endif
 
     init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.sessionStore = sessionStore; packLoader = SelectedPackLoader(catalog: catalog, regionRepository: regionRepository) }
 
@@ -16,7 +19,12 @@ final class DescriptionSearchViewModel {
     /// background (off the main thread), so the first search usually finds it ready.
     func load() async {
         packState = await packLoader.load()
-        if let pack { SearchIndexPreparation.start(packID: pack.id, catalog: packLoader.catalog) }
+        guard let pack else { return }
+#if DEBUG || DIVEID_INTERNAL
+        SearchIndexPreparation.start(packID: pack.id, catalog: packLoader.catalog, diagnostics: diagnostics)
+#else
+        SearchIndexPreparation.start(packID: pack.id, catalog: packLoader.catalog)
+#endif
     }
 
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
@@ -74,13 +82,24 @@ struct DescriptionSearchView: View {
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
                     Task {
+#if DEBUG || DIVEID_INTERNAL
+                        if let pack = viewModel.pack { viewModel.diagnostics.querySubmitted(packID: pack.id) }
+#endif
                         await router.waitForSessionUpdates()
                         if let sessionID = await viewModel.submit() {
                             router.navigate(to: .identificationResults(sessionID: sessionID))
+                        } else {
+#if DEBUG || DIVEID_INTERNAL
+                            viewModel.diagnostics.queryFinished(.failed)
+#endif
                         }
                     }
                 }
                 .accessibilityIdentifier("findMatches")
+#if DEBUG || DIVEID_INTERNAL
+                // Below the search controls, so it never moves or covers them.
+                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
+#endif
             }
             .padding()
         }

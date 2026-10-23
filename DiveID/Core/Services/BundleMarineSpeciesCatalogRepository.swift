@@ -92,6 +92,10 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
+#if DEBUG || DIVEID_INTERNAL
+        let interval = SearchSignposts.begin(.catalogueLoad, id.rawValue)
+        defer { SearchSignposts.end(interval) }
+#endif
         if case .publication = access, registry.definition(for: id)?.availableInRelease == false {
             throw failure(id, .publicationUnavailable, .publicationUnavailable, nil, .validation)
         }
