@@ -54,7 +54,8 @@ final class DiveIDUITests: XCTestCase {
     @MainActor
     private func assertFindMatchesReachableWithKeyboard(launchArguments: [String], file: StaticString = #filePath, line: UInt = #line) {
         let app = XCUIApplication()
-        app.launchArguments = launchArguments
+        // An existing user's stored Caribbean selection, as in the smoke flow; new installs start in Global.
+        app.launchArguments = launchArguments + ["-selectedDiveRegion", "caribbean"]
         app.launch()
         app.buttons["describeAction"].tap()
         XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2), file: file, line: line)
