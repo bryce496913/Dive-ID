@@ -1,9 +1,12 @@
 # Global pack: search quality and performance at full size (2026-10-22)
 
-**Current state (2026-10-23):** the Global pack holds **4,794 draft records** (Debug
-only; Release excludes it). Its latest evaluation, over 34 positive cases, is in
-[Caribbean species in Global](#caribbean-species-in-global-2026-10-23): every
-applicable gate passes, and four positive cases (`v05-05-paraphrase`,
+**Current state (2026-10-23):** the Global pack holds **4,798 records**, 4,792 approved
+and in Release; the 6 drafts are four owner-requested sharks and rays awaiting batch-21
+review and two records awaiting re-review ([GlobalBatchReview.md](GlobalBatchReview.md#owner-additions-2026-10-23)).
+Rerun over all 4,798 records (`Reports/GlobalPackEvaluation.json`), the evaluation of
+[Caribbean species in Global](#caribbean-species-in-global-2026-10-23) is unchanged
+(recall 33/34, top1 18/34, top3 24/34, top10 30/34, no-match 6/6, confidence 46/46;
+the Release-approved 4,792 give the same): every applicable gate passes, and four positive cases (`v05-05-paraphrase`,
 `v05-09-diagnostic`, `v05-09-paraphrase`, `v05-10-paraphrase`) still miss the top ten.
 Those cases are development data that influenced the implementation, not a holdout,
 and passing them approves no record for publication.

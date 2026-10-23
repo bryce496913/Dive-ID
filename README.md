@@ -13,16 +13,16 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global | 23 | 4798 | 4792 | 4792 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Global (Experimental) | 23 | 4798 | 4792 | 4792 | pass, opt-in (30/34; four positive cases miss the top ten) |
 
 **Global is the default for new installs and is available in Release** (owner decision,
 2026-10-23), after every Global record was approved in batch review. Release shows only
 approved records; the 6 drafts awaiting review (below) stay out of it. Its search quality
-evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,794 records
+evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,798 records
 ([report](Docs/GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23),
 [raw results](Reports/GlobalPackEvaluation.json)):
 
-| Global, 4,794 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
+| Global, 4,798 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
 
