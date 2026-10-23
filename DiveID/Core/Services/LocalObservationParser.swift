@@ -33,7 +33,7 @@ struct LocalObservationParser: ObservationParsing {
         tokens.formUnion(raw.compactMap(Self.likeStem))
         tokens.formUnion(morphology)
         if normalized.contains("indo pacific") { tokens.insert("indo-pacific") }
-        for (key, values) in LocalObservationVocabulary.synonyms where values.contains(where: { Self.matches($0, inTokens: tokens, normalizedText: traitText) }) { tokens.insert(key) }
+        tokens = Self.expandingSynonyms(tokens, normalizedText: traitText)
         // Measurement ranges must refer to the user's original string. In
         // particular, normalization can remove multi-byte Unicode characters
         // and make ranges from the normalized string invalid for the source.
@@ -127,6 +127,21 @@ struct LocalObservationParser: ObservationParsing {
         let lower = word.lowercased()
         guard lower.count > 6, lower.hasSuffix("like") else { return nil }
         return singular(String(lower.dropLast(4)))
+    }
+    /// Adds the key of every synonym rule that matches the description's own tokens.
+    /// Rules see only `tokens` as given, never a key another rule added, so expansion
+    /// is a single pass with no chaining: "sandy" adds "sand", but "sand" does not then
+    /// add "bottom-swimming". Keys are matched in sorted order and added together, so
+    /// the result does not depend on the order of `rules` or on per-launch hash seeds.
+    static func expandingSynonyms(
+        _ tokens: Set<String>,
+        normalizedText: String,
+        rules: [(key: String, values: Set<String>)] = LocalObservationVocabulary.synonyms.map { (key: $0.key, values: $0.value) }
+    ) -> Set<String> {
+        let matched = rules.sorted { $0.key < $1.key }.filter { rule in
+            rule.values.contains { matches($0, inTokens: tokens, normalizedText: normalizedText) }
+        }
+        return tokens.union(matched.map(\.key))
     }
     static func singular(_ token: String) -> String { token.count > 3 && token.hasSuffix("s") ? String(token.dropLast()) : token }
     static func matches(_ synonym: String, inTokens tokens: Set<String>, normalizedText: String) -> Bool {

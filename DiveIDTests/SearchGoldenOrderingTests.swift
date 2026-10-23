@@ -18,13 +18,6 @@ final class SearchGoldenOrderingTests: XCTestCase {
     private struct Location: Decodable { let id: String; let description: String; let outOfRangeLocation: String }
     private struct LocationCases: Decodable { let cases: [Location] }
 
-    /// Pre-existing, unrelated to retrieval: LocalObservationParser applies synonyms in
-    /// dictionary hash order and matches against tokens it has just added, so "sandy"
-    /// adds "sand" and, in some processes only, then "bottom-swimming". The structured
-    /// score of such a query differs between runs on main as well. Its retrieved pool is
-    /// still compared exactly; its ranked scores are not.
-    private static let parserOrderDependent: Set<String> = ["a school of spotted rays crossed the sandy channel"]
-
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent() }
 
     /// Unique descriptions, in a fixed order.
@@ -113,7 +106,7 @@ final class SearchGoldenOrderingTests: XCTestCase {
                 let want = expected[position]
                 let label = "\(name) / \(query)"
                 XCTAssertEqual(actual["retrieved"] as? [String], want["retrieved"] as? [String], "\(label): retrieved pool order")
-                for key in Self.parserOrderDependent.contains(query) ? ["pool"] : ["ranked", "pool"] {
+                for key in ["ranked", "pool"] {
                     let a = try XCTUnwrap(actual[key] as? [[String: Any]]), w = try XCTUnwrap(want[key] as? [[String: Any]])
                     XCTAssertEqual(a.map { $0["id"] as? String }, w.map { $0["id"] as? String }, "\(label): \(key) ranks")
                     for (x, y) in zip(a, w) {

@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 @testable import DiveID
 
@@ -318,5 +319,138 @@ extension MorphologyConceptTests {
         for sample in samples {
             XCTAssertEqual(LocalObservationParser.normalize(sample), referenceNormalize(sample), sample.debugDescription)
         }
+    }
+}
+
+/// Synonym expansion is a single pass over the description's own tokens (Codex P2): a
+/// rule never matches a key that another rule added, and the result is the same on every
+/// launch, whatever order the synonym dictionary iterates in.
+final class SynonymExpansionTests: XCTestCase {
+    private let parser = LocalObservationParser()
+    private static let sandyChannel = "a school of spotted rays crossed the sandy channel"
+    private static let outputVariable = "DIVEID_PARSER_TOKENS_OUTPUT"
+
+    func testSandyAddsSandButNotBottomSwimming() async {
+        let observation = await parser.parse(Self.sandyChannel)
+        XCTAssertTrue(observation.tokens.contains("sand"))
+        XCTAssertTrue(observation.habitats.contains("sand"))
+        XCTAssertFalse(observation.tokens.contains("bottom-swimming"))
+        XCTAssertFalse(observation.behaviors.contains("bottom-swimming"))
+        // The rule still applies to the description's own words.
+        for text in ["ray resting on sand", "ray over a sandy bottom"] {
+            let direct = await parser.parse(text)
+            XCTAssertTrue(direct.behaviors.contains("bottom-swimming"), text)
+        }
+    }
+
+    func testRulesNeverMatchKeysThatOtherRulesAdded() {
+        // "second" matches only through the key "first" adds.
+        let rules = [(key: "first", values: Set(["word"])), (key: "second", values: Set(["first"]))]
+        for ordered in [rules, rules.reversed()] {
+            XCTAssertEqual(LocalObservationParser.expandingSynonyms(["word"], normalizedText: "word", rules: ordered), ["word", "first"])
+        }
+    }
+
+    func testExpansionDoesNotDependOnRuleOrder() throws {
+        var generator = SplitMix64(seed: 0x5EED)
+        let rules = LocalObservationVocabulary.synonyms.map { (key: $0.key, values: $0.value) }.sorted { $0.key < $1.key }
+        for description in try Self.descriptions() {
+            let text = LocalObservationParser.normalize(description)
+            let tokens = Set(text.split(separator: " ").map { LocalObservationParser.singular(String($0)) })
+            let expected = LocalObservationParser.expandingSynonyms(tokens, normalizedText: text, rules: rules)
+            XCTAssertEqual(LocalObservationParser.expandingSynonyms(tokens, normalizedText: text, rules: rules.reversed()), expected, description)
+            for _ in 0..<8 {
+                XCTAssertEqual(LocalObservationParser.expandingSynonyms(tokens, normalizedText: text, rules: rules.shuffled(using: &generator)), expected, description)
+            }
+        }
+    }
+
+    func testRepeatedParsesGiveIdenticalTokens() async throws {
+        let descriptions = try Self.descriptions()
+        let first = await tokens(for: descriptions)
+        for _ in 0..<20 {
+            let again = await tokens(for: descriptions)
+            XCTAssertEqual(again, first)
+        }
+    }
+
+    /// Swift seeds hashing per process, so only separate processes exercise different
+    /// dictionary orders. Each child reruns this test with `outputVariable` set, writes its
+    /// tokens and a probe of its Set order, and exits. The probe shows the seeds differed.
+    func testSeparateProcessesGiveIdenticalTokens() async throws {
+        let descriptions = try Self.descriptions()
+        let environment = ProcessInfo.processInfo.environment
+        if let path = environment[Self.outputVariable] {
+            let output = ChildOutput(setOrder: Array(Set((0..<64).map(String.init))), tokens: await tokens(for: descriptions))
+            try JSONEncoder().encode(output).write(to: URL(fileURLWithPath: path))
+            return
+        }
+#if os(macOS) || os(Linux)
+        let executable = try XCTUnwrap(Bundle.main.executablePath)
+        let test = String(reflecting: Self.self) + "/testSeparateProcessesGiveIdenticalTokens"
+        let arguments: [String]
+#if os(macOS)
+        // SwiftPM runs XCTest bundles with the `xctest` tool.
+        guard URL(fileURLWithPath: executable).lastPathComponent == "xctest" else {
+            throw XCTSkip("Not running under xctest: \(executable)")
+        }
+        arguments = ["-XCTest", test, Bundle(for: Self.self).bundlePath]
+#else
+        arguments = [test]
+#endif
+        var child = environment
+        child.removeValue(forKey: "SWIFT_DETERMINISTIC_HASHING")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("parser-tokens-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        var outputs: [ChildOutput] = []
+        for run in 0..<4 {
+            let path = directory.appendingPathComponent("\(run).json")
+            child[Self.outputVariable] = path.path
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: executable)
+            process.arguments = arguments
+            process.environment = child
+            process.standardOutput = FileHandle.nullDevice
+            try process.run()
+            process.waitUntilExit()
+            XCTAssertEqual(process.terminationStatus, 0, "child \(run)")
+            outputs.append(try JSONDecoder().decode(ChildOutput.self, from: Data(contentsOf: path)))
+        }
+        XCTAssertGreaterThan(Set(outputs.map(\.setOrder)).count, 1, "child processes shared one hash seed")
+        let expected = await tokens(for: descriptions)
+        for (run, output) in outputs.enumerated() { XCTAssertEqual(output.tokens, expected, "child \(run)") }
+#else
+        throw XCTSkip("Child processes are unavailable on this platform")
+#endif
+    }
+
+    private struct ChildOutput: Codable { let setOrder: [String]; let tokens: [[String]] }
+
+    private func tokens(for descriptions: [String]) async -> [[String]] {
+        var result: [[String]] = []
+        for description in descriptions { result.append(await parser.parse(description).tokens.sorted()) }
+        return result
+    }
+
+    /// Every query of the golden search outputs.
+    private static func descriptions() throws -> [String] {
+        let golden = try JSONSerialization.jsonObject(with: Data(contentsOf: TestResources.fixture(named: "SearchGolden.v2"))) as? [String: Any]
+        let queries = try XCTUnwrap(golden?["queries"] as? [String])
+        XCTAssertTrue(queries.contains(sandyChannel))
+        return queries
+    }
+}
+
+/// A seeded generator, so a failing shuffle can be reproduced.
+private struct SplitMix64: RandomNumberGenerator {
+    private var state: UInt64
+    init(seed: UInt64) { state = seed }
+    mutating func next() -> UInt64 {
+        state &+= 0x9E37_79B9_7F4A_7C15
+        var value = state
+        value = (value ^ (value >> 30)) &* 0xBF58_476D_1CE4_E5B9
+        value = (value ^ (value >> 27)) &* 0x94D0_49BB_1331_11EB
+        return value ^ (value >> 31)
     }
 }
