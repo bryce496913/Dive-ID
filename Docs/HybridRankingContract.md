@@ -23,11 +23,12 @@ holds 150 shark and ray records. A one-word group name was a single clue group, 
 information was `insufficient` and every candidate was rejected; "ray" (3 characters)
 also could not be submitted under the 5-character minimum.
 
-- Naming a specific animal group (any parser category except `fish`, by one of its own
-  words: "shark", "rays", "octopus", "crab", "stingray", "manta") is `limited`
-  information, so that group's records are listed with confidence capped at 0.64.
-- "Fish" alone and vague phrases ("flat thing", although it maps to `ray`) still list
-  nothing, as do the existing no-match cases.
+- Naming a specific animal group (any parser category except `fish`: "shark", "rays",
+  "octopus", "crab", "stingray", "manta") is `limited` information, so that group's
+  records are listed with confidence capped at 0.64.
+- "Fish" alone, "dark fish" and "blue thing" still list nothing, as do the existing
+  no-match cases. "Flat thing" lists rays at limited confidence, as it already did
+  before this change (body shape "flat" plus category `ray` is two clue groups).
 - "stingray" and "manta" now map to the `ray` category.
 - Descriptions may be 3 characters or more (was 5), so "ray" and "eel" can be submitted.
 - Ordering inside the group is unchanged (evidence score, retrieval relevance,

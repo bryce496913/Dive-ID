@@ -551,9 +551,23 @@ final class AnimalGroupSearchTests: XCTestCase {
 
     func testBroadOrVagueDescriptionsStillListNothing() async throws {
         let pack = try await releaseGlobal()
-        for description in ["fish", "flat thing", "dark fish", "blue thing"] {
+        for description in ["fish", "dark fish", "blue thing"] {
             let matches = try await search(description, in: pack)
             XCTAssertTrue(matches.isEmpty, "\(description): \(matches.map(\.species.commonName))")
+        }
+    }
+
+    /// "Flat thing" was already limited information before group-name searches: the parser
+    /// reads it as body shape "flat" plus category "ray", two clue groups with a distinctive
+    /// one. It lists rays at limited confidence, as it did before.
+    func testFlatThingListsRaysAtLimitedConfidence() async throws {
+        let pack = try await releaseGlobal()
+        let rays = Set(pack.profiles.filter { $0.categories.contains("ray") }.map(\.id))
+        let matches = try await search("flat thing", in: pack)
+        XCTAssertFalse(matches.isEmpty)
+        for match in matches {
+            XCTAssertTrue(rays.contains(match.id), match.species.commonName)
+            XCTAssertLessThanOrEqual(match.score, 0.64, match.species.commonName)
         }
     }
 
