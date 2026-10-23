@@ -31,6 +31,42 @@ final class DiveIDUITests: XCTestCase {
     }
 
     @MainActor
+    func testFindMatchesStaysReachableWhileKeyboardIsShown() {
+        assertFindMatchesReachableWithKeyboard(launchArguments: ["-uiTesting"])
+    }
+
+    @MainActor
+    func testFindMatchesStaysReachableWhileKeyboardIsShownAtLargestDynamicType() {
+        assertFindMatchesReachableWithKeyboard(launchArguments: ["-uiTesting", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"])
+    }
+
+    @MainActor
+    private func assertFindMatchesReachableWithKeyboard(launchArguments: [String], file: StaticString = #filePath, line: UInt = #line) {
+        let app = XCUIApplication()
+        app.launchArguments = launchArguments
+        app.launch()
+        app.buttons["describeAction"].tap()
+        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2), file: file, line: line)
+        let editor = app.textViews["descriptionText"]
+        XCTAssertTrue(editor.waitForExistence(timeout: 2), file: file, line: line)
+        editor.tap()
+        editor.typeText("Large flat eagle ray with white spots and a long tail over sand in the Caribbean.")
+        let findMatches = app.buttons["findMatches"]
+        XCTAssertTrue(findMatches.isEnabled, file: file, line: line)
+        XCTAssertTrue(findMatches.isHittable, file: file, line: line)
+        // A simulator with a connected hardware keyboard shows no software keyboard; when it is shown,
+        // the button must sit entirely above it.
+        let keyboard = app.keyboards.firstMatch
+        if keyboard.exists {
+            XCTAssertLessThanOrEqual(findMatches.frame.maxY, keyboard.frame.minY, file: file, line: line)
+        }
+        // A single tap dismisses the keyboard and submits.
+        findMatches.tap()
+        XCTAssertTrue(app.navigationBars["Possible Matches"].waitForExistence(timeout: 3), file: file, line: line)
+        XCTAssertFalse(app.keyboards.firstMatch.exists, file: file, line: line)
+    }
+
+    @MainActor
     func testPhotoCardIsDisabledAndSavedScreenOpens() {
         let app = XCUIApplication()
         app.launch()
