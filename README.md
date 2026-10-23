@@ -41,8 +41,8 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved all 20
   [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
-  on October 23, 2026, so all 4,794 records are verified: 1,963 individually reviewed
-  (every flagged record and each batch's sample) and 2,831 sample-approved. The pack
+  on October 23, 2026, so all 4,794 records are verified and recorded as individually reviewed, on Bryce's
+  statement that he reviewed every entry (`--all-individually-reviewed`). The pack
   is no longer "(Experimental)". Approval of the Global copies does not carry over to
   the regional packs.
 - **Release** exposes 4,796 records: the 2 approved Caribbean species in Caribbean and

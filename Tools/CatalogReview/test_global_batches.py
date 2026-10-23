@@ -254,6 +254,15 @@ class RecordTests(unittest.TestCase):
         self.assertIn("not individually read", unread["reviewerNotes"])
         self.assertIn('"Approved, batch 1"', unread["reviewerNotes"])
 
+    def test_a_reviewer_who_read_every_record_records_all_as_individually_reviewed(self):
+        _, overlay = self.w.record(self.manifest, all_individually_reviewed=True)
+        self.assertEqual({r["reviewMethod"] for r in overlay["records"]}, {"individually-reviewed"})
+        self.assertIn("reviewer stated every record", overlay["reviewMethodBasis"])
+        reviews, _ = self.w.approved()
+        self.assertEqual(len(reviews), 80)
+        self.assertTrue(all(r["reviewMethod"] == "individually-reviewed" and "This record: individually reviewed." in r["reviewerNotes"]
+                            for r in reviews.values()))
+
     def test_partial_approval_holds_excluded_and_rejected_records(self):
         flagged, unread = self.w.ids(self.manifest, "flagged"), self.w.ids(self.manifest, "unread")
         _, overlay = self.w.record(self.manifest, excludes=[f"{unread[0]}=deferred to the next batch"],
