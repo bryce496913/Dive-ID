@@ -101,6 +101,24 @@ jobs:
           print(candidates[0][2])
           ' )"
           echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
+          # Smallest supported iPhone, for the small-screen UI-test pass.
+          se_udid="$(xcrun simctl list devices available --json | python3 -c '
+          import json, re, sys
+          devices = json.load(sys.stdin)["devices"]
+          candidates = []
+          for runtime, entries in devices.items():
+              match = re.search(r"iOS[- ](\d+)[-.](\d+)", runtime)
+              if not match or int(match.group(1)) != 18:
+                  continue
+              version = tuple(map(int, match.groups()))
+              for device in entries:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone SE"):
+                      candidates.append((version, device["name"], device["udid"]))
+          candidates.sort(reverse=True)
+          print(candidates[0][2] if candidates else "")
+          ' )"
+          # The SE pass is reported as skipped in the summary when the runner has no SE simulator.
+          if [ -n "$se_udid" ]; then echo "se_destination=platform=iOS Simulator,id=$se_udid" >> "$GITHUB_OUTPUT"; fi
 
       - name: Resolve and validate Debug test product settings
         id: debug_settings
@@ -185,6 +203,22 @@ jobs:
             test-without-building \
             -only-testing:DiveIDUITests 2>&1 | tee "$RUNNER_TEMP/ui-tests.log"
 
+      - name: Run UI-test target on the smallest supported iPhone (SE)
+        id: ui_tests_se
+        if: ${{ always() && steps.build.outcome == 'success' && steps.simulator.outputs.se_destination != '' }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -destination '${{ steps.simulator.outputs.se_destination }}' \
+            -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath "$RUNNER_TEMP/DiveIDUITestsSE.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            -parallel-testing-enabled NO \
+            test-without-building \
+            -only-testing:DiveIDUITests 2>&1 | tee "$RUNNER_TEMP/ui-tests-se.log"
+
       - name: Build the Internal application (optimized, development catalogue)
         id: internal_build
         if: ${{ always() && steps.internal_settings.outcome == 'success' }}
@@ -228,7 +262,8 @@ jobs:
         shell: bash
         run: |
           status=0
-          for stage in DiveIDTests DiveIDHostedPackagingTest DiveIDUITests; do
+          for stage in DiveIDTests DiveIDHostedPackagingTest DiveIDUITests DiveIDUITestsSE; do
+            [ -d "$RUNNER_TEMP/$stage.xcresult" ] || [ "$stage" != DiveIDUITestsSE ] || continue
             xcrun xcresulttool get test-results summary --path "$RUNNER_TEMP/$stage.xcresult" > "$RUNNER_TEMP/$stage-summary.json" || status=1
             cat "$RUNNER_TEMP/$stage-summary.json" >> "$GITHUB_STEP_SUMMARY"
           done
@@ -249,6 +284,7 @@ jobs:
           | Complete unit target | ${{ steps.unit_tests.outcome }} |
           | Hosted packaging | ${{ steps.packaging.outcome }} |
           | UI target | ${{ steps.ui_tests.outcome }} |
+          | UI target (iPhone SE) | ${{ steps.ui_tests_se.outcome }} |
           | Internal build | ${{ steps.internal_build.outcome }} |
           | Release build | ${{ steps.release_build.outcome }} |
           | Instrumentation absent from Release | ${{ steps.instrumentation.outcome }} |
