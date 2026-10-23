@@ -132,7 +132,7 @@ def main(argv=None):
     records, excluded, dropped = compose(drafts, risk)
     reviews, review_report = apply_reviews(records, Path(args.batches))
     manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
-    catalogue_validation.validate_catalogue(records, manifest)  # raises on any error; nothing written
+    catalogue_validation.validate_catalogue(records, manifest, pack)  # raises on any error; nothing written
     action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     applied = Path(args.batches) / "AppliedApprovals.json"
     if not applied.exists() or applied.read_text() != applied_approvals_text(reviews, review_report):

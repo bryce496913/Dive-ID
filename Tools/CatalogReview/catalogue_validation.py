@@ -11,6 +11,7 @@ import math
 import re
 import uuid
 from datetime import datetime
+from pathlib import Path
 
 
 VOCABULARY = {
@@ -176,7 +177,10 @@ def validate_record(record, position=1):
     return errors
 
 
-def validate_catalogue(records, manifest=None):
+def validate_catalogue(records, manifest=None, pack_directory=None):
+    """Raise CatalogueValidationError listing every problem. With pack_directory (which
+    needs manifest), every bundledImage must also exist as a file in the pack's
+    imageSubdirectory, as the app's loader requires."""
     errors = []
     if not isinstance(records, list): raise CatalogueValidationError([f"field $: expected array of records; actual {_actual(records)}"])
     for i, record in enumerate(records, 1): errors.extend(validate_record(record, i))
@@ -245,6 +249,10 @@ def validate_catalogue(records, manifest=None):
                 value = image.get(field, "")
                 if isinstance(value, str) and not re.match(r"^https?://[^/]+", value, re.I): errors.append(f"speciesID {sid!r}, field bundledImage.{field}: expected HTTP(S) URL; actual {value!r}")
             if image.get("licenseName") not in IMAGE_LICENSES: _error(errors, sid, "bundledImage.licenseName", "supported image license", image.get("licenseName"))
+            if pack_directory is not None and isinstance(filename, str) and filename.strip() and isinstance(manifest, dict) and isinstance(manifest.get("imageSubdirectory"), str):
+                path = Path(pack_directory) / manifest["imageSubdirectory"] / filename
+                if not path.is_file(): errors.append(f"speciesID {sid!r}, field bundledImage.fileName: expected file in the pack's {manifest['imageSubdirectory']}/ directory; actual {filename!r} not found")
+    if pack_directory is not None and manifest is None: errors.append("field manifest: expected object to locate the pack's images; actual null")
     if manifest is not None:
         if not isinstance(manifest, dict): errors.append(f"field manifest: expected object; actual {_actual(manifest)}")
         else:
