@@ -3,6 +3,10 @@
 enum GlobalRegion {
     static let definition = RegionCatalogDefinition(
         id: .global,
-        resourceDirectory: "Global"
+        resourceDirectory: "Global",
+        // Global stays out of Release even when batch approvals verify some of its
+        // records. Enabling it is a separate change the owner approves explicitly
+        // (Docs/GlobalBatchReview.md, "Release visibility").
+        availableInRelease: false
     )
 }

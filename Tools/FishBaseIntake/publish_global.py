@@ -16,8 +16,9 @@ DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.
 - Every staged record must be a draft. A record becomes verified only through a batch
   review overlay (Tools/CatalogReview/global_batches.py) whose manifest is the newest
   for its batch and whose fingerprint still matches the record's content. Release
-  builds expose only verified records, so the pack stays hidden from Release until
-  the first batch is approved.
+  builds expose only verified records, and only from packs whose definition is
+  `availableInRelease`; Global is not (GlobalRegion.swift), so approvals alone never
+  put it in Release.
 - Manifest counts are derived from the written records, and the whole pack is validated
   with the Swift-compatible validator before anything is written. The two files are
   replaced as a pair with rollback (Tools/CatalogReview/paired_write.py). Output is
@@ -89,8 +90,9 @@ def applied_approvals_text(reviews, report):
 
 def manifest_for(records, template, approved_batches=0):
     """Counts come from the records. The pack stays "(Experimental)" until every record
-    is publication-eligible; its version rises with each approved batch, whose review
-    changes the records."""
+    is publication-eligible; its version rises with each recorded batch approval, whose
+    review changes the records. approved_batches counts every approval ever recorded, so
+    a new generation that supersedes an approved one never lowers the version."""
     reviewed = sum(r["review"]["status"] in ("sourceChecked", "verified") for r in records)
     eligible = sum(r["review"]["status"] == "verified" and bool(r["categories"]) for r in records)
     complete = bool(records) and eligible == len(records)
@@ -131,7 +133,7 @@ def main(argv=None):
     risk = json.loads((staging / "RiskReport.json").read_text())["records"]
     records, excluded, dropped = compose(drafts, risk)
     reviews, review_report = apply_reviews(records, Path(args.batches))
-    manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), len(review_report["approvedBatches"]))
+    manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), review_report["approvalsRecorded"])
     catalogue_validation.validate_catalogue(records, manifest, pack)  # raises on any error; nothing written
     action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     applied = Path(args.batches) / "AppliedApprovals.json"

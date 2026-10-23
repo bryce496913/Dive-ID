@@ -4,6 +4,7 @@ import io
 
 Records are synthetic; every test works in a temporary directory."""
 import json
+import shutil
 import sys
 import tempfile
 import unittest
@@ -80,14 +81,18 @@ class NamedBatchTests(unittest.TestCase):
         self.assertTrue(all(r["reviewMethod"] == "individually-reviewed" for r in reviews.values()))
         self.assertEqual(report["approvedBatches"], ["batch-caribbean g1"])
 
-    def test_named_batch_accepts_records_absent_from_the_risk_report(self):
+    def test_named_batch_assesses_records_absent_from_the_risk_report_with_the_current_validators(self):
         # The carried Caribbean records are not built from FishBase, so they have no risk entry.
         for member in self.members:
             del self.w.risk[member]
         self.w.risk_path.write_text(json.dumps({"records": self.w.risk}))
+        for record in self.w.records[80:87]:
+            record["regions"] = ["caribbean"]
+        self.w.save()
         manifest, _, _ = self.prepare()
-        self.assertEqual(manifest["counts"], {"flagged": 0, "sampled": len(self.members), "unread": 0})
-        self.assertTrue(all(e["flags"] == [] and e["riskScore"] == 0 for e in manifest["records"]))
+        self.assertEqual(manifest["counts"], {"flagged": 1, "sampled": len(self.members) - 1, "unread": 0})
+        flagged = [e for e in manifest["records"] if e["selection"] == "flagged"]
+        self.assertEqual([(e["speciesID"], e["flags"], e["riskScore"]) for e in flagged], [(ID(88), ["distribution_missing"], 15)])
 
     def test_named_batch_rejects_bad_names_unknown_ids_and_rereview(self):
         for name in (None, "", "7", "07-rereview", "Caribbean", "a_b"):
@@ -105,6 +110,59 @@ class NamedBatchTests(unittest.TestCase):
     def test_cli_requires_name_and_ids_together(self):
         with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
             self.assertNotEqual(G.main(["prepare", "--name", "caribbean"]), 0)
+
+
+class PartitionTests(unittest.TestCase):
+    """Numbered batches cover every pack record exactly once."""
+    def setUp(self):
+        self.w = Workspace()
+        self.addCleanup(self.w.temp.cleanup)
+
+    def test_records_absent_from_the_risk_report_join_the_last_batch_and_risk_only_records_are_skipped(self):
+        carried = [species(n) for n in range(91, 99)]
+        self.w.records += carried
+        self.w.risk[ID(500)] = {"batch": 2, "score": 30, "flags": ["missing_required:geographicRange"]}  # left out of the pack
+        self.w.risk_path.write_text(json.dumps({"records": self.w.risk}))
+        self.w.save()
+        numbers = G.batch_assignments(self.w.records, self.w.risk)
+        self.assertEqual(set(numbers), {r["id"] for r in self.w.records})
+        self.assertTrue(all(numbers[r["id"]] == 2 for r in carried))
+        first, second = self.w.prepare(1)[0], self.w.prepare(2)[0]
+        covered = [e["speciesID"] for m in (first, second) for e in m["records"]]
+        self.assertEqual(sorted(covered), sorted(r["id"] for r in self.w.records), "every record exactly once")
+        self.assertEqual(len(second["records"]), 18)
+        with self.assertRaises(G.ReviewError):
+            self.w.prepare(3)
+
+    def test_the_real_pack_is_covered_exactly_once_with_the_caribbean_records_in_the_last_batch(self):
+        records = json.loads((G.PACK / "Creatures.json").read_text())
+        risk = json.loads(G.RISK_REPORT.read_text())["records"]
+        caribbean = {r["id"] for r in json.loads((G.REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())}
+        numbers = G.batch_assignments(records, risk)
+        self.assertEqual(set(numbers), {r["id"] for r in records})
+        last = max(numbers.values())
+        self.assertEqual({numbers[i] for i in caribbean}, {last})
+        self.assertEqual(sorted(set(numbers.values())), list(range(1, last + 1)), "no gap in the numbering")
+        assessed = G.record_risk(records, risk)
+        self.assertTrue(all(assessed[i] == risk[i] for i in numbers if i in risk), "FishBase records keep the build's flags")
+
+    def test_the_current_manifests_supersede_the_earlier_batch_01_reviews(self):
+        manifests = G.load_manifests(G.BATCHES)
+        current = [m for _, m in manifests.values() if not G.superseded_by(manifests, m)]
+        numbered = [m for m in current if G.re.fullmatch(r"batch-\d+", m["batchID"])]
+        if not any(m["batchID"] == "batch-01" and m["generation"] > 1 for m in numbered):
+            self.skipTest("the current-content batches are not prepared")
+        records = json.loads((G.PACK / "Creatures.json").read_text())
+        covered = [e["speciesID"] for m in numbered for e in m["records"]]
+        self.assertEqual(sorted(covered), sorted(r["id"] for r in records), "the current batches cover the pack exactly once")
+        self.assertEqual([m["batchID"] for m in current if m not in numbered], [], "no earlier re-review batch stays current")
+        with tempfile.TemporaryDirectory() as temp:
+            copy = Path(temp) / "Batches"  # a copy, so a missed refusal never writes a decision
+            shutil.copytree(G.BATCHES, copy)
+            for key, (_, manifest) in manifests.items():
+                if manifest not in current:
+                    with self.assertRaisesRegex(G.ReviewError, "superseded|already recorded"):
+                        G.record(key, "Bryce", "test only", "approve", "2026-10-23", root=copy, pack=G.PACK, commit="x")
 
 
 class PrepareTests(unittest.TestCase):
@@ -333,6 +391,33 @@ class RereviewTests(unittest.TestCase):
         self.assertEqual(report["pendingBatches"], ["batch-01-rereview g1"])
         G.record(manifest["manifestSHA256"], "Bryce", "Approved the re-review.", "approve", "2026-10-23", root=self.w.root, pack=self.w.pack, commit="x")
         self.assertEqual(len(self.w.approved()[0]), 80)
+
+    def test_a_new_generation_of_the_batch_supersedes_its_rereview(self):
+        for r in self.w.records:
+            if r["id"] in (ID(3), ID(40)):
+                r["summary"] = "Rebuilt with more evidence."
+        self.w.save()
+        rereview = G.prepare(1, None, False, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path, rereview=True)[0]
+        fresh = self.w.prepare(force_new=True)[0]
+        with self.assertRaisesRegex(G.ReviewError, "superseded by generation 2 of batch-01"):
+            G.record(rereview["manifestSHA256"], "Bryce", "Approved the re-review.", "approve", "2026-10-23", root=self.w.root, pack=self.w.pack, commit="x")
+        reviews, report = self.w.approved()
+        self.assertEqual((reviews, report["supersededBatches"], report["pendingBatches"]), ({}, ["batch-01-rereview g1"], ["batch-01 g2"]))
+        self.w.record(fresh)
+        self.assertEqual(len(self.w.approved()[0]), 80)
+
+    def test_an_approved_rereview_stops_counting_once_its_batch_has_a_new_generation(self):
+        for r in self.w.records:
+            if r["id"] in (ID(3), ID(40)):
+                r["summary"] = "Rebuilt with more evidence."
+        self.w.save()
+        rereview = G.prepare(1, None, False, root=self.w.root, pages=self.w.pages, pack=self.w.pack, risk_path=self.w.risk_path, rereview=True)[0]
+        G.record(rereview["manifestSHA256"], "Bryce", "Approved the re-review.", "approve", "2026-10-23", root=self.w.root, pack=self.w.pack, commit="x")
+        self.assertEqual(len(self.w.approved()[0]), 80)
+        self.w.prepare(force_new=True)
+        reviews, report = self.w.approved()
+        self.assertEqual(reviews, {}, "only the newest generation of batch-01 counts, and it is undecided")
+        self.assertEqual(report["supersededBatches"], ["batch-01-rereview g1"])
 
     def test_nothing_to_rereview_when_no_approved_record_changed(self):
         with self.assertRaises(G.ReviewError):

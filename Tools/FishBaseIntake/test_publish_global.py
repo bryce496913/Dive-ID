@@ -133,7 +133,7 @@ class OutputTests(unittest.TestCase):
             self.assertEqual(carried["review"]["status"], "verified" if carried["id"] in reviews else "draft")
         self.assertEqual((publish_global.PACK / "Creatures.json").read_text(), publish_global.creatures_text(records))
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
-        self.assertEqual(manifest, publish_global.manifest_for(records, manifest, len(report["approvedBatches"])))
+        self.assertEqual(manifest, publish_global.manifest_for(records, manifest, report["approvalsRecorded"]))
         applied = publish_global.global_batches.BATCHES / "AppliedApprovals.json"
         self.assertEqual(applied.read_text(), publish_global.applied_approvals_text(reviews, report), "AppliedApprovals.json is current")
         stale = set(report["staleRecords"])
@@ -158,6 +158,18 @@ class BatchReviewTests(unittest.TestCase):
         self.assertNotIn(stale, verified)
         self.assertEqual(report["staleRecords"], [stale])
         self.assertEqual(publish_global.manifest_for(w.records, {"id": "global"})["publicationEligibleRecordCount"], 79)
+
+    def test_a_new_generation_of_an_approved_batch_never_lowers_the_pack_version(self):
+        import test_global_batches
+        w = test_global_batches.Workspace()
+        self.addCleanup(w.temp.cleanup)
+        w.record(w.prepare(seed=7)[0])
+        _, report = publish_global.apply_reviews(w.records, w.root)
+        version = publish_global.manifest_for(w.records, {"id": "global"}, report["approvalsRecorded"])["packVersion"]
+        w.prepare(force_new=True)  # supersedes the approved generation; nothing is approved now
+        reviews, report = publish_global.apply_reviews(w.records, w.root)
+        self.assertEqual((reviews, report["approvedBatches"], report["approvalsRecorded"]), ({}, [], 1))
+        self.assertEqual(publish_global.manifest_for(w.records, {"id": "global"}, report["approvalsRecorded"])["packVersion"], version)
 
 
 if __name__ == "__main__":
