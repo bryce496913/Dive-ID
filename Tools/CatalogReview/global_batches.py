@@ -15,9 +15,14 @@ is stored verbatim. Records the reviewer read get reviewMethod "individually-rev
 the rest "sample-approved". Any reported error in a sampled record rejects the whole
 batch; regenerate it with a new seed after fixing.
 
+Numbered batches partition the whole pack: each FishBase record is in its build batch
+(RiskReport.json), and records absent from the risk report (the carried Caribbean
+records) join the last numbered batch, so every pack record is in exactly one batch.
+
 `approved_reviews` is what publish_global.py applies. It fails closed: only the newest
-manifest of each batch counts, its overlay must approve it, and a record is approved
-only while its current content still has the fingerprint in that manifest.
+manifest of each batch counts, a re-review batch counts only while the generation it
+re-reviews is still the newest of its batch, its overlay must approve it, and a record
+is approved only while its current content still has the fingerprint in that manifest.
 """
 from __future__ import annotations
 
@@ -37,6 +42,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from catalog_review import PUBLICATION_FIELDS, content_fingerprint  # noqa: E402
+import catalogue_validation  # noqa: E402
 
 SCHEMA_VERSION = 1
 SAMPLE_SIZE = 30
@@ -65,25 +71,47 @@ def batch_name(batch):
     return f"batch-{batch:02d}"
 
 
+def batch_assignments(records, risk):
+    """{speciesID: batch number} for every pack record. A FishBase record keeps its build
+    batch from the risk report; a record absent from it (the carried Caribbean records,
+    appended after the FishBase records) joins the last numbered batch."""
+    numbers = [risk[r["id"]]["batch"] for r in records if r["id"] in risk]
+    if not numbers:
+        raise ReviewError("no pack record has a batch in the risk report")
+    last = max(numbers)
+    return {r["id"]: risk[r["id"]]["batch"] if r["id"] in risk else last for r in records}
+
+
+def record_risk(records, risk):
+    """{speciesID: {"score", "flags"}} for every pack record: the build's risk report, or,
+    for a record absent from it, the current record validators (catalogue_validation)."""
+    absent = [r for r in records if r["id"] not in risk]
+    assessed = catalogue_validation.assess_risk(absent, reserved_common_names=[
+        r["commonName"] for r in records if r["id"] in risk])["records"] if absent else {}
+    return {r["id"]: risk.get(r["id"]) or assessed[r["id"]] for r in records}
+
+
 def build_manifest(records, risk, batch, seed, generation, pack_metadata, member_ids=None, batch_id=None, rereview_of=None):
     """member_ids/batch_id select a re-review batch instead of a numbered batch."""
     batch_id = batch_id or batch_name(batch)
-    members = sorted((r for r in records if (r["id"] in member_ids if member_ids is not None else risk.get(r["id"], {}).get("batch") == batch)),
+    numbers = batch_assignments(records, risk) if member_ids is None else {}
+    members = sorted((r for r in records if (r["id"] in member_ids if member_ids is not None else numbers[r["id"]] == batch)),
                      key=lambda r: r["id"])
     if not members:
         raise ReviewError(f"{batch_id} has no records in the pack")
-    # Records absent from the FishBase risk report (the carried Caribbean records) have no flags.
-    flagged = {r["id"] for r in members if risk.get(r["id"], {}).get("flags")}
+    risk = record_risk(records, risk)
+    flagged = {r["id"] for r in members if risk[r["id"]]["flags"]}
     unflagged = sorted(r["id"] for r in members if r["id"] not in flagged)
     sampled = set(random.Random(seed).sample(unflagged, min(SAMPLE_SIZE, len(unflagged))))
     entries = [{"speciesID": r["id"], "commonName": r["commonName"], "scientificName": r["scientificName"],
                 "reviewedContentFingerprint": content_fingerprint(r),
                 "selection": "flagged" if r["id"] in flagged else "sampled" if r["id"] in sampled else "unread",
-                "riskScore": risk.get(r["id"], {}).get("score", 0), "flags": risk.get(r["id"], {}).get("flags", [])} for r in members]
+                "riskScore": risk[r["id"]]["score"], "flags": risk[r["id"]]["flags"]} for r in members]
     manifest = {"schemaVersion": SCHEMA_VERSION, "batchID": batch_id, "generation": generation,
                 "pack": pack_metadata["id"], "packVersion": pack_metadata["packVersion"], "seed": seed,
                 "sampleSize": len(sampled), "sampling": SAMPLING,
-                "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json",
+                "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json, or, for a record absent from it, "
+                                     "from catalogue_validation.risk_flags",
                 "counts": {s: sum(e["selection"] == s for e in entries) for s in ("flagged", "sampled", "unread")},
                 "records": entries}
     if rereview_of:
@@ -133,6 +161,21 @@ def load_overlays(root):
 
 def _batch_history(manifests, batch_id):
     return sorted((m for _, m in manifests.values() if m["batchID"] == batch_id), key=lambda m: m["generation"])
+
+
+def superseded_by(manifests, manifest):
+    """Why a manifest can no longer be decided or applied, or None while it is current:
+    a newer generation of its batch, or, for a re-review batch, a newer generation of the
+    batch it re-reviews (which covers those records again)."""
+    latest = _batch_history(manifests, manifest["batchID"])[-1]
+    if latest["manifestSHA256"] != manifest["manifestSHA256"]:
+        return f"generation {latest['generation']} of {manifest['batchID']}"
+    origin = manifest.get("rereviewOf")
+    if origin:
+        history = _batch_history(manifests, origin["batchID"])
+        if history and history[-1]["generation"] > origin["generation"]:
+            return f"generation {history[-1]['generation']} of {origin['batchID']}, which it re-reviewed generation {origin['generation']} of"
+    return None
 
 
 def _json_text(document):
@@ -257,9 +300,9 @@ def record(manifest_sha256, reviewer, decision_text, outcome, review_date=None, 
     if key in overlays:
         raise ReviewError(f"a decision is already recorded for manifest {key}: {overlays[key][0]}")
     _, manifest = manifests[key]
-    latest = _batch_history(manifests, manifest["batchID"])[-1]
-    if latest["manifestSHA256"] != key:
-        raise ReviewError(f"manifest {key} was superseded by generation {latest['generation']} of {manifest['batchID']}")
+    superseded = superseded_by(manifests, manifest)
+    if superseded:
+        raise ReviewError(f"manifest {key} was superseded by {superseded}")
 
     entries = {e["speciesID"]: e for e in manifest["records"]}
     excluded, rejected = _parse_notes(excludes, "exclude"), _parse_notes(rejects, "reject")
@@ -320,11 +363,16 @@ def approved_reviews(records, root=BATCHES):
         if key not in manifests:
             raise ReviewError(f"{path}: decision for an unknown manifest {key}")
     current = {r["id"]: content_fingerprint(r) for r in records}
-    reviews, report = {}, {"approvedBatches": [], "pendingBatches": [], "rejectedBatches": [], "staleRecords": []}
+    reviews, report = {}, {"approvedBatches": [], "pendingBatches": [], "rejectedBatches": [], "supersededBatches": [], "staleRecords": []}
+    # Every approval ever recorded, superseded or not: overlays are never removed, so this only rises.
+    report["approvalsRecorded"] = sum(overlay["decision"] == "approved" for _, overlay in overlays.values())
     for batch_id in sorted({m["batchID"] for _, m in manifests.values()}):
         latest = _batch_history(manifests, batch_id)[-1]
         _, overlay = overlays.get(latest["manifestSHA256"], (None, None))
         label = f"{batch_id} g{latest['generation']}"
+        if superseded_by(manifests, latest):
+            report["supersededBatches"].append(label)
+            continue
         if overlay is None:
             report["pendingBatches"].append(label)
             continue
@@ -462,7 +510,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
     p = commands.add_parser("prepare", help="write a batch manifest and its review page")
-    p.add_argument("--batch", type=int, help="a numbered batch (from RiskReport.json)")
+    p.add_argument("--batch", type=int, help="a numbered batch (the build batch in RiskReport.json; the carried Caribbean records are in the last)")
     p.add_argument("--name", help="with --ids: a named batch, batch-NAME")
     p.add_argument("--ids", help="with --name: comma-separated species IDs")
     p.add_argument("--seed", type=int, help="default: a fresh random seed, recorded in the manifest")

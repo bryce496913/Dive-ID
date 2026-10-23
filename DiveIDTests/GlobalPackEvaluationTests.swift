@@ -110,8 +110,8 @@ final class GlobalPackEvaluationTests: XCTestCase {
         let composedProfiles = global.profiles.filter { !caribbeanIDs.contains($0.id) } + caribbean.profiles
         var composed = global.metadata
         composed.speciesCount = composedProfiles.count
-        // The subset Release actually exposes: publication access. Unavailable means no
-        // approved Global record exists, so the subset is empty.
+        // The subset Release actually exposes: publication access. Unavailable means Global is
+        // gated out of Release (GlobalRegion.definition) or has no approved record, so the subset is empty.
         let release: OfflineIdentificationPack
         do {
             release = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)

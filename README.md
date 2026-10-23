@@ -25,11 +25,13 @@ the iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through
-  [batch review](Docs/GlobalBatchReview.md). The builder v3 rebuild changed all 250,
-  so none keeps its approval. They wait in the re-review batch `batch-01-rereview`.
-  All 4,786 records are draft, and the pack keeps "(Experimental)" in its name.
+  [batch review](Docs/GlobalBatchReview.md). Later rebuilds changed all 250, so none
+  keeps its approval. All 4,794 records are draft and wait in 20
+  [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23),
+  and the pack keeps "(Experimental)" in its name.
 - **Release** exposes 2 records, the 2 Caribbean species; Global and Tropical Pacific
-  are unavailable. **Debug** permits all 5,794 development records.
+  are unavailable. Global is gated out of Release at pack level (`GlobalRegion.swift`),
+  so approving its records does not publish it; enabling it is a separate change. **Debug** permits all 5,794 development records.
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).

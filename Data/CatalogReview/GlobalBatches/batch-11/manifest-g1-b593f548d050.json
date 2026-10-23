@@ -1,0 +1,2388 @@
+{
+  "schemaVersion": 1,
+  "batchID": "batch-11",
+  "generation": 1,
+  "pack": "global",
+  "packVersion": 3,
+  "seed": 8119467024620482905,
+  "sampleSize": 30,
+  "sampling": "random.Random(seed).sample(sorted unflagged speciesIDs, min(30, count)) in CPython 3",
+  "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json, or, for a record absent from it, from catalogue_validation.risk_flags",
+  "counts": {
+    "flagged": 56,
+    "sampled": 30,
+    "unread": 164
+  },
+  "records": [
+    {
+      "speciesID": "00c6ea80-1d9b-529e-9e9a-dfbdb46343a9",
+      "commonName": "Tosanoides flavofasciatus",
+      "scientificName": "Tosanoides flavofasciatus",
+      "reviewedContentFingerprint": "sha256:4684d9ff674241afb03d30d7c7d558d9f7b84164d91fced991f5fb15f54891ee",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "0114f22b-e07c-5efb-938a-fece13b268c4",
+      "commonName": "Mushroom scorpionfish",
+      "scientificName": "Scorpaena inermis",
+      "reviewedContentFingerprint": "sha256:dc479787af49ec7566ac3340c6458469663a2eca17b23ab5288c9d1363e67e3c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "01b7d3eb-1132-5744-bfea-48b4843ea278",
+      "commonName": "Scaly chromis",
+      "scientificName": "Azurina lepidolepis",
+      "reviewedContentFingerprint": "sha256:0f56b29710dfce73e358625e8d0d1354f664991b0e207eac6f16e1cf26bf61c5",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "026af2d5-759c-561f-a599-9ad1c26f429d",
+      "commonName": "Bluemarked drombus",
+      "scientificName": "Drombus ocyurus",
+      "reviewedContentFingerprint": "sha256:0fc0922579e331d2c3e9f1f250b2238ecea85312dabbbc71ed23ef09caff8dc1",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "02f76a65-85c1-57a0-8830-9ac1b135b248",
+      "commonName": "Aurora anthias",
+      "scientificName": "Pseudanthias calloura",
+      "reviewedContentFingerprint": "sha256:b1d4b36c893a6aee525c2f51bcc27645f1c082dbdffda5c9190134fc7bbc0a62",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "03cb97f5-b179-5de8-9315-ccf4cca78743",
+      "commonName": "Pseudolabrus gayi",
+      "scientificName": "Pseudolabrus gayi",
+      "reviewedContentFingerprint": "sha256:45745cb0bad62b8cbfb2217e94fc788e9ce33807f2d6269db6ec0252db1e088a",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "059f2487-ffc2-54ef-8049-f43994c8698b",
+      "commonName": "Banner goby",
+      "scientificName": "Microgobius microlepis",
+      "reviewedContentFingerprint": "sha256:450dad0ac36dc2007fb87694c3de16d013814873cbc60a97ca450f8e26aa085e",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors"
+      ]
+    },
+    {
+      "speciesID": "06fad93a-dcfb-5f73-947a-4779f59550df",
+      "commonName": "Rock damselfish",
+      "scientificName": "Plectroglyphidodon sindonis",
+      "reviewedContentFingerprint": "sha256:878ed23a91893abc440731a0a40f3d9403d8b1b885bd4149a555269bfe37c0df",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "07c02c15-35f6-53d1-af67-f093d2cc995c",
+      "commonName": "Blackbar devil",
+      "scientificName": "Plectroglyphidodon dickii",
+      "reviewedContentFingerprint": "sha256:7af5be4bf66a6300194422d111930183425ae541a5084a1f584bd89d921aca78",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0a1acbfb-4ac8-57ed-8b87-d229d5b515ec",
+      "commonName": "Saddle squirrelfish",
+      "scientificName": "Sargocentron poco",
+      "reviewedContentFingerprint": "sha256:e75cb24473588a06a6a69ff851f1c07fb16bfe176aaa509e905e83d3e272f6e5",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0a280fdf-26ee-557b-aebf-06a05def1e2f",
+      "commonName": "Pallid rockskipper",
+      "scientificName": "Istiblennius unicolor",
+      "reviewedContentFingerprint": "sha256:f7c53375b7358b99bddfb46bfd53d1b77791283e6ce9c0e84b7e7ad86d5992af",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0a38e6b0-075f-58b6-bf80-0e865c01c9a7",
+      "commonName": "Yellowfin damsel",
+      "scientificName": "Amblyglyphidodon flavilatus",
+      "reviewedContentFingerprint": "sha256:c603cb4f0c94516c701614ac6d1c3f1291d53ac18c6099ddc400256f416c9a2a",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0bb8f6ae-ef31-56df-bdc5-2ece4df30ff0",
+      "commonName": "Crested blenny (Hypleurochilus geminatus)",
+      "scientificName": "Hypleurochilus geminatus",
+      "reviewedContentFingerprint": "sha256:c2abb17dd5df5f903546b4c1711ac09d9db115204d5452e249e3d36e50aa2c1e",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0bcba079-2e28-5b38-bc7f-aab8b80ea9c5",
+      "commonName": "Canary fangblenny",
+      "scientificName": "Meiacanthus oualanensis",
+      "reviewedContentFingerprint": "sha256:83b50b844a1c281bc6f51f7351ca425ba8c68f7a5a2b31a67e72cd010bf66c9d",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0c995466-834f-5b52-9666-cd0325945c58",
+      "commonName": "Springer's blenny (Cirripectes springeri)",
+      "scientificName": "Cirripectes springeri",
+      "reviewedContentFingerprint": "sha256:786f50f75a39958b938d60602c53d1eab063e241e7e117c3d33ed70eb9527d61",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors/markings"
+      ]
+    },
+    {
+      "speciesID": "0cbe3cc7-e7b4-5e9b-9b5c-8ca4473638a3",
+      "commonName": "Yellow-headed goby",
+      "scientificName": "Gobius xanthocephalus",
+      "reviewedContentFingerprint": "sha256:9eb6ebf7cb823e3ac82e39789b4955d8f866ff5bf6bc4e423ee75f3f05ff36c6",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0de959c2-735a-567b-b3c7-54596626c07a",
+      "commonName": "Mozambique fangblenny",
+      "scientificName": "Meiacanthus mossambicus",
+      "reviewedContentFingerprint": "sha256:7090b075bc87502b76031e4e00a91f00700094eeed67b350b096b2d4396345c6",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "0e083878-08b7-52a1-9fa4-42371808e11a",
+      "commonName": "Amblyeleotris novaecaledoniae",
+      "scientificName": "Amblyeleotris novaecaledoniae",
+      "reviewedContentFingerprint": "sha256:4f60b89db67cec037744a82a8810d57bf3433073c83ee7a67fa588d95fd8647f",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "0e969ada-2c16-5374-ac73-df205ac00b27",
+      "commonName": "Istiblennius flaviumbrinus",
+      "scientificName": "Istiblennius flaviumbrinus",
+      "reviewedContentFingerprint": "sha256:49d9710169b30acba11c87c2b8a99248d360bf66c45c84f9d7715249151984cf",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "120f68d3-6adb-552f-a1c9-b038b2c853f6",
+      "commonName": "Goosehead scorpionfish",
+      "scientificName": "Scorpaena bergii",
+      "reviewedContentFingerprint": "sha256:9780426a86229987bb263ef7301dd3226d6c18d8f6859928b01c7a72715f4668",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "12bf6758-aa79-5211-8d9b-dba6f021b6cb",
+      "commonName": "Black leopard wrasse",
+      "scientificName": "Macropharyngodon kuiteri",
+      "reviewedContentFingerprint": "sha256:41f1891dd482950d1ebba10db0aca88e666ff5d20a2d9fdd56d0a2fc1648360c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "144e5ecd-2db3-57ab-a5c2-8948530248b8",
+      "commonName": "Nahacky's angelfish",
+      "scientificName": "Centropyge nahackyi",
+      "reviewedContentFingerprint": "sha256:3a6778f69acef2ae29c98f95f9b045b33afa430b2b56a4b0d4052d33f32c8cf2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "14985046-9a6b-5956-84d8-f3c3346fe99b",
+      "commonName": "Sulphur damsel",
+      "scientificName": "Pomacentrus sulfureus",
+      "reviewedContentFingerprint": "sha256:cf217741336d3e2b1a0958d0b3ae74889c25257e481fbc935f4915a38c3ad4cd",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "19d54a2c-cadd-5da7-8afe-dd66334a783b",
+      "commonName": "Feather blenny",
+      "scientificName": "Hypsoblennius hentz",
+      "reviewedContentFingerprint": "sha256:1adf828f7c7d97f51c4c15229bbe341a5e2c373553c5b0cd6c4b84d3df3d5ec6",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1aba09ac-cfb2-5c6b-b797-9ea99f96561d",
+      "commonName": "Yellow-brown chromis",
+      "scientificName": "Chromis xouthos",
+      "reviewedContentFingerprint": "sha256:dde44131c0dbca0ae9e0dc4d05f0893828b4d8ff58b857425fca479fa84aee07",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1b115b81-37db-59cf-b279-e5461c674776",
+      "commonName": "Darkspotted scorpionfish",
+      "scientificName": "Sebastapistes tinkhami",
+      "reviewedContentFingerprint": "sha256:2c4a89eb78d9d98434fc99981ef449c1eafb7e12eddeb04105fc477beb86079b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1b34ffb1-8ae1-531f-b557-d8ebe14e8655",
+      "commonName": "Yellow prawn-goby",
+      "scientificName": "Cryptocentrus cinctus",
+      "reviewedContentFingerprint": "sha256:80f447c1c5d3a39c36d60cc0e4889d8ab631b8e23992c9140222d41b3c960e07",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1ca8bea6-3cd8-5a83-bf89-4463bf688fa7",
+      "commonName": "Rocas gregory",
+      "scientificName": "Stegastes rocasensis",
+      "reviewedContentFingerprint": "sha256:4fd920aa7cc5ad7fe5b5b119e2115c6675a06b36306fe03cb062edfcbdc35764",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1e9ee3b5-c028-5ae1-a17e-ee956eb5f7a7",
+      "commonName": "Blacklip damsel",
+      "scientificName": "Pomacentrus pikei",
+      "reviewedContentFingerprint": "sha256:0321fa817572b3406166cf08ef8b87162510998ba10cacf77b24491cd83fa2e3",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "20c6e168-dd97-5f35-8ea9-e5265d3c42b3",
+      "commonName": "White-eye goby",
+      "scientificName": "Bollmannia boqueronensis",
+      "reviewedContentFingerprint": "sha256:b07d6f3ccd55d430ec24a501365661ec8a8ccd6a08d6ab5ffca9a40a7e8fb070",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "20f8f92a-5a25-5194-95ed-83e763d51e18",
+      "commonName": "Island gregory",
+      "scientificName": "Plectroglyphidodon insularis",
+      "reviewedContentFingerprint": "sha256:2fd6a2083618295d7ec6a3d62c544b73a22715cfbc0d78c69f0336e24fdb0194",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors"
+      ]
+    },
+    {
+      "speciesID": "215acfa1-c390-5063-b6de-3c7feba09ca7",
+      "commonName": "Triplespot shrimpgoby",
+      "scientificName": "Amblyeleotris triguttata",
+      "reviewedContentFingerprint": "sha256:eb323ce35da55a5550597d337a941e71f69f5df88c6cbdbe08eea06d63816aa9",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "24cd2beb-079e-5af5-8f90-23a08c9f4cf5",
+      "commonName": "Redeye wrasse",
+      "scientificName": "Pseudojuloides erythrops",
+      "reviewedContentFingerprint": "sha256:40affbbbc0e1f6aad27e8139c5ad4b269972424d191f576536d74eec473a5a13",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "252bf064-d13e-5148-9c7a-94f88eda26ee",
+      "commonName": "Striped poison-fang blenny mimic",
+      "scientificName": "Petroscirtes breviceps",
+      "reviewedContentFingerprint": "sha256:5d8e48f91c62d8234b722d6c7c8e1e80c6382f80cc8c1a14358de59bce606367",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:habitats",
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "255d1ae3-2a4e-5c53-87b2-57a9a7785861",
+      "commonName": "Striped pigfish",
+      "scientificName": "Bodianus izuensis",
+      "reviewedContentFingerprint": "sha256:bc347e9a5309314866fd5a663b80bb58039a44e7c98bdeb11b68bbada0a77e00",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "25738b9e-d27c-5255-a86b-d2b89e2c1d88",
+      "commonName": "Valenciennea persica",
+      "scientificName": "Valenciennea persica",
+      "reviewedContentFingerprint": "sha256:6b6651232b2d48ea2f3745320cff33d009287cd30615a93d77721d0eb0fcd8b2",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "2619969f-86dd-5dc4-960c-e3efe27af362",
+      "commonName": "Ewa blenny",
+      "scientificName": "Plagiotremus ewaensis",
+      "reviewedContentFingerprint": "sha256:c9b964a99f9966f7de37dd23eb20a30f99ca39cbd7fbb07c1039ee6a0e45563f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "27ae3135-a307-5d29-938d-23bbcb71f590",
+      "commonName": "Papuan toby",
+      "scientificName": "Canthigaster papua",
+      "reviewedContentFingerprint": "sha256:b018aafbfd3d9cd35a2a451774260878a2456d6a1748907970c960fbd9121ee9",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors",
+        "trait_ambiguous:features/habitats"
+      ]
+    },
+    {
+      "speciesID": "2818c748-96e2-52a3-8b4c-68eaed276473",
+      "commonName": "Cryptocentrus yatsui",
+      "scientificName": "Cryptocentrus yatsui",
+      "reviewedContentFingerprint": "sha256:84c3bb62d81fa839d74610b067621c1d7efd4138203f2dc5e8b3f80526289c4d",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "28bc465b-51aa-58a2-97af-9146ccc7109a",
+      "commonName": "Batuna's damselfish",
+      "scientificName": "Amblyglyphidodon batunaorum",
+      "reviewedContentFingerprint": "sha256:3364916ef9443240bca245833dc9fa3649d1ba943d4c0c6e10368a61b84621c3",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "29dae23e-479e-54b6-90d8-3fee3c59f28b",
+      "commonName": "Cocos-Keeling angelfish",
+      "scientificName": "Centropyge colini",
+      "reviewedContentFingerprint": "sha256:eef1ec66886dba24ff4a85e66b3e7b3265206830836d735149e264dc08f551a2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "29e09f73-04e5-59ea-a2cb-54b4af220527",
+      "commonName": "Blotched podge",
+      "scientificName": "Aporops bilinearis",
+      "reviewedContentFingerprint": "sha256:050f5b4c2dae2ddba7e0f750188db377b90c7ceec4973448c0b14fc8dcecaa53",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2a9cdc26-b400-5d30-a739-5878306a574f",
+      "commonName": "Yellow fangbelly",
+      "scientificName": "Meiacanthus luteus",
+      "reviewedContentFingerprint": "sha256:e4dbbd4d7a8bc4dd0bb8800c12446935f5ec62d5f9e3deaeb1f30befabd48b24",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2b597325-66d4-551f-b1e1-3d2d64f39348",
+      "commonName": "Minute goatfish",
+      "scientificName": "Parupeneus minys",
+      "reviewedContentFingerprint": "sha256:982ea61de28195567f6672b9a02846b351d07c7f274cc18893592c080b066903",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2c39590c-76df-5d3f-803e-05deafb27033",
+      "commonName": "Parva goby",
+      "scientificName": "Valenciennea parva",
+      "reviewedContentFingerprint": "sha256:ef63360eec630da3b8c07c2401b2550e3c889c14688bcacf971bfbd929547216",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2e0fb3d4-0794-5f8d-a6e2-baca3140f2be",
+      "commonName": "Sand wrasse",
+      "scientificName": "Ammolabrus dicrus",
+      "reviewedContentFingerprint": "sha256:e301f3d5321ecd85a032b7b441706658dcfe0c64aac26c19b58a130db68a94ed",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2e8bfbbd-4293-5eff-9640-92be79678b33",
+      "commonName": "Striped trawl wrasse",
+      "scientificName": "Suezichthys bifurcatus",
+      "reviewedContentFingerprint": "sha256:75c6c48129535c16d471a5d1c45f6bbe8d4a8111c0136937c7dff91fe6608497",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2ea87551-b326-5819-b4f4-b89106849ae2",
+      "commonName": "Sarato's goby",
+      "scientificName": "Gobius fallax",
+      "reviewedContentFingerprint": "sha256:f938d527d5612d5f72f812cc0ec8346745f766be54abe7e7adc28462957b77c9",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2f47ad01-da7c-58af-afd8-983b8733a0af",
+      "commonName": "False puffer",
+      "scientificName": "Paraluteres prionurus",
+      "reviewedContentFingerprint": "sha256:2126fefdf72f01a24d2c74010f8c3510cb39a1e8c6d967738a0b7702796802d1",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors/features"
+      ]
+    },
+    {
+      "speciesID": "2f60e73c-e6f4-528e-9a34-3a9936322a8f",
+      "commonName": "Mertens' prawn-goby",
+      "scientificName": "Vanderhorstia mertensi",
+      "reviewedContentFingerprint": "sha256:3096d4c3e59540506f7168d5cf069c027b278d093080f0801db9bf447c9f9f17",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2f8e6d1e-cb40-544a-9126-49ee0099575c",
+      "commonName": "Chromis pamae",
+      "scientificName": "Chromis pamae",
+      "reviewedContentFingerprint": "sha256:5964be87204dad9de4bd722f7da79551d4d666d420911cd7e012a9fc2ae64cb2",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "2fc9277d-6c34-5175-b7b0-bf40d5e0e3a5",
+      "commonName": "Twinspot shrimpgoby",
+      "scientificName": "Amblyeleotris biguttata",
+      "reviewedContentFingerprint": "sha256:c14f0725899d3bbfe9762be62d27f0d462b9a3da8e43223635f3992e396e55d5",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2fd203c7-e3e7-5301-8b06-0e978f7e176d",
+      "commonName": "Whitespotted frillgoby",
+      "scientificName": "Bathygobius coalitus",
+      "reviewedContentFingerprint": "sha256:05edbc348f459cd6bf6862a626ff6bdf96feeec28e3be9a18cc306bb982dc025",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "32144692-5187-583a-8de6-01b21d808813",
+      "commonName": "Madagascar wrasse",
+      "scientificName": "Macropharyngodon vivienae",
+      "reviewedContentFingerprint": "sha256:6c8f105cf0fc915361f546f4a105c0779f24886af88b79ea53573a5597f78301",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "32b4d3dd-8e04-5e64-b6cd-65a76c60bb73",
+      "commonName": "Cross' damsel",
+      "scientificName": "Neoglyphidodon crossi",
+      "reviewedContentFingerprint": "sha256:57d0b45988d007aaec363bb17c5b8afc06104be44d0fd85e03844401ff9e6674",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3310ff67-680b-53f9-9666-3d95c156b331",
+      "commonName": "Spotted blenny",
+      "scientificName": "Cirripectes fuscoguttatus",
+      "reviewedContentFingerprint": "sha256:4a7b2751b5c136c61617a9384d48aa386418a593304b7d49d9554567d5dc9dbc",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "33adf1f4-de87-50c8-9579-202ac2ee1232",
+      "commonName": "Gilbert's blenny",
+      "scientificName": "Cirripectes gilberti",
+      "reviewedContentFingerprint": "sha256:b6586061d875f752d25a64ca4825fa21ea7b70c04e4e5585c5111c8bdffb64e7",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "34a90b2c-9a86-558a-8583-363653a0f7f0",
+      "commonName": "Barred blenny (Hypleurochilus bermudensis)",
+      "scientificName": "Hypleurochilus bermudensis",
+      "reviewedContentFingerprint": "sha256:3482913f2cd27d364256637de06aec6037eaadd5dcaa2e3c2b949821f7ef9c72",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "37562d50-0de4-56ed-90ed-a1a8c077ec66",
+      "commonName": "Indian damsel",
+      "scientificName": "Pomacentrus indicus",
+      "reviewedContentFingerprint": "sha256:144a33f216e5636276457363e41e4737e2745b091ecc3b4963535cfbd7d0ba20",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "378f77ff-9847-5979-8a22-f9bbad6efad6",
+      "commonName": "Paletail damsel",
+      "scientificName": "Pomacentrus trichrourus",
+      "reviewedContentFingerprint": "sha256:9ade8669e498093edd0c426e844295687cc9d4e974b33f583bf5b6445d63d568",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "38fc0a46-ef37-5741-8734-8aec1fec60ec",
+      "commonName": "Ochreband wrasse",
+      "scientificName": "Leptojulis chrysotaenia",
+      "reviewedContentFingerprint": "sha256:c188c5afc454932b0d63aa12e7cbdfca0e73c565497276344dab81e0680895fd",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "3a0b675b-8852-50fd-8fcd-d0ef9285b7bb",
+      "commonName": "Blackline fangblenny",
+      "scientificName": "Meiacanthus nigrolineatus",
+      "reviewedContentFingerprint": "sha256:17742f7fb3f140b4ed697f8e084608499d4914695a29cad2657405d508b958b5",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3a6b247d-90fb-59d9-b92b-efb0f82d80c2",
+      "commonName": "Humpback nohu",
+      "scientificName": "Sebastapistes coniorta",
+      "reviewedContentFingerprint": "sha256:683e4c2b7300d2a7d3f5e0b80cb3f2d374686f5212722d7dc21d01a00df933cc",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3ad016bd-4aab-5846-a20d-2a2e8543da0d",
+      "commonName": "School bass",
+      "scientificName": "Schultzea beta",
+      "reviewedContentFingerprint": "sha256:c5f439a0dced09d034629544c1fc1b11d1f32e2b058eaeed75c3df6e520e0b03",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3c79ec55-38ea-58c5-b4a4-a398340886b6",
+      "commonName": "Strasburg's dascyllus",
+      "scientificName": "Dascyllus strasburgi",
+      "reviewedContentFingerprint": "sha256:585b7a93154c0031229362b7d46830dc4293f8477fd30bb2c133f23eca868171",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3d16c36b-21e6-58ae-b316-12d2f9f7e68a",
+      "commonName": "Saddle bass",
+      "scientificName": "Serranus notospilus",
+      "reviewedContentFingerprint": "sha256:c6a36c67883a417186c4816b14c120359046a7dc1ee6196322ea5fe38b90533e",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "40ddbff2-351a-5cc1-b730-05a141ffe50f",
+      "commonName": "Meiacanthus tongaensis",
+      "scientificName": "Meiacanthus tongaensis",
+      "reviewedContentFingerprint": "sha256:102eef3cdcb542e966227f4f67c73f3b17ee6ccd2846d845842a51fe6ae05759",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "40ffd1c8-090f-5d8f-bf96-72abe1dcefb0",
+      "commonName": "Harlequin goldie",
+      "scientificName": "Pseudanthias connelli",
+      "reviewedContentFingerprint": "sha256:dc64f5e4cfc6b4b9cddffee60e2c46f94b92ce8f742a4ee647b12bba02a7b6d7",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4144a5bd-089c-5778-932c-00fc56ddf9a5",
+      "commonName": "Sheila's damselfish",
+      "scientificName": "Chrysiptera sheila",
+      "reviewedContentFingerprint": "sha256:145b1715254b7e0b75536843a24027f2966acb28a25ff1c013120a31d3891599",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "43c940b9-2072-50fc-b645-db9abd2b5e70",
+      "commonName": "Tyler's toby",
+      "scientificName": "Canthigaster tyleri",
+      "reviewedContentFingerprint": "sha256:e1629fb1c5bf71c80026c457b90fe70d5930416f5228bc8c14506df22cc549b7",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "448c69cc-80e2-5664-b008-7e3f94c2f672",
+      "commonName": "Ebosia falcata",
+      "scientificName": "Ebosia falcata",
+      "reviewedContentFingerprint": "sha256:c469a47058e99f23832580f4bce7d6e8041a60935ec2f655e1a2b7e4ca5097f2",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "45371b57-ccd7-579d-b7ae-c4b9738006a8",
+      "commonName": "Alexander's damsel",
+      "scientificName": "Pomacentrus alexanderae",
+      "reviewedContentFingerprint": "sha256:89166da77f305b8d756ac893ccd37681d6c19f32aec37afe164984a80183116b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "47734636-8644-595b-92f8-cafd41b5d785",
+      "commonName": "Twospined angelfish",
+      "scientificName": "Centropyge bispinosa",
+      "reviewedContentFingerprint": "sha256:93bbcd60d33ce6561b29a066030fb86b21a35c0bebbd8c0df3be3d27ed9ca5df",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4a3306be-5ed8-5bff-a57d-e439debb571f",
+      "commonName": "Wood's chromis",
+      "scientificName": "Chromis woodsi",
+      "reviewedContentFingerprint": "sha256:aa4cbd1dd261ec7b187ab57654941df859b0d895a07b4a515eb966bcd8d24325",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4bbf1dd5-963b-5da7-bf0d-4902afddc41f",
+      "commonName": "White-spotted blenny",
+      "scientificName": "Salarias alboguttatus",
+      "reviewedContentFingerprint": "sha256:f5f9967ed6f0344c766bfa9210b3348f90eae9a5aaddbc1922b7ea1ee16be70d",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4cc49543-b83c-58ff-82f9-ce72a4f785aa",
+      "commonName": "Yellowtail reeffish",
+      "scientificName": "Chromis enchrysurus",
+      "reviewedContentFingerprint": "sha256:bf0122d5b0713fbfe7e6b554d3fc1329f8f9a32133a0800b51143747490d9485",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4ce5c79c-956d-5580-af9f-4d91ccab7266",
+      "commonName": "Hypleurochilus fissicornis",
+      "scientificName": "Hypleurochilus fissicornis",
+      "reviewedContentFingerprint": "sha256:a17629e7e8ccf6d6ef22b78d550be514e5b3346089e7255d4ed3a3bebde2242f",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "4e10a170-1f98-53ab-8373-dd081dfb2ec9",
+      "commonName": "Magnus' prawn-goby",
+      "scientificName": "Amblyeleotris sungami",
+      "reviewedContentFingerprint": "sha256:01f6277bc7e82814f037adcd02199fd675c5160e5426dc997aab5bc88f33cc58",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4e72f297-466e-56d6-91d8-ae53ff54f1f2",
+      "commonName": "Beaugregory",
+      "scientificName": "Stegastes leucostictus",
+      "reviewedContentFingerprint": "sha256:e4c47b08539a62bb8755b51d056a5ea364864658cd862917de405b7c2ced0826",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4f5be507-02c1-57d2-b0f8-956900b10632",
+      "commonName": "Imitator damsel",
+      "scientificName": "Pomacentrus imitator",
+      "reviewedContentFingerprint": "sha256:f0a28a0ce8b2af69b7f9084117a5d7ce350ecc96ebe53c498b9808e01b10c5a4",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "50365c8f-8441-5e12-ba08-3674f980ab66",
+      "commonName": "Randall's fairy basslet",
+      "scientificName": "Pseudanthias randalli",
+      "reviewedContentFingerprint": "sha256:e2d060efeed35f583f1340257dd0fc1444cf5150aac8a9c25a78b3afd991be2f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "50b72a6e-041b-54f3-a85b-ba5edeb0841c",
+      "commonName": "Scarface blenny",
+      "scientificName": "Cirripectes vanderbilti",
+      "reviewedContentFingerprint": "sha256:ed8b9a9fdf0ba81befafd4c52354519cc1b24ed0623432c636d49c36886cb6dc",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "513716a7-21de-5e04-861a-326bb16ab8c7",
+      "commonName": "Cape Verde gregory",
+      "scientificName": "Stegastes imbricatus",
+      "reviewedContentFingerprint": "sha256:955df1cf3e31e7f154508f68985fb17df23744400a7980f00890b7883057139f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "51792c7e-4c92-51f0-919a-9bc052fabd83",
+      "commonName": "Greenfish (Thalassoma ascensionis)",
+      "scientificName": "Thalassoma ascensionis",
+      "reviewedContentFingerprint": "sha256:780d6d2f3e1afa186a12fb7e672f6004299c8c79330ba4a69d372fcbf8c31c13",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5421edb5-6295-55cc-a00f-65083900623f",
+      "commonName": "Patch-reef goby",
+      "scientificName": "Coryphopterus tortugae",
+      "reviewedContentFingerprint": "sha256:e40acc69812269ff5aa63e99bce63ca16e7988c1194710fb4fe8e81851813aa4",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "544ba2df-5518-55b5-9fdc-7d6c145e3454",
+      "commonName": "Shortsnout scorpionfish",
+      "scientificName": "Scorpaenopsis obtusa",
+      "reviewedContentFingerprint": "sha256:f0b11bba0748380e574b86539a80987b9a25db8d993a1200736b00f9a79e9e11",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "54ce6a96-5241-5ddf-a449-7d6f891f7197",
+      "commonName": "Caerulean damsel",
+      "scientificName": "Pomacentrus caeruleus",
+      "reviewedContentFingerprint": "sha256:a21a9bfd34f78ac83d4498682c161cf421e97f4f9aee2c9a5ad404226b5ff26c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5571d28a-004e-519d-b37c-3747ed0b5196",
+      "commonName": "Creole damsel",
+      "scientificName": "Pomacentrus agassizii",
+      "reviewedContentFingerprint": "sha256:916c98d95e31b6448e0085b1fca585a4b0c9df71c262075561e3718e66316c92",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "56313241-6b00-5eeb-91f4-c1be5d1c5fd7",
+      "commonName": "Girdled wrasse",
+      "scientificName": "Cirrhilabrus balteatus",
+      "reviewedContentFingerprint": "sha256:7428c13cbd71c94f9d67e6724282617378f210d6f3c96acccfb1611fd940c209",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "57776243-310d-5a80-880a-0ad01cde3a48",
+      "commonName": "Baldwin's major",
+      "scientificName": "Stegastes baldwini",
+      "reviewedContentFingerprint": "sha256:793dccc352d7d3009c0ca72c261d6a88635a00cf8de7e1a4fe325f53156f72e1",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "585ec2be-2772-5f8f-b785-2e5d2a937b49",
+      "commonName": "Golden angelfish",
+      "scientificName": "Centropyge aurantia",
+      "reviewedContentFingerprint": "sha256:ba052c4d37613cc0dc66ecac25c224b2c25c26efec495cc8e9fc786c84977c98",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "587d9a1c-597b-586e-bfc5-8c59657884a1",
+      "commonName": "Leaping blenny",
+      "scientificName": "Alticus saliens",
+      "reviewedContentFingerprint": "sha256:99b299a82ce990fea20752cb7c4dca63e3e13bec5da4a1e65b0b64f90d562dc8",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "59235112-f505-5039-a795-fcc9a9c73d53",
+      "commonName": "Outer-reef damsel",
+      "scientificName": "Pomacentrus emarginatus",
+      "reviewedContentFingerprint": "sha256:3247b5e697e5f10d112aae8877fb91e1049926e9294a029664572cb642c865ca",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5a2af312-425e-5132-887e-72f6e1a2fb14",
+      "commonName": "Chromis planesi",
+      "scientificName": "Chromis planesi",
+      "reviewedContentFingerprint": "sha256:b60902091c37888615daa1bf9eb9e5b171f5c3eefb25031ae14bde5a8251db20",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "5c571cab-4b1e-537b-bb2e-4871d3212bac",
+      "commonName": "Yellowfin angelfish",
+      "scientificName": "Centropyge flavipectoralis",
+      "reviewedContentFingerprint": "sha256:e6cc059f07fd1416510f6e5aa21d3b3f0896d4dda566db462ad84926d71f5661",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5d767972-5a6f-5937-adea-a39db17afaae",
+      "commonName": "Pyle's wrasse",
+      "scientificName": "Cirrhilabrus pylei",
+      "reviewedContentFingerprint": "sha256:a913641f5749031c0e822d32d359f8f5b55e7776ab65e6ecce6dcac3dc8fd3ca",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "603cb793-8784-55bb-a7e5-a33e4d2a9e07",
+      "commonName": "Baensch's damsel",
+      "scientificName": "Pomacentrus baenschi",
+      "reviewedContentFingerprint": "sha256:513ce685fd0e87c1e2e4d155480965f8143573a39e8bb1f29d6b556b75d29c31",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "605d4076-63b6-5f54-85c7-7df3b45da15e",
+      "commonName": "Stegastes sanctaehelenae",
+      "scientificName": "Stegastes sanctaehelenae",
+      "reviewedContentFingerprint": "sha256:ad3f175eb5da56337d49ab79395c1c34aeb20a6d74f9b331369483b31036a6e6",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "613e1049-ffbe-5967-b77d-6c493e17deb7",
+      "commonName": "Marquesan gregory",
+      "scientificName": "Stegastes lividus",
+      "reviewedContentFingerprint": "sha256:223ff3828fb77a491745f4d8aa7432524865a49b2d00d565c0a079c4da3a0079",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "61a0aa24-9880-5484-92a0-d72c15777963",
+      "commonName": "Belted sandfish",
+      "scientificName": "Serranus subligarius",
+      "reviewedContentFingerprint": "sha256:682a9ba70f596ea632181991fcce8372e60bb3bdee8267e6b1c80822719a4d50",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "63626c63-fdb7-54b6-a4a4-37a39260bd01",
+      "commonName": "Pycnochromis fatuhivae",
+      "scientificName": "Pycnochromis fatuhivae",
+      "reviewedContentFingerprint": "sha256:e21403b11d1bf5458a363a385d07320b53adaf64a4ee2a1787898d1c3d26c8fc",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "641e28d2-f090-5070-9ef5-39eff9f91ef4",
+      "commonName": "Pinstriped basslet",
+      "scientificName": "Liopropoma mitratum",
+      "reviewedContentFingerprint": "sha256:2f9cef93bcefc5bd72d22edb0eaba5f6560eaa7b692578c8f90c455c7da40505",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "648e1426-7598-5705-9ea2-e0a68ee49f75",
+      "commonName": "Four-fingered lipsucker",
+      "scientificName": "Andamia tetradactylus",
+      "reviewedContentFingerprint": "sha256:f138e455006d1c4abc65a8b9d5161177adb98ba581e7113cbd306236644e7c2c",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "651f8faf-9d3d-5eeb-ae16-c6b61b8c17cc",
+      "commonName": "Amblyglyphidodon melanopterus",
+      "scientificName": "Amblyglyphidodon melanopterus",
+      "reviewedContentFingerprint": "sha256:e7667bd6a9cda9c6c045faa69214a352b5adde07a48d0120f66be277156e12a5",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "67098c94-c5bc-5e19-b47f-965bba35bb97",
+      "commonName": "Orangeback fairy-warsse",
+      "scientificName": "Cirrhilabrus aurantidorsalis",
+      "reviewedContentFingerprint": "sha256:a94f883b08b7e0f6c5c80d3bf5a6680193466b0dfa46ed009339a117ec8f099b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "69264f60-8cf7-5bc0-817a-6cb0bb547568",
+      "commonName": "Flame wrasse",
+      "scientificName": "Cirrhilabrus jordani",
+      "reviewedContentFingerprint": "sha256:fee830b3eeaa179a66a1efd61bec503f61d4bfad2b7c3a89113e07f9c854815c",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6994a4a6-b7c6-5d1f-a6d3-7c6561966d46",
+      "commonName": "Hairytail fangblenny",
+      "scientificName": "Meiacanthus crinitus",
+      "reviewedContentFingerprint": "sha256:fdc6e65d7935855ee8e77bf07d1af9fb00a11fd0f262e4abef95e37b87db40bb",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors/features"
+      ]
+    },
+    {
+      "speciesID": "6b22d2a6-3b74-5d48-b7f9-d3b209dfa36f",
+      "commonName": "Estuary filefish",
+      "scientificName": "Paramonacanthus tricuspis",
+      "reviewedContentFingerprint": "sha256:e7481dbb33cb3b01198da43a0fce6013479656d278bede195d9acc4bce481f39",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6b27d493-77fe-59b8-b581-c60721253ede",
+      "commonName": "Longsnout butterflyfish",
+      "scientificName": "Prognathodes aculeatus",
+      "reviewedContentFingerprint": "sha256:57ed09eef99ae0c42b88351ede34a02dd9b1e4e9c39fa5e70f73ffc170cb88a1",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors/features"
+      ]
+    },
+    {
+      "speciesID": "6b458c36-b122-541d-b530-71c77c8da5dd",
+      "commonName": "Montano's Rockskipper",
+      "scientificName": "Alticus montanoi",
+      "reviewedContentFingerprint": "sha256:f26b1cbf43e9c40092563980f264b83cb0d03009fd562881097afd19b54abb7f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6cc5a1a2-8036-5863-b9ce-3dee6c89ce6a",
+      "commonName": "Whitefin damsel",
+      "scientificName": "Pomacentrus albicaudatus",
+      "reviewedContentFingerprint": "sha256:b2ec12ced8a6720096a2be83aa9654d91ac312481c7baed8d5e6a87faf48b784",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6d463db0-2cf0-5493-a2c5-5e0b38603908",
+      "commonName": "Sabertooth blenny",
+      "scientificName": "Plagiotremus azaleus",
+      "reviewedContentFingerprint": "sha256:c8195ca7677ba72c5d93286d81f52fc280b1805c9d4530d5e589102c6ae747c2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6d6401c3-72f2-5af0-acd3-1afb234514d1",
+      "commonName": "Lemon damsel",
+      "scientificName": "Pomacentrus moluccensis",
+      "reviewedContentFingerprint": "sha256:14f470ad2670740e9dcf78bc110c64b1dce259ac78ad49ec50c8d1746f9eb895",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6ee34d5f-7ad0-5572-942d-596bb3490484",
+      "commonName": "Maude's shrimpgoby",
+      "scientificName": "Cryptocentrus maudae",
+      "reviewedContentFingerprint": "sha256:b3bd1399b049980325dc969737e677bf21e67ad5fc882e1bac97054457639934",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6ef2335d-9770-56e5-b74a-4a4cb9765abc",
+      "commonName": "Squiggly blenny",
+      "scientificName": "Cirripectes quagga",
+      "reviewedContentFingerprint": "sha256:a8b293ca8bd6a0c9995ba26770b662d8ffc44cf9211d95497cf54b4bfb490fba",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7024665f-f711-5a57-bc72-9a6788034d27",
+      "commonName": "Lesueurigobius koumansi",
+      "scientificName": "Lesueurigobius koumansi",
+      "reviewedContentFingerprint": "sha256:ea67d6dc03edb186fa540d9f03427afd71974b59ad48788f807c760fed866248",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "71823a0c-f3fe-5040-a43a-6ad2e3b1ca75",
+      "commonName": "Orangespotted goby",
+      "scientificName": "Nes longus",
+      "reviewedContentFingerprint": "sha256:27f237f81783a387bff4dda06eebab0c4ff72b522fcf00f2b30524e18e8890a2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "71e51e16-ddd2-5760-af29-6fb6fe4452e2",
+      "commonName": "Smith's shrimpgoby",
+      "scientificName": "Tomiyamichthys smithi",
+      "reviewedContentFingerprint": "sha256:5472478528947508837a69a36cd4d6cf20bc1b76ae293a86270bbd693e6094a0",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "728bf166-18d3-5153-ab9c-24667aba747c",
+      "commonName": "Yatabe blenny",
+      "scientificName": "Parablennius yatabei",
+      "reviewedContentFingerprint": "sha256:e0131153a0dbe238fc61ef3c401403d295dea4673394e1193f59b752a98d8aad",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "72e733c9-abfc-51fa-b7ad-5040109838be",
+      "commonName": "Cave bass",
+      "scientificName": "Liopropoma mowbrayi",
+      "reviewedContentFingerprint": "sha256:6e2b69a6f198f80ffb5cb6262f72448b27aa0f30bffb92413d422d20eadafbdd",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "73b8849d-c33f-5734-9e8c-487c22ba8b36",
+      "commonName": "Red-speckled blenny",
+      "scientificName": "Cirripectes variolosus",
+      "reviewedContentFingerprint": "sha256:3ce7ad5b555625db4d6c5f9704b35ccdf63919844be88166ce9164eb4bfbfbcc",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "73c2019c-d47c-5fd3-9985-c9d6be94d358",
+      "commonName": "Suckerlip blenny",
+      "scientificName": "Andamia reyi",
+      "reviewedContentFingerprint": "sha256:a9469a7ebaa61b9e3c066291537578b8cc9946b54ad77e850e341489a46589e8",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "73ccf9b2-092a-5753-aa11-865267a4ecaf",
+      "commonName": "Pearl blenny",
+      "scientificName": "Entomacrodus nigricans",
+      "reviewedContentFingerprint": "sha256:85d98747a57ad0015ef08f17fc1998141e48f90c67447ce90a6d70ebae764f5e",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "750092b8-be3d-53c3-ab8a-c21eaa90e75b",
+      "commonName": "Arabian damsel",
+      "scientificName": "Pomacentrus arabicus",
+      "reviewedContentFingerprint": "sha256:c287cc70c7a0ac7e9933f8b90cf84cf259d0f35949451cb87f7eef4151f84eaa",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "765a37eb-abd4-5aae-9ea7-6c80da1e325d",
+      "commonName": "Breastspot blenny",
+      "scientificName": "Salarias guttatus",
+      "reviewedContentFingerprint": "sha256:b932f492214bd4ed43d42054a1d247efc6021aa9b80d7ef3bc8a05c5b08a5298",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7700e378-541f-5f75-94dc-3243a8a36871",
+      "commonName": "Coral scorpionfish (Scorpaena albifimbria)",
+      "scientificName": "Scorpaena albifimbria",
+      "reviewedContentFingerprint": "sha256:cd6f0a65776dbfce6da061ef674a4d6f4ce751ab62f447c11d64551d45478c47",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "786741f1-d3e4-5480-ae04-4fbd7feab7a9",
+      "commonName": "Thielle's anemonefish",
+      "scientificName": "Amphiprion thiellei",
+      "reviewedContentFingerprint": "sha256:a3d5c9e8fd87e7ab13ad2c38023a1026ba3acffd5ac604a59f91c8338e7d2f4b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "792e84a8-6934-50d2-9780-228be649813f",
+      "commonName": "Saowisata wrasse",
+      "scientificName": "Halichoeres binotopsis",
+      "reviewedContentFingerprint": "sha256:f4bde1e3158251f63fb679191d5bb4842ab9e897b60041dced5731f7601f33eb",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "79405f77-44bf-576c-8338-a7fbd7955990",
+      "commonName": "Shen's basslet",
+      "scientificName": "Pseudanthias sheni",
+      "reviewedContentFingerprint": "sha256:f625900f4682828b8d714e752bf136f9bd5d3b9fb0291fa7d837d8d1b5aaceff",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7a64a15e-41c6-5328-bcaa-b4dab84f9b1c",
+      "commonName": "Anton's damsel",
+      "scientificName": "Pomacentrus saksonoi",
+      "reviewedContentFingerprint": "sha256:baef2d61fd02c3ce6005d90819a17a81eee2f690114c35d82e9b0af8ffa0c617",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7b6e151f-31db-5f1f-ba5c-281ab6ff913f",
+      "commonName": "Halichoeres leptotaenia",
+      "scientificName": "Halichoeres leptotaenia",
+      "reviewedContentFingerprint": "sha256:6904c3ead2bac850ee6dfffa55f78685c54e9cf4d376e17fb54506eade35d59a",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "7c4aa380-fbcb-5372-ba13-36e5e055374d",
+      "commonName": "Redspotted shrimpgoby",
+      "scientificName": "Amblyeleotris ogasawarensis",
+      "reviewedContentFingerprint": "sha256:3a0d6c0a7ba6075051ed40751478784d64ffac3c7694bdfcb7d96ed8233f7533",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7c6de394-1c5f-5551-9481-822d403d2d44",
+      "commonName": "Coris centralis",
+      "scientificName": "Coris centralis",
+      "reviewedContentFingerprint": "sha256:cdb76c0c2ea3b61c7f243c622a644cbd4afc714e7cca2b928f135a07e2f465a1",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "7d0bef6c-77b7-5dd5-a987-63f18de8ad48",
+      "commonName": "Princess damsel",
+      "scientificName": "Pomacentrus vaiuli",
+      "reviewedContentFingerprint": "sha256:e30adf74b3076fac3346ccf16f57249054086cf97e89635942820cbccc99f756",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7de99a00-5f2b-5be2-8710-41a5db058c1f",
+      "commonName": "Beaubrummel",
+      "scientificName": "Stegastes flavilatus",
+      "reviewedContentFingerprint": "sha256:01c858e0316cccad0f461d0494f47f7829aea1270617a9e6179d51206f07fb30",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7eb4cb71-b109-5130-b80f-d888ff7e20a9",
+      "commonName": "Gomon's tuskfish",
+      "scientificName": "Choerodon gomoni",
+      "reviewedContentFingerprint": "sha256:3cbc08c83392f8b2926761705e17602c57d67b4c4651f176acae2041e7c34537",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "80577754-645b-538e-92ee-56f4b4aae375",
+      "commonName": "Pomacentrus caeruleopunctatus",
+      "scientificName": "Pomacentrus caeruleopunctatus",
+      "reviewedContentFingerprint": "sha256:67c37129448608edca1d925d3f8999bf0ca75aae9cfb95af308993b610c71f9e",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "817b3938-ccb8-5a62-adbb-62ae23f037b6",
+      "commonName": "Tidepool blenny",
+      "scientificName": "Hypsoblennius caulopus",
+      "reviewedContentFingerprint": "sha256:1945349bf5990f0ba34db75ae8cc9f502a89f9614a2a69176eaa3cc0678fbd74",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "828ffc36-7e67-5708-80f0-e725646ab238",
+      "commonName": "Goldback damsel",
+      "scientificName": "Pomacentrus nigromanus",
+      "reviewedContentFingerprint": "sha256:cbd33755b0a1ffedd0bf1a71c9023a367863c1bfba4e41e48749d3a9d4b81f3e",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "832ddade-419e-54a0-9626-593f0e70e51f",
+      "commonName": "Cryptocentrus callopterus",
+      "scientificName": "Cryptocentrus callopterus",
+      "reviewedContentFingerprint": "sha256:fee5239663c38ae8b87e6773aa979fb9933575b0a953ecdc2bc187d1fdd71302",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "8392e6e8-c2a8-58e0-8f6c-0b509ad1e2ec",
+      "commonName": "Purple reeffish",
+      "scientificName": "Chromis scotti",
+      "reviewedContentFingerprint": "sha256:7b19af5bc7e9fc44eec6ed3af187964eaf899fedd8222cdf1ae4ea689744c694",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "844c1dc6-ae2f-5e00-af0b-30f67a036955",
+      "commonName": "Cryptocentrus diproctotaenia",
+      "scientificName": "Cryptocentrus diproctotaenia",
+      "reviewedContentFingerprint": "sha256:d3e5b9892a80338da43a3be19ba5dc547ef71228f8b999bbd6d872abf32eb55b",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "8463121a-b95e-5f32-8658-da16fca515bc",
+      "commonName": "African demoiselle",
+      "scientificName": "Neopomacentrus fuliginosus",
+      "reviewedContentFingerprint": "sha256:8b857681a394e107277097780dfa55d29412f8dee3e36a3391c26d31e56f44f7",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "84a80ba6-83c5-5756-b12e-9458f4ef0810",
+      "commonName": "Spotted sharpnosed puffer",
+      "scientificName": "Canthigaster punctatissima",
+      "reviewedContentFingerprint": "sha256:6bdd210710126f70c44229ce73e1e9fa2d452c5df3ccab243d79a2a4d000a7ff",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "86c4ca32-b31f-5c34-9b78-b4a6f0dd78a9",
+      "commonName": "Threadfin wrasse",
+      "scientificName": "Cirrhilabrus temminckii",
+      "reviewedContentFingerprint": "sha256:f0e833adfdc043947a315f99f1a4eb9a51f05b31cc3bc61bf617eafcbb3739a6",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "87f2bbc1-174f-50c7-8c98-0168da86dfd3",
+      "commonName": "Reid's damsel",
+      "scientificName": "Pomacentrus reidi",
+      "reviewedContentFingerprint": "sha256:02df8f53b238addbfb7a1e9ea1a953172287c051774fa066deb7b767818a44ed",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "882df870-a332-5000-9b5f-293ce7f488c7",
+      "commonName": "Honeycomb toby",
+      "scientificName": "Canthigaster janthinoptera",
+      "reviewedContentFingerprint": "sha256:0fa041bc89cf24330b2847de089c8ee1600efde775d539530696c37b67f2edf5",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors/features",
+        "trait_ambiguous:tailShape"
+      ]
+    },
+    {
+      "speciesID": "889c4f2e-33a9-541f-a266-5ad9317d57e1",
+      "commonName": "Twinspot goby",
+      "scientificName": "Signigobius biocellatus",
+      "reviewedContentFingerprint": "sha256:5f8d73e7d0ce9d206f8fa9f4e385983513f261212c60d819ae3f4e493046d7f1",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "88b500dd-5927-5c5e-8536-e22375c5483b",
+      "commonName": "Peppermint bass",
+      "scientificName": "Liopropoma rubre",
+      "reviewedContentFingerprint": "sha256:bde7bfdee3151c51fb0181f5ac92d150e59f43ddba9d9595f5984aad8d5b3008",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "8a5f4d1b-4545-5653-b0c3-81a46cdbed90",
+      "commonName": "Cebu shrimpgoby",
+      "scientificName": "Cryptocentrus cebuanus",
+      "reviewedContentFingerprint": "sha256:00ba92d151de42f88d0e6e2cea33f5360845778ad64b3c9a276955eec1dae4fb",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "8a9e3715-3b1f-51d6-9353-6b49835ff046",
+      "commonName": "Bodianus paraleucosticticus",
+      "scientificName": "Bodianus paraleucosticticus",
+      "reviewedContentFingerprint": "sha256:a069a1b3e5d007b82f5539dc62734de238df37c77c7df0a307c1ce161cbd980a",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "8be408d1-ae21-5736-9eab-588e1a1b6df4",
+      "commonName": "Bluethroat rainbow wrasse",
+      "scientificName": "Suezichthys cyanolaemus",
+      "reviewedContentFingerprint": "sha256:727a2fd13b7407adcd6db88b098218b9b9527679c9c3c2c46c575e8605977c21",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "8dd99f35-3ac0-5113-a708-346441d3b922",
+      "commonName": "Nagasaki damsel",
+      "scientificName": "Pomacentrus nagasakiensis",
+      "reviewedContentFingerprint": "sha256:2966f79a3ba6018a774fdee21f1d5d7ece4c39cb98087d725fd8d01fc828e857",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "9013199f-fc99-50d8-b957-a2abf595de61",
+      "commonName": "Barchin scorpionfish",
+      "scientificName": "Sebastapistes strongia",
+      "reviewedContentFingerprint": "sha256:fbd7fc65728b5f556d41caafce2b5e6f864f8245da5b61babf719e866b9e6f25",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "90e05f7a-fde9-5646-81d7-c285c0a4b12f",
+      "commonName": "Bigscale squirrelfish",
+      "scientificName": "Sargocentron macrosquamis",
+      "reviewedContentFingerprint": "sha256:94efa44c42197c96e3bafd6ef5b3347fd5c7f57fa2e1c8c272b1d229c6d4656a",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:tailShape"
+      ]
+    },
+    {
+      "speciesID": "91e139d7-3c39-5240-aba6-0d7f281f268b",
+      "commonName": "White-dotted rockskipper",
+      "scientificName": "Praealticus bilineatus",
+      "reviewedContentFingerprint": "sha256:a9bd808b39f1cf50b2af1c35bf2ad7fca53cc35959d4301491823352b5df873e",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "92054c15-5c13-5904-b7ba-4890405097b5",
+      "commonName": "Ambon chromis",
+      "scientificName": "Pycnochromis amboinensis",
+      "reviewedContentFingerprint": "sha256:a79ce52e81d2d8aafe74898c2c9a1415452024ab75196416c9192e58bc640607",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "92a76997-4475-5b31-9843-0b751ba45b06",
+      "commonName": "Chromis flavapicis",
+      "scientificName": "Chromis flavapicis",
+      "reviewedContentFingerprint": "sha256:faa80287118e38e0f5ac6ffeac874ceadee990252f91aa9e908c2c18a98616e1",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "93c92017-ba76-5b25-b55f-ab0a1a987186",
+      "commonName": "Finspot wrasse",
+      "scientificName": "Xenojulis margaritacea",
+      "reviewedContentFingerprint": "sha256:c12ce7c93d832d0c827d1a411e7951c8fa127d2fb666a25a1f594e76fb62a832",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "93cc99f5-bcd9-5c2c-84af-65c3e3730540",
+      "commonName": "Red-lipped cleaner wrasse",
+      "scientificName": "Labroides rubrolabiatus",
+      "reviewedContentFingerprint": "sha256:b3be557f8027f35b79b0fde546c43c82aafe9284f91d7cb2bda8072251fe1620",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "947747f2-b395-5c33-8336-d6ff6118b332",
+      "commonName": "Sixline wrasse",
+      "scientificName": "Pseudocheilinus hexataenia",
+      "reviewedContentFingerprint": "sha256:a1f6c5e4db5ff2a4b17275406ee1e930b109c98bc6579df65e1b5960cd55a640",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "95479963-0315-5d6b-925c-501161dc966c",
+      "commonName": "Severns' wrasse",
+      "scientificName": "Pseudojuloides severnsi",
+      "reviewedContentFingerprint": "sha256:9c1cf4091142bcbba32502e8c9662499944b6730e92721decedea4f913af43fb",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "972e9fe5-d2d2-5fad-a732-aebca05505dc",
+      "commonName": "Long-tailed wrasse",
+      "scientificName": "Cirrhilabrus lanceolatus",
+      "reviewedContentFingerprint": "sha256:da6fcb4ea67849056dae61c17a0069471fbff4234cfdacf04abf3b7d3e4d8451",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "98adfc30-4b6b-5603-8614-cb4e20046bf2",
+      "commonName": "Hiva basslet",
+      "scientificName": "Pseudanthias hiva",
+      "reviewedContentFingerprint": "sha256:4cfc3924b3dca97ac439cda9f0cdf4c08c50a1bf7e0fb0cc03e6eadc4050c5fc",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "993e4986-fd45-5380-98aa-5676a675383d",
+      "commonName": "Bicolor damselfish",
+      "scientificName": "Stegastes partitus",
+      "reviewedContentFingerprint": "sha256:f108bd651cdce78f1bc600bb3a210e90516e13a3667ed94dde682d81768904b5",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "99cb9c8a-6087-5af7-9a05-6d8c5b20d78f",
+      "commonName": "Chestnut eyelash-blenny",
+      "scientificName": "Cirripectes castaneus",
+      "reviewedContentFingerprint": "sha256:4b0eaf10cf2c41f9a6a49bd649efbdeefa284f73aeab056b3d09c1f950fb24d9",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "99e0c79f-67b6-5b4d-be20-618ce95fde31",
+      "commonName": "Lady Musgrave blenny",
+      "scientificName": "Cirripectes chelomatus",
+      "reviewedContentFingerprint": "sha256:43a9b107cd2544ced91abaf24069d99aacc9c3391c9655adee607f9d92658e72",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "9acdab60-b476-555f-a6e4-24ae89d9dbf3",
+      "commonName": "Threeline damsel",
+      "scientificName": "Pomacentrus trilineatus",
+      "reviewedContentFingerprint": "sha256:3241f6d17b337ce8ac35ff93292755fe3d80bf80b4fd4905319fdb05595fde59",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "9bd18724-872b-589e-8c96-4ab5957d6acb",
+      "commonName": "Cryptocentrus niveatus",
+      "scientificName": "Cryptocentrus niveatus",
+      "reviewedContentFingerprint": "sha256:a2859b411d53129d13057fcbcc90297cdffc318eba5431b0162d71d79ec18b93",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "9d1ac91b-6fd9-5a23-a38f-d6732c68cd35",
+      "commonName": "Thorogobius angolensis",
+      "scientificName": "Thorogobius angolensis",
+      "reviewedContentFingerprint": "sha256:e616ee75ceaf514ab4db8388b92d6c325697f6746d71141a248def39fcaffe83",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "9e78d457-73c3-5edf-bb41-38e0ca3044d8",
+      "commonName": "Scorpaena colorata",
+      "scientificName": "Scorpaena colorata",
+      "reviewedContentFingerprint": "sha256:ff0e5d9ffeeac42394378a87da16605613650729a5c2efd8fc4ccb17d40df1c8",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "a0070f10-b483-56a3-9caf-5c040a2b0ef5",
+      "commonName": "Dwarf wrasse",
+      "scientificName": "Doratonotus megalepis",
+      "reviewedContentFingerprint": "sha256:0a55c00c9ac3cdd7584ad39ca415780c29a861bb1ff6907e33b945d57cb8934a",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "a3129dd6-bf0d-58ef-83b1-c884d690fb30",
+      "commonName": "Soela wrasse",
+      "scientificName": "Suezichthys soelae",
+      "reviewedContentFingerprint": "sha256:cf3146f1b102348e133e8622627fd094b6a4b3b53d6d1a3c8549205e2b91aa8b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "a4f6a607-5006-5dba-9029-bad4e657b27f",
+      "commonName": "Blue-green damselfish",
+      "scientificName": "Pomacentrus callainus",
+      "reviewedContentFingerprint": "sha256:b57db4a62f20843bb75ba80d863dcdc909eb6e235422d6ba181608173c1e2dd5",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "a594daf3-e535-556b-a524-b785f8cf2820",
+      "commonName": "Segmented blenny",
+      "scientificName": "Salarias segmentatus",
+      "reviewedContentFingerprint": "sha256:ab958207352864df39bacc98f1b3e0bf4f0b266e6906871dd58c805120690d13",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "a605f5e3-8e5b-5fe1-8e0e-0dc9c839f983",
+      "commonName": "Scorpaenopsis longispina",
+      "scientificName": "Scorpaenopsis longispina",
+      "reviewedContentFingerprint": "sha256:b2a1297d52abffc949a761e78cf07d987456eafc0aafcb06367b0a0a791f3015",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "a734c227-e4e5-5229-8e27-f83cd02b697f",
+      "commonName": "Russet angelfish",
+      "scientificName": "Centropyge potteri",
+      "reviewedContentFingerprint": "sha256:fd160668584dfd7fc730b08a9ff8215243296ced04e2360687ff1a2139b2a28b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "a9649317-df64-556d-bde9-5d1c536d8e9f",
+      "commonName": "Yellowbreasted damsel",
+      "scientificName": "Pomacentrus xanthosternus",
+      "reviewedContentFingerprint": "sha256:2edcd0b8c7d7a923308732f71860faf5f3fad861bf45838b7ea0b7eb0e564667",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "aaa597e8-fcd2-5b29-947b-c1ad3961fe22",
+      "commonName": "Miry's demoiselle",
+      "scientificName": "Neopomacentrus miryae",
+      "reviewedContentFingerprint": "sha256:46356f04f33b1cba93dbdaae0386ea1852b1ee5ec6b671256abaa818b07427e2",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "aaaa56f8-9e76-56a3-9c75-328ede1214e2",
+      "commonName": "Neomerinthe megalepis",
+      "scientificName": "Neomerinthe megalepis",
+      "reviewedContentFingerprint": "sha256:b8f978901e63be2c1bf309ad0c14f0aa796e139589da687a22a2bfdd9cb09f39",
+      "selection": "flagged",
+      "riskScore": 20,
+      "flags": [
+        "no_english_common_name",
+        "depth_outlier"
+      ]
+    },
+    {
+      "speciesID": "ac6546e8-f6ca-56bf-b995-af3721ca3f0f",
+      "commonName": "Golden gregory",
+      "scientificName": "Plectroglyphidodon aureus",
+      "reviewedContentFingerprint": "sha256:6a6fea0174ff960cbd054fab396b8594f98c103d8858151581a768c7c68080d4",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors"
+      ]
+    },
+    {
+      "speciesID": "ad345055-a422-5b0e-b8d6-1589c6e8d592",
+      "commonName": "Pacific crown toby",
+      "scientificName": "Canthigaster axiologus",
+      "reviewedContentFingerprint": "sha256:e0924881696ce65d9809c873ab89607f4febdd541b9e865dc33bff782fcf3ce5",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors",
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "ae601708-735d-52e4-aead-913e2475a68f",
+      "commonName": "Shuttles hoppfish",
+      "scientificName": "Periophthalmus modestus",
+      "reviewedContentFingerprint": "sha256:98d072c5c77e78058c7d5a66b568df69848ae6c5476b87e5062f94224381e420",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "af1aed0c-e224-55ab-acb5-f4234e6c71a2",
+      "commonName": "Tripplespot blenny",
+      "scientificName": "Crossosalarias macrospilus",
+      "reviewedContentFingerprint": "sha256:9c2f305405447054376a77b3b9ba7a64c64d9f069992d881a44e08e4d18b0846",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b0887ed2-47a9-5b4f-8690-4dc3d9cba12b",
+      "commonName": "Cirripectes randalli",
+      "scientificName": "Cirripectes randalli",
+      "reviewedContentFingerprint": "sha256:30cf63cf04134d53f79cc22398f33e0b53a0b2ea9f72e38843ed314ba518012e",
+      "selection": "flagged",
+      "riskScore": 20,
+      "flags": [
+        "no_english_common_name",
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "b1b3729e-d24d-52a4-ba7b-9497e46ef9b3",
+      "commonName": "Sanzo's goby",
+      "scientificName": "Lesueurigobius sanzi",
+      "reviewedContentFingerprint": "sha256:289fb22d168c3d89e6c941ed51cb861793eaead9054f643d5fd884cbcc254f80",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b480dae4-538b-57c2-b215-94493bf1e3db",
+      "commonName": "Bodianus neopercularis",
+      "scientificName": "Bodianus neopercularis",
+      "reviewedContentFingerprint": "sha256:77d1b129beb64cf484806cec6d585448c610e2c5c4d20c600b78fbf882c22042",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "b4f766d2-bed8-5ed7-89f5-7fcfa7e2bd34",
+      "commonName": "Fourspine scorpionfish",
+      "scientificName": "Scorpaenodes quadrispinosus",
+      "reviewedContentFingerprint": "sha256:5c53c360f5001fc027014df5f8e3e6b7af8021dbd907808a1cb1bc5dfb1284b3",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b6995b5f-23e1-5b54-b26d-eab5b6aadd19",
+      "commonName": "Red-streaked blenny",
+      "scientificName": "Cirripectes stigmaticus",
+      "reviewedContentFingerprint": "sha256:699ceba8bd5b648a4cd165b3e39b880f538f076bcc73c0fa1fb6ef1a33a92575",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:behaviors"
+      ]
+    },
+    {
+      "speciesID": "b70ff3b7-978c-5a53-bf5c-d3149d341e2a",
+      "commonName": "Ovate chromis",
+      "scientificName": "Pycnochromis ovatiformis",
+      "reviewedContentFingerprint": "sha256:6b6ed47b6b1493e4b64c977b81a1daf0763adb27732ef9b9a7402b4faf3e6f5e",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b856fd1f-18f6-57a2-aef1-4f1856ae85b7",
+      "commonName": "Imitator blenny",
+      "scientificName": "Cirripectes imitator",
+      "reviewedContentFingerprint": "sha256:4c975aa3b08464c4aba10ab7ab14c08de411cee7d4bb6d4cc9b5a9960023107c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b89fae79-1200-5c94-aa73-df9ce1d0c14e",
+      "commonName": "Townsend's anthias",
+      "scientificName": "Pseudanthias townsendi",
+      "reviewedContentFingerprint": "sha256:3a57ba75daa1ee6f328e9d2f6d56ca77439a22b4c2ac5acd652f0259e24c34f6",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b9452ab2-5013-5bbd-b9c8-1d9ecf0726e9",
+      "commonName": "Forktail blenny",
+      "scientificName": "Meiacanthus atrodorsalis",
+      "reviewedContentFingerprint": "sha256:d081ccfed776d410fba33b236cbac056ab1c09158aabc65709c930c23771d340",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "b9caee3d-5e1e-5a81-8af2-ffbad5be5bf8",
+      "commonName": "Dark-fin chromis",
+      "scientificName": "Pycnochromis atripes",
+      "reviewedContentFingerprint": "sha256:4f1be2ad6b5202e952139d99c30e18dc73ee8d89d8f8b5727132158049d3a43c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "bacd9981-efa6-5061-9df2-6c4d15c89899",
+      "commonName": "Emery's gregory",
+      "scientificName": "Plectroglyphidodon emeryi",
+      "reviewedContentFingerprint": "sha256:7105ccc379c8c3eef8afef250dc68b9b92f70001d4539113b0f904748506eeca",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "baecbeff-96b8-51f6-80c6-ddc6c5862030",
+      "commonName": "Ternate chromis",
+      "scientificName": "Chromis ternatensis",
+      "reviewedContentFingerprint": "sha256:915e806d7ba669909e74c9250eaaf8f421bf8bcca00a99a6dd537623e6ddcae9",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "bbb99c3e-6326-56c4-834a-90e701b73e1f",
+      "commonName": "Blue Mauritius angelfish",
+      "scientificName": "Centropyge debelius",
+      "reviewedContentFingerprint": "sha256:ee41871b91f74b534c87bb7b7def3620cd4c082560477b49ed1b132c558a3d71",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c1369412-9bf6-5e24-8922-f8dcb3f59558",
+      "commonName": "Sneaky wrasse",
+      "scientificName": "Pteragogus guttatus",
+      "reviewedContentFingerprint": "sha256:7ed57c084a425c9084cef489de4d33557b6965f291c2ef239b50ec281cf2f1fb",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "c2fd4a91-f90e-5a71-aae4-b3f2ba184623",
+      "commonName": "Pseudanthias taira",
+      "scientificName": "Pseudanthias taira",
+      "reviewedContentFingerprint": "sha256:d2e4a4022dab6dadfd8a381bbe30a63394d74d7e22b320132fb0b6e190d48d23",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "c585bf93-4109-54ac-9b55-4db47d5ff18a",
+      "commonName": "Grey chromis",
+      "scientificName": "Chromis axillaris",
+      "reviewedContentFingerprint": "sha256:556fd247633cb9fe0a3285915f9c352f2beb8d4dfa4ca9061a1c2b669bdccfab",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c5e913b9-9045-595e-a56b-a05934265699",
+      "commonName": "Blue-speckled prawn-goby",
+      "scientificName": "Cryptocentrus caeruleomaculatus",
+      "reviewedContentFingerprint": "sha256:896c1aa5203a2a8787c5e543385945a1fd1c11816952793c31b3e638ae47d6b1",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c6ca972c-e6f3-5db1-bba1-c8aaf334e8b7",
+      "commonName": "Seminole goby",
+      "scientificName": "Microgobius carri",
+      "reviewedContentFingerprint": "sha256:1d49c0e282e8dded3e34d4b21f2347a1afe9c6353536db5f98796bc1b7f3cb5b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c7a2ddee-883e-58a2-ab5b-60fcc8e3d2f2",
+      "commonName": "Yellowspotted scorpionfish",
+      "scientificName": "Sebastapistes cyanostigma",
+      "reviewedContentFingerprint": "sha256:3743c79e91b872c78a0b52510dc47a7c6ca9007df2a7369ef8bbd76ca1ab68f2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c88209b2-7523-5d2b-bce3-7c152993afc8",
+      "commonName": "Colombo damsel",
+      "scientificName": "Pomacentrus proteus",
+      "reviewedContentFingerprint": "sha256:236588d8ac78316018a7f3d8a026b729f705a43155064db210ee7997a231d7a0",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c8f54686-793b-5921-98df-2fdfd2029079",
+      "commonName": "Red Sea eightline flasher",
+      "scientificName": "Paracheilinus octotaenia",
+      "reviewedContentFingerprint": "sha256:54373c4f74537e90b1324bfabc7fbc9fe300d454c1c5d13786b37ec0db88b8fa",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:tailShape"
+      ]
+    },
+    {
+      "speciesID": "c9670ac7-2e6b-5b62-b4b6-e80c7c723215",
+      "commonName": "Rigilius goby",
+      "scientificName": "Istigobius rigilius",
+      "reviewedContentFingerprint": "sha256:7f8e313318e58a9722d0179ef328211857307b80cb4fd061fb3876b9e2c6adfc",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "c9b56301-50f8-5107-9260-c03f94a7b1a8",
+      "commonName": "Onespot demoiselle",
+      "scientificName": "Chrysiptera unimaculata",
+      "reviewedContentFingerprint": "sha256:d5d6cdac5d92cf8861ce019d6832dc72880b61aa825a4792f88a86a9c36a2288",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c9baa03a-6465-5e36-863d-8b294ef4d36a",
+      "commonName": "Bluespot damsel",
+      "scientificName": "Pomacentrus grammorhynchus",
+      "reviewedContentFingerprint": "sha256:a413321d237677fc288b5303c4f0dc8e573011ff2112d7db6ea970f64085bbfa",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "cbda7cdc-f9a6-5fde-92ec-9fad228b4291",
+      "commonName": "Orangeback bass",
+      "scientificName": "Serranus annularis",
+      "reviewedContentFingerprint": "sha256:1eeea0ec3dd9afd006c97ddcb4f355036ae28bfe859d0a0019e958dc3d4b0a43",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "cdb2716b-8793-554c-84e8-91f619bc5e84",
+      "commonName": "Smallscale wrasse",
+      "scientificName": "Leptojulis polylepis",
+      "reviewedContentFingerprint": "sha256:c91d74b23c2ad09c7a0868cca205dfbe28d03c52137a1321f8d58955f659b6aa",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ce1a082d-c11e-5669-ad9e-051fd6fd763a",
+      "commonName": "Allen's tubelip",
+      "scientificName": "Labropsis alleni",
+      "reviewedContentFingerprint": "sha256:a8ac6a5453f4ec8290aeb2a49f87ef21302b97db109628d68e1bead6f3cdf6d7",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "d0988e36-0f92-5d65-b054-76bc59d71ed7",
+      "commonName": "pink-banded fairy-warsse",
+      "scientificName": "Cirrhilabrus roseafascia",
+      "reviewedContentFingerprint": "sha256:353519c1e64921c3596887e8f23f1ffaf4463c9f718da8e68ae66f9a50ccd058",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d1b3d2f6-a943-5673-a8b9-f63cfbe8982e",
+      "commonName": "Striated rockskipper",
+      "scientificName": "Praealticus striatus",
+      "reviewedContentFingerprint": "sha256:3e9c9e922d4c1db838947833cc71c8a7c50f4a662767edb8019ffb77f066d98f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d3e71f8b-acb9-5409-a795-b79ca5cec6aa",
+      "commonName": "Thread-tail basslet",
+      "scientificName": "Pseudanthias rubrolineatus",
+      "reviewedContentFingerprint": "sha256:e4cdbbb7d2833e423ba898b6b41bd3530d3615352f5670e0569a94575dd3640b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d6236911-480c-5612-a473-a7872f19838c",
+      "commonName": "Barrier reef anemonefish",
+      "scientificName": "Amphiprion akindynos",
+      "reviewedContentFingerprint": "sha256:87690edcb76b758e8d99f84264d407426dd8e6c5eb6ba48991049bf1578e85eb",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d7f6a19c-836c-5e64-8c18-2306812d19d1",
+      "commonName": "Maned blenny",
+      "scientificName": "Scartella emarginata",
+      "reviewedContentFingerprint": "sha256:8f10dfe9e2dc8aae6deab586ca63b7fba33d75fbd8e96ae4b4109eb8b29e0c3c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d924213d-b9d1-5467-b720-b86fa2ef411f",
+      "commonName": "Englert's scorpionfish",
+      "scientificName": "Scorpaenodes englerti",
+      "reviewedContentFingerprint": "sha256:059dea729a748313b1bbe9ce642ec8882276bb0a40e6f4f6670722d2ac5dfdd1",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "da1fcbee-3a07-52b0-a590-cc2b9afe4f6a",
+      "commonName": "Sebastapistes nuchalis",
+      "scientificName": "Sebastapistes nuchalis",
+      "reviewedContentFingerprint": "sha256:2ca6c78093d13ad500b35ac133a97ee5db51200d826a03466be008a9a3f16e2f",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "da507ec8-735e-5cc4-8e0e-3b304cc93d2d",
+      "commonName": "Muzzled blenny",
+      "scientificName": "Omobranchus punctatus",
+      "reviewedContentFingerprint": "sha256:1450bdbbcf169c03386c7d6789cb6cd373a4cb5c31bdf094b27ca742ce27c429",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:markings"
+      ]
+    },
+    {
+      "speciesID": "dae855b0-e14a-5b07-a887-c763a5c0d8d5",
+      "commonName": "Hutchins' blenny",
+      "scientificName": "Cirripectes hutchinsi",
+      "reviewedContentFingerprint": "sha256:98f5b96e0c5c3512fb45c05d0a3e75550ad69e13288b6c4f03e84b9857c0ae17",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "dc74e39c-46e2-50fe-8e4f-cbcd72c16db0",
+      "commonName": "Redspotted hawkfish",
+      "scientificName": "Amblycirrhitus pinos",
+      "reviewedContentFingerprint": "sha256:1303f054c080db25b78dd0e6df3cde331036268f21c4d9e49285c6c90e373fde",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "dd628605-68ab-5e83-a645-b13cb90057ae",
+      "commonName": "Hawaiian whitespotted toby",
+      "scientificName": "Canthigaster jactator",
+      "reviewedContentFingerprint": "sha256:140c8622cbeb60308d893a8f4c1e8092ceeb0f0f650bad84f91c2fd2c22b09ad",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "de7df70d-d4ab-5685-a4d7-819258424d03",
+      "commonName": "Sharp-nosed sand goby",
+      "scientificName": "Favonigobius gymnauchen",
+      "reviewedContentFingerprint": "sha256:a59c8033f3a99408495b50adbb86a965541b36a1a773011d7884622d06d100d8",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ded16f24-f1ef-5c7b-b815-8fe48f418961",
+      "commonName": "Shige shrimpgoby",
+      "scientificName": "Cryptocentrus shigensis",
+      "reviewedContentFingerprint": "sha256:9610b10b1cf5c1c1f58f2fe793dd4d63d390d96266130cd9d809d4a337899c26",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e00689c1-3e70-5c9f-82dd-f78a3dcea794",
+      "commonName": "Blacklined filefish",
+      "scientificName": "Pervagor nigrolineatus",
+      "reviewedContentFingerprint": "sha256:d20d6e2bfeae662c2eaa23934465d3211bbe4f6005de6710fbdb40c4a7d7d7f8",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e06021d8-f9b4-5b87-a0bf-63ce2a3570df",
+      "commonName": "Silver demoiselle",
+      "scientificName": "Neopomacentrus anabatoides",
+      "reviewedContentFingerprint": "sha256:8a496b70a7e57a27edc0a4cecb906826173d8e3249d8e7c8d62066945d05bd06",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e0b2b451-be74-5194-bcf0-a7716fc6e842",
+      "commonName": "Pseudanthias leucozonus",
+      "scientificName": "Pseudanthias leucozonus",
+      "reviewedContentFingerprint": "sha256:3f51d658caf517daf39ca339acc340670e114eee59e67aa831f19e5afddab3d8",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "no_english_common_name"
+      ]
+    },
+    {
+      "speciesID": "e0e165b1-a63c-5736-9937-b343009c913b",
+      "commonName": "Southern demoiselle",
+      "scientificName": "Chrysiptera notialis",
+      "reviewedContentFingerprint": "sha256:f1eeac3fd4507cad0a8ff673b2baa687d7cba50ec600f2d8930852c4a001951c",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e3deb85c-db27-5e33-8221-d521b22d966d",
+      "commonName": "Coral scorpionfish (Scorpaenodes corallinus)",
+      "scientificName": "Scorpaenodes corallinus",
+      "reviewedContentFingerprint": "sha256:f3b5555c1813a65dd193b35ea218c240f718dad7ed93e599895eebd8aea973e2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ea61acc0-1f66-58c3-abdd-fc6b27bbca65",
+      "commonName": "Red scorpionfish (Scorpaenodes insularis)",
+      "scientificName": "Scorpaenodes insularis",
+      "reviewedContentFingerprint": "sha256:1bb1d35dd5098396bbda2ad818a7659bdb181c82130c6e42aed30744f292f02c",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:habitats"
+      ]
+    },
+    {
+      "speciesID": "ec2ca5e6-9276-5b93-ba32-b7291de0eed3",
+      "commonName": "Lubbock's gregory",
+      "scientificName": "Stegastes lubbocki",
+      "reviewedContentFingerprint": "sha256:670233cc1d6eabd3413b9e03ed986a4920617210bd35e8e6c24f0500ffc603c9",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ed4b32f7-86d5-5c69-b7e7-32b93b603322",
+      "commonName": "Yellowhead angelfish",
+      "scientificName": "Centropyge joculator",
+      "reviewedContentFingerprint": "sha256:8dec3e4d459cb4f0c394cf7ed453735c4d3f008f81430f4cc778ca8e56e43b9d",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "edfbf3f1-3bb0-567e-b068-83f5d0bc196e",
+      "commonName": "Pacific reef bass",
+      "scientificName": "Pseudogramma thaumasia",
+      "reviewedContentFingerprint": "sha256:c1ed9c6b09eb4af235415cf269994a26118a514e57577ac79d9c647f215b63ab",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f15235cc-0110-52b1-ad4f-4826a82873bc",
+      "commonName": "Nusa penida basslet",
+      "scientificName": "Pseudanthias cichlops",
+      "reviewedContentFingerprint": "sha256:cfaec026e5e9be22529231e7210d951aa717a1f46cb3c697cafe580216996684",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors/markings"
+      ]
+    },
+    {
+      "speciesID": "f172a4ca-3b2c-5d53-b9fb-11a4bfb5a277",
+      "commonName": "Furneaux scorpionfish",
+      "scientificName": "Scorpaenopsis furneauxi",
+      "reviewedContentFingerprint": "sha256:1e84dbc06d5ad9ae793ccc6446ef328ff1fdc1ad0bb8183a09255906d5fd488b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f3ac0aa0-8aae-50e9-b36a-898dab882186",
+      "commonName": "Fan shrimp-goby",
+      "scientificName": "Tomiyamichthys latruncularius",
+      "reviewedContentFingerprint": "sha256:a2e7b648da5f8be952989ec2ce9d6c493cba2eb74311c2f36a18d66df2165603",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f4a862bb-b3e8-5f48-9b42-84a627f7ab94",
+      "commonName": "Freckled blenny",
+      "scientificName": "Hypsoblennius ionthas",
+      "reviewedContentFingerprint": "sha256:79b7ecdec9956c4db14ad945616604cd2dd555f9ec00fec2a8a6abcb5f4ba057",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f4eadcd1-d002-56ab-8d37-0021b842e19e",
+      "commonName": "Red seaperch",
+      "scientificName": "Hypoplectrodes cardinalis",
+      "reviewedContentFingerprint": "sha256:f1f429ac6f9a6ce4591f04272482c34cdf2dc2b34298b65a8e8aa5958beb2597",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f65ab929-3814-514e-8221-d842a83f78be",
+      "commonName": "Breastspot cleaner wrasse",
+      "scientificName": "Labroides pectoralis",
+      "reviewedContentFingerprint": "sha256:318b465451ef6e9a2f6c880408938d25728bd0e693b654d2ba3533bd84a797b8",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f71a60ad-7332-55cb-8088-ffc5adbae130",
+      "commonName": "Bynoe goby",
+      "scientificName": "Amblygobius bynoensis",
+      "reviewedContentFingerprint": "sha256:511198c11f3a1f8e339aff2d654773e8471aaaa786365c0cc08d20c14bdf89df",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "f8ab6b3c-7ea8-5bc1-bb1b-060f9adf1d2d",
+      "commonName": "Istigobius hoshinonis",
+      "scientificName": "Istigobius hoshinonis",
+      "reviewedContentFingerprint": "sha256:68c3d2e50240f31d47b2197262e9c74831f08a01799496ac4a04ae03e44963e4",
+      "selection": "flagged",
+      "riskScore": 20,
+      "flags": [
+        "no_english_common_name",
+        "trait_ambiguous:behaviors"
+      ]
+    },
+    {
+      "speciesID": "fa0140f9-4914-5887-bcb0-3d567c96e142",
+      "commonName": "Slender filefish",
+      "scientificName": "Monacanthus tuckeri",
+      "reviewedContentFingerprint": "sha256:5da257e928c8c7be10b7e1ab8b3148c5daf15519717ba029eb4a53dfd48fe768",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "fa044f1b-16ef-5aec-8466-a53ef6f77d7a",
+      "commonName": "Fusilier damselfish",
+      "scientificName": "Lepidozygus tapeinosoma",
+      "reviewedContentFingerprint": "sha256:438ce0bb48e69996807351c0ebbaffb2faba6951b2c8f68294ed6563823c14e9",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:habitats"
+      ]
+    },
+    {
+      "speciesID": "fa0e1351-7a29-54a9-89a5-60a621ed4e83",
+      "commonName": "Mauritian damsel",
+      "scientificName": "Plectroglyphidodon randalli",
+      "reviewedContentFingerprint": "sha256:235721649a9ef62a0aba475698e3cb2aff4499e8984ffc567e7f967ac8cebe15",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "fb913a7b-6f4c-5e24-940d-7aecfdbb8db2",
+      "commonName": "Arabian demoiselle",
+      "scientificName": "Neopomacentrus sindensis",
+      "reviewedContentFingerprint": "sha256:d1c515880b0ea0d94a5ce6fcaee45670b5a6eeafa835168729250c1bbeadd096",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "fc1fbfbc-90ea-5306-8e7a-aa967a0829bb",
+      "commonName": "Linedfin rockskipper",
+      "scientificName": "Praealticus multistriatus",
+      "reviewedContentFingerprint": "sha256:436bc11cf48bff4d17527cc75519f5fa4d27a9d0a9088695b63279b4545bc611",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "fd9c890b-e1a3-5ecf-8e88-556c36d3b8f9",
+      "commonName": "Banded damsel-fish",
+      "scientificName": "Dischistodus darwiniensis",
+      "reviewedContentFingerprint": "sha256:503161f5e2bc3b2f01aa52185078b4b194799e6cada47c11de51a128582e0b43",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ff39cc2c-176e-524b-9b0e-dd9633e63e35",
+      "commonName": "Pigmy leatherjacket",
+      "scientificName": "Brachaluteres jacksonianus",
+      "reviewedContentFingerprint": "sha256:13bd9da2c2dde49cf200d480a45af7e9dd226ee596f66477bf6a723c26498da2",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ffc4d713-4bb5-5f27-9858-aec92b7fb900",
+      "commonName": "Bennett's sharpnose puffer",
+      "scientificName": "Canthigaster bennetti",
+      "reviewedContentFingerprint": "sha256:fbbe89f3d867f055cd85519b31b6fc2e48d2d6573b6dce4a35f475c340a64444",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:tailShape"
+      ]
+    },
+    {
+      "speciesID": "ffdfb8aa-9f62-5547-8387-f3b06960ba1e",
+      "commonName": "Bluedotted damsel",
+      "scientificName": "Pristotis cyanostigma",
+      "reviewedContentFingerprint": "sha256:f3aaf603ecf7a4466b6b8199cdeb425031bb35804b1ab5475fc3255e22fcb26f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    }
+  ],
+  "manifestSHA256": "b593f548d0501f6e9336d89879e3f00248c4056bc6dbdef81922636022990929"
+}

@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "batchID": "batch-20",
+  "generation": 1,
+  "pack": "global",
+  "packVersion": 3,
+  "seed": 2200883920732990615,
+  "sampleSize": 30,
+  "sampling": "random.Random(seed).sample(sorted unflagged speciesIDs, min(30, count)) in CPython 3",
+  "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json, or, for a record absent from it, from catalogue_validation.risk_flags",
+  "counts": {
+    "flagged": 0,
+    "sampled": 30,
+    "unread": 15
+  },
+  "records": [
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "commonName": "Atlantic Blue Tang",
+      "scientificName": "Acanthurus coeruleus",
+      "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "commonName": "Stoplight Parrotfish",
+      "scientificName": "Sparisoma viride",
+      "reviewedContentFingerprint": "sha256:4bbb0baa7aba654a40d525fd007fac90efad594b7c284fb6d6fb8034b442d5d8",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "commonName": "Red Lionfish",
+      "scientificName": "Pterois volitans",
+      "reviewedContentFingerprint": "sha256:e1ee82d27c40e8b7f42fd55dc915b7065e0f219e0f593581419b6d3e1154d970",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000008",
+      "commonName": "Great Barracuda",
+      "scientificName": "Sphyraena barracuda",
+      "reviewedContentFingerprint": "sha256:93dbcc49092ea5246a7b80f02c8db8fe697eab0c92a49734105e22dba3881561",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000009",
+      "commonName": "Green Sea Turtle",
+      "scientificName": "Chelonia mydas",
+      "reviewedContentFingerprint": "sha256:fd6a5f1f35ed6b3704b3b3f6932b2904d0541548a44ce48a757d6328ab980cac",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "commonName": "Spotted Eagle Ray",
+      "scientificName": "Aetobatus narinari",
+      "reviewedContentFingerprint": "sha256:b09f5c9f939b7d501fa43ab9380706b4ea17a4fb6c6383a1deb13b0d47cc34b0",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "03b4064d-d309-568a-bf51-96f1a5b169f9",
+      "commonName": "Mediterranean shore crab",
+      "scientificName": "Carcinus aestuarii",
+      "reviewedContentFingerprint": "sha256:fb176e1b3b1f996782d405d1deb5d8ece21b62edd8975e101642ad73a58d0522",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "1f0a9c68-c5e6-5db3-a928-eebb7c785b2a",
+      "commonName": "Nuttall cockle",
+      "scientificName": "Clinocardium nuttallii",
+      "reviewedContentFingerprint": "sha256:88bd636691da76df77b3ac806e33e5967828d6d41f89bb9853b34ccb4bd0d19a",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "21349407-2117-54a5-b14c-842aa0fe5934",
+      "commonName": "West African mangrove oyster",
+      "scientificName": "Crassostrea tulipa",
+      "reviewedContentFingerprint": "sha256:40be415f3a4c334e11804696b57d5e9487abf5e2b5ae870ec622fe17002f8408",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2b4c18f8-7001-5dd9-a6d3-e5961681b697",
+      "commonName": "Mamorate volute",
+      "scientificName": "Cymbium marmoratum",
+      "reviewedContentFingerprint": "sha256:24bc3f90d2aab40a913be561486ea1eb00e12bc10e66cdc8c8d408e00a9f196b",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "365b6840-415c-540b-9587-d1f3fd3a75b2",
+      "commonName": "Tiger lucine",
+      "scientificName": "Codakia orbicularis",
+      "reviewedContentFingerprint": "sha256:2940537f0bc951c773f1e9ba18b4b78d2bcd3df7a614319c2a48916c5003e63b",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "384ebf27-48ab-52a3-b6e3-69cfef6b8a63",
+      "commonName": "Common edible cockle",
+      "scientificName": "Cerastoderma edule",
+      "reviewedContentFingerprint": "sha256:d45dc077689c72a40cedcc69f8be5d0c74a4ed933fa5780949cc71f029886980",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "39dcff62-fb5d-550e-9f97-f3b8cc8652cf",
+      "commonName": "American cupped oyster",
+      "scientificName": "Crassostrea virginica",
+      "reviewedContentFingerprint": "sha256:01d2318d99dedb588314a2788cb72c417fafa0e374976c4a8b9303813a417aca",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "3ad42c9a-c118-538c-9a36-67c86b36616b",
+      "commonName": "Horned octopus",
+      "scientificName": "Eledone cirrhosa",
+      "reviewedContentFingerprint": "sha256:1d96c91fea6caaf819c77018414f39bd7d54a5d1f1168b0c3fb59ec18efd83c4",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "4058d632-e092-5f66-ab86-bf01597f888b",
+      "commonName": "West African geryon",
+      "scientificName": "Chaceon maritae",
+      "reviewedContentFingerprint": "sha256:9d7d918592153b6c30b401a129ebc3a2d834a13d6ca9b459dcb85ac15d347843",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "42baa08f-4eca-5451-bcf7-d9d7f0333848",
+      "commonName": "Elephant's snoout volute",
+      "scientificName": "Cymbium glans",
+      "reviewedContentFingerprint": "sha256:b8a9cbd7c6ff374bec0303965c202bc302017a86ef68ec66cd3fee3112d2e406",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "462d6c54-6fdb-5191-b9e5-1b29f7962913",
+      "commonName": "Ponderous Dosinia",
+      "scientificName": "Dosinia ponderosa",
+      "reviewedContentFingerprint": "sha256:b299180f13efa36815ad7be63f2101004fb520cd3915e89a6349c1d1c5e262f8",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "564bb546-e121-5a9e-99c3-61f68f63320d",
+      "commonName": "Choro mussel",
+      "scientificName": "Choromytilus chorus",
+      "reviewedContentFingerprint": "sha256:ddf0d7158ca34de015846b44f115d4c36e2b32bbd5d876463f8428bcd597c96a",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5843b432-0f6a-5cd5-abd6-d7dc2aba94cb",
+      "commonName": "Mature Dosinia",
+      "scientificName": "Dosinia exoleta",
+      "reviewedContentFingerprint": "sha256:a4f4f9ee0843ee9f8c8d1cd85f692e6f8d0bb41a256a91146a898d8e8d14b038",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "5fce2ae6-5aef-5cee-b687-299d17be91f0",
+      "commonName": "Tanner crab",
+      "scientificName": "Chionoecetes bairdi",
+      "reviewedContentFingerprint": "sha256:8192248ae094e68a0ac80693d043b3f4cfd2ee4895a4cbc746ad0b893d7a2118",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "615ba8b7-4c75-51dc-a2db-32e5849d27d3",
+      "commonName": "Deep-sea red crab",
+      "scientificName": "Chaceon affinis",
+      "reviewedContentFingerprint": "sha256:7b29b7042e6d732f0fd6fe4e5b312a84c343885e8ea9fdc7acb3a8e322bda13d",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "64314874-4dc3-56e7-bf43-3c8e218c8705",
+      "commonName": "Snow crab",
+      "scientificName": "Chionoecetes opilio",
+      "reviewedContentFingerprint": "sha256:f0954c1686ca53c0ea7d54dff558d3733d018f126cee078d5722f2c9c076f013",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6c9fb3f7-763f-54a9-b332-8d40612acc63",
+      "commonName": "Boco",
+      "scientificName": "Cancer porteri",
+      "reviewedContentFingerprint": "sha256:e41f03f457614843412cf1995a3d5154eb4da965e0f62c89ed5d0f9ebb6f8545",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "6f983291-7221-53b6-a077-88dd28c9509b",
+      "commonName": "Pig's snout volute",
+      "scientificName": "Cymbium cymbium",
+      "reviewedContentFingerprint": "sha256:f8e013577d44042dc3dd6d4ef992c41400736f5f9b04b0b9f2e56c9b968a2f42",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "717e7fb2-48c0-5e40-9066-ce8a07000813",
+      "commonName": "Olive green cockle",
+      "scientificName": "Cerastoderma glaucum",
+      "reviewedContentFingerprint": "sha256:81a936d62b76ed33200c5ec1e95b6641d9ee971450824189a8bed30d8725f4e0",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "72ff456d-2732-5602-95cf-304ea39c23a5",
+      "commonName": "Mangrove cupped oyster",
+      "scientificName": "Crassostrea rhizophorae",
+      "reviewedContentFingerprint": "sha256:187e8c44aa8597ec3dad22eb4ced08d469984be5b038a72041a943ce4712dfb9",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "76ee5d46-e633-51df-9855-435fb5615394",
+      "commonName": "Giant land crab",
+      "scientificName": "Cardisoma guanhumi",
+      "reviewedContentFingerprint": "sha256:0980ed27bdcbf1fad7b70e9ee0390abac0d3590257576a9d4c297a3ec5655bd3",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7a3d6a4a-34c9-5302-9b49-2cb63934928e",
+      "commonName": "Indian backwater oyster",
+      "scientificName": "Magallana bilineata",
+      "reviewedContentFingerprint": "sha256:8ab7ffd2a57bb6619860654191d09eb059b405e5360c61a437b1198d98e8c3e2",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7e7f6302-9a3a-5884-93f9-d3b7c0b365a6",
+      "commonName": "Blue squat lobster",
+      "scientificName": "Grimothea johni",
+      "reviewedContentFingerprint": "sha256:56ed398e114c3c0a68fcd2b1462391ea52d6f21057ab7e8017f34b0a385d03f2",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "7f0771f1-ae33-59b7-b63f-d71910b95f60",
+      "commonName": "Brown land crab",
+      "scientificName": "Cardisoma carnifex",
+      "reviewedContentFingerprint": "sha256:f3aa6dca943039a89743a00e521a34d0237fb4dd8d98a7a054b6df0f95d54ce0",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "807476e3-fdca-5f7e-b281-2f2718b08c1b",
+      "commonName": "Green crab",
+      "scientificName": "Carcinus maenas",
+      "reviewedContentFingerprint": "sha256:2fa422260dbcea4ec3fda6a531f53e330a80f11fa4551b4a1f23e7828793a128",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "814b1139-e940-5968-a496-312e6821b81d",
+      "commonName": "Truncate Donax",
+      "scientificName": "Donax trunculus",
+      "reviewedContentFingerprint": "sha256:9b23c32649a730a20e44317876d37e78bcbfcd68d2b02ac8e17d85bb2fd1ee1e",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "858957d5-01fb-5dce-8900-06ddad3cb766",
+      "commonName": "Chilean crab",
+      "scientificName": "Cancer plebejus",
+      "reviewedContentFingerprint": "sha256:c683ca3511c2e3e6f06d2699d79c723dd2d26d22e8b8503e981dbe3cdbe1f01b",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "87d06814-b16d-52f4-9835-9cbf601b2b9a",
+      "commonName": "Giant cupped oyster",
+      "scientificName": "Magallana gigas",
+      "reviewedContentFingerprint": "sha256:8f7c90d692d1964f6ee058fb07a4f96ed3f057713fa4ae2d5506d338fb7bcf43",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "960ea91e-440a-505b-8f29-10e28483b5fb",
+      "commonName": "Red crab",
+      "scientificName": "Chaceon quinquedens",
+      "reviewedContentFingerprint": "sha256:afab3baef8ed87429dcd7c9e05a07dbe24cec6eb2056e4ffb606610d0148f200",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "98470b7a-8a9c-5fa4-8050-cde6a00e16af",
+      "commonName": "Angel wing",
+      "scientificName": "Cyrtopleura costata",
+      "reviewedContentFingerprint": "sha256:85d15fadf421f84eef5ee524d76ed14ad21ea84c2d734d3557e0a0a35f68f705",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "98f782af-096e-587b-b56a-80f36dd5bb4e",
+      "commonName": "Mangrove oyster",
+      "scientificName": "Crassostrea brasiliana",
+      "reviewedContentFingerprint": "sha256:4319d4e56044dd7343034d3b458b939d7e8a0516294e6661caf34b52bc8180d3",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "ba58f3d7-d69d-5cd2-b1cd-6b409335c3b0",
+      "commonName": "California venus",
+      "scientificName": "Chione californiensis",
+      "reviewedContentFingerprint": "sha256:95ee36c6f20b3e7b57e3b28dec7952a65a9b4a5b58180abcbf5ac88d55b6f113",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "baba9f55-fadc-5e9c-91ef-2dae92bac211",
+      "commonName": "Neptune's volute",
+      "scientificName": "Cymbium pepo",
+      "reviewedContentFingerprint": "sha256:419a1a0d2a46ab615d398c4e7a7028c43dd45063d74883308252ffd08bb0506b",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "c40f5559-bf9c-5a9f-9898-589eab2fc805",
+      "commonName": "Trumpet shell",
+      "scientificName": "Charonia lampas",
+      "reviewedContentFingerprint": "sha256:fb9e2365dc2204e5edc08e50c233546b979ce3b3035876de548601f5348a034f",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "d6ea7ed9-24d0-5aab-80e3-f6fbe62d7e8f",
+      "commonName": "Cortez oyster",
+      "scientificName": "Crassostrea corteziensis",
+      "reviewedContentFingerprint": "sha256:82e0ab9ecf1700def8725ebace4b7247b03ff0e9269087b67aac24bc51ffdd68",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e1c39f0c-7114-5971-9d0c-4b06db825900",
+      "commonName": "Clown crab",
+      "scientificName": "Carpilius maculatus",
+      "reviewedContentFingerprint": "sha256:dd4e2f33e5344e0279b868e5d87348f028da736aa4e0f28ad6d81d2c116904ca",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "e61177a3-b90c-5ac6-9850-e2d15bd1957b",
+      "commonName": "Striped venus clam",
+      "scientificName": "Chamelea gallina",
+      "reviewedContentFingerprint": "sha256:8338d68c056be93e4b5090fd1f52c016f9ab2f3a0113b3a9114b0e487958625f",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+      "commonName": "French Angelfish",
+      "scientificName": "Pomacanthus paru",
+      "reviewedContentFingerprint": "sha256:146c5e9241fc5a01752d77cbcd9d827eab46404da21974e591528e060092bec3",
+      "selection": "unread",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "commonName": "Queen Angelfish",
+      "scientificName": "Holacanthus ciliaris",
+      "reviewedContentFingerprint": "sha256:e63d39626d6308de982f643746f5319f1e18dfa1a4ca5bf57530245a521fc63f",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    }
+  ],
+  "manifestSHA256": "75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f"
+}

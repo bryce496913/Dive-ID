@@ -44,10 +44,12 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     /// records and reports that count. Full validation, including that the records
     /// match the manifest's counts, runs once when a pack is first opened (`loadPack`),
     /// which fails closed exactly as before. A pack already opened is listed from its
-    /// validated records.
+    /// validated records. Release never lists a pack whose definition is not
+    /// `availableInRelease`.
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
         var available: [OfflineIdentificationPackMetadata] = []
         for definition in registry.definitions {
+            if case .publication = access, !definition.availableInRelease { continue }
             if let raw = cachedRawPacks[definition.id] {
                 let metadata = try accountingMetadata(for: raw)
                 guard case .publication = access else { available.append(metadata); continue }
@@ -90,6 +92,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
 
     func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack {
         if let cached = cachedPacks[id] { return cached }
+        if case .publication = access, registry.definition(for: id)?.availableInRelease == false {
+            throw failure(id, .publicationUnavailable, .publicationUnavailable, nil, .validation)
+        }
         let raw = try loadRawPack(id: id)
         let accounting = try accountingMetadata(for: raw)
         let pack: OfflineIdentificationPack

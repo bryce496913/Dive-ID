@@ -67,15 +67,96 @@ final class GlobalPackTests: XCTestCase {
         }
     }
 
-    /// Release (publication access) exposes exactly the records a recorded approval
-    /// covers, and no draft.
-    func testReleaseExposesExactlyTheApprovedGlobalRecords() async throws {
-        let approved = try appliedApprovals()
+    /// The Global definition with the Release gate lifted, as an approved enabling change would set it.
+    private static let ungatedGlobal = RegionCatalogDefinition(id: .global, resourceDirectory: "Global", availableInRelease: true)
+
+    /// A copy of the bundled Global pack in which the first `approved` records are verified
+    /// by a batch review and the manifest counts them, as publish_global.py would write it.
+    private func globalCopyWithApprovedRecords(_ approved: Int) throws -> (root: URL, ids: Set<UUID>) {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let source = try XCTUnwrap(TestResources.productionBundle.resourceURL).appendingPathComponent("IdentificationPacks/Global", isDirectory: true)
+        let destination = root.appendingPathComponent("IdentificationPacks/Global", isDirectory: true)
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: root) }
+        var records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: source.appendingPathComponent("Creatures.json"))) as? [[String: Any]])
+        var ids = Set<UUID>()
+        for index in 0..<approved {
+            records[index]["review"] = ["status": "verified", "verifiedBy": "Bryce", "reviewDate": "2026-10-23T00:00:00Z",
+                                        "reviewerNotes": "Synthetic approval for the Release gate test.", "reviewMethod": "individually-reviewed"]
+            ids.insert(try XCTUnwrap(UUID(uuidString: try XCTUnwrap(records[index]["id"] as? String))))
+        }
+        try JSONSerialization.data(withJSONObject: records).write(to: destination.appendingPathComponent("Creatures.json"))
+        var manifest = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: source.appendingPathComponent("PackManifest.json"))) as? [String: Any])
+        manifest["humanReviewedRecordCount"] = approved
+        manifest["publicationEligibleRecordCount"] = approved
+        try JSONSerialization.data(withJSONObject: manifest).write(to: destination.appendingPathComponent("PackManifest.json"))
+        return (root, ids)
+    }
+
+    private func repository(root: URL, global: RegionCatalogDefinition, access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) -> BundleMarineSpeciesCatalogRepository {
+        BundleMarineSpeciesCatalogRepository(bundle: Bundle(for: GlobalPackTests.self), registry: RegionCatalogRegistry(definitions: [global]),
+                                             resourceResolutionMode: .bundleThenDevelopmentSource, developmentSourceRoot: root, access: access)
+    }
+
+    private func assertPublicationUnavailable(_ repository: BundleMarineSpeciesCatalogRepository, file: StaticString = #filePath, line: UInt = #line) async {
+        do {
+            _ = try await repository.loadPack(id: .global)
+            XCTFail("Release must not open the Global pack", file: file, line: line)
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .publicationUnavailable, file: file, line: line)
+        } catch {
+            XCTFail("Unexpected error: \(error)", file: file, line: line)
+        }
+    }
+
+    /// Global is gated out of Release at pack level. Lifting the gate is a separate,
+    /// explicitly approved change to GlobalRegion.definition; this test must change with it.
+    func testGlobalIsGatedOutOfRelease() async throws {
+        XCTAssertFalse(GlobalRegion.definition.availableInRelease)
+        XCTAssertEqual(RegionCatalogRegistry.bundled.definition(for: .global)?.availableInRelease, false)
+        XCTAssertEqual(RegionCatalogRegistry.bundled.definitions.filter { !$0.availableInRelease }.map(\.id), [.global], "only Global is gated")
         let release = repository(.publication)
+        let available = try await release.availablePacks()
+        XCTAssertFalse(available.contains { $0.id == .global })
+        XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
+        await assertPublicationUnavailable(release)
+    }
+
+    /// Approved records alone never publish Global: with two verified records the gated pack
+    /// is still absent from Release, while the same files with the gate lifted would show
+    /// exactly those two. Debug and Internal still open the whole pack.
+    func testGlobalStaysOutOfReleaseEvenWhenSomeRecordsAreApproved() async throws {
+        let (root, approved) = try globalCopyWithApprovedRecords(2)
+        let gated = repository(root: root, global: GlobalRegion.definition, access: .publication)
+        let listed = try await gated.availablePacks()
+        XCTAssertTrue(listed.isEmpty, "a gated pack is not listed in Release")
+        await assertPublicationUnavailable(gated)
+
+        let development = try await repository(root: root, global: GlobalRegion.definition, access: .experimentalDevelopment).loadPack(id: .global)
+        XCTAssertGreaterThan(development.profiles.count, 4_000)
+        XCTAssertEqual(Set(development.profiles.filter { $0.review?.status == .verified }.map(\.id)), approved)
+
+        // Control: the gate, not the review status, is what keeps these records out.
+        let ungated = repository(root: root, global: Self.ungatedGlobal, access: .publication)
+        let exposed = try await ungated.availablePacks()
+        XCTAssertEqual(exposed.map(\.id), [.global])
+        XCTAssertEqual(exposed.first?.speciesCount, 2)
+        let ungatedPack = try await ungated.loadPack(id: .global)
+        XCTAssertEqual(Set(ungatedPack.profiles.map(\.id)), approved)
+    }
+
+    /// With the gate lifted, publication access would expose exactly the records a
+    /// recorded approval covers, and no draft.
+    func testWithTheGateLiftedReleaseWouldExposeExactlyTheApprovedGlobalRecords() async throws {
+        let approved = try appliedApprovals()
+        let release = BundleMarineSpeciesCatalogRepository(
+            bundle: TestResources.productionBundle,
+            registry: RegionCatalogRegistry(definitions: [CaribbeanRegion.definition, TropicalPacificRegion.definition, Self.ungatedGlobal]),
+            resourceResolutionMode: .bundleThenDevelopmentSource, access: .publication)
         let available = try await release.availablePacks()
         XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
         guard !approved.isEmpty else {
-            XCTAssertFalse(available.contains { $0.id == .global }, "no approval, no Global pack in Release")
+            XCTAssertFalse(available.contains { $0.id == .global }, "no approval, no Global pack")
             return
         }
         let listed = try XCTUnwrap(available.first { $0.id == .global })
@@ -87,8 +168,7 @@ final class GlobalPackTests: XCTestCase {
         let full = try await repository(.experimentalDevelopment).loadPack(id: .global)
         let unapproved = Set(full.profiles.map(\.id)).subtracting(approved.keys)
         XCTAssertEqual(unapproved.count, full.profiles.count - approved.count)
-        XCTAssertTrue(unapproved.isDisjoint(with: pack.profiles.map(\.id)), "unapproved records are absent from Release")
-        print("GLOBAL_RELEASE exposed=\(pack.profiles.count) unapproved=\(unapproved.count) individually=\(pack.profiles.filter { $0.review?.reviewMethod == .individuallyReviewed }.count) sample=\(pack.profiles.filter { $0.review?.reviewMethod == .sampleApproved }.count)")
+        XCTAssertTrue(unapproved.isDisjoint(with: pack.profiles.map(\.id)), "unapproved records are absent")
     }
 
     func testDescribedLocationBoostsInRangeKeepsOutOfRangeAndUnknownIsNeutral() async throws {
