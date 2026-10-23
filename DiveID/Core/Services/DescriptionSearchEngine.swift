@@ -138,25 +138,26 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
 
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
         try Task.checkCancellation()
-        let observation = await parser.parse(description)
-        try Task.checkCancellation()
-        var retrieved: [RetrievedSpeciesCandidate]
-        if let bm25 = retriever as? BM25SpeciesCandidateRetriever {
-            // The production path: the BM25 index is built once per catalogue content.
-            let index = try await indexStore.index(pack: pack, builder: documentBuilder)
-            retrieved = try await bm25.retrieve(query: description, index: index, limit: candidateLimit)
-        } else {
-            let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
-            retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
-        }
-        try Task.checkCancellation()
+        let retrieved: [RetrievedSpeciesCandidate]
+        let observation: ParsedObservation
+        var semanticAdditions = 0
         if let semanticComplement {
-            let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
-            let primaryIDs = Set(retrieved.map(\.speciesID))
-            let semantic = try await semanticComplement.retrieve(query: description, documents: documents, limit: candidateLimit)
+            // The query embedding runs alongside parsing and BM25 instead of after them.
+            async let semantic = semanticCandidates(semanticComplement, description: description, pack: pack)
+            observation = await parser.parse(description)
             try Task.checkCancellation()
-            retrieved += semantic.filter { !primaryIDs.contains($0.speciesID) }
+            let primary = try await primaryCandidates(description: description, pack: pack)
+            let primaryIDs = Set(primary.map(\.speciesID))
+            let similar = try await semantic
+            let additions = similar.filter { !primaryIDs.contains($0.speciesID) }
+            semanticAdditions = additions.count
+            retrieved = primary + additions
+        } else {
+            observation = await parser.parse(description)
+            try Task.checkCancellation()
+            retrieved = try await primaryCandidates(description: description, pack: pack)
         }
+        try Task.checkCancellation()
         let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         var included = Set<UUID>()
         let pool = retrieved.enumerated().compactMap { offset, item -> SpeciesRankingCandidate? in
@@ -197,8 +198,26 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
                 packRegionCompatibility: compatibility
             ),
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
-            retrievalLimit: semanticComplement == nil ? candidateLimit : candidateLimit * 2
+            // The pool bound actually searched: BM25's limit plus the species semantic added.
+            retrievalLimit: candidateLimit + semanticAdditions
         )
+    }
+
+    private func primaryCandidates(description: String, pack: OfflineIdentificationPack) async throws -> [RetrievedSpeciesCandidate] {
+        if let bm25 = retriever as? BM25SpeciesCandidateRetriever {
+            // The production path: the BM25 index is built once per catalogue content.
+            let index = try await indexStore.index(pack: pack, builder: documentBuilder)
+            return try await bm25.retrieve(query: description, index: index, limit: candidateLimit)
+        }
+        let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
+        return try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
+    }
+
+    private func semanticCandidates(_ complement: any SpeciesCandidateRetrieving, description: String,
+                                    pack: OfflineIdentificationPack) async throws -> [RetrievedSpeciesCandidate] {
+        let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
+        return try await complement.retrieve(query: description, documents: documents,
+                                             contentKey: SearchIndexStore.contentKey(pack, documentBuilder), limit: candidateLimit)
     }
 }
 

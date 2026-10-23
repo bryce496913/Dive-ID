@@ -80,6 +80,13 @@ actor SemanticRetrievalRuntime {
         let provider: any SemanticEmbeddingProviding
         let index: SpeciesEmbeddingIndex
         let identity: String
+        /// Built once per load, not per query (4,798 entries for Global).
+        let vectors: [UUID: [Float]]
+
+        init(provider: any SemanticEmbeddingProviding, index: SpeciesEmbeddingIndex, identity: String) {
+            self.provider = provider; self.index = index; self.identity = identity
+            vectors = Dictionary(index.records.map { ($0.speciesID, $0.vector) }, uniquingKeysWith: { first, _ in first })
+        }
     }
     private var loaded: [String: Loaded] = [:]
     private var loading: [String: Task<Loaded, Error>] = [:]
@@ -102,8 +109,10 @@ actor SemanticRetrievalRuntime {
                                    identity: "\(provider.modelIdentifier):\(provider.modelVersion):\(provider.tokenizerFingerprint):\(provider.vocabularySHA256):\(index.metadata.documentFingerprint)")
     }
 
+    /// `contentKey` names the document set's content. When given, the full index validation
+    /// runs once per content instead of re-sorting and hashing every fingerprint per query.
     func retrieve(locations: SemanticArtifactLocations, pack: OfflineIdentificationPackMetadata,
-                  documents: [SpeciesSearchDocument], query: String, limit: Int) async throws
+                  documents: [SpeciesSearchDocument], contentKey: String? = nil, query: String, limit: Int) async throws
         -> (candidates: [RetrievedSpeciesCandidate], modelHit: Bool, indexHit: Bool, queryHit: Bool, loadMS: Double, embeddingMS: Double, retrievalMS: Double, loaded: (String, String, String)) {
         try Task.checkCancellation()
         let loadStart = ContinuousClock.now
@@ -129,7 +138,7 @@ actor SemanticRetrievalRuntime {
             loaded[artifactKey] = artifacts
             loading[artifactKey] = nil
         }
-        let validationKey = artifacts.identity + ":" + SpeciesSearchDocument.catalogueFingerprint(documents)
+        let validationKey = artifacts.identity + ":" + (contentKey.map { "content:" + $0 } ?? SpeciesSearchDocument.catalogueFingerprint(documents))
         let indexHit = validated.contains(validationKey)
         if !indexHit {
             do { try artifacts.index.validate(provider: artifacts.provider, pack: pack, documents: documents) }
@@ -154,7 +163,7 @@ actor SemanticRetrievalRuntime {
         }
         let embeddingMS = Self.milliseconds(since: embeddingStart)
         let retrievalStart = ContinuousClock.now
-        let records = Dictionary(uniqueKeysWithValues: artifacts.index.records.map { ($0.speciesID, $0.vector) })
+        let records = artifacts.vectors
         var candidates: [RetrievedSpeciesCandidate] = []
         candidates.reserveCapacity(documents.count)
         for document in documents {
@@ -219,9 +228,18 @@ struct ExperimentalSemanticRetriever: SpeciesCandidateRetrieving {
     let diagnostics: (any SemanticDiagnosticsReporting)?
 
     func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] {
+        try await run(query: query, documents: documents, contentKey: nil, limit: limit)
+    }
+
+    func retrieve(query: String, documents: [SpeciesSearchDocument], contentKey: String, limit: Int) async throws -> [RetrievedSpeciesCandidate] {
+        try await run(query: query, documents: documents, contentKey: contentKey, limit: limit)
+    }
+
+    private func run(query: String, documents: [SpeciesSearchDocument], contentKey: String?, limit: Int) async throws -> [RetrievedSpeciesCandidate] {
         let total = ContinuousClock.now
         do {
-            let result = try await runtime.retrieve(locations: locations, pack: pack, documents: documents, query: query, limit: limit)
+            let result = try await runtime.retrieve(locations: locations, pack: pack, documents: documents, contentKey: contentKey,
+                                                    query: query, limit: limit)
             await diagnostics?.record(.init(requestedEngine: .experimentalCoreML, actualEngine: .experimentalCoreML,
                 modelIdentity: result.loaded.0, tokenizerIdentity: result.loaded.1, preprocessingIdentity: result.loaded.2,
                 packIdentity: "\(pack.id.rawValue):\(pack.packVersion)", fallbackReason: nil,

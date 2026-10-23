@@ -6,6 +6,21 @@ protocol SpeciesCandidateRetrieving: Sendable {
         documents: [SpeciesSearchDocument],
         limit: Int
     ) async throws -> [RetrievedSpeciesCandidate]
+
+    /// `contentKey` identifies the document set's content (`SearchIndexStore.contentKey`),
+    /// so a retriever can cache per-content work instead of re-hashing every document.
+    func retrieve(
+        query: String,
+        documents: [SpeciesSearchDocument],
+        contentKey: String,
+        limit: Int
+    ) async throws -> [RetrievedSpeciesCandidate]
+}
+
+extension SpeciesCandidateRetrieving {
+    func retrieve(query: String, documents: [SpeciesSearchDocument], contentKey: String, limit: Int) async throws -> [RetrievedSpeciesCandidate] {
+        try await retrieve(query: query, documents: documents, limit: limit)
+    }
 }
 
 struct RetrievedSpeciesCandidate: Sendable, Equatable {
