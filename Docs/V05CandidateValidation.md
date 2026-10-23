@@ -419,3 +419,194 @@ the production BM25 engine with biological ranking; the Core ML opt-in is Debug-
 
 A Debug build also opens Global, but report Debug timings only as Debug: Debug keeps
 testability and `DEBUG`-only diagnostics and is unoptimized (`-Onone`, enforced in CI).
+
+## Internal device performance test (prepared 2026-10-23)
+
+For Bryce to run on his iPhone with the **Internal** configuration (see
+[Optional: Global in an Internal build](#optional-global-in-an-internal-build-experimental-only)):
+optimized like Release, installed as **Dive ID Internal**, opening the full draft
+catalogue. **Nothing below has been observed on an iPhone.** The behaviours were
+checked in tests first (`FirstUsePerformanceTests`, `InternalInstrumentationTests`,
+`SearchIndexStoreTests`); the host numbers are host numbers only.
+
+### What the Internal build adds (Debug too; never Release)
+
+All of it is compiled only under `DEBUG || DIVEID_INTERNAL`
+(`DiveID/Core/Services/SearchPerformanceInstrumentation.swift` and its call sites).
+CI builds the Release app and fails if any of its strings or the signpost API appear
+in it (`Tools/CI/check_internal_instrumentation.py`); it also checks that they are
+present in the Internal and Debug apps, so the check is known to see them.
+`InternalInstrumentationTests` does the same for the SwiftPM binaries in both
+`swift test` and `swift test -c release`. No ranking, content or Release behaviour changed.
+
+**Signpost intervals** (Instruments → Points of Interest, subsystem
+`com.brycecameron.DiveID.performance`; each carries the pack ID, never query text):
+
+| Interval | Starts | Ends |
+| --- | --- | --- |
+| Catalogue load | a pack is decoded and validated (not a cached pack) | the pack is ready |
+| Index load from store | a stored index file exists and is read | loaded, or rejected (message says which) |
+| Index build | documents and the BM25 index are built | the index is ready |
+| Background preparation | Describe What You Saw opens (or the dive region changes) | the index is ready; the message is the index source |
+| Query to first result | Find Matches is tapped | results, "No useful matches" or an error is on screen; `cancelled` if you go back first |
+
+**Diagnostics row**, on Describe What You Saw below Find Matches (scroll down):
+
+```
+Internal search diagnostics
+Index: loaded from store · Ready: 0.91 s · Last query: 62 ms
+Catalogue 0.74 s + index 0.17 s
+[Delete stored index] [Corrupt stored index]
+```
+
+- **Index:** where the selected pack's index came from on this launch: `built` (no
+  stored index), `loaded from store`, or `rebuilt after invalid store` (a stored
+  file existed but failed validation, was deleted and rebuilt). `preparing…` until ready.
+- **Ready:** from the screen opening (preparation start) to the index being ready:
+  catalogue load plus index load or build. It is kept for the first preparation of each
+  launch, so reopening the screen does not replace it. The second line splits it.
+- **Last query:** Find Matches tap to the first state on the results screen (the
+  `Query to first result` interval). A suffix says `(no results)`, `(failed)` or
+  `(cancelled)`; none means results were shown.
+- **Delete stored index** removes the selected pack's file from the app's Caches
+  folder. **Corrupt stored index** overwrites the middle half of it with random bytes,
+  keeping its length, header and checksum, so only validation can catch it. Both change
+  only the file; the index in memory stays, so **force-quit and relaunch** to test
+  recovery. The row confirms how many files were changed.
+
+### Host baseline (re-measured 2026-10-23; host results, not iPhone results)
+
+HOST_BASELINE_PLACEHOLDER
+
+### 1. Install
+
+1. **Check out** the commit being tested on the Mac and record its full SHA.
+2. **Connect the iPhone**, unlocked and trusted, with Developer Mode on.
+3. **Build and install Internal:** Product → Scheme → Edit Scheme… → Run → Build
+   Configuration: **Internal**, then Run on the iPhone. Or, with `DEVICE_ID` from
+   `xcrun devicectl list devices`:
+
+   ```sh
+   xcodebuild -project DiveID.xcodeproj -scheme DiveID -configuration Internal \
+     -destination "platform=iOS,id=$DEVICE_ID" -derivedDataPath /tmp/diveid-internal build
+   xcrun devicectl device install app --device "$DEVICE_ID" \
+     /tmp/diveid-internal/Build/Products/Internal-iphoneos/DiveID.app
+   ```
+4. **Check:** the yellow "Internal build" banner shows on every screen, and Describe What
+   You Saw shows the diagnostics row below Find Matches.
+5. **Detach:** after installing, stop the debugger (Product → Stop) and launch
+   **Dive ID Internal** from the Home Screen for every timing below. Turn on Airplane
+   Mode; the app needs no network.
+
+### 2. Test sequence
+
+Use **Global (Experimental)** throughout; it is the slow case. Record each step in the
+results table. "Search A" is `Bright blue fish with a yellow spine near the tail`.
+Have it on the clipboard (copy it from Notes) so it can be pasted at once.
+
+**A. Fresh install, search at once**
+
+1. Delete Dive ID Internal from the iPhone (long-press → Remove App → Delete App), then
+   install it again (step 1.3). This removes the stored index.
+2. Launch it, open Describe What You Saw and paste search A **first**.
+3. Tap Change, select Global (Experimental). You return to Describe What You Saw with the
+   text kept, and Global's preparation starts now. Tap **Find Matches immediately**.
+4. **Expect:** the results screen shows "Searching the Global (Experimental) dive
+   region…" with a progress indicator while the index is prepared, then results. Never
+   an empty list, "No useful matches" or an error while it waits.
+5. **Record:** the time from tap to results (stopwatch or screen recording), the first
+   three results, then go back and read the row: `Index: built`, its Ready time and
+   Last query. The Last query is the tap-to-results time.
+
+**B. Back mid-search**
+
+1. Still on this launch, tap **Delete stored index**, force-quit, relaunch, open
+   Describe What You Saw (Global stays selected), paste search A and tap Find Matches
+   at once; the index is building again.
+2. Tap **Back** before results appear.
+3. **Expect:** you return to Describe What You Saw at once; the row says
+   `Last query: … (cancelled)` once the screen refreshes. Tap Find Matches again: the
+   progress view shows, then the same results as A. No spinner stays behind, and the
+   app stays responsive (try scrolling the description while it prepares).
+
+**C. Relaunch, and force-quit during the build**
+
+1. Force-quit, relaunch and open Describe What You Saw. **Expect:** `Index: loaded
+   from store`, with a Ready time much shorter than A's. Run search A and confirm the
+   same first three results. Repeat this relaunch 3 times and record each Ready time.
+2. Tap **Delete stored index**, force-quit and relaunch. Open Describe What You Saw and,
+   within about one second (well before the index is ready), **force-quit again** from
+   the app switcher. Relaunch and open the screen.
+3. **Expect:** `Index: built` (the interrupted launch never wrote a file), and search A
+   gives the same results. Force-quit and relaunch once more: `loaded from store`.
+
+**D. Delete the stored index**
+
+1. Tap **Delete stored index**; the row says it deleted 1 file. Force-quit and relaunch.
+2. **Expect:** `Index: built`, with a Ready time similar to A's; search A gives the same
+   results. The next relaunch shows `loaded from store` again.
+
+**E. Corrupt the stored index**
+
+1. Tap **Corrupt stored index**; the row says it corrupted 1 file. Force-quit and relaunch.
+2. **Expect:** `Index: rebuilt after invalid store`, never `loaded from store`, and
+   search A gives the same results. The next relaunch shows `loaded from store` again.
+
+**F. Five warm queries**
+
+With the index ready (`loaded from store` or after A to E), without quitting, run each
+search below once, tapping Back between them, and record each Last query:
+
+1. `Bright blue fish with a yellow spine near the tail`
+2. `Oval blue surgeonfish grazing on algae over the reef`
+3. `Blue and yellow angelfish with a dark spot ringed in blue on its forehead`
+4. `A large grey shark cruising in open water`
+5. `Something swimming on the reef`
+
+Report the five values, their median, and the maximum (with five samples, nearest-rank
+p95 is the maximum; label it descriptive). If one is close to a threshold below, run
+search 1 another 20 times for a real p95.
+
+### 3. Instruments trace with the signposts
+
+1. In Xcode: Product → Scheme → Edit Scheme… → **Profile** → Build Configuration:
+   **Internal**. (Profile defaults to Release, which has no signposts.)
+2. Product → Profile (⌘I) on the iPhone, choose the **Time Profiler** template (it
+   includes **Points of Interest**). Or add the **os_signpost** instrument to a Blank
+   template, filtered to subsystem `com.brycecameron.DiveID.performance`.
+3. Record, then run step A (or C/D/E) and two warm searches in the app. Stop.
+4. In the Points of Interest track, select the list view (Summary: Intervals) to read
+   each interval's duration: Catalogue load, Index load from store or Index build,
+   Background preparation, Query to first result.
+5. Save the trace (File → Save) outside the repository and note its path.
+
+From the command line instead (after installing the Internal app):
+
+```sh
+xcrun xctrace record --template 'Time Profiler' --device "$DEVICE_ID" \
+  --attach 'DiveID' --time-limit 60s --output ~/Desktop/diveid-internal.trace
+```
+
+### 4. Results
+
+| Field | Result |
+| --- | --- |
+| Commit SHA / version / build | |
+| iPhone model / iOS build / Xcode version | |
+| Configuration (Internal), banner seen, debugger detached, Airplane Mode | |
+| A. Fresh install: tap → results (s); row: source / Ready / Last query | |
+| A. Progress shown while waiting; first three results | |
+| B. Back mid-search: returned at once (yes/no); row says cancelled; retry results match A | |
+| C. Relaunch Ready ×3 (source); search A results match | |
+| C. Force-quit during build → relaunch source; results match | |
+| D. Delete → source / Ready; results match; next launch source | |
+| E. Corrupt → source / Ready; results match; next launch source | |
+| F. Warm Last query ×5 (ms); median; max | |
+| Memory gauge: launch / first-search peak / after F (metric) | |
+| Instruments: Catalogue load / Index load or build / Background preparation / Query to first result | |
+| Trace and recording locations | |
+| Problems seen | |
+
+### 5. When further optimization becomes necessary (proposed thresholds)
+
+THRESHOLDS_PLACEHOLDER
