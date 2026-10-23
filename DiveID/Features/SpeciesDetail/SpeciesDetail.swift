@@ -5,13 +5,12 @@ struct SpeciesDetailView: View {
     @State private var showsAppearance = true
     @State private var showsHabitat = false
     @State private var showsTaxonomy = false
-    @ScaledMetric(relativeTo: .largeTitle) private var artworkHeight: CGFloat = 220
+    @ScaledMetric(relativeTo: .largeTitle) private var artworkHeight: CGFloat = 280
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
-                SpeciesArtwork(species: viewModel.species).frame(height: artworkHeight)
-                header
+                hero
                 PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved Identifications" : "Save Identification") {
                     Task { await viewModel.toggleSaved() }
                 }
@@ -57,15 +56,28 @@ struct SpeciesDetailView: View {
         .task { await viewModel.load() }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
-            Text(viewModel.species.commonName).font(.largeTitle.bold())
-            Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextSecondary)
-            if let match = viewModel.match {
-                MatchStrengthBadge(strength: match.matchStrength).padding(.top, AppTheme.Spacing.xxs)
-                if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
+    /// The artwork with the name, scientific name and match strength set over its lower edge.
+    private var hero: some View {
+        ZStack(alignment: .bottomLeading) {
+            SpeciesArtwork(species: viewModel.species, showsCaption: false)
+            LinearGradient(colors: [.clear, .black.opacity(0.75)], startPoint: .center, endPoint: .bottom)
+                .allowsHitTesting(false)
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                if let match = viewModel.match {
+                    MatchStrengthBadge(strength: match.matchStrength)
+                }
+                Text(viewModel.species.commonName).font(.largeTitle.bold())
+                Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                if let match = viewModel.match, match.taxonomicResolution != .species {
+                    Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                }
             }
+            .padding(AppTheme.Spacing.xl)
         }
+        .frame(minHeight: artworkHeight)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.heroRadius, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: AppTheme.heroRadius, style: .continuous).strokeBorder(Color.appStroke, lineWidth: 1))
+        .shadow(color: Color.appAccent.opacity(0.35), radius: 20, y: 8)
     }
 
     @ViewBuilder

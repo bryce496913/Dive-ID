@@ -21,9 +21,9 @@ extension Color {
 
 extension LinearGradient {
     /// The brand fill for primary actions and hero surfaces: deep accent into deep highlight.
-    static let appBrand = LinearGradient(colors: [.appAccentDeep, .appHighlightDeep], startPoint: .topLeading, endPoint: .bottomTrailing)
+    static var appBrand: LinearGradient { LinearGradient(colors: [.appAccentDeep, .appHighlightDeep], startPoint: .topLeading, endPoint: .bottomTrailing) }
     /// Card fill: the surface color lifting slightly toward its top edge.
-    static let appCard = LinearGradient(colors: [.appSurfaceElevated, .appSurface], startPoint: .top, endPoint: .bottom)
+    static var appCard: LinearGradient { LinearGradient(colors: [.appSurfaceElevated, .appSurface], startPoint: .top, endPoint: .bottom) }
 }
 
 enum AppTheme {

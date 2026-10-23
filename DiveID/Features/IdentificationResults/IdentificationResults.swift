@@ -29,19 +29,26 @@ struct IdentificationResultsView: View {
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
-                        Text(viewModel.resultsSummary)
-                            .font(.footnote).foregroundStyle(Color.appTextSecondary)
-                        if viewModel.packMetadata?.isExperimental == true {
-                            Label(AppCopy.draftCatalogueWarning, systemImage: "exclamationmark.triangle.fill")
-                                .font(.footnote.bold()).foregroundStyle(Color.appWarning)
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
+                            Label(viewModel.resultsSummary, systemImage: "sparkle.magnifyingglass")
+                                .labelStyle(CompactLabelStyle())
+                                .font(.subheadline.weight(.semibold))
+                            if viewModel.packMetadata?.isExperimental == true {
+                                Label(AppCopy.draftCatalogueWarning, systemImage: "exclamationmark.triangle.fill")
+                                    .labelStyle(CompactLabelStyle())
+                                    .font(.footnote.bold()).foregroundStyle(Color.appWarning)
+                            }
+                            Text(AppCopy.matchStrengthDisclaimer)
+                                .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         }
-                        Text(AppCopy.matchStrengthDisclaimer)
-                            .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .appCard()
                         ForEach(matches) { match in
                             Button { router.navigate(to: .speciesDetail(match.species, match)) } label: {
                                 SpeciesResultCard(match: match)
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(AppCardButtonStyle())
                             .accessibilityIdentifier("result_\(match.species.id)")
                         }
                         Text(AppCopy.accuracyDisclaimer)
