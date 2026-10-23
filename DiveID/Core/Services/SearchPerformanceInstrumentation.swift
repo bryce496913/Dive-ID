@@ -27,7 +27,7 @@ enum SearchSignposts {
     static let subsystem = "com.brycecameron.DiveID.performance"
 
 #if canImport(os)
-    nonisolated(unsafe) private static let signposter = OSSignposter(logHandle: OSLog(subsystem: subsystem, category: .pointsOfInterest))
+    private static let signposter = OSSignposter(logHandle: OSLog(subsystem: subsystem, category: .pointsOfInterest))
 #endif
 
     /// Begins an interval; `detail` (a pack ID, never query text) is shown with it.
