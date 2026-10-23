@@ -1,5 +1,11 @@
 # v0.5 development evaluation
 
+**Current state (2026-10-23):** the v2 evaluation now passes every gate. See
+[`Reports/V05DevelopmentEvaluation.json`](../Reports/V05DevelopmentEvaluation.json) and
+the README's [required portable checks](../README.md#required-portable-checks). The
+results and defects below record the first run, before later parser, ranking and
+catalogue changes, and are kept as recorded.
+
 This pass adds evaluation only. The prerequisite spine-vocabulary correction is
 isolated in PR #85 (`92a975e`), whose complete Debug and Release suites passed
 107 tests with one opt-in frozen evaluation skipped. The evaluation branch adds
