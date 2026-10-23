@@ -54,6 +54,7 @@ final class DescriptionSearchViewModel {
 struct DescriptionSearchView: View {
     @State var viewModel: DescriptionSearchViewModel
     let router: AppRouter
+    @FocusState private var isEditorFocused: Bool
 
     var body: some View {
         ScrollView {
@@ -69,6 +70,7 @@ struct DescriptionSearchView: View {
                     }
                     TextEditor(text: $viewModel.descriptionText)
                         .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
+                        .focused($isEditorFocused)
                         .accessibilityIdentifier("descriptionText")
                 }
                 .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
@@ -79,8 +81,22 @@ struct DescriptionSearchView: View {
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 Label("Offline results are limited to species currently included with this version of Dive ID.", systemImage: "tray.full")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
+#if DEBUG || DIVEID_INTERNAL
+                // In the scrolling content, so it never moves or covers the pinned search controls.
+                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
+#endif
+            }
+            .padding()
+        }
+        .scrollDismissesKeyboard(.interactively)
+        // Pinned outside the scroll view so the keyboard can never cover it: it sits directly
+        // above the keyboard when open, and above any app-wide bottom inset when closed.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
                 if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
+                    // One tap both dismisses the keyboard and submits.
+                    isEditorFocused = false
                     Task {
 #if DEBUG || DIVEID_INTERNAL
                         if let pack = viewModel.pack { viewModel.diagnostics.querySubmitted(packID: pack.id) }
@@ -96,12 +112,17 @@ struct DescriptionSearchView: View {
                     }
                 }
                 .accessibilityIdentifier("findMatches")
-#if DEBUG || DIVEID_INTERNAL
-                // Below the search controls, so it never moves or covers them.
-                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
-#endif
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, AppTheme.Spacing.s)
+            .background(Color.appBackground.ignoresSafeArea(.container, edges: .bottom))
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { isEditorFocused = false }
+                    .accessibilityIdentifier("dismissKeyboard")
+            }
         }
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
