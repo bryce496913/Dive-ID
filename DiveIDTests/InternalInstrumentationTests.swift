@@ -4,8 +4,8 @@ import XCTest
 
 /// First-use instrumentation (signposts, the diagnostics row's data and the stored-index
 /// actions) exists in Debug and Internal and never in Release. The binary check runs in
-/// SwiftPM, where the app module is linked into the test binary; CI checks the built
-/// Xcode apps with Tools/CI/check_internal_instrumentation.py.
+/// SwiftPM on macOS, where the app module is linked into the test bundle; CI checks the
+/// built Xcode apps with Tools/CI/check_internal_instrumentation.py.
 @MainActor
 final class InternalInstrumentationTests: XCTestCase {
     /// Strings only the instrumentation contains, stored reversed so this file's own
@@ -17,45 +17,27 @@ final class InternalInstrumentationTests: XCTestCase {
     ]
     private static var markers: [String] { reversedMarkers.map { String($0.reversed()) } }
 
+    /// Darwin only: on Linux the SwiftPM test runner does not carry these strings even in
+    /// Debug (found on CI), so a scan there could not tell Release from Debug and would
+    /// prove nothing. Linux still runs every behaviour test; the Release absence proof is
+    /// this test on macOS and the CI check of the built Release app.
     func testReleaseBinariesContainNoInstrumentation() throws {
-#if SWIFT_PACKAGE
-        let binaries = try Self.loadedTestBinaries()
-        XCTAssertFalse(binaries.isEmpty)
-        var found = Set<String>()
-        for binary in binaries {
-            let data = try Data(contentsOf: binary)
-            found.formUnion(Self.markers.filter { data.range(of: Data($0.utf8)) != nil })
-        }
-        let foundInOrder = Self.markers.filter(found.contains)
+#if SWIFT_PACKAGE && canImport(Darwin)
+        let binary = try XCTUnwrap(Bundle(for: InternalInstrumentationTests.self).executableURL)
+        let data = try Data(contentsOf: binary)
+        let foundInOrder = Self.markers.filter { data.range(of: Data($0.utf8)) != nil }
 #if DEBUG || DIVEID_INTERNAL
-        XCTAssertEqual(foundInOrder, Self.markers, "the check finds the instrumentation where it is compiled in; scanned \(binaries.map(\.path))")
+        XCTAssertEqual(foundInOrder, Self.markers, "the check finds the instrumentation where it is compiled in; scanned \(binary.path)")
 #else
-        XCTAssertEqual(foundInOrder, [], "Release must not contain instrumentation; scanned \(binaries.map(\.path))")
+        XCTAssertEqual(foundInOrder, [], "Release must not contain instrumentation; scanned \(binary.path)")
         XCTAssertEqual(BuildChannel.current, .release)
 #endif
+#elseif SWIFT_PACKAGE
+        throw XCTSkip("Linux test binaries cannot show the instrumentation strings; macOS SwiftPM and the Xcode app check prove Release excludes them")
 #else
         throw XCTSkip("Xcode app binaries are checked by Tools/CI/check_internal_instrumentation.py")
 #endif
     }
-
-#if SWIFT_PACKAGE
-    /// The files the app module can be linked into: on Linux every non-system file mapped
-    /// into this process (the test executable and any libraries SwiftPM built beside it),
-    /// on Darwin the test bundle's binary.
-    private static func loadedTestBinaries() throws -> [URL] {
-#if os(Linux)
-        let maps = try String(contentsOfFile: "/proc/self/maps", encoding: .utf8)
-        let paths = Set(maps.split(separator: "\n").compactMap { line -> String? in
-            guard let slash = line.firstIndex(of: "/") else { return nil }
-            let path = String(line[slash...])
-            return ["/usr/", "/lib", "/etc/", "/proc/", "/dev/"].contains { path.hasPrefix($0) } ? nil : path
-        })
-        return paths.sorted().map(URL.init(fileURLWithPath:)).filter { FileManager.default.isReadableFile(atPath: $0.path) }
-#else
-        return [try XCTUnwrap(Bundle(for: InternalInstrumentationTests.self).executableURL)]
-#endif
-    }
-#endif
 
 #if DEBUG || DIVEID_INTERNAL
     private var directory: URL!
