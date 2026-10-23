@@ -74,6 +74,10 @@ struct LocalRankingWeights: Sendable {
     let exactName = 20.0, category = 6.0, region = 5.0, habitat = 4.0, marking = 4.0, color = 3.0, bodyShape = 3.0, size = 3.0, depth = 2.0, behavior = 2.0, keyword = 1.0, waterConflict = -10.0, sizeConflict = -4.0, habitatConflict = -3.0, preferredRegion = 3.0, outOfRange = -3.0
     let appearanceRelationship = 2.0, tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
+    /// Raw cosine a semantic-only candidate needs for provisional admission, and the zero
+    /// point of its ordering contribution. Calibrated on the Global score distribution
+    /// (Docs/HybridRankingContract.md, "Semantic calibration").
+    let semanticAdmissionCosine = 0.30
 }
 
 private struct RawRankedCandidate {
@@ -85,6 +89,7 @@ private struct RawRankedCandidate {
     let informationLevel: ObservationInformationLevel
     let retrievalRelevance: Double?
     let orderingScore: Double
+    let hasBiologicalEvidence: Bool
 }
 
 struct LocalSpeciesRanker: SpeciesRanking {
@@ -119,9 +124,9 @@ struct LocalSpeciesRanker: SpeciesRanking {
                 LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
                     && Self.namesSubject($0, in: input.description)
             }
-            let retrievalRelevance = candidate.retrieval.map(Self.normalizedRelevance)
+            let retrievalRelevance = candidate.retrieval.map(normalizedRelevance)
             let provisionalSemantic = candidate.retrieval?.scoreKind == .cosineSimilarity
-                && (retrievalRelevance ?? 0) >= 0.65 && meaningfulTermCount >= 3
+                && (candidate.retrieval?.score ?? -1) >= weights.semanticAdmissionCosine && meaningfulTermCount >= 3
             guard observationInformation != .insufficient || hasExactName || provisionalSemantic else { return nil }
             let informationLevel: ObservationInformationLevel = hasExactName ? .sufficient
                 : (provisionalSemantic && observationInformation == .insufficient ? .limited : observationInformation)
@@ -206,11 +211,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if let depth = observation.approximateDepthMeters, let min = profile.minimumDepthMeters, let max = profile.maximumDepthMeters, (min - 3)...(max + 5) ~= depth { score += weights.depth; matched.append("compatible depth") }
             if observation.categories.contains("fish"), profile.categories.contains("turtle") || profile.categories.contains("ray") { score += weights.waterConflict; conflicts.append("animal group") }
             if !observation.habitats.isEmpty, !profile.habitats.isEmpty, observation.habitats.intersection(Set(profile.habitats)).isEmpty, score > 0 { score += weights.habitatConflict; conflicts.append("habitat") }
-            // Retrieval is normalized by its declared scale: cosine maps [-1, 1]
+            // Retrieval is normalized by its declared scale: cosine maps the admission floor..1
             // to [0, 1], while BM25 uses a saturating transform s/(s+3). This
             // avoids adding incompatible raw values. Semantic retrieval can grant
             // provisional eligibility, but never upgrades confidence by itself.
-            guard score >= weights.threshold || hasExactName || provisionalSemantic else { return nil }
+            let hasBiologicalEvidence = score >= weights.threshold || hasExactName
+            guard hasBiologicalEvidence || provisionalSemantic else { return nil }
             let relevanceContribution = (retrievalRelevance ?? 0) * 8
             let preferredRegionBoost = isInPreferredRegion(profile, input.preferredRegions) ? weights.preferredRegion : 0
             let orderingScore = score + relevanceContribution + occurrenceWeight(profile.regionalOccurrence) + preferredRegionBoost
@@ -218,9 +224,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             // Applied after eligibility, so the out-of-range penalty reorders but never removes.
             let rangeAdjustedOrdering = orderingScore + (described == .conflicting ? weights.outOfRange : 0)
             if candidate.retrieval?.source == .semantic { matched.append("catalogue description similarity") }
-            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: rangeAdjustedOrdering)
+            return RawRankedCandidate(profile: profile, rawScore: score, matchedClues: unique(matched), conflictingClues: unique(conflicts), matchedAppearanceVariant: bestVariant, informationLevel: informationLevel, retrievalRelevance: retrievalRelevance, orderingScore: rangeAdjustedOrdering, hasBiologicalEvidence: hasBiologicalEvidence)
         }
         return rawCandidates.sorted { a, b in
+            // Similarity alone never outranks a candidate with biological evidence. Without
+            // a cosine signal every candidate has evidence, so this changes no BM25 order.
+            if a.hasBiologicalEvidence != b.hasBiologicalEvidence { return a.hasBiologicalEvidence }
             if a.orderingScore != b.orderingScore { return a.orderingScore > b.orderingScore }
             if a.profile.commonName != b.profile.commonName { return a.profile.commonName < b.profile.commonName }
             return a.profile.id.uuidString < b.profile.id.uuidString
@@ -241,9 +250,13 @@ struct LocalSpeciesRanker: SpeciesRanking {
             .map(LocalObservationParser.singular)).union(LocalObservationVocabulary.stopWords)
     }()
 
-    private static func normalizedRelevance(_ signal: SpeciesRetrievalSignal) -> Double {
+    private func normalizedRelevance(_ signal: SpeciesRetrievalSignal) -> Double {
         switch signal.scoreKind {
-        case .cosineSimilarity: return max(0, min(1, (signal.score + 1) / 2))
+        // Zero at the admission floor, so a barely admitted semantic hit adds almost nothing
+        // to ordering; most unrelated species already score near the floor.
+        case .cosineSimilarity:
+            let floor = weights.semanticAdmissionCosine
+            return max(0, min(1, (signal.score - floor) / (1 - floor)))
         case .bm25: return signal.score > 0 ? min(1, signal.score / (signal.score + 3)) : 0
         }
     }

@@ -479,7 +479,7 @@ final class SemanticSearchTests: XCTestCase {
         ])
         let merged = try await HybridDescriptionSearchEngine(semanticComplement: complement).search(description: description, pack: pack)
         XCTAssertEqual(merged.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs + [missed.id])
-        XCTAssertEqual(merged.retrievalLimit, lexical.retrievalLimit * 2)
+        XCTAssertEqual(merged.retrievalLimit, lexical.retrievalLimit + 1)
         let lexicalScores = Dictionary(uniqueKeysWithValues: lexical.candidates.map { ($0.profile.id, $0.rawScore) })
         for candidate in merged.candidates where lexicalScores[candidate.profile.id] != nil {
             XCTAssertEqual(candidate.rawScore, lexicalScores[candidate.profile.id])

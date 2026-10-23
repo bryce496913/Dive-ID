@@ -61,6 +61,11 @@ actor SearchIndexStore {
     }
 
     private func key(_ pack: OfflineIdentificationPack, _ builder: any SpeciesSearchDocumentBuilding) -> String {
+        Self.contentKey(pack, builder)
+    }
+
+    /// Identifies the documents built for this content; changes whenever they would.
+    nonisolated static func contentKey(_ pack: OfflineIdentificationPack, _ builder: any SpeciesSearchDocumentBuilding) -> String {
         "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion):\(pack.profiles.count):\(pack.contentFingerprint):\(String(reflecting: type(of: builder)))"
     }
 
