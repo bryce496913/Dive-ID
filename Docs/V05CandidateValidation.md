@@ -414,6 +414,8 @@ the production BM25 engine with biological ranking; the Core ML opt-in is Debug-
    - **Warm search:** host median 54 ms.
    - **Memory:** the gauge at launch, the first-search peak and after ten searches.
      On the host, the full Global pack peaks at about 186 MiB.
+   - The step-by-step version, with diagnostics, signposts and a results table, is the
+     [Internal device performance test](#internal-device-performance-test-prepared-2026-10-23).
 4. **Record** these as Internal numbers with the commit SHA. They are not Release
    results, and Global's search quality on them is development evidence only.
 
@@ -436,8 +438,9 @@ All of it is compiled only under `DEBUG || DIVEID_INTERNAL`
 CI builds the Release app and fails if any of its strings or the signpost API appear
 in it (`Tools/CI/check_internal_instrumentation.py`); it also checks that they are
 present in the Internal and Debug apps, so the check is known to see them.
-`InternalInstrumentationTests` does the same for the SwiftPM binaries in both
-`swift test` and `swift test -c release`. No ranking, content or Release behaviour changed.
+`InternalInstrumentationTests` does the same for the SwiftPM test bundle on macOS in
+both `swift test` and `swift test -c release` (on Linux the test runner does not carry
+these strings even in Debug, so the scan is skipped there). No ranking, content or Release behaviour changed.
 
 **Signpost intervals** (Instruments → Points of Interest, subsystem
 `com.brycecameron.DiveID.performance`; each carries the pack ID, never query text):
@@ -476,7 +479,32 @@ Catalogue 0.74 s + index 0.17 s
 
 ### Host baseline (re-measured 2026-10-23; host results, not iPhone results)
 
-HOST_BASELINE_PLACEHOLDER
+Measured with `GlobalPackPerformanceTests` (`swift test -c release`) on a GitHub-hosted
+**macos-15 runner** (Apple silicon virtual machine, 3 cores, macOS 15.7.9), twice at
+the current catalogue and once, on the same runner, at `7b93702` (the commit before the 8
+Caribbean records joined Global). Each launch is a fresh repository and index store in
+one process, so the file cache is warm. **These are host numbers, not iPhone numbers**,
+and this runner is a different machine from the Linux container behind the earlier
+figures (4.93 s / 0.89 s / 54 ms), so compare like with like.
+
+| Global pack | Fresh install: screen to search-ready | Later launch (stored index) | Warm query median (p95) | First query without preparation | Index build | Stored index |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4,794 records, run 1 | 6.74 s | 0.89 s | 140 ms (192 ms) | 6.94 s | 4.72 s | 2.99 MB |
+| 4,794 records, run 2 | 6.39 s | 0.74 s | 140 ms | 6.59 s | 4.77 s | 2.99 MB |
+| 4,786 records (before), same runner | 6.26 s | 0.69 s | 140 ms | 6.45 s | 4.97 s | 2.99 MB |
+
+Tropical Pacific (1,000) on the same runner: 0.74–0.95 s fresh, 0.08–0.10 s later
+launch, 54–56 ms warm median. Caribbean (8): about 10 ms and 5 ms, 12 ms warm.
+
+- **The 8 Caribbean records make no measurable difference.** The 4,786 and 4,794 runs
+  differ by less than the two 4,794 runs differ from each other.
+- **Fresh readiness** is decode (0.6 s) + documents (0.8 s) + index build (4.7 s) on
+  this runner; the index build is about 70% of it.
+- **Warm queries** are slower here than on the Linux container (140 ms against 54 ms
+  median) at the same code, which is the hardware difference. An iPhone could land on
+  either side; only the device test answers that.
+- Full JSON for each run is in the CI artifacts of
+  [run 39970473554](https://github.com/bryce496913/Dive-ID/actions/runs/39970473554).
 
 ### 1. Install
 
@@ -609,4 +637,39 @@ xcrun xctrace record --template 'Time Profiler' --device "$DEVICE_ID" \
 
 ### 5. When further optimization becomes necessary (proposed thresholds)
 
-THRESHOLDS_PLACEHOLDER
+These are proposals for Bryce to accept or change, not decisions. Nothing has been
+optimized. Read them against the iPhone results above, not the host numbers. Any one
+breached on the device would make optimization the next step.
+
+| Measure (Global, Internal build, iPhone) | Optimize if | Host today |
+| --- | --- | --- |
+| Fresh install: Find Matches tapped at once → results (step A) | **over 8 s** | 6.6–6.9 s macOS runner; 4.9 s Linux container (earlier) |
+| Rebuild after a deleted or invalid store (steps D, E) | **over 8 s** | as fresh install |
+| Later launch: Ready with `loaded from store` (step C) | **over 1.5 s** | 0.74–0.89 s |
+| Warm query: Last query, five samples (step F) | **any over 500 ms, or median over 300 ms** | engine median 139 ms macOS VM, 54 ms Linux |
+| Memory: first-search peak | **over 300 MB** | about 186 MiB resident (Linux) |
+
+Whatever the timing, these are defects to fix rather than optimizations: wrong or empty
+results while waiting, a progress view that never ends, a session left behind after
+Back, or `loaded from store` after a corrupt or older index.
+
+Reasoning:
+
+- **Fresh install and rebuild, 8 s.** It happens once per install, and again after
+  every app update, because the stored index is keyed to the app build. The screen
+  shows progress throughout. Around 10 s is the usual limit for keeping a person's
+  attention on one task, and 8 s leaves margin for slower iPhones and a warm device.
+  On the host, about 70% of it is the index build (4.7 s of 6.4 s on macOS), so that
+  would be the first place to look.
+- **Later launch, 1.5 s.** It happens on every cold launch, and a diver often searches
+  within seconds of opening the screen, so this is the wait people meet most. The host
+  needs about 0.9 s; 1.5 s means the device is clearly slower than the host and the
+  first search of a launch would visibly wait.
+- **Warm query, 300 ms median and 500 ms maximum.** Up to roughly 100 ms feels instant.
+  The results screen's push animation already takes about 0.35 s, so a median under
+  300 ms still reads as a direct response, while anything over 500 ms reads as a
+  pause on every search. Last query covers the whole path from tap to results on
+  screen, not just ranking.
+- **Memory, 300 MB.** The host peak is about 186 MiB for the whole Global pack. A
+  device peak over 300 MB would mean the index or catalogue is held more than once,
+  and it starts to risk background termination on older 4 GB iPhones.
