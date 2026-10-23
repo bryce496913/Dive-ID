@@ -135,7 +135,7 @@ Record each item independently with configuration, device and evidence location.
 Keep Wi-Fi and cellular off while exercising the app; leave saved storage intact.
 
 1. Debug: verify Caribbean 8 / Pacific 384, switch between them, relaunch and
-   confirm selection persists. Release: verify Global with 4,794 records as the new-install default, Caribbean
+   confirm selection persists. Release: verify Global with 4,792 records (4,798 once batch-21 and batch-18-rereview are approved) as the new-install default, Caribbean
    with exactly two approved species, unavailable Pacific, accessible saved snapshots and unavailable photo action.
 2. Debug: run the committed Pacific ray/dartfish/waspfish/puffer positive cases and
    freshwater-lily-pad frog no-match. Record actual ranks, engine, pack and labels.
@@ -252,8 +252,9 @@ none are listed as expectations.
 ### What this Release build contains
 
 - **Approved records:** Release exposes only approved records. At this commit those
-  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **all 4,794
-  Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`).
+  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **4,792 of the
+  4,798 Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`). The other 6
+  are drafts awaiting review (batch-21 and batch-18-rereview).
 - **Global** is in Release and is the default region for new installs (owner decision,
   2026-10-23).
 - **Tropical Pacific** has 0 approved records and must not appear either.

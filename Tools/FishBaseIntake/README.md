@@ -157,3 +157,28 @@ Other UUIDs are retired as aliases. These stop the plan for a decision:
 
 Outputs: `MergePlan.csv` and `MergePlanReport.json`. `build.py` gives candidates their
 crosswalk UUID, so workbook identities are kept.
+
+## Owner additions (`Data/GlobalMarine/OwnerAdditions.csv`)
+
+Species the owner asks for after the build batches were reviewed. One row each:
+`additionID`, `scientificNameInput`, optional `commonName` (the name the owner asked for;
+blank uses the source's main name), optional `preferredAliases` (`;`-separated, each an
+English name in the source), `batch`, `speciesID` (uuid5 of the addition ID in the
+`Tools/GlobalMarineImport/intake.py` namespace), who asked and when.
+
+- `resolve.py` and `merge_plan.py` take them after every candidate, so an addition of a
+  species the pack already holds only retires.
+- `distribution.py` stages species resolved after `Distribution.json` was written in
+  `DistributionAdditions.json` (same source, same checks); `Distribution.json` is never
+  rewritten. A later addition that isn't covered needs a fresh output path.
+- `build.py` puts each addition in the batch its row names, which must come after every
+  build batch, so build batches never change. When `commonName` is set, the source's main
+  name becomes an alias; preferred aliases come first. An addition's common name and
+  preferred aliases belong to it alone (an alias naming it on another record is dropped),
+  it takes no alias another record already has, it may not share another record's common
+  name (the build stops), and existing records gain no similar-species link to it.
+  `RiskReport.json` marks each with `ownerAddition`.
+- They are drafts like every other record. Prepare their batch with
+  `global_batches.py prepare --batch N`; records whose content the addition changed (an
+  alias dropped) need `prepare --batch M --rereview`.
+
