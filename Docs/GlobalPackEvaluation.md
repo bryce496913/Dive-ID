@@ -1,9 +1,19 @@
 # Global pack: search quality and performance at full size (2026-10-22)
 
-The Global pack now holds **4,786 draft records** (Debug only; Release excludes it).
-This page reports how search behaves on it. **Two blocking results: Tropical Pacific
-gates regress, and query latency is unacceptable.** Per the owner's instruction,
-nothing was retuned; causes and options are below.
+**Current state (2026-10-23):** the Global pack holds **4,794 draft records** (Debug
+only; Release excludes it). Its latest evaluation, over 34 positive cases, is in
+[Caribbean species in Global](#caribbean-species-in-global-2026-10-23): every
+applicable gate passes, and four positive cases (`v05-05-paraphrase`,
+`v05-09-diagnostic`, `v05-09-paraphrase`, `v05-10-paraphrase`) still miss the top ten.
+Those cases are development data that influenced the implementation, not a holdout,
+and passing them approves no record for publication.
+
+This page is a dated log. Sections dated before 2026-10-23 measured the earlier
+**4,786-record** pack (before the 8 Caribbean species were added) against the 18
+Tropical Pacific cases, and are kept as recorded. The first of them reported two
+blocking results: Tropical Pacific gates regressed, and query latency was
+unacceptable. Per the owner's instruction, nothing was retuned; causes and options
+are below.
 
 ## How it was measured
 

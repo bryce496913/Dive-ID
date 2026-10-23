@@ -12,16 +12,31 @@ submitted or published by this repository workflow.
 | Pack | Version | Bundled records | Human-reviewed | Publication-eligible | V05 gates (development, top10) |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
-| Tropical Pacific | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global (Experimental) | 3 | 4786 | 0 | 0 | pass, opt-in (15/18; top3 and top10 pass by one case) |
+| Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
+| Global (Experimental) | 3 | 4794 | 0 | 0 | pass, opt-in (30/34; four positive cases miss the top ten) |
 
-**Global is not ready to be the default or main search experience** (2026-10-22).
-After the negation and ranking fixes (builder v4) its opt-in evaluation passes every
-applicable gate, but top3 and top10 each pass by a single case, the cases were used to
-find the defects (development evidence, not a holdout), and Release contains no
-approved Global record. Regional packs stay the default. Gates and remaining causes are
-in [GlobalPackEvaluation.md](Docs/GlobalPackEvaluation.md#negation-repair-and-ranking-fix-builder-v4-2026-10-22);
-the iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
+**Global is not ready to be the default or main search experience** (2026-10-23).
+Its latest opt-in evaluation runs the 34 positive V05 cases against all 4,794 records
+([report](Docs/GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23),
+[raw results](Reports/GlobalPackEvaluation.json)):
+
+| Global, 4,794 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
+
+All applicable aggregate gates pass (region conflict does not apply to a single
+worldwide pack). Four positive descriptions still miss the top ten:
+`v05-05-paraphrase` (Red Lionfish, Caribbean), `v05-09-diagnostic` and
+`v05-09-paraphrase` (Bird Wrasse, Tropical Pacific), and `v05-10-paraphrase`
+(Black Triggerfish, Tropical Pacific).
+
+> **These results are not independent evidence and not publication approval.**
+> The 34 cases are development cases that influenced the implementation, not a
+> holdout; independent diver testing is still needed. Passing the search gates
+> approves no record: Release contains no approved Global record, and Global is
+> gated out of Release at pack level. Regional packs stay the default.
+
+The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through
@@ -31,7 +46,9 @@ the iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
   and the pack keeps "(Experimental)" in its name.
 - **Release** exposes 2 records, the 2 Caribbean species; Global and Tropical Pacific
   are unavailable. Global is gated out of Release at pack level (`GlobalRegion.swift`),
-  so approving its records does not publish it; enabling it is a separate change. **Debug** permits all 5,794 development records.
+  so approving its records does not publish it; enabling it is a separate change.
+- **Debug** permits all 5,802 development records: 8 Caribbean, 1,000 Tropical Pacific
+  and 4,794 Global (Global holds its own draft copies of the 8 Caribbean species).
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).

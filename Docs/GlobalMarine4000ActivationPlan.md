@@ -454,7 +454,9 @@ are unchanged. Result: **4,787 drafts in 20 batches**.
 ## 11. Global pack written; quality and performance at full size (2026-10-22)
 
 `Tools/FishBaseIntake/publish_global.py` writes the drafts into the Global pack:
-**4,786 records**. One record missing a required field stays in staging. The pack is
+**4,786 records** (4,794 since the 8 Caribbean species were added on 2026-10-23; see
+[GlobalPackEvaluation.md](GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23)).
+One record missing a required field stays in staging. The pack is
 Debug-only, because Release exposes only verified records; a test proves this.
 
 The results block activation. See [GlobalPackEvaluation.md](GlobalPackEvaluation.md).
