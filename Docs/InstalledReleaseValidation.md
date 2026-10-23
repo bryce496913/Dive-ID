@@ -3,12 +3,12 @@
 This procedure supplements V05CandidateValidation.md. Last commit-bound outcome:
 `Reports/InstalledReleaseValidation.json`, recorded before any Global approval.
 
-**Current publication subset (2026-10-22, after the builder v3 rebuild): 2 records.**
+**Current publication subset (2026-10-23): 2 records.**
 - **Caribbean:** 2 records, approved 2026-10-12.
 - **Global (Experimental):** none. Batch 1's 250 approvals lapsed when the rebuild
-  changed those records; they wait in `batch-01-rereview`. All 4,786 Global records
-  and all 1,000 Tropical Pacific records are draft and must be absent from Release,
-  so Global is not listed there.
+  changed those records. All 4,794 Global records and all 1,000 Tropical Pacific
+  records are draft and must be absent from Release, so Global is not listed there.
+  Global is also gated out of Release at pack level.
 
 Approvals come only from fingerprint-bound human decisions; merging a review PR is
 not record approval. Rebind the device record to the new SHA before testing. Never
