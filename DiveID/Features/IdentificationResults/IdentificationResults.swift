@@ -4,13 +4,18 @@ struct IdentificationResultsView: View {
     @State var viewModel: IdentificationResultsViewModel
     let router: AppRouter
 
+    private var hasResults: Bool {
+        if case .loaded(_) = viewModel.state { return true }
+        return false
+    }
+
     var body: some View {
         Group {
             switch viewModel.state {
             case .idle, .loading:
                 LoadingStateView(message: viewModel.loadingMessage).accessibilityIdentifier("resultsLoading")
             case .empty:
-                EmptyStateView(title: "No useful matches", message: "No useful match was found in the offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
+                EmptyStateView(title: "No useful matches", message: "No useful match was found in the offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.", systemImage: "magnifyingglass")
                     .accessibilityIdentifier("resultsEmpty")
 #if DEBUG || DIVEID_INTERNAL
                     .onAppear { InternalSearchDiagnostics.shared.queryFinished(.noResults) }
@@ -23,7 +28,7 @@ struct IdentificationResultsView: View {
 #endif
             case .loaded(let matches):
                 ScrollView {
-                    LazyVStack(spacing: AppTheme.Spacing.m) {
+                    LazyVStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
                         Text(viewModel.resultsSummary)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary)
                         if viewModel.packMetadata?.isExperimental == true {
@@ -51,6 +56,7 @@ struct IdentificationResultsView: View {
         }
         .appScreenBackground()
         .navigationTitle("Possible Matches")
+        .sensoryFeedback(.success, trigger: hasResults) { _, hasResults in hasResults }
         // A detail push cancels this view task, but the router still owns the flow.
         .task {
             await router.waitForSessionUpdates()
