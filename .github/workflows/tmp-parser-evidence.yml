@@ -1,0 +1,91 @@
+# TEMPORARY: evidence for the single-pass synonym expansion PR. Removed before review.
+name: Temporary parser evidence
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Evaluations on main (before)
+        shell: bash
+        run: |
+          set -o pipefail
+          git worktree add "$RUNNER_TEMP/base" "origin/main"
+          cd "$RUNNER_TEMP/base"
+          git log -1 --format='BASE %H'
+          DIVEID_V05_REPORT="$RUNNER_TEMP/before-v05.json" DIVEID_GLOBAL_EVAL_REPORT="$RUNNER_TEMP/before-global.json" \
+            swift test -c release --filter 'V05DevelopmentEvaluationTests|GlobalPackEvaluationTests' 2>&1 | tail -40
+      - name: Evaluations on this branch (after)
+        shell: bash
+        run: |
+          set -o pipefail
+          git log -1 --format='HEAD %H'
+          DIVEID_V05_REPORT="$RUNNER_TEMP/after-v05.json" DIVEID_GLOBAL_EVAL_REPORT="$RUNNER_TEMP/after-global.json" \
+            swift test -c release --filter 'V05DevelopmentEvaluationTests|GlobalPackEvaluationTests' 2>&1 | tail -40
+      - name: Write golden outputs from this branch
+        shell: bash
+        run: |
+          set -o pipefail
+          DIVEID_WRITE_SEARCH_GOLDEN="$RUNNER_TEMP/golden-new.json" swift test --filter SearchGoldenOrderingTests 2>&1 | tail -10
+      - name: Compare
+        shell: bash
+        run: |
+          python3 - "$RUNNER_TEMP" <<'PY'
+          import json, sys
+          t = sys.argv[1]
+          old = json.load(open("DiveIDTests/Fixtures/SearchGolden.v2.json"))
+          new = json.load(open(t + "/golden-new.json"))
+          assert old["queries"] == new["queries"]
+          def same(a, b):
+              if isinstance(a, dict): return a.keys() == b.keys() and all(same(a[k], b[k]) for k in a)
+              if isinstance(a, list): return len(a) == len(b) and all(same(x, y) for x, y in zip(a, b))
+              if isinstance(a, float) or isinstance(b, float): return abs(a - b) <= 1e-9
+              return a == b
+          for pack in [k for k in old if k not in ("queries", "schemaVersion")]:
+              for i, q in enumerate(old["queries"]):
+                  for key in ("ranked", "retrieved", "pool"):
+                      if not same(old[pack][i][key], new[pack][i][key]):
+                          print("GOLDEN_DIFF", pack, i, key, json.dumps(q))
+                          if key == "ranked":
+                              print("GOLDEN_OLD", pack, i, json.dumps(old[pack][i]["ranked"]))
+                              print("GOLDEN_NEW", pack, i, json.dumps(new[pack][i]["ranked"]))
+          for name in ("v05", "global"):
+              before = json.load(open(f"{t}/before-{name}.json")); after = json.load(open(f"{t}/after-{name}.json"))
+              for gb, ga in zip(before["groups"], after["groups"]):
+                  label = {k: v for k, v in ga.items() if isinstance(v, str)}
+                  print("EVAL", name, json.dumps(label))
+                  for x, y in zip(gb.get("gates", []), ga.get("gates", [])):
+                      print("  GATE", x.get("metric"), f'{x.get("hits")}/{x.get("denominator")} {x.get("status")}', "->", f'{y.get("hits")}/{y.get("denominator")} {y.get("status")}')
+                  cb = {c.get("id"): c for c in gb.get("cases", [])}; ca = {c.get("id"): c for c in ga.get("cases", [])}
+                  print("  CASES", len(cb), len(ca))
+                  for cid in sorted(set(cb) | set(ca), key=str):
+                      if not same(cb.get(cid), ca.get(cid)) if cb.get(cid) is not None and ca.get(cid) is not None else True:
+                          print("  CASE_DIFF", cid, json.dumps(cb.get(cid))[:1500], "=>", json.dumps(ca.get(cid))[:1500])
+          PY
+      - name: Full suite in Release
+        shell: bash
+        run: |
+          set -o pipefail
+          swift test -c release 2>&1 | tail -60
+
+  release-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Full suite in Release
+        shell: bash
+        run: |
+          set -o pipefail
+          swift --version
+          swift test -c release 2>&1 | tail -60
