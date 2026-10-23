@@ -24,7 +24,7 @@ enum FingerprintContract {
             "paddingToken": contract.paddingToken, "unknownToken": contract.unknownToken,
             "queryPrefix": contract.queryPrefix, "documentPrefix": contract.documentPrefix,
             "pooling": contract.pooling.rawValue, "normalizeL2": contract.normalizeL2,
-            "tokenizerFamily": "WordPiece", "vocabularySHA256": vocabularyDigest
+            "tokenizerFamily": WordPieceTokenizer.family, "vocabularySHA256": vocabularyDigest
         ]
         return (SHA256Digest.hex(try canonicalJSON(identity)), vocabularyDigest)
     }
@@ -212,13 +212,15 @@ struct WordPieceTokenizer: Sendable {
         tokenizerFingerprint = identities.tokenizerFingerprint
     }
 
+    /// Part of every tokenizer fingerprint (Tools/SemanticSearch/build_embedding_index.py
+    /// `TOKENIZER_FAMILY`), so artifacts made with the earlier rule, which dropped
+    /// punctuation, no longer validate.
+    static let family = "BertWordPiece"
+    static let maximumInputCharactersPerWord = 100
+
     func encode(_ input: String, document: Bool = false) -> (ids: [Int32], mask: [Int32]) {
-        var text = (document ? contract.documentPrefix : contract.queryPrefix) + input
-        if contract.lowercase { text = text.lowercased() }
-        if contract.stripAccents {
-            text = text.folding(options: .diacriticInsensitive, locale: Locale(identifier: "en_US_POSIX"))
-        }
-        let basic = text.split { !$0.isLetter && !$0.isNumber }.map(String.init)
+        let text = (document ? contract.documentPrefix : contract.queryPrefix) + input
+        let basic = Self.basicTokens(text, lowercase: contract.lowercase, stripAccents: contract.stripAccents)
         var pieces = basic.flatMap(wordPieces)
         let available = contract.maximumSequenceLength - 2
         if pieces.count > available {
@@ -233,16 +235,88 @@ struct WordPieceTokenizer: Sendable {
         return (ids.map(Int32.init), mask)
     }
 
+    /// BERT's basic tokenization, as the pinned fast tokenizer applies it (BertNormalizer then
+    /// BertPreTokenizer), on Unicode scalars like the Python mirror `basic_tokens`:
+    /// 1. drop NUL, U+FFFD and control, format, surrogate and private-use scalars, except tab,
+    ///    newline and return; every whitespace scalar becomes a space;
+    /// 2. put spaces around CJK ideographs;
+    /// 3. strip accents (NFD, then drop nonspacing marks), then lowercase scalar by scalar;
+    /// 4. split on whitespace; every punctuation scalar (ASCII punctuation or Unicode P*) is a
+    ///    token of its own.
+    static func basicTokens(_ text: String, lowercase: Bool, stripAccents: Bool) -> [String] {
+        var cleaned = String.UnicodeScalarView()
+        for scalar in text.unicodeScalars {
+            if scalar == "\t" || scalar == "\n" || scalar == "\r" { cleaned.append(" "); continue }
+            if scalar == "\u{0}" || scalar == "\u{FFFD}" { continue }
+            switch scalar.properties.generalCategory {
+            case .control, .format, .surrogate, .privateUse: continue
+            default: break
+            }
+            if scalar.properties.isWhitespace {
+                cleaned.append(" ")
+            } else if isCJK(scalar) {
+                cleaned.append(" "); cleaned.append(scalar); cleaned.append(" ")
+            } else {
+                cleaned.append(scalar)
+            }
+        }
+        var scalars = Array(cleaned)
+        if stripAccents {
+            scalars = String(String.UnicodeScalarView(scalars)).decomposedStringWithCanonicalMapping.unicodeScalars
+                .filter { $0.properties.generalCategory != .nonspacingMark }
+        }
+        if lowercase {
+            scalars = scalars.flatMap { $0.properties.lowercaseMapping.unicodeScalars }
+        }
+        var tokens: [String] = [], current = String.UnicodeScalarView()
+        func flush() {
+            if !current.isEmpty { tokens.append(String(current)); current = String.UnicodeScalarView() }
+        }
+        for scalar in scalars {
+            if scalar.properties.isWhitespace {
+                flush()
+            } else if isPunctuation(scalar) {
+                flush(); tokens.append(String(scalar))
+            } else {
+                current.append(scalar)
+            }
+        }
+        flush()
+        return tokens
+    }
+
+    private static func isPunctuation(_ scalar: Unicode.Scalar) -> Bool {
+        if scalar.isASCII, "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".unicodeScalars.contains(scalar) { return true }
+        switch scalar.properties.generalCategory {
+        case .connectorPunctuation, .dashPunctuation, .openPunctuation, .closePunctuation,
+             .initialPunctuation, .finalPunctuation, .otherPunctuation: return true
+        default: return false
+        }
+    }
+
+    private static func isCJK(_ scalar: Unicode.Scalar) -> Bool {
+        switch scalar.value {
+        case 0x4E00...0x9FFF, 0x3400...0x4DBF, 0x20000...0x2A6DF, 0x2A700...0x2B73F,
+             0x2B740...0x2B81F, 0x2B820...0x2CEAF, 0xF900...0xFAFF, 0x2F800...0x2FA1F: return true
+        default: return false
+        }
+    }
+
+    /// Greedy longest-match WordPiece over Unicode scalars; a word longer than
+    /// `maximumInputCharactersPerWord` scalars, or one that cannot be split, is unknown.
     private func wordPieces(_ word: String) -> [String] {
+        // As the pinned WordPiece model: the length limit comes before the vocabulary lookup.
+        let scalars = Array(word.unicodeScalars)
+        guard scalars.count <= Self.maximumInputCharactersPerWord else { return [contract.unknownToken] }
         if vocabulary[word] != nil { return [word] }
-        var result: [String] = [], start = word.startIndex
-        while start < word.endIndex {
-            var end = word.endIndex, match: String?
+        var result: [String] = [], start = 0
+        while start < scalars.count {
+            var end = scalars.count, match: String?
             while start < end {
-                let raw = String(word[start..<end])
-                let candidate = start == word.startIndex ? raw : "##" + raw
+                let raw = String(String.UnicodeScalarView(scalars[start..<end]))
+                let candidate = start == 0 ? raw : "##" + raw
                 if vocabulary[candidate] != nil { match = candidate; break }
-                end = word.index(before: end)
+                end -= 1
             }
             guard let match else { return [contract.unknownToken] }
             result.append(match); start = end

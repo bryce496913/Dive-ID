@@ -23,10 +23,68 @@ def vocabulary_checksum(vocabulary):
     return hashlib.sha256(canonical_json(vocabulary).encode("utf-8")).hexdigest()
 
 
+# The basic tokenization below follows BERT's (BertNormalizer + BertPreTokenizer in the
+# pinned `tokenizers`); the family name is part of every fingerprint, so artifacts built
+# with the earlier rule (which dropped punctuation) no longer validate.
+TOKENIZER_FAMILY = "BertWordPiece"
+MAX_INPUT_CHARS_PER_WORD = 100
+# Unicode White_Space, as Rust's char::is_whitespace (Python's str.isspace also accepts U+001C–U+001F).
+WHITE_SPACE = frozenset("\t\n\x0b\x0c\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008"
+                        "\u2009\u200a\u2028\u2029\u202f\u205f\u3000")
+OTHER_DROPPED = frozenset(("Cc", "Cf", "Cs", "Co"))
+ASCII_PUNCTUATION = frozenset("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")
+CJK_RANGES = ((0x4E00, 0x9FFF), (0x3400, 0x4DBF), (0x20000, 0x2A6DF), (0x2A700, 0x2B73F),
+              (0x2B740, 0x2B81F), (0x2B820, 0x2CEAF), (0xF900, 0xFAFF), (0x2F800, 0x2FA1F))
+
+
 def tokenizer_fingerprint(contract, vocabulary):
     identity = {key: contract[key] for key in TOKENIZER_CONTRACT_FIELDS}
-    identity.update({"tokenizerFamily": "WordPiece", "vocabularySHA256": vocabulary_checksum(vocabulary)})
+    identity.update({"tokenizerFamily": TOKENIZER_FAMILY, "vocabularySHA256": vocabulary_checksum(vocabulary)})
     return hashlib.sha256(canonical_json(identity).encode("utf-8")).hexdigest()
+
+
+def basic_tokens(text, lowercase, strip_accents):
+    """BERT's basic tokenization, as the pinned fast tokenizer applies it:
+    1. clean: drop NUL, U+FFFD and control, format, surrogate and private-use characters
+       (Cc, Cf, Cs, Co; unassigned code points are kept) except tab, newline and return;
+       every whitespace character becomes a space;
+    2. put spaces around CJK ideographs;
+    3. strip accents (NFD, then drop nonspacing marks), then lowercase character by character;
+    4. split on whitespace, and make every punctuation character (ASCII punctuation or a
+       Unicode P* character) a token of its own."""
+    cleaned = []
+    for character in text:
+        if character in "\t\n\r":
+            cleaned.append(" ")
+        elif character in ("\x00", "\ufffd") or unicodedata.category(character) in OTHER_DROPPED:
+            continue
+        else:
+            cleaned.append(" " if character in WHITE_SPACE else character)
+    spaced = []
+    for character in cleaned:
+        if any(low <= ord(character) <= high for low, high in CJK_RANGES):
+            spaced += [" ", character, " "]
+        else:
+            spaced.append(character)
+    normalized = "".join(spaced)
+    if strip_accents:
+        normalized = "".join(c for c in unicodedata.normalize("NFD", normalized) if unicodedata.category(c) != "Mn")
+    if lowercase:
+        normalized = "".join(c.lower() for c in normalized)
+    tokens, current = [], []
+    for character in normalized:
+        if character in WHITE_SPACE:
+            if current:
+                tokens.append("".join(current)); current = []
+        elif character in ASCII_PUNCTUATION or unicodedata.category(character).startswith("P"):
+            if current:
+                tokens.append("".join(current)); current = []
+            tokens.append(character)
+        else:
+            current.append(character)
+    if current:
+        tokens.append("".join(current))
+    return tokens
 
 
 class ReferenceWordPieceTokenizer:
@@ -56,6 +114,9 @@ class ReferenceWordPieceTokenizer:
         self.contract = contract
 
     def _word_pieces(self, word):
+        # As the pinned WordPiece model: the length limit comes before the vocabulary lookup.
+        if len(word) > MAX_INPUT_CHARS_PER_WORD:
+            return [self.contract["unknownToken"]]
         if word in self.vocabulary:
             return [word]
         pieces, start = [], 0
@@ -74,19 +135,7 @@ class ReferenceWordPieceTokenizer:
 
     def encode(self, value, document=False):
         text = self.contract["documentPrefix" if document else "queryPrefix"] + value
-        if self.contract["lowercase"]:
-            text = text.lower()
-        if self.contract["stripAccents"]:
-            text = "".join(character for character in unicodedata.normalize("NFD", text)
-                           if unicodedata.category(character) != "Mn")
-        words, current = [], []
-        for character in text:
-            if character.isalpha() or character.isnumeric():
-                current.append(character)
-            elif current:
-                words.append("".join(current)); current = []
-        if current:
-            words.append("".join(current))
+        words = basic_tokens(text, self.contract["lowercase"], self.contract["stripAccents"])
         pieces = [piece for word in words for piece in self._word_pieces(word)]
         available = self.contract["maximumSequenceLength"] - 2
         if len(pieces) > available:

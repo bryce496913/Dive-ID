@@ -21,8 +21,13 @@ final class SemanticSearchTests: XCTestCase {
             let inputIDs: [Int32]
             let attentionMask: [Int32]
         }
+        struct BasicCase: Decodable {
+            let text: String
+            let tokens: [String]
+        }
         let vocabulary: [String: Int]
         let contract: SemanticModelArtifactContract
+        let basicTokenCases: [BasicCase]
         let cases: [FixtureCase]
     }
 
@@ -217,16 +222,29 @@ final class SemanticSearchTests: XCTestCase {
     }
 
     func testWordPieceContractAppliesPrefixTruncationMaskAndPadding() throws {
-        let vocabulary = ["[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "query": 4, "cafe": 5, "fish": 6]
+        // As in BERT, the colon of the "query: " prefix is a token of its own.
+        let vocabulary = ["[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "query": 4, "cafe": 5, "fish": 6, ":": 7]
         let contract = try semanticContract().binding(to: vocabulary)
         let tokenizer = try WordPieceTokenizer(data: JSONEncoder().encode(vocabulary), contract: contract)
-        let encoded = tokenizer.encode("CAFÉ fish")
-        XCTAssertEqual(encoded.ids, [2, 4, 5, 6, 3, 0])
+        let encoded = tokenizer.encode("CAFÉ")
+        XCTAssertEqual(encoded.ids, [2, 4, 7, 5, 3, 0])
         XCTAssertEqual(encoded.mask, [1, 1, 1, 1, 1, 0])
     }
 
+    /// The expected words come from the pinned fast tokenizer's BertNormalizer and
+    /// BertPreTokenizer (Tools/SemanticSearch/write_tokenizer_parity_fixture.py), so this
+    /// checks Swift against the model's own tokenizer, not only against the Python mirror.
+    func testBasicTokenizationMatchesThePinnedBertTokenizer() throws {
+        let fixture = try JSONDecoder().decode(TokenizerFixture.self, from: Data(contentsOf: TestResources.fixture(named: "TokenizerParity.v2")))
+        XCTAssertGreaterThanOrEqual(fixture.basicTokenCases.count, 20)
+        for basic in fixture.basicTokenCases {
+            XCTAssertEqual(WordPieceTokenizer.basicTokens(basic.text, lowercase: fixture.contract.lowercase, stripAccents: fixture.contract.stripAccents),
+                           basic.tokens, basic.text.debugDescription)
+        }
+    }
+
     func testWordPieceTokenizerExactlyMatchesSharedPythonParityFixture() throws {
-        let url = try TestResources.fixture(named: "TokenizerParity.v1")
+        let url = try TestResources.fixture(named: "TokenizerParity.v2")
         let fixture = try JSONDecoder().decode(TokenizerFixture.self, from: Data(contentsOf: url))
         let vocabularyData = try JSONEncoder().encode(fixture.vocabulary)
         let sharedIdentities = try FingerprintContract.identities(contract: fixture.contract, vocabulary: fixture.vocabulary)
