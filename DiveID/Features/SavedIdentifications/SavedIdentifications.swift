@@ -3,6 +3,8 @@ import SwiftUI
 struct SavedIdentificationsView: View {
     @State var viewModel: SavedSpeciesViewModel
     let router: AppRouter
+    /// The sighting the confirmation dialog asks about, from the context menu.
+    @State private var confirmingRemoval: SavedIdentification?
 
     var body: some View {
         VStack(spacing: AppTheme.Spacing.m) {
@@ -48,6 +50,16 @@ struct SavedIdentificationsView: View {
                             Button("Remove", role: .destructive) { Task { await viewModel.remove(item) } }
                                 .disabled(viewModel.isUpdating)
                         }
+                        // Swipe alone is hard to discover, so long-press offers Remove too, behind a confirmation.
+                        .contextMenu {
+                            Button { router.navigate(to: .savedIdentification(item)) } label: {
+                                Label("View Details", systemImage: "info.circle")
+                            }
+                            Button(role: .destructive) { confirmingRemoval = item } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+                            .disabled(viewModel.isUpdating)
+                        }
                     }
                 }
                 .scrollContentBackground(.hidden)
@@ -55,6 +67,16 @@ struct SavedIdentificationsView: View {
         }
         .appScreenBackground()
         .navigationTitle("Saved Identifications")
+        .confirmationDialog(
+            "Remove this saved identification?",
+            isPresented: Binding(get: { confirmingRemoval != nil }, set: { if !$0 { confirmingRemoval = nil } }),
+            titleVisibility: .visible,
+            presenting: confirmingRemoval
+        ) { item in
+            Button("Remove \(item.species.commonName)", role: .destructive) { Task { await viewModel.remove(item) } }
+        } message: { _ in
+            Text("Its saved notes and match details are deleted from this device.")
+        }
         .task { await viewModel.load() }
     }
 }
