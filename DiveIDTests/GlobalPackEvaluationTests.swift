@@ -103,8 +103,13 @@ final class GlobalPackEvaluationTests: XCTestCase {
         let subsetProfiles = global.profiles.filter { pacificIDs.contains($0.id) }
         var subsetMetadata = global.metadata
         subsetMetadata.speciesCount = subsetProfiles.count
+        // Global carries the 8 Caribbean species as the regional pack's own records (drafts in
+        // Global), so this variant now equals the pack as written apart from review status.
+        // It swaps the regional records in rather than appending them, so no ID appears twice.
+        let caribbeanIDs = Set(caribbean.profiles.map(\.id))
+        let composedProfiles = global.profiles.filter { !caribbeanIDs.contains($0.id) } + caribbean.profiles
         var composed = global.metadata
-        composed.speciesCount += caribbean.profiles.count
+        composed.speciesCount = composedProfiles.count
         // The subset Release actually exposes: publication access. Unavailable means no
         // approved Global record exists, so the subset is empty.
         let release: OfflineIdentificationPack
@@ -125,7 +130,7 @@ final class GlobalPackEvaluationTests: XCTestCase {
         pendingMetadata.speciesCount = pendingProfiles.count
         let variants: [(String, OfflineIdentificationPack)] = [
             ("global-as-written", global),
-            ("global-plus-caribbean-8 (in memory only)", OfflineIdentificationPack(metadata: composed, profiles: global.profiles + caribbean.profiles)),
+            ("global-plus-caribbean-8 (in memory only)", OfflineIdentificationPack(metadata: composed, profiles: composedProfiles)),
             // Diagnostic: Global's rebuilt text at regional size, separating text effects from scale effects.
             ("global-records-for-tropical-pacific-ids (diagnostic)", OfflineIdentificationPack(metadata: subsetMetadata, profiles: subsetProfiles)),
             ("global-release-approved", release),

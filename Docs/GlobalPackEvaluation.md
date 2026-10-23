@@ -433,6 +433,48 @@ differences:
   relationships in BM25 terms.
 - **Global:** includes the builder v4 content.
 
+## Caribbean species in Global (2026-10-23)
+
+Global is rebuilt from the pinned FishBase/SeaLifeBase release v26.06. All 34 tables
+matched their pinned size and MD5, and the rebuilt drafts are identical to the committed
+ones.
+
+**Every pack keeps the v3 field-guide text for its regional species** (owner decisions,
+2026-10-23):
+- **Caribbean and Tropical Pacific** stay as they are.
+- **Global** now holds the 8 Caribbean species as the Caribbean pack's own records,
+  appended after the 4,786 FishBase records, for 4,794 in total.
+- **Differences in Global:** each copy is a draft there (a regional approval does not
+  carry over; Global approval comes only from a recorded batch decision) and has no
+  bundled image.
+
+**Why not FishBase text.** Rebuilding these species from FishBase was tried first and
+rejected; the field-guide clues divers describe are not in FishBase:
+- **Tropical Pacific pack:** it broke three case rank limits: v05-09 diagnostic and
+  paraphrase (Bird wrasse) and v05-10 paraphrase (Black triggerfish).
+- **Release:** it would have exposed no record, because the rebuilt Atlantic Blue Tang
+  and Queen Angelfish no longer matched their approved content.
+- **Global:** with FishBase text for the 8 Caribbean species, the Global gate fell to
+  recall 23/34, top1 12/34, top3 15/34 and top10 21/34.
+
+**Regional search is unchanged.** All 184 `run_v05.py` case results are identical
+before and after: ranks, failures and displayed species, development and Release. In
+`SearchGolden.v2.json`, only the 137 `global` results changed. The one regional entry
+that differs is the excluded parser-order query ("a school of spotted rays crossed the
+sandy channel"), whose ranked score varies between processes; its pool is identical.
+
+**The opt-in Global gate passes on all 34 positive cases.** The 16 Caribbean
+identification cases are no longer blocked by coverage:
+
+| Global (4,794 records) | Recall | top1 | top3 | top10 | No-match | Confidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
+| Before (Tropical Pacific cases only) | 17/18 | 9/18 | 11/18 | 15/18 | 6/6 | 29/29 |
+| Tropical Pacific records only (diagnostic, unchanged) | 17/18 | 11/18 | 15/18 | 16/18 | 6/6 | 29/29 |
+
+Release still exposes the 2 approved Caribbean records through the Caribbean pack only;
+Global has no approved record.
+
 ## Performance (host measurements, Release)
 
 | Pack | Records | Load (median) | Document build | BM25 retrieval (median) | Query median | Query p95 | First query | RSS after queries (peak) |

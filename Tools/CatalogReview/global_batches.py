@@ -72,13 +72,14 @@ def build_manifest(records, risk, batch, seed, generation, pack_metadata, member
                      key=lambda r: r["id"])
     if not members:
         raise ReviewError(f"{batch_id} has no records in the pack")
-    flagged = {r["id"] for r in members if risk[r["id"]].get("flags")}
+    # Records absent from the FishBase risk report (the carried Caribbean records) have no flags.
+    flagged = {r["id"] for r in members if risk.get(r["id"], {}).get("flags")}
     unflagged = sorted(r["id"] for r in members if r["id"] not in flagged)
     sampled = set(random.Random(seed).sample(unflagged, min(SAMPLE_SIZE, len(unflagged))))
     entries = [{"speciesID": r["id"], "commonName": r["commonName"], "scientificName": r["scientificName"],
                 "reviewedContentFingerprint": content_fingerprint(r),
                 "selection": "flagged" if r["id"] in flagged else "sampled" if r["id"] in sampled else "unread",
-                "riskScore": risk[r["id"]].get("score", 0), "flags": risk[r["id"]].get("flags", [])} for r in members]
+                "riskScore": risk.get(r["id"], {}).get("score", 0), "flags": risk.get(r["id"], {}).get("flags", [])} for r in members]
     manifest = {"schemaVersion": SCHEMA_VERSION, "batchID": batch_id, "generation": generation,
                 "pack": pack_metadata["id"], "packVersion": pack_metadata["packVersion"], "seed": seed,
                 "sampleSize": len(sampled), "sampling": SAMPLING,
@@ -147,14 +148,33 @@ def _write_new(path, text):
     temp.replace(path)
 
 
-def prepare(batch, seed=None, force_new=False, root=BATCHES, pages=PAGES, pack=PACK, risk_path=RISK_REPORT, rereview=False):
+NAME = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
+
+def prepare(batch, seed=None, force_new=False, root=BATCHES, pages=PAGES, pack=PACK, risk_path=RISK_REPORT, rereview=False,
+            members=None, name=None):
     """rereview: a separate batch (batch-NN-rereview) of only the records whose approved
     content in batch-NN changed. batch-NN itself is left alone, so its unchanged records
-    keep their approval."""
+    keep their approval.
+
+    members/name: a named batch (batch-<name>) of exactly these species IDs, for example
+    the records of one regional pack. batch is then ignored. With 30 or fewer unflagged
+    records every record is sampled, so the page shows them all."""
     records = json.loads((Path(pack) / "Creatures.json").read_text())
     metadata = json.loads((Path(pack) / "PackManifest.json").read_text())
     risk = json.loads(Path(risk_path).read_text())["records"]
-    member_ids, batch_id, rereview_of = None, batch_name(batch), None
+    member_ids, batch_id, rereview_of = None, batch_name(batch) if batch is not None else None, None
+    if members is not None:
+        if rereview:
+            raise ReviewError("a named batch cannot also be a re-review")
+        if not name or not NAME.fullmatch(name) or re.fullmatch(r"\d+(?:-rereview)?", name):
+            raise ReviewError("a named batch needs --name of lowercase words joined by hyphens, not a batch number")
+        member_ids, batch_id = set(members), f"batch-{name}"
+        missing = sorted(member_ids - {r["id"] for r in records})
+        if missing:
+            raise ReviewError(f"not in the pack: {', '.join(missing)}")
+    elif batch is None:
+        raise ReviewError("prepare needs --batch, or --name with --ids")
     if rereview:
         changed, rereview_of = changed_approvals(records, root, batch_name(batch))
         if not changed:
@@ -442,7 +462,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
     p = commands.add_parser("prepare", help="write a batch manifest and its review page")
-    p.add_argument("--batch", type=int, required=True)
+    p.add_argument("--batch", type=int, help="a numbered batch (from RiskReport.json)")
+    p.add_argument("--name", help="with --ids: a named batch, batch-NAME")
+    p.add_argument("--ids", help="with --name: comma-separated species IDs")
     p.add_argument("--seed", type=int, help="default: a fresh random seed, recorded in the manifest")
     p.add_argument("--force-new", action="store_true", help="replace an undecided or approved generation")
     p.add_argument("--rereview", action="store_true", help="only the batch's approved records whose content changed, as batch-NN-rereview")
@@ -460,7 +482,11 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
-            manifest, manifest_path, page_path = prepare(args.batch, args.seed, args.force_new, rereview=args.rereview)
+            members = [i.strip() for i in args.ids.split(",") if i.strip()] if args.ids else None
+            if (members is None) != (args.name is None):
+                raise ReviewError("--name and --ids go together")
+            manifest, manifest_path, page_path = prepare(args.batch, args.seed, args.force_new, rereview=args.rereview,
+                                                         members=members, name=args.name)
             print(json.dumps({"manifest": str(manifest_path.relative_to(REPO)), "page": str(page_path.relative_to(REPO)),
                               "manifestSHA256": manifest["manifestSHA256"], "seed": manifest["seed"], "counts": manifest["counts"]}, indent=2))
         elif args.command == "page":

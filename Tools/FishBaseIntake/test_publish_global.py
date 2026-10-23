@@ -41,6 +41,25 @@ class ComposeTests(unittest.TestCase):
             publish_global.compose([draft("a", status="verified")], {})
 
 
+class CaribbeanCarryTests(unittest.TestCase):
+    def test_caribbean_records_are_carried_unchanged_as_drafts(self):
+        regional = dict(draft("car-1", ["car-2"]), commonName="Queen Angelfish", bundledImage={"fileName": "car-1.svg"},
+                        review={"status": "verified", "verifiedBy": "Bryce", "reviewDate": "2026-10-12", "reviewerNotes": "approved"})
+        carried = publish_global.carried_caribbean([draft("fb-1")], [regional, draft("car-2")])
+        self.assertEqual([r["id"] for r in carried], ["car-1", "car-2"])
+        self.assertEqual(carried[0]["review"], publish_global.CARIBBEAN_REVIEW, "a regional approval does not carry over")
+        self.assertIsNone(carried[0]["bundledImage"], "artwork stays in the Caribbean pack")
+        self.assertEqual({k: v for k, v in carried[0].items() if k not in ("review", "bundledImage")},
+                         {k: v for k, v in regional.items() if k not in ("review", "bundledImage")})
+        self.assertEqual(regional["review"]["status"], "verified", "the regional record is not modified")
+        records, _, _ = publish_global.compose([draft("fb-1", ["car-1"])] + carried, {})
+        self.assertEqual([s["speciesID"] for s in records[0]["similarSpecies"]], ["car-1"], "references into the carried records resolve")
+
+    def test_a_caribbean_species_built_from_fishbase_is_refused(self):
+        with self.assertRaises(SystemExit):
+            publish_global.carried_caribbean([draft("car-1")], [draft("car-1")])
+
+
 class ManifestTests(unittest.TestCase):
     def test_counts_come_from_the_records(self):
         template = {"id": "global", "packVersion": 1, "speciesCount": 0, "regionAliases": []}
@@ -100,8 +119,18 @@ class OutputTests(unittest.TestCase):
         if not (staging / "RiskReport.json").exists():
             self.skipTest("staging data not present")
         drafts = [r for f in sorted((staging / "Drafts").glob("batch-*.json")) for r in json.loads(f.read_text())]
+        caribbean = json.loads(publish_global.CARIBBEAN.read_text())
+        drafts += publish_global.carried_caribbean(drafts, caribbean)
         records, _, _ = publish_global.compose(drafts, json.loads((staging / "RiskReport.json").read_text())["records"])
         reviews, report = publish_global.apply_reviews(records, publish_global.global_batches.BATCHES)
+        # The Caribbean species are the regional pack's own records, last, with only the review changed.
+        tail = records[-len(caribbean):]
+        self.assertEqual([r["id"] for r in tail], [r["id"] for r in caribbean])
+        for carried, regional in zip(tail, caribbean):
+            ignored = ("review", "bundledImage", "similarSpecies", "dataSources")
+            self.assertEqual({k: v for k, v in carried.items() if k not in ignored}, {k: v for k, v in regional.items() if k not in ignored})
+            self.assertIsNone(carried["bundledImage"])
+            self.assertEqual(carried["review"]["status"], "verified" if carried["id"] in reviews else "draft")
         self.assertEqual((publish_global.PACK / "Creatures.json").read_text(), publish_global.creatures_text(records))
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
         self.assertEqual(manifest, publish_global.manifest_for(records, manifest, len(report["approvedBatches"])))

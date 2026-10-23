@@ -7,6 +7,12 @@ DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.
   out: the app rejects a pack containing them. They stay in staging.
 - `similarSpecies` references to records outside the written pack are dropped, because
   the app requires every reference to resolve within the pack.
+- The 8 Caribbean species come from the bundled Caribbean pack, with its reviewed
+  field-guide (v3) text, not from FishBase: rebuilding them from FishBase lost the clues
+  divers describe (owner decision, 2026-10-23). They are appended after every FishBase
+  record, unchanged except that in Global each is a draft (a regional approval does not
+  carry over; Global approval comes only from a recorded batch decision) and has no
+  bundled image (the artwork files live in the Caribbean pack; no Global record has one).
 - Every staged record must be a draft. A record becomes verified only through a batch
   review overlay (Tools/CatalogReview/global_batches.py) whose manifest is the newest
   for its batch and whose fingerprint still matches the record's content. Release
@@ -31,7 +37,20 @@ import global_batches  # noqa: E402
 import paired_write  # noqa: E402
 
 PACK = REPO / "DiveID/Resources/IdentificationPacks/Global"
+CARIBBEAN = REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json"
+CARIBBEAN_REVIEW = {"status": "draft", "reviewDate": None, "verifiedBy": None,
+                    "reviewerNotes": "Caribbean pack record (field-guide text), carried into Global unchanged; "
+                                     "awaiting Global batch review."}
 PACK_VERSION = 2  # 1 was the empty placeholder; each approved batch adds 1
+
+
+def carried_caribbean(drafts, caribbean):
+    """The Caribbean pack's records as Global drafts, to append after the FishBase drafts.
+    The FishBase build reserves these species' names and never builds them."""
+    built = {r["id"] for r in drafts} & {r["id"] for r in caribbean}
+    if built:
+        raise SystemExit(f"Caribbean species also built from FishBase: {', '.join(sorted(built))}")
+    return [dict(json.loads(json.dumps(r)), review=dict(CARIBBEAN_REVIEW), bundledImage=None) for r in caribbean]
 
 
 def compose(drafts, risk_records):
@@ -104,9 +123,11 @@ def main(argv=None):
     parser.add_argument("--staging", default=REPO / "Data/GlobalMarine/FishBase")
     parser.add_argument("--pack", default=PACK)
     parser.add_argument("--batches", default=global_batches.BATCHES)
+    parser.add_argument("--caribbean", default=CARIBBEAN, help="the bundled Caribbean pack's Creatures.json")
     args = parser.parse_args(argv)
     staging, pack = Path(args.staging), Path(args.pack)
     drafts = [r for f in sorted(glob.glob(str(staging / "Drafts" / "batch-*.json"))) for r in json.loads(Path(f).read_text())]
+    drafts += carried_caribbean(drafts, json.loads(Path(args.caribbean).read_text()))
     risk = json.loads((staging / "RiskReport.json").read_text())["records"]
     records, excluded, dropped = compose(drafts, risk)
     reviews, review_report = apply_reviews(records, Path(args.batches))
