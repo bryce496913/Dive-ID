@@ -3,12 +3,14 @@
 This procedure supplements V05CandidateValidation.md. Last commit-bound outcome:
 `Reports/InstalledReleaseValidation.json`, recorded before any Global approval.
 
-**Current publication subset (2026-10-23): 4,796 records in two packs.**
+**Current publication subset (2026-10-23): 4,794 records in two packs.**
 - **Caribbean:** 2 of 8 records, approved 2026-10-12.
-- **Global:** all 4,794 records, approved 2026-10-23 in 20 batches
+- **Global:** 4,792 of 4,798 records, approved 2026-10-23 in 20 batches
   ([batch review](GlobalBatchReview.md#current-content-review-2026-10-23)); all recorded
-  as individually reviewed. Global's Release gate is open and it
-  is the default region for new installs.
+  as individually reviewed. Global's Release gate is open and it is the default region
+  for new installs. The 6 drafts (four owner-added sharks and rays in batch-21, and
+  Graceful shark and Silky shark awaiting re-review) are absent from Release until
+  approved ([owner additions](GlobalBatchReview.md#owner-additions-2026-10-23)).
 - **Tropical Pacific:** 0 of 1,000; all draft and absent from Release.
 
 `Tools/CI/validate_device_release.py` checks the packaged Caribbean, Tropical Pacific
@@ -159,7 +161,7 @@ is not a passed no-match or out-of-domain test.
 | Check | Action and required evidence |
 | --- | --- |
 | Installed identity | Record SHA, Release log/settings, signing, built and installed version/build, bundle ID, phone model/iOS build, approved IDs/counts and runtime engine trace. |
-| Global subset | A new install opens in Global. In Change Dive Region, Global shows 4,794 records; Caribbean shows 2; Tropical Pacific is absent or unavailable. An upgrade from a build with a stored region keeps that region. In Global, search by name for Meteor cardinalfish, Clown triggerfish, Moorish idol, Banded damsel, Achilles tang and Regal angelfish and confirm they appear; each one's review status reads "Approved for publication — individually reviewed". Each Source link opens its FishBase page. Open Data Sources and Credits from Home. |
+| Global subset | A new install opens in Global. In Change Dive Region, Global shows 4,792 records (until batch-21 and batch-18-rereview are approved); Caribbean shows 2; Tropical Pacific is absent or unavailable. An upgrade from a build with a stored region keeps that region. In Global, search by name for Meteor cardinalfish, Clown triggerfish, Moorish idol, Banded damsel, Achilles tang and Regal angelfish and confirm they appear; each one's review status reads "Approved for publication — individually reviewed". Each Source link opens its FishBase page. Open Data Sources and Credits from Home. |
 | Search outcomes | Enter applicable frozen cases verbatim; record case ID, request region, displayed IDs/ranks and distinct mismatch/no-match/loading-error states. Unavailable expected IDs are inapplicable. |
 | Offline repeat | Capture Airplane Mode ON, Wi-Fi OFF and cellular OFF; repeat representative positives and rejection cases with unchanged text. Record any network error separately. |
 | Region association | In region A, search and open details/back; switch to approved region B and search. Record pack context for both requests/results/saved snapshots. Earlier results must retain A's request region. |

@@ -7,6 +7,10 @@ snapshot is checked on every read, and a schema, source or hash mismatch fails c
 A valid snapshot for the same source is reused as is. Changing the source requires a
 fresh output path; a snapshot is never edited in place. Writes are atomic.
 
+Species resolved after a snapshot was staged (owner additions) are staged on their own
+in a supplementary snapshot (DistributionAdditions.json) with the same source and rules,
+so the original snapshot is never rewritten. `read_staged` returns both, merged.
+
 Records whose status is questionable, misidentification, error, not established or
 extirpated are kept with their status but never count towards ocean basins.
 """
@@ -30,6 +34,7 @@ OCEAN_BASINS = {18: "Arctic", 21: "Atlantic", 27: "Atlantic", 31: "Atlantic", 34
                 37: "Mediterranean and Black Sea", 48: "Southern", 58: "Southern", 88: "Southern",
                 51: "Indian", 57: "Indian", 61: "Pacific", 67: "Pacific", 71: "Pacific", 77: "Pacific", 81: "Pacific", 87: "Pacific"}
 DEFAULT_OUTPUT = REPO / "Data/GlobalMarine/FishBase/Distribution.json"
+ADDITIONS_NAME = "DistributionAdditions.json"
 
 
 class IntegrityError(RuntimeError):
@@ -52,6 +57,20 @@ def read_snapshot(path, source):
             or snapshot.get("state") != "success" or snapshot.get("payloadSHA256") != payload_hash(snapshot.get("payload")):
         raise IntegrityError(f"{path}: snapshot does not match its source or payload hash; use a fresh output path")
     return snapshot["payload"]
+
+
+def read_staged(path, source):
+    """The snapshot at path merged with its supplementary snapshot, when there is one.
+    Both are verified; a species staged in both is an error."""
+    payload = read_snapshot(path, source)
+    extra_path = Path(path).with_name(ADDITIONS_NAME)
+    if not extra_path.exists():
+        return payload
+    extra = read_snapshot(extra_path, source)
+    both = sorted(set(payload["species"]) & set(extra["species"]))
+    if both:
+        raise IntegrityError(f"{extra_path}: species already staged in {path}: {', '.join(both)}")
+    return {key: {**payload[key], **extra[key]} for key in ("species", "faoAreaNames", "countries")}
 
 
 def write_snapshot(path, source, payload, now=None):
@@ -128,6 +147,19 @@ def main(argv=None):
     if output.exists():
         payload = read_snapshot(output, source)  # fails closed on any mismatch
         print(f"reused verified snapshot {output} ({len(payload['species'])} species)")
+        missing = {(sv, code) for sv, code in resolved_keys(output.parent / "NameResolution.csv") if f"{sv}:{code}" not in payload["species"]}
+        if not missing:
+            return 0
+        extra_path = output.with_name(ADDITIONS_NAME)
+        if extra_path.exists():
+            staged = read_staged(output, source)
+            uncovered = sorted(f"{sv}:{code}" for sv, code in missing if f"{sv}:{code}" not in staged["species"])
+            if uncovered:
+                raise IntegrityError(f"{extra_path} does not cover {', '.join(uncovered)}; a snapshot is never edited in place")
+            print(f"reused verified snapshot {extra_path} ({len(missing)} species)")
+            return 0
+        write_snapshot(extra_path, source, stage(manifest, args.cache, args.offline, missing))
+        print(f"staged {len(missing)} species resolved after {output.name} -> {extra_path}")
         return 0
     payload = stage(manifest, args.cache, args.offline, resolved_keys(output.parent / "NameResolution.csv"))
     write_snapshot(output, source, payload)

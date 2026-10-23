@@ -5007,3 +5007,7 @@ candidate,MARINE5K-03997,,Donax trunculus,814b1139-e940-5968-a496-312e6821b81d,n
 candidate,MARINE5K-03998,,Dosinia exoleta,5843b432-0f6a-5cd5-abd6-d7dc2aba94cb,new_provisional_identity,slb:48850,Dosinia exoleta,5843b432-0f6a-5cd5-abd6-d7dc2aba94cb,keep,
 candidate,MARINE5K-03999,,Dosinia ponderosa,462d6c54-6fdb-5191-b9e5-1b29f7962913,new_provisional_identity,slb:165290,Dosinia ponderosa,462d6c54-6fdb-5191-b9e5-1b29f7962913,keep,
 candidate,MARINE5K-04000,,Eledone cirrhosa,3ad42c9a-c118-538c-9a36-67c86b36616b,new_provisional_identity,slb:58213,Eledone cirrhosa,3ad42c9a-c118-538c-9a36-67c86b36616b,keep,
+addition,OWNER-ADD-0001,,Triaenodon obesus,2f9b6a7f-1d44-58f4-adf6-d458cdf3966a,owner_addition,fb:907,Triaenodon obesus,2f9b6a7f-1d44-58f4-adf6-d458cdf3966a,keep,
+addition,OWNER-ADD-0002,,Carcharhinus amblyrhynchos,f23a6ebe-e2bf-5156-af7f-87caefe2ce0c,owner_addition,fb:861,Carcharhinus amblyrhynchos,f23a6ebe-e2bf-5156-af7f-87caefe2ce0c,keep,
+addition,OWNER-ADD-0003,,Stegostoma tigrinum,6a1df41f-c607-5cb9-a483-a59e7ed13c4c,owner_addition,fb:5374,Stegostoma tigrinum,6a1df41f-c607-5cb9-a483-a59e7ed13c4c,keep,
+addition,OWNER-ADD-0004,,Mobula alfredi,2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf,owner_addition,fb:65179,Mobula alfredi,2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf,keep,

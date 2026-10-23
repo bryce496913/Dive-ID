@@ -17,7 +17,8 @@ batch; regenerate it with a new seed after fixing.
 
 Numbered batches partition the whole pack: each FishBase record is in its build batch
 (RiskReport.json), and records absent from the risk report (the carried Caribbean
-records) join the last numbered batch, so every pack record is in exactly one batch.
+records) join the last build batch, so every pack record is in exactly one batch. Owner
+additions are in numbered batches of their own after the build batches.
 
 `approved_reviews` is what publish_global.py applies. It fails closed: only the newest
 manifest of each batch counts, a re-review batch counts only while the generation it
@@ -74,8 +75,10 @@ def batch_name(batch):
 def batch_assignments(records, risk):
     """{speciesID: batch number} for every pack record. A FishBase record keeps its build
     batch from the risk report; a record absent from it (the carried Caribbean records,
-    appended after the FishBase records) joins the last numbered batch."""
-    numbers = [risk[r["id"]]["batch"] for r in records if r["id"] in risk]
+    appended after the FishBase records) joins the last build batch. Owner additions
+    (risk "ownerAddition") are in batches of their own after the build batches, so they
+    never move the carried records."""
+    numbers = [risk[r["id"]]["batch"] for r in records if r["id"] in risk and not risk[r["id"]].get("ownerAddition")]
     if not numbers:
         raise ReviewError("no pack record has a batch in the risk report")
     last = max(numbers)

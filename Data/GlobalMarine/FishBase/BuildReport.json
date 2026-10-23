@@ -1,7 +1,7 @@
 {
   "builderVersion": 4,
-  "records": 4787,
-  "batches": 20,
+  "records": 4791,
+  "batches": 21,
   "batchActions": {
     "batch-01": "unchanged",
     "batch-02": "unchanged",
@@ -20,13 +20,44 @@
     "batch-15": "unchanged",
     "batch-16": "unchanged",
     "batch-17": "unchanged",
-    "batch-18": "unchanged",
+    "batch-18": "written",
     "batch-19": "unchanged",
-    "batch-20": "written"
+    "batch-20": "unchanged",
+    "batch-21": "written"
   },
   "rebuiltTropicalPacific": 962,
   "fromCandidates": 3825,
   "keptUnchangedCaribbean": 8,
+  "ownerAdditions": [
+    {
+      "additionID": "OWNER-ADD-0001",
+      "speciesID": "2f9b6a7f-1d44-58f4-adf6-d458cdf3966a",
+      "commonName": "Whitetip reef shark",
+      "scientificName": "Triaenodon obesus",
+      "batch": 21
+    },
+    {
+      "additionID": "OWNER-ADD-0002",
+      "speciesID": "f23a6ebe-e2bf-5156-af7f-87caefe2ce0c",
+      "commonName": "Grey reef shark",
+      "scientificName": "Carcharhinus amblyrhynchos",
+      "batch": 21
+    },
+    {
+      "additionID": "OWNER-ADD-0003",
+      "speciesID": "6a1df41f-c607-5cb9-a483-a59e7ed13c4c",
+      "commonName": "Zebra shark",
+      "scientificName": "Stegostoma tigrinum",
+      "batch": 21
+    },
+    {
+      "additionID": "OWNER-ADD-0004",
+      "speciesID": "2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf",
+      "commonName": "Reef manta ray",
+      "scientificName": "Mobula alfredi",
+      "batch": 21
+    }
+  ],
   "excludedFreshwaterOnly": [
     "Caridina nilotica",
     "Cherax quadricarinatus",
@@ -48,39 +79,39 @@
   ],
   "fieldCoverage": {
     "commonName": 1.0,
-    "aliases": 0.6664,
+    "aliases": 0.6667,
     "categories": 1.0,
-    "colors": 0.5427,
+    "colors": 0.5431,
     "markings": 0.5423,
-    "bodyShapes": 0.9198,
-    "habitats": 0.9018,
-    "behaviors": 0.3227,
+    "bodyShapes": 0.9196,
+    "habitats": 0.9019,
+    "behaviors": 0.3229,
     "regions": 0.9985,
-    "maximumSizeCentimeters": 0.963,
-    "measurements": 0.9467,
-    "maximumDepthMeters": 0.7907,
+    "maximumSizeCentimeters": 0.9631,
+    "measurements": 0.9468,
+    "maximumDepthMeters": 0.7909,
     "summary": 1.0,
     "distinguishingFeatures": 1.0,
     "typicalHabitat": 1.0,
     "geographicRange": 0.9998,
-    "cautions": 0.0913,
-    "tailShape": 0.4103,
-    "mouthAndHeadShape": 0.3512,
-    "finAndSpineClues": 0.6459,
-    "similarSpecies": 0.0725,
-    "appearanceVariants": 0.1481
+    "cautions": 0.0918,
+    "tailShape": 0.4104,
+    "mouthAndHeadShape": 0.3511,
+    "finAndSpineClues": 0.6454,
+    "similarSpecies": 0.0724,
+    "appearanceVariants": 0.148
   },
   "recordsChangedByRule": {
-    "hedge": 634,
-    "negation": 193,
-    "stage": 822
+    "hedge": 636,
+    "negation": 194,
+    "stage": 823
   },
   "recordsWithAppearanceVariants": {
     "juvenile": 488,
     "male": 249,
     "female": 155
   },
-  "recordsWithTraitAmbiguousFlag": 927,
+  "recordsWithTraitAmbiguousFlag": 930,
   "changedSincePreviousBuild": {
     "colors": 0,
     "markings": 0,
@@ -100,12 +131,12 @@
     "jellyfish": 5,
     "mollusk": 94,
     "octopus": 10,
-    "ray": 64,
+    "ray": 65,
     "sea cucumber": 37,
     "sea squirt": 1,
     "sea urchin": 7,
     "seahorse": 27,
-    "shark": 85,
+    "shark": 88,
     "squid": 17,
     "turtle": 6,
     "worm": 6
@@ -118,15 +149,15 @@
       "near_verbatim": 0.0002,
       "duplicate_common_name": 0.0,
       "distribution_missing": 0.0008,
-      "no_english_common_name": 0.0936,
+      "no_english_common_name": 0.0935,
       "size_outlier": 0.0,
       "depth_outlier": 0.0033,
-      "trait_ambiguous": 0.1936
+      "trait_ambiguous": 0.1941
     },
-    "flaggedRecords": 1364,
+    "flaggedRecords": 1367,
     "scoreHistogram": {
-      "0": 3423,
-      "1-20": 1362,
+      "0": 3424,
+      "1-20": 1365,
       "21-40": 1,
       "41-60": 1,
       "61-100": 0

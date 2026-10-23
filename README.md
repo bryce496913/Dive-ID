@@ -13,15 +13,16 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global | 23 | 4794 | 4794 | 4794 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Global (Experimental) | 23 | 4798 | 4792 | 4792 | pass, opt-in (30/34; four positive cases miss the top ten) |
 
 **Global is the default for new installs and is available in Release** (owner decision,
-2026-10-23), after every Global record was approved in batch review. Its search quality
-evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,794 records
+2026-10-23), after every Global record was approved in batch review. Release shows only
+approved records; the 6 drafts awaiting review (below) stay out of it. Its search quality
+evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,798 records
 ([report](Docs/GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23),
 [raw results](Reports/GlobalPackEvaluation.json)):
 
-| Global, 4,794 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
+| Global, 4,798 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
 
@@ -41,17 +42,21 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved all 20
   [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
-  on October 23, 2026, so all 4,794 records are verified and recorded as individually reviewed, on Bryce's
-  statement that he reviewed every entry (`--all-individually-reviewed`). The pack
-  is no longer "(Experimental)". Approval of the Global copies does not carry over to
-  the regional packs.
-- **Release** exposes 4,796 records: the 2 approved Caribbean species in Caribbean and
-  all 4,794 in Global (which holds its own copies of the 8 Caribbean species). Tropical
+  on October 23, 2026, all recorded as individually reviewed on Bryce's statement that
+  he reviewed every entry (`--all-individually-reviewed`). 4,792 of those approvals
+  still hold. Approval of the Global copies does not carry over to the regional packs.
+- **Awaiting review (drafts, not in Release):** the four sharks and rays Bryce asked for
+  on October 23, 2026 (Whitetip reef shark, Grey reef shark, Zebra shark, Reef manta ray)
+  in [batch-21](Docs/GlobalBatchReview.md#owner-additions-2026-10-23), and Graceful shark
+  and Silky shark in batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were
+  removed. While these drafts exist the pack is listed as "Global (Experimental)".
+- **Release** exposes 4,794 records: the 2 approved Caribbean species in Caribbean and
+  4,792 in Global (which holds its own copies of the 8 Caribbean species). Tropical
   Pacific is unavailable. Bryce opened Global's pack-level Release gate
   (`GlobalRegion.swift`) on October 23, 2026. New installs start in Global; a stored
   region selection is kept.
-- **Debug** permits all 5,802 development records: 8 Caribbean, 1,000 Tropical Pacific
-  and 4,794 Global (Global holds its own draft copies of the 8 Caribbean species).
+- **Debug** permits all 5,806 development records: 8 Caribbean, 1,000 Tropical Pacific
+  and 4,798 Global (Global holds its own draft copies of the 8 Caribbean species).
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).

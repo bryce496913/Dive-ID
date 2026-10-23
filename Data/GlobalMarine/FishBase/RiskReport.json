@@ -5,13 +5,13 @@
   "duplicate_common_name": 0.0,
   "missing_required": 0.0002,
   "near_verbatim": 0.0002,
-  "no_english_common_name": 0.0936,
+  "no_english_common_name": 0.0935,
   "ocr_junk": 0.0,
   "size_outlier": 0.0,
-  "trait_ambiguous": 0.1936,
+  "trait_ambiguous": 0.1941,
   "vocabulary": 0.0
  },
- "flaggedRecords": 1364,
+ "flaggedRecords": 1367,
  "records": {
   "000948be-40ec-5fac-a83a-e4f64ecc1d8e": {
    "batch": 13,
@@ -4641,6 +4641,12 @@
    "flags": [],
    "score": 0
   },
+  "2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf": {
+   "batch": 21,
+   "flags": [],
+   "ownerAddition": "OWNER-ADD-0004",
+   "score": 0
+  },
   "2b4c18f8-7001-5dd9-a6d3-e5961681b697": {
    "batch": 20,
    "flags": [],
@@ -5167,6 +5173,14 @@
    "batch": 15,
    "flags": [],
    "score": 0
+  },
+  "2f9b6a7f-1d44-58f4-adf6-d458cdf3966a": {
+   "batch": 21,
+   "flags": [
+    "trait_ambiguous:colors/markings"
+   ],
+   "ownerAddition": "OWNER-ADD-0001",
+   "score": 10
   },
   "2fa29148-5347-58de-936f-62a47cbae5b1": {
    "batch": 5,
@@ -11506,6 +11520,14 @@
    "flags": [
     "trait_ambiguous:habitats"
    ],
+   "score": 10
+  },
+  "6a1df41f-c607-5cb9-a483-a59e7ed13c4c": {
+   "batch": 21,
+   "flags": [
+    "trait_ambiguous:colors/markings"
+   ],
+   "ownerAddition": "OWNER-ADD-0003",
    "score": 10
   },
   "6a4179e7-894d-5edd-99ac-b599f7f7d504": {
@@ -25360,6 +25382,14 @@
    ],
    "score": 10
   },
+  "f23a6ebe-e2bf-5156-af7f-87caefe2ce0c": {
+   "batch": 21,
+   "flags": [
+    "trait_ambiguous:colors"
+   ],
+   "ownerAddition": "OWNER-ADD-0002",
+   "score": 10
+  },
   "f23cf191-884e-561f-aa99-d9c06b9d31d5": {
    "batch": 14,
    "flags": [],
@@ -26902,8 +26932,8 @@
   }
  },
  "scoreHistogram": {
-  "0": 3423,
-  "1-20": 1362,
+  "0": 3424,
+  "1-20": 1365,
   "21-40": 1,
   "41-60": 1,
   "61-100": 0

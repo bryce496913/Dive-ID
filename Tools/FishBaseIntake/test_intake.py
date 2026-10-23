@@ -384,5 +384,100 @@ class MergePlanTests(unittest.TestCase):
         self.assertEqual((report["unresolvedInputs"]["existing"], report["wormsConfirmedCandidates"], report["confirmedCandidates"]), (1, 0, 0))
 
 
+class OwnerAdditionTests(unittest.TestCase):
+    """Species the owner asks for after review (Data/GlobalMarine/OwnerAdditions.csv)."""
+    def addition(self, addition_id="OWNER-ADD-0001", name="Cus dus", common="", preferred="", batch="3", uuid="add-1"):
+        return {"additionID": addition_id, "scientificNameInput": name, "commonName": common, "preferredAliases": preferred,
+                "batch": batch, "speciesID": uuid}
+
+    def test_an_addition_of_a_species_already_held_retires_and_a_new_one_keeps_its_uuid(self):
+        existing = [{"id": "app-1", "pack": "TropicalPacific", "scientificName": "Aus bus"}]
+        resolution = [MergePlanTests.resolution(None, "existing", "app-1", 1), MergePlanTests.resolution(None, "addition", "A-1", 1),
+                      MergePlanTests.resolution(None, "addition", "A-2", 2, "Cus dus")]
+        rows, report = merge_plan.plan(existing, {}, resolution, additions=[self.addition("A-1", "Aus bus", uuid="add-1"),
+                                                                             self.addition("A-2", "Cus dus", uuid="add-2")])
+        roles = {r["inputID"]: (r["role"], r["plannedUUID"], r["identityStatus"]) for r in rows}
+        self.assertEqual(roles["A-1"], ("retire", "app-1", "owner_addition"))
+        self.assertEqual(roles["A-2"], ("keep", "add-2", "owner_addition"))
+        self.assertEqual((report["status"], report["inputs"]["ownerAdditions"]), ("ready", 2))
+
+    def test_the_real_additions_are_resolved_kept_and_uuids_are_derived_from_their_ids(self):
+        import csv, uuid
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "GlobalMarineImport"))
+        import intake
+        additions = resolve.load_additions()
+        self.assertTrue(additions)
+        for row in additions:
+            self.assertEqual(row["speciesID"], str(uuid.uuid5(intake.NAMESPACE, row["additionID"])), row["additionID"])
+        plan = {r["inputID"]: r for r in csv.DictReader(open(build.REPO / "Data/GlobalMarine/FishBase/MergePlan.csv", newline=""))}
+        self.assertTrue(all(plan[r["additionID"]]["role"] == "keep" and plan[r["additionID"]]["plannedUUID"] == r["speciesID"] for r in additions))
+
+    def test_requested_common_name_and_preferred_aliases_come_first(self):
+        entry = {"server": "fb", "specCode": "861", "acceptedName": "Carcharhinus amblyrhynchos", "inputName": "Carcharhinus amblyrhynchos",
+                 "resolution": "exact", "id": "add-1", "categories": ["shark"],
+                 "addition": self.addition(common="Grey reef shark", preferred="Gray reef shark")}
+        src = {"release": "v26.06", "species": {"FBname": "Blacktail reef shark"}, "fao_area_names": {}, "country_names": {},
+               "english_names": ["Blacktail reef shark", "Black-vee whaler", "Gray reef shark", "Grey reef shark"]}
+        profile = build.build_profile(entry, src)[0]
+        self.assertEqual(profile["commonName"], "Grey reef shark")
+        self.assertEqual(profile["aliases"], ["Gray reef shark", "Blacktail reef shark", "Black-vee whaler"])
+        entry["addition"] = self.addition(preferred="Not a source name")
+        with self.assertRaises(SystemExit):
+            build.build_profile(entry, src)
+
+    def test_an_additions_names_leave_other_records_and_it_takes_no_name_in_use(self):
+        graceful = {"id": "a", "commonName": "Graceful shark", "scientificName": "Aus one", "aliases": ["Grey reef shark", "Queensland shark"]}
+        silky = {"id": "b", "commonName": "Silky shark", "scientificName": "Bus two", "aliases": ["Gray reef shark", "Reef shark"]}
+        added = {"id": "c", "commonName": "Grey reef shark", "scientificName": "Cus three", "aliases": ["Gray reef shark", "Graceful shark", "Reef shark", "Grey shark"]}
+        renamed = build.enforce_unique_names([graceful, silky, added], set(), {"c": self.addition(preferred="Gray reef shark")})
+        self.assertEqual(renamed, [])
+        self.assertEqual(graceful["aliases"], ["Queensland shark"])
+        self.assertEqual(silky["aliases"], ["Reef shark"], "a preferred alias of an addition belongs to it alone")
+        self.assertEqual(added["aliases"], ["Gray reef shark", "Grey shark"], "no other record's name or alias")
+
+    def test_an_addition_named_like_another_record_stops_the_build(self):
+        other = {"id": "a", "commonName": "Zebra shark", "scientificName": "Aus one", "aliases": []}
+        added = {"id": "c", "commonName": "Zebra shark", "scientificName": "Cus three", "aliases": []}
+        with self.assertRaises(SystemExit):
+            build.enforce_unique_names([other, added], set(), {"c": self.addition()})
+
+    def test_additions_get_their_own_batch_after_the_build_batches(self):
+        profiles = [{"id": str(i)} for i in range(build.BATCH_SIZE + 3)] + [{"id": "add-1"}, {"id": "add-2"}]
+        layout = build.batch_layout(profiles, {"add-1": 3, "add-2": 3})
+        self.assertEqual({n: len(b) for n, b in layout.items()}, {1: build.BATCH_SIZE, 2: 3, 3: 2})
+        with self.assertRaises(SystemExit):
+            build.batch_layout(profiles, {"add-1": 2, "add-2": 3})
+        with tempfile.TemporaryDirectory() as directory:
+            drafts = Path(directory)
+            build.write_batches(profiles[:-2], drafts)
+            first = (drafts / "batch-02.json").read_bytes()
+            self.assertEqual(build.write_batches(profiles, drafts, assigned={"add-1": 3, "add-2": 3}),
+                             {"batch-01": "unchanged", "batch-02": "unchanged", "batch-03": "written"})
+            self.assertEqual((drafts / "batch-02.json").read_bytes(), first, "adding a species never changes a build batch")
+
+    def test_selection_carries_the_addition_row(self):
+        resolution = [{"inputKind": "addition", "inputID": "OWNER-ADD-0001", "resolution": "exact", "inputName": "Cus dus"}]
+        plan = [{"inputKind": "addition", "inputID": "OWNER-ADD-0001", "pack": "", "role": "keep", "plannedUUID": "add-1"}]
+        entries = build.select_entries(plan, resolution, [], [self.addition()])
+        self.assertEqual((entries[0]["id"], entries[0]["addition"]["additionID"]), ("add-1", "OWNER-ADD-0001"))
+
+    def test_supplementary_distribution_snapshot_is_merged_and_verified(self):
+        source = {"fb/v26.06/faoareas": "etag-1"}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "Distribution.json"
+            distribution.write_snapshot(path, source, {"species": {"fb:1": {"a": 1}}, "faoAreaNames": {"71": "Pacific"}, "countries": {}})
+            self.assertEqual(distribution.read_staged(path, source)["species"], {"fb:1": {"a": 1}})
+            extra = path.with_name(distribution.ADDITIONS_NAME)
+            distribution.write_snapshot(extra, source, {"species": {"fb:2": {"b": 2}}, "faoAreaNames": {"57": "Indian"}, "countries": {}})
+            staged = distribution.read_staged(path, source)
+            self.assertEqual((sorted(staged["species"]), sorted(staged["faoAreaNames"])), (["fb:1", "fb:2"], ["57", "71"]))
+            distribution.write_snapshot(extra, source, {"species": {"fb:1": {"a": 1}}, "faoAreaNames": {}, "countries": {}})
+            with self.assertRaises(distribution.IntegrityError, msg="a species staged twice"):
+                distribution.read_staged(path, source)
+            extra.write_text(extra.read_text().replace('"a":1', '"a":2'))
+            with self.assertRaises(distribution.IntegrityError, msg="an edited supplementary payload"):
+                distribution.read_staged(path, source)
+
+
 if __name__ == "__main__":
     unittest.main()

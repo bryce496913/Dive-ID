@@ -16,6 +16,8 @@ never resolve a name. Anything else is "unresolved".
 
 Resolved inputs are de-duplicated by (database, SpecCode). An existing app
 record keeps its identity; otherwise the first candidate in queue order does.
+Owner additions (Data/GlobalMarine/OwnerAdditions.csv) come after every candidate, so
+an addition of a species the pack already holds is only a duplicate.
 """
 import argparse
 import csv
@@ -33,6 +35,7 @@ AMBIGUOUS_SYNONYM_STATUS = "ambiguous synonym"
 SPECIES_LEVELS = {"species", "nominotypical"}
 MAX_GENUS_EDITS = 2
 MAX_EPITHET_EDITS = 1
+ADDITIONS = "Data/GlobalMarine/OwnerAdditions.csv"
 FIELDS = ["inputKind", "inputID", "pack", "inputName", "resolution", "flagged", "server", "specCode",
           "acceptedName", "correctedFrom", "duplicateOf", "note"]
 
@@ -157,7 +160,20 @@ def load_inputs(repo=REPO):
         inputs += [{"inputKind": "existing", "inputID": r["id"], "pack": pack_dir.name, "inputName": r["scientificName"]} for r in records]
     with open(repo / "Data/GlobalMarine/Expansion4000_CandidateQueue.csv", newline="") as f:
         inputs += [{"inputKind": "candidate", "inputID": r["candidateID"], "pack": "", "inputName": r["scientificNameInput"]} for r in csv.DictReader(f)]
+    # Species the owner asked for after the candidate queue was built. They come last, so
+    # they never take an identity from an existing record or candidate.
+    inputs += [{"inputKind": "addition", "inputID": r["additionID"], "pack": "", "inputName": r["scientificNameInput"]}
+               for r in load_additions(repo)]
     return inputs
+
+
+def load_additions(repo=REPO):
+    """Data/GlobalMarine/OwnerAdditions.csv: one row per species the owner asked to add."""
+    path = repo / ADDITIONS
+    if not path.exists():
+        return []
+    with open(path, newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def resolve_all(index, inputs):

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "batchID": "batch-18-rereview",
+  "generation": 1,
+  "pack": "global",
+  "packVersion": 23,
+  "seed": 6703939030536056391,
+  "sampleSize": 1,
+  "sampling": "random.Random(seed).sample(sorted unflagged speciesIDs, min(30, count)) in CPython 3",
+  "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json, or, for a record absent from it, from catalogue_validation.risk_flags",
+  "counts": {
+    "flagged": 1,
+    "sampled": 1,
+    "unread": 0
+  },
+  "records": [
+    {
+      "speciesID": "3144c583-9cab-56a3-b061-f51da4564531",
+      "commonName": "Graceful shark",
+      "scientificName": "Carcharhinus amblyrhynchoides",
+      "reviewedContentFingerprint": "sha256:9b78c232b4dcec33b2a62597abe2ef3fb16d91d76bd75f63ace36f5f8a7af052",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors/fins"
+      ]
+    },
+    {
+      "speciesID": "37b37357-b011-51c4-9ddd-d9465184bd4f",
+      "commonName": "Silky shark",
+      "scientificName": "Carcharhinus falciformis",
+      "reviewedContentFingerprint": "sha256:9f1f2b140c12c4a20cd765abe1e235dcf6ac4ab7c5bc55a942e2c7759d675206",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    }
+  ],
+  "rereviewOf": {
+    "batchID": "batch-18",
+    "generation": 1,
+    "manifestSHA256": "d498b98cf5e3feff055bc5c684e8a5e4ea5167784c7abe02377f8b4e772c72ac"
+  },
+  "manifestSHA256": "a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c"
+}

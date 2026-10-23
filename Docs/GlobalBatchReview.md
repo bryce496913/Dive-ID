@@ -1,13 +1,14 @@
 # Global pack batch review
 
-The 4,794 Global records (4,786 built from FishBase and SeaLifeBase plus the 8 carried
-Caribbean records) are approved in batches of about 250. For each batch, the reviewer
+The 4,798 Global records (4,786 built from FishBase and SeaLifeBase, the 8 carried
+Caribbean records and 4 owner additions) are approved in batches of about 250. For each batch, the reviewer
 reads every flagged record and a seeded random sample of 30 unflagged records.
 The tool is `Tools/CatalogReview/global_batches.py`.
 
 Numbered batches partition the pack: each FishBase record is in its build batch
 (`batch` in `Data/GlobalMarine/FishBase/RiskReport.json`), and records absent from the
-risk report, the 8 carried Caribbean records, join the last numbered batch. Their risk
+risk report, the 8 carried Caribbean records, join the last build batch (batch-20).
+Owner additions are in numbered batches of their own after the build batches (batch-21). Their risk
 flags come from the current record validators (`catalogue_validation.risk_flags`).
 
 ## Steps
@@ -164,6 +165,36 @@ python3 Tools/FishBaseIntake/publish_global.py
 A rejected sampled record rejects the whole batch. After fixes, run
 `prepare --batch N` again for a new generation with a new seed.
 
+## Owner additions (2026-10-23)
+
+Bryce asked for Whitetip reef shark, Grey reef shark, Zebra shark and Reef manta. They
+were added through `Data/GlobalMarine/OwnerAdditions.csv` (see
+`Tools/FishBaseIntake/README.md`) as **batch-21**, a batch of their own after the 20
+build batches, so no approved batch's records moved. Caribbean reef shark was already in
+Global. All four are drafts until batch-21 is approved; none is in Release.
+
+| Species | Scientific name | Flags |
+| --- | --- | --- |
+| Whitetip reef shark | *Triaenodon obesus* | `trait_ambiguous:colors/markings` |
+| Grey reef shark | *Carcharhinus amblyrhynchos* | `trait_ambiguous:colors` |
+| Zebra shark | *Stegostoma tigrinum* | `trait_ambiguous:colors/markings` |
+| Reef manta ray | *Mobula alfredi* | none (sampled) |
+
+"Grey reef shark" uses Bryce's name; FishBase's main name, "Blacktail reef shark", is an
+alias, and so is "Gray reef shark". Those names were aliases of Graceful shark ("Grey reef
+shark") and Silky shark ("Gray reef shark"), so a search for the species found the wrong
+ones. The aliases now belong to the new record alone. Removing them changed those two
+records, so their batch-18 approval lapsed: they are drafts and out of Release until
+**batch-18-rereview** is approved. The other 248 batch-18 records keep their approval.
+
+Release therefore exposes 4,792 Global records until both decisions are recorded:
+
+```sh
+python3 Tools/CatalogReview/global_batches.py record --manifest-sha256 <hash> \
+  --reviewer Bryce --decision-text "<verbatim decision>" --outcome approve|reject
+python3 Tools/FishBaseIntake/publish_global.py
+```
+
 ## Status
 
 | Batch | Generation | Manifest SHA-256 | Seed | Flagged | Sampled | Unread | Decision |
@@ -191,4 +222,6 @@ A rejected sampled record rejects the whole batch. After fixes, run
 | batch-19 | 1 | `01df05baeb2b7f698a280312b2e069ed726f91b5626804d626b4308adc351aa3` | 5304005859740104966 | 26 | 30 | 193 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-20 | 1 | `75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f` | 2200883920732990615 | 0 | 30 | 15 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-01-rereview | 2 | `a855aeef9fda952f23a33a4744b447e067a37ac7b6491100e1b2c9e2bfd909ce` | 5457129314686080825 | 87 | 30 | 133 | superseded by batch-01 generation 2 (2026-10-23), undecided. Prepared after the builder v4 negation repair (2026-10-22) changed 22 of the generation 1 records. |
+| batch-21 | 1 | `b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890` | 5609686461008101448 | 3 | 1 | 0 | **awaiting Bryce's decision.** The four owner-requested species (see "Owner additions"). |
+| batch-18-rereview | 1 | `a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c` | 6703939030536056391 | 1 | 1 | 0 | **awaiting Bryce's decision.** Graceful shark and Silky shark, after their wrong "Grey/Gray reef shark" aliases were removed. |
 
