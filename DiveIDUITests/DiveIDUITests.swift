@@ -78,6 +78,43 @@ final class DiveIDUITests: XCTestCase {
         XCTAssertFalse(app.keyboards.firstMatch.exists, file: file, line: line)
     }
 
+    /// At the largest accessibility text size, every Home action, the top result and the save
+    /// button stay within the screen's width and can be scrolled to and tapped.
+    @MainActor
+    func testLayoutsFitAtLargestDynamicType() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "caribbean", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        for identifier in ["offlinePackSummary", "describeAction", "photoAction", "savedAction", "creditsAction"] {
+            assertFitsAndReachable(app.buttons[identifier], in: app, named: identifier)
+        }
+        // Scroll back to the top before opening Describe.
+        for _ in 0..<8 where !app.buttons["describeAction"].isHittable { app.swipeDown() }
+        app.buttons["describeAction"].tap()
+        let editor = app.textViews["descriptionText"]
+        XCTAssertTrue(editor.waitForExistence(timeout: 2))
+        editor.tap()
+        editor.typeText("Large flat eagle ray with white spots and a long tail over sand in the Caribbean.")
+        app.buttons["findMatches"].tap()
+        XCTAssertTrue(app.navigationBars["Possible Matches"].waitForExistence(timeout: 3))
+        let firstResult = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'result_'")).firstMatch
+        XCTAssertTrue(firstResult.waitForExistence(timeout: 5))
+        assertFitsAndReachable(firstResult, in: app, named: "first result")
+        firstResult.tap()
+        XCTAssertTrue(app.navigationBars["Spotted Eagle Ray"].waitForExistence(timeout: 2))
+        assertFitsAndReachable(app.buttons["toggleSaved"], in: app, named: "toggleSaved")
+    }
+
+    /// Scrolls until the element is hittable, then checks it does not run past either screen edge.
+    @MainActor
+    private func assertFitsAndReachable(_ element: XCUIElement, in app: XCUIApplication, named name: String, file: StaticString = #filePath, line: UInt = #line) {
+        for _ in 0..<8 where !(element.exists && element.isHittable) { app.swipeUp() }
+        XCTAssertTrue(element.isHittable, "\(name) could not be scrolled into view", file: file, line: line)
+        let window = app.windows.firstMatch.frame
+        XCTAssertGreaterThanOrEqual(element.frame.minX, window.minX - 1, "\(name) runs past the leading edge", file: file, line: line)
+        XCTAssertLessThanOrEqual(element.frame.maxX, window.maxX + 1, "\(name) runs past the trailing edge", file: file, line: line)
+    }
+
     @MainActor
     func testPhotoCardIsDisabledAndSavedScreenOpens() {
         let app = XCUIApplication()
