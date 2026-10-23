@@ -18,6 +18,7 @@ struct PrimaryActionButton: View {
             .frame(maxWidth: .infinity, minHeight: 50)
         }
         .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle(radius: AppTheme.controlRadius))
         .tint(.appAccent)
         .disabled(disabled || isLoading)
     }
@@ -28,24 +29,35 @@ struct FeatureActionCard: View {
     let subtitle: String
     let symbol: String
     let action: () -> Void
+    @Environment(\.isEnabled) private var isEnabled
+    /// Grows the icon badge with Dynamic Type so the symbol never clips.
+    @ScaledMetric(relativeTo: .title) private var badgeSize: CGFloat = 44
 
     var body: some View {
         Button(action: action) {
             HStack(spacing: AppTheme.Spacing.l) {
                 Image(systemName: symbol)
-                    .font(.title)
-                    .frame(width: 44, height: 44)
+                    .font(.title2)
+                    .frame(width: badgeSize, height: badgeSize)
                     .background(Color.appAccent.opacity(0.2), in: Circle())
-                VStack(alignment: .leading) {
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                     Text(title).font(.headline)
                     Text(subtitle).font(.subheadline).foregroundStyle(Color.appTextSecondary)
                 }
-                Spacer()
+                .multilineTextAlignment(.leading)
+                Spacer(minLength: AppTheme.Spacing.s)
                 Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.appTextSecondary)
+                    .accessibilityHidden(true)
             }
             .padding()
             .foregroundStyle(Color.appTextPrimary)
             .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+            // A plain button does not dim its custom colors when disabled, so do it here.
+            .opacity(isEnabled ? 1 : 0.5)
         }
         .buttonStyle(.plain)
     }
@@ -65,9 +77,10 @@ struct LoadingStateView: View {
 struct EmptyStateView: View {
     let title: String
     let message: String
+    var systemImage = "fish"
 
     var body: some View {
-        ContentUnavailableView(title, systemImage: "fish", description: Text(message))
+        ContentUnavailableView(title, systemImage: systemImage, description: Text(message))
     }
 }
 
@@ -112,6 +125,8 @@ struct SelectedPackStatusView: View {
 
 struct SpeciesArtwork: View {
     let species: Species
+    /// Thumbnails sit next to the name already, so they leave the name caption off.
+    var showsCaption = true
     var showsPlaceholder: Bool { true }
     var accessibilityDescription: String { "Species artwork unavailable" }
 
@@ -119,19 +134,27 @@ struct SpeciesArtwork: View {
         ZStack {
             RoundedRectangle(cornerRadius: 14)
                 .fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
+            // Sized to the artwork's frame, so the symbol fits a thumbnail as well as the detail header.
             Image(systemName: symbolName)
-                .font(.system(size: 54, weight: .semibold))
+                .resizable()
+                .scaledToFit()
+                .fontWeight(.semibold)
                 .foregroundStyle(Color.appTextSecondary)
-            VStack {
-                Spacer()
-                Text(species.commonName)
-                    .font(.caption.bold())
-                    .lineLimit(1)
-                    .padding(AppTheme.Spacing.s)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.black.opacity(0.35))
+                .frame(maxWidth: 72, maxHeight: 72)
+                .padding(showsCaption ? AppTheme.Spacing.xxl : AppTheme.Spacing.m)
+            if showsCaption {
+                VStack {
+                    Spacer()
+                    Text(species.commonName)
+                        .font(.caption.bold())
+                        .lineLimit(1)
+                        .padding(AppTheme.Spacing.s)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.black.opacity(0.35))
+                }
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .accessibilityLabel(accessibilityDescription)
     }
 
@@ -142,18 +165,36 @@ struct SpeciesArtwork: View {
     }
 }
 
-struct SpeciesResultCard: View {
-    let match: IdentificationMatch
+/// A neutral capsule for a match's strength band. Deliberately uncolored: strength is
+/// relative clue similarity, and a traffic-light color would read as confidence.
+struct MatchStrengthBadge: View {
+    let strength: MatchStrength
 
     var body: some View {
-        HStack(alignment: .top) {
-            SpeciesArtwork(species: match.species).frame(width: 72, height: 72)
+        Text(strength.displayName)
+            .font(.caption.weight(.semibold))
+            .padding(.horizontal, AppTheme.Spacing.s)
+            .padding(.vertical, AppTheme.Spacing.xxs)
+            .background(Color.appAccent.opacity(0.25), in: Capsule())
+            .foregroundStyle(Color.appTextPrimary)
+    }
+}
+
+struct SpeciesResultCard: View {
+    let match: IdentificationMatch
+    @ScaledMetric(relativeTo: .headline) private var artworkSize: CGFloat = 72
+
+    var body: some View {
+        HStack(alignment: .top, spacing: AppTheme.Spacing.m) {
+            SpeciesArtwork(species: match.species, showsCaption: false)
+                .frame(width: artworkSize, height: artworkSize)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                 Text("#\(match.rank) · \(match.species.commonName)").font(.headline)
                 if !match.species.scientificName.isEmpty {
-                    Text(match.species.scientificName).italic().font(.subheadline)
+                    Text(match.species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary)
                 }
-                Text(match.matchStrength.displayName).font(.caption).foregroundStyle(Color.appTextSecondary)
+                MatchStrengthBadge(strength: match.matchStrength)
                 if !match.explanation.isEmpty {
                     Text(match.explanation).font(.subheadline).lineLimit(3)
                 }
@@ -161,11 +202,16 @@ struct SpeciesResultCard: View {
                     Text("• \($0)").font(.caption).foregroundStyle(Color.appTextSecondary)
                 }
             }
-            Spacer()
-            Image(systemName: "chevron.right").foregroundStyle(Color.appTextSecondary)
+            .multilineTextAlignment(.leading)
+            Spacer(minLength: AppTheme.Spacing.s)
+            Image(systemName: "chevron.right")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(Color.appTextSecondary)
+                .accessibilityHidden(true)
         }
         .padding()
         .foregroundStyle(Color.appTextPrimary)
         .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
     }
 }

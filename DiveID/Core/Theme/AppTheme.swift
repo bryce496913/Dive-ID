@@ -26,6 +26,8 @@ enum AppTheme {
         static let xxl: CGFloat = 24
     }
     static let radius: CGFloat = 18
+    /// Corner radius for buttons and other controls inside cards.
+    static let controlRadius: CGFloat = 14
 }
 
 extension View {
