@@ -131,11 +131,26 @@ python3 Tools/Evaluation/run_v05.py --configuration debug
 ```
 
 CI runs Python, Linux/macOS SwiftPM and hosted Xcode validation independently and
-requires every job to succeed. The v0.5 evaluation currently exposes failures;
-these commands must retain their nonzero exit status. The shell loop runs all eight suites and aggregates their status. Existing Caribbean/Pacific gates pass, but the new source-informed
-46-case development evaluation fails on paraphrase retrieval/ranking, freshwater
-false positives and regional conflicts. See [full results and limitations](Docs/V05DevelopmentEvaluation.md).
-Its descriptions are synthetic, not independent diver holdout data. The legacy
+requires every job to succeed. The shell loop runs all eight suites and aggregates
+their status; every command keeps a nonzero exit status on failure, and
+`run_v05.py` returns the evaluation test's status.
+
+The 46-case v0.5 development evaluation (fixture v2) passes every gate on the
+regional packs ([report](Reports/V05DevelopmentEvaluation.json), refreshed
+2026-10-22; the 2026-10-23 Global rebuild left every regional case result unchanged).
+With the production engine:
+
+- **Development (8 Caribbean + 1,000 Tropical Pacific records):** candidate recall
+  34/34, top1 26/34, top3 33/34, top10 34/34, no-match 6/6, region conflicts 4/4,
+  confidence 46/46.
+- **Release (2 approved Caribbean records):** the 4 positive cases whose species are
+  approved give candidate recall 4/4, top1 3/4, top3 4/4, top10 4/4, no-match 3/3,
+  region conflicts 2/2, confidence 10/10. The other 36 cases are blocked by coverage.
+
+Its descriptions are synthetic and v2 was written after v1 results were seen, so
+this is development evidence, not independent diver holdout data or publication
+approval. The first run's failures and the remaining limitations are in
+[V05DevelopmentEvaluation.md](Docs/V05DevelopmentEvaluation.md). The legacy
 100-case benchmark includes an opt-in frozen cohort; routine tests leave it closed.
 
 ## Rebuild catalogue data
