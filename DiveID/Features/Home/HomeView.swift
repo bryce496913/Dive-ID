@@ -123,10 +123,18 @@ private struct HomeHero: View {
 /// The selected dive region inside the hero, with a cue that it opens region selection.
 private struct RegionPill: View {
     let pack: OfflineIdentificationPackMetadata
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// The Change cue moves below the region at accessibility sizes, so the region text keeps the full width.
+    private var layout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: AppTheme.Spacing.s))
+            : AnyLayout(HStackLayout(spacing: AppTheme.Spacing.m))
+    }
 
     var body: some View {
-        HStack(spacing: AppTheme.Spacing.m) {
-            Image(systemName: "map.fill").accessibilityHidden(true)
+        layout {
+            if !dynamicTypeSize.isAccessibilitySize { Image(systemName: "map.fill").accessibilityHidden(true) }
             VStack(alignment: .leading, spacing: 2) {
                 Text("Dive Region").font(.caption.weight(.semibold)).foregroundStyle(Color.appTextPrimary.opacity(0.85))
                 Text(pack.displayName).font(.headline)
@@ -135,10 +143,13 @@ private struct RegionPill: View {
                 Text("Included with Dive ID").font(.caption2).foregroundStyle(Color.appTextPrimary.opacity(0.85))
             }
             .multilineTextAlignment(.leading)
-            Spacer(minLength: AppTheme.Spacing.s)
-            Text("Change").font(.subheadline.weight(.semibold))
-            Image(systemName: "chevron.right").font(.caption.weight(.bold)).accessibilityHidden(true)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
+            HStack(spacing: AppTheme.Spacing.s) {
+                Text("Change").font(.subheadline.weight(.semibold))
+                Image(systemName: "chevron.right").font(.caption.weight(.bold)).accessibilityHidden(true)
+            }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundStyle(Color.appTextPrimary)
         .padding(AppTheme.Spacing.m)
         .background(Color.black.opacity(0.28), in: RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))

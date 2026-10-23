@@ -57,21 +57,32 @@ struct DescriptionSearchView: View {
     @State var viewModel: DescriptionSearchViewModel
     let router: AppRouter
     @FocusState private var isEditorFocused: Bool
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// The Change button moves below the region at accessibility sizes, so the region text keeps the full width.
+    private var regionLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: AppTheme.Spacing.s))
+            : AnyLayout(HStackLayout(spacing: AppTheme.Spacing.m))
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
                 ClueGuide()
                 if let pack = viewModel.pack {
-                    HStack(spacing: AppTheme.Spacing.m) {
-                        Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+                    regionLayout {
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+                        }
                         VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                             Text("Dive region: \(pack.displayName)").font(.headline)
                             Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
                         }
-                        Spacer(minLength: AppTheme.Spacing.s)
+                        if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
                         Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     .appCard()
                 }
@@ -191,7 +202,7 @@ private struct FlowLayout: Layout {
         for row in rows(for: subviews, width: bounds.width) {
             var x = bounds.minX
             for index in row.indices {
-                let size = subviews[index].sizeThatFits(.unspecified)
+                let size = chipSize(subviews[index], maxWidth: bounds.width)
                 subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
                 x += size.width + spacing
             }
@@ -205,7 +216,7 @@ private struct FlowLayout: Layout {
         var rows: [Row] = []
         var current = Row()
         for index in subviews.indices {
-            let size = subviews[index].sizeThatFits(.unspecified)
+            let size = chipSize(subviews[index], maxWidth: maxWidth)
             let needed = current.indices.isEmpty ? size.width : current.width + spacing + size.width
             if needed > maxWidth, !current.indices.isEmpty {
                 rows.append(current)
@@ -217,6 +228,14 @@ private struct FlowLayout: Layout {
         }
         if !current.indices.isEmpty { rows.append(current) }
         return rows
+    }
+
+    /// A child's natural size, or its size wrapped to the row width when it is wider than a row,
+    /// as a chip can be at the largest text sizes.
+    private func chipSize(_ subview: LayoutSubview, maxWidth: CGFloat) -> CGSize {
+        let natural = subview.sizeThatFits(.unspecified)
+        guard natural.width > maxWidth else { return natural }
+        return subview.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
     }
 }
 

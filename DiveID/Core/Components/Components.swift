@@ -148,10 +148,20 @@ struct SpeciesResultCard: View {
     @ScaledMetric(relativeTo: .headline) private var artworkSize: CGFloat = 72
     @ScaledMetric(relativeTo: .headline) private var spotlightArtworkSize: CGFloat = 96
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     private var isSpotlight: Bool { match.rank == 1 }
 
+    /// Side by side, or the artwork above the text at accessibility sizes, where the scaled
+    /// thumbnail would otherwise leave the text only a sliver of the row.
+    private var layout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: AppTheme.Spacing.m))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: AppTheme.Spacing.m))
+    }
+
     var body: some View {
-        HStack(alignment: .top, spacing: AppTheme.Spacing.m) {
+        layout {
             ZStack(alignment: .topLeading) {
                 SpeciesArtwork(species: match.species, showsCaption: false)
                     .frame(width: isSpotlight ? spotlightArtworkSize : artworkSize, height: isSpotlight ? spotlightArtworkSize : artworkSize)
@@ -175,12 +185,15 @@ struct SpeciesResultCard: View {
                 }
             }
             .multilineTextAlignment(.leading)
-            Spacer(minLength: AppTheme.Spacing.s)
-            Image(systemName: "chevron.right")
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color.appTextSecondary)
-                .accessibilityHidden(true)
+            if !dynamicTypeSize.isAccessibilitySize {
+                Spacer(minLength: AppTheme.Spacing.s)
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.appTextSecondary)
+                    .accessibilityHidden(true)
+            }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(isSpotlight ? AppTheme.Spacing.xl : AppTheme.Spacing.l)
         .foregroundStyle(Color.appTextPrimary)
         .appCard()
