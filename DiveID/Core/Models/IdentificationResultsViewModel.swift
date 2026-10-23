@@ -134,6 +134,9 @@ final class IdentificationResultsViewModel {
 
     // Owned by the navigation route, not the results view's temporary visibility.
     func cancel() {
+#if DEBUG || DIVEID_INTERNAL
+        if case .loading = state { InternalSearchDiagnostics.shared.queryFinished(.cancelled) }
+#endif
         loadID = nil
         loadTask?.cancel()
         loadTask = nil

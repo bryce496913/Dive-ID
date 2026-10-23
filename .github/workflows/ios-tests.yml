@@ -199,6 +199,30 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build 2>&1 | tee "$RUNNER_TEMP/internal-build.log"
 
+      - name: Build the Release application
+        id: release_build
+        if: ${{ always() && steps.release_settings.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DiveID.xcodeproj \
+            -scheme DiveID \
+            -configuration Release \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$DERIVED_DATA-release" \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee "$RUNNER_TEMP/release-build.log"
+
+      # First-use instrumentation is Debug and Internal only (SearchPerformanceInstrumentation.swift).
+      - name: Check instrumentation is absent from Release and present in Debug and Internal
+        id: instrumentation
+        if: ${{ always() && steps.build.outcome == 'success' && steps.internal_build.outcome == 'success' && steps.release_build.outcome == 'success' }}
+        run: |
+          set -e
+          python3 Tools/CI/check_internal_instrumentation.py --expect absent "$DERIVED_DATA-release/Build/Products/Release-iphonesimulator/DiveID.app"
+          python3 Tools/CI/check_internal_instrumentation.py --expect present "$DERIVED_DATA-internal/Build/Products/Internal-iphonesimulator/DiveID.app"
+          python3 Tools/CI/check_internal_instrumentation.py --expect present "$DERIVED_DATA/Build/Products/Debug-iphonesimulator/DiveID.app"
+
       - name: Export hosted result summaries
         if: ${{ always() && steps.build.outcome == 'success' }}
         shell: bash
@@ -226,6 +250,8 @@ jobs:
           | Hosted packaging | ${{ steps.packaging.outcome }} |
           | UI target | ${{ steps.ui_tests.outcome }} |
           | Internal build | ${{ steps.internal_build.outcome }} |
+          | Release build | ${{ steps.release_build.outcome }} |
+          | Instrumentation absent from Release | ${{ steps.instrumentation.outcome }} |
           SUMMARY
 
       - name: Upload Xcode logs, settings and result bundles

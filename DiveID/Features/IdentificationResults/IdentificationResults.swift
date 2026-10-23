@@ -12,9 +12,15 @@ struct IdentificationResultsView: View {
             case .empty:
                 EmptyStateView(title: "No useful matches", message: "No useful match was found in the offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.")
                     .accessibilityIdentifier("resultsEmpty")
+#if DEBUG || DIVEID_INTERNAL
+                    .onAppear { InternalSearchDiagnostics.shared.queryFinished(.noResults) }
+#endif
             case .failed(let message, let retryable):
                 ErrorStateView(message: message, retry: retryable ? { Task { await viewModel.retry() } } : nil)
                     .accessibilityIdentifier("resultsFailure")
+#if DEBUG || DIVEID_INTERNAL
+                    .onAppear { InternalSearchDiagnostics.shared.queryFinished(.failed) }
+#endif
             case .loaded(let matches):
                 ScrollView {
                     LazyVStack(spacing: AppTheme.Spacing.m) {
@@ -38,6 +44,9 @@ struct IdentificationResultsView: View {
                     }
                     .padding()
                 }
+#if DEBUG || DIVEID_INTERNAL
+                .onAppear { InternalSearchDiagnostics.shared.queryFinished(.results) }
+#endif
             }
         }
         .appScreenBackground()
