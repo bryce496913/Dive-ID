@@ -309,7 +309,7 @@ class RepositoryReadmeTests(unittest.TestCase):
         packs = manifests()
         self.assertTrue(packs, f'No PackManifest.json under {PACKS}')
         gated = release_gated_directories()
-        self.assertIn('Global', gated, 'Expected GlobalRegion.swift to keep Global out of Release')
+        self.assertNotIn('Global', gated, 'GlobalRegion.swift opens Global for Release (owner approval, 2026-10-23)')
         problems = mismatches(README.read_text(), packs, gated)
         self.assertEqual(problems, [], 'README.md disagrees with the pack manifests:\n' + '\n'.join(problems))
 

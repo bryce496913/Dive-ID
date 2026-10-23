@@ -213,7 +213,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         let development = BundleMarineSpeciesCatalogRepository(
             bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let available = try await publication.availablePacks()
-        for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+        for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific, .global] {
             let full = try await development.loadPack(id: id)
             let approved = full.profiles.filter { $0.review?.status == .verified && !$0.categories.isEmpty }
             let expected = Set(try XCTUnwrap(expectedIDs[id.rawValue]))

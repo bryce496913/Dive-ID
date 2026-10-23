@@ -69,12 +69,12 @@ flags come from the current record validators (`catalogue_validation.risk_flags`
 - **Overlays are never written by hand or by an assistant.** No earlier statement,
   including `Data/GlobalMarine/CandidateApprovalContext.json`, counts as a decision.
 - **Release visibility.** Release builds show only verified records, and only from packs
-  whose definition is `availableInRelease`. Global is not (`GlobalRegion.swift`,
-  since 2026-10-23), so **approving batches never puts Global in Release** on its own.
-  `GlobalPackTests` proves Global stays out of Release even with approved records, and
-  that with the gate lifted Release would expose exactly the records the recorded
-  approvals cover. Enabling Global is a separate change to `GlobalRegion.definition`
-  that the owner approves explicitly.
+  whose definition is `availableInRelease`. Bryce opened Global's gate
+  (`GlobalRegion.swift`) on 2026-10-23, with his approval of all 20 current batches.
+  `GlobalPackTests` asserts that Release exposes exactly the records the recorded
+  approvals cover, and that a closed gate still keeps a pack out of Release even when
+  some of its records are approved. Closing it again is a one-line change to
+  `GlobalRegion.definition`.
 - **Pack version.** The Global `packVersion` rises with each recorded approval and
   never falls when a new generation supersedes an approved one.
 
@@ -96,11 +96,18 @@ pinned v26.06 tables with the current builder and validators: `RiskReport.json`,
 drafts and `ClueTrace.json` came out byte-identical, so `trait_ambiguous` (including
 `trait_ambiguous:negation_scope`) and the negation rules are current. batch-01
 generation 2 supersedes batch-01 generation 1 and both batch-01-rereview generations;
-none of those can be recorded against. No decision has been recorded for any of them.
+none of those can be recorded against.
 
 To read: **1,363 flagged** and **600 sampled** records, 1,963 in all. The other
-2,831 are sample-approved if their batch is approved. Global stays out of Release
-whatever is approved (see "Release visibility").
+2,831 are sample-approved if their batch is approved.
+
+**Decision (2026-10-23).** Bryce approved all 20 batches with the decision text
+"I have reviewed all of the entries and have approved them. All creatures can move into
+approved." It was recorded once per current manifest with
+`global_batches.py record --outcome approve --date 2026-10-23`: 4,794 records approved,
+none held, every fingerprint matching the manifest. `publish_global.py` then marked all
+4,794 verified (1,963 individually reviewed, 2,831 sample-approved), and the gate was
+opened (see "Release visibility").
 
 Take them in this order: highest flagged count first, ties by batch number.
 
@@ -153,25 +160,25 @@ A rejected sampled record rejects the whole batch. After fixes, run
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | batch-01 | 1 | `35450343a04f7062a1921ed1b8cffa1df4e9e82e30ac21d608f066bb922d9691` | 249769802202299688 | 4 | 30 | 216 | approved 2026-10-22 by Bryce ("I have. approved all"). All 250 approvals lapsed when the builder v3 rebuild changed the records. Superseded by generation 2 (2026-10-23). |
 | batch-01-rereview | 1 | `d1e7e47d4724cd05f630bf162942734ba2271330bad79b220a15575d7bacfcfd` | 2799262242171053537 | 86 | 30 | 134 | superseded by generation 2, undecided. All 250 batch-01 records changed in the builder v3 rebuild (2026-10-22): 221 in identification content and 29 only in the new `dataSources.sourceFields` provenance list. None keeps its approval. |
-| batch-01 | 2 | `9cddefd45f1b4e11fbcbfcb16c543b2ad362669c9c3324511d9b228cd607c896` | 6620643215757994745 | 87 | 30 | 133 | awaiting review (current content, 2026-10-23). |
-| batch-02 | 1 | `686abe319fbc46410a1f1f3abe31c598a49eb4f9ff852ca727b92fdabc5e7bc0` | 9064425676869974389 | 80 | 30 | 140 | awaiting review (current content, 2026-10-23). |
-| batch-03 | 1 | `cc50751f1853d81a40776470bc50e480ded0f771b384448fef0feb03ee35d826` | 1150192674019228709 | 81 | 30 | 139 | awaiting review (current content, 2026-10-23). |
-| batch-04 | 1 | `46c41406bc4cde15feada9182fdf936901525412ddfeb7b3d3a43d6c6c5b9bd2` | 4583211733273006097 | 85 | 30 | 135 | awaiting review (current content, 2026-10-23). |
-| batch-05 | 1 | `f3f45fa95e346392fbf21659ddb098a3649809dd83c58a6e1234b97ae8d921eb` | 6170256753491440946 | 81 | 30 | 139 | awaiting review (current content, 2026-10-23). |
-| batch-06 | 1 | `70d7e57a7ba60935ac66a1cc2a724e234f777a9c648de0bcfb4539ad2371a2ee` | 5709548382389902958 | 67 | 30 | 153 | awaiting review (current content, 2026-10-23). |
-| batch-07 | 1 | `c0c6b7a22d7f9201d0818cc6cf06ecdd2a033c23e83d22886f7dab0d19cd03e2` | 8906990601601499119 | 70 | 30 | 150 | awaiting review (current content, 2026-10-23). |
-| batch-08 | 1 | `d554e72a4c3332df2ff198f7c5550a95a444ed2e458b0ba009a46c2a39c38b58` | 5180136277957005184 | 67 | 30 | 153 | awaiting review (current content, 2026-10-23). |
-| batch-09 | 1 | `d1b2b6ac9756d65739254ac79887ca4d84257ae002327b4be63d0cb69a949e23` | 3983373252997082561 | 65 | 30 | 155 | awaiting review (current content, 2026-10-23). |
-| batch-10 | 1 | `c945eb857869f22eeb3f3a6019f819190ba7ee5b257113d44aa270ff1eab0400` | 1417251802194022862 | 80 | 30 | 140 | awaiting review (current content, 2026-10-23). |
-| batch-11 | 1 | `b593f548d0501f6e9336d89879e3f00248c4056bc6dbdef81922636022990929` | 8119467024620482905 | 56 | 30 | 164 | awaiting review (current content, 2026-10-23). |
-| batch-12 | 1 | `ea8e353b1bcf3550a9f841f99fd184f222068764823fd9d48a1640ebf29ab8ea` | 961158327718651566 | 87 | 30 | 133 | awaiting review (current content, 2026-10-23). |
-| batch-13 | 1 | `f6b78a61650a20c7838388cb85e5351c7850e71405d52ea824d46955b0f64b89` | 9165081101871360616 | 84 | 30 | 136 | awaiting review (current content, 2026-10-23). |
-| batch-14 | 1 | `f5bebe673310daaf692863ea235c924721ec523a55134ea03e912a024f0ec652` | 5452742877917365280 | 83 | 30 | 137 | awaiting review (current content, 2026-10-23). |
-| batch-15 | 1 | `167e83f00b21ee9cb98ca8f3187935028e1425be6e3ff360e3828c7e811f1c93` | 5962894279841414666 | 72 | 30 | 148 | awaiting review (current content, 2026-10-23). |
-| batch-16 | 1 | `632618ec9a954f5dc9c620d0c3480f540db20f84a835eb3f451820723a45237c` | 3170227035746323471 | 60 | 30 | 160 | awaiting review (current content, 2026-10-23). |
-| batch-17 | 1 | `b41307dc71d1108c9ce7325612416a1bfa2d006ceec21ec1700c97be08a80f15` | 5929038167441915047 | 70 | 30 | 150 | awaiting review (current content, 2026-10-23). |
-| batch-18 | 1 | `d498b98cf5e3feff055bc5c684e8a5e4ea5167784c7abe02377f8b4e772c72ac` | 6448878743500968022 | 62 | 30 | 158 | awaiting review (current content, 2026-10-23). |
-| batch-19 | 1 | `01df05baeb2b7f698a280312b2e069ed726f91b5626804d626b4308adc351aa3` | 5304005859740104966 | 26 | 30 | 193 | awaiting review (current content, 2026-10-23). |
-| batch-20 | 1 | `75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f` | 2200883920732990615 | 0 | 30 | 15 | awaiting review (current content, 2026-10-23). |
+| batch-01 | 2 | `9cddefd45f1b4e11fbcbfcb16c543b2ad362669c9c3324511d9b228cd607c896` | 6620643215757994745 | 87 | 30 | 133 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-02 | 1 | `686abe319fbc46410a1f1f3abe31c598a49eb4f9ff852ca727b92fdabc5e7bc0` | 9064425676869974389 | 80 | 30 | 140 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-03 | 1 | `cc50751f1853d81a40776470bc50e480ded0f771b384448fef0feb03ee35d826` | 1150192674019228709 | 81 | 30 | 139 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-04 | 1 | `46c41406bc4cde15feada9182fdf936901525412ddfeb7b3d3a43d6c6c5b9bd2` | 4583211733273006097 | 85 | 30 | 135 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-05 | 1 | `f3f45fa95e346392fbf21659ddb098a3649809dd83c58a6e1234b97ae8d921eb` | 6170256753491440946 | 81 | 30 | 139 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-06 | 1 | `70d7e57a7ba60935ac66a1cc2a724e234f777a9c648de0bcfb4539ad2371a2ee` | 5709548382389902958 | 67 | 30 | 153 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-07 | 1 | `c0c6b7a22d7f9201d0818cc6cf06ecdd2a033c23e83d22886f7dab0d19cd03e2` | 8906990601601499119 | 70 | 30 | 150 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-08 | 1 | `d554e72a4c3332df2ff198f7c5550a95a444ed2e458b0ba009a46c2a39c38b58` | 5180136277957005184 | 67 | 30 | 153 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-09 | 1 | `d1b2b6ac9756d65739254ac79887ca4d84257ae002327b4be63d0cb69a949e23` | 3983373252997082561 | 65 | 30 | 155 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-10 | 1 | `c945eb857869f22eeb3f3a6019f819190ba7ee5b257113d44aa270ff1eab0400` | 1417251802194022862 | 80 | 30 | 140 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-11 | 1 | `b593f548d0501f6e9336d89879e3f00248c4056bc6dbdef81922636022990929` | 8119467024620482905 | 56 | 30 | 164 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-12 | 1 | `ea8e353b1bcf3550a9f841f99fd184f222068764823fd9d48a1640ebf29ab8ea` | 961158327718651566 | 87 | 30 | 133 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-13 | 1 | `f6b78a61650a20c7838388cb85e5351c7850e71405d52ea824d46955b0f64b89` | 9165081101871360616 | 84 | 30 | 136 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-14 | 1 | `f5bebe673310daaf692863ea235c924721ec523a55134ea03e912a024f0ec652` | 5452742877917365280 | 83 | 30 | 137 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-15 | 1 | `167e83f00b21ee9cb98ca8f3187935028e1425be6e3ff360e3828c7e811f1c93` | 5962894279841414666 | 72 | 30 | 148 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-16 | 1 | `632618ec9a954f5dc9c620d0c3480f540db20f84a835eb3f451820723a45237c` | 3170227035746323471 | 60 | 30 | 160 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-17 | 1 | `b41307dc71d1108c9ce7325612416a1bfa2d006ceec21ec1700c97be08a80f15` | 5929038167441915047 | 70 | 30 | 150 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-18 | 1 | `d498b98cf5e3feff055bc5c684e8a5e4ea5167784c7abe02377f8b4e772c72ac` | 6448878743500968022 | 62 | 30 | 158 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-19 | 1 | `01df05baeb2b7f698a280312b2e069ed726f91b5626804d626b4308adc351aa3` | 5304005859740104966 | 26 | 30 | 193 | approved 2026-10-23 by Bryce (decision text above). |
+| batch-20 | 1 | `75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f` | 2200883920732990615 | 0 | 30 | 15 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-01-rereview | 2 | `a855aeef9fda952f23a33a4744b447e067a37ac7b6491100e1b2c9e2bfd909ce` | 5457129314686080825 | 87 | 30 | 133 | superseded by batch-01 generation 2 (2026-10-23), undecided. Prepared after the builder v4 negation repair (2026-10-22) changed 22 of the generation 1 records. |
 

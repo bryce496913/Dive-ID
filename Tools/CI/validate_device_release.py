@@ -40,7 +40,7 @@ def validate_product(settings, app, expected, root=ROOT):
         if str(info.get(field)) != str(settings.get(setting)):
             raise ValueError(f'Built {field} differs from resolved {setting}')
     counts = {}
-    for region, directory in [('caribbean', 'Caribbean'), ('tropical-pacific', 'TropicalPacific')]:
+    for region, directory in [('caribbean', 'Caribbean'), ('tropical-pacific', 'TropicalPacific'), ('global', 'Global')]:
         relative = Path('IdentificationPacks') / directory
         for filename in ('Creatures.json', 'PackManifest.json'):
             built = json.loads((app / relative / filename).read_text())
