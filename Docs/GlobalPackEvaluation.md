@@ -436,37 +436,44 @@ differences:
 ## Caribbean species in Global (2026-10-23)
 
 Global is rebuilt from the pinned FishBase/SeaLifeBase release v26.06. All 34 tables
-matched their pinned size and MD5. The 8 Caribbean species are now Global records too,
-built from FishBase and placed last in the build order, so existing review batches keep
-their membership. Global holds 4,794 records.
+matched their pinned size and MD5, and the rebuilt drafts are identical to the committed
+ones.
 
-**The regional packs keep their v3 field-guide text** (owner decision, 2026-10-23).
-Rebuilding them from FishBase was tried first and rejected:
-- **Tropical Pacific** broke three case rank limits: v05-09 diagnostic and paraphrase
-  (Bird wrasse) and v05-10 paraphrase (Black triggerfish). FishBase has no colours for
-  *Gomphosus varius*, and no "pale blue band at the fin bases" for *Melichthys niger*.
-- **Release** would have exposed no record: the rebuilt Atlantic Blue Tang and Queen
-  Angelfish no longer matched their approved content.
+**Every pack keeps the v3 field-guide text for its regional species** (owner decisions,
+2026-10-23):
+- **Caribbean and Tropical Pacific** stay as they are.
+- **Global** now holds the 8 Caribbean species as the Caribbean pack's own records,
+  appended after the 4,786 FishBase records, for 4,794 in total.
+- **Differences in Global:** each copy is a draft there (a regional approval does not
+  carry over; Global approval comes only from a recorded batch decision) and has no
+  bundled image.
 
-Caribbean and Tropical Pacific therefore share UUIDs with Global but not text, as
-Tropical Pacific already did.
+**Why not FishBase text.** Rebuilding these species from FishBase was tried first and
+rejected; the field-guide clues divers describe are not in FishBase:
+- **Tropical Pacific pack:** it broke three case rank limits: v05-09 diagnostic and
+  paraphrase (Bird wrasse) and v05-10 paraphrase (Black triggerfish).
+- **Release:** it would have exposed no record, because the rebuilt Atlantic Blue Tang
+  and Queen Angelfish no longer matched their approved content.
+- **Global:** with FishBase text for the 8 Caribbean species, the Global gate fell to
+  recall 23/34, top1 12/34, top3 15/34 and top10 21/34.
 
-**Regional search is unchanged.** Every `run_v05.py` gate and case is identical before
-and after, development and Release. In `SearchGolden.v2.json`, all 411 regional query
-results are byte-identical; only the 137 `global` results were regenerated.
+**Regional search is unchanged.** All 184 `run_v05.py` case results are identical
+before and after: ranks, failures and displayed species, development and Release. In
+`SearchGolden.v2.json`, only the 137 `global` results changed. The one regional entry
+that differs is the excluded parser-order query ("a school of spotted rays crossed the
+sandy channel"), whose ranked score varies between processes; its pool is identical.
 
-**The opt-in Global gate now fails.** The 16 Caribbean identification cases are no
-longer blocked by coverage, so it evaluates 34 positive cases instead of 18:
+**The opt-in Global gate passes on all 34 positive cases.** The 16 Caribbean
+identification cases are no longer blocked by coverage:
 
-| Global variant (4,794 records) | Recall | top1 | top3 | top10 | Confidence |
-| --- | --- | --- | --- | --- | --- |
-| As written: the 8 Caribbean species with FishBase text | **23/34** | **12/34** | **15/34** | **21/34** | 46/46 |
-| The same 8 species with their regional v3 text (in memory) | 33/34 | 18/34 | 24/34 | 30/34 | 46/46 |
-| Tropical Pacific records only (diagnostic) | 17/18 | 11/18 | 15/18 | 16/18 | 29/29 |
+| Global (4,794 records) | Recall | top1 | top3 | top10 | No-match | Confidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
+| Before (Tropical Pacific cases only) | 17/18 | 9/18 | 11/18 | 15/18 | 6/6 | 29/29 |
+| Tropical Pacific records only (diagnostic, unchanged) | 17/18 | 11/18 | 15/18 | 16/18 | 6/6 | 29/29 |
 
-The Tropical Pacific results are unchanged. The failure comes from the Caribbean
-records' FishBase text, which loses the field-guide clues these cases describe. It needs
-the same decision as the Tropical Pacific text (see Options).
+Release still exposes the 2 approved Caribbean records through the Caribbean pack only;
+Global has no approved record.
 
 ## Performance (host measurements, Release)
 

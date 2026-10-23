@@ -103,8 +103,9 @@ final class GlobalPackEvaluationTests: XCTestCase {
         let subsetProfiles = global.profiles.filter { pacificIDs.contains($0.id) }
         var subsetMetadata = global.metadata
         subsetMetadata.speciesCount = subsetProfiles.count
-        // Global now carries the 8 Caribbean species (FishBase text). This what-if swaps in
-        // the regional Caribbean records (v3 text) for them, so no ID appears twice.
+        // Global carries the 8 Caribbean species as the regional pack's own records (drafts in
+        // Global), so this variant now equals the pack as written apart from review status.
+        // It swaps the regional records in rather than appending them, so no ID appears twice.
         let caribbeanIDs = Set(caribbean.profiles.map(\.id))
         let composedProfiles = global.profiles.filter { !caribbeanIDs.contains($0.id) } + caribbean.profiles
         var composed = global.metadata

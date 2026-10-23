@@ -5,12 +5,12 @@
       "byRegion" : {
         "caribbean" : {
           "positive" : 16,
-          "top1" : 3,
-          "top10" : 6
+          "top1" : 10,
+          "top10" : 15
         },
         "tropical-pacific" : {
           "positive" : 18,
-          "top1" : 9,
+          "top1" : 8,
           "top10" : 15
         }
       },
@@ -18,47 +18,47 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Atlantic Blue Tang",
             "Powderblue surgeonfish",
-            "Palette surgeonfish",
-            "Lined surgeonfish"
+            "Palette surgeonfish"
           ],
           "error" : null,
           "id" : "v05-01-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 4,
+          "rank" : 1,
           "region" : "caribbean",
-          "topScore" : 0.5476190476190477
+          "topScore" : 0.5714285714285714
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Convict surgeonfish",
-            "Threespot damselfish",
-            "Longfin damselfish"
+            "Stoplight Parrotfish",
+            "Atlantic Blue Tang",
+            "Convict surgeonfish"
           ],
           "error" : null,
           "id" : "v05-01-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 6,
+          "rank" : 2,
           "region" : "caribbean",
-          "topScore" : 0.35714285714285715
+          "topScore" : 0.3333333333333333
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Stoplight Parrotfish",
             "White-spotted spinefoot",
-            "Eye-spot blenny",
-            "Yellow-eyed comb-tooth"
+            "Eye-spot blenny"
           ],
           "error" : null,
           "id" : "v05-02-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 1,
           "region" : "caribbean",
-          "topScore" : 0.38095238095238093
+          "topScore" : 0.47619047619047616
         },
         {
           "confidenceCompliant" : true,
@@ -71,7 +71,7 @@
           "id" : "v05-02-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 4,
           "region" : "caribbean",
           "topScore" : 0.40476190476190477
         },
@@ -86,69 +86,69 @@
           "id" : "v05-03-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 10,
           "region" : "caribbean",
           "topScore" : 0.5238095238095238
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Atlantic Blue Tang",
             "Mauritian gregory",
-            "Whitetail chromis",
-            "Redtail filefish"
+            "Queen Angelfish"
           ],
           "error" : null,
           "id" : "v05-03-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 3,
           "region" : "caribbean",
-          "topScore" : 0.5476190476190477
+          "topScore" : 0.5
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Queen angelfish",
-            "Squaretail mullet",
-            "Emperor angelfish"
+            "French Angelfish",
+            "Queen Angelfish",
+            "Spotted Eagle Ray"
           ],
           "error" : null,
           "id" : "v05-04-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 1,
           "region" : "caribbean",
           "topScore" : 0.16666666666666666
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "French Angelfish",
             "Whitecheek surgeonfish",
-            "Paletail chromis",
-            "Golden trevally"
+            "Paletail chromis"
           ],
           "error" : null,
           "id" : "v05-04-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 1,
           "region" : "caribbean",
-          "topScore" : 0.38095238095238093
+          "topScore" : 0.35714285714285715
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Red Lionfish",
             "Samurai squirrelfish",
-            "Smallmouth squirrelfish",
-            "Blackblotch squirrelfish"
+            "Smallmouth squirrelfish"
           ],
           "error" : null,
           "id" : "v05-05-diagnostic",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : null,
+          "rank" : 1,
           "region" : "caribbean",
-          "topScore" : 0.6190476190476191
+          "topScore" : 0.7142857142857143
         },
         {
           "confidenceCompliant" : true,
@@ -168,57 +168,12 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Great Barracuda",
             "Mahogany snapper",
-            "Sand grey mullet",
-            "Largespotted dart"
+            "Sand grey mullet"
           ],
           "error" : null,
           "id" : "v05-06-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "caribbean",
-          "topScore" : 0.38095238095238093
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Trumpet emperor",
-            "Grey snapper",
-            "Longface emperor"
-          ],
-          "error" : null,
-          "id" : "v05-06-paraphrase",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : null,
-          "region" : "caribbean",
-          "topScore" : 0.42857142857142855
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Green sea turtle",
-            "Hawksbill turtle",
-            "Greenblotch parrotfish"
-          ],
-          "error" : null,
-          "id" : "v05-07-diagnostic",
-          "kind" : "identification",
-          "outcome" : "evaluated",
-          "rank" : 1,
-          "region" : "caribbean",
-          "topScore" : 0.42857142857142855
-        },
-        {
-          "confidenceCompliant" : true,
-          "displayed" : [
-            "Green sea turtle",
-            "Kemp's ridley turtle",
-            "Olive ridley turtle"
-          ],
-          "error" : null,
-          "id" : "v05-07-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
           "rank" : 1,
@@ -228,9 +183,54 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Great Barracuda",
+            "Trumpet emperor",
+            "Grey snapper"
+          ],
+          "error" : null,
+          "id" : "v05-06-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "caribbean",
+          "topScore" : 0.5238095238095238
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Green Sea Turtle",
+            "Hawksbill turtle",
+            "Greenblotch parrotfish"
+          ],
+          "error" : null,
+          "id" : "v05-07-diagnostic",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "caribbean",
+          "topScore" : 0.3333333333333333
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
+            "Green Sea Turtle",
+            "Kemp's ridley turtle",
+            "Olive ridley turtle"
+          ],
+          "error" : null,
+          "id" : "v05-07-paraphrase",
+          "kind" : "identification",
+          "outcome" : "evaluated",
+          "rank" : 1,
+          "region" : "caribbean",
+          "topScore" : 0.5
+        },
+        {
+          "confidenceCompliant" : true,
+          "displayed" : [
             "Bull ray",
-            "Whitespotted eagle ray",
-            "Piked dogfish"
+            "Spotted Eagle Ray",
+            "Great Barracuda"
           ],
           "error" : null,
           "id" : "v05-08-diagnostic",
@@ -243,9 +243,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Whitespotted eagle ray",
-            "Oriental flying gurnard",
-            "Spotted drum"
+            "Spotted Eagle Ray",
+            "Great Barracuda",
+            "Oriental flying gurnard"
           ],
           "error" : null,
           "id" : "v05-08-paraphrase",
@@ -253,7 +253,7 @@
           "outcome" : "evaluated",
           "rank" : 1,
           "region" : "caribbean",
-          "topScore" : 0.4523809523809524
+          "topScore" : 0.5952380952380952
         },
         {
           "confidenceCompliant" : true,
@@ -302,8 +302,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Paletail chromis",
-            "Palelipped surgeonfish",
-            "Dark-banded fusilier"
+            "Atlantic Blue Tang",
+            "Palelipped surgeonfish"
           ],
           "error" : null,
           "id" : "v05-10-paraphrase",
@@ -331,17 +331,17 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Spotted Eagle Ray",
             "Pinktail triggerfish",
-            "Gilded triggerfish",
-            "Wedgetail triggerfish"
+            "Gilded triggerfish"
           ],
           "error" : null,
           "id" : "v05-11-paraphrase",
           "kind" : "identification",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 2,
           "region" : "tropical-pacific",
-          "topScore" : 0.23809523809523808
+          "topScore" : 0.21428571428571427
         },
         {
           "confidenceCompliant" : true,
@@ -408,7 +408,7 @@
           "displayed" : [
             "Lined surgeonfish",
             "Yellowspotted sawtail",
-            "Spanish flag snapper"
+            "Rainbow wrasse (Halichoeres pictus)"
           ],
           "error" : null,
           "id" : "v05-14-diagnostic",
@@ -526,32 +526,32 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
-            "Flameback angelfish",
-            "Queen angelfish",
-            "Gray angelfish"
+            "French Angelfish",
+            "Spotted Eagle Ray",
+            "Queen Angelfish"
           ],
           "error" : null,
           "id" : "v05-ambiguous-angelfish",
           "kind" : "ambiguous",
           "outcome" : "evaluated",
-          "rank" : 2,
+          "rank" : 1,
           "region" : "caribbean",
           "topScore" : 0.30952380952380953
         },
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "French Angelfish",
             "Pinktail triggerfish",
-            "Masked triggerfish",
-            "Redtail triggerfish"
+            "Spotted Eagle Ray"
           ],
           "error" : null,
           "id" : "v05-ambiguous-trigger",
           "kind" : "ambiguous",
           "outcome" : "evaluated",
-          "rank" : 1,
+          "rank" : 2,
           "region" : "tropical-pacific",
-          "topScore" : 0.19047619047619047
+          "topScore" : 0.16666666666666666
         },
         {
           "confidenceCompliant" : true,
@@ -664,9 +664,9 @@
         {
           "confidenceCompliant" : true,
           "displayed" : [
+            "Queen Angelfish",
             "Green razorfish",
-            "Angelfish",
-            "Longfin damselfish"
+            "Angelfish"
           ],
           "error" : null,
           "id" : "v05-region-3",
@@ -680,8 +680,8 @@
           "confidenceCompliant" : true,
           "displayed" : [
             "Spotted ray",
-            "Corocoro grunt",
-            "Goldspotted eel"
+            "Spotted Eagle Ray",
+            "Corocoro grunt"
           ],
           "error" : null,
           "id" : "v05-region-4",
@@ -698,7 +698,7 @@
           "total" : 2
         },
         "candidateRecall" : {
-          "hits" : 23,
+          "hits" : 33,
           "total" : 34
         },
         "confidenceCompliant" : {
@@ -714,15 +714,15 @@
           "total" : 4
         },
         "top1" : {
-          "hits" : 12,
+          "hits" : 18,
           "total" : 34
         },
         "top3" : {
-          "hits" : 15,
+          "hits" : 24,
           "total" : 34
         },
         "top10" : {
-          "hits" : 21,
+          "hits" : 30,
           "total" : 34
         }
       },
@@ -732,11 +732,11 @@
       "gates" : [
         {
           "denominator" : 34,
-          "hits" : 23,
+          "hits" : 33,
           "metric" : "candidateRecall",
           "minimumRate" : 0.85,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 46,
@@ -764,27 +764,27 @@
         },
         {
           "denominator" : 34,
-          "hits" : 12,
+          "hits" : 18,
           "metric" : "top1",
           "minimumRate" : 0.4,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 21,
+          "hits" : 30,
           "metric" : "top10",
           "minimumRate" : 0.8,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         },
         {
           "denominator" : 34,
-          "hits" : 15,
+          "hits" : 24,
           "metric" : "top3",
           "minimumRate" : 0.6,
           "note" : "",
-          "status" : "failed"
+          "status" : "passed"
         }
       ],
       "packSize" : 4794,

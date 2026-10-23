@@ -4,9 +4,8 @@ Input: NameResolution.csv (resolve.py), the merge plan (merge_plan.py), the stag
 distribution snapshot (distribution.py) and the pinned, integrity-checked tables
 (fetch.py). Each accepted taxon the merge plan keeps becomes one draft record under the
 kept UUID. The rebuilt Tropical Pacific records keep their UUIDs and lose all text that
-came from the field-guide book. The 8 Caribbean records are rebuilt the same way, so
-every pack shares one FishBase-built text per species; they are appended after all other
-records so that existing review batches keep their membership.
+came from the field-guide book. The 8 Caribbean records are kept as they are (2 are
+human-verified) and only reserve their names.
 
 Every field is mapped deterministically from source facts (Docs/GlobalMarine4000ActivationPlan.md §4):
 - categories come from the source taxonomy (class, order, family);
@@ -472,20 +471,17 @@ def lives_in_sea(species_row):
 def select_entries(plan_rows, resolution_rows, candidate_rows):
     """One record per accepted taxon, under the UUID the merge plan keeps.
 
-    Every kept taxon is built, including the 8 Caribbean records. Caribbean entries are
-    placed last: batches are cut in order, so earlier batches (and the approvals recorded
-    against them) keep their records. Retired, unresolved and conflicted inputs are
-    never built."""
+    The 8 Caribbean records stay as they are, so a taxon kept by a Caribbean record is
+    not rebuilt. Retired, unresolved and conflicted inputs are never built."""
     categories = {r["candidateID"]: r["proposedAppCategory"] for r in candidate_rows}
     resolution = {(r["inputKind"], r["inputID"]): r for r in resolution_rows}
-    entries, caribbean = [], []
+    entries = []
     for plan in plan_rows:
-        if plan["role"] != "keep":
+        if plan["role"] != "keep" or plan["pack"] == "Caribbean":
             continue
         row = resolution[(plan["inputKind"], plan["inputID"])]
-        entry = dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"]))
-        (caribbean if plan["pack"] == "Caribbean" else entries).append(entry)
-    return entries + caribbean
+        entries.append(dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"])))
+    return entries
 
 
 def batch_text(batch):
@@ -548,13 +544,15 @@ def main(argv=None):
     plan_rows = list(csv.DictReader(open(output / "MergePlan.csv", newline="")))
     manifest = fetch.load_manifest()
     staged = distribution.read_snapshot(output / "Distribution.json", distribution.source_of(manifest))  # fails closed
-    caribbean_ids = {r["plannedUUID"] for r in plan_rows if r["role"] == "keep" and r["pack"] == "Caribbean"}
+    caribbean = json.loads((REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())
     tropical_ids = {r["id"] for r in json.loads((REPO / "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json").read_text())}
     entries = select_entries(plan_rows, resolution, candidates)
     sources = load_sources(manifest, args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries}, staged)
     kept = [e for e in entries if lives_in_sea(sources[(e["server"], int(e["specCode"]))]["species"])]
     freshwater_only = sorted(e["acceptedName"] for e in entries if e not in kept)
     targets = {(e["server"], int(e["specCode"])): (e["id"], e["acceptedName"]) for e in kept}
+    targets.update({(r["taxonKey"].split(":")[0], int(r["taxonKey"].split(":")[1])): (r["plannedUUID"], r["acceptedName"])
+                    for r in plan_rows if r["role"] == "keep" and r["pack"] == "Caribbean"})
     profiles, passages, disagreements, extra_flags, clue_trace, effects = [], {}, [], {}, {}, {}
     previous = {}
     for path in sorted((output / "Drafts").glob("batch-*.json")):
@@ -574,17 +572,18 @@ def main(argv=None):
         clue_trace[profile["id"]] = info["trace"]
         for rule in rule_effects(src):
             effects.setdefault(rule, []).append(profile["id"])
-    renamed = enforce_unique_names(profiles, set())
+    reserved = {" ".join(n.lower().split()) for r in caribbean for n in (r["commonName"], r["scientificName"])}
+    renamed = enforce_unique_names(profiles, reserved)
     actions = write_batches(profiles, output / "Drafts", args.batch)
-    risk = catalogue_validation.assess_risk(profiles, passages, (), extra_flags)
+    risk = catalogue_validation.assess_risk(profiles, passages, [r["commonName"] for r in caribbean], extra_flags)
     for i, p in enumerate(profiles):
         risk["records"][p["id"]]["batch"] = i // BATCH_SIZE + 1
     report = {
         "builderVersion": BUILDER_VERSION, "records": len(profiles), "batches": (len(profiles) + BATCH_SIZE - 1) // BATCH_SIZE,
         "batchActions": actions,
         "rebuiltTropicalPacific": sum(p["id"] in tropical_ids for p in profiles),
-        "rebuiltCaribbean": sum(p["id"] in caribbean_ids for p in profiles),
-        "fromCandidates": sum(p["id"] not in tropical_ids and p["id"] not in caribbean_ids for p in profiles),
+        "fromCandidates": sum(p["id"] not in tropical_ids for p in profiles),
+        "keptUnchangedCaribbean": len(caribbean),
         "excludedFreshwaterOnly": freshwater_only,
         "commonNamesDisambiguated": len(renamed),
         "categoryFromQueueBecauseTaxonomyUnmapped": sum(1 for e in kept if e["categories"] and category_from_taxonomy(

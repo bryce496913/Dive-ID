@@ -72,13 +72,14 @@ def build_manifest(records, risk, batch, seed, generation, pack_metadata, member
                      key=lambda r: r["id"])
     if not members:
         raise ReviewError(f"{batch_id} has no records in the pack")
-    flagged = {r["id"] for r in members if risk[r["id"]].get("flags")}
+    # Records absent from the FishBase risk report (the carried Caribbean records) have no flags.
+    flagged = {r["id"] for r in members if risk.get(r["id"], {}).get("flags")}
     unflagged = sorted(r["id"] for r in members if r["id"] not in flagged)
     sampled = set(random.Random(seed).sample(unflagged, min(SAMPLE_SIZE, len(unflagged))))
     entries = [{"speciesID": r["id"], "commonName": r["commonName"], "scientificName": r["scientificName"],
                 "reviewedContentFingerprint": content_fingerprint(r),
                 "selection": "flagged" if r["id"] in flagged else "sampled" if r["id"] in sampled else "unread",
-                "riskScore": risk[r["id"]].get("score", 0), "flags": risk[r["id"]].get("flags", [])} for r in members]
+                "riskScore": risk.get(r["id"], {}).get("score", 0), "flags": risk.get(r["id"], {}).get("flags", [])} for r in members]
     manifest = {"schemaVersion": SCHEMA_VERSION, "batchID": batch_id, "generation": generation,
                 "pack": pack_metadata["id"], "packVersion": pack_metadata["packVersion"], "seed": seed,
                 "sampleSize": len(sampled), "sampling": SAMPLING,

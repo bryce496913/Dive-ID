@@ -5,52 +5,14 @@
   "duplicate_common_name": 0.0,
   "missing_required": 0.0002,
   "near_verbatim": 0.0002,
-  "no_english_common_name": 0.0934,
+  "no_english_common_name": 0.0936,
   "ocr_junk": 0.0,
   "size_outlier": 0.0,
-  "trait_ambiguous": 0.194,
+  "trait_ambiguous": 0.1936,
   "vocabulary": 0.0
  },
- "flaggedRecords": 1367,
+ "flaggedRecords": 1364,
  "records": {
-  "00000000-0000-0000-0000-000000000003": {
-   "batch": 20,
-   "flags": [],
-   "score": 0
-  },
-  "00000000-0000-0000-0000-000000000005": {
-   "batch": 20,
-   "flags": [
-    "trait_ambiguous:colors",
-    "trait_ambiguous:habitats"
-   ],
-   "score": 10
-  },
-  "00000000-0000-0000-0000-000000000006": {
-   "batch": 20,
-   "flags": [
-    "trait_ambiguous:colors"
-   ],
-   "score": 10
-  },
-  "00000000-0000-0000-0000-000000000008": {
-   "batch": 20,
-   "flags": [],
-   "score": 0
-  },
-  "00000000-0000-0000-0000-000000000009": {
-   "batch": 20,
-   "flags": [
-    "trait_ambiguous:colors",
-    "trait_ambiguous:habitats"
-   ],
-   "score": 10
-  },
-  "00000000-0000-0000-0000-000000000010": {
-   "batch": 20,
-   "flags": [],
-   "score": 0
-  },
   "000948be-40ec-5fac-a83a-e4f64ecc1d8e": {
    "batch": 13,
    "flags": [],
@@ -25103,11 +25065,6 @@
    "flags": [],
    "score": 0
   },
-  "eff286cc-2c87-5393-b00d-e158fd48e3aa": {
-   "batch": 20,
-   "flags": [],
-   "score": 0
-  },
   "effe5a05-a10a-5bb2-aff8-113189e1a394": {
    "batch": 18,
    "flags": [],
@@ -26542,11 +26499,6 @@
    "flags": [],
    "score": 0
   },
-  "fc213eff-6ba6-53ab-b288-f6e654299e68": {
-   "batch": 20,
-   "flags": [],
-   "score": 0
-  },
   "fc2a5799-cd19-5459-97b7-c4f3896ab0eb": {
    "batch": 3,
    "flags": [],
@@ -26950,8 +26902,8 @@
   }
  },
  "scoreHistogram": {
-  "0": 3428,
-  "1-20": 1365,
+  "0": 3423,
+  "1-20": 1362,
   "21-40": 1,
   "41-60": 1,
   "61-100": 0

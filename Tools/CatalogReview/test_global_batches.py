@@ -80,6 +80,15 @@ class NamedBatchTests(unittest.TestCase):
         self.assertTrue(all(r["reviewMethod"] == "individually-reviewed" for r in reviews.values()))
         self.assertEqual(report["approvedBatches"], ["batch-caribbean g1"])
 
+    def test_named_batch_accepts_records_absent_from_the_risk_report(self):
+        # The carried Caribbean records are not built from FishBase, so they have no risk entry.
+        for member in self.members:
+            del self.w.risk[member]
+        self.w.risk_path.write_text(json.dumps({"records": self.w.risk}))
+        manifest, _, _ = self.prepare()
+        self.assertEqual(manifest["counts"], {"flagged": 0, "sampled": len(self.members), "unread": 0})
+        self.assertTrue(all(e["flags"] == [] and e["riskScore"] == 0 for e in manifest["records"]))
+
     def test_named_batch_rejects_bad_names_unknown_ids_and_rereview(self):
         for name in (None, "", "7", "07-rereview", "Caribbean", "a_b"):
             with self.assertRaises(G.ReviewError):
