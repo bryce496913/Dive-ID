@@ -50,9 +50,9 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertGreaterThan(global.speciesCount, 4_000)
         XCTAssertEqual(global.includedRecordCount, global.speciesCount)
         XCTAssertEqual(global.publicationEligibleRecordCount, approved.count)
-        XCTAssertEqual(approved.count, global.speciesCount, "every Global record is approved (2026-10-23)")
-        XCTAssertFalse(global.isExperimental)
-        XCTAssertEqual(global.displayName, "Global", "no longer experimental once every record is approved")
+        XCTAssertEqual(global.speciesCount - approved.count, global.draftRecordCount,
+                       "the drafts are the owner additions awaiting batch-21 review and the records awaiting re-review")
+        XCTAssertEqual(global.isExperimental, approved.count < global.speciesCount, "Debug marks a pack holding drafts")
         XCTAssertTrue(global.regionAliases.isEmpty, "the global pack never conflicts with a described location")
         XCTAssertEqual(Set(development.map(\.id)), [.caribbean, .tropicalPacific, .global], "existing packs stay in place")
         let pack = try await repository(.experimentalDevelopment).loadPack(id: .global)
@@ -133,8 +133,8 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertEqual(Set(ungatedPack.profiles.map(\.id)), approved, "only approved records, no draft")
     }
 
-    /// Release (publication access) exposes exactly the records a recorded approval covers:
-    /// every Global record, since all 20 batches were approved on 2026-10-23.
+    /// Release (publication access) exposes exactly the records a recorded approval covers,
+    /// never a draft awaiting review.
     func testReleaseExposesExactlyTheApprovedGlobalRecords() async throws {
         let approved = try appliedApprovals()
         let release = repository(.publication)
@@ -142,13 +142,14 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
         let listed = try XCTUnwrap(available.first { $0.id == .global })
         XCTAssertEqual(listed.speciesCount, approved.count)
-        XCTAssertEqual(listed.displayName, "Global")
-        XCTAssertFalse(listed.isExperimental)
+        XCTAssertFalse(listed.isExperimental, "Release lists only the approved records")
         let pack = try await release.loadPack(id: .global)
         XCTAssertEqual(Set(pack.profiles.map(\.id)), Set(approved.keys))
         XCTAssertTrue(pack.profiles.allSatisfy { $0.review?.status == .verified })
         let full = try await repository(.experimentalDevelopment).loadPack(id: .global)
-        XCTAssertEqual(pack.profiles.count, full.profiles.count, "every Global record is approved")
+        let drafts = Set(full.profiles.filter { $0.review?.status != .verified }.map(\.id))
+        XCTAssertEqual(pack.profiles.count + drafts.count, full.profiles.count)
+        XCTAssertTrue(drafts.isDisjoint(with: pack.profiles.map(\.id)), "no draft reaches Release")
         print("GLOBAL_RELEASE exposed=\(pack.profiles.count) individually=\(pack.profiles.filter { $0.review?.reviewMethod == .individuallyReviewed }.count) sample=\(pack.profiles.filter { $0.review?.reviewMethod == .sampleApproved }.count)")
     }
 

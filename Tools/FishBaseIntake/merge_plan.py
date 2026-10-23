@@ -8,7 +8,8 @@ identity where one exists), and the taxon each input resolved to
 For each accepted taxon the plan keeps exactly one UUID:
 1. the existing app record's UUID, if there is one;
 2. otherwise the one existing workbook identity among its candidates;
-3. otherwise the first candidate's UUID in queue order.
+3. otherwise the first candidate's UUID in queue order;
+4. otherwise an owner addition's UUID (Data/GlobalMarine/OwnerAdditions.csv).
 Other UUIDs for the taxon are retired into the plan as aliases, never reassigned.
 
 When a taxon has two existing app records (or two workbook identities), the owner's
@@ -28,14 +29,17 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
+sys.path.insert(0, str(HERE))
+import resolve  # noqa: E402
+
 FIELDS = ["inputKind", "inputID", "pack", "inputName", "inputUUID", "identityStatus", "taxonKey", "acceptedName",
           "plannedUUID", "role", "note"]
 RESOLVED = {"exact", "synonym", "corrected"}
 
 
-def plan(existing, crosswalk, resolution, worms_status=None):
-    """existing: [{id, pack, scientificName}]; crosswalk: {candidateID: row}; resolution: NameResolution rows.
-    Returns (rows, report)."""
+def plan(existing, crosswalk, resolution, worms_status=None, additions=()):
+    """existing: [{id, pack, scientificName}]; crosswalk: {candidateID: row}; resolution: NameResolution rows;
+    additions: OwnerAdditions.csv rows. Returns (rows, report)."""
     by_input = {(r["inputKind"], r["inputID"]): r for r in resolution}
     members = []  # (order, row dict)
     for order, record in enumerate(existing):
@@ -46,6 +50,11 @@ def plan(existing, crosswalk, resolution, worms_status=None):
         res = by_input.get(("candidate", candidate_id), {})
         members.append({"inputKind": "candidate", "inputID": candidate_id, "pack": "", "inputName": row["sourceName"],
                         "inputUUID": row["speciesID"], "identityStatus": row["identityStatus"], "res": res, "order": order})
+    # Owner additions come last: a species the pack already holds keeps its UUID and the addition retires.
+    for order, row in enumerate(additions, start=len(members)):
+        res = by_input.get(("addition", row["additionID"]), {})
+        members.append({"inputKind": "addition", "inputID": row["additionID"], "pack": "", "inputName": row["scientificNameInput"],
+                        "inputUUID": row["speciesID"], "identityStatus": "owner_addition", "res": res, "order": order})
 
     taxa, unresolved = {}, []
     for m in members:
@@ -99,14 +108,15 @@ def plan(existing, crosswalk, resolution, worms_status=None):
     worms = worms_status or {}
     report = {
         "status": "blocked: resolve conflicts before merging" if conflicts else "ready",
-        "inputs": {"existingAppRecords": len(existing), "candidates": len(crosswalk)},
+        "inputs": {"existingAppRecords": len(existing), "candidates": len(crosswalk), "ownerAdditions": len(additions)},
         "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv); counts as confirmed (owner decision 2026-10-21)",
         "confirmedCandidates": sum(1 for m in members if m["inputKind"] == "candidate" and m["taxonKey"]),
         "resolvedByAcceptedName": [c for c in collisions if c["rule"].startswith("kept the record")],
         "wormsConfirmedCandidates": sum(1 for s in worms.values() if s == "confirmed"),
         "wormsTaxonomyStatus": dict(sorted({s: sum(1 for v in worms.values() if v == s) for s in set(worms.values())}.items())),
         "acceptedTaxa": len(taxa),
-        "unresolvedInputs": {"existing": sum(m["inputKind"] == "existing" for m in unresolved), "candidates": sum(m["inputKind"] == "candidate" for m in unresolved)},
+        "unresolvedInputs": {"existing": sum(m["inputKind"] == "existing" for m in unresolved), "candidates": sum(m["inputKind"] == "candidate" for m in unresolved),
+                             "ownerAdditions": sum(m["inputKind"] == "addition" for m in unresolved)},
         "retiredUUIDs": sum(r["role"] == "retire" for r in rows),
         "collisions": len(collisions), "conflicts": conflicts, "collisionDetails": collisions,
     }
@@ -128,7 +138,7 @@ def main(argv=None):
         worms = {r["candidateID"]: r["taxonomyStatus"] for r in csv.DictReader(f) if r["queue"] == "primary"}
     with open(output / "NameResolution.csv", newline="") as f:
         resolution = list(csv.DictReader(f))
-    rows, report = plan(existing, crosswalk, resolution, worms)
+    rows, report = plan(existing, crosswalk, resolution, worms, resolve.load_additions())
     with open(output / "MergePlan.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS, lineterminator="\n")
         writer.writeheader()

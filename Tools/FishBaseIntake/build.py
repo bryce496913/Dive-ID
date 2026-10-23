@@ -19,6 +19,15 @@ Every field is mapped deterministically from source facts (Docs/GlobalMarine4000
   dataSources lists the source fields it used;
 - fields with no source stay empty or null; nothing is filled from general knowledge.
 
+Owner additions (Data/GlobalMarine/OwnerAdditions.csv) are species the owner asked for
+after the build batches were reviewed. Each goes into the batch its row names, after the
+build batches, so adding one never changes a reviewed batch. An addition may carry the
+common name the owner asked for (the source's main name then becomes an alias) and
+preferred aliases, which must be English names in the source. Adding one changes no
+other record except that an alias naming it elsewhere is dropped: its common name and
+preferred aliases belong to it alone. It takes no alias another record already has, and
+existing records gain no similar-species reference to it.
+
 Output (staging only): review batches of 250 at Data/GlobalMarine/FishBase/Drafts/,
 written resumably (an unchanged batch is not rewritten), plus BuildReport.json
 (field coverage) and RiskReport.json (per-record risk flags and score).
@@ -38,6 +47,7 @@ sys.path.insert(0, str(HERE.parent / "CatalogReview"))
 import catalogue_validation  # noqa: E402
 import distribution  # noqa: E402
 import fetch  # noqa: E402
+import resolve  # noqa: E402
 import traits  # noqa: E402
 
 BUILDER_VERSION = 4
@@ -270,6 +280,14 @@ def build_profile(entry, src, similar_targets=None):
     genus = accepted.split(" ")[0]
     english = [n for n in src.get("english_names", []) if n]
     common = (sp.get("FBname") or (english[0] if english else "") or accepted).strip()
+    addition = entry.get("addition") or {}
+    preferred = {a.lower() for a in preferred_aliases(addition)}
+    unknown = sorted(preferred - {n.lower() for n in english})
+    if unknown:
+        raise SystemExit(f"{addition['additionID']}: preferred aliases are not English names in the source: {', '.join(unknown)}")
+    english = [n for n in english if n.lower() in preferred] + [n for n in english if n.lower() not in preferred]
+    if (addition.get("commonName") or "").strip():
+        common = addition["commonName"].strip()  # the source's main name stays as an alias
     aliases = []
     for name in english + ([entry["inputName"]] if entry["resolution"] == "synonym" else []):
         if name.strip().lower() not in {common.lower(), accepted.lower()} and name.strip().lower() not in {a.lower() for a in aliases}:
@@ -398,12 +416,26 @@ def build_profile(entry, src, similar_targets=None):
     return profile, source_passages, {"flags": sorted(set(flags)), "trace": trace}
 
 
-def enforce_unique_names(profiles, reserved_names):
-    """Common names must be unique and aliases may not equal another record's names."""
+def preferred_aliases(addition):
+    return [a.strip() for a in (addition.get("preferredAliases") or "").split(";") if a.strip()]
+
+
+def enforce_unique_names(profiles, reserved_names, additions=None):
+    """Common names must be unique and aliases may not equal another record's names.
+
+    additions: {speciesID: OwnerAdditions row} of the owner additions among profiles. Their
+    preferred aliases count as their names, an addition whose common name another record
+    already has stops the build (renaming that record would change reviewed content), and
+    an addition drops any alias another record already carries."""
     norm = lambda s: " ".join(s.lower().split())
+    additions = additions or {}
+    names = lambda p: {norm(p["commonName"]), norm(p["scientificName"])} | {norm(a) for a in preferred_aliases(additions.get(p["id"], {}))}
     counts = {}
     for p in profiles:
         counts[norm(p["commonName"])] = counts.get(norm(p["commonName"]), 0) + 1
+    clashes = sorted(p["commonName"] for p in profiles if p["id"] in additions and (counts[norm(p["commonName"])] > 1 or norm(p["commonName"]) in reserved_names))
+    if clashes:
+        raise SystemExit(f"owner additions named like another record: {', '.join(clashes)}")
     renamed = []
     for p in profiles:
         if counts[norm(p["commonName"])] > 1 or norm(p["commonName"]) in reserved_names:
@@ -411,10 +443,15 @@ def enforce_unique_names(profiles, reserved_names):
             renamed.append(p["id"])
     canonical = set(reserved_names)
     for p in profiles:
-        canonical |= {norm(p["commonName"]), norm(p["scientificName"])}
+        canonical |= names(p)
     for p in profiles:
-        own = {norm(p["commonName"]), norm(p["scientificName"])}
+        own = names(p)
         p["aliases"] = [a for a in p["aliases"] if norm(a) in own or norm(a) not in canonical]
+    taken = {norm(a) for p in profiles if p["id"] not in additions for a in p["aliases"]}
+    for p in profiles:
+        if p["id"] in additions:
+            own = names(p)
+            p["aliases"] = [a for a in p["aliases"] if norm(a) in own or norm(a) not in taken]
     return renamed
 
 
@@ -468,19 +505,23 @@ def lives_in_sea(species_row):
     return truthy(species_row.get("Saltwater")) or truthy(species_row.get("Brack"))
 
 
-def select_entries(plan_rows, resolution_rows, candidate_rows):
+def select_entries(plan_rows, resolution_rows, candidate_rows, addition_rows=()):
     """One record per accepted taxon, under the UUID the merge plan keeps.
 
     The 8 Caribbean records stay as they are, so a taxon kept by a Caribbean record is
     not rebuilt. Retired, unresolved and conflicted inputs are never built."""
     categories = {r["candidateID"]: r["proposedAppCategory"] for r in candidate_rows}
+    additions = {r["additionID"]: r for r in addition_rows}
     resolution = {(r["inputKind"], r["inputID"]): r for r in resolution_rows}
     entries = []
     for plan in plan_rows:
         if plan["role"] != "keep" or plan["pack"] == "Caribbean":
             continue
         row = resolution[(plan["inputKind"], plan["inputID"])]
-        entries.append(dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"])))
+        entry = dict(row, id=plan["plannedUUID"], candidateCategory=categories.get(plan["inputID"]))
+        if plan["inputKind"] == "addition":
+            entry["addition"] = additions[plan["inputID"]]
+        entries.append(entry)
     return entries
 
 
@@ -488,17 +529,33 @@ def batch_text(batch):
     return "[\n" + ",\n".join(json.dumps(p, ensure_ascii=False) for p in batch) + "\n]\n"
 
 
-def write_batches(profiles, drafts, only=None):
+def batch_layout(profiles, assigned=None):
+    """{batch number: profiles}. Profiles not in assigned ({speciesID: batch number}, the
+    owner additions) fill build batches of BATCH_SIZE in order; an assigned profile goes to
+    its own batch, which must come after every build batch."""
+    assigned = assigned or {}
+    built = [p for p in profiles if p["id"] not in assigned]
+    layout = {i // BATCH_SIZE + 1: built[i:i + BATCH_SIZE] for i in range(0, len(built), BATCH_SIZE)}
+    last_built = len(layout)
+    for p in profiles:
+        if p["id"] in assigned:
+            if assigned[p["id"]] <= last_built:
+                raise SystemExit(f"{p['id']}: an owner addition cannot join build batch {assigned[p['id']]}")
+            layout.setdefault(assigned[p["id"]], []).append(p)
+    return dict(sorted(layout.items()))
+
+
+def write_batches(profiles, drafts, only=None, assigned=None):
     """Write review batches resumably: an existing batch with identical content is left
     alone; changed batches are replaced atomically. Returns {batch name: action}."""
     drafts.mkdir(parents=True, exist_ok=True)
     actions, names = {}, []
-    for i in range(0, len(profiles), BATCH_SIZE):
-        name = f"batch-{i // BATCH_SIZE + 1:02d}"
+    for number, batch in batch_layout(profiles, assigned).items():
+        name = f"batch-{number:02d}"
         names.append(name)
         if only is not None and name != f"batch-{only:02d}":
             continue
-        text = batch_text(profiles[i:i + BATCH_SIZE])
+        text = batch_text(batch)
         path = drafts / f"{name}.json"
         if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == hashlib.sha256(text.encode()).hexdigest():
             actions[name] = "unchanged"
@@ -543,16 +600,20 @@ def main(argv=None):
     candidates = list(csv.DictReader(open(REPO / "Data/GlobalMarine/Expansion4000_CandidateQueue.csv", newline="")))
     plan_rows = list(csv.DictReader(open(output / "MergePlan.csv", newline="")))
     manifest = fetch.load_manifest()
-    staged = distribution.read_snapshot(output / "Distribution.json", distribution.source_of(manifest))  # fails closed
+    staged = distribution.read_staged(output / "Distribution.json", distribution.source_of(manifest))  # fails closed
+    addition_rows = resolve.load_additions()
     caribbean = json.loads((REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())
     tropical_ids = {r["id"] for r in json.loads((REPO / "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json").read_text())}
-    entries = select_entries(plan_rows, resolution, candidates)
+    entries = select_entries(plan_rows, resolution, candidates, addition_rows)
     sources = load_sources(manifest, args.cache, args.offline, {(e["server"], int(e["specCode"])) for e in entries}, staged)
     kept = [e for e in entries if lives_in_sea(sources[(e["server"], int(e["specCode"]))]["species"])]
     freshwater_only = sorted(e["acceptedName"] for e in entries if e not in kept)
     targets = {(e["server"], int(e["specCode"])): (e["id"], e["acceptedName"]) for e in kept}
     targets.update({(r["taxonKey"].split(":")[0], int(r["taxonKey"].split(":")[1])): (r["plannedUUID"], r["acceptedName"])
                     for r in plan_rows if r["role"] == "keep" and r["pack"] == "Caribbean"})
+    # Existing records gain no reference to an owner addition: that would change reviewed content.
+    added = {(e["server"], int(e["specCode"])) for e in kept if e.get("addition")}
+    built_targets = {k: v for k, v in targets.items() if k not in added}
     profiles, passages, disagreements, extra_flags, clue_trace, effects = [], {}, [], {}, {}, {}
     previous = {}
     for path in sorted((output / "Drafts").glob("batch-*.json")):
@@ -565,7 +626,7 @@ def main(argv=None):
         e["categories"] = [derived or queued] if (derived or queued) else []
         if derived and queued and derived != queued:
             disagreements.append(f"{e['acceptedName']}: taxonomy {derived}, queue {queued}")
-        profile, source_passages, info = build_profile(e, src, targets)
+        profile, source_passages, info = build_profile(e, src, targets if e.get("addition") else built_targets)
         profiles.append(profile)
         passages[profile["id"]] = source_passages
         extra_flags[profile["id"]] = info["flags"]
@@ -573,17 +634,24 @@ def main(argv=None):
         for rule in rule_effects(src):
             effects.setdefault(rule, []).append(profile["id"])
     reserved = {" ".join(n.lower().split()) for r in caribbean for n in (r["commonName"], r["scientificName"])}
-    renamed = enforce_unique_names(profiles, reserved)
-    actions = write_batches(profiles, output / "Drafts", args.batch)
+    additions = {e["id"]: e["addition"] for e in kept if e.get("addition")}
+    renamed = enforce_unique_names(profiles, reserved, additions)
+    assigned = {i: int(a["batch"]) for i, a in additions.items()}
+    actions = write_batches(profiles, output / "Drafts", args.batch, assigned)
     risk = catalogue_validation.assess_risk(profiles, passages, [r["commonName"] for r in caribbean], extra_flags)
-    for i, p in enumerate(profiles):
-        risk["records"][p["id"]]["batch"] = i // BATCH_SIZE + 1
+    for number, batch in batch_layout(profiles, assigned).items():
+        for p in batch:
+            risk["records"][p["id"]]["batch"] = number
+            if p["id"] in additions:
+                risk["records"][p["id"]]["ownerAddition"] = additions[p["id"]]["additionID"]
     report = {
-        "builderVersion": BUILDER_VERSION, "records": len(profiles), "batches": (len(profiles) + BATCH_SIZE - 1) // BATCH_SIZE,
+        "builderVersion": BUILDER_VERSION, "records": len(profiles), "batches": len(batch_layout(profiles, assigned)),
         "batchActions": actions,
         "rebuiltTropicalPacific": sum(p["id"] in tropical_ids for p in profiles),
-        "fromCandidates": sum(p["id"] not in tropical_ids for p in profiles),
+        "fromCandidates": sum(p["id"] not in tropical_ids and p["id"] not in additions for p in profiles),
         "keptUnchangedCaribbean": len(caribbean),
+        "ownerAdditions": [{"additionID": additions[p["id"]]["additionID"], "speciesID": p["id"], "commonName": p["commonName"],
+                            "scientificName": p["scientificName"], "batch": assigned[p["id"]]} for p in profiles if p["id"] in additions],
         "excludedFreshwaterOnly": freshwater_only,
         "commonNamesDisambiguated": len(renamed),
         "categoryFromQueueBecauseTaxonomyUnmapped": sum(1 for e in kept if e["categories"] and category_from_taxonomy(

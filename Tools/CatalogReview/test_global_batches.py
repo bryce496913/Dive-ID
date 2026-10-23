@@ -134,14 +134,25 @@ class PartitionTests(unittest.TestCase):
         with self.assertRaises(G.ReviewError):
             self.w.prepare(3)
 
-    def test_the_real_pack_is_covered_exactly_once_with_the_caribbean_records_in_the_last_batch(self):
+    def test_owner_additions_never_move_the_carried_records_out_of_the_last_build_batch(self):
+        self.w.records += [species(n) for n in range(91, 93)]  # carried
+        self.w.records += [species(n) for n in range(93, 95)]  # owner additions
+        for n in (93, 94):
+            self.w.risk[ID(n)] = {"batch": 3, "score": 0, "flags": [], "ownerAddition": f"OWNER-ADD-{n:04d}"}
+        numbers = G.batch_assignments(self.w.records, self.w.risk)
+        self.assertEqual([numbers[ID(n)] for n in range(91, 95)], [2, 2, 3, 3])
+
+    def test_the_real_pack_is_covered_exactly_once_with_the_caribbean_records_in_the_last_build_batch(self):
         records = json.loads((G.PACK / "Creatures.json").read_text())
         risk = json.loads(G.RISK_REPORT.read_text())["records"]
         caribbean = {r["id"] for r in json.loads((G.REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())}
         numbers = G.batch_assignments(records, risk)
         self.assertEqual(set(numbers), {r["id"] for r in records})
         last = max(numbers.values())
-        self.assertEqual({numbers[i] for i in caribbean}, {last})
+        added = {i for i in numbers if risk.get(i, {}).get("ownerAddition")}
+        last_built = max(numbers[i] for i in numbers if i not in added)
+        self.assertEqual({numbers[i] for i in caribbean}, {last_built})
+        self.assertTrue(all(numbers[i] > last_built for i in added), "owner additions follow the build batches")
         self.assertEqual(sorted(set(numbers.values())), list(range(1, last + 1)), "no gap in the numbering")
         assessed = G.record_risk(records, risk)
         self.assertTrue(all(assessed[i] == risk[i] for i in numbers if i in risk), "FishBase records keep the build's flags")
@@ -155,7 +166,11 @@ class PartitionTests(unittest.TestCase):
         records = json.loads((G.PACK / "Creatures.json").read_text())
         covered = [e["speciesID"] for m in numbered for e in m["records"]]
         self.assertEqual(sorted(covered), sorted(r["id"] for r in records), "the current batches cover the pack exactly once")
-        self.assertEqual([m["batchID"] for m in current if m not in numbered], [], "no earlier re-review batch stays current")
+        self.assertFalse(any(m["batchID"] == "batch-01-rereview" for m in current), "no earlier batch-01 re-review stays current")
+        for rereview in (m for m in current if m not in numbered):
+            origin = rereview["rereviewOf"]
+            newest = max((m for m in numbered if m["batchID"] == origin["batchID"]), key=lambda m: m["generation"])
+            self.assertEqual(origin["generation"], newest["generation"], f"{rereview['batchID']} re-reviews its batch's current generation")
         with tempfile.TemporaryDirectory() as temp:
             copy = Path(temp) / "Batches"  # a copy, so a missed refusal never writes a decision
             shutil.copytree(G.BATCHES, copy)

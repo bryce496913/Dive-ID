@@ -953,7 +953,6 @@
   "313841a4-cb18-5ffc-ab62-1fdc5f3315fb": "individually-reviewed",
   "313ee107-20d6-5a8f-a8ca-ea885dbdb689": "sample-approved",
   "3144474d-864c-51ee-927b-84309f4a1c87": "sample-approved",
-  "3144c583-9cab-56a3-b061-f51da4564531": "individually-reviewed",
   "31496046-89a0-5507-b9c3-7601cc6293ce": "sample-approved",
   "314ada13-d92f-5a63-9330-313ec45d2503": "individually-reviewed",
   "314bafd5-b351-5110-b6cd-6cfc31019c05": "sample-approved",
@@ -1082,7 +1081,6 @@
   "378e0248-3097-540d-8763-6caa0d88e0c9": "sample-approved",
   "378f77ff-9847-5979-8a22-f9bbad6efad6": "sample-approved",
   "3793a1ac-f776-5a25-8489-78428f82d7a6": "individually-reviewed",
-  "37b37357-b011-51c4-9ddd-d9465184bd4f": "sample-approved",
   "37b52e01-caf6-5cf4-b74b-18f8682b1c19": "sample-approved",
   "37c701a5-7d11-531a-8350-fa3d2befdb2c": "sample-approved",
   "37c7c102-d5e5-5345-83e1-caf8863600ce": "sample-approved",
@@ -4817,5 +4815,8 @@
   "batch-19 g1",
   "batch-20 g1"
  ],
- "stale": []
+ "stale": [
+  "3144c583-9cab-56a3-b061-f51da4564531",
+  "37b37357-b011-51c4-9ddd-d9465184bd4f"
+ ]
 }

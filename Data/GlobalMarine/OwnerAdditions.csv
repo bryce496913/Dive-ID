@@ -1,0 +1,5 @@
+additionID,scientificNameInput,commonName,preferredAliases,batch,speciesID,requestedBy,requestedDate,note
+OWNER-ADD-0001,Triaenodon obesus,,,21,2f9b6a7f-1d44-58f4-adf6-d458cdf3966a,Bryce,2026-10-23,Whitetip reef shark
+OWNER-ADD-0002,Carcharhinus amblyrhynchos,Grey reef shark,Gray reef shark,21,f23a6ebe-e2bf-5156-af7f-87caefe2ce0c,Bryce,2026-10-23,Grey reef shark; FishBase's main name is Blacktail reef shark
+OWNER-ADD-0003,Stegostoma tigrinum,,,21,6a1df41f-c607-5cb9-a483-a59e7ed13c4c,Bryce,2026-10-23,Zebra shark (formerly Stegostoma fasciatum)
+OWNER-ADD-0004,Mobula alfredi,,,21,2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf,Bryce,2026-10-23,Reef manta

@@ -570,6 +570,54 @@ final class AnimalGroupSearchTests: XCTestCase {
     }
 }
 
+/// The four sharks and rays Bryce asked for on 2026-10-23 (Data/GlobalMarine/OwnerAdditions.csv,
+/// Global batch-21) are found by name in Debug and stay out of Release until their batch is approved.
+/// "Grey reef shark" was an alias on Graceful shark and Silky shark; it now names only the real species.
+final class OwnerAddedSpeciesSearchTests: XCTestCase {
+    private func global(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) async throws -> OfflineIdentificationPack {
+        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access).loadPack(id: .global)
+    }
+
+    private func search(_ description: String, in pack: OfflineIdentificationPack) async throws -> [IdentificationMatch] {
+        try await LocalMarineLifeIdentificationService(catalogRepository: SinglePackRepository(pack: pack), parser: LocalObservationParser(), ranker: LocalSpeciesRanker())
+            .identify(request: IdentificationRequest(source: .description(description), context: .init(region: .global)), processedPhoto: nil)
+    }
+
+    private let added = ["Whitetip reef shark": "Triaenodon obesus", "Grey reef shark": "Carcharhinus amblyrhynchos",
+                         "Zebra shark": "Stegostoma tigrinum", "Reef manta ray": "Mobula alfredi"]
+
+    func testEachAddedSpeciesIsFoundByNameInDevelopment() async throws {
+        let pack = try await global(.experimentalDevelopment)
+        for (description, expected) in [("Whitetip reef shark", "Whitetip reef shark"), ("grey reef shark", "Grey reef shark"),
+                                        ("gray reef shark", "Grey reef shark"), ("zebra shark", "Zebra shark"), ("reef manta", "Reef manta ray")] {
+            let matches = try await search(description, in: pack)
+            XCTAssertEqual(matches.first?.species.commonName, expected, "\(description): \(matches.prefix(3).map(\.species.commonName))")
+            XCTAssertEqual(matches.first?.species.scientificName, added[expected], description)
+        }
+    }
+
+    func testGreyReefSharkNamesNoOtherSpecies() async throws {
+        let pack = try await global(.experimentalDevelopment)
+        let owners = pack.profiles.filter { profile in
+            profile.aliases.contains { ["grey reef shark", "gray reef shark"].contains($0.lowercased()) } || profile.commonName == "Grey reef shark"
+        }
+        XCTAssertEqual(owners.map(\.scientificName), ["Carcharhinus amblyrhynchos"])
+    }
+
+    func testAddedSpeciesAreDraftsAndStayOutOfReleaseUntilReviewed() async throws {
+        let development = try await global(.experimentalDevelopment)
+        let additions = development.profiles.filter { added[$0.commonName] == $0.scientificName }
+        XCTAssertEqual(additions.count, added.count)
+        for profile in additions where profile.review?.status != .verified {
+            XCTAssertEqual(profile.review?.status, .draft, profile.commonName)
+        }
+        let releaseIDs = Set(try await global(.publication).profiles.map(\.id))
+        for profile in additions {
+            XCTAssertEqual(releaseIDs.contains(profile.id), profile.review?.status == .verified, profile.commonName)
+        }
+    }
+}
+
 private struct SinglePackRepository: MarineSpeciesCatalogRepository {
     let pack: OfflineIdentificationPack
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [pack.metadata] }

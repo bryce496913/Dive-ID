@@ -2,7 +2,8 @@
   "status": "ready",
   "inputs": {
     "existingAppRecords": 1008,
-    "candidates": 4000
+    "candidates": 4000,
+    "ownerAdditions": 4
   },
   "taxonAuthority": "FishBase/SeaLifeBase v26.06 (NameResolution.csv); counts as confirmed (owner decision 2026-10-21)",
   "confirmedCandidates": 3993,
@@ -44,10 +45,11 @@
   "wormsTaxonomyStatus": {
     "pending": 4000
   },
-  "acceptedTaxa": 4798,
+  "acceptedTaxa": 4802,
   "unresolvedInputs": {
     "existing": 33,
-    "candidates": 7
+    "candidates": 7,
+    "ownerAdditions": 0
   },
   "retiredUUIDs": 170,
   "collisions": 168,

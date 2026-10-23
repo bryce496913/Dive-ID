@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "batchID": "batch-21",
+  "generation": 1,
+  "pack": "global",
+  "packVersion": 23,
+  "seed": 5609686461008101448,
+  "sampleSize": 1,
+  "sampling": "random.Random(seed).sample(sorted unflagged speciesIDs, min(30, count)) in CPython 3",
+  "flaggedDefinition": "a risk flag in Data/GlobalMarine/FishBase/RiskReport.json, or, for a record absent from it, from catalogue_validation.risk_flags",
+  "counts": {
+    "flagged": 3,
+    "sampled": 1,
+    "unread": 0
+  },
+  "records": [
+    {
+      "speciesID": "2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf",
+      "commonName": "Reef manta ray",
+      "scientificName": "Mobula alfredi",
+      "reviewedContentFingerprint": "sha256:ce74ecb8334741555f5ba64d6218e9f20869638df3fad5dfa4c2313ceaaa6c40",
+      "selection": "sampled",
+      "riskScore": 0,
+      "flags": []
+    },
+    {
+      "speciesID": "2f9b6a7f-1d44-58f4-adf6-d458cdf3966a",
+      "commonName": "Whitetip reef shark",
+      "scientificName": "Triaenodon obesus",
+      "reviewedContentFingerprint": "sha256:5feb17ceb44dcece70186a48b2f6e4792ab2c737ab83b231eccb23a45e419e15",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors/markings"
+      ]
+    },
+    {
+      "speciesID": "6a1df41f-c607-5cb9-a483-a59e7ed13c4c",
+      "commonName": "Zebra shark",
+      "scientificName": "Stegostoma tigrinum",
+      "reviewedContentFingerprint": "sha256:d4b249defab8a48484ab1f45555c697b09a3fa3b6edb726dbda54500365d68c7",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors/markings"
+      ]
+    },
+    {
+      "speciesID": "f23a6ebe-e2bf-5156-af7f-87caefe2ce0c",
+      "commonName": "Grey reef shark",
+      "scientificName": "Carcharhinus amblyrhynchos",
+      "reviewedContentFingerprint": "sha256:8bad09e0313ba046122a4529c342d12acfd61e6e2df8b19b23e7545f2870f0b7",
+      "selection": "flagged",
+      "riskScore": 10,
+      "flags": [
+        "trait_ambiguous:colors"
+      ]
+    }
+  ],
+  "manifestSHA256": "b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890"
+}
