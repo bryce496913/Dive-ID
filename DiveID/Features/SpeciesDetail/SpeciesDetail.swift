@@ -2,51 +2,52 @@ import SwiftUI
 
 struct SpeciesDetailView: View {
     @State var viewModel: SpeciesDetailViewModel
+    @State private var showsAppearance = true
+    @State private var showsHabitat = false
+    @State private var showsTaxonomy = false
+    @ScaledMetric(relativeTo: .largeTitle) private var artworkHeight: CGFloat = 220
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
-                SpeciesArtwork(species: viewModel.species).frame(height: 250)
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
-                    Text(viewModel.species.commonName).font(.largeTitle.bold())
-                    Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextSecondary)
-                    if let match = viewModel.match {
-                        Text(match.matchStrength.displayName).font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                        if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
-                    }
-                }
+                SpeciesArtwork(species: viewModel.species).frame(height: artworkHeight)
+                header
                 PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved Identifications" : "Save Identification") {
                     Task { await viewModel.toggleSaved() }
                 }
                 .accessibilityIdentifier("toggleSaved")
                 .disabled(viewModel.isUpdatingSavedState)
+                .sensoryFeedback(.success, trigger: viewModel.isSaved) { _, isSaved in isSaved }
                 if let error = viewModel.errorMessage {
-                    Text(error).foregroundStyle(Color.appError)
-                    Button(AppCopy.tryAgain) { Task { await viewModel.retry() } }
-                        .disabled(viewModel.isUpdatingSavedState)
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
+                        Label(error, systemImage: "exclamationmark.triangle.fill").foregroundStyle(Color.appError)
+                        Button(AppCopy.tryAgain) { Task { await viewModel.retry() } }
+                            .disabled(viewModel.isUpdatingSavedState)
+                    }
                 }
-                DetailSection(title: "Identification summary", text: viewModel.species.summary)
-                DetailSection(title: "Visual characteristics", text: viewModel.species.visualCharacteristics.joined(separator: " • "))
-                DetailSection(title: "Typical habitat", text: viewModel.species.habitat)
-                DetailSection(title: "General geographic range", text: viewModel.species.geographicRange)
-                if let taxonomy = viewModel.species.taxonomy { DetailSection(title: "Taxonomy", text: Self.taxonomyText(taxonomy)) }
-                if let measurements = viewModel.species.measurements { DetailSection(title: "Size / measurements", text: Self.measurementsText(measurements)) }
-                if let tailShape = viewModel.species.tailShape, !tailShape.isEmpty { DetailSection(title: "Tail shape", text: tailShape) }
-                if !viewModel.species.mouthAndHeadShape.isEmpty { DetailSection(title: "Head and mouth clues", text: viewModel.species.mouthAndHeadShape.joined(separator: " • ")) }
-                if !viewModel.species.finAndSpineClues.isEmpty { DetailSection(title: "Fin and spine clues", text: viewModel.species.finAndSpineClues.joined(separator: " • ")) }
-                if let occurrence = viewModel.species.regionalOccurrence { DetailSection(title: "Regional occurrence", text: occurrence.capitalized) }
-                if !viewModel.species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: viewModel.species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
-                if !viewModel.species.similarSpecies.isEmpty { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
-                if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
-                if !viewModel.species.dataSources.isEmpty { SourceSection(sources: viewModel.species.dataSources) }
-                if let pack = viewModel.species.packContext { DetailSection(title: "Dive region", text: pack.displayName) }
-                if let review = viewModel.species.review {
-                    DetailSection(title: "Record review status", text: AppCopy.recordReviewStatus(review))
+                // What a diver needs to judge the match comes first: why it matched, what is
+                // missing, and how to tell it apart from look-alikes.
+                matchEvidence
+                if !viewModel.species.similarSpecies.isEmpty {
+                    DetailCard { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
                 }
-                if let match = viewModel.match, !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
-                if let match = viewModel.match, !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
-                if let match = viewModel.match, !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
-                DetailSection(title: "Accuracy", text: AppCopy.accuracyDisclaimer)
+                DetailCard { DetailSection(title: "Identification summary", text: viewModel.species.summary) }
+                appearance
+                habitat
+                if let taxonomy = viewModel.species.taxonomy {
+                    DetailGroup(title: "Taxonomy", isExpanded: $showsTaxonomy) {
+                        DetailSection(title: "Classification", text: Self.taxonomyText(taxonomy))
+                    }
+                }
+                // Source attribution stays expanded: the source licence asks for it on each record.
+                DetailCard {
+                    if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
+                    if !viewModel.species.dataSources.isEmpty { SourceSection(sources: viewModel.species.dataSources) }
+                    if let review = viewModel.species.review {
+                        DetailSection(title: "Record review status", text: AppCopy.recordReviewStatus(review))
+                    }
+                    DetailSection(title: "Accuracy", text: AppCopy.accuracyDisclaimer)
+                }
             }
             .padding()
         }
@@ -54,6 +55,50 @@ struct SpeciesDetailView: View {
         .navigationTitle(viewModel.species.commonName)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+            Text(viewModel.species.commonName).font(.largeTitle.bold())
+            Text(viewModel.species.scientificName).font(.title3).italic().foregroundStyle(Color.appTextSecondary)
+            if let match = viewModel.match {
+                MatchStrengthBadge(strength: match.matchStrength).padding(.top, AppTheme.Spacing.xxs)
+                if match.taxonomicResolution != .species { Text("Taxonomic level: \(match.taxonomicResolution.rawValue.capitalized)").font(.caption).foregroundStyle(Color.appTextSecondary) }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var matchEvidence: some View {
+        if let match = viewModel.match, !match.explanation.isEmpty || !match.cautions.isEmpty || !match.observationDescription.isEmpty {
+            DetailCard {
+                if !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
+                if !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
+                if !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
+            }
+        }
+    }
+
+    private var appearance: some View {
+        let species = viewModel.species
+        return DetailGroup(title: "Appearance", isExpanded: $showsAppearance) {
+            DetailSection(title: "Visual characteristics", text: species.visualCharacteristics.joined(separator: " • "))
+            if let measurements = species.measurements { DetailSection(title: "Size / measurements", text: Self.measurementsText(measurements)) }
+            if let tailShape = species.tailShape, !tailShape.isEmpty { DetailSection(title: "Tail shape", text: tailShape) }
+            if !species.mouthAndHeadShape.isEmpty { DetailSection(title: "Head and mouth clues", text: species.mouthAndHeadShape.joined(separator: " • ")) }
+            if !species.finAndSpineClues.isEmpty { DetailSection(title: "Fin and spine clues", text: species.finAndSpineClues.joined(separator: " • ")) }
+            if !species.appearanceVariants.isEmpty { DetailSection(title: "Life-stage differences", text: species.appearanceVariants.map { $0.description }.joined(separator: " • ")) }
+        }
+    }
+
+    private var habitat: some View {
+        let species = viewModel.species
+        return DetailGroup(title: "Habitat and range", isExpanded: $showsHabitat) {
+            DetailSection(title: "Typical habitat", text: species.habitat)
+            DetailSection(title: "General geographic range", text: species.geographicRange)
+            if let occurrence = species.regionalOccurrence { DetailSection(title: "Regional occurrence", text: occurrence.capitalized) }
+            if let pack = species.packContext { DetailSection(title: "Dive region", text: pack.displayName) }
+        }
     }
 
     static func taxonomyText(_ taxonomy: SpeciesTaxonomy) -> String {
@@ -69,6 +114,37 @@ struct SpeciesDetailView: View {
         if let maximum = measurements.maximumRecordedCentimeters { parts.append("Maximum recorded: \(maximum.formatted()) cm") }
         parts.append(measurements.type.rawValue.replacingOccurrences(of: "Length", with: " length").replacingOccurrences(of: "Width", with: " width").capitalized)
         return parts.joined(separator: " • ")
+    }
+}
+
+/// A surface card holding one or more detail sections.
+private struct DetailCard<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.l) { content }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+    }
+}
+
+/// A collapsible card for reference detail that most sightings do not need at a glance.
+private struct DetailGroup<Content: View>: View {
+    let title: String
+    @Binding var isExpanded: Bool
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        DisclosureGroup(isExpanded: $isExpanded) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) { content }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, AppTheme.Spacing.m)
+        } label: {
+            Text(title).font(.title3.bold()).foregroundStyle(Color.appTextPrimary)
+        }
+        .padding()
+        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
     }
 }
 
