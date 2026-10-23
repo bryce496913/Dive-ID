@@ -1,0 +1,154 @@
+name: Semantic search (Core ML)
+
+# Builds the pinned MiniLM encoder into Core ML for the Global pack and proves the
+# experimental semantic path really runs. The model is never committed: it is rebuilt
+# here and kept as a workflow artifact for private Debug builds. BM25 stays the default.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'Tools/SemanticSearch/**'
+      - 'DiveID/Core/Services/*Semantic*.swift'
+      - 'DiveID/Core/Services/DescriptionSearchEngine.swift'
+      - 'DiveID/Core/Services/SpeciesCandidateRetriever.swift'
+      - 'DiveID/Core/Services/LocalSpeciesRanker.swift'
+      - 'DiveID/Core/Models/SpeciesSearchDocument.swift'
+      - 'DiveID/Resources/IdentificationPacks/Global/**'
+      - 'DiveIDTests/SemanticEndToEndTests.swift'
+      - '.github/workflows/semantic-search.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provision-and-verify:
+    name: Provision encoder and verify semantic search
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      RESOURCES: ${{ github.workspace }}/.semantic-resources
+      DERIVED_DATA: ${{ github.workspace }}/.derived-data
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: Tools/SemanticSearch/requirements-real-encoder.txt
+
+      - name: Install pinned encoder tooling
+        run: python3 -m pip install -r Tools/SemanticSearch/requirements-real-encoder.txt
+
+      - name: Provision, convert, compile and package the Global encoder
+        id: provision
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 Tools/SemanticSearch/provision_real_encoder.py \
+            --pack DiveID/Resources/IdentificationPacks/Global \
+            --package-resources "$RESOURCES" 2>&1 | tee "$RUNNER_TEMP/provision.log"
+          ls -la "$RESOURCES"
+          {
+            echo '### Packaged semantic resources'
+            echo '```'
+            du -sh "$RESOURCES"/* "$RESOURCES"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify provisioning evidence against the packaged resources
+        run: |
+          python3 Tools/SemanticSearch/validate_production_readiness.py \
+            Tools/SemanticSearch/production-readiness.v1.json \
+            --provisioning-evidence "$RESOURCES/provisioning-evidence.json" \
+            --packaged-resources "$RESOURCES"
+
+      - name: SwiftPM end-to-end semantic search on Global
+        id: swiftpm
+        if: ${{ always() && steps.provision.outcome == 'success' }}
+        shell: bash
+        env:
+          DIVEID_SEMANTIC_RESOURCES: ${{ github.workspace }}/.semantic-resources
+          DIVEID_SEMANTIC_REPORT: ${{ runner.temp }}/semantic-v05-global.json
+        run: |
+          set -o pipefail
+          swift test --filter SemanticEndToEndTests 2>&1 | tee "$RUNNER_TEMP/swiftpm-semantic.log"
+          # A skipped test is not evidence: require the report it writes after running.
+          test -s "$DIVEID_SEMANTIC_REPORT"
+          python3 - "$DIVEID_SEMANTIC_REPORT" >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, sys
+          report = json.load(open(sys.argv[1]))
+          rows = report["rows"]
+          embedding = sorted(row["embeddingMilliseconds"] for row in rows)
+          print("### Merged semantic + BM25 on Global (V05 development descriptions)")
+          print(f"- Cases: {report['cases']} on {report['speciesCount']} species ({report['pack']})")
+          print(f"- Top result changed vs BM25: {report['top1Changed']}")
+          print(f"- Cases showing a species BM25 did not retrieve: {report['casesWithSemanticOnlyResults']}")
+          print(f"- No-match cases that gained results: {report['noMatchCasesThatGainedResults']}")
+          print(f"- Query embedding ms (macOS runner, median): {embedding[len(embedding) // 2]:.1f}")
+          print(f"- First load ms: {rows[0]['loadMilliseconds']:.0f}")
+          PY
+
+      - name: Bundle resources into the app and run the hosted semantic test
+        id: hosted
+        if: ${{ always() && steps.provision.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p DiveID/Resources/SemanticSearch
+          cp -R "$RESOURCES"/. DiveID/Resources/SemanticSearch/
+          udid="$(xcrun simctl list devices available --json | python3 -c '
+          import json, re, sys
+          found = []
+          for runtime, entries in json.load(sys.stdin)["devices"].items():
+              match = re.search(r"iOS[- ](\d+)[-.](\d+)", runtime)
+              if match and int(match.group(1)) == 18:
+                  found += [(tuple(map(int, match.groups())), d["udid"]) for d in entries
+                            if d.get("isAvailable") and d.get("name", "").startswith("iPhone")]
+          print(sorted(found, reverse=True)[0][1])
+          ')"
+          xcodebuild -project DiveID.xcodeproj -scheme DiveID -destination "platform=iOS Simulator,id=$udid" \
+            -derivedDataPath "$DERIVED_DATA" CODE_SIGNING_ALLOWED=NO build-for-testing 2>&1 | tee "$RUNNER_TEMP/hosted-build.log"
+          app="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/DiveID.app"
+          test -d "$app/Semantic-global.mlmodelc"
+          test -f "$app/Semantic-global.index.json"
+          python3 Tools/SemanticSearch/validate_production_readiness.py \
+            Tools/SemanticSearch/production-readiness.v1.json \
+            --provisioning-evidence "$app/provisioning-evidence.json" --packaged-resources "$app"
+          export TEST_RUNNER_DIVEID_REQUIRE_SEMANTIC=1
+          xcodebuild -project DiveID.xcodeproj -scheme DiveID -destination "platform=iOS Simulator,id=$udid" \
+            -derivedDataPath "$DERIVED_DATA" -resultBundlePath "$RUNNER_TEMP/SemanticHosted.xcresult" \
+            CODE_SIGNING_ALLOWED=NO -parallel-testing-enabled NO test-without-building \
+            -only-testing:DiveIDTests/SemanticEndToEndTests/testBundledArtifactsServeTheExperimentalSelection \
+            2>&1 | tee "$RUNNER_TEMP/hosted-test.log"
+
+      - name: Summarize
+        if: ${{ always() }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          | Stage | Outcome |
+          | --- | --- |
+          | Provision and package | ${{ steps.provision.outcome }} |
+          | SwiftPM end-to-end | ${{ steps.swiftpm.outcome }} |
+          | Hosted app bundle | ${{ steps.hosted.outcome }} |
+
+          Production default remains BM25; the readiness ledger stays unapproved.
+          SUMMARY
+
+      - name: Upload packaged resources (for private Debug builds) and evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-global-resources
+          path: |
+            .semantic-resources
+            ${{ runner.temp }}/*.log
+            ${{ runner.temp }}/semantic-v05-global.json
+            ${{ runner.temp }}/SemanticHosted.xcresult
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14

@@ -214,7 +214,9 @@ def main():
             else:
                 mask = encoded["attention_mask"].unsqueeze(-1)
                 pooled = (hidden * mask).sum(1) / mask.sum(1).clamp(min=1)
-            vector = torch.nn.functional.normalize(pooled, p=2, dim=1)[0].tolist()
+            normalized = torch.nn.functional.normalize(pooled, p=2, dim=1)[0].float().numpy()
+            # Swift decodes Float32; the shortest Float32 text is exact and about half the size.
+            vector = [float(str(value)) for value in normalized]
             if len(vector) != contract["embeddingDimension"]:
                 raise SystemExit("encoder dimension does not match contract")
             vectors.append(vector)

@@ -457,4 +457,53 @@ final class SemanticSearchTests: XCTestCase {
                                Optional(metric.packIdentity), metric.fallbackReason.map(\.description)].compactMap { $0 }
         XCTAssertFalse(recordedStrings.contains(rawQuery))
     }
+
+    private struct FixedRetriever: SpeciesCandidateRetrieving {
+        let candidates: [RetrievedSpeciesCandidate]
+        func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] {
+            Array(candidates.prefix(limit))
+        }
+    }
+
+    func testSemanticComplementAddsMissedSpeciesAndKeepsLexicalSignals() async throws {
+        let pack = try await pack()
+        let description = "Spotted Eagle Ray"
+        let lexical = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
+        let lexicalIDs = Set(lexical.retrievedSpeciesIDs)
+        let missed = try XCTUnwrap(pack.profiles.first { !lexicalIDs.contains($0.id) })
+        let found = try XCTUnwrap(lexical.retrievedSpeciesIDs.first)
+        // The semantic complement repeats a BM25 hit and adds one species BM25 missed.
+        let complement = FixedRetriever(candidates: [
+            RetrievedSpeciesCandidate(speciesID: found, retrievalScore: 0.99, evidence: .semantic, matchedTerms: []),
+            RetrievedSpeciesCandidate(speciesID: missed.id, retrievalScore: 0.2, evidence: .semantic, matchedTerms: []),
+        ])
+        let merged = try await HybridDescriptionSearchEngine(semanticComplement: complement).search(description: description, pack: pack)
+        XCTAssertEqual(merged.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs + [missed.id])
+        XCTAssertEqual(merged.retrievalLimit, lexical.retrievalLimit * 2)
+        let lexicalScores = Dictionary(uniqueKeysWithValues: lexical.candidates.map { ($0.profile.id, $0.rawScore) })
+        for candidate in merged.candidates where lexicalScores[candidate.profile.id] != nil {
+            XCTAssertEqual(candidate.rawScore, lexicalScores[candidate.profile.id])
+        }
+        XCTAssertEqual(merged.candidates.first?.profile.commonName, "Spotted Eagle Ray")
+    }
+
+    func testFailedSemanticComplementLeavesTheBM25ResultUnchanged() async throws {
+        let pack = try await pack()
+        let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
+        let provider = FakeProvider()
+        let stale = try await index(documents: documents, pack: pack.metadata, provider: provider, modelVersion: "stale")
+        let diagnostics = SemanticDiagnosticsStore()
+        let semantic = ExperimentalSemanticRetriever(pack: pack.metadata, locations: try artifactLocations(),
+            runtime: SemanticRetrievalRuntime(provider: provider, index: stale), fallback: NoCandidateRetriever(), diagnostics: diagnostics)
+        for description in ["Spotted Eagle Ray", "small yellow fish with a black spot near the tail on the reef"] {
+            let lexical = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
+            let merged = try await HybridDescriptionSearchEngine(semanticComplement: semantic).search(description: description, pack: pack)
+            XCTAssertEqual(merged.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs)
+            XCTAssertEqual(merged.candidates.map(\.profile.id), lexical.candidates.map(\.profile.id))
+            XCTAssertEqual(merged.candidates.map(\.score), lexical.candidates.map(\.score))
+        }
+        let metric = await diagnostics.latest
+        XCTAssertEqual(metric?.actualEngine, .productionBM25)
+        XCTAssertEqual(metric?.fallbackReason, .incompatibleIndex(.modelVersionMismatch))
+    }
 }

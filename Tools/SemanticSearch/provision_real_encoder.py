@@ -77,6 +77,12 @@ def run(command):
     subprocess.run([str(value) for value in command], cwd=ROOT, check=True)
 
 
+def pack_identity(pack_directory):
+    """Return the pack ID and the ``Semantic-<pack>`` stem the app looks up for it."""
+    manifest = json.loads((Path(pack_directory) / "PackManifest.json").read_text(encoding="utf-8"))
+    return manifest["id"], f"Semantic-{manifest['id']}"
+
+
 def contract_for(lock, vocabulary_name):
     revision = lock["sourceRevision"]
     return {
@@ -208,6 +214,8 @@ def package_resources(package, resources, stem, copy_files, evidence_builder,
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=TOOLS / "generated" / "real-encoder")
+    parser.add_argument("--pack", type=Path, default=ROOT / "DiveID/Resources/IdentificationPacks/Caribbean",
+                        help="identification pack to index; the app looks up Semantic-<pack id>.*")
     parser.add_argument("--skip-conversion", action="store_true")
     parser.add_argument("--package-resources", type=Path,
                         help="copy app-ready artifacts here; requires macOS coremlcompiler")
@@ -232,7 +240,7 @@ def main():
 
     vocabulary = {token.rstrip("\n"): offset for offset, token in enumerate(
         (model_dir / "vocab.txt").read_text(encoding="utf-8").splitlines())}
-    stem = lock["artifactStem"]
+    pack_id, stem = pack_identity(args.pack)
     vocabulary_path = output / f"{stem}.vocab.json"
     vocabulary_path.write_text(canonical_json(vocabulary) + "\n")
     contract = contract_for(lock, vocabulary_path.name)
@@ -246,9 +254,9 @@ def main():
     hf.truncation_side = "right"
     assert_tokenizer_parity(hf, ReferenceWordPieceTokenizer(vocabulary, contract))
 
-    corpus = output / "caribbean-search-corpus.jsonl"
+    corpus = output / f"{pack_id}-search-corpus.jsonl"
     index = output / f"{stem}.index.json"
-    run([sys.executable, TOOLS / "export_search_corpus.py", "--output", corpus])
+    run([sys.executable, TOOLS / "export_search_corpus.py", "--pack", args.pack.resolve(), "--output", corpus])
     run([sys.executable, TOOLS / "build_embedding_index.py", "--corpus", corpus,
          "--contract", contract_path, "--model", model_dir, "--output", index])
 

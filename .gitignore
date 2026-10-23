@@ -8,6 +8,9 @@ xcuserdata/
 
 # Reproducible semantic-search development artifacts
 Tools/SemanticSearch/generated/
+# Provisioned encoder copied into a private Debug build (never committed)
+DiveID/Resources/SemanticSearch/
+.semantic-resources/
 
 # Python developer-tool caches
 __pycache__/
