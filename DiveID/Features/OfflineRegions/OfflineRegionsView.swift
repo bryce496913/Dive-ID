@@ -56,12 +56,16 @@ struct OfflineRegionsView: View {
                     RegionRow(pack: pack, isSelected: viewModel.selected == pack.id)
                 }
                 .accessibilityIdentifier("region_\(pack.id.rawValue)")
+                .accessibilityAddTraits(viewModel.selected == pack.id ? .isSelected : [])
                 .listRowBackground(Color.appSurface)
             }
-            Text("Development builds can expose explicitly selected experimental catalogues. Release catalogues list only records backed by human-review evidence and never substitute another region.")
-                .font(.footnote)
-                .foregroundStyle(Color.appTextSecondary)
-                .listRowBackground(Color.appSurface)
+            Section {
+                EmptyView()
+            } footer: {
+                Text("Development builds can expose explicitly selected experimental catalogues. Release catalogues list only records backed by human-review evidence and never substitute another region.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.appTextSecondary)
+            }
         }
         .appScreenBackground()
         .navigationTitle("Dive Region")
@@ -78,14 +82,20 @@ private struct RegionRow: View {
             HStack {
                 Text(pack.displayName).font(.headline)
                 Spacer()
-                if isSelected { Label("Selected", systemImage: "checkmark.circle.fill") }
+                if isSelected {
+                    Label("Selected", systemImage: "checkmark.circle.fill")
+                        .labelStyle(.titleAndIcon)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color.appAccent)
+                }
             }
             Text("\(pack.speciesCount) species available offline")
             Label(pack.publicationStatusText, systemImage: pack.isExperimental ? "exclamationmark.triangle.fill" : "checkmark.seal.fill")
                 .foregroundStyle(pack.isExperimental ? Color.appWarning : Color.appTextPrimary)
-            Text("Catalogue version \(pack.packVersion)")
+            Text("Catalogue version \(pack.packVersion)").font(.footnote).foregroundStyle(Color.appTextSecondary)
             Text(pack.geographicScope).font(.caption).foregroundStyle(Color.appTextSecondary)
         }
         .foregroundStyle(Color.appTextPrimary)
+        .padding(.vertical, AppTheme.Spacing.xxs)
     }
 }
