@@ -19,24 +19,43 @@ final class InternalInstrumentationTests: XCTestCase {
 
     func testReleaseBinariesContainNoInstrumentation() throws {
 #if SWIFT_PACKAGE
-#if os(Linux)
-        let binary = URL(fileURLWithPath: "/proc/self/exe")
-#else
-        let binary = try XCTUnwrap(Bundle(for: InternalInstrumentationTests.self).executableURL)
-#endif
-        let data = try Data(contentsOf: binary)
-        XCTAssertGreaterThan(data.count, 0)
-        let found = Self.markers.filter { data.range(of: Data($0.utf8)) != nil }
+        let binaries = try Self.loadedTestBinaries()
+        XCTAssertFalse(binaries.isEmpty)
+        var found = Set<String>()
+        for binary in binaries {
+            let data = try Data(contentsOf: binary)
+            found.formUnion(Self.markers.filter { data.range(of: Data($0.utf8)) != nil })
+        }
+        let foundInOrder = Self.markers.filter(found.contains)
 #if DEBUG || DIVEID_INTERNAL
-        XCTAssertEqual(found, Self.markers, "the check finds the instrumentation where it is compiled in")
+        XCTAssertEqual(foundInOrder, Self.markers, "the check finds the instrumentation where it is compiled in; scanned \(binaries.map(\.path))")
 #else
-        XCTAssertEqual(found, [], "Release must not contain instrumentation")
+        XCTAssertEqual(foundInOrder, [], "Release must not contain instrumentation; scanned \(binaries.map(\.path))")
         XCTAssertEqual(BuildChannel.current, .release)
 #endif
 #else
         throw XCTSkip("Xcode app binaries are checked by Tools/CI/check_internal_instrumentation.py")
 #endif
     }
+
+#if SWIFT_PACKAGE
+    /// The files the app module can be linked into: on Linux every non-system file mapped
+    /// into this process (the test executable and any libraries SwiftPM built beside it),
+    /// on Darwin the test bundle's binary.
+    private static func loadedTestBinaries() throws -> [URL] {
+#if os(Linux)
+        let maps = try String(contentsOfFile: "/proc/self/maps", encoding: .utf8)
+        let paths = Set(maps.split(separator: "\n").compactMap { line -> String? in
+            guard let slash = line.firstIndex(of: "/") else { return nil }
+            let path = String(line[slash...])
+            return ["/usr/", "/lib", "/etc/", "/proc/", "/dev/"].contains { path.hasPrefix($0) } ? nil : path
+        })
+        return paths.sorted().map(URL.init(fileURLWithPath:)).filter { FileManager.default.isReadableFile(atPath: $0.path) }
+#else
+        return [try XCTUnwrap(Bundle(for: InternalInstrumentationTests.self).executableURL)]
+#endif
+    }
+#endif
 
 #if DEBUG || DIVEID_INTERNAL
     private var directory: URL!
