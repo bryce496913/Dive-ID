@@ -35,16 +35,14 @@ final class GlobalDraftCatalogueTests: XCTestCase {
         let complete = profiles.filter { !incomplete.contains($0.id.uuidString.lowercased()) }
         XCTAssertEqual(profiles.count - complete.count, incomplete.count, "only flagged records are set aside")
         XCTAssertLessThan(incomplete.count, 10)
+        // The drafts carry the 8 Caribbean species themselves (built from FishBase, last in
+        // the build order), so they validate as one catalogue without the regional pack.
         let caribbean = try decode(repository.appendingPathComponent("DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json"))
-        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(complete + caribbean.map(withoutBundledImage)))
+        XCTAssertTrue(Set(caribbean.map(\.id)).isSubset(of: Set(complete.map(\.id))), "every Caribbean species is in Global")
+        XCTAssertEqual(Array(complete.suffix(caribbean.count)).map(\.id).sorted { $0.uuidString < $1.uuidString },
+                       caribbean.map(\.id).sorted { $0.uuidString < $1.uuidString }, "Caribbean records come last")
+        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(complete))
         XCTAssertTrue(profiles.allSatisfy { $0.review?.status == .draft && $0.bundledImage == nil })
         XCTAssertTrue(profiles.allSatisfy { $0.dataSources.first?.sourceLicense == "CC BY-NC 4.0" && !($0.dataSources.first?.reviewedFields.isEmpty ?? true) })
-    }
-
-    /// Image files live in the app bundle, which SwiftPM tests don't load; images aren't under test here.
-    private func withoutBundledImage(_ profile: LocalSpeciesProfile) -> LocalSpeciesProfile {
-        var copy = profile
-        copy.bundledImage = nil
-        return copy
     }
 }

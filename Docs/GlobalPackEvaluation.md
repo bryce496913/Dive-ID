@@ -433,6 +433,41 @@ differences:
   relationships in BM25 terms.
 - **Global:** includes the builder v4 content.
 
+## Caribbean species in Global (2026-10-23)
+
+Global is rebuilt from the pinned FishBase/SeaLifeBase release v26.06. All 34 tables
+matched their pinned size and MD5. The 8 Caribbean species are now Global records too,
+built from FishBase and placed last in the build order, so existing review batches keep
+their membership. Global holds 4,794 records.
+
+**The regional packs keep their v3 field-guide text** (owner decision, 2026-10-23).
+Rebuilding them from FishBase was tried first and rejected:
+- **Tropical Pacific** broke three case rank limits: v05-09 diagnostic and paraphrase
+  (Bird wrasse) and v05-10 paraphrase (Black triggerfish). FishBase has no colours for
+  *Gomphosus varius*, and no "pale blue band at the fin bases" for *Melichthys niger*.
+- **Release** would have exposed no record: the rebuilt Atlantic Blue Tang and Queen
+  Angelfish no longer matched their approved content.
+
+Caribbean and Tropical Pacific therefore share UUIDs with Global but not text, as
+Tropical Pacific already did.
+
+**Regional search is unchanged.** Every `run_v05.py` gate and case is identical before
+and after, development and Release. In `SearchGolden.v2.json`, all 411 regional query
+results are byte-identical; only the 137 `global` results were regenerated.
+
+**The opt-in Global gate now fails.** The 16 Caribbean identification cases are no
+longer blocked by coverage, so it evaluates 34 positive cases instead of 18:
+
+| Global variant (4,794 records) | Recall | top1 | top3 | top10 | Confidence |
+| --- | --- | --- | --- | --- | --- |
+| As written: the 8 Caribbean species with FishBase text | **23/34** | **12/34** | **15/34** | **21/34** | 46/46 |
+| The same 8 species with their regional v3 text (in memory) | 33/34 | 18/34 | 24/34 | 30/34 | 46/46 |
+| Tropical Pacific records only (diagnostic) | 17/18 | 11/18 | 15/18 | 16/18 | 29/29 |
+
+The Tropical Pacific results are unchanged. The failure comes from the Caribbean
+records' FishBase text, which loses the field-guide clues these cases describe. It needs
+the same decision as the Tropical Pacific text (see Options).
+
 ## Performance (host measurements, Release)
 
 | Pack | Records | Load (median) | Document build | BM25 retrieval (median) | Query median | Query p95 | First query | RSS after queries (peak) |

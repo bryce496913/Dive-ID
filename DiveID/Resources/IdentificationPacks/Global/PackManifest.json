@@ -3,15 +3,15 @@
   "schemaVersion": 1,
   "packVersion": 3,
   "displayName": "Global (Experimental)",
-  "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase; 0 of 4786 records approved for publication",
+  "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase; 0 of 4794 records approved for publication",
   "geographicScope": "Worldwide marine and brackish species. Location in a description ranks results; it never excludes a species.",
   "regionAliases": [],
-  "speciesCount": 4786,
+  "speciesCount": 4794,
   "speciesResourceName": "Creatures",
   "imageSubdirectory": "Images",
   "includedWithApp": true,
   "lastDataReviewDate": null,
-  "includedRecordCount": 4786,
+  "includedRecordCount": 4794,
   "humanReviewedRecordCount": 0,
   "publicationEligibleRecordCount": 0
 }
