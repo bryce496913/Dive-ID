@@ -67,83 +67,68 @@ struct DescriptionSearchView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
-                ClueGuide()
-                if let pack = viewModel.pack {
-                    regionLayout {
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
+                    ClueGuide()
+                    if let pack = viewModel.pack {
+                        regionLayout {
+                            if !dynamicTypeSize.isAccessibilitySize {
+                                Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+                            }
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                                Text("Dive region: \(pack.displayName)").font(.headline)
+                                Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                            }
+                            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
+                            Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                         }
-                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                            Text("Dive region: \(pack.displayName)").font(.headline)
-                            Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                        }
-                        if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
-                        Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .appCard()
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                    else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
+                    ZStack(alignment: .topLeading) {
+                        if viewModel.descriptionText.isEmpty {
+                            Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
+                                .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
+                        }
+                        TextEditor(text: $viewModel.descriptionText)
+                            .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
+                            .focused($isEditorFocused)
+                            .accessibilityIdentifier("descriptionText")
+                    }
                     .appCard()
-                }
-                else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
-                ZStack(alignment: .topLeading) {
-                    if viewModel.descriptionText.isEmpty {
-                        Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
-                            .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
+                    // The editor's edge lights up with the brand gradient while typing.
+                    .overlay {
+                        RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
+                            .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
+                            .opacity(isEditorFocused ? 1 : 0)
+                            .animation(.easeOut(duration: 0.2), value: isEditorFocused)
+                            .allowsHitTesting(false)
                     }
-                    TextEditor(text: $viewModel.descriptionText)
-                        .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
-                        .focused($isEditorFocused)
-                        .accessibilityIdentifier("descriptionText")
-                }
-                .appCard()
-                // The editor's edge lights up with the brand gradient while typing.
-                .overlay {
-                    RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
-                        .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
-                        .opacity(isEditorFocused ? 1 : 0)
-                        .animation(.easeOut(duration: 0.2), value: isEditorFocused)
-                        .allowsHitTesting(false)
-                }
-                DescriptionLengthHint(count: viewModel.normalizedDescription.count)
-                Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
-                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                    DescriptionLengthHint(count: viewModel.normalizedDescription.count)
+                    if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
+                    findMatchesButton.id(Self.findMatchesAnchor)
+                    Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
+                        .font(.footnote).foregroundStyle(Color.appTextSecondary)
 #if DEBUG || DIVEID_INTERNAL
-                // In the scrolling content, so it never moves or covers the pinned search controls.
-                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
+                    // Below the search controls, so it never moves or covers them.
+                    if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
 #endif
+                }
+                .padding()
             }
-            .padding()
-        }
-        .scrollDismissesKeyboard(.interactively)
-        // Pinned outside the scroll view so the keyboard can never cover it: it sits directly
-        // above the keyboard when open, and above any app-wide bottom inset when closed.
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
-                if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
-                PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
-                    // One tap both dismisses the keyboard and submits.
-                    isEditorFocused = false
-                    Task {
-#if DEBUG || DIVEID_INTERNAL
-                        if let pack = viewModel.pack { viewModel.diagnostics.querySubmitted(packID: pack.id) }
-#endif
-                        await router.waitForSessionUpdates()
-                        if let sessionID = await viewModel.submit() {
-                            router.navigate(to: .identificationResults(sessionID: sessionID))
-                        } else {
-#if DEBUG || DIVEID_INTERNAL
-                            viewModel.diagnostics.queryFinished(.failed)
-#endif
-                        }
-                    }
+            .scrollDismissesKeyboard(.interactively)
+            // Find Matches sits right under the editor. Once the keyboard has opened, scroll it into
+            // view so it lands just above the keyboard, where one tap dismisses the keyboard and submits.
+            .onChange(of: isEditorFocused) { _, isFocused in
+                guard isFocused else { return }
+                Task {
+                    try? await Task.sleep(for: .milliseconds(400))
+                    withAnimation { proxy.scrollTo(Self.findMatchesAnchor, anchor: .bottom) }
                 }
-                .accessibilityIdentifier("findMatches")
             }
-            .padding(.horizontal)
-            .padding(.vertical, AppTheme.Spacing.s)
-            .background(Color.appBackground.ignoresSafeArea(.container, edges: .bottom))
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -155,6 +140,29 @@ struct DescriptionSearchView: View {
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
         .task(id: router.path) { await viewModel.load() }
+    }
+
+    private static let findMatchesAnchor = "findMatchesAnchor"
+
+    private var findMatchesButton: some View {
+        PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
+            // One tap both dismisses the keyboard and submits.
+            isEditorFocused = false
+            Task {
+#if DEBUG || DIVEID_INTERNAL
+                if let pack = viewModel.pack { viewModel.diagnostics.querySubmitted(packID: pack.id) }
+#endif
+                await router.waitForSessionUpdates()
+                if let sessionID = await viewModel.submit() {
+                    router.navigate(to: .identificationResults(sessionID: sessionID))
+                } else {
+#if DEBUG || DIVEID_INTERNAL
+                    viewModel.diagnostics.queryFinished(.failed)
+#endif
+                }
+            }
+        }
+        .accessibilityIdentifier("findMatches")
     }
 }
 
