@@ -28,6 +28,12 @@ class RealEncoderProvisioningTests(unittest.TestCase):
         self.assertIsNone(contract["tokenTypeIDsFeature"])
         self.assertEqual(contract["modelVersion"], lock["sourceRevision"])
 
+    def test_artifact_stem_follows_the_pack_the_app_searches(self):
+        packs = PROVISION.ROOT / "DiveID/Resources/IdentificationPacks"
+        lock = json.loads((PROVISION.TOOLS / "real-encoder.v1.json").read_text())
+        self.assertEqual(PROVISION.pack_identity(packs / "Caribbean"), ("caribbean", lock["artifactStem"]))
+        self.assertEqual(PROVISION.pack_identity(packs / "Global"), ("global", "Semantic-global"))
+
     def test_sha256_records_exact_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "artifact"

@@ -105,8 +105,12 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
 
 /// Retrieves a bounded lexical pool, then delegates every biological score,
 /// conflict, confidence cap, and explanation decision to the structured ranker.
+///
+/// An optional semantic complement adds species the primary retriever missed. Species
+/// the primary retriever found keep their own signal, so their scores are unchanged.
 struct HybridDescriptionSearchEngine: DescriptionSearching {
     let retriever: any SpeciesCandidateRetrieving
+    let semanticComplement: (any SpeciesCandidateRetrieving)?
     let documentBuilder: any SpeciesSearchDocumentBuilding
     let parser: any ObservationParsing
     let ranker: any SpeciesRanking
@@ -120,9 +124,11 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         parser: any ObservationParsing = LocalObservationParser(),
         ranker: any SpeciesRanking = LocalSpeciesRanker(),
         candidateLimit: Int = 50,
-        indexStore: SearchIndexStore = .shared
+        indexStore: SearchIndexStore = .shared,
+        semanticComplement: (any SpeciesCandidateRetrieving)? = nil
     ) {
         self.retriever = retriever
+        self.semanticComplement = semanticComplement
         self.documentBuilder = documentBuilder
         self.parser = parser
         self.ranker = ranker
@@ -134,7 +140,7 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         try Task.checkCancellation()
         let observation = await parser.parse(description)
         try Task.checkCancellation()
-        let retrieved: [RetrievedSpeciesCandidate]
+        var retrieved: [RetrievedSpeciesCandidate]
         if let bm25 = retriever as? BM25SpeciesCandidateRetriever {
             // The production path: the BM25 index is built once per catalogue content.
             let index = try await indexStore.index(pack: pack, builder: documentBuilder)
@@ -144,6 +150,13 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
             retrieved = try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
         }
         try Task.checkCancellation()
+        if let semanticComplement {
+            let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
+            let primaryIDs = Set(retrieved.map(\.speciesID))
+            let semantic = try await semanticComplement.retrieve(query: description, documents: documents, limit: candidateLimit)
+            try Task.checkCancellation()
+            retrieved += semantic.filter { !primaryIDs.contains($0.speciesID) }
+        }
         let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         var included = Set<UUID>()
         let pool = retrieved.enumerated().compactMap { offset, item -> SpeciesRankingCandidate? in
@@ -184,7 +197,7 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
                 packRegionCompatibility: compatibility
             ),
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
-            retrievalLimit: candidateLimit
+            retrievalLimit: semanticComplement == nil ? candidateLimit : candidateLimit * 2
         )
     }
 }
@@ -218,8 +231,16 @@ struct ConfiguredDescriptionSearchEngine: DescriptionSearching {
                 totalMilliseconds: Double(duration.seconds) * 1_000 + Double(duration.attoseconds) / 1e15))
             return result
         }
-        let retriever = ExperimentalSemanticRetriever(pack: pack.metadata, locations: locations, runtime: runtime,
-                                                       fallback: BM25SpeciesCandidateRetriever(), diagnostics: diagnostics)
-        return try await HybridDescriptionSearchEngine(retriever: retriever).search(description: description, pack: pack)
+        // BM25 always runs; semantic candidates are merged in. If the model fails, the
+        // complement contributes nothing and the result is exactly the BM25 result.
+        let semantic = ExperimentalSemanticRetriever(pack: pack.metadata, locations: locations, runtime: runtime,
+                                                     fallback: NoCandidateRetriever(), diagnostics: diagnostics)
+        return try await HybridDescriptionSearchEngine(semanticComplement: semantic).search(description: description, pack: pack)
     }
+}
+
+/// Contributes no candidates. Used as the semantic complement's fallback, where BM25
+/// has already run and must not be counted twice.
+struct NoCandidateRetriever: SpeciesCandidateRetrieving {
+    func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] { [] }
 }

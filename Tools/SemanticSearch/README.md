@@ -95,6 +95,27 @@ indexes are incompatible and therefore use the visible typed BM25 fallback; iden
 labels alone never establish compatibility. These two digests are also part of loaded
 provider, validated-index, and query-vector cache identities.
 
+## Building the encoder in CI (Global pack)
+
+The app looks up `Semantic-<pack id>.*`, and new installs open the Global pack, so pass
+the pack to index with `--pack` (default: Caribbean, which reproduces the frozen
+`Semantic-caribbean` stem):
+
+```sh
+python3 Tools/SemanticSearch/provision_real_encoder.py \
+  --pack DiveID/Resources/IdentificationPacks/Global \
+  --package-resources DiveID/Resources/SemanticSearch
+```
+
+`.github/workflows/semantic-search.yml` runs exactly this on a macOS runner (which can
+reach Hugging Face and has Xcode), verifies the evidence, runs
+`SemanticEndToEndTests` under SwiftPM and hosted in the built app, and uploads the
+packaged resources as the `semantic-global-resources` artifact. To try semantic search in
+a private Debug build, unzip that artifact's `.semantic-resources` contents into
+`DiveID/Resources/SemanticSearch/` (ignored by Git) before building. An index only
+matches the exact catalogue it was built from: any Global record change makes it stale,
+and the app then falls back to BM25 with `incompatibleIndex`.
+
 ## Frozen real-encoder candidate and provisioning
 
 The selected development candidate is
@@ -224,7 +245,15 @@ contracts, and indexes may be committed only as test fixtures and do not demonst
 model quality or identification accuracy.
 
 Enable the engine explicitly in a developer build by setting the user default
-`DiveIDExperimentalSemanticSearch=true`. Default installs remain on BM25. Missing,
+`DiveIDExperimentalSemanticSearch=true`. Default installs remain on BM25.
+
+When enabled, semantic retrieval **complements** BM25 rather than replacing it
+(`HybridDescriptionSearchEngine(semanticComplement:)`): BM25 retrieves its usual top 50,
+the encoder retrieves its top 50, and species BM25 missed are appended to the pool. A
+species BM25 found keeps its BM25 signal, so its score is identical to the BM25-only
+result; the existing ranker, gates, 0.65 semantic admission floor, and confidence caps
+then decide what is shown. If the model is missing or fails, the complement adds nothing
+and the result is exactly the BM25 result. Missing,
 stale, or malformed artifacts emit a typed diagnostic and fall back offline; query text
 is excluded from the metrics payload. Device inference, latency, encoder conversion
 parity, and accuracy remain unverified until a compatible real artifact is supplied.

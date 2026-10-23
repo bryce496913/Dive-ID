@@ -28,8 +28,8 @@ struct DebugSemanticSearchStatusView: View {
 
     private func name(_ engine: DescriptionRetrievalEngine) -> String {
         switch engine {
-        case .experimentalCoreML: "Core ML semantic"
-        case .productionBM25: latest?.requestedEngine == .experimentalCoreML ? "BM25 fallback" : "BM25"
+        case .experimentalCoreML: "Core ML semantic + BM25"
+        case .productionBM25: latest?.requestedEngine == .experimentalCoreML ? "BM25 only (semantic fallback)" : "BM25"
         }
     }
 }

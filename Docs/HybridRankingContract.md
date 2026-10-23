@@ -16,6 +16,14 @@ it permits useful paraphrases, while rejecting a high-similarity result for a qu
 such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
 are still scored after provisional admission and can lower or remove a candidate.
 
+## Semantic complement (2026-10-23)
+
+With the Debug-only experimental engine switched on, semantic candidates are merged into
+the BM25 pool instead of replacing it. BM25 hits keep their BM25 signal and score;
+only species BM25 did not retrieve enter with a cosine signal, and they still need the
+0.65 relevance and three-term floor above for provisional admission. The production
+default (BM25 only) is unchanged.
+
 ## Animal-group searches (2026-10-23)
 
 Found on device: searching "shark" or "ray" alone listed nothing in Global, although it
