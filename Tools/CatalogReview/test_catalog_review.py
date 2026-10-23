@@ -276,5 +276,42 @@ class GlobalSchemaVocabularyTests(unittest.TestCase):
         self.assertTrue(any("measurements.type" in e for e in self.V.validate_record(r)))
 
 
+
+class BundledImageFileTests(unittest.TestCase):
+    """A record's bundledImage must name a file in its own pack, as the app's loader requires."""
+    PACKS = Path(__file__).parents[2] / "DiveID/Resources/IdentificationPacks"
+
+    def setUp(self):
+        spec = importlib.util.spec_from_file_location("catalogue_validation", Path(__file__).with_name("catalogue_validation.py"))
+        self.V = importlib.util.module_from_spec(spec); spec.loader.exec_module(self.V)
+        caribbean = self.PACKS / "Caribbean"
+        self.record = next(r for r in json.loads((caribbean / "Creatures.json").read_text()) if r.get("bundledImage"))
+        self.manifest = json.loads((caribbean / "PackManifest.json").read_text())
+        self.manifest.update(speciesCount=1, includedRecordCount=1,
+                             humanReviewedRecordCount=int(self.record["review"]["status"] in ("sourceChecked", "verified")),
+                             publicationEligibleRecordCount=int(self.record["review"]["status"] == "verified" and bool(self.record["categories"])))
+
+    def test_an_image_in_the_pack_is_accepted(self):
+        self.V.validate_catalogue([self.record], self.manifest, self.PACKS / "Caribbean")
+
+    def test_an_image_outside_the_pack_is_rejected(self):
+        with tempfile.TemporaryDirectory() as other:
+            with self.assertRaisesRegex(self.V.CatalogueValidationError, r"bundledImage.fileName.*not found"):
+                self.V.validate_catalogue([self.record], self.manifest, other)
+
+    def test_without_a_pack_directory_files_are_not_checked(self):
+        self.V.validate_catalogue([self.record], self.manifest)
+
+    def test_a_pack_directory_needs_the_manifest(self):
+        with self.assertRaisesRegex(self.V.CatalogueValidationError, r"locate the pack's images"):
+            self.V.validate_catalogue([self.record], None, self.PACKS / "Caribbean")
+
+    def test_every_bundled_pack_finds_its_images(self):
+        for pack in sorted(p for p in self.PACKS.iterdir() if (p / "PackManifest.json").is_file()):
+            with self.subTest(pack=pack.name):
+                self.V.validate_catalogue(json.loads((pack / "Creatures.json").read_text()),
+                                          json.loads((pack / "PackManifest.json").read_text()), pack)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -21,7 +21,7 @@ def generate():
     if any(outcome['state'] != 'applied' for outcome in outcomes):
         raise ValueError(f'Stale or blocked overlay; catalogue not written: {outcomes}')
     update_manifest(manifest, records)
-    validate_catalogue(records, manifest)
+    validate_catalogue(records, manifest, pack)
     return records, manifest, outcomes
 
 
