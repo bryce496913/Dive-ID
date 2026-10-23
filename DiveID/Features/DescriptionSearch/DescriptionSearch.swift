@@ -29,7 +29,9 @@ final class DescriptionSearchViewModel {
 
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
-    var canSubmit: Bool { pack != nil && (3...2000).contains(normalizedDescription.count) && !isCreatingSession }
+    /// Trimmed description lengths that can be searched.
+    nonisolated static let descriptionLengthRange = 3...2000
+    var canSubmit: Bool { pack != nil && Self.descriptionLengthRange.contains(normalizedDescription.count) && !isCreatingSession }
 
     func submit() async -> UUID? {
         guard canSubmit, let pack else { return nil }
@@ -61,7 +63,19 @@ struct DescriptionSearchView: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
                 Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
                     .foregroundStyle(Color.appTextSecondary)
-                if let pack = viewModel.pack { HStack { VStack(alignment: .leading) { Text("Dive region: \(pack.displayName)").font(.headline); Text("\(pack.speciesCount) species available offline") } ; Spacer(); Button("Change") { router.navigate(to: .offlineRegions) } }.padding().background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius)) }
+                if let pack = viewModel.pack {
+                    HStack(spacing: AppTheme.Spacing.m) {
+                        Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                            Text("Dive region: \(pack.displayName)").font(.headline)
+                            Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                        }
+                        Spacer(minLength: AppTheme.Spacing.s)
+                        Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
+                    }
+                    .padding()
+                    .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                }
                 else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
                 ZStack(alignment: .topLeading) {
                     if viewModel.descriptionText.isEmpty {
@@ -74,12 +88,8 @@ struct DescriptionSearchView: View {
                         .accessibilityIdentifier("descriptionText")
                 }
                 .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                Text("\(viewModel.descriptionText.count) characters")
-                    .font(.caption).frame(maxWidth: .infinity, alignment: .trailing)
-                    .foregroundStyle(Color.appTextSecondary)
-                Label("Your description is processed on this device using Dive ID’s offline catalogue.", systemImage: "iphone")
-                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
-                Label("Offline results are limited to species currently included with this version of Dive ID.", systemImage: "tray.full")
+                DescriptionLengthHint(count: viewModel.normalizedDescription.count)
+                Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
 #if DEBUG || DIVEID_INTERNAL
                 // In the scrolling content, so it never moves or covers the pinned search controls.
@@ -127,5 +137,30 @@ struct DescriptionSearchView: View {
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
         .task(id: router.path) { await viewModel.load() }
+    }
+}
+
+/// Counts the trimmed description against the range `canSubmit` accepts, so a disabled
+/// Find Matches explains itself.
+private struct DescriptionLengthHint: View {
+    let count: Int
+    private var range: ClosedRange<Int> { DescriptionSearchViewModel.descriptionLengthRange }
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline) {
+            if let hint { Text(hint) }
+            Spacer(minLength: AppTheme.Spacing.s)
+            Text("\(count.formatted()) / \(range.upperBound.formatted())")
+                .monospacedDigit()
+                .accessibilityLabel("\(count) of \(range.upperBound) characters")
+        }
+        .font(.caption)
+        .foregroundStyle(count > range.upperBound ? Color.appError : Color.appTextSecondary)
+    }
+
+    private var hint: String? {
+        if count > range.upperBound { return "Shorten your description to search." }
+        if count > 0 && count < range.lowerBound { return "Add a little more detail to search." }
+        return nil
     }
 }
