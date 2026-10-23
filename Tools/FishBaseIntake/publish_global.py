@@ -89,9 +89,10 @@ def applied_approvals_text(reviews, report):
 
 
 def manifest_for(records, template, approved_batches=0):
-    """Counts come from the records. The pack stays "(Experimental)" until every record
-    is publication-eligible; its version rises with each recorded batch approval, whose
-    review changes the records. approved_batches counts every approval ever recorded, so
+    """Counts come from the records. The pack is named "Global" even while it holds drafts
+    (Bryce, 2026-10-23): Release lists only its approved records, and the description
+    gives the approved count until every record is publication-eligible. The version
+    rises with each recorded batch approval, whose review changes the records. approved_batches counts every approval ever recorded, so
     a new generation that supersedes an approved one never lowers the version."""
     reviewed = sum(r["review"]["status"] in ("sourceChecked", "verified") for r in records)
     eligible = sum(r["review"]["status"] == "verified" and bool(r["categories"]) for r in records)
@@ -99,7 +100,7 @@ def manifest_for(records, template, approved_batches=0):
     manifest = dict(template)
     manifest.update({"packVersion": PACK_VERSION + approved_batches, "speciesCount": len(records), "includedRecordCount": len(records),
                      "humanReviewedRecordCount": reviewed, "publicationEligibleRecordCount": eligible,
-                     "displayName": "Global" if complete else "Global (Experimental)",
+                     "displayName": "Global",
                      "shortDescription": "Worldwide catalogue from FishBase and SeaLifeBase" if complete else
                      f"Worldwide catalogue from FishBase and SeaLifeBase; {eligible} of {len(records)} records approved for publication"})
     return manifest

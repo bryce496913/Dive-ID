@@ -13,7 +13,7 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global (Experimental) | 23 | 4798 | 4792 | 4792 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Global | 24 | 4798 | 4796 | 4796 | pass, opt-in (30/34; four positive cases miss the top ten) |
 
 **Global is the default for new installs and is available in Release** (owner decision,
 2026-10-23), after every Global record was approved in batch review. Release shows only
@@ -44,14 +44,16 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
   [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
   on October 23, 2026, all recorded as individually reviewed on Bryce's statement that
   he reviewed every entry (`--all-individually-reviewed`). 4,792 of those approvals
-  still hold. Approval of the Global copies does not carry over to the regional packs.
-- **Awaiting review (drafts, not in Release):** the four sharks and rays Bryce asked for
-  on October 23, 2026 (Whitetip reef shark, Grey reef shark, Zebra shark, Reef manta ray)
-  in [batch-21](Docs/GlobalBatchReview.md#owner-additions-2026-10-23), and Graceful shark
-  and Silky shark in batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were
-  removed. While these drafts exist the pack is listed as "Global (Experimental)".
-- **Release** exposes 4,794 records: the 2 approved Caribbean species in Caribbean and
-  4,792 in Global (which holds its own copies of the 8 Caribbean species). Tropical
+  still hold. He approved the four sharks and rays he asked for (Whitetip reef shark,
+  Grey reef shark, Zebra shark, Reef manta ray;
+  [batch-21](Docs/GlobalBatchReview.md#owner-additions-2026-10-23)) the same day, each
+  individually reviewed. Approval of the Global copies does not carry over to the
+  regional packs.
+- **Awaiting review (drafts, not in Release):** Graceful shark and Silky shark in
+  batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were removed. The pack
+  is named "Global" while they are drafts (Bryce, October 23, 2026).
+- **Release** exposes 4,798 records: the 2 approved Caribbean species in Caribbean and
+  4,796 in Global (which holds its own copies of the 8 Caribbean species). Tropical
   Pacific is unavailable. Bryce opened Global's pack-level Release gate
   (`GlobalRegion.swift`) on October 23, 2026. New installs start in Global; a stored
   region selection is kept.
