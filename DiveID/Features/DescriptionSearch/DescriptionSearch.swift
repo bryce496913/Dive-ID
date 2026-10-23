@@ -29,7 +29,7 @@ final class DescriptionSearchViewModel {
 
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
-    var canSubmit: Bool { pack != nil && (5...2000).contains(normalizedDescription.count) && !isCreatingSession }
+    var canSubmit: Bool { pack != nil && (3...2000).contains(normalizedDescription.count) && !isCreatingSession }
 
     func submit() async -> UUID? {
         guard canSubmit, let pack else { return nil }

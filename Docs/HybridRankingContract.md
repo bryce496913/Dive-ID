@@ -16,6 +16,23 @@ it permits useful paraphrases, while rejecting a high-similarity result for a qu
 such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
 are still scored after provisional admission and can lower or remove a candidate.
 
+## Animal-group searches (2026-10-23)
+
+Found on device: searching "shark" or "ray" alone listed nothing in Global, although it
+holds 150 shark and ray records. A one-word group name was a single clue group, so
+information was `insufficient` and every candidate was rejected; "ray" (3 characters)
+also could not be submitted under the 5-character minimum.
+
+- Naming a specific animal group (any parser category except `fish`, by one of its own
+  words: "shark", "rays", "octopus", "crab", "stingray", "manta") is `limited`
+  information, so that group's records are listed with confidence capped at 0.64.
+- "Fish" alone and vague phrases ("flat thing", although it maps to `ray`) still list
+  nothing, as do the existing no-match cases.
+- "stingray" and "manta" now map to the `ray` category.
+- Descriptions may be 3 characters or more (was 5), so "ray" and "eel" can be submitted.
+- Ordering inside the group is unchanged (evidence score, retrieval relevance,
+  occurrence); it does not try to put the most commonly seen species first.
+
 ## Group names and appearance variants (2026-10-22)
 
 Changed to fix the Global ranking defects found in the V05 traces. Before, a bare group

@@ -29,7 +29,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
         case .processedPhoto: throw LocalIdentificationError.unsupportedSource
         case .description(let description):
             let trimmed = description.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard trimmed.count >= 5 else { throw LocalIdentificationError.invalidDescription }
+            guard trimmed.count >= 3 else { throw LocalIdentificationError.invalidDescription }
             let packID = request.context.region ?? .caribbean
             let pack: OfflineIdentificationPack
             do {

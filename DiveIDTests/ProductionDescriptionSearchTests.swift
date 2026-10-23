@@ -518,3 +518,60 @@ private struct UnreadableDomainTestRepository: MarineSpeciesCatalogRepository {
         throw LocalCatalogError.unreadableData
     }
 }
+
+/// A diver who types only an animal group ("shark", "rays") gets that group's species from
+/// the Release Global pack, at limited confidence. "Fish" and vague phrases still list nothing.
+final class AnimalGroupSearchTests: XCTestCase {
+    private func releaseGlobal() async throws -> OfflineIdentificationPack {
+        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
+    }
+
+    private func search(_ description: String, in pack: OfflineIdentificationPack) async throws -> [IdentificationMatch] {
+        try await LocalMarineLifeIdentificationService(catalogRepository: SinglePackRepository(pack: pack), parser: LocalObservationParser(), ranker: LocalSpeciesRanker())
+            .identify(request: IdentificationRequest(source: .description(description), context: .init(region: .global)), processedPhoto: nil)
+    }
+
+    func testGroupNameAloneListsThatGroupFromReleaseGlobal() async throws {
+        let pack = try await releaseGlobal()
+        let categories = Dictionary(uniqueKeysWithValues: pack.profiles.map { ($0.id, Set($0.categories)) })
+        XCTAssertGreaterThanOrEqual(pack.profiles.filter { $0.categories.contains("shark") }.count, 80)
+        XCTAssertGreaterThanOrEqual(pack.profiles.filter { $0.categories.contains("ray") }.count, 60)
+        for (description, group) in [("shark", "shark"), ("Sharks", "shark"), ("ray", "ray"), ("rays", "ray"), ("stingray", "ray"), ("manta", "ray")] {
+            let matches = try await search(description, in: pack)
+            XCTAssertFalse(matches.isEmpty, description)
+            for match in matches {
+                XCTAssertTrue(categories[match.id]?.contains(group) ?? false, "\(description): \(match.species.commonName) is not a \(group)")
+                XCTAssertLessThanOrEqual(match.score, 0.64, "\(description): a group name alone is limited evidence")
+            }
+            if description == "manta" { XCTAssertTrue(matches.contains { $0.species.commonName == "Oceanic manta ray" }, description) }
+        }
+        let whale = try await search("whale shark", in: pack)
+        XCTAssertEqual(whale.first?.species.commonName, "Whale shark")
+    }
+
+    func testBroadOrVagueDescriptionsStillListNothing() async throws {
+        let pack = try await releaseGlobal()
+        for description in ["fish", "flat thing", "dark fish", "blue thing"] {
+            let matches = try await search(description, in: pack)
+            XCTAssertTrue(matches.isEmpty, "\(description): \(matches.map(\.species.commonName))")
+        }
+    }
+
+    func testThreeLetterGroupNamesCanBeSubmitted() async throws {
+        let pack = try await releaseGlobal()
+        let matches = try await search("eel", in: pack)
+        XCTAssertFalse(matches.isEmpty)
+        do {
+            _ = try await search("ab", in: pack)
+            XCTFail("Expected an invalid-description error")
+        } catch {
+            XCTAssertEqual(error as? LocalIdentificationError, .invalidDescription)
+        }
+    }
+}
+
+private struct SinglePackRepository: MarineSpeciesCatalogRepository {
+    let pack: OfflineIdentificationPack
+    func availablePacks() async throws -> [OfflineIdentificationPackMetadata] { [pack.metadata] }
+    func loadPack(id: OfflineIdentificationPackID) async throws -> OfflineIdentificationPack { pack }
+}
