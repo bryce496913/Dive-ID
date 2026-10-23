@@ -28,6 +28,8 @@ struct FeatureActionCard: View {
     let title: String
     let subtitle: String
     let symbol: String
+    /// The screen's main action: tinted and outlined with the accent instead of the surface color.
+    var isProminent = false
     let action: () -> Void
     @Environment(\.isEnabled) private var isEnabled
     /// Grows the icon badge with Dynamic Type so the symbol never clips.
@@ -39,22 +41,26 @@ struct FeatureActionCard: View {
                 Image(systemName: symbol)
                     .font(.title2)
                     .frame(width: badgeSize, height: badgeSize)
-                    .background(Color.appAccent.opacity(0.2), in: Circle())
+                    .background(isProminent ? Color.white.opacity(0.2) : Color.appAccent.opacity(0.2), in: Circle())
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                    Text(title).font(.headline)
-                    Text(subtitle).font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                    Text(title).font(isProminent ? .title3.bold() : .headline)
+                    Text(subtitle).font(.subheadline).foregroundStyle(isProminent ? Color.appTextPrimary : Color.appTextSecondary)
                 }
                 .multilineTextAlignment(.leading)
                 Spacer(minLength: AppTheme.Spacing.s)
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Color.appTextSecondary)
+                    .foregroundStyle(isProminent ? Color.appTextPrimary : Color.appTextSecondary)
                     .accessibilityHidden(true)
             }
-            .padding()
+            .padding(isProminent ? AppTheme.Spacing.xl : AppTheme.Spacing.l)
             .foregroundStyle(Color.appTextPrimary)
-            .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            // A translucent accent over the black background keeps white text above 4.5:1; solid accent does not.
+            .background(isProminent ? Color.appAccent.opacity(0.35) : Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .overlay {
+                if isProminent { RoundedRectangle(cornerRadius: AppTheme.radius).strokeBorder(Color.appAccent, lineWidth: 1.5) }
+            }
             .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
             // A plain button does not dim its custom colors when disabled, so do it here.
             .opacity(isEnabled ? 1 : 0.5)
