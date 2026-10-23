@@ -135,7 +135,7 @@ Record each item independently with configuration, device and evidence location.
 Keep Wi-Fi and cellular off while exercising the app; leave saved storage intact.
 
 1. Debug: verify Caribbean 8 / Pacific 384, switch between them, relaunch and
-   confirm selection persists. Release: verify Global with 4,792 records (4,798 once batch-21 and batch-18-rereview are approved) as the new-install default, Caribbean
+   confirm selection persists. Release: verify Global with 4,796 records (4,798 once batch-18-rereview is approved) as the new-install default, Caribbean
    with exactly two approved species, unavailable Pacific, accessible saved snapshots and unavailable photo action.
 2. Debug: run the committed Pacific ray/dartfish/waspfish/puffer positive cases and
    freshwater-lily-pad frog no-match. Record actual ranks, engine, pack and labels.
@@ -252,9 +252,9 @@ none are listed as expectations.
 ### What this Release build contains
 
 - **Approved records:** Release exposes only approved records. At this commit those
-  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **4,792 of the
-  4,798 Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`). The other 6
-  are drafts awaiting review (batch-21 and batch-18-rereview).
+  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **4,796 of the
+  4,798 Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`). The other 2
+  are drafts awaiting re-review (batch-18-rereview).
 - **Global** is in Release and is the default region for new installs (owner decision,
   2026-10-23).
 - **Tropical Pacific** has 0 approved records and must not appear either.
@@ -405,8 +405,8 @@ the production BM25 engine with biological ranking; the Core ML opt-in is Debug-
    **Internal**, then Run on the iPhone. Or
    `xcodebuild … -configuration Internal -destination "platform=iOS,id=$DEVICE_ID"`.
    Stop the debugger and launch **Dive ID Internal** from the Home Screen for timings.
-2. **Check:** the banner is visible, and Change Dive Region lists Global
-   (Experimental), Tropical Pacific and Caribbean with their full record counts.
+2. **Check:** the banner is visible, and Change Dive Region lists Global,
+   Tropical Pacific (Experimental) and Caribbean with their full record counts.
 3. **Select Global**, then time it:
    - **Fresh install:** delete Dive ID Internal first, then time the first Global
      search submitted at once. On the Linux host, readiness takes 4.9 s in Release.
@@ -529,7 +529,7 @@ launch, 54–56 ms warm median. Caribbean (8): about 10 ms and 5 ms, 12 ms warm.
 
 ### 2. Test sequence
 
-Use **Global (Experimental)** throughout; it is the slow case. Record each step in the
+Use **Global** throughout; it is the slow case. Record each step in the
 results table. "Search A" is `Bright blue fish with a yellow spine near the tail`.
 Have it on the clipboard (copy it from Notes) so it can be pasted at once.
 
@@ -538,9 +538,9 @@ Have it on the clipboard (copy it from Notes) so it can be pasted at once.
 1. Delete Dive ID Internal from the iPhone (long-press → Remove App → Delete App), then
    install it again (step 1.3). This removes the stored index.
 2. Launch it, open Describe What You Saw and paste search A **first**.
-3. Tap Change, select Global (Experimental). You return to Describe What You Saw with the
+3. Tap Change, select Global. You return to Describe What You Saw with the
    text kept, and Global's preparation starts now. Tap **Find Matches immediately**.
-4. **Expect:** the results screen shows "Searching the Global (Experimental) dive
+4. **Expect:** the results screen shows "Searching the Global dive
    region…" with a progress indicator while the index is prepared, then results. Never
    an empty list, "No useful matches" or an error while it waits.
 5. **Record:** the time from tap to results (stopwatch or screen recording), the first

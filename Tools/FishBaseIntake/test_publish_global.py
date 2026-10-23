@@ -67,17 +67,19 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual((manifest["speciesCount"], manifest["includedRecordCount"], manifest["humanReviewedRecordCount"],
                           manifest["publicationEligibleRecordCount"], manifest["packVersion"]), (2, 2, 0, 0, publish_global.PACK_VERSION))
         self.assertEqual(manifest["regionAliases"], [])
-        self.assertEqual(manifest["displayName"], "Global (Experimental)")
+        self.assertEqual(manifest["displayName"], "Global")
         self.assertIn("0 of 2 records approved", manifest["shortDescription"])
         self.assertEqual(template["speciesCount"], 0, "the template is not modified")
 
-    def test_experimental_until_every_record_is_approved(self):
+    def test_named_global_while_drafts_remain(self):
         approved = dict(draft("a"), review={"status": "verified"})
         partial = publish_global.manifest_for([approved, draft("b")], {"id": "global"}, 1)
         self.assertEqual((partial["displayName"], partial["publicationEligibleRecordCount"], partial["packVersion"]),
-                         ("Global (Experimental)", 1, publish_global.PACK_VERSION + 1))
+                         ("Global", 1, publish_global.PACK_VERSION + 1))
+        self.assertIn("1 of 2 records approved", partial["shortDescription"])
         complete = publish_global.manifest_for([approved, dict(approved, id="b")], {"id": "global"}, 2)
         self.assertEqual(complete["displayName"], "Global")
+        self.assertEqual(complete["shortDescription"], "Worldwide catalogue from FishBase and SeaLifeBase")
 
 
 class OutputTests(unittest.TestCase):

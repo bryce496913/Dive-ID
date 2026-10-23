@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-23",
+  "datePrecision": "day; overlay UTC midnight represents the supplied calendar date, not an asserted time of review",
+  "decision": "approved",
+  "provenance": "Recorded by Tools/CatalogReview/global_batches.py record from decision text the reviewer typed for this manifest hash; the tool never infers a decision.",
+  "reviewReference": "Data/CatalogReview/GlobalBatches/batch-21/ (manifest sha256:b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890)",
+  "verbatimDecision": "4 new species (whitetip reef, grey reef, zebra shark, reef manta) move them over as approved",
+  "batchID": "batch-21",
+  "generation": 1,
+  "batchManifestSHA256": "b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890",
+  "seed": 5609686461008101448,
+  "records": [
+    {
+      "speciesID": "2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf",
+      "reviewedContentFingerprint": "sha256:ce74ecb8334741555f5ba64d6218e9f20869638df3fad5dfa4c2313ceaaa6c40",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=65179"
+      ]
+    },
+    {
+      "speciesID": "2f9b6a7f-1d44-58f4-adf6-d458cdf3966a",
+      "reviewedContentFingerprint": "sha256:5feb17ceb44dcece70186a48b2f6e4792ab2c737ab83b231eccb23a45e419e15",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=907"
+      ]
+    },
+    {
+      "speciesID": "6a1df41f-c607-5cb9-a483-a59e7ed13c4c",
+      "reviewedContentFingerprint": "sha256:d4b249defab8a48484ab1f45555c697b09a3fa3b6edb726dbda54500365d68c7",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5374"
+      ]
+    },
+    {
+      "speciesID": "f23a6ebe-e2bf-5156-af7f-87caefe2ce0c",
+      "reviewedContentFingerprint": "sha256:8bad09e0313ba046122a4529c342d12acfd61e6e2df8b19b23e7545f2870f0b7",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=861"
+      ]
+    }
+  ],
+  "heldRecords": [],
+  "rejection": null,
+  "reviewedCommit": "3ad8e3be21c6d448ba2e879029833c8f1fa2f9ec"
+}

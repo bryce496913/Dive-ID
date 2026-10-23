@@ -171,7 +171,9 @@ Bryce asked for Whitetip reef shark, Grey reef shark, Zebra shark and Reef manta
 were added through `Data/GlobalMarine/OwnerAdditions.csv` (see
 `Tools/FishBaseIntake/README.md`) as **batch-21**, a batch of their own after the 20
 build batches, so no approved batch's records moved. Caribbean reef shark was already in
-Global. All four are drafts until batch-21 is approved; none is in Release.
+Global. Bryce approved batch-21 on 2026-10-23 ("4 new species (whitetip reef, grey reef,
+zebra shark, reef manta) move them over as approved"); all four are individually reviewed
+and in Release.
 
 | Species | Scientific name | Flags |
 | --- | --- | --- |
@@ -187,7 +189,9 @@ ones. The aliases now belong to the new record alone. Removing them changed thos
 records, so their batch-18 approval lapsed: they are drafts and out of Release until
 **batch-18-rereview** is approved. The other 248 batch-18 records keep their approval.
 
-Release therefore exposes 4,792 Global records until both decisions are recorded:
+Release therefore exposes 4,796 Global records until batch-18-rereview is decided. The
+pack is named "Global" while those two are drafts (Bryce, 2026-10-23); its description
+gives the approved count. To record a decision and republish:
 
 ```sh
 python3 Tools/CatalogReview/global_batches.py record --manifest-sha256 <hash> \
@@ -222,6 +226,6 @@ python3 Tools/FishBaseIntake/publish_global.py
 | batch-19 | 1 | `01df05baeb2b7f698a280312b2e069ed726f91b5626804d626b4308adc351aa3` | 5304005859740104966 | 26 | 30 | 193 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-20 | 1 | `75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f` | 2200883920732990615 | 0 | 30 | 15 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-01-rereview | 2 | `a855aeef9fda952f23a33a4744b447e067a37ac7b6491100e1b2c9e2bfd909ce` | 5457129314686080825 | 87 | 30 | 133 | superseded by batch-01 generation 2 (2026-10-23), undecided. Prepared after the builder v4 negation repair (2026-10-22) changed 22 of the generation 1 records. |
-| batch-21 | 1 | `b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890` | 5609686461008101448 | 3 | 1 | 0 | **awaiting Bryce's decision.** The four owner-requested species (see "Owner additions"). |
+| batch-21 | 1 | `b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890` | 5609686461008101448 | 3 | 1 | 0 | **approved** 2026-10-23 by Bryce: "4 new species (whitetip reef, grey reef, zebra shark, reef manta) move them over as approved". 4 approved, all individually reviewed, none held. Overlay `batch-21/BryceReview2026-10-23-batch-21-g1.json`. |
 | batch-18-rereview | 1 | `a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c` | 6703939030536056391 | 1 | 1 | 0 | **awaiting Bryce's decision.** Graceful shark and Silky shark, after their wrong "Grey/Gray reef shark" aliases were removed. |
 
