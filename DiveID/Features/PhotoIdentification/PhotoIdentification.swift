@@ -154,6 +154,6 @@ struct PhotoIdentificationView: View {
             }
         }
         .frame(maxWidth: .infinity, minHeight: 260)
-        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .appCard()
     }
 }

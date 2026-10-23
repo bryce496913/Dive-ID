@@ -40,7 +40,7 @@ struct InternalSearchDiagnosticsView: View {
         .font(.caption2.monospaced())
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Spacing.s)
-        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .appCard()
     }
 }
 #endif

@@ -61,8 +61,7 @@ struct DescriptionSearchView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
-                Text("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
-                    .foregroundStyle(Color.appTextSecondary)
+                ClueGuide()
                 if let pack = viewModel.pack {
                     HStack(spacing: AppTheme.Spacing.m) {
                         Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
@@ -74,7 +73,7 @@ struct DescriptionSearchView: View {
                         Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                     }
                     .padding()
-                    .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                    .appCard()
                 }
                 else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
                 ZStack(alignment: .topLeading) {
@@ -87,7 +86,15 @@ struct DescriptionSearchView: View {
                         .focused($isEditorFocused)
                         .accessibilityIdentifier("descriptionText")
                 }
-                .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                .appCard()
+                // The editor's edge lights up with the brand gradient while typing.
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
+                        .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
+                        .opacity(isEditorFocused ? 1 : 0)
+                        .animation(.easeOut(duration: 0.2), value: isEditorFocused)
+                        .allowsHitTesting(false)
+                }
                 DescriptionLengthHint(count: viewModel.normalizedDescription.count)
                 Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
@@ -137,6 +144,79 @@ struct DescriptionSearchView: View {
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
         .task(id: router.path) { await viewModel.load() }
+    }
+}
+
+/// The clues worth including, as a row of chips above the editor.
+private struct ClueGuide: View {
+    private static let clues: [(String, String)] = [
+        ("Color", "paintpalette.fill"), ("Size", "ruler.fill"), ("Markings", "circle.dotted"),
+        ("Shape", "fish.fill"), ("Behavior", "figure.wave"), ("Habitat", "leaf.fill"),
+        ("Depth", "arrow.down.to.line"), ("Where", "map.fill"),
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
+            Text("Include as many clues as you can").font(.headline)
+            FlowLayout(spacing: AppTheme.Spacing.s) {
+                ForEach(Self.clues, id: \.0) { clue in
+                    Label(clue.0, systemImage: clue.1)
+                        .labelStyle(CompactLabelStyle())
+                        .font(.subheadline.weight(.medium))
+                        .padding(.horizontal, AppTheme.Spacing.m)
+                        .padding(.vertical, AppTheme.Spacing.xs)
+                        .background(Color.appAccent.opacity(0.18), in: Capsule())
+                        .overlay(Capsule().strokeBorder(Color.appAccent.opacity(0.35), lineWidth: 1))
+                }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Include color, size, markings, shape, behavior, habitat, depth, and where you saw it.")
+    }
+}
+
+/// Lays its children out in rows, wrapping to the next row when one is full.
+private struct FlowLayout: Layout {
+    var spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = rows(for: subviews, width: proposal.width ?? .infinity)
+        let width = rows.map(\.width).max() ?? 0
+        let height = rows.map(\.height).reduce(0, +) + spacing * CGFloat(max(rows.count - 1, 0))
+        return CGSize(width: width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in rows(for: subviews, width: bounds.width) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.unspecified)
+                subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+                x += size.width + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row { var indices: [Int] = []; var width: CGFloat = 0; var height: CGFloat = 0 }
+
+    private func rows(for subviews: Subviews, width maxWidth: CGFloat) -> [Row] {
+        var rows: [Row] = []
+        var current = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.unspecified)
+            let needed = current.indices.isEmpty ? size.width : current.width + spacing + size.width
+            if needed > maxWidth, !current.indices.isEmpty {
+                rows.append(current)
+                current = Row()
+            }
+            current.width = current.indices.isEmpty ? size.width : current.width + spacing + size.width
+            current.height = max(current.height, size.height)
+            current.indices.append(index)
+        }
+        if !current.indices.isEmpty { rows.append(current) }
+        return rows
     }
 }
 

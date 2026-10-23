@@ -24,81 +24,207 @@ struct HomeView: View {
     let router: AppRouter
     let features: FeatureAvailability
     @State var viewModel: HomeViewModel
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxl) {
-                HomeHeader()
-                // The main task leads; region, photo, and the secondary screens follow.
-                FeatureActionCard(
-                    title: "Describe What You Saw",
-                    subtitle: viewModel.canSearch ? "Use color, shape, size, and habitat clues" : "Unavailable for the selected dive region",
-                    symbol: "text.alignleft",
-                    isProminent: true
-                ) {
-                    if viewModel.canSearch { router.navigate(to: .descriptionSearch) }
-                }
-                .disabled(!viewModel.canSearch)
-                .accessibilityIdentifier("describeAction")
-                if let pack = viewModel.pack {
-                    Button { router.navigate(to: .offlineRegions) } label: {
-                        SelectedPackSummary(pack: pack)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("offlinePackSummary")
-                } else {
+                HomeHero(pack: viewModel.pack) { router.navigate(to: .offlineRegions) }
+                if viewModel.pack == nil {
                     SelectedPackStatusView(
                         state: viewModel.packState,
                         retry: { Task { await viewModel.load() } },
                         changeRegion: { router.navigate(to: .offlineRegions) }
                     )
                 }
-                FeatureActionCard(
-                    title: "Identify From Photo",
-                    subtitle: features.photoIdentificationEnabled ? "Development photo preparation" : "Coming later",
-                    symbol: "photo"
+                // The main task leads; photo and the secondary screens follow.
+                HomePrimaryTile(
+                    title: "Describe What You Saw",
+                    subtitle: viewModel.canSearch ? "Use color, shape, size, and habitat clues" : "Unavailable for the selected dive region"
                 ) {
-                    if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) }
+                    if viewModel.canSearch { router.navigate(to: .descriptionSearch) }
                 }
-                .disabled(!features.photoIdentificationEnabled)
-                .accessibilityHint(features.photoIdentificationEnabled ? "Opens the development photo preparation flow." : "Photo identification is not yet available.")
-                .accessibilityIdentifier("photoAction")
-                VStack(spacing: 0) {
-                    HomeLinkRow(title: "Saved Identifications", symbol: "bookmark.fill") { router.navigate(to: .savedIdentifications) }
-                        .accessibilityIdentifier("savedAction")
-                    Divider().padding(.leading, AppTheme.Spacing.l)
-                    HomeLinkRow(title: "Data Sources and Credits", symbol: "info.circle") { router.navigate(to: .credits) }
-                        .accessibilityIdentifier("creditsAction")
+                .disabled(!viewModel.canSearch)
+                .accessibilityIdentifier("describeAction")
+                Text("More").font(.title3.bold()).accessibilityAddTraits(.isHeader)
+                LazyVGrid(columns: gridColumns, spacing: AppTheme.Spacing.m) {
+                    HomeTile(
+                        title: "Identify From Photo",
+                        subtitle: features.photoIdentificationEnabled ? "Development photo preparation" : "Coming later",
+                        symbol: "camera.fill"
+                    ) {
+                        if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) }
+                    }
+                    .disabled(!features.photoIdentificationEnabled)
+                    .accessibilityHint(features.photoIdentificationEnabled ? "Opens the development photo preparation flow." : "Photo identification is not yet available.")
+                    .accessibilityIdentifier("photoAction")
+                    HomeTile(title: "Saved Identifications", subtitle: "Your kept matches", symbol: "bookmark.fill") {
+                        router.navigate(to: .savedIdentifications)
+                    }
+                    .accessibilityIdentifier("savedAction")
                 }
-                .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                HomeLinkRow(title: "Data Sources and Credits", symbol: "info.circle") { router.navigate(to: .credits) }
+                    .accessibilityIdentifier("creditsAction")
+                    .appCard()
             }
             .padding()
         }
         .appScreenBackground()
         .navigationTitle("Home")
-        // The header already names the app; the title stays for the back button on pushed screens.
+        // The hero already names the app; the title stays for the back button on pushed screens.
         .toolbar(.hidden, for: .navigationBar)
         .task(id: router.path) { await viewModel.load() }
     }
-}
 
-private struct HomeHeader: View {
-    @ScaledMetric(relativeTo: .largeTitle) private var symbolSize: CGFloat = 48
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
-            Image(systemName: "water.waves")
-                .font(.system(size: symbolSize))
-                .foregroundStyle(Color.appPrimary)
-                .accessibilityHidden(true)
-            Text("Dive ID").font(.largeTitle.bold())
-            Text("Describe the marine life you saw and review possible matches for your selected dive region.")
-                .foregroundStyle(Color.appTextSecondary)
-        }
+    /// Two tiles side by side, or one per row at accessibility text sizes.
+    private var gridColumns: [GridItem] {
+        let count = dynamicTypeSize.isAccessibilitySize ? 1 : 2
+        return Array(repeating: GridItem(.flexible(), spacing: AppTheme.Spacing.m, alignment: .top), count: count)
     }
 }
 
-/// A row in Home's grouped list of secondary screens.
+/// The brand banner: app name, what it does, and the selected dive region.
+private struct HomeHero: View {
+    let pack: OfflineIdentificationPackMetadata?
+    let changeRegion: () -> Void
+    @ScaledMetric(relativeTo: .largeTitle) private var waveSize: CGFloat = 150
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
+            Text("Dive ID").font(.largeTitle.bold())
+            Text("Describe the marine life you saw and review possible matches for your selected dive region.")
+                .font(.subheadline)
+                .foregroundStyle(Color.appTextPrimary.opacity(0.9))
+            if let pack {
+                Button(action: changeRegion) { RegionPill(pack: pack) }
+                    .buttonStyle(AppCardButtonStyle())
+                    .accessibilityIdentifier("offlinePackSummary")
+                    .padding(.top, AppTheme.Spacing.xs)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(AppTheme.Spacing.xxl)
+        .background {
+            ZStack(alignment: .topTrailing) {
+                RoundedRectangle(cornerRadius: AppTheme.heroRadius, style: .continuous).fill(LinearGradient.appBrand)
+                Image(systemName: "water.waves")
+                    .font(.system(size: waveSize, weight: .bold))
+                    .foregroundStyle(Color.white.opacity(0.12))
+                    .offset(x: 24, y: -18)
+                    .accessibilityHidden(true)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.heroRadius, style: .continuous))
+            .shadow(color: Color.appAccent.opacity(0.45), radius: 24, y: 10)
+        }
+        .padding(.top, AppTheme.Spacing.s)
+    }
+}
+
+/// The selected dive region inside the hero, with a cue that it opens region selection.
+private struct RegionPill: View {
+    let pack: OfflineIdentificationPackMetadata
+
+    var body: some View {
+        HStack(spacing: AppTheme.Spacing.m) {
+            Image(systemName: "map.fill").accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Dive Region").font(.caption.weight(.semibold)).foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                Text(pack.displayName).font(.headline)
+                Text("\(pack.speciesCount) species available offline for the \(pack.displayName)")
+                    .font(.caption).foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                Text("Included with Dive ID").font(.caption2).foregroundStyle(Color.appTextPrimary.opacity(0.85))
+            }
+            .multilineTextAlignment(.leading)
+            Spacer(minLength: AppTheme.Spacing.s)
+            Text("Change").font(.subheadline.weight(.semibold))
+            Image(systemName: "chevron.right").font(.caption.weight(.bold)).accessibilityHidden(true)
+        }
+        .foregroundStyle(Color.appTextPrimary)
+        .padding(AppTheme.Spacing.m)
+        .background(Color.black.opacity(0.28), in: RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
+    }
+}
+
+/// Home's main action: a large tile with a call to action.
+private struct HomePrimaryTile: View {
+    let title: String
+    let subtitle: String
+    let action: () -> Void
+    @Environment(\.isEnabled) private var isEnabled
+    @ScaledMetric(relativeTo: .title) private var badgeSize: CGFloat = 56
+
+    var body: some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
+                Image(systemName: "text.bubble.fill")
+                    .font(.title)
+                    .frame(width: badgeSize, height: badgeSize)
+                    .background(LinearGradient.appBrand, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                    Text(title).font(.title2.bold())
+                    Text(subtitle).font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                }
+                .multilineTextAlignment(.leading)
+                HStack(spacing: AppTheme.Spacing.s) {
+                    Text("Start")
+                    Image(systemName: "arrow.right").accessibilityHidden(true)
+                }
+                .font(.headline)
+                .padding(.horizontal, AppTheme.Spacing.l)
+                .padding(.vertical, AppTheme.Spacing.s)
+                .background(LinearGradient.appBrand, in: Capsule())
+                .accessibilityHidden(true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(AppTheme.Spacing.xl)
+            .foregroundStyle(Color.appTextPrimary)
+            .appCard(cornerRadius: AppTheme.heroRadius)
+            .overlay(RoundedRectangle(cornerRadius: AppTheme.heroRadius, style: .continuous).strokeBorder(LinearGradient.appBrand, lineWidth: 1.5))
+            .contentShape(RoundedRectangle(cornerRadius: AppTheme.heroRadius))
+            .opacity(isEnabled ? 1 : 0.5)
+        }
+        .buttonStyle(AppCardButtonStyle())
+    }
+}
+
+/// A square-ish tile in Home's grid of secondary actions.
+private struct HomeTile: View {
+    let title: String
+    let subtitle: String
+    let symbol: String
+    let action: () -> Void
+    @Environment(\.isEnabled) private var isEnabled
+    @ScaledMetric(relativeTo: .title2) private var badgeSize: CGFloat = 44
+
+    var body: some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
+                Image(systemName: symbol)
+                    .font(.title3)
+                    .frame(width: badgeSize, height: badgeSize)
+                    .background(Color.appAccent.opacity(0.22), in: RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
+                    .foregroundStyle(Color.appAccent)
+                    .accessibilityHidden(true)
+                Spacer(minLength: 0)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                    Text(title).font(.headline)
+                    Text(subtitle).font(.caption).foregroundStyle(Color.appTextSecondary)
+                }
+                .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, minHeight: 140, alignment: .leading)
+            .padding(AppTheme.Spacing.l)
+            .foregroundStyle(Color.appTextPrimary)
+            .appCard()
+            .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+            .opacity(isEnabled ? 1 : 0.5)
+        }
+        .buttonStyle(AppCardButtonStyle())
+    }
+}
+
+/// A full-width row for a secondary screen.
 private struct HomeLinkRow: View {
     let title: String
     let symbol: String
@@ -119,30 +245,8 @@ private struct HomeLinkRow: View {
             .padding(.vertical, AppTheme.Spacing.s)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(AppCardButtonStyle())
         .foregroundStyle(Color.appTextPrimary)
-    }
-}
-
-private struct SelectedPackSummary: View {
-    let pack: OfflineIdentificationPackMetadata
-
-    var body: some View {
-        HStack(spacing: AppTheme.Spacing.m) {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
-                Text("Dive Region").font(.headline)
-                Text(pack.displayName).font(.title3.bold())
-                Text("\(pack.speciesCount) species available offline for the \(pack.displayName)")
-                Text("Included with Dive ID").font(.caption).foregroundStyle(Color.appTextSecondary)
-            }
-            .multilineTextAlignment(.leading)
-            Spacer(minLength: 0)
-            // Says the summary opens region selection; it was tappable with no visual cue.
-            Text("Change").font(.subheadline.weight(.semibold)).foregroundStyle(Color.appAccent)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
     }
 }
 

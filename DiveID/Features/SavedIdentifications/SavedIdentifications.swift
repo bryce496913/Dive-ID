@@ -16,7 +16,7 @@ struct SavedIdentificationsView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                .appCard()
                 .padding(.horizontal)
             }
             if viewModel.isLoading {
