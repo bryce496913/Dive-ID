@@ -79,11 +79,14 @@ struct HomeView: View {
 }
 
 private struct HomeHeader: View {
+    @ScaledMetric(relativeTo: .largeTitle) private var symbolSize: CGFloat = 48
+
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
             Image(systemName: "water.waves")
-                .font(.system(size: 48))
+                .font(.system(size: symbolSize))
                 .foregroundStyle(Color.appPrimary)
+                .accessibilityHidden(true)
             Text("Dive ID").font(.largeTitle.bold())
             Text("Describe the marine life you saw and review possible matches for your selected dive region.")
                 .foregroundStyle(Color.appTextSecondary)
@@ -95,11 +98,17 @@ private struct SelectedPackSummary: View {
     let pack: OfflineIdentificationPackMetadata
 
     var body: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
-            Text("Dive Region").font(.headline)
-            Text(pack.displayName).font(.title3.bold())
-            Text("\(pack.speciesCount) species available offline for the \(pack.displayName)")
-            Text("Included with Dive ID").font(.caption).foregroundStyle(Color.appTextSecondary)
+        HStack(spacing: AppTheme.Spacing.m) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                Text("Dive Region").font(.headline)
+                Text(pack.displayName).font(.title3.bold())
+                Text("\(pack.speciesCount) species available offline for the \(pack.displayName)")
+                Text("Included with Dive ID").font(.caption).foregroundStyle(Color.appTextSecondary)
+            }
+            .multilineTextAlignment(.leading)
+            Spacer(minLength: 0)
+            // Says the summary opens region selection; it was tappable with no visual cue.
+            Text("Change").font(.subheadline.weight(.semibold)).foregroundStyle(Color.appAccent)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
