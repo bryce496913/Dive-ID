@@ -32,8 +32,13 @@ flags come from the current record validators (`catalogue_validation.risk_flags`
    ```sh
    python3 Tools/CatalogReview/global_batches.py record --manifest-sha256 <hash> \
      --reviewer Bryce --decision-text "<verbatim decision>" --outcome approve|reject \
-     [--exclude ID=note] [--reject ID=note] [--reason "..."] [--date YYYY-MM-DD]
+     [--exclude ID=note] [--reject ID=note] [--reason "..."] [--date YYYY-MM-DD] \
+     [--all-individually-reviewed]
    ```
+
+   `--all-individually-reviewed` is only for a reviewer who states they read every record
+   in the batch, not only those on the page; it marks every approved record
+   individually-reviewed and records that basis in the overlay.
 
    It writes `batch-NN/<Reviewer>Review<date>-batch-NN-gG.json` in the
    `Data/CatalogReview/BryceReview2026-10-12.json` schema, with these additions:
@@ -105,9 +110,14 @@ To read: **1,363 flagged** and **600 sampled** records, 1,963 in all. The other
 "I have reviewed all of the entries and have approved them. All creatures can move into
 approved." It was recorded once per current manifest with
 `global_batches.py record --outcome approve --date 2026-10-23`: 4,794 records approved,
-none held, every fingerprint matching the manifest. `publish_global.py` then marked all
-4,794 verified (1,963 individually reviewed, 2,831 sample-approved), and the gate was
-opened (see "Release visibility").
+none held, every fingerprint matching the manifest, and the gate was opened (see "Release
+visibility"). Those overlays first used the default methods (1,963 individually reviewed,
+2,831 sample-approved). At Bryce's direction ("re-recorded as individually-reviewed for
+all 4,794 as you originally wrote"), they were replaced the same day by overlays recorded
+with `--all-individually-reviewed`, which marks every approved record individually-reviewed
+and stores `reviewMethodBasis`: it rests on his statement that he reviewed every entry, not
+on the review pages, which showed the 2,831 unread records by name only. This is the one
+time recorded overlays were replaced; the earlier ones are in git history (PR #138).
 
 Take them in this order: highest flagged count first, ties by batch number.
 

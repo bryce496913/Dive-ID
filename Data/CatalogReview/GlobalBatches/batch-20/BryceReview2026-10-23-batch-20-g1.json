@@ -15,7 +15,7 @@
     {
       "speciesID": "00000000-0000-0000-0000-000000000003",
       "reviewedContentFingerprint": "sha256:5fe77e0a07ad5d74e06c8adce87509e0b74afecf2bd767507adc2b35bbfd2bbd",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/Acanthurus-coeruleus.html",
@@ -53,7 +53,7 @@
     {
       "speciesID": "00000000-0000-0000-0000-000000000009",
       "reviewedContentFingerprint": "sha256:fd6a5f1f35ed6b3704b3b3f6932b2904d0541548a44ce48a757d6328ab980cac",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/Chelonia-mydas.html"
@@ -62,7 +62,7 @@
     {
       "speciesID": "00000000-0000-0000-0000-000000000010",
       "reviewedContentFingerprint": "sha256:b09f5c9f939b7d501fa43ab9380706b4ea17a4fb6c6383a1deb13b0d47cc34b0",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/Aetobatus-narinari.html"
@@ -89,7 +89,7 @@
     {
       "speciesID": "21349407-2117-54a5-b14c-842aa0fe5934",
       "reviewedContentFingerprint": "sha256:40be415f3a4c334e11804696b57d5e9487abf5e2b5ae870ec622fe17002f8408",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=130917"
@@ -98,7 +98,7 @@
     {
       "speciesID": "2b4c18f8-7001-5dd9-a6d3-e5961681b697",
       "reviewedContentFingerprint": "sha256:24bc3f90d2aab40a913be561486ea1eb00e12bc10e66cdc8c8d408e00a9f196b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=86550"
@@ -116,7 +116,7 @@
     {
       "speciesID": "384ebf27-48ab-52a3-b6e3-69cfef6b8a63",
       "reviewedContentFingerprint": "sha256:d45dc077689c72a40cedcc69f8be5d0c74a4ed933fa5780949cc71f029886980",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=48263"
@@ -125,7 +125,7 @@
     {
       "speciesID": "39dcff62-fb5d-550e-9f97-f3b8cc8652cf",
       "reviewedContentFingerprint": "sha256:01d2318d99dedb588314a2788cb72c417fafa0e374976c4a8b9303813a417aca",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=48095"
@@ -134,7 +134,7 @@
     {
       "speciesID": "3ad42c9a-c118-538c-9a36-67c86b36616b",
       "reviewedContentFingerprint": "sha256:1d96c91fea6caaf819c77018414f39bd7d54a5d1f1168b0c3fb59ec18efd83c4",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=58213"
@@ -143,7 +143,7 @@
     {
       "speciesID": "4058d632-e092-5f66-ab86-bf01597f888b",
       "reviewedContentFingerprint": "sha256:9d7d918592153b6c30b401a129ebc3a2d834a13d6ca9b459dcb85ac15d347843",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=84556"
@@ -269,7 +269,7 @@
     {
       "speciesID": "7e7f6302-9a3a-5884-93f9-d3b7c0b365a6",
       "reviewedContentFingerprint": "sha256:56ed398e114c3c0a68fcd2b1462391ea52d6f21057ab7e8017f34b0a385d03f2",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=83702"
@@ -287,7 +287,7 @@
     {
       "speciesID": "807476e3-fdca-5f7e-b281-2f2718b08c1b",
       "reviewedContentFingerprint": "sha256:2fa422260dbcea4ec3fda6a531f53e330a80f11fa4551b4a1f23e7828793a128",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=26397"
@@ -296,7 +296,7 @@
     {
       "speciesID": "814b1139-e940-5968-a496-312e6821b81d",
       "reviewedContentFingerprint": "sha256:9b23c32649a730a20e44317876d37e78bcbfcd68d2b02ac8e17d85bb2fd1ee1e",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=84579"
@@ -386,7 +386,7 @@
     {
       "speciesID": "e1c39f0c-7114-5971-9d0c-4b06db825900",
       "reviewedContentFingerprint": "sha256:dd4e2f33e5344e0279b868e5d87348f028da736aa4e0f28ad6d81d2c116904ca",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=21380"
@@ -395,7 +395,7 @@
     {
       "speciesID": "e61177a3-b90c-5ac6-9850-e2d15bd1957b",
       "reviewedContentFingerprint": "sha256:8338d68c056be93e4b5090fd1f52c016f9ab2f3a0113b3a9114b0e487958625f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.sealifebase.se/summary/SpeciesSummary.php?ID=47279"
@@ -404,7 +404,7 @@
     {
       "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
       "reviewedContentFingerprint": "sha256:146c5e9241fc5a01752d77cbcd9d827eab46404da21974e591528e060092bec3",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/Pomacanthus-paru.html"
@@ -424,5 +424,6 @@
   ],
   "heldRecords": [],
   "rejection": null,
-  "reviewedCommit": "a8c4920845d0d7e2f28bb02ff06f0ccd63d5b685"
+  "reviewedCommit": "8c2d3e05ddda053df7755dfb39efb6b2e4197dc3",
+  "reviewMethodBasis": "all-individually-reviewed: the reviewer stated every record in the batch was reviewed, including the unread records the review page listed by name only"
 }

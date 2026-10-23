@@ -15,7 +15,7 @@
     {
       "speciesID": "000961c8-1cb5-5712-a5aa-a1d382cd6433",
       "reviewedContentFingerprint": "sha256:0aa3b0bbef74d0b37a239703b595e67514d00e94676036db5e09d22f6cbfff14",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=59765"
@@ -42,7 +42,7 @@
     {
       "speciesID": "057a4730-aac2-5a14-8aac-5ac8b76e32a3",
       "reviewedContentFingerprint": "sha256:bb8f1b3a6e09a9faa48ee80e5f4e9abf4205579c6ad1666cde7cbabf35beaf92",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12644"
@@ -60,7 +60,7 @@
     {
       "speciesID": "07ac0eaf-bf52-55a6-864b-cd1c9e4fa3ad",
       "reviewedContentFingerprint": "sha256:ee923e442edcf84362eafafb5acfa687af1973e7e4ac675e3b7ae98e2e022a34",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=60765"
@@ -78,7 +78,7 @@
     {
       "speciesID": "09735678-2f4d-51b8-a2eb-d5a6953e3d71",
       "reviewedContentFingerprint": "sha256:a30994df6d7ef1d7beec5765c53a5b7671a0b24547e6621fffbe74ef030a9f2d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7789"
@@ -96,7 +96,7 @@
     {
       "speciesID": "0ba171f4-631d-5cac-9d83-aa0e1c333475",
       "reviewedContentFingerprint": "sha256:11b0aa79a283f58cafd3446ddf07af251ca41c53fa38709e12447b79aa387f1a",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5813"
@@ -105,7 +105,7 @@
     {
       "speciesID": "0d001eef-bd23-5b44-9d46-6aaf504cea35",
       "reviewedContentFingerprint": "sha256:ca0c8044e346cfc0ebdbb1d3103d8192eadb273bdb55d77839555ad88d783a0f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25690"
@@ -114,7 +114,7 @@
     {
       "speciesID": "0d98c143-e250-5d05-9f34-d52236fc60c9",
       "reviewedContentFingerprint": "sha256:24c892bba92d467f0090b3f7fd1de168d98df7a40242bf6811b852bd8e7ae854",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11764"
@@ -123,7 +123,7 @@
     {
       "speciesID": "0dd03178-a273-509f-a1d8-8de46386a0c4",
       "reviewedContentFingerprint": "sha256:a1523fa6143d04f751e04cdfe49d6bcc74d0c2aba2285df938434d8b71507183",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=56816"
@@ -141,7 +141,7 @@
     {
       "speciesID": "0eb552ac-8e55-573d-af0f-a9d5c1afdb38",
       "reviewedContentFingerprint": "sha256:ee8b36fe1f6acf0e8a0e98244a8c132eedb4310b7b609b980138ca37cb1bcff0",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12787"
@@ -150,7 +150,7 @@
     {
       "speciesID": "0ed08b3f-ca79-51f3-9a4e-d945c0201e84",
       "reviewedContentFingerprint": "sha256:b774865e6e55fc2743d08ae4674b1d6b20bdbc7df564bfd6ffc041d756541e38",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=61068"
@@ -159,7 +159,7 @@
     {
       "speciesID": "11da2d83-d5da-56b5-9797-0f1476f77f2a",
       "reviewedContentFingerprint": "sha256:732bbbc48772fcdf4293aeafee22a2c1512716fd524484547d0e3657b95b2232",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7210"
@@ -177,7 +177,7 @@
     {
       "speciesID": "13c144f2-d192-5105-860c-309da8601078",
       "reviewedContentFingerprint": "sha256:8a7f613936e0d1db2f6377d92134623ca25b5b5a2c5527ce6f6c87e6db5d59c5",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8587"
@@ -186,7 +186,7 @@
     {
       "speciesID": "14548b26-3ece-526f-ab9c-ab5293546dbf",
       "reviewedContentFingerprint": "sha256:63ae2e9554f79204e8a209c9de274b924866a3d49ee475f012a2e77d141945d0",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7230"
@@ -195,7 +195,7 @@
     {
       "speciesID": "1455aee1-b8a8-5caf-89f9-bd4e15c4d323",
       "reviewedContentFingerprint": "sha256:1bd63d3a43f420566a80b2bac73baea724d1772738a2a53a21e5b76b8dcecede",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=47385"
@@ -204,7 +204,7 @@
     {
       "speciesID": "14e32c6d-1ec1-5f4f-994a-4ffd0dde187b",
       "reviewedContentFingerprint": "sha256:36a202cd6e2ffc9b1b1bd52231fcc829a9b05ecce819c43b10f385a217e46c35",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8128"
@@ -213,7 +213,7 @@
     {
       "speciesID": "15280cc8-8b36-5c84-8870-a8765b4d4d4e",
       "reviewedContentFingerprint": "sha256:4bd7dc29661e72c528bdae9549587ee78207161287f4a983576ab76f3bf25898",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5598"
@@ -240,7 +240,7 @@
     {
       "speciesID": "17a3c302-bdbf-5761-a198-217c802baa89",
       "reviewedContentFingerprint": "sha256:60b931300ffa2635150b2db403e40ec9cf4b57dfac99284576b3ec6866c30a95",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7448"
@@ -249,7 +249,7 @@
     {
       "speciesID": "17ac75e3-9f5b-5840-9208-d0cee6f567c9",
       "reviewedContentFingerprint": "sha256:2978276f4448a44beb61f71501fc5da554d902d3e173836f82b9fdc53f7a3abe",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5544"
@@ -267,7 +267,7 @@
     {
       "speciesID": "1b18cde6-8227-5ae4-8559-385d09a12a7b",
       "reviewedContentFingerprint": "sha256:a20fa8f976867d98a787a73338cbb8d086c13688263daffe00f656c2e6feb443",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=23766"
@@ -276,7 +276,7 @@
     {
       "speciesID": "1b6a0c05-eef3-52f7-b107-bfb99e9dcb6c",
       "reviewedContentFingerprint": "sha256:5b02c811b6160e6f5d04db39e296f4bc264329530a958cf3de8d5ba8a1881434",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=10136"
@@ -294,7 +294,7 @@
     {
       "speciesID": "1f44e1ce-3010-581a-89a0-3fbc2566afc1",
       "reviewedContentFingerprint": "sha256:0b93ce45c1568f8b76306d9850684a154c4efff2001dd83f606e26d44c9b1641",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4980"
@@ -303,7 +303,7 @@
     {
       "speciesID": "208f16bc-c664-579e-92aa-7cab8f789bf1",
       "reviewedContentFingerprint": "sha256:140fb71362b0ad035dd1ebab8b4e6cf00c159d47b6319ad1871465569a72d2d9",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5592"
@@ -312,7 +312,7 @@
     {
       "speciesID": "21301045-bf09-5ccf-844a-786d220d901d",
       "reviewedContentFingerprint": "sha256:ea068a3eeff4872171c248f6e5b31e57c5220ecfde35c079d7c74dd594188833",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4867"
@@ -321,7 +321,7 @@
     {
       "speciesID": "2191ad72-df89-560c-ac5e-71068b269562",
       "reviewedContentFingerprint": "sha256:c507fcd252d8d7bd9119f64a6a47a53520830b6088f3fc95f6a85261455e61bd",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25677"
@@ -339,7 +339,7 @@
     {
       "speciesID": "24882309-158b-5d73-8759-9013448c19e1",
       "reviewedContentFingerprint": "sha256:7d38d23f1dcf5fe95e225326b52d8865729723dc7fc5a1a548b959fbdec6a06a",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6605"
@@ -348,7 +348,7 @@
     {
       "speciesID": "295429c9-6ff9-57c3-af1b-be62a56fe31f",
       "reviewedContentFingerprint": "sha256:8128230497f67e2489da2f28cb9c6934996f35018f30ac1e73a569eab1a1ff57",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=10235"
@@ -393,7 +393,7 @@
     {
       "speciesID": "2e8e33b5-e283-55e5-84dd-bf913e0bb573",
       "reviewedContentFingerprint": "sha256:489b7cb93bbdb005e5ebe980361abd419f959270d8e38932f7cbd96f001bff48",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=61175"
@@ -420,7 +420,7 @@
     {
       "speciesID": "32c1deda-b6b1-5f2a-8435-53ce979791d4",
       "reviewedContentFingerprint": "sha256:8ba6de4d9ad266f828f6e4b2a5dca0d83eea295ad1beea043ac1cd777b5f31a4",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4890"
@@ -429,7 +429,7 @@
     {
       "speciesID": "3542d6c9-1369-54d4-a25c-030e525b878d",
       "reviewedContentFingerprint": "sha256:a3e4bb8a17f844e1db19c3342bfde3fa28ef5837bcc3a2435c2ffd86cb9edd74",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8030"
@@ -438,7 +438,7 @@
     {
       "speciesID": "377c6eca-55a5-5f65-ac1b-47c4be25180e",
       "reviewedContentFingerprint": "sha256:ed9138467283ed95f0669483b006a070969f6405c3ba806eba5d9b71276b598e",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=10990"
@@ -447,7 +447,7 @@
     {
       "speciesID": "37d27ff0-d026-5d15-ac64-6a6178325368",
       "reviewedContentFingerprint": "sha256:3d33b92fa2ec2b504a5ed2215ade125e3f71d2aa20dbb0454a967835a11eb5a4",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=914"
@@ -456,7 +456,7 @@
     {
       "speciesID": "3beb3fbc-8402-53ad-85ff-d7339aece637",
       "reviewedContentFingerprint": "sha256:789226a0b9c95a3c08e7b18a9eab3a52bbb0707e103b173b15141f455e290341",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8288"
@@ -465,7 +465,7 @@
     {
       "speciesID": "40d469d0-f328-5baa-a832-bde7fc04696f",
       "reviewedContentFingerprint": "sha256:fcc9415db59a708da146c9a3f2aebb8b987f5370d1b1c35e761c364395f5ef93",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7846"
@@ -474,7 +474,7 @@
     {
       "speciesID": "41b762fa-3283-5542-8175-3189042b5acb",
       "reviewedContentFingerprint": "sha256:1ec80c4b1d234762d0825843b1f720c7dcbc32324815a95d922329a84844df28",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5673"
@@ -483,7 +483,7 @@
     {
       "speciesID": "43cf9b35-71a7-5178-b661-db7dbea7ccd5",
       "reviewedContentFingerprint": "sha256:16a93906f245258098f154d9880c792a48b29333af358fc57a2cf6f96f4bcf40",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=56809"
@@ -510,7 +510,7 @@
     {
       "speciesID": "4bdc0cb2-1385-5609-80f7-0167b290676b",
       "reviewedContentFingerprint": "sha256:459cb6565bfa6310212e49d5c7f86e3143c7310c09195db08397f2449e5be06e",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7989"
@@ -528,7 +528,7 @@
     {
       "speciesID": "4dc8c377-10a8-52e3-8433-dbeda42dd1e6",
       "reviewedContentFingerprint": "sha256:73464fafe4501b92640826cc739f46689f9c803df8009c40cda62c723f33c758",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=58179"
@@ -546,7 +546,7 @@
     {
       "speciesID": "4fcb4036-b38d-5a4c-8f4b-a949478ed463",
       "reviewedContentFingerprint": "sha256:1203685fccc8359275e1ae4a5ac5fd544bf8399c83987914bbf19719c2538dba",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4826"
@@ -564,7 +564,7 @@
     {
       "speciesID": "50d0103c-b225-54e4-9ded-b65fdf647755",
       "reviewedContentFingerprint": "sha256:ffd62309599cd069fefac784a31b62186e94ca41f80b3ca13aa6437f9d4856d7",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7456"
@@ -618,7 +618,7 @@
     {
       "speciesID": "56069573-984b-50fb-8863-0b1388447b30",
       "reviewedContentFingerprint": "sha256:774be87c8269d91aa06f7d9c4efa7dd0003078f2514c0a99fde8eb155aa3b998",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5833"
@@ -636,7 +636,7 @@
     {
       "speciesID": "583b891f-95b0-5a6d-be70-993eca33c302",
       "reviewedContentFingerprint": "sha256:dc8539501019b1c693315c0f3cdb659428fa1d551cea0ad672be04f870498b94",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6545"
@@ -654,7 +654,7 @@
     {
       "speciesID": "59943aa2-6bef-5da4-8470-f9c98271cab0",
       "reviewedContentFingerprint": "sha256:943a3f9a2c39a485c14e021962f57f533c7d2b3f597bbc4417ec0af11bd8adde",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12532"
@@ -672,7 +672,7 @@
     {
       "speciesID": "5a46ab8a-5173-5ca0-a0cf-f56d54430ce1",
       "reviewedContentFingerprint": "sha256:9a8135a399c0b5d04bc8e51ff55b128e4a3d6bc272ef840f08d247de370038e9",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12700"
@@ -681,7 +681,7 @@
     {
       "speciesID": "5c1f347e-d67f-5406-be55-e2941a7640c8",
       "reviewedContentFingerprint": "sha256:a575d591f89f0108536216379b0f21dd1e7a798121519c4a4a947b6eb1f891aa",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8589"
@@ -690,7 +690,7 @@
     {
       "speciesID": "5e1834f8-29c2-543a-b5d3-e5d42e264a40",
       "reviewedContentFingerprint": "sha256:e55e5575437de557f277f4ae640fff73eb6ee6548fdc30d3461fa5ca6af8be1e",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=9648"
@@ -735,7 +735,7 @@
     {
       "speciesID": "5ff62de6-cf73-5610-abbb-56f8ba88bda1",
       "reviewedContentFingerprint": "sha256:35a19e3d6df69baf3cca7af218ef00096e2da898d1c0c01d501ac162c3b6537d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7243"
@@ -744,7 +744,7 @@
     {
       "speciesID": "62015454-381b-5a12-b3ba-afb5aa41eaba",
       "reviewedContentFingerprint": "sha256:5b8c8c6cd2ab5d66132c2463c9d0a4fa98fcbf564a81ad0a21742c94ac256503",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7475"
@@ -762,7 +762,7 @@
     {
       "speciesID": "63d67ed2-5bfb-5669-8d0d-8571db4a0f19",
       "reviewedContentFingerprint": "sha256:cb6494880f536a89ed91467ab6ae5c0e423189e5670b5ff0902a986d3a8a6df7",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=160"
@@ -771,7 +771,7 @@
     {
       "speciesID": "643f23eb-9752-5d49-a7a4-096e38cbe2f5",
       "reviewedContentFingerprint": "sha256:a0cf051742af614bea3e02bff3c2307636147ddd2074cb984524cbb20fc9e064",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=60351"
@@ -780,7 +780,7 @@
     {
       "speciesID": "64bb45ea-b8cb-51f5-b127-144bbc4cc6f2",
       "reviewedContentFingerprint": "sha256:725d39f1d37f9d2518aa89dcaa8de9dbc4d555a752e8c7d705212904e177611c",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=59851"
@@ -807,7 +807,7 @@
     {
       "speciesID": "677b0ce9-7f69-59ab-a171-59eb3dc5eab3",
       "reviewedContentFingerprint": "sha256:d48392b009d94d31025a1429a49a47225909b8b90899e4f9cfdefbb7c341aaa2",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25808"
@@ -834,7 +834,7 @@
     {
       "speciesID": "69a95baa-cf5f-5268-bba9-9bf5af3f98db",
       "reviewedContentFingerprint": "sha256:3d8f3fe48c4e4af1e55d8e17074ad08511cfaf7ea75c15a65176f645b4eba63d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=9626"
@@ -852,7 +852,7 @@
     {
       "speciesID": "6ae06cb7-cb33-52b8-bd63-ff0812a3cc37",
       "reviewedContentFingerprint": "sha256:9440bfc35e4ea7ff47f964b4944b804479d32accd500ff193280dc4237978302",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=27030"
@@ -870,7 +870,7 @@
     {
       "speciesID": "6b7cc03f-9b7c-5a84-a2e2-0aa00eb67a7f",
       "reviewedContentFingerprint": "sha256:0ca94fb69c65bd03892d1430af8801b560ff7806b5c042a8fea62ed5c1635ca1",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7634"
@@ -879,7 +879,7 @@
     {
       "speciesID": "6c03d484-cfeb-58ec-9853-32f23898e25d",
       "reviewedContentFingerprint": "sha256:81ef7730e2db600490ed93879024843cac685a9dd4eb3d9678555b5b200b3d1d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=15628"
@@ -897,7 +897,7 @@
     {
       "speciesID": "6d8d592b-bea5-5ee9-b6b2-94d76088b0f6",
       "reviewedContentFingerprint": "sha256:03373482ebb5a4eb386b7f32b4ba617c008996cfef3752c245b572a1d37501be",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=58178"
@@ -906,7 +906,7 @@
     {
       "speciesID": "716175cf-b7f7-5394-9774-b3c77da4f427",
       "reviewedContentFingerprint": "sha256:9ccdba6fe5d911d840f7e4a42f830146f47be181f0f9b0ea092ddc2409df4196",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4376"
@@ -915,7 +915,7 @@
     {
       "speciesID": "739fd46f-e885-512d-86f5-4fc485a97efa",
       "reviewedContentFingerprint": "sha256:5b0d93bb9d609b754921c78d9d81dc75d46a4f2bdf053e89b9e9eebe244bbbc9",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=13029"
@@ -924,7 +924,7 @@
     {
       "speciesID": "73ecdef3-89aa-58d4-942f-288c5e1aad69",
       "reviewedContentFingerprint": "sha256:982d7f531962331439899ff86b88a5337b4ef5cce832d249c0cf7599726bc0f0",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5976"
@@ -942,7 +942,7 @@
     {
       "speciesID": "767fffe6-58ae-57e8-9002-6c89f4ec5947",
       "reviewedContentFingerprint": "sha256:b46e181baa602c32744d6cdd24e7afc79aeee76f3eef0beef627b805d8e65a1a",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4891"
@@ -987,7 +987,7 @@
     {
       "speciesID": "7c0272d4-0ba0-5954-beab-2d3599c10f24",
       "reviewedContentFingerprint": "sha256:f9ee699c4f5611ed41d84cd5dfb2241b2df458be8ec34b0fb403dd572d3985a4",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6923"
@@ -1005,7 +1005,7 @@
     {
       "speciesID": "7ddbbcf4-6afd-525c-b28c-cebacdbdcb88",
       "reviewedContentFingerprint": "sha256:70eeeb3d251ec35e19ad2f84fceed38978c5c9898c5d5e7191d953a7eb6d55c1",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5832"
@@ -1023,7 +1023,7 @@
     {
       "speciesID": "7fd755ed-ab2d-5801-9d9a-fe8d94a29e8a",
       "reviewedContentFingerprint": "sha256:23da9d4c434d06ba3c1711bb1ae036d3ade4cda027a85490714795b22d24e271",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6387"
@@ -1032,7 +1032,7 @@
     {
       "speciesID": "80f3a629-f926-58c8-8fe4-f7b65fa06e6d",
       "reviewedContentFingerprint": "sha256:eabe8043706e68d9fb59e213cbbeba39fe659654082d4f9022b784b64c65f690",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8242"
@@ -1041,7 +1041,7 @@
     {
       "speciesID": "8105113a-8586-5f7e-a23c-ff52a8a5d0ac",
       "reviewedContentFingerprint": "sha256:b8b7a70615389afbc0ed1f20230179b42118e301fb4fdd43b09795cedeb17041",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5875"
@@ -1059,7 +1059,7 @@
     {
       "speciesID": "842682ee-77ad-545b-8160-2457c28b74be",
       "reviewedContentFingerprint": "sha256:3bbfa501b3ff2fd51bab9e7fe7f873fe5bc5a38672aabf26bce1b23f21d87bf8",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5483"
@@ -1086,7 +1086,7 @@
     {
       "speciesID": "859c9526-abb0-518f-a3f4-62883e31fd67",
       "reviewedContentFingerprint": "sha256:601aba4f1683d55a8351b04b42459a7026a7216eff7671b166e3f62ad9b8778d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11614"
@@ -1095,7 +1095,7 @@
     {
       "speciesID": "86469bc1-8f0a-59db-b4ef-f884cae83e48",
       "reviewedContentFingerprint": "sha256:ea8f87e7a592ce82e89f140f46d6690b6c7a4166bd48ccdf6868cf93e45207b7",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4617"
@@ -1104,7 +1104,7 @@
     {
       "speciesID": "864ca8ce-eb64-5911-bccb-793115ed9505",
       "reviewedContentFingerprint": "sha256:13df99387b66ac0f682120b9651d002f3c7e7281f9091673e0445721c400cd49",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=938"
@@ -1113,7 +1113,7 @@
     {
       "speciesID": "870f67f1-4d68-5fe7-b351-a7162a7e3440",
       "reviewedContentFingerprint": "sha256:76d4f24523caf9610adb1e0c74b6b6551f1cdd43e5073eae070f9217142da523",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4749"
@@ -1122,7 +1122,7 @@
     {
       "speciesID": "871c4502-0141-55f2-901f-169b087fced7",
       "reviewedContentFingerprint": "sha256:9b162ddc012054e3264b5cf26f4d5e2d2d4be52992935270f68198d76e728ea1",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5729"
@@ -1131,7 +1131,7 @@
     {
       "speciesID": "873641c3-42e7-54d8-8be7-7ddb6a50ee5c",
       "reviewedContentFingerprint": "sha256:ee2acd429d0e3b2004946439d393376d454e44cb8ed07ccc9451383b986c4760",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6023"
@@ -1176,7 +1176,7 @@
     {
       "speciesID": "89c96fd8-32d0-596a-b454-cd596e58fb89",
       "reviewedContentFingerprint": "sha256:8b964a6f1d895f6989be4f46b89d875f7df5382d62f086fa6898de27c539ce0f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7215"
@@ -1185,7 +1185,7 @@
     {
       "speciesID": "8a54b591-da84-5c46-b970-28fe3caf4962",
       "reviewedContentFingerprint": "sha256:16bf35e7bb4e008bb3e052d647430271ce3d82836031b71532cf417d10f94922",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5599"
@@ -1194,7 +1194,7 @@
     {
       "speciesID": "8afe541c-b870-5a76-8921-943c93c2f85c",
       "reviewedContentFingerprint": "sha256:ac5c494ddbba8d56e4f94c7582f809575d2b36d39c6a80b279eb9a7d76310a40",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11153"
@@ -1203,7 +1203,7 @@
     {
       "speciesID": "8c86603a-d15b-5f21-aaf9-0e607be2a63c",
       "reviewedContentFingerprint": "sha256:ef031c5e32f12f45f92c23551ad978cbc3f1f59a10db8a935b4d6a354160d6fe",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=67937"
@@ -1221,7 +1221,7 @@
     {
       "speciesID": "8f25dca9-c0d2-53e8-9f6e-a37328650c6f",
       "reviewedContentFingerprint": "sha256:5d1d258024c2d8ecab2a8f415005c2a441cf19486a5604cf0e12a94bc5243b73",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25837"
@@ -1239,7 +1239,7 @@
     {
       "speciesID": "8ff7a266-e1a5-5b4d-bd79-242a61ccacc8",
       "reviewedContentFingerprint": "sha256:d8f9eb729e157e9c8edfbc331e0b8453ef004449467c85cf20f200c188bff026",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7458"
@@ -1248,7 +1248,7 @@
     {
       "speciesID": "9163f2d4-bdf0-5560-8cb6-f4f3959c096a",
       "reviewedContentFingerprint": "sha256:790e8202b490ab123e1da16ff36f19e79b607d38682e4f92bec53f2570cdc05d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4485"
@@ -1257,7 +1257,7 @@
     {
       "speciesID": "91da1a43-678e-5b49-a2d4-1d2ff37eb7d8",
       "reviewedContentFingerprint": "sha256:29b031bb8a89f3c4dcb2173e501ad019b8de7739e6771c00869b81d66d0a998b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=8039"
@@ -1266,7 +1266,7 @@
     {
       "speciesID": "93973839-99ed-53e9-8e75-52d0a0304507",
       "reviewedContentFingerprint": "sha256:27eec843de4385ac52197d96e07425349050a5d65ca36e9e00155ad726fbe824",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4620"
@@ -1284,7 +1284,7 @@
     {
       "speciesID": "94505d89-7965-5349-8784-fa3b56028079",
       "reviewedContentFingerprint": "sha256:a803dd5440b99d84cb5e55f8240c8b9ae237dd0822167a6ce98a46a0d8e44110",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5815"
@@ -1302,7 +1302,7 @@
     {
       "speciesID": "958b3bac-c455-56b6-a38c-e58ab373c839",
       "reviewedContentFingerprint": "sha256:3b24776e36aa529d04295b78d5aa213165e0f2a61a3a5a7df70ca922c4d473ea",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5879"
@@ -1311,7 +1311,7 @@
     {
       "speciesID": "9676ca64-4a2e-5e62-9a17-9c202d773795",
       "reviewedContentFingerprint": "sha256:43d9424d3c110fc123979fba4dec518d40bd238e8c9eac38ac9ab6c2aa8bc5af",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7461"
@@ -1356,7 +1356,7 @@
     {
       "speciesID": "9a5235f8-bef0-53e0-9f69-e0ff4be79a9c",
       "reviewedContentFingerprint": "sha256:56641acba13d21efe7bb6dddbbc31458fa1a15283760b6b2342b2c9906109601",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=10352"
@@ -1365,7 +1365,7 @@
     {
       "speciesID": "9c516f12-72f4-5119-a6ee-3bfe784720ba",
       "reviewedContentFingerprint": "sha256:78f29c89ef7c0663a63873afc40b296b0a1c32eac38b5edfe5d755520eb982a3",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=1869"
@@ -1374,7 +1374,7 @@
     {
       "speciesID": "9cd9549c-6efc-5d91-a63f-f5277fca3518",
       "reviewedContentFingerprint": "sha256:bd5ad84f8a7252fb841096cda14cac86bfee5fe10e07ce06ac288db21fb32a65",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=58791"
@@ -1383,7 +1383,7 @@
     {
       "speciesID": "9dc3dbc6-3d01-54eb-b725-88ea643b6e33",
       "reviewedContentFingerprint": "sha256:5e4b6473eb187112a8e894d8bf6724c380e691bb69288d0825e5ce0667a05835",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5615"
@@ -1392,7 +1392,7 @@
     {
       "speciesID": "9dd63b0c-dae0-5d6b-8c3c-e899420793a2",
       "reviewedContentFingerprint": "sha256:d029e7011f129a1763f2d3b74230bb3c1c88b059baea444775e46e054fe91171",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=928"
@@ -1401,7 +1401,7 @@
     {
       "speciesID": "9e22c86e-f0e5-5cdb-8edf-8a45c860d37b",
       "reviewedContentFingerprint": "sha256:1312fcfab5c66395e7d644b348a7b798ebeb95a91411e2b499d55299c1f7181f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=370"
@@ -1446,7 +1446,7 @@
     {
       "speciesID": "a515f207-f215-55eb-88c8-90402e50d46b",
       "reviewedContentFingerprint": "sha256:e4e4a29cc19ed78c489ad36efa44a3a940721c011bdafd4e39d45fadfb39b09c",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=14998"
@@ -1500,7 +1500,7 @@
     {
       "speciesID": "aa94b0d9-fa51-5bde-96a4-0330dbdb0ad7",
       "reviewedContentFingerprint": "sha256:867fed2b227cb11daf179667ad62832ef541fa6643b060697d2dcc31b071932a",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=23581"
@@ -1509,7 +1509,7 @@
     {
       "speciesID": "aaaad6e8-06bf-50d1-8ba0-89071f195950",
       "reviewedContentFingerprint": "sha256:cf86f1f758beae4e82a92bd71184edc8d19426dd24f87a1a71a975fcbb9557c5",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5482"
@@ -1527,7 +1527,7 @@
     {
       "speciesID": "ab43e49d-4947-55a2-a8eb-9f0e7b7d96bb",
       "reviewedContentFingerprint": "sha256:bdc4556caea26abd5a439ab7ee11886b4e0c73d18d23163a52474aaf28f42da9",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4984"
@@ -1581,7 +1581,7 @@
     {
       "speciesID": "ae7053e2-0c00-5ec8-b8fc-3dbd0054f0a1",
       "reviewedContentFingerprint": "sha256:87b6636990575d8ee8111bd2d126d0a0653755d145e0b52a038f8f8f7a8e010c",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4622"
@@ -1599,7 +1599,7 @@
     {
       "speciesID": "b02c6ee4-f390-56ae-a79b-9c256ad6a56c",
       "reviewedContentFingerprint": "sha256:8bef7ada23130ec932997ac8648779f0064a5d7499a2417f939a928e5dae8550",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=59344"
@@ -1608,7 +1608,7 @@
     {
       "speciesID": "b21f6b66-e27f-53f5-a189-2b64882a888f",
       "reviewedContentFingerprint": "sha256:6d3754ee781921757572cd25000429ea693d01614b08225506dd234c7c965053",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5955"
@@ -1626,7 +1626,7 @@
     {
       "speciesID": "b45f2c95-076b-5131-a166-792b495ae977",
       "reviewedContentFingerprint": "sha256:f5f221020772a34bac0eb3d190c6a3225e74f8cc6cf13f79f8ee2a3a5eb72a32",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11618"
@@ -1662,7 +1662,7 @@
     {
       "speciesID": "b9835fd1-efad-5c39-ab1b-8d199053028e",
       "reviewedContentFingerprint": "sha256:a9ff3a45fbf52f9043ee4aa1e427a9cfeaa7983549286370081c07c68653d5ce",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=10896"
@@ -1671,7 +1671,7 @@
     {
       "speciesID": "bbdba186-6dd1-5897-825e-2fe73889000a",
       "reviewedContentFingerprint": "sha256:fe7a8b1034b2e09db28b0fdea05aa0ddc80ad1a9217c0828ab605efca0327544",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12659"
@@ -1680,7 +1680,7 @@
     {
       "speciesID": "bf91801f-2440-57b5-bf5e-65d1a5dc5c89",
       "reviewedContentFingerprint": "sha256:4a7069f41367b620bdf1b0c5477a1f20696171e34c3c68d042d4ce414fdf9385",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5772"
@@ -1698,7 +1698,7 @@
     {
       "speciesID": "c54b8b1f-6144-5089-ad46-e46305b5a49a",
       "reviewedContentFingerprint": "sha256:ba7c11674d7838901a61b1459bad6ebc54c387b7a8f75dad09734f8e1fee0bfb",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5572"
@@ -1707,7 +1707,7 @@
     {
       "speciesID": "c5eae180-88b5-5552-86c5-b015b4c8550b",
       "reviewedContentFingerprint": "sha256:50f2456ed4ef21a31f3c46b5f522e650705df1c58cc8519caa826e794f693755",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12483"
@@ -1716,7 +1716,7 @@
     {
       "speciesID": "c6cfd10c-b520-509e-a9cc-c654b924ca8a",
       "reviewedContentFingerprint": "sha256:ae28c8e66b2f2570ab213d6d0d78da9f34d463167968097d83003c82ccb587b6",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=22819"
@@ -1725,7 +1725,7 @@
     {
       "speciesID": "c70d97ae-cd42-5b22-ae93-5fb6f6c5e813",
       "reviewedContentFingerprint": "sha256:df5448e27c92da126490bab334976235b8cd37bb6f8a824f4f015bbc4c77ae81",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5568"
@@ -1734,7 +1734,7 @@
     {
       "speciesID": "c7d77e9a-9578-589b-bf4b-22be6121e46b",
       "reviewedContentFingerprint": "sha256:f483cc4bbef2caf3b64550777ac61280d490ec6096c489a9cef50a49d9e6518d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=13774"
@@ -1752,7 +1752,7 @@
     {
       "speciesID": "c8c1235d-283f-56c7-be3b-b4d0cfaf5e87",
       "reviewedContentFingerprint": "sha256:cf247023223f703d1ef26952397db4490a15ade865bdaaa51e10d3f7a6ceccb4",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=46499"
@@ -1770,7 +1770,7 @@
     {
       "speciesID": "c939e05e-b24b-5f1c-9538-227a8446f4e0",
       "reviewedContentFingerprint": "sha256:19122fad123a7a2e9a22f247bd3998daa16e8c1b552d9461b81bf4b0908abb11",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=23455"
@@ -1788,7 +1788,7 @@
     {
       "speciesID": "ca1f8cd6-e40b-54ec-97d2-7d40e425c304",
       "reviewedContentFingerprint": "sha256:50adc9317b0fe81ffd0aa95a7843d2a8d23cf6ff230452805610a7977b2ccc1b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12782"
@@ -1806,7 +1806,7 @@
     {
       "speciesID": "cd0c51f1-b075-5b35-a11e-605c5f4b339f",
       "reviewedContentFingerprint": "sha256:c5bc0863ca41fe36f1a9e83d60dd632a8806723c98ac8e0aa30a5596086991c3",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=80"
@@ -1824,7 +1824,7 @@
     {
       "speciesID": "ce4fb4a5-400a-5df6-a564-6209fb322131",
       "reviewedContentFingerprint": "sha256:302dd0946b07cf5516fc7336a2c6e22577f3604d5a8f6ec8982f1336e2ebf967",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=24793"
@@ -1833,7 +1833,7 @@
     {
       "speciesID": "cee4bdd1-330d-52db-a516-fcd8a4cd61ba",
       "reviewedContentFingerprint": "sha256:3c9d90ea58fc721136449de0ae6872ae4c2fd5cc5ac416e7e47deccd10a43343",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25051"
@@ -1860,7 +1860,7 @@
     {
       "speciesID": "d5553b11-8b22-5531-accc-cc6de9add6bc",
       "reviewedContentFingerprint": "sha256:877c9b1c79796ff63d8568dd67d3ce571fbade1975c34d4702bfa58772c07b45",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25049"
@@ -1869,7 +1869,7 @@
     {
       "speciesID": "d57e2c37-6d4a-50f3-add6-871de33cc8e0",
       "reviewedContentFingerprint": "sha256:63f0dbc875f7b8e313e6140f3c8b306b99b1f8ed6d1e528ad5bda801db5c7b26",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5457"
@@ -1887,7 +1887,7 @@
     {
       "speciesID": "d681dc63-720b-55ae-af88-433aca2dc8a4",
       "reviewedContentFingerprint": "sha256:828be9b02f892b9b0fb8b73032df00b9148f16283a378e74b21040293f8cfdab",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4981"
@@ -1896,7 +1896,7 @@
     {
       "speciesID": "d84d0c67-6450-5fcd-b4b6-082a0ac2db13",
       "reviewedContentFingerprint": "sha256:99ab3672f9bbb2359b567960cddce24d952f049f2f8a4f92e86cda6323637d54",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5128"
@@ -1914,7 +1914,7 @@
     {
       "speciesID": "dc0a196c-63da-51e3-bed2-f932f86222d2",
       "reviewedContentFingerprint": "sha256:f9b23a070317bfe54f39f55e621ca7a06b284677d7e5a82172a31ab0690a3cac",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=12259"
@@ -1923,7 +1923,7 @@
     {
       "speciesID": "dcc3a51e-5f01-5934-8938-ee6d60b9ec3d",
       "reviewedContentFingerprint": "sha256:3925c9d8a10d8e7eb4928b63d7836057bdb57a2db8a0a9753b5bb7472736f839",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6548"
@@ -1932,7 +1932,7 @@
     {
       "speciesID": "dd2f3443-0ea0-5857-ab10-0e75bf2904b0",
       "reviewedContentFingerprint": "sha256:9b4401b74f012d9636b79fb65bda70d156896834de33378348d0e6963dd5b50d",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6630"
@@ -1977,7 +1977,7 @@
     {
       "speciesID": "e339fd91-9e0c-5fb4-9208-3164a4c339e0",
       "reviewedContentFingerprint": "sha256:e99034bf9ad06e668330517a19969243d22e2d7aeeac0db1ca45e736be635527",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5579"
@@ -1995,7 +1995,7 @@
     {
       "speciesID": "e78f6edb-c356-5b6e-91a8-1cc92f7d46aa",
       "reviewedContentFingerprint": "sha256:1e3145cf71106e9ffd8b1f1741c88e88ca53650b90e573722acacfc164d5b4ae",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=932"
@@ -2022,7 +2022,7 @@
     {
       "speciesID": "eadcc05d-005e-5f45-8910-e8b1253d4b31",
       "reviewedContentFingerprint": "sha256:f740acd276525bbe445f7b9fca9bb93a6002b5a772a0afc4056491efcfddc941",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=7976"
@@ -2031,7 +2031,7 @@
     {
       "speciesID": "ebc6d6c7-e771-55b8-adcf-52a7d0b3b294",
       "reviewedContentFingerprint": "sha256:d82ba02db35fe08c93c6007b16e2047ce9270bcec7cc7e016d451c0492b5c295",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11861"
@@ -2049,7 +2049,7 @@
     {
       "speciesID": "ee728389-1916-5add-9641-d3bb8a960543",
       "reviewedContentFingerprint": "sha256:1071bbac2002233f655bee23ad2399cb294d00f24afc24b4661fed4883f9d25b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=56806"
@@ -2058,7 +2058,7 @@
     {
       "speciesID": "ef324852-c4c5-53b0-95ec-8c3cbe8414af",
       "reviewedContentFingerprint": "sha256:2e1cf17fe4c152a0b9fe422c6b60a151c925052613e28a93c36ed2e881762e91",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=23644"
@@ -2076,7 +2076,7 @@
     {
       "speciesID": "f0aa2ccd-a198-53a8-b853-1999aedfb8dd",
       "reviewedContentFingerprint": "sha256:62eb30b135209c3f67d72802d9cfc715163da1317c2731edc39210761b655ffc",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5696"
@@ -2094,7 +2094,7 @@
     {
       "speciesID": "f2d70d23-a7f7-5fa6-8afd-e112a7785a04",
       "reviewedContentFingerprint": "sha256:949cce5fd244207b4652e5e639d24a898bafa30645021916ca3da814a91d8649",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6650"
@@ -2112,7 +2112,7 @@
     {
       "speciesID": "f43b661c-a99d-5990-b79a-26f1fb94e2bb",
       "reviewedContentFingerprint": "sha256:ed2871a779da31f6ee02982a7efec7295b4a0b266273e231a3c2445a8d7df108",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5806"
@@ -2130,7 +2130,7 @@
     {
       "speciesID": "f6301949-0651-5d93-9f50-48a2822842c6",
       "reviewedContentFingerprint": "sha256:c2c80db1c372a68337f158609a0b59367ddb6e461cc003cf51e83d7b3a13261f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=11000"
@@ -2139,7 +2139,7 @@
     {
       "speciesID": "f80ef773-f930-5061-b086-8a75c4c9a97a",
       "reviewedContentFingerprint": "sha256:5ab6671dd664bf6b2594b47ebc39c4af3e03ba88b515cbee2394295c4c00ec8b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=47204"
@@ -2148,7 +2148,7 @@
     {
       "speciesID": "f892a76b-0d04-5f39-be32-a76f2d125495",
       "reviewedContentFingerprint": "sha256:e8b7eb777712e62f1bc3db7be8b02b1279bcae06c864ae07172683b2f8e61be7",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5720"
@@ -2157,7 +2157,7 @@
     {
       "speciesID": "f8d905fe-124c-5fa2-b3aa-7a60faf106d9",
       "reviewedContentFingerprint": "sha256:24556432ac5d5fd5662b8903eb305a250e720a406e028c8576b6bc4e04eba419",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=25452"
@@ -2166,7 +2166,7 @@
     {
       "speciesID": "f8e011d0-9a73-5f18-98ab-8e85de595d10",
       "reviewedContentFingerprint": "sha256:772ba2fce922db3ccb4c975ec5412458ccb54936ce2161499a283ea13fe2c96b",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6452"
@@ -2175,7 +2175,7 @@
     {
       "speciesID": "f9c45dab-6de4-559b-a491-d6344f587513",
       "reviewedContentFingerprint": "sha256:574db918a8dd951da8524ba3e6face67868560fe1939fdbe79e2fb3d1f1bd4f3",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5618"
@@ -2184,7 +2184,7 @@
     {
       "speciesID": "fb59250e-4acd-567c-8c09-fe3329849f5e",
       "reviewedContentFingerprint": "sha256:9274845d939fbeb43d2345b4ee7cc2a886aef144c09aa0ae15529342a05fe929",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=61081"
@@ -2202,7 +2202,7 @@
     {
       "speciesID": "fbd7be94-6c5a-554a-9897-dd13eea9f7e9",
       "reviewedContentFingerprint": "sha256:31db14b97eaba0b9020e7ee0fa36af88ebe5319d11b7265f887aee50e08e62b6",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=60350"
@@ -2220,7 +2220,7 @@
     {
       "speciesID": "fc6259eb-d846-58b3-b94e-cd19bc096af4",
       "reviewedContentFingerprint": "sha256:6d4b3eb71472e6c310f31d260662b44cc088a33adcdb5c535b9381566720fb0f",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=6490"
@@ -2238,7 +2238,7 @@
     {
       "speciesID": "fe105937-98cd-5e29-ac6b-417a66121c7f",
       "reviewedContentFingerprint": "sha256:9441cd5be750902daf7053a1daa19b5dc6eb10425b6eb0a948525d4199ece34c",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5819"
@@ -2247,7 +2247,7 @@
     {
       "speciesID": "fe89378e-a014-50d0-8f89-8e687822fcfb",
       "reviewedContentFingerprint": "sha256:f305fe02b59b06f5e26c6770eb5a46d00d3481f452c62101313384cc5c56fe30",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=4838"
@@ -2256,7 +2256,7 @@
     {
       "speciesID": "ffebb95a-b8a6-5541-bd3d-60af99475e78",
       "reviewedContentFingerprint": "sha256:d02d0f2f22d7f641b4e483f1426e067c302ac26cdcc7b68b38c7443f978f7860",
-      "reviewMethod": "sample-approved",
+      "reviewMethod": "individually-reviewed",
       "resolvedQuestions": [],
       "sourceReferences": [
         "https://www.fishbase.se/summary/SpeciesSummary.php?ID=5795"
@@ -2265,5 +2265,6 @@
   ],
   "heldRecords": [],
   "rejection": null,
-  "reviewedCommit": "a8c4920845d0d7e2f28bb02ff06f0ccd63d5b685"
+  "reviewedCommit": "8c2d3e05ddda053df7755dfb39efb6b2e4197dc3",
+  "reviewMethodBasis": "all-individually-reviewed: the reviewer stated every record in the batch was reviewed, including the unread records the review page listed by name only"
 }
