@@ -282,9 +282,8 @@ struct LocalSpeciesRanker: SpeciesRanking {
         let count = groups.filter { $0 }.count
         if count >= 3 { return .sufficient }
         // Naming a specific animal group ("shark", "rays", "octopus") is enough to list
-        // that group's species with limited confidence. "Fish" and vague phrases such as
-        // "flat thing" are too broad to list anything on their own.
-        if namesSpecificAnimalGroup(observation) { return .limited }
+        // that group's species with limited confidence. "Fish" alone is too broad.
+        if !observation.categories.subtracting(["fish"]).isEmpty { return .limited }
 
         // Category, color, and approximate size are broad clues. Two of those alone
         // (for example, "dark fish" or "small fish") are still not identifying.
@@ -296,19 +295,6 @@ struct LocalSpeciesRanker: SpeciesRanking {
             || observation.approximateDepthMeters != nil
         if count >= 2, hasDistinctiveGroup { return .limited }
         return .insufficient
-    }
-
-    private static let vagueGroupPhrases: Set<String> = ["flat thing"]
-
-    private static func namesSpecificAnimalGroup(_ observation: ParsedObservation) -> Bool {
-        // Checked against the described words, not `tokens`: synonym expansion adds the
-        // category name itself to `tokens`, so "flat thing" would otherwise read as "ray".
-        let words = Set(observation.normalizedText.split { !$0.isLetter && !$0.isNumber }.map { LocalObservationParser.singular(String($0)) })
-        return observation.categories.subtracting(["fish"]).contains { category in
-            (LocalObservationVocabulary.synonyms[category] ?? [category]).subtracting(vagueGroupPhrases).contains {
-                LocalObservationParser.matches($0, inTokens: words, normalizedText: observation.normalizedText)
-            }
-        }
     }
 
     private func unique(_ values: [String]) -> [String] {
