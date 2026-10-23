@@ -125,7 +125,7 @@ private struct DetailCard<Content: View>: View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.l) { content }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .appCard()
     }
 }
 
@@ -144,7 +144,7 @@ private struct DetailGroup<Content: View>: View {
             Text(title).font(.title3.bold()).foregroundStyle(Color.appTextPrimary)
         }
         .padding()
-        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .appCard()
     }
 }
 

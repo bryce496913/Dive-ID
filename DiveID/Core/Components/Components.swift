@@ -15,57 +15,11 @@ struct PrimaryActionButton: View {
                     Text(title).fontWeight(.semibold)
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 50)
+            .frame(maxWidth: .infinity, minHeight: 54)
+            .contentShape(Rectangle())
         }
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.roundedRectangle(radius: AppTheme.controlRadius))
-        .tint(.appAccent)
+        .buttonStyle(AppPrimaryButtonStyle())
         .disabled(disabled || isLoading)
-    }
-}
-
-struct FeatureActionCard: View {
-    let title: String
-    let subtitle: String
-    let symbol: String
-    /// The screen's main action: tinted and outlined with the accent instead of the surface color.
-    var isProminent = false
-    let action: () -> Void
-    @Environment(\.isEnabled) private var isEnabled
-    /// Grows the icon badge with Dynamic Type so the symbol never clips.
-    @ScaledMetric(relativeTo: .title) private var badgeSize: CGFloat = 44
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: AppTheme.Spacing.l) {
-                Image(systemName: symbol)
-                    .font(.title2)
-                    .frame(width: badgeSize, height: badgeSize)
-                    .background(isProminent ? Color.white.opacity(0.2) : Color.appAccent.opacity(0.2), in: Circle())
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                    Text(title).font(isProminent ? .title3.bold() : .headline)
-                    Text(subtitle).font(.subheadline).foregroundStyle(isProminent ? Color.appTextPrimary : Color.appTextSecondary)
-                }
-                .multilineTextAlignment(.leading)
-                Spacer(minLength: AppTheme.Spacing.s)
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(isProminent ? Color.appTextPrimary : Color.appTextSecondary)
-                    .accessibilityHidden(true)
-            }
-            .padding(isProminent ? AppTheme.Spacing.xl : AppTheme.Spacing.l)
-            .foregroundStyle(Color.appTextPrimary)
-            // A translucent accent over the black background keeps white text above 4.5:1; solid accent does not.
-            .background(isProminent ? Color.appAccent.opacity(0.35) : Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-            .overlay {
-                if isProminent { RoundedRectangle(cornerRadius: AppTheme.radius).strokeBorder(Color.appAccent, lineWidth: 1.5) }
-            }
-            .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
-            // A plain button does not dim its custom colors when disabled, so do it here.
-            .opacity(isEnabled ? 1 : 0.5)
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -139,13 +93,14 @@ struct SpeciesArtwork: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14)
-                .fill(LinearGradient(colors: [Color.appAccent.opacity(0.35), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(LinearGradient(colors: [Color.appAccentDeep.opacity(0.9), Color.appHighlightDeep.opacity(0.55), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
             // Sized to the artwork's frame, so the symbol fits a thumbnail as well as the detail header.
             Image(systemName: symbolName)
                 .resizable()
                 .scaledToFit()
                 .fontWeight(.semibold)
-                .foregroundStyle(Color.appTextSecondary)
+                .foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
                 .frame(maxWidth: 72, maxHeight: 72)
                 .padding(showsCaption ? AppTheme.Spacing.xxl : AppTheme.Spacing.m)
             if showsCaption {
@@ -186,26 +141,37 @@ struct MatchStrengthBadge: View {
     }
 }
 
+/// A possible match in the results list. The first match gets a spotlight layout with a larger
+/// thumbnail and a brand-gradient edge; it is still labelled with its rank and strength only.
 struct SpeciesResultCard: View {
     let match: IdentificationMatch
     @ScaledMetric(relativeTo: .headline) private var artworkSize: CGFloat = 72
+    @ScaledMetric(relativeTo: .headline) private var spotlightArtworkSize: CGFloat = 96
+
+    private var isSpotlight: Bool { match.rank == 1 }
 
     var body: some View {
         HStack(alignment: .top, spacing: AppTheme.Spacing.m) {
-            SpeciesArtwork(species: match.species, showsCaption: false)
-                .frame(width: artworkSize, height: artworkSize)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                Text("#\(match.rank) · \(match.species.commonName)").font(.headline)
+            ZStack(alignment: .topLeading) {
+                SpeciesArtwork(species: match.species, showsCaption: false)
+                    .frame(width: isSpotlight ? spotlightArtworkSize : artworkSize, height: isSpotlight ? spotlightArtworkSize : artworkSize)
+                RankBadge(rank: match.rank).offset(x: -6, y: -6)
+            }
+            .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                Text("#\(match.rank) · \(match.species.commonName)").font(isSpotlight ? .title3.bold() : .headline)
                 if !match.species.scientificName.isEmpty {
                     Text(match.species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary)
                 }
                 MatchStrengthBadge(strength: match.matchStrength)
                 if !match.explanation.isEmpty {
-                    Text(match.explanation).font(.subheadline).lineLimit(3)
+                    Text(match.explanation).font(.subheadline).lineLimit(isSpotlight ? 4 : 3)
                 }
-                ForEach(match.distinguishingFeatures.prefix(2), id: \.self) {
-                    Text("• \($0)").font(.caption).foregroundStyle(Color.appTextSecondary)
+                ForEach(match.distinguishingFeatures.prefix(2), id: \.self) { feature in
+                    Label(feature, systemImage: "checkmark.circle")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .labelStyle(CompactLabelStyle())
                 }
             }
             .multilineTextAlignment(.leading)
@@ -215,9 +181,40 @@ struct SpeciesResultCard: View {
                 .foregroundStyle(Color.appTextSecondary)
                 .accessibilityHidden(true)
         }
-        .padding()
+        .padding(isSpotlight ? AppTheme.Spacing.xl : AppTheme.Spacing.l)
         .foregroundStyle(Color.appTextPrimary)
-        .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .appCard()
+        .overlay {
+            if isSpotlight {
+                RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous).strokeBorder(LinearGradient.appBrand, lineWidth: 2)
+            }
+        }
         .contentShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+    }
+}
+
+/// The rank number on a result's thumbnail.
+private struct RankBadge: View {
+    let rank: Int
+    @ScaledMetric(relativeTo: .caption) private var size: CGFloat = 26
+
+    var body: some View {
+        Text("\(rank)")
+            .font(.caption.bold())
+            .monospacedDigit()
+            .frame(minWidth: size, minHeight: size)
+            .background(LinearGradient.appBrand, in: Circle())
+            .overlay(Circle().strokeBorder(Color.black.opacity(0.4), lineWidth: 2))
+            .foregroundStyle(Color.appTextPrimary)
+    }
+}
+
+/// An icon and text with tight spacing, aligned to the text's first line.
+struct CompactLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: AppTheme.Spacing.xs) {
+            configuration.icon
+            configuration.title
+        }
     }
 }

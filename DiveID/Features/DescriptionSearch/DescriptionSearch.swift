@@ -74,7 +74,7 @@ struct DescriptionSearchView: View {
                         Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                     }
                     .padding()
-                    .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                    .appCard()
                 }
                 else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
                 ZStack(alignment: .topLeading) {
@@ -87,7 +87,7 @@ struct DescriptionSearchView: View {
                         .focused($isEditorFocused)
                         .accessibilityIdentifier("descriptionText")
                 }
-                .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                .appCard()
                 DescriptionLengthHint(count: viewModel.normalizedDescription.count)
                 Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)

@@ -40,7 +40,7 @@ private struct CreditsCard<Content: View>: View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) { content }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .background(Color.appSurface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .appCard()
     }
 }
 

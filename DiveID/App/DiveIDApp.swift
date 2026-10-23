@@ -59,6 +59,7 @@ struct DiveIDApp: App {
                 features: features
             )
             .preferredColorScheme(.dark)
+            .fontDesign(.rounded)
             .safeAreaInset(edge: .bottom, spacing: 0) {
 #if DEBUG
                 // Reserve space so diagnostics cannot cover or intercept search controls.
