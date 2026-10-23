@@ -31,7 +31,7 @@ struct RootView: View {
                     router: router
                 )
             } else {
-                EmptyStateView(title: "Photo identification unavailable", message: "Photo identification is not yet available.")
+                EmptyStateView(title: "Photo identification unavailable", message: "Photo identification is not yet available.", systemImage: "camera")
                     .appScreenBackground()
                     .navigationTitle("Identify From Photo")
             }

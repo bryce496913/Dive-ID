@@ -283,8 +283,12 @@ def _current_commit():
 
 
 def record(manifest_sha256, reviewer, decision_text, outcome, review_date=None, excludes=(), rejects=(), reason=None,
-           root=BATCHES, pack=PACK, commit=None):
-    """Write the overlay for one manifest from the reviewer's own decision. Returns (path, overlay)."""
+           root=BATCHES, pack=PACK, commit=None, all_individually_reviewed=False):
+    """Write the overlay for one manifest from the reviewer's own decision. Returns (path, overlay).
+
+    all_individually_reviewed: the reviewer states they read every record in the batch, not
+    only the flagged and sampled ones shown on the review page. Every approved record is then
+    individually-reviewed, and the overlay records that this rests on the reviewer's statement."""
     match = HASH.fullmatch(manifest_sha256.strip())
     if not match:
         raise ReviewError("the manifest hash must be 64 hex characters")
@@ -344,7 +348,8 @@ def record(manifest_sha256, reviewer, decision_text, outcome, review_date=None, 
         "batchID": manifest["batchID"], "generation": manifest["generation"],
         "batchManifestSHA256": key, "seed": manifest["seed"],
         "records": [] if not approved else [
-            {"speciesID": i, "reviewedContentFingerprint": e["reviewedContentFingerprint"], "reviewMethod": METHODS[e["selection"]],
+            {"speciesID": i, "reviewedContentFingerprint": e["reviewedContentFingerprint"],
+             "reviewMethod": "individually-reviewed" if all_individually_reviewed else METHODS[e["selection"]],
              "resolvedQuestions": [], "sourceReferences": sources.get(i, [])}
             for i, e in sorted(entries.items()) if i not in held_ids],
         "heldRecords": held,
@@ -354,6 +359,9 @@ def record(manifest_sha256, reviewer, decision_text, outcome, review_date=None, 
             "next": "fix the records, rebuild the pack, then regenerate this batch with a new seed"},
         "reviewedCommit": commit if commit is not None else _current_commit(),
     }
+    if all_individually_reviewed:
+        overlay["reviewMethodBasis"] = ("all-individually-reviewed: the reviewer stated every record in the batch was reviewed, "
+                                        "including the unread records the review page listed by name only")
     path = Path(root) / manifest["batchID"] / f"{reviewer.strip()}Review{review_date}-{manifest['batchID']}-g{manifest['generation']}.json"
     _write_new(path, _json_text(overlay))
     return path, overlay
@@ -530,6 +538,8 @@ def main(argv=None):
     r.add_argument("--exclude", action="append", metavar="ID=NOTE", help="hold a record out of approval")
     r.add_argument("--reject", action="append", metavar="ID=NOTE", help="a record with an error; a sampled one rejects the batch")
     r.add_argument("--reason", help="why the batch is rejected")
+    r.add_argument("--all-individually-reviewed", action="store_true",
+                   help="the reviewer states they read every record, so none is sample-approved")
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
@@ -544,7 +554,7 @@ def main(argv=None):
             print(render_page(args.manifest_sha256).relative_to(REPO))
         else:
             path, overlay = record(args.manifest_sha256, args.reviewer, args.decision_text, args.outcome, args.date,
-                                   args.exclude, args.reject, args.reason)
+                                   args.exclude, args.reject, args.reason, all_individually_reviewed=args.all_individually_reviewed)
             print(json.dumps({"overlay": str(path.relative_to(REPO)), "decision": overlay["decision"],
                               "approvedRecords": len(overlay["records"]), "heldRecords": len(overlay["heldRecords"]),
                               "rejection": overlay["rejection"]}, indent=2, ensure_ascii=False))

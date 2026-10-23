@@ -42,14 +42,14 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
 - **Global:** Bryce approved all 20
   [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
-  on October 23, 2026: 1,963 records individually reviewed (every flagged record and
-  each batch's sample) and 2,831 sample-approved. 4,792 of those approvals still hold.
-  Approval of the Global copies does not carry over to the regional packs.
+  on October 23, 2026, all recorded as individually reviewed on Bryce's statement that
+  he reviewed every entry (`--all-individually-reviewed`). 4,792 of those approvals
+  still hold. Approval of the Global copies does not carry over to the regional packs.
 - **Awaiting review (drafts, not in Release):** the four sharks and rays Bryce asked for
   on October 23, 2026 (Whitetip reef shark, Grey reef shark, Zebra shark, Reef manta ray)
   in [batch-21](Docs/GlobalBatchReview.md#owner-additions-2026-10-23), and Graceful shark
   and Silky shark in batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were
-  removed.
+  removed. While these drafts exist the pack is listed as "Global (Experimental)".
 - **Release** exposes 4,794 records: the 2 approved Caribbean species in Caribbean and
   4,792 in Global (which holds its own copies of the 8 Caribbean species). Tropical
   Pacific is unavailable. Bryce opened Global's pack-level Release gate
