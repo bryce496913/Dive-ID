@@ -4,9 +4,9 @@ enum GlobalRegion {
     static let definition = RegionCatalogDefinition(
         id: .global,
         resourceDirectory: "Global",
-        // Global stays out of Release even when batch approvals verify some of its
-        // records. Enabling it is a separate change the owner approves explicitly
-        // (Docs/GlobalBatchReview.md, "Release visibility").
-        availableInRelease: false
+        // Opened for Release on the owner's explicit approval (Bryce, 2026-10-23), once
+        // every record was approved in batch review. Release still exposes only
+        // verified records (Docs/GlobalBatchReview.md, "Release visibility").
+        availableInRelease: true
     )
 }

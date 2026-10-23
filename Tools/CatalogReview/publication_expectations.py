@@ -40,7 +40,23 @@ def generate():
         records = json.loads((ROOT / f'DiveID/Resources/IdentificationPacks/{directory}/Creatures.json').read_text())
         document = json.loads((ROOT / 'Data/CatalogReview' / decisions).read_text())
         result[catalogue] = approved_ids(records, document, catalogue)
+    result['global'] = global_approved_ids()
     return result
+
+
+def global_approved_ids(root=ROOT):
+    """Global approvals come from recorded batch decisions (global_batches.py), bound to
+    each record's current content fingerprint; the pack's verified records must equal them."""
+    import global_batches
+    pack = root / 'DiveID/Resources/IdentificationPacks/Global'
+    records = json.loads((pack / 'Creatures.json').read_text())
+    validate_catalogue(records)
+    reviews, _ = global_batches.approved_reviews(records, root / 'Data/CatalogReview/GlobalBatches')
+    expected = {record['id'] for record in records if record['id'] in reviews and record.get('categories')}
+    actual = {record['id'] for record in records if record['review']['status'] == 'verified'}
+    if actual != expected:
+        raise ValueError(f"Global publication differs from approvals: {sorted(actual ^ expected)[:10]}")
+    return sorted(expected)
 
 
 if __name__ == '__main__':

@@ -5,7 +5,8 @@ final class DiveIDUITests: XCTestCase {
     func testCoreOfflineNavigationSmokeFlow() {
         let spottedEagleRayResultIdentifier = "result_00000000-0000-0000-0000-000000000010"
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting"]
+        // An existing user's stored Caribbean selection (a launch-argument default, not persisted).
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "caribbean"]
         app.launch()
         XCTAssertTrue(app.buttons["describeAction"].exists)
         XCTAssertTrue(app.buttons["photoAction"].exists)
@@ -28,6 +29,16 @@ final class DiveIDUITests: XCTestCase {
         spottedEagleRayResult.tap()
         XCTAssertTrue(app.navigationBars["Spotted Eagle Ray"].waitForExistence(timeout: 2))
         XCTAssertTrue(app.buttons["toggleSaved"].waitForExistence(timeout: 2))
+    }
+
+    /// A new install, with no stored selection, starts in the Global pack.
+    @MainActor
+    func testNewInstallStartsInGlobal() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting"]
+        app.launch()
+        app.buttons["describeAction"].tap()
+        XCTAssertTrue(app.staticTexts["Dive region: Global"].waitForExistence(timeout: 5))
     }
 
     @MainActor

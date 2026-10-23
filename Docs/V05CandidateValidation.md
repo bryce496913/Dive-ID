@@ -135,8 +135,8 @@ Record each item independently with configuration, device and evidence location.
 Keep Wi-Fi and cellular off while exercising the app; leave saved storage intact.
 
 1. Debug: verify Caribbean 8 / Pacific 384, switch between them, relaunch and
-   confirm selection persists. Release: verify Caribbean with exactly two approved species, unavailable
-   Pacific, accessible saved snapshots and unavailable photo action.
+   confirm selection persists. Release: verify Global with 4,794 records as the new-install default, Caribbean
+   with exactly two approved species, unavailable Pacific, accessible saved snapshots and unavailable photo action.
 2. Debug: run the committed Pacific ray/dartfish/waspfish/puffer positive cases and
    freshwater-lily-pad frog no-match. Record actual ranks, engine, pack and labels.
    Also run the frozen v0.5 freshwater-sand and regional probes; record actual
@@ -252,10 +252,10 @@ none are listed as expectations.
 ### What this Release build contains
 
 - **Approved records:** Release exposes only approved records. At this commit those
-  are **2 Caribbean species**: Atlantic Blue Tang and Queen Angelfish.
-- **Global** has 0 approved records. Batch 1's approvals lapsed in the evidence
-  rebuild and await re-review (`Docs/GlobalBatchReview.md`). Global must not appear
-  in Release.
+  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **all 4,794
+  Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`).
+- **Global** is in Release and is the default region for new installs (owner decision,
+  2026-10-23).
 - **Tropical Pacific** has 0 approved records and must not appear either.
 - **The region picker** therefore offers Caribbean only, showing 2 species.
 
@@ -392,7 +392,7 @@ for p in sys.argv[1:]:
 
 ### Optional: Global in an Internal build (experimental only)
 
-Global is development-only and must never appear in Release. To time it on the iPhone,
+Global is also in Release since 2026-10-23. To time its development build on the iPhone,
 use the **Internal** configuration rather than Debug: it is optimized like Release
 (`-O`, whole module) and has no `DEBUG`, but it opens the development catalogue. It
 installs as a separate app, **Dive ID Internal** (`com.brycecameron.DiveID.internal`),

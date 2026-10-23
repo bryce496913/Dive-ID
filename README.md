@@ -13,10 +13,11 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
-| Global (Experimental) | 3 | 4794 | 0 | 0 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Global | 23 | 4794 | 4794 | 4794 | pass, opt-in (30/34; four positive cases miss the top ten) |
 
-**Global is not ready to be the default or main search experience** (2026-10-23).
-Its latest opt-in evaluation runs the 34 positive V05 cases against all 4,794 records
+**Global is the default for new installs and is available in Release** (owner decision,
+2026-10-23), after every Global record was approved in batch review. Its search quality
+evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,794 records
 ([report](Docs/GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23),
 [raw results](Reports/GlobalPackEvaluation.json)):
 
@@ -33,20 +34,22 @@ worldwide pack). Four positive descriptions still miss the top ten:
 > **These results are not independent evidence and not publication approval.**
 > The 34 cases are development cases that influenced the implementation, not a
 > holdout; independent diver testing is still needed. Passing the search gates
-> approves no record: Release contains no approved Global record, and Global is
-> gated out of Release at pack level. Regional packs stay the default.
+> approves no record; Global's records are approved by the recorded batch decisions.
 
 The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidation.md#release-device-checklist-prepared-2026-10-22-unexecuted).
 
 - **Caribbean:** Bryce approved Atlantic Blue Tang and Queen Angelfish on October 12, 2026.
-- **Global:** Bryce approved batch 1 (250 records) on October 22, 2026, through
-  [batch review](Docs/GlobalBatchReview.md). Later rebuilds changed all 250, so none
-  keeps its approval. All 4,794 records are draft and wait in 20
-  [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23),
-  and the pack keeps "(Experimental)" in its name.
-- **Release** exposes 2 records, the 2 Caribbean species; Global and Tropical Pacific
-  are unavailable. Global is gated out of Release at pack level (`GlobalRegion.swift`),
-  so approving its records does not publish it; enabling it is a separate change.
+- **Global:** Bryce approved all 20
+  [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
+  on October 23, 2026, so all 4,794 records are verified: 1,963 individually reviewed
+  (every flagged record and each batch's sample) and 2,831 sample-approved. The pack
+  is no longer "(Experimental)". Approval of the Global copies does not carry over to
+  the regional packs.
+- **Release** exposes 4,796 records: the 2 approved Caribbean species in Caribbean and
+  all 4,794 in Global (which holds its own copies of the 8 Caribbean species). Tropical
+  Pacific is unavailable. Bryce opened Global's pack-level Release gate
+  (`GlobalRegion.swift`) on October 23, 2026. New installs start in Global; a stored
+  region selection is kept.
 - **Debug** permits all 5,802 development records: 8 Caribbean, 1,000 Tropical Pacific
   and 4,794 Global (Global holds its own draft copies of the 8 Caribbean species).
 

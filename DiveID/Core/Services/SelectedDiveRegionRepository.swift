@@ -5,11 +5,11 @@ protocol SelectedDiveRegionRepository: Sendable {
     func setSelectedRegion(_ id: OfflineIdentificationPackID) async
 }
 
-/// The dive region a new install starts with. It stays regional while the Global pack
-/// fails its evaluation gates (Docs/GlobalPackEvaluation.md); a stored choice, Global
+/// The dive region a new install starts with: Global, by the owner's decision of
+/// 2026-10-23, once every Global record was approved. A stored choice, regional
 /// included, is always kept.
 enum DefaultDiveRegion {
-    static let forNewInstalls: OfflineIdentificationPackID = .caribbean
+    static let forNewInstalls: OfflineIdentificationPackID = .global
 }
 
 actor UserDefaultsSelectedDiveRegionRepository: SelectedDiveRegionRepository {
