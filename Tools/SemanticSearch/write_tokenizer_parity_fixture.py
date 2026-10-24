@@ -3,7 +3,7 @@
 Swift `WordPieceTokenizer` and the Python mirror (`build_embedding_index.ReferenceWordPieceTokenizer`).
 
 - `basicTokenCases` record what the pinned fast tokenizer's BertNormalizer and
-  BertPreTokenizer produce (the `tokenizers` version in requirements-real-encoder.txt),
+  BertPreTokenizer produce (the `tokenizers` version in requirements-real-encoder.in),
   so both implementations are checked against the real tokenizer, not only each other.
   Writing refuses if the mirror disagrees with it on any case.
 - `cases` record full encodings (IDs and attention mask) of the mirror on a small vocabulary.
@@ -19,7 +19,7 @@ sys.path.insert(0, str(HERE))
 import build_embedding_index as builder  # noqa: E402
 
 OUTPUT = HERE.parents[1] / "DiveIDTests/Fixtures/TokenizerParity.v2.json"
-PINNED_TOKENIZERS = next(line.split("==")[1].strip() for line in (HERE / "requirements-real-encoder.txt").read_text().splitlines()
+PINNED_TOKENIZERS = next(line.split("==")[1].split("#")[0].strip() for line in (HERE / "requirements-real-encoder.in").read_text().splitlines()
                          if line.startswith("tokenizers=="))
 
 VOCABULARY = ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "query", "passage", "cafe", "fish", "div", "##ing", "reef",

@@ -1,0 +1,20 @@
+# Direct dependencies of the Core ML provisioning flow (provision_real_encoder.py,
+# build_embedding_index.py, write_tokenizer_parity_fixture.py). requirements-real-encoder.txt
+# is the hash-locked resolution of this file for the macOS arm64 runner (Python 3.12):
+#
+#   uv pip compile Tools/SemanticSearch/requirements-real-encoder.in \
+#     --python-version 3.12 --python-platform aarch64-apple-darwin --generate-hashes \
+#     -o Tools/SemanticSearch/requirements-real-encoder.txt
+#
+# coremltools converts a traced `aten::Int` on a length-1 constant with Python int(ndarray);
+# NumPy 2.4 turned that (deprecated since 1.25) into "TypeError: only 0-dimensional arrays can
+# be converted to Python scalars". coremltools 8.3.0 and 9.0 both fail with NumPy 2.4+, so
+# NumPy stays below 2.4 until a coremltools release converts the model with it.
+coremltools==8.3.0
+numpy==2.3.5
+# The newest PyTorch coremltools 8.3.0 is tested against (it warns on 2.6).
+torch==2.5.0
+transformers==4.51.3
+tokenizers==0.21.4
+safetensors==0.5.3
+huggingface-hub==0.30.2

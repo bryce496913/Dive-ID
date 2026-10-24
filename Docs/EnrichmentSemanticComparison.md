@@ -87,7 +87,7 @@ On an authorized networked Mac with Xcode and Python 3.12:
 ```sh
 python3 -m venv .venv-real-encoder
 . .venv-real-encoder/bin/activate
-python3 -m pip install -r Tools/SemanticSearch/requirements-real-encoder.txt
+python3 -m pip install --require-hashes -r Tools/SemanticSearch/requirements-real-encoder.txt
 python3 Tools/SemanticSearch/provision_real_encoder.py \
   --package-resources DiveID/Resources/SemanticSearch
 python3 Tools/SemanticSearch/validate_production_readiness.py \
