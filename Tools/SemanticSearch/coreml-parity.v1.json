@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "frozenOn": "2026-10-24",
+  "frozenBefore": "Fixed before any genuine Core ML vector was produced or inspected. Do not loosen a tolerance to obtain a pass; a change needs its own reviewed justification and a new schemaVersion.",
+  "reference": "PyTorch float32 forward pass of the pinned source model on the same 256-token padded input (ReferenceWordPieceTokenizer), masked mean pooling, L2 normalization: the computation that builds the bundled index.",
+  "tolerances": {
+    "coreMLCosineMinimum": 0.999,
+    "coreMLMaxAbsoluteDifference": 0.01,
+    "unitNormMaxDeviation": 0.0001,
+    "paddingInvarianceCosineMinimum": 0.99999,
+    "retrievalTopK": 10,
+    "retrievalTopKOverlapMinimum": 9,
+    "retrievalScoreMaxAbsoluteDifference": 0.02,
+    "retrievalTop1RequiredWhenReferenceMarginAtLeast": 0.01
+  },
+  "probes": [
+    "large flat ray with white spots on a dark back gliding over sand",
+    "small bright blue fish with a yellow tail darting around coral",
+    "CAFÉ-striped fish near the reef!",
+    "diver's blue—green animal; 12cm",
+    "juvenile\tangelfish\nwith yellow tail",
+    "eel",
+    "a fish on the reef",
+    "Long silver fish with a pointed head, large teeth and dark spots cruising near a Caribbean reef.",
+    "octopus changing colour quickly hiding in a crevice at night",
+    "striped fish with long venomous spines hovering near a wreck, reddish brown with white bands, about 30 cm, seen in the Caribbean at 15 metres depth; it barely moved and kept its fins spread wide while we watched it for several minutes before it drifted under a ledge. The bands were thin and closely spaced, the face had small tentacles above the eyes, and the pectoral fins looked like feathery fans. It did not react to our lights and stayed in the same spot even when other fish swam past. reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish reef fish"
+  ]
+}
