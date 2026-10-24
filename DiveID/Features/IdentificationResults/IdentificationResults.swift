@@ -28,7 +28,9 @@ struct IdentificationResultsView: View {
 #endif
             case .loaded(let matches):
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
+                    // At most ten results, so a plain stack: every result exists (and keeps its identifier
+                    // in the accessibility tree) even when, at large text sizes, it starts below the screen.
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
                         VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
                             Label(viewModel.resultsSummary, systemImage: "sparkle.magnifyingglass")
                                 .labelStyle(CompactLabelStyle())
