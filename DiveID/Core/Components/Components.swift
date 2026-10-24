@@ -12,7 +12,11 @@ struct PrimaryActionButton: View {
                 if isLoading {
                     ProgressView().tint(.white)
                 } else {
+                    // Wraps rather than truncating at large text sizes; the button grows to fit.
                     Text(title).fontWeight(.semibold)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.vertical, AppTheme.Spacing.s)
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 54)

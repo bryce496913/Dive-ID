@@ -67,68 +67,65 @@ struct DescriptionSearchView: View {
     }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
-                    ClueGuide()
-                    if let pack = viewModel.pack {
-                        regionLayout {
-                            if !dynamicTypeSize.isAccessibilitySize {
-                                Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
-                            }
-                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                                Text("Dive region: \(pack.displayName)").font(.headline)
-                                Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                            }
-                            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
-                            Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
+        ScrollView {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
+                ClueGuide()
+                if let pack = viewModel.pack {
+                    regionLayout {
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .appCard()
-                    }
-                    else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
-                    ZStack(alignment: .topLeading) {
-                        if viewModel.descriptionText.isEmpty {
-                            Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
-                                .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                            Text("Dive region: \(pack.displayName)").font(.headline)
+                            Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
                         }
-                        TextEditor(text: $viewModel.descriptionText)
-                            .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
-                            .focused($isEditorFocused)
-                            .accessibilityIdentifier("descriptionText")
+                        if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
+                        Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
                     .appCard()
-                    // The editor's edge lights up with the brand gradient while typing.
-                    .overlay {
-                        RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
-                            .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
-                            .opacity(isEditorFocused ? 1 : 0)
-                            .animation(.easeOut(duration: 0.2), value: isEditorFocused)
-                            .allowsHitTesting(false)
+                }
+                else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
+                ZStack(alignment: .topLeading) {
+                    if viewModel.descriptionText.isEmpty {
+                        Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
+                            .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
                     }
-                    DescriptionLengthHint(count: viewModel.normalizedDescription.count)
-                    if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
-                    findMatchesButton.id(Self.findMatchesAnchor)
-                    Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
-                        .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                    TextEditor(text: $viewModel.descriptionText)
+                        .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
+                        .focused($isEditorFocused)
+                        .accessibilityIdentifier("descriptionText")
+                }
+                .appCard()
+                // The editor's edge lights up with the brand gradient while typing.
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
+                        .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
+                        .opacity(isEditorFocused ? 1 : 0)
+                        .animation(.easeOut(duration: 0.2), value: isEditorFocused)
+                        .allowsHitTesting(false)
+                }
+                DescriptionLengthHint(count: viewModel.normalizedDescription.count)
+                if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
+                Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
+                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
 #if DEBUG || DIVEID_INTERNAL
-                    // Below the search controls, so it never moves or covers them.
-                    if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
+                // Below the search controls, so it never moves or covers them.
+                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
 #endif
-                }
-                .padding()
             }
-            .scrollDismissesKeyboard(.interactively)
-            // Find Matches sits right under the editor. Once the keyboard has opened, scroll it into
-            // view so it lands just above the keyboard, where one tap dismisses the keyboard and submits.
-            .onChange(of: isEditorFocused) { _, isFocused in
-                guard isFocused else { return }
-                Task {
-                    try? await Task.sleep(for: .milliseconds(400))
-                    withAnimation { proxy.scrollTo(Self.findMatchesAnchor, anchor: .bottom) }
-                }
-            }
+            .padding()
+        }
+        .scrollDismissesKeyboard(.interactively)
+        // Find Matches is pinned in the bottom safe area, which the keyboard raises, so it always sits
+        // above the keyboard however tall the editor, the text or the screen is; one tap dismisses the
+        // keyboard and submits. The scroll view's content ends above it, so nothing is hidden behind it.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            findMatchesButton
+                .padding(.horizontal)
+                .padding(.vertical, AppTheme.Spacing.s)
+                .background(Color.appBackground.opacity(0.92).ignoresSafeArea(.container, edges: .bottom))
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -141,8 +138,6 @@ struct DescriptionSearchView: View {
         .navigationTitle("Describe What You Saw")
         .task(id: router.path) { await viewModel.load() }
     }
-
-    private static let findMatchesAnchor = "findMatchesAnchor"
 
     private var findMatchesButton: some View {
         PrimaryActionButton(title: "Find Matches", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
