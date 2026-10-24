@@ -34,18 +34,40 @@ enum FingerprintContract {
         if let typed = value as? [String: Int] { object = typed.mapValues { $0 as Any } }
         else if let typed = value as? [String: Any] { object = typed }
         else { throw SemanticArtifactDiagnostic.malformedTokenizer }
-        let members = try object.keys.sorted().map { key -> String in
-            let encodedKey = String(decoding: try JSONEncoder().encode(key), as: UTF8.self)
+        // Keys in code-point order, as Python's sort_keys (Swift's String order is not defined that way).
+        let keys = object.keys.sorted { $0.unicodeScalars.lexicographicallyPrecedes($1.unicodeScalars) { $0.value < $1.value } }
+        let members = try keys.map { key -> String in
             let encodedValue: String
             switch object[key]! {
-            case let string as String: encodedValue = String(decoding: try JSONEncoder().encode(string), as: UTF8.self)
+            case let string as String: encodedValue = pythonJSONString(string)
             case let boolean as Bool: encodedValue = boolean ? "true" : "false"
             case let integer as Int: encodedValue = String(integer)
             default: throw SemanticArtifactDiagnostic.malformedTokenizer
             }
-            return encodedKey + ":" + encodedValue
+            return pythonJSONString(key) + ":" + encodedValue
         }
         return Data(("{" + members.joined(separator: ",") + "}").utf8)
+    }
+
+    /// A JSON string exactly as Python's `json.dumps(..., ensure_ascii=False)` writes it: only the
+    /// quote, the backslash and C0 controls are escaped. JSONEncoder also escapes "/", which the real
+    /// vocabulary contains ("/" and "##/"), so its digest never matched the provisioned contract.
+    static func pythonJSONString(_ value: String) -> String {
+        var output = "\""
+        for scalar in value.unicodeScalars {
+            switch scalar {
+            case "\"": output += "\\\""
+            case "\\": output += "\\\\"
+            case "\n": output += "\\n"
+            case "\r": output += "\\r"
+            case "\t": output += "\\t"
+            case "\u{08}": output += "\\b"
+            case "\u{0C}": output += "\\f"
+            case _ where scalar.value < 0x20: output += String(format: "\\u%04x", scalar.value)
+            default: output.unicodeScalars.append(scalar)
+            }
+        }
+        return output + "\""
     }
 }
 
