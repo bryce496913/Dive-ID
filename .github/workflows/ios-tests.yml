@@ -93,12 +93,16 @@ jobs:
                   continue
               version = tuple(map(int, match.groups()))
               for device in entries:
-                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
-                      candidates.append((version, device["name"], device["udid"]))
+                  # The SE has its own pass below; sorting by name would otherwise pick it here too
+                  # ("iPhone SE" sorts after "iPhone 16"), so the larger screen was never tested.
+                  name = device.get("name", "")
+                  if device.get("isAvailable") and name.startswith("iPhone") and not name.startswith("iPhone SE"):
+                      candidates.append((version, name, device["udid"]))
           if not candidates:
-              raise SystemExit("No available iOS 18 iPhone simulator for Xcode 16.4 was found")
+              raise SystemExit("No available iOS 18 iPhone simulator (other than the SE) for Xcode 16.4 was found")
           candidates.sort(reverse=True)
           print(candidates[0][2])
+          print(f"Main simulator: {candidates[0][1]} (iOS {candidates[0][0][0]}.{candidates[0][0][1]})", file=sys.stderr)
           ' )"
           echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
           # Smallest supported iPhone, for the small-screen UI-test pass.
