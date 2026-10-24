@@ -72,6 +72,19 @@ final class DiveIDUITests: XCTestCase {
         let keyboard = app.keyboards.firstMatch
         if keyboard.exists {
             XCTAssertLessThanOrEqual(findMatches.frame.maxY, keyboard.frame.minY, file: file, line: line)
+            // Dismissed and shown again, with the description grown well past the editor's height,
+            // the button is still entirely above the keyboard each time.
+            for round in 1...2 {
+                app.buttons["dismissKeyboard"].tap()
+                XCTAssertTrue(keyboard.waitForNonExistence(timeout: 3), file: file, line: line)
+                XCTAssertTrue(findMatches.isHittable, file: file, line: line)
+                editor.tap()
+                XCTAssertTrue(keyboard.waitForExistence(timeout: 3), file: file, line: line)
+                editor.typeText(" Seen gliding slowly along the reef edge at about ten metres, with a pointed snout, a dark back covered in pale rings and spots, and a white belly.")
+                record(app, "keyboard-round-\(round)", elements: ["findMatches": findMatches, "editor": editor, "keyboard": keyboard])
+                XCTAssertTrue(findMatches.isHittable, file: file, line: line)
+                XCTAssertLessThanOrEqual(findMatches.frame.maxY, keyboard.frame.minY, file: file, line: line)
+            }
         }
         // A single tap dismisses the keyboard and submits.
         findMatches.tap()
@@ -102,6 +115,7 @@ final class DiveIDUITests: XCTestCase {
         let firstResultFound = firstResult.waitForExistence(timeout: 5)
         record(app, "results", elements: ["firstResult": firstResult], hierarchy: !firstResultFound)
         XCTAssertTrue(firstResultFound)
+        XCTAssertEqual(firstResult.identifier, "result_00000000-0000-0000-0000-000000000010")
         assertFitsAndReachable(firstResult, in: app, named: "first result")
         record(app, "results-before-tap", elements: ["firstResult": firstResult])
         firstResult.tap()
