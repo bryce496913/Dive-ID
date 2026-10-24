@@ -1,0 +1,728 @@
+{
+  "schemaVersion": 2,
+  "basicTokenizerSource": "tokenizers 0.21.4 BertNormalizer + BertPreTokenizer",
+  "vocabulary": {
+    "[PAD]": 0,
+    "[UNK]": 1,
+    "[CLS]": 2,
+    "[SEP]": 3,
+    "query": 4,
+    "passage": 5,
+    "cafe": 6,
+    "fish": 7,
+    "div": 8,
+    "##ing": 9,
+    "reef": 10,
+    "one": 11,
+    "two": 12,
+    "three": 13,
+    "four": 14,
+    "five": 15,
+    "six": 16,
+    "hello": 17,
+    "world": 18,
+    ",": 19,
+    "-": 20,
+    "!": 21,
+    ":": 22,
+    "'": 23,
+    "s": 24,
+    "diver": 25
+  },
+  "contract": {
+    "contractVersion": 1,
+    "modelIdentifier": "fixture.wordpiece",
+    "modelVersion": "1",
+    "embeddingDimension": 2,
+    "tokenizerIdentifier": "fixture-bert-wordpiece-v2",
+    "preprocessingIdentifier": "fixture-preprocess-v1",
+    "vocabularyFile": "tokenizer-parity-fixture.json",
+    "lowercase": true,
+    "stripAccents": true,
+    "maximumSequenceLength": 12,
+    "truncation": "end",
+    "clsToken": "[CLS]",
+    "separatorToken": "[SEP]",
+    "paddingToken": "[PAD]",
+    "unknownToken": "[UNK]",
+    "queryPrefix": "query: ",
+    "documentPrefix": "passage: ",
+    "inputIDsFeature": "ids",
+    "attentionMaskFeature": "mask",
+    "tokenTypeIDsFeature": null,
+    "outputFeature": "hidden",
+    "pooling": "meanMasked",
+    "normalizeL2": true,
+    "vocabularySHA256": "8e2595de5344acc6ee0c78b09201d99fc18c6beba92a98a13ae8699ed954db2c",
+    "tokenizerFingerprint": "fc6e1be60dbfc7c7266e4e0632127bdeef73392f8e43ee6ebcc8814da696e252"
+  },
+  "basicTokenCases": [
+    {
+      "text": "CAFÉ-striped fish near the reef!",
+      "tokens": [
+        "cafe",
+        "-",
+        "striped",
+        "fish",
+        "near",
+        "the",
+        "reef",
+        "!"
+      ]
+    },
+    {
+      "text": "diver's blue—green animal; 12cm",
+      "tokens": [
+        "diver",
+        "'",
+        "s",
+        "blue",
+        "—",
+        "green",
+        "animal",
+        ";",
+        "12cm"
+      ]
+    },
+    {
+      "text": "juvenile\tang\nwith yellow tail",
+      "tokens": [
+        "juvenile",
+        "ang",
+        "with",
+        "yellow",
+        "tail"
+      ]
+    },
+    {
+      "text": "unaffable bioluminescence ???",
+      "tokens": [
+        "unaffable",
+        "bioluminescence",
+        "?",
+        "?",
+        "?"
+      ]
+    },
+    {
+      "text": "Colours: black, brown, gray and orange.",
+      "tokens": [
+        "colours",
+        ":",
+        "black",
+        ",",
+        "brown",
+        ",",
+        "gray",
+        "and",
+        "orange",
+        "."
+      ]
+    },
+    {
+      "text": "Dorsal fin: 17–18 spines, 6–7 soft rays.",
+      "tokens": [
+        "dorsal",
+        "fin",
+        ":",
+        "17",
+        "–",
+        "18",
+        "spines",
+        ",",
+        "6",
+        "–",
+        "7",
+        "soft",
+        "rays",
+        "."
+      ]
+    },
+    {
+      "text": "50°C × 3 ± 2 €5 $5 #1 @me ~ok",
+      "tokens": [
+        "50°c",
+        "×",
+        "3",
+        "±",
+        "2",
+        "€5",
+        "$",
+        "5",
+        "#",
+        "1",
+        "@",
+        "me",
+        "~",
+        "ok"
+      ]
+    },
+    {
+      "text": "«quoted» „low“ ‹single›",
+      "tokens": [
+        "«",
+        "quoted",
+        "»",
+        "„",
+        "low",
+        "“",
+        "‹",
+        "single",
+        "›"
+      ]
+    },
+    {
+      "text": "naïve résumé coöperate é",
+      "tokens": [
+        "naive",
+        "resume",
+        "cooperate",
+        "e"
+      ]
+    },
+    {
+      "text": "ø Ø ł Ł đ ß æ œ ı",
+      "tokens": [
+        "ø",
+        "ø",
+        "ł",
+        "ł",
+        "đ",
+        "ß",
+        "æ",
+        "œ",
+        "ı"
+      ]
+    },
+    {
+      "text": "İstanbul KELVIN K",
+      "tokens": [
+        "istanbul",
+        "kelvin",
+        "k"
+      ]
+    },
+    {
+      "text": "ΣΊΣΥΦΟΣ",
+      "tokens": [
+        "σισυφοσ"
+      ]
+    },
+    {
+      "text": "海洋魚 fish 鱼",
+      "tokens": [
+        "海",
+        "洋",
+        "魚",
+        "fish",
+        "鱼"
+      ]
+    },
+    {
+      "text": "a\u000bb\fcd\u001ce",
+      "tokens": [
+        "abcde"
+      ]
+    },
+    {
+      "text": "zero​width­soft﻿bom",
+      "tokens": [
+        "zerowidthsoftbom"
+      ]
+    },
+    {
+      "text": " nbsp em　ideo",
+      "tokens": [
+        "nbsp",
+        "em",
+        "ideo"
+      ]
+    },
+    {
+      "text": "x\u0000y�z",
+      "tokens": [
+        "xyz"
+      ]
+    },
+    {
+      "text": "unassigned⁥kept",
+      "tokens": [
+        "unassigned⁥kept"
+      ]
+    },
+    {
+      "text": "क्षेत्र हिन्दी",
+      "tokens": [
+        "कषतर",
+        "हिनदी"
+      ]
+    },
+    {
+      "text": "ﬁsh ligature",
+      "tokens": [
+        "ﬁsh",
+        "ligature"
+      ]
+    },
+    {
+      "text": "emoji 🐠🐟 fish",
+      "tokens": [
+        "emoji",
+        "🐠🐟",
+        "fish"
+      ]
+    },
+    {
+      "text": "hyphen-ated--double",
+      "tokens": [
+        "hyphen",
+        "-",
+        "ated",
+        "-",
+        "-",
+        "double"
+      ]
+    },
+    {
+      "text": "a.b.c",
+      "tokens": [
+        "a",
+        ".",
+        "b",
+        ".",
+        "c"
+      ]
+    },
+    {
+      "text": "under_score (paren) [bracket] {brace}",
+      "tokens": [
+        "under",
+        "_",
+        "score",
+        "(",
+        "paren",
+        ")",
+        "[",
+        "bracket",
+        "]",
+        "{",
+        "brace",
+        "}"
+      ]
+    },
+    {
+      "text": "",
+      "tokens": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "uppercase",
+      "text": "HELLO WORLD",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        17,
+        18,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "accents",
+      "text": "CAFÉ fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        6,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "punctuation",
+      "text": "hello, reef-fish!",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        17,
+        19,
+        10,
+        20,
+        7,
+        21,
+        3,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "apostrophe",
+      "text": "diver's fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        25,
+        23,
+        24,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "unknown",
+      "text": "mystery fish",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        1,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wordpiece",
+      "text": "DIVING",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        8,
+        9,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "long-word",
+      "text": "fish aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        7,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "control-and-whitespace",
+      "text": "reef fish\u0000​\tworld",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        10,
+        7,
+        18,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "end-truncation",
+      "text": "one two three four five six fish one two three",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        7,
+        11,
+        3
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "beginning-truncation",
+      "text": "one two three four five six fish one two three",
+      "document": false,
+      "truncation": "beginning",
+      "inputIDs": [
+        2,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        7,
+        11,
+        12,
+        13,
+        3
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "query-prefix",
+      "text": "reef",
+      "document": false,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        4,
+        22,
+        10,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "document-prefix",
+      "text": "reef",
+      "document": true,
+      "truncation": "end",
+      "inputIDs": [
+        2,
+        5,
+        22,
+        10,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attentionMask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

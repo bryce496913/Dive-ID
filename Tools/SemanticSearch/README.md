@@ -88,8 +88,26 @@ bytes of the decoded token-to-integer-ID JSON object serialized with keys sorted
 no insignificant whitespace, and non-ASCII characters left as UTF-8. It deliberately
 identifies vocabulary meaning rather than source-file formatting. `tokenizerFingerprint`
 is SHA-256 over the same canonical JSON representation of `tokenizerFamily`
-(`WordPiece`), `vocabularySHA256`, and the fields in `TOKENIZER_CONTRACT_FIELDS` in
-`build_embedding_index.py`. Swift recomputes both values from the loaded contract and
+(`BertWordPiece`), `vocabularySHA256`, and the fields in `TOKENIZER_CONTRACT_FIELDS` in
+`build_embedding_index.py`.
+
+**Basic tokenization follows BERT**, as the pinned fast tokenizer (BertNormalizer and
+BertPreTokenizer) applies it. Swift's `WordPieceTokenizer.basicTokens` and the Python
+mirror `basic_tokens` work on Unicode scalars and apply these steps:
+
+1. Remove control, format, surrogate and private-use characters (tab, newline and
+   return become spaces), and turn whitespace into spaces.
+2. Put spaces around CJK ideographs.
+3. Strip accents (NFD, then drop nonspacing marks), then lowercase.
+4. Split on whitespace. Every punctuation character is a token of its own.
+
+Words longer than 100 scalars are `[UNK]`.
+
+`DiveIDTests/Fixtures/TokenizerParity.v2.json`, written by
+`write_tokenizer_parity_fixture.py` with the pinned `tokenizers`, records that tokenizer's
+own word splits, and both implementations are tested against it. The family was
+`WordPiece` until 2026-10-23, when the rule dropped punctuation; the new family name makes
+any artifact built with it incompatible. Swift recomputes both values from the loaded contract and
 vocabulary during provider loading. Missing, malformed, mismatched, and legacy format-1
 indexes are incompatible and therefore use the visible typed BM25 fallback; identifier
 labels alone never establish compatibility. These two digests are also part of loaded

@@ -8,7 +8,7 @@ from types import SimpleNamespace
 MODULE = Path(__file__).parents[1] / "build_embedding_index.py"
 spec = importlib.util.spec_from_file_location("build_embedding_index", MODULE)
 builder = importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
-FIXTURE = Path(__file__).parents[3] / "DiveIDTests/Fixtures/TokenizerParity.v1.json"
+FIXTURE = Path(__file__).parents[3] / "DiveIDTests/Fixtures/TokenizerParity.v2.json"
 
 
 class FakeWordPieceTokenizer:
@@ -40,6 +40,19 @@ class EmbeddingIndexTokenizerTests(unittest.TestCase):
                 case["text"], document=case["document"])
             self.assertEqual(encoded["input_ids"], case["inputIDs"], case["name"])
             self.assertEqual(encoded["attention_mask"], case["attentionMask"], case["name"])
+
+    def test_basic_tokens_match_the_pinned_bert_tokenizer(self):
+        # Recorded from tokenizers' BertNormalizer + BertPreTokenizer by write_tokenizer_parity_fixture.py.
+        self.assertGreaterEqual(len(self.fixture["basicTokenCases"]), 20)
+        contract = self.fixture["contract"]
+        for case in self.fixture["basicTokenCases"]:
+            self.assertEqual(builder.basic_tokens(case["text"], contract["lowercase"], contract["stripAccents"]), case["tokens"], case["text"])
+
+    def test_punctuation_is_kept_as_tokens(self):
+        # The earlier rule dropped punctuation, which the pinned tokenizer keeps.
+        self.assertEqual(builder.basic_tokens("CAFÉ-striped fish near the reef!", True, True),
+                         ["cafe", "-", "striped", "fish", "near", "the", "reef", "!"])
+        self.assertEqual(builder.TOKENIZER_FAMILY, "BertWordPiece")
 
     def test_beginning_contract_explicitly_corrects_right_hf_truncation(self):
         contract = dict(self.fixture["contract"], truncation="beginning")

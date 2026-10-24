@@ -75,8 +75,9 @@ struct LocalRankingWeights: Sendable {
     let appearanceRelationship = 2.0, tailShape = 2.0, headAndMouth = 2.0, finAndSpine = 2.0
     let threshold = 4.0, maximumRawScore = 42.0
     /// Raw cosine a semantic-only candidate needs for provisional admission, and the zero
-    /// point of its ordering contribution. Calibrated on the Global score distribution
-    /// (Docs/HybridRankingContract.md, "Semantic calibration").
+    /// point of its ordering contribution. Not yet calibrated: 0.30 is the earlier
+    /// (cos + 1) / 2 ≥ 0.65 floor, kept until SemanticEndToEndTests reports the Global
+    /// cosine distribution in CI.
     let semanticAdmissionCosine = 0.30
 }
 

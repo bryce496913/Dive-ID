@@ -90,7 +90,7 @@ def contract_for(lock, vocabulary_name):
         "modelIdentifier": lock["modelIdentifier"],
         "modelVersion": revision,
         "embeddingDimension": lock["embeddingDimension"],
-        "tokenizerIdentifier": f"{lock['modelIdentifier']}@{revision}:WordPiece",
+        "tokenizerIdentifier": f"{lock['modelIdentifier']}@{revision}:BertWordPiece",
         "preprocessingIdentifier": "minilm-mean-mask-l2-v1",
         "vocabularyFile": vocabulary_name,
         "lowercase": lock["lowercase"], "stripAccents": lock["stripAccents"],
