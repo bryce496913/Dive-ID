@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-10-24",
+  "physicalDeviceStatus": "unexecuted",
+  "blocker": "Linux cloud container: no Mac, Xcode, paired iPhone or remote device session was available",
+  "candidate": {
+    "branchHead": "b138001ba73986163abcc4c17587eeecb759cf95",
+    "requiredCandidate": "main merge commit containing 217cdc4 and b138001 after hosted UI tests pass",
+    "expected": {
+      "bundleIdentifier": "com.brycecameron.DiveID",
+      "version": "0.5",
+      "build": "2",
+      "configuration": "Release",
+      "team": "7ZAXQ2686Z",
+      "minimumIOS": "18.0",
+      "searchEngine": "productionBM25"
+    },
+    "observed": {
+      "commit": null,
+      "version": null,
+      "build": null,
+      "deviceModel": null,
+      "iOS": null,
+      "actualEngine": null
+    }
+  },
+  "catalogue": {
+    "global": {
+      "packVersion": 24,
+      "bundled": 4798,
+      "searchable": 4796,
+      "draftsExcluded": [
+        "Graceful shark",
+        "Silky shark"
+      ],
+      "catalogueFingerprint": "f05456831f0f395a10c81f8ee79dd1bcd2178b6ab9935b54e1e0f5469373c0a9"
+    },
+    "caribbean": {
+      "packVersion": 3,
+      "bundled": 8,
+      "searchable": 2,
+      "catalogueFingerprint": "7af68dfc8c3b7b0c1e3a7887d61fa13aa89383a4ccbd48c9946031543180d944"
+    },
+    "tropical-pacific": {
+      "packVersion": 3,
+      "bundled": 1000,
+      "searchable": 0
+    },
+    "eligibleIDsEqualApprovalsOracle": true,
+    "evidence": "Computed from the candidate source on Linux (publication_expectations.generate and SwiftPM SpeciesSearchDocument.catalogueFingerprint); not observed on a device"
+  },
+  "physicalRows": [
+    {
+      "id": "D1",
+      "check": "Fresh install opens",
+      "expected": "Global selected; 4,796 species available offline; Photo card disabled ('Coming later')",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D2",
+      "check": "First and repeated searches (Global, query G)",
+      "expected": "Ranked results including Spotted Eagle Ray 00000000-0000-0000-0000-000000000010; repeats consistent",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D3",
+      "check": "Positive / ambiguous / no-match / region conflict (Caribbean, frozen V05 cases verbatim)",
+      "expected": "Blue Tang within original bound; ambiguous confidence <= 0.64; no-match state for v05-caribbean-vague and v05-caribbean-terrestrial; region mismatch for v05-region-1",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D4",
+      "check": "Find Matches with keyboard open, refocus, multi-line description",
+      "expected": "Button fully above keyboard; one tap dismisses and submits",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D5",
+      "check": "Largest accessibility text size",
+      "expected": "D4 holds; title wraps; top result opens; Save Identification reachable by scrolling",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D6",
+      "check": "Results to detail",
+      "expected": "Tapped card's species opens; back preserves results",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D7",
+      "check": "Region switching",
+      "expected": "Caribbean results limited to its 2 approved species; earlier Global results keep Global",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D8",
+      "check": "Recovery from unavailable selected region",
+      "expected": "'Selected region unavailable', Change Dive Region, recovery persists (requires prior installation)",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D9",
+      "check": "Cancellation then immediate new search x10",
+      "expected": "Only newer results shown; no stuck spinner; 'cancellation not observed' if A always completes first",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D10",
+      "check": "Save, terminate, relaunch, reopen",
+      "expected": "Saved sighting present with same species, region and description",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D11",
+      "check": "Remove, terminate, relaunch",
+      "expected": "Sighting absent",
+      "observed": null,
+      "result": "unexecuted"
+    },
+    {
+      "id": "D12",
+      "check": "UI responsiveness during background index preparation",
+      "expected": "No visible hang; scrolling and keyboard responsive",
+      "observed": null,
+      "result": "unexecuted"
+    }
+  ],
+  "timing": [
+    {
+      "measure": "launchToSearchReady.freshInstall",
+      "boundary": "icon tap -> Home with region and enabled Describe",
+      "plannedTrials": 5,
+      "report": "median, range",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    },
+    {
+      "measure": "launchToSearchReady.laterLaunch",
+      "boundary": "same, after force-quit with index archive present",
+      "plannedTrials": 5,
+      "report": "median, range",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    },
+    {
+      "measure": "firstQuery.freshInstall",
+      "boundary": "Find Matches tap -> stable results, first search with no index archive",
+      "plannedTrials": 5,
+      "report": "median, range",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    },
+    {
+      "measure": "firstQuery.laterLaunch",
+      "boundary": "same, first search after relaunch",
+      "plannedTrials": 5,
+      "report": "median, range",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    },
+    {
+      "measure": "warmQuery.global",
+      "boundary": "same, 20 searches in one process, query G",
+      "plannedTrials": 20,
+      "report": "median, nearest-rank p95",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    },
+    {
+      "measure": "warmQuery.caribbean",
+      "boundary": "same, 20 searches, v05-01-diagnostic",
+      "plannedTrials": 20,
+      "report": "median, nearest-rank p95",
+      "samplesMilliseconds": [],
+      "result": "unexecuted"
+    }
+  ],
+  "experimentalSemantic": {
+    "status": "not run",
+    "reason": "genuine artifacts not yet proven in the app: run 40105492969 fell back (vocabulary fingerprint defect fixed in b138001); run 40107408712 in progress",
+    "configuration": "Debug with -DiveIDExperimentalSemanticSearch YES; never Release",
+    "expected": {
+      "requestedEngine": "experimentalCoreML",
+      "actualEngine": "experimentalCoreML",
+      "fallback": null
+    },
+    "observed": null
+  },
+  "automated": {
+    "separateFromDevice": true,
+    "hostedRun": "https://github.com/bryce496913/Dive-ID/actions/runs/40103213891 (main 96aab8d, Debug, iPhone SE simulator iOS 18.6)",
+    "unitTests": "IdentificationLifecycleTests, SearchIndexStoreTests, SavedIdentificationPersistenceTests, SavedIdentificationCompatibilityTests, SelectedPackStateTests, PackListingTests passed",
+    "uiTests": {
+      "passed": [
+        "testCoreOfflineNavigationSmokeFlow",
+        "testFindMatchesStaysReachableWhileKeyboardIsShown",
+        "testNewInstallStartsInGlobal",
+        "testPhotoCardIsDisabledAndSavedScreenOpens"
+      ],
+      "failed": [
+        "testFindMatchesStaysReachableWhileKeyboardIsShownAtLargestDynamicType",
+        "testLayoutsFitAtLargestDynamicType"
+      ],
+      "note": "Both UI passes ran on the iPhone SE; the fix (217cdc4) and the larger-iPhone selection are not yet re-run"
+    }
+  }
+}
