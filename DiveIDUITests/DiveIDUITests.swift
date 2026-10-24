@@ -64,6 +64,7 @@ final class DiveIDUITests: XCTestCase {
         editor.tap()
         editor.typeText("Large flat eagle ray with white spots and a long tail over sand in the Caribbean.")
         let findMatches = app.buttons["findMatches"]
+        record(app, "keyboard-after-typing", elements: ["findMatches": findMatches, "editor": editor, "keyboard": app.keyboards.firstMatch])
         XCTAssertTrue(findMatches.isEnabled, file: file, line: line)
         XCTAssertTrue(findMatches.isHittable, file: file, line: line)
         // A simulator with a connected hardware keyboard shows no software keyboard; when it is shown,
@@ -98,17 +99,54 @@ final class DiveIDUITests: XCTestCase {
         app.buttons["findMatches"].tap()
         XCTAssertTrue(app.navigationBars["Possible Matches"].waitForExistence(timeout: 3))
         let firstResult = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'result_'")).firstMatch
-        XCTAssertTrue(firstResult.waitForExistence(timeout: 5))
+        let firstResultFound = firstResult.waitForExistence(timeout: 5)
+        record(app, "results", elements: ["firstResult": firstResult], hierarchy: !firstResultFound)
+        XCTAssertTrue(firstResultFound)
         assertFitsAndReachable(firstResult, in: app, named: "first result")
+        record(app, "results-before-tap", elements: ["firstResult": firstResult])
         firstResult.tap()
         XCTAssertTrue(app.navigationBars["Spotted Eagle Ray"].waitForExistence(timeout: 2))
-        assertFitsAndReachable(app.buttons["toggleSaved"], in: app, named: "toggleSaved")
+        let toggleSaved = app.buttons["toggleSaved"]
+        record(app, "detail-opened", elements: ["toggleSaved": toggleSaved], hierarchy: true)
+        assertFitsAndReachable(toggleSaved, in: app, named: "toggleSaved")
+        record(app, "detail-after-scrolling", elements: ["toggleSaved": toggleSaved], hierarchy: !toggleSaved.isHittable)
+    }
+
+    /// Evidence for the result bundle: a screenshot, and optionally the accessibility hierarchy,
+    /// kept whether or not the test passes; a one-line summary of each element's state also goes
+    /// to the log (prefixed UIDIAG) so it is readable without the bundle.
+    @MainActor
+    private func record(_ app: XCUIApplication, _ name: String, elements: [String: XCUIElement], hierarchy: Bool = false) {
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "\(name).png"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let window = app.windows.firstMatch.frame
+        var line = "UIDIAG \(name) window=\(window)"
+        for (label, element) in elements.sorted(by: { $0.key < $1.key }) {
+            let exists = element.exists
+            line += " | \(label) exists=\(exists)"
+            if exists {
+                line += " id=\(element.identifier) enabled=\(element.isEnabled) hittable=\(element.isHittable) frame=\(element.frame)"
+            }
+        }
+        print(line)
+        if hierarchy {
+            let tree = XCTAttachment(string: app.debugDescription)
+            tree.name = "\(name)-hierarchy.txt"
+            tree.lifetime = .keepAlways
+            add(tree)
+            print("UIDIAG-TREE \(name) BEGIN\n\(app.debugDescription)\nUIDIAG-TREE \(name) END")
+        }
     }
 
     /// Scrolls until the element is hittable, then checks it does not run past either screen edge.
     @MainActor
     private func assertFitsAndReachable(_ element: XCUIElement, in app: XCUIApplication, named name: String, file: StaticString = #filePath, line: UInt = #line) {
-        for _ in 0..<8 where !(element.exists && element.isHittable) { app.swipeUp() }
+        for swipe in 0..<8 where !(element.exists && element.isHittable) {
+            print("UIDIAG reach \(name) swipe=\(swipe) exists=\(element.exists) frame=\(element.exists ? element.frame : .null)")
+            app.swipeUp()
+        }
         XCTAssertTrue(element.isHittable, "\(name) could not be scrolled into view", file: file, line: line)
         let window = app.windows.firstMatch.frame
         XCTAssertGreaterThanOrEqual(element.frame.minX, window.minX - 1, "\(name) runs past the leading edge", file: file, line: line)
