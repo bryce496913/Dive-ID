@@ -1,7 +1,7 @@
 {
   "sourcePackID": "global",
-  "sourcePackVersion": 24,
-  "sourceSHA256": "26fc50f9fdf375d81ac86d28740bfa04fed687401bad3a9c9f38e0cc0e7f2472",
+  "sourcePackVersion": 25,
+  "sourceSHA256": "c448e96bd31a285143ae06d4511b772032e8f535b96d21b7a080185eac00dea0",
   "rule": "FAO 37",
   "speciesIDs": [
     "013545ba-17c6-5aab-8250-e069a694f417",

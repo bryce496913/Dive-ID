@@ -179,7 +179,7 @@ authorize an identified custodian and collection channel before outreach.
    manifests, provenance, catalogue/code hashes, private ranks and abstentions.
    Inspect pilot failures only as development material. Do not enrich or tune in
    this pass. Publish aggregate denominators separately for development access
-   (Global 4,798 records) and publication access (Global 4,796 approved); the runner
+   (Global 4,798 records) and publication access (Global 4,798 approved); the runner
    rederives pack sizes from the frozen catalogue. Coverage blocks are not
    abstention successes.
 

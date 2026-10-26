@@ -622,6 +622,22 @@ final class OwnerAddedSpeciesSearchTests: XCTestCase {
         XCTAssertEqual(owners.map(\.scientificName), ["Carcharhinus amblyrhynchos"])
     }
 
+    /// Graceful shark and Silky shark lost their batch-18 approval when their wrong "Grey/Gray
+    /// reef shark" aliases were removed; Bryce approved them again in batch-18-rereview.
+    func testRereviewedSharksAreInReleaseWithoutGreyReefAliases() async throws {
+        let releaseIDs = Set(try await global(.publication).profiles.map(\.id))
+        let development = try await global(.experimentalDevelopment)
+        for (name, scientific) in [("Graceful shark", "Carcharhinus amblyrhynchoides"), ("Silky shark", "Carcharhinus falciformis")] {
+            let profile = try XCTUnwrap(development.profiles.first { $0.scientificName == scientific }, name)
+            XCTAssertEqual(profile.commonName, name)
+            XCTAssertEqual(profile.review?.status, .verified, name)
+            XCTAssertEqual(profile.review?.reviewMethod, .individuallyReviewed, name)
+            XCTAssertTrue(profile.review?.reviewerNotes?.contains("batch-18-rereview") ?? false, name)
+            XCTAssertTrue(releaseIDs.contains(profile.id), "\(name) is in Release")
+            XCTAssertFalse(profile.aliases.contains { ["grey reef shark", "gray reef shark"].contains($0.lowercased()) }, name)
+        }
+    }
+
     func testAddedSpeciesAreApprovedAndInRelease() async throws {
         let development = try await global(.experimentalDevelopment)
         let additions = development.profiles.filter { added[$0.commonName] == $0.scientificName }

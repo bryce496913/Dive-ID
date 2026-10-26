@@ -13,11 +13,11 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16); retired region, development fixture only |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18); retired region, development fixture only |
-| Global | 24 | 4798 | 4796 | 4796 | pass, opt-in (30/34; four positive cases miss the top ten) |
-| Tropical Atlantic Regions | 1 | 1039 | 1038 | 1038 | drawn from Global |
-| Indo-Pacific Regions | 1 | 3592 | 3590 | 3590 | drawn from Global |
-| Pacific Coast Regions | 1 | 566 | 565 | 565 | drawn from Global |
-| Mediterranean | 1 | 330 | 329 | 329 | drawn from Global |
+| Global | 25 | 4798 | 4798 | 4798 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Tropical Atlantic Regions | 1 | 1039 | 1039 | 1039 | drawn from Global |
+| Indo-Pacific Regions | 1 | 3592 | 3592 | 3592 | drawn from Global |
+| Pacific Coast Regions | 1 | 566 | 566 | 566 | drawn from Global |
+| Mediterranean | 1 | 330 | 330 | 330 | drawn from Global |
 
 **Dive regions (owner decision, 2026-10-26).** The app offers Global and four regions
 drawn from it: Tropical Atlantic Regions, Indo-Pacific Regions, Pacific Coast Regions and
@@ -35,8 +35,8 @@ stored region is retired sees "Dive region unavailable" with a one-tap suggestio
 changes until the person chooses.
 
 **Global is the default for new installs and is available in Release** (owner decision,
-2026-10-23), after every Global record was approved in batch review. Release shows only
-approved records; the 6 drafts awaiting review (below) stay out of it. Its search quality
+2026-10-23), after every Global record was approved in batch review. Every Global record
+is approved, so Release shows all 4,798. Its search quality
 evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cases against all 4,798 records
 ([report](Docs/GlobalPackEvaluation.md#caribbean-species-in-global-2026-10-23),
 [raw results](Reports/GlobalPackEvaluation.json)):
@@ -63,20 +63,20 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
   [current-content batches](Docs/GlobalBatchReview.md#current-content-review-2026-10-23)
   on October 23, 2026, all recorded as individually reviewed on Bryce's statement that
   he reviewed every entry (`--all-individually-reviewed`). 4,792 of those approvals
-  still hold. He approved the four sharks and rays he asked for (Whitetip reef shark,
+  still hold; the other two, Graceful shark and Silky shark, lapsed when their wrong
+  "Grey/Gray reef shark" aliases were removed, and he approved them again on October 26,
+  2026 in [batch-18-rereview](Docs/GlobalBatchReview.md#owner-additions-2026-10-23),
+  individually reviewed. He approved the four sharks and rays he asked for (Whitetip reef shark,
   Grey reef shark, Zebra shark, Reef manta ray;
   [batch-21](Docs/GlobalBatchReview.md#owner-additions-2026-10-23)) the same day, each
   individually reviewed. Approval of the Global copies does not carry over to the
   regional packs.
-- **Awaiting review (drafts, not in Release):** Graceful shark and Silky shark in
-  batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were removed. The pack
-  is named "Global" while they are drafts (Bryce, October 23, 2026).
-- **Release** exposes 4,796 records, all in Global; the four regions show subsets of
+- **Release** exposes 4,798 records, all of Global's; the four regions show subsets of
   them. Tropical Pacific and Caribbean are retired regions. Bryce opened Global's
   pack-level Release gate (`GlobalRegion.swift`) on October 23, 2026. New installs start
   in Global; a stored region selection is kept, and a retired one is offered its
   replacement.
-- **Debug** permits all 4,798 development records: Global's, including its 2 drafts,
+- **Debug** permits all 4,798 development records: Global's, which has no drafts,
   listed in Global and its regions. Debug and tests can still open the retired Caribbean
   (8) and Tropical Pacific (1,000) packs by ID as evaluation fixtures; no build lists them.
 
@@ -133,7 +133,7 @@ xcodebuild -project DiveID.xcodeproj -scheme DiveID -showdestinations
 | Release | publication-eligible only | `-O`, whole module | no | `com.brycecameron.DiveID` / Dive ID |
 | Internal | all development records | `-O`, whole module | no (`DIVEID_INTERNAL`) | `com.brycecameron.DiveID.internal` / Dive ID Internal |
 
-**Internal** is for measuring draft packs (for example Global) on an iPhone at
+**Internal** is for measuring packs that hold drafts on an iPhone at
 Release-like speed. It installs beside the Release app, never replaces it, shows an
 "Internal build" banner on every screen, uses the production BM25 engine and has no
 Core ML opt-in. It is not a distribution build and its results are not Release

@@ -186,12 +186,15 @@ and in Release.
 alias, and so is "Gray reef shark". Those names were aliases of Graceful shark ("Grey reef
 shark") and Silky shark ("Gray reef shark"), so a search for the species found the wrong
 ones. The aliases now belong to the new record alone. Removing them changed those two
-records, so their batch-18 approval lapsed: they are drafts and out of Release until
-**batch-18-rereview** is approved. The other 248 batch-18 records keep their approval.
+records, so their batch-18 approval lapsed and they were drafts, out of Release, until
+**batch-18-rereview** was decided. The other 248 batch-18 records keep their approval.
 
-Release therefore exposes 4,796 Global records until batch-18-rereview is decided. The
-pack is named "Global" while those two are drafts (Bryce, 2026-10-23); its description
-gives the approved count. To record a decision and republish:
+Bryce approved batch-18-rereview on 2026-10-26: "I reviewed Graceful shark and Silky shark
+in batch-18-rereview, including the removal of the wrong Grey/Gray reef shark aliases, and
+I approve both." Both are individually reviewed and in Release, so every one of Global's
+4,798 records is approved (pack version 25) and none awaits review. "Grey reef shark" and
+"Gray reef shark" still find Grey reef shark first. To record a later decision and
+republish:
 
 ```sh
 python3 Tools/CatalogReview/global_batches.py record --manifest-sha256 <hash> \
@@ -227,5 +230,5 @@ python3 Tools/FishBaseIntake/publish_global.py
 | batch-20 | 1 | `75e0b56d43a324ddea4019789efede24048eae1cd7d8a0b15e23bdccfd7d116f` | 2200883920732990615 | 0 | 30 | 15 | approved 2026-10-23 by Bryce (decision text above). |
 | batch-01-rereview | 2 | `a855aeef9fda952f23a33a4744b447e067a37ac7b6491100e1b2c9e2bfd909ce` | 5457129314686080825 | 87 | 30 | 133 | superseded by batch-01 generation 2 (2026-10-23), undecided. Prepared after the builder v4 negation repair (2026-10-22) changed 22 of the generation 1 records. |
 | batch-21 | 1 | `b55810bae4d98f4ba20f7663e8700aab54f55d3dc33521aad854441c99670890` | 5609686461008101448 | 3 | 1 | 0 | **approved** 2026-10-23 by Bryce: "4 new species (whitetip reef, grey reef, zebra shark, reef manta) move them over as approved". 4 approved, all individually reviewed, none held. Overlay `batch-21/BryceReview2026-10-23-batch-21-g1.json`. |
-| batch-18-rereview | 1 | `a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c` | 6703939030536056391 | 1 | 1 | 0 | **awaiting Bryce's decision.** Graceful shark and Silky shark, after their wrong "Grey/Gray reef shark" aliases were removed. |
+| batch-18-rereview | 1 | `a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c` | 6703939030536056391 | 1 | 1 | 0 | **approved** 2026-10-26 by Bryce: "I reviewed Graceful shark and Silky shark in batch-18-rereview, including the removal of the wrong Grey/Gray reef shark aliases, and I approve both." 2 approved, both individually reviewed, none held. Overlay `batch-18-rereview/BryceReview2026-10-26-batch-18-rereview-g1.json`. |
 
