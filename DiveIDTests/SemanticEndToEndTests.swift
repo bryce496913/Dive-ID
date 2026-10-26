@@ -2,16 +2,16 @@ import Foundation
 import XCTest
 @testable import DiveID
 
-/// Proves the real provisioned encoder, not the BM25 fallback, served Global searches, and
-/// measures how merging semantic candidates into BM25 changes results. Skipped unless the
-/// semantic-search workflow supplies provisioned artifacts:
+/// Proves the real provisioned encoder serves the experimental semantic fallback on Global
+/// (it runs only when BM25 ranks nothing) and measures what the fallback shows. Skipped
+/// unless provisioned artifacts are supplied:
 ///
 /// * `DIVEID_SEMANTIC_RESOURCES` names a directory holding `Semantic-global.*` (SwiftPM).
 /// * `DIVEID_REQUIRE_SEMANTIC=1` requires them in the built application bundle (Xcode).
 ///
 /// `DIVEID_SEMANTIC_REPORT` and `DIVEID_SEMANTIC_DISTRIBUTION` optionally name JSON report
-/// files. No-match descriptions gaining semantic-only results is a hard failure; quality is
-/// reported, not asserted, because the encoder is unapproved and the cases are development data.
+/// files. A no-match description gaining any result is a hard failure; quality is reported,
+/// not asserted, because the encoder is unapproved and the cases are development data.
 final class SemanticEndToEndTests: XCTestCase {
 
     private var environment: [String: String] { ProcessInfo.processInfo.environment }
@@ -38,14 +38,14 @@ final class SemanticEndToEndTests: XCTestCase {
         throw XCTSkip("Set DIVEID_SEMANTIC_RESOURCES or DIVEID_REQUIRE_SEMANTIC=1 with provisioned Semantic-global artifacts.")
     }
 
-    private func mergedEngine(pack: OfflineIdentificationPack, diagnostics: SemanticDiagnosticsStore,
-                              runtime: SemanticRetrievalRuntime) throws -> HybridDescriptionSearchEngine {
-        let semantic = ExperimentalSemanticRetriever(pack: pack.metadata, locations: try locations(packID: pack.metadata.id),
-                                                     runtime: runtime, fallback: NoCandidateRetriever(), diagnostics: diagnostics)
-        return HybridDescriptionSearchEngine(semanticComplement: semantic)
+    private func fallbackEngine(locations: SemanticArtifactLocations, diagnostics: SemanticDiagnosticsStore,
+                                runtime: SemanticRetrievalRuntime) -> ConfiguredDescriptionSearchEngine {
+        ConfiguredDescriptionSearchEngine(selection: .experimentalCoreML, runtime: runtime, diagnostics: diagnostics,
+                                          locateArtifacts: { _ in locations })
     }
 
-    /// Hosted in the app: the bundled artifacts load through the same selection the app uses.
+    /// Hosted in the app: the bundled artifacts load through the same selection the app uses,
+    /// and Core ML serves the fallback on development descriptions BM25 cannot answer.
     func testBundledArtifactsServeTheExperimentalSelection() async throws {
         guard environment["DIVEID_REQUIRE_SEMANTIC"] == "1" else {
             throw XCTSkip("Set DIVEID_REQUIRE_SEMANTIC=1 to require bundled Semantic-global artifacts.")
@@ -54,15 +54,23 @@ final class SemanticEndToEndTests: XCTestCase {
         let diagnostics = SemanticDiagnosticsStore()
         let engine = ConfiguredDescriptionSearchEngine(selection: .experimentalCoreML, bundle: TestResources.productionBundle,
                                                        diagnostics: diagnostics)
-        let result = try await engine.search(description: "large flat ray with white spots on a dark back gliding over sand", pack: pack)
-        let recorded = await diagnostics.latest
-        let metric = try XCTUnwrap(recorded)
-        print("SEMANTIC-ENGINE requested=\(metric.requestedEngine.rawValue) actual=\(metric.actualEngine.rawValue) "
-              + "fallback=\(metric.fallbackReason?.description ?? "none") model=\(metric.modelIdentity ?? "none")")
-        XCTAssertEqual(metric.requestedEngine, .experimentalCoreML)
-        XCTAssertEqual(metric.actualEngine, .experimentalCoreML, "fell back: \(metric.fallbackReason?.description ?? "unknown")")
-        XCTAssertNil(metric.fallbackReason)
-        XCTAssertFalse(result.candidates.isEmpty)
+        let bm25 = HybridDescriptionSearchEngine()
+        var served = 0
+        for item in try developmentCases() where item.kind == "identification" {
+            guard try await bm25.search(description: item.description, pack: pack).candidates.isEmpty else { continue }
+            let result = try await engine.search(description: item.description, pack: pack)
+            let recorded = await diagnostics.latest
+            let metric = try XCTUnwrap(recorded)
+            XCTAssertNil(metric.fallbackReason, "\(item.id): bundled artifacts failed: \(metric.fallbackReason?.description ?? "")")
+            if metric.fallbackOutcome == .served {
+                served += 1
+                XCTAssertEqual(metric.actualEngine, .experimentalCoreML, item.id)
+                XCTAssertFalse(result.candidates.isEmpty, item.id)
+                print("SEMANTIC-ENGINE case=\(item.id) requested=\(metric.requestedEngine.rawValue) actual=\(metric.actualEngine.rawValue) "
+                      + "outcome=\(metric.fallbackOutcome.rawValue) model=\(metric.modelIdentity ?? "none")")
+            }
+        }
+        XCTAssertGreaterThan(served, 0, "Core ML never served a fallback from the bundled artifacts")
     }
 
 #if canImport(CoreML)
@@ -216,7 +224,7 @@ final class SemanticEndToEndTests: XCTestCase {
             "expectedCosineMin": expectedCosines.min() ?? .nan, "expectedCosineMedian": Self.percentile(expectedCosines.sorted(), 0.5),
             "expectedCosineP25": Self.percentile(expectedCosines.sorted(), 0.25),
             "backgroundP99Median": Self.percentile(backgroundP99.sorted(), 0.5), "tenthBestMedian": Self.percentile(top10.sorted(), 0.5),
-            "currentAdmissionCosine": LocalRankingWeights().semanticAdmissionCosine,
+            "semanticFallbackCosine": LocalRankingWeights().semanticFallbackCosine,
         ]
         let data = try JSONSerialization.data(withJSONObject: Self.finite(summary), options: [.sortedKeys])
         print("SEMANTIC-CALIBRATION " + String(decoding: data, as: UTF8.self))
@@ -226,99 +234,112 @@ final class SemanticEndToEndTests: XCTestCase {
         }
     }
 
-    func testProvisionedEncoderComplementsBM25OnGlobal() async throws {
+    /// The fallback design on Global: BM25-answered cases are returned unchanged without the
+    /// model; the fallback runs only where BM25 ranks nothing; no no-match description may gain a
+    /// result. Reports where it fired, what it rescued, what it showed wrongly and its latency.
+    func testProvisionedEncoderFallsBackOnlyWhenBM25FindsNothing() async throws {
         let pack = try await globalPack()
-        _ = try locations(packID: pack.metadata.id)
+        let locations = try locations(packID: pack.metadata.id)
         let cases = try developmentCases()
+        let documents = try await SearchIndexStore.shared.documents(pack: pack, builder: SpeciesSearchDocumentBuilder())
         let diagnostics = SemanticDiagnosticsStore()
-        let merged = try mergedEngine(pack: pack, diagnostics: diagnostics, runtime: SemanticRetrievalRuntime())
+        let runtime = SemanticRetrievalRuntime()
+        let engine = fallbackEngine(locations: locations, diagnostics: diagnostics, runtime: runtime)
         let bm25 = HybridDescriptionSearchEngine()
+        let cutoff = LocalRankingWeights().semanticFallbackCosine
 
         var rows: [[String: Any]] = []
-        var topChanged = 0, semanticOnlyShown = 0, noMatchGainedResults = 0
-        var servedByCoreML = 0, fallbacks: [String: Int] = [:]
+        var outcomes: [String: Int] = [:], wrongByKind: [String: Int] = [:]
+        var noMatchGainedResults = 0, rescued = 0, rescuedFirst = 0, maximumFallbackConfidence = Double.nan
+        var firedLoad: [Double] = [], firedEmbedding: [Double] = [], firedTotal: [Double] = []
         for item in cases {
             let lexical = try await bm25.search(description: item.description, pack: pack)
-            let combined = try await merged.search(description: item.description, pack: pack)
+            let result = try await engine.search(description: item.description, pack: pack)
             let recorded = await diagnostics.latest
             let metric = try XCTUnwrap(recorded)
             XCTAssertEqual(metric.requestedEngine, .experimentalCoreML, item.id)
-            XCTAssertEqual(metric.actualEngine, .experimentalCoreML,
-                           "\(item.id) fell back: \(metric.fallbackReason?.description ?? "unknown")")
-            XCTAssertNil(metric.fallbackReason, item.id)
-            if metric.actualEngine == .experimentalCoreML && metric.fallbackReason == nil { servedByCoreML += 1 }
-            if let reason = metric.fallbackReason { fallbacks[reason.description, default: 0] += 1 }
-
-            // Merging must never change how a BM25-retrieved species is scored.
-            let lexicalByID = Dictionary(uniqueKeysWithValues: lexical.candidates.map { ($0.profile.id, $0) })
-            for candidate in combined.candidates {
-                guard let original = lexicalByID[candidate.profile.id] else { continue }
-                XCTAssertEqual(candidate.rawScore, original.rawScore, "\(item.id) \(candidate.profile.commonName)")
-                XCTAssertEqual(candidate.score, original.score, "\(item.id) \(candidate.profile.commonName)")
+            XCTAssertNil(metric.fallbackReason, "\(item.id): artifacts failed: \(metric.fallbackReason?.description ?? "")")
+            outcomes[metric.fallbackOutcome.rawValue, default: 0] += 1
+            var row: [String: Any] = ["id": item.id, "kind": item.kind, "bm25Abstained": lexical.candidates.isEmpty,
+                                      "fallbackOutcome": metric.fallbackOutcome.rawValue,
+                                      "expectedTop1BM25": lexical.candidates.first.map { item.expected.contains($0.profile.id) } ?? false,
+                                      "expectedTop1": result.candidates.first.map { item.expected.contains($0.profile.id) } ?? false]
+            if !lexical.candidates.isEmpty {
+                // BM25 answered: the result is BM25's, unchanged, and the model was not used.
+                XCTAssertEqual(metric.fallbackOutcome, .notNeeded, item.id)
+                XCTAssertNil(metric.modelIdentity, item.id)
+                XCTAssertEqual(result.candidates.map(\.profile.id), lexical.candidates.map(\.profile.id), item.id)
+                XCTAssertEqual(result.candidates.map(\.score), lexical.candidates.map(\.score), item.id)
+                rows.append(row)
+                continue
             }
-            // Every BM25 candidate stays in the pool.
-            XCTAssertTrue(Set(lexical.retrievedSpeciesIDs).isSubset(of: Set(combined.retrievedSpeciesIDs)), item.id)
-
-            let additions = combined.candidates.filter { lexicalByID[$0.profile.id] == nil }
-            let changed = lexical.candidates.first?.profile.id != combined.candidates.first?.profile.id
-            if changed { topChanged += 1 }
-            if !additions.isEmpty { semanticOnlyShown += 1 }
+            // BM25 ranked nothing: the measurement behind the cutoff, then what the fallback showed.
+            let similar = try await runtime.retrieve(locations: locations, pack: pack.metadata, documents: documents,
+                                                     query: item.description, limit: documents.count).candidates
+            let expectedRank = similar.firstIndex { item.expected.contains($0.speciesID) }
+            row["topSemanticCosine"] = similar.first?.retrievalScore ?? .nan
+            row["topSemanticIsExpected"] = similar.first.map { item.expected.contains($0.speciesID) } ?? false
+            row["expectedSemanticRank"] = expectedRank.map { ($0 + 1) as Any } ?? NSNull()
+            row["expectedCosine"] = expectedRank.map { similar[$0].retrievalScore as Any } ?? NSNull()
+            row["candidatesAboveCutoff"] = similar.filter { $0.retrievalScore >= cutoff }.count
+            let shownExpected = result.candidates.firstIndex { item.expected.contains($0.profile.id) }
+            let wrong = result.candidates.filter { !item.expected.contains($0.profile.id) }
+            row["fallbackResultCount"] = result.candidates.count
+            row["expectedFallbackRank"] = shownExpected.map { ($0 + 1) as Any } ?? NSNull()
+            row["wrongFallbackResults"] = wrong.count
+            row["maximumFallbackConfidence"] = result.candidates.map(\.score).max() ?? .nan
             if item.kind == "noMatch" {
-                // Hard gate: semantic retrieval must never add results to a no-match description.
-                if !additions.isEmpty { noMatchGainedResults += 1 }
-                XCTAssertTrue(additions.isEmpty, "\(item.id) gained semantic-only results: \(additions.map(\.profile.commonName))")
+                // Hard gate: no no-match description may gain a result.
+                if !result.candidates.isEmpty { noMatchGainedResults += 1 }
+                XCTAssertTrue(result.candidates.isEmpty, "\(item.id) gained fallback results: \(result.candidates.map(\.profile.commonName))")
             }
-            let unexpectedAdditions = additions.filter { !item.expected.contains($0.profile.id) }
-            rows.append([
-                "id": item.id, "kind": item.kind,
-                "bm25Abstained": lexical.candidates.isEmpty, "mergedAbstained": combined.candidates.isEmpty,
-                "semanticOnlyExpected": additions.contains { item.expected.contains($0.profile.id) },
-                "semanticOnlyUnexpected": unexpectedAdditions.count,
-                "semanticOnlyMaxConfidence": additions.map(\.score).max() ?? .nan,
-                "bm25Top1Confidence": lexical.candidates.first?.score ?? .nan,
-                "mergedTop1Confidence": combined.candidates.first?.score ?? .nan,
-                "bm25Top1": lexical.candidates.first?.profile.commonName ?? "",
-                "mergedTop1": combined.candidates.first?.profile.commonName ?? "",
-                "bm25ResultCount": lexical.candidates.count, "mergedResultCount": combined.candidates.count,
-                "semanticOnlyInResults": additions.count,
-                "expectedTop1BM25": lexical.candidates.first.map { item.expected.contains($0.profile.id) } ?? false,
-                "expectedTop1Merged": combined.candidates.first.map { item.expected.contains($0.profile.id) } ?? false,
-                "embeddingMilliseconds": metric.embeddingMilliseconds, "loadMilliseconds": metric.loadMilliseconds,
-                "retrievalMilliseconds": metric.retrievalMilliseconds, "totalSemanticMilliseconds": metric.totalMilliseconds,
-            ])
-        }
-        // Abstention (no results), added unexpected results and their confidence, against BM25 on the same cases.
-        var newlyAnswered = 0, newlyAbstained = 0, expectedOnlyFromSemantic = 0
-        var unexpectedByKind: [String: Int] = [:]
-        var maximumSemanticOnlyConfidence = Double.nan
-        for row in rows {
-            let bm25Abstained = row["bm25Abstained"] as? Bool ?? false
-            let mergedAbstained = row["mergedAbstained"] as? Bool ?? false
-            if bm25Abstained && !mergedAbstained { newlyAnswered += 1 }
-            if !bm25Abstained && mergedAbstained { newlyAbstained += 1 }
-            if row["semanticOnlyExpected"] as? Bool == true { expectedOnlyFromSemantic += 1 }
-            unexpectedByKind[row["kind"] as? String ?? "", default: 0] += row["semanticOnlyUnexpected"] as? Int ?? 0
-            if let confidence = row["semanticOnlyMaxConfidence"] as? Double, confidence.isFinite {
-                maximumSemanticOnlyConfidence = maximumSemanticOnlyConfidence.isNaN ? confidence : max(maximumSemanticOnlyConfidence, confidence)
+            if metric.fallbackOutcome == .served {
+                XCTAssertEqual(metric.actualEngine, .experimentalCoreML, item.id)
+                for candidate in result.candidates {
+                    XCTAssertEqual(candidate.informationLevel, .limited, item.id)
+                    XCTAssertLessThanOrEqual(candidate.score, LocalRankingWeights.limitedConfidenceCap, item.id)
+                    XCTAssertTrue(candidate.matchedEvidence.contains(LocalRankingWeights.similarityClue), item.id)
+                }
+                if shownExpected != nil { rescued += 1 }
+                if shownExpected == 0 { rescuedFirst += 1 }
+                wrongByKind[item.kind, default: 0] += wrong.count
+                if let confidence = result.candidates.map(\.score).max() {
+                    maximumFallbackConfidence = maximumFallbackConfidence.isNaN ? confidence : max(maximumFallbackConfidence, confidence)
+                }
             }
+            if metric.fallbackOutcome == .served || metric.fallbackOutcome == .nothingAboveCutoff {
+                // Latency only where the fallback actually ran the model.
+                firedLoad.append(metric.loadMilliseconds); firedEmbedding.append(metric.embeddingMilliseconds)
+                firedTotal.append(metric.totalMilliseconds)
+                row["loadMilliseconds"] = metric.loadMilliseconds; row["embeddingMilliseconds"] = metric.embeddingMilliseconds
+                row["totalMilliseconds"] = metric.totalMilliseconds
+            }
+            rows.append(row)
         }
+        let abstained = rows.filter { $0["bm25Abstained"] as? Bool == true }
+        let noMatchTop = abstained.filter { $0["kind"] as? String == "noMatch" }.compactMap { $0["topSemanticCosine"] as? Double }
         let summary: [String: Any] = [
-            "cases": cases.count, "top1Changed": topChanged, "casesWithSemanticOnlyResults": semanticOnlyShown,
+            "cases": cases.count, "semanticFallbackCosine": cutoff,
+            "bm25Abstained": abstained.count, "fallbackOutcomes": outcomes,
+            "fallbackRan": (outcomes["served"] ?? 0) + (outcomes["nothingAboveCutoff"] ?? 0),
+            "fallbackServed": outcomes["served"] ?? 0,
+            "rescuedExpectedShown": rescued, "rescuedExpectedFirst": rescuedFirst,
+            "wrongFallbackResults": wrongByKind.values.reduce(0, +), "wrongFallbackResultsByKind": wrongByKind,
+            "maximumFallbackConfidence": maximumFallbackConfidence,
             "noMatchCasesThatGainedResults": noMatchGainedResults,
-            "requestedEngine": "experimentalCoreML", "casesServedByCoreML": servedByCoreML,
-            "fallbackCount": fallbacks.values.reduce(0, +), "fallbackReasons": fallbacks,
-            "newlyAnswered": newlyAnswered, "newlyAbstained": newlyAbstained,
-            "casesWithExpectedOnlyFromSemantic": expectedOnlyFromSemantic,
-            "addedUnexpectedResults": unexpectedByKind.values.reduce(0, +),
-            "addedUnexpectedResultsByKind": unexpectedByKind,
-            "maximumSemanticOnlyConfidence": maximumSemanticOnlyConfidence,
+            "noMatchTopSemanticCosineMax": noMatchTop.max() ?? .nan,
             "expectedTop1BM25": rows.filter { $0["expectedTop1BM25"] as? Bool == true }.count,
-            "expectedTop1Merged": rows.filter { $0["expectedTop1Merged"] as? Bool == true }.count,
+            "expectedTop1WithFallback": rows.filter { $0["expectedTop1"] as? Bool == true }.count,
+            "firedLoadMillisecondsMedian": Self.percentile(firedLoad.sorted(), 0.5),
+            "firedEmbeddingMillisecondsMedian": Self.percentile(firedEmbedding.sorted(), 0.5),
+            "firedTotalMillisecondsMedian": Self.percentile(firedTotal.sorted(), 0.5),
+            "firedTotalMillisecondsMax": firedTotal.max() ?? .nan,
         ]
-        print("SEMANTIC-MERGE " + String(decoding: try JSONSerialization.data(withJSONObject: Self.finite(summary), options: [.sortedKeys]), as: UTF8.self))
+        print("SEMANTIC-FALLBACK " + String(decoding: try JSONSerialization.data(withJSONObject: Self.finite(summary), options: [.sortedKeys]), as: UTF8.self))
         if let path = environment["DIVEID_SEMANTIC_REPORT"] {
             var report = Self.finite(summary)
-            report["schemaVersion"] = 3
+            report["schemaVersion"] = 4
+            report["design"] = "semantic fallback only when BM25 ranks nothing"
             report["fixtures"] = ["V05Development.v2", "CaribbeanIdentificationBenchmark (development split)"]
             report["pack"] = "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion)"
             report["speciesCount"] = pack.profiles.count

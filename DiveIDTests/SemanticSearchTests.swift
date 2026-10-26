@@ -410,9 +410,19 @@ final class SemanticSearchTests: XCTestCase {
             bundle: TestResources.productionBundle, diagnostics: diagnostics)
             .search(description: "Spotted Eagle Ray", pack: pack)
         XCTAssertEqual(result.candidates.first?.profile.commonName, "Spotted Eagle Ray")
+        // BM25 answered, so the missing artifacts were never needed.
+        let answered = await diagnostics.latest
+        XCTAssertEqual(answered?.fallbackOutcome, .notNeeded)
+        XCTAssertNil(answered?.fallbackReason)
+        // BM25 ranks nothing: the fallback looks for the artifacts, finds none, and keeps BM25's empty result.
+        let empty = try await ConfiguredDescriptionSearchEngine(selection: .experimentalCoreML,
+            bundle: TestResources.productionBundle, diagnostics: diagnostics)
+            .search(description: unmatched, pack: pack)
+        XCTAssertTrue(empty.candidates.isEmpty)
         let metric = await diagnostics.latest
         XCTAssertEqual(metric?.requestedEngine, .experimentalCoreML)
         XCTAssertEqual(metric?.actualEngine, .productionBM25)
+        XCTAssertEqual(metric?.fallbackOutcome, .unavailable)
         XCTAssertNotNil(metric?.fallbackReason)
     }
 
@@ -496,52 +506,121 @@ final class SemanticSearchTests: XCTestCase {
         XCTAssertFalse(recordedStrings.contains(rawQuery))
     }
 
-    private struct FixedRetriever: SpeciesCandidateRetrieving {
-        let candidates: [RetrievedSpeciesCandidate]
-        func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] {
-            Array(candidates.prefix(limit))
+    /// Returns one fixed query vector and counts embedding calls; shares FakeProvider's identity
+    /// so indexes built for FakeProvider validate against it.
+    private final class CountingProvider: SemanticEmbeddingProviding, @unchecked Sendable {
+        let modelIdentifier = "test.fake", modelVersion = "1", embeddingDimension = 3
+        let tokenizerFingerprint = String(repeating: "1", count: 64)
+        let vocabularySHA256 = String(repeating: "2", count: 64)
+        let queryVector: [Float]
+        private let lock = NSLock()
+        private var count = 0
+        var calls: Int { lock.withLock { count } }
+        init(queryVector: [Float]) { self.queryVector = queryVector }
+        func embedding(for text: String) async throws -> [Float] {
+            lock.withLock { count += 1 }
+            return queryVector
         }
     }
 
-    func testSemanticComplementAddsMissedSpeciesAndKeepsLexicalSignals() async throws {
-        let pack = try await pack()
-        let description = "Spotted Eagle Ray"
-        let lexical = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
-        let lexicalIDs = Set(lexical.retrievedSpeciesIDs)
-        let missed = try XCTUnwrap(pack.profiles.first { !lexicalIDs.contains($0.id) })
-        let found = try XCTUnwrap(lexical.retrievedSpeciesIDs.first)
-        // The semantic complement repeats a BM25 hit and adds one species BM25 missed.
-        let complement = FixedRetriever(candidates: [
-            RetrievedSpeciesCandidate(speciesID: found, retrievalScore: 0.99, evidence: .semantic, matchedTerms: []),
-            RetrievedSpeciesCandidate(speciesID: missed.id, retrievalScore: 0.2, evidence: .semantic, matchedTerms: []),
-        ])
-        let merged = try await HybridDescriptionSearchEngine(semanticComplement: complement).search(description: description, pack: pack)
-        XCTAssertEqual(merged.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs + [missed.id])
-        XCTAssertEqual(merged.retrievalLimit, lexical.retrievalLimit + 1)
-        let lexicalScores = Dictionary(uniqueKeysWithValues: lexical.candidates.map { ($0.profile.id, $0.rawScore) })
-        for candidate in merged.candidates where lexicalScores[candidate.profile.id] != nil {
-            XCTAssertEqual(candidate.rawScore, lexicalScores[candidate.profile.id])
-        }
-        XCTAssertEqual(merged.candidates.first?.profile.commonName, "Spotted Eagle Ray")
-    }
-
-    func testFailedSemanticComplementLeavesTheBM25ResultUnchanged() async throws {
+    /// An experimental engine over the Caribbean development pack whose index puts `target`
+    /// at cosine 1 with the query vector [1, 0, 0] and every other species at cosine 0.
+    private func fallbackEngine(target: UUID?, queryVector: [Float] = [1, 0, 0], modelVersion: String? = nil)
+        async throws -> (ConfiguredDescriptionSearchEngine, CountingProvider, SemanticDiagnosticsStore, OfflineIdentificationPack) {
         let pack = try await pack()
         let documents = pack.profiles.map { SpeciesSearchDocumentBuilder().document(from: $0, pack: pack.metadata) }
-        let provider = FakeProvider()
-        let stale = try await index(documents: documents, pack: pack.metadata, provider: provider, modelVersion: "stale")
+        let vectors = documents.map { $0.speciesID == target ? [Float(1), 0, 0] : [Float(0), 1, 0] }
+        let semanticIndex = try await index(documents: documents, pack: pack.metadata, provider: FakeProvider(),
+                                            modelVersion: modelVersion, vectors: vectors)
+        let provider = CountingProvider(queryVector: queryVector)
         let diagnostics = SemanticDiagnosticsStore()
-        let semantic = ExperimentalSemanticRetriever(pack: pack.metadata, locations: try artifactLocations(),
-            runtime: SemanticRetrievalRuntime(provider: provider, index: stale), fallback: NoCandidateRetriever(), diagnostics: diagnostics)
+        let locations = try artifactLocations()
+        let engine = ConfiguredDescriptionSearchEngine(selection: .experimentalCoreML,
+            runtime: SemanticRetrievalRuntime(provider: provider, index: semanticIndex), diagnostics: diagnostics,
+            locateArtifacts: { _ in locations })
+        return (engine, provider, diagnostics, pack)
+    }
+
+    /// Three meaningful words BM25 cannot match, so it ranks nothing.
+    private let unmatched = "zorblat quinnex vardaph"
+
+    func testExperimentalSearchReturnsBM25UnchangedWithoutEmbeddingWhenBM25RanksCandidates() async throws {
+        let (engine, provider, diagnostics, pack) = try await fallbackEngine(target: nil)
         for description in ["Spotted Eagle Ray", "small yellow fish with a black spot near the tail on the reef"] {
             let lexical = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
-            let merged = try await HybridDescriptionSearchEngine(semanticComplement: semantic).search(description: description, pack: pack)
-            XCTAssertEqual(merged.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs)
-            XCTAssertEqual(merged.candidates.map(\.profile.id), lexical.candidates.map(\.profile.id))
-            XCTAssertEqual(merged.candidates.map(\.score), lexical.candidates.map(\.score))
+            XCTAssertFalse(lexical.candidates.isEmpty, description)
+            let result = try await engine.search(description: description, pack: pack)
+            XCTAssertEqual(result.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs)
+            XCTAssertEqual(result.candidates.map(\.profile.id), lexical.candidates.map(\.profile.id))
+            XCTAssertEqual(result.candidates.map(\.score), lexical.candidates.map(\.score))
+            XCTAssertEqual(result.candidates.map(\.informationLevel), lexical.candidates.map(\.informationLevel))
         }
-        let metric = await diagnostics.latest
-        XCTAssertEqual(metric?.actualEngine, .productionBM25)
-        XCTAssertEqual(metric?.fallbackReason, .incompatibleIndex(.modelVersionMismatch))
+        XCTAssertEqual(provider.calls, 0, "the query is never embedded when BM25 ranks candidates")
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.fallbackOutcome, .notNeeded)
+        XCTAssertEqual(metric.actualEngine, .productionBM25)
+        XCTAssertNil(metric.fallbackReason)
+    }
+
+    func testFallbackShowsOnlySimilarityResultsAboveTheCutoffAsLimited() async throws {
+        let pack = try await pack()
+        let target = try XCTUnwrap(pack.profiles.first)
+        let (engine, provider, diagnostics, _) = try await fallbackEngine(target: target.id)
+        let lexical = try await HybridDescriptionSearchEngine().search(description: unmatched, pack: pack)
+        XCTAssertTrue(lexical.candidates.isEmpty, "BM25 must rank nothing for this description")
+        let result = try await engine.search(description: unmatched, pack: pack)
+        XCTAssertEqual(provider.calls, 1)
+        // Every other species sits at cosine 0, below the frozen cutoff, so only the target shows.
+        XCTAssertEqual(result.candidates.map(\.profile.id), [target.id])
+        let candidate = try XCTUnwrap(result.candidates.first)
+        XCTAssertEqual(candidate.informationLevel, .limited)
+        XCTAssertLessThanOrEqual(candidate.score, LocalRankingWeights.limitedConfidenceCap)
+        XCTAssertTrue(candidate.matchedEvidence.contains(LocalRankingWeights.similarityClue))
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.fallbackOutcome, .served)
+        XCTAssertEqual(metric.actualEngine, .experimentalCoreML)
+    }
+
+    func testFallbackBelowTheCutoffKeepsTheEmptyBM25Result() async throws {
+        let pack = try await pack()
+        let target = try XCTUnwrap(pack.profiles.first)
+        // The target's cosine is just under the frozen cutoff; every other species is at 0.
+        let cutoff = Float(LocalRankingWeights().semanticFallbackCosine) - 0.01
+        let (engine, provider, diagnostics, _) = try await fallbackEngine(target: target.id,
+            queryVector: [cutoff, 0, (1 - cutoff * cutoff).squareRoot()])
+        let result = try await engine.search(description: unmatched, pack: pack)
+        XCTAssertEqual(provider.calls, 1)
+        XCTAssertTrue(result.candidates.isEmpty, "nothing reaches the cutoff, so nothing is shown")
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.fallbackOutcome, .nothingAboveCutoff)
+        XCTAssertEqual(metric.actualEngine, .productionBM25)
+    }
+
+    func testFallbackIsNotAttemptedForADomainContradiction() async throws {
+        let pack = try await pack()
+        let (engine, provider, diagnostics, _) = try await fallbackEngine(target: try XCTUnwrap(pack.profiles.first).id)
+        let result = try await engine.search(description: "A spotted freshwater frog on sand, about 5 cm long.", pack: pack)
+        XCTAssertTrue(result.candidates.isEmpty)
+        XCTAssertEqual(provider.calls, 0)
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.fallbackOutcome, .notAttempted)
+    }
+
+    func testFailedSemanticFallbackLeavesTheBM25ResultUnchanged() async throws {
+        let pack = try await pack()
+        let (engine, _, diagnostics, _) = try await fallbackEngine(target: try XCTUnwrap(pack.profiles.first).id, modelVersion: "stale")
+        let lexical = try await HybridDescriptionSearchEngine().search(description: unmatched, pack: pack)
+        let result = try await engine.search(description: unmatched, pack: pack)
+        XCTAssertEqual(result.retrievedSpeciesIDs, lexical.retrievedSpeciesIDs)
+        XCTAssertTrue(result.candidates.isEmpty)
+        let recorded = await diagnostics.latest
+        let metric = try XCTUnwrap(recorded)
+        XCTAssertEqual(metric.actualEngine, .productionBM25)
+        XCTAssertEqual(metric.fallbackOutcome, .unavailable)
+        XCTAssertEqual(metric.fallbackReason, .incompatibleIndex(.modelVersionMismatch))
     }
 }

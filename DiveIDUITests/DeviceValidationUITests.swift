@@ -361,8 +361,9 @@ final class DeviceValidationUITests: XCTestCase {
     }
 
     /// Debug build with the real Semantic-global artifacts bundled, launched with the experimental
-    /// flag: each search must report Core ML semantic as both requested and actual engine. Kept
-    /// apart from the Release rows; Release never offers semantic search.
+    /// flag. Semantic search is only a fallback for searches BM25 cannot answer: these three are
+    /// answered by BM25 (or contradict the catalogue's domain), so each must report BM25 with no
+    /// semantic failure. Kept apart from the Release rows; Release never offers semantic search.
     @MainActor
     func testExperimentalSemanticOnDebugBuild() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["DIVEID_DEVICE_PHASE"] == "experimental-semantic",
@@ -375,12 +376,12 @@ final class DeviceValidationUITests: XCTestCase {
         for (id, text) in [("positive", Self.globalQuery), ("ambiguous", "Dark angelfish near a reef."),
                            ("no-match", "A spotted freshwater frog on sand, about 5 cm long.")] {
             let outcome = search(app, text)
-            let lines = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Requested engine' OR label BEGINSWITH 'Actual engine' OR label BEGINSWITH 'Fallback'"))
+            let lines = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Requested engine' OR label BEGINSWITH 'Actual engine' OR label BEGINSWITH 'Semantic'"))
                 .allElementsBoundByIndex.map { $0.label }
             report("semantic-device", ["case": id, "state": outcome.state, "results": outcome.results, "diagnostics": lines])
-            XCTAssertTrue(lines.contains("Requested engine: Core ML semantic + BM25"), "\(id): \(lines)")
-            XCTAssertTrue(lines.contains("Actual engine: Core ML semantic + BM25"), "\(id): \(lines)")
-            XCTAssertFalse(lines.contains { $0.hasPrefix("Fallback") }, "\(id): \(lines)")
+            XCTAssertTrue(lines.contains("Requested engine: BM25, semantic fallback"), "\(id): \(lines)")
+            XCTAssertTrue(lines.contains("Actual engine: BM25"), "\(id): \(lines)")
+            XCTAssertFalse(lines.contains { $0.hasPrefix("Semantic unavailable") }, "\(id): \(lines)")
             attachScreenshot(app, "semantic-\(id)")
             goBack(app)
         }

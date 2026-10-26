@@ -298,16 +298,20 @@ model quality or identification accuracy.
 Enable the engine explicitly in a developer build by setting the user default
 `DiveIDExperimentalSemanticSearch=true`. Default installs remain on BM25.
 
-When enabled, semantic retrieval **complements** BM25 rather than replacing it
-(`HybridDescriptionSearchEngine(semanticComplement:)`): BM25 retrieves its usual top 50,
-the encoder retrieves its top 50, and species BM25 missed are appended to the pool. A
-species BM25 found keeps its BM25 signal, so its score is identical to the BM25-only
-result; the existing ranker, gates, 0.65 semantic admission floor, and confidence caps
-then decide what is shown. If the model is missing or fails, the complement adds nothing
-and the result is exactly the BM25 result. Missing,
-stale, or malformed artifacts emit a typed diagnostic and fall back offline; query text
-is excluded from the metrics payload. Device inference, latency, encoder conversion
-parity, and accuracy remain unverified until a compatible real artifact is supplied.
+When enabled, semantic retrieval is a **fallback** used only when BM25 ranks nothing
+(`ConfiguredDescriptionSearchEngine`). BM25 always runs first; if it ranks any candidate,
+that result is returned unchanged and the model is neither loaded nor run. Otherwise,
+unless the description contradicts the catalogue's domain, the query is embedded and
+the best semantic candidates at or above `semanticFallbackCosine` (0.55, frozen in
+[HybridRankingContract.md](../../Docs/HybridRankingContract.md#semantic-calibration))
+are ranked, ordered by cosine and shown as limited-information results with the
+"catalogue description similarity" clue. If nothing reaches the cutoff, or the model is
+missing or fails, the result stays BM25's empty one. Missing, stale, or malformed
+artifacts emit a typed diagnostic; query text is excluded from the metrics payload.
+The Debug strip shows "BM25" or "Semantic fallback (BM25 found nothing)".
+`SemanticEndToEndTests.testProvisionedEncoderFallsBackOnlyWhenBM25FindsNothing` measures
+the design on real artifacts and fails if any no-match development description gains a
+result. Accuracy on independent data remains unverified.
 
 ## Frozen-candidate audit
 
