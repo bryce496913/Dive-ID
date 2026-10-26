@@ -93,12 +93,16 @@ jobs:
                   continue
               version = tuple(map(int, match.groups()))
               for device in entries:
-                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
-                      candidates.append((version, device["name"], device["udid"]))
+                  # The SE has its own pass below; sorting by name would otherwise pick it here too
+                  # ("iPhone SE" sorts after "iPhone 16"), so the larger screen was never tested.
+                  name = device.get("name", "")
+                  if device.get("isAvailable") and name.startswith("iPhone") and not name.startswith("iPhone SE"):
+                      candidates.append((version, name, device["udid"]))
           if not candidates:
-              raise SystemExit("No available iOS 18 iPhone simulator for Xcode 16.4 was found")
+              raise SystemExit("No available iOS 18 iPhone simulator (other than the SE) for Xcode 16.4 was found")
           candidates.sort(reverse=True)
           print(candidates[0][2])
+          print(f"Main simulator: {candidates[0][1]} (iOS {candidates[0][0][0]}.{candidates[0][0][1]})", file=sys.stderr)
           ' )"
           echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
           # Smallest supported iPhone, for the small-screen UI-test pass.
@@ -117,8 +121,10 @@ jobs:
           candidates.sort(reverse=True)
           print(candidates[0][2] if candidates else "")
           ' )"
-          # The SE pass is reported as skipped in the summary when the runner has no SE simulator.
-          if [ -n "$se_udid" ]; then echo "se_destination=platform=iOS Simulator,id=$se_udid" >> "$GITHUB_OUTPUT"; fi
+          # Both passes are required, on two different simulators; a missing SE fails the run.
+          if [ -z "$se_udid" ]; then echo "No iOS 18 iPhone SE simulator: the small-screen pass cannot run" >&2; exit 1; fi
+          if [ "$se_udid" = "$udid" ]; then echo "The main and SE passes resolved to the same simulator" >&2; exit 1; fi
+          echo "se_destination=platform=iOS Simulator,id=$se_udid" >> "$GITHUB_OUTPUT"
 
       - name: Resolve and validate Debug test product settings
         id: debug_settings
@@ -205,7 +211,7 @@ jobs:
 
       - name: Run UI-test target on the smallest supported iPhone (SE)
         id: ui_tests_se
-        if: ${{ always() && steps.build.outcome == 'success' && steps.simulator.outputs.se_destination != '' }}
+        if: ${{ always() && steps.build.outcome == 'success' }}
         run: |
           set -o pipefail
           xcodebuild \
@@ -218,6 +224,19 @@ jobs:
             -parallel-testing-enabled NO \
             test-without-building \
             -only-testing:DiveIDUITests 2>&1 | tee "$RUNNER_TEMP/ui-tests-se.log"
+
+      - name: Require two distinct UI-test screens
+        id: ui_destinations
+        if: ${{ always() && steps.ui_tests.outcome == 'success' && steps.ui_tests_se.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # UI tests log each recorded window as "UIDIAG <name> window=(x, y, width, height)".
+          main="$(grep -oE 'UIDIAG [^ ]+ window=\([^)]*\)' "$RUNNER_TEMP/ui-tests.log" | sed -E 's/.*window=//' | sort -u)"
+          se="$(grep -oE 'UIDIAG [^ ]+ window=\([^)]*\)' "$RUNNER_TEMP/ui-tests-se.log" | sed -E 's/.*window=//' | sort -u)"
+          echo "Main pass windows: $main"; echo "SE pass windows: $se"
+          [ "$(printf '%s\n' "$main" | wc -l)" -eq 1 ] && [ "$(printf '%s\n' "$se" | wc -l)" -eq 1 ] && [ -n "$main" ] && [ -n "$se" ]
+          if [ "$main" = "$se" ]; then echo "Both UI passes ran on the same screen size" >&2; exit 1; fi
 
       - name: Build the Internal application (optimized, development catalogue)
         id: internal_build
@@ -263,7 +282,6 @@ jobs:
         run: |
           status=0
           for stage in DiveIDTests DiveIDHostedPackagingTest DiveIDUITests DiveIDUITestsSE; do
-            [ -d "$RUNNER_TEMP/$stage.xcresult" ] || [ "$stage" != DiveIDUITestsSE ] || continue
             xcrun xcresulttool get test-results summary --path "$RUNNER_TEMP/$stage.xcresult" > "$RUNNER_TEMP/$stage-summary.json" || status=1
             cat "$RUNNER_TEMP/$stage-summary.json" >> "$GITHUB_STEP_SUMMARY"
           done
@@ -285,6 +303,7 @@ jobs:
           | Hosted packaging | ${{ steps.packaging.outcome }} |
           | UI target | ${{ steps.ui_tests.outcome }} |
           | UI target (iPhone SE) | ${{ steps.ui_tests_se.outcome }} |
+          | Two distinct UI screens | ${{ steps.ui_destinations.outcome }} |
           | Internal build | ${{ steps.internal_build.outcome }} |
           | Release build | ${{ steps.release_build.outcome }} |
           | Instrumentation absent from Release | ${{ steps.instrumentation.outcome }} |

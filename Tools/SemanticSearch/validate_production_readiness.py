@@ -10,7 +10,8 @@ import json
 import sys
 from pathlib import Path
 
-from provision_real_encoder import compiled_model_fingerprint
+from coreml_parity import SPEC_PATH as PARITY_SPEC_PATH
+from provision_real_encoder import EVIDENCE_SCHEMA_VERSION, compiled_model_fingerprint
 
 FINGERPRINT_KEYS = (
     "modelRevision", "tokenizerFingerprint", "preprocessingFingerprint",
@@ -87,7 +88,7 @@ def validate(document):
 
 def validate_provisioning_evidence(evidence, resources):
     errors = []
-    if evidence.get("schemaVersion") != 2:
+    if evidence.get("schemaVersion") != EVIDENCE_SCHEMA_VERSION:
         errors.append("unsupported provisioning evidence schemaVersion")
     completion = evidence.get("completion", {})
     if evidence.get("status") != "complete" or any(completion.get(key) is not True for key in
@@ -104,6 +105,23 @@ def validate_provisioning_evidence(evidence, resources):
     for key in ("algorithm", "files", "sha256"):
         if recorded.get(key) != actual.get(key):
             errors.append(f"compiledModel.{key} mismatch")
+    return errors + validate_parity_evidence(evidence.get("parity"), resources)
+
+
+def validate_parity_evidence(parity, resources):
+    """Packaged artifacts are runtime-ready only with passing Core ML parity, measured against
+    the frozen tolerances now in the repository, and with that fixture packaged unchanged."""
+    if not isinstance(parity, dict) or parity.get("status") != "passed":
+        return ["Core ML parity did not pass"]
+    errors = []
+    if parity.get("specSHA256") != digest(PARITY_SPEC_PATH):
+        errors.append("Core ML parity was measured against different tolerances")
+    fixture = parity.get("fixture") or {}
+    path = Path(resources) / str(fixture.get("resourceName", ""))
+    if not fixture.get("resourceName") or not path.is_file():
+        errors.append("Core ML parity fixture is not packaged")
+    elif digest(path) != fixture.get("sha256"):
+        errors.append("Core ML parity fixture mismatch")
     return errors
 
 

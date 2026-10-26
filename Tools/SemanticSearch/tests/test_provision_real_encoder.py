@@ -117,6 +117,52 @@ class RealEncoderProvisioningTests(unittest.TestCase):
             self.assertEqual((resources / "old").read_text(), "valid")
             self.assertFalse((resources / "provisioning-evidence.json").exists())
 
+    def test_conversion_environment_is_exactly_pinned_and_hash_locked(self):
+        pins = PROVISION.pinned_requirements()
+        for name in ("coremltools", "numpy", "torch", "transformers", "tokenizers", "safetensors", "huggingface-hub"):
+            self.assertIn(name, pins)
+        # coremltools (8.3.0 and 9.0) converts `aten::Int` with int(ndarray), which NumPy 2.4+ rejects.
+        major, minor = (int(part) for part in pins["numpy"].split(".")[:2])
+        self.assertLess((major, minor), (2, 4))
+        lock = (PROVISION.TOOLS / "requirements-real-encoder.txt").read_text()
+        locked = {}
+        for line in lock.splitlines():
+            if line and not line.startswith((" ", "#")):
+                name, _, version = line.rstrip(" \\").partition("==")
+                locked[name.lower()] = version
+        for name, version in pins.items():
+            self.assertEqual(locked.get(name), version, f"{name} differs between the .in pins and the lock")
+        blocks = [block for block in lock.split("\n") if block and not block.startswith(("#", " "))]
+        self.assertTrue(blocks)
+        for name in locked:
+            self.assertRegex(lock, rf"(?m)^{name}==[^\n]*\\\n\s+--hash=sha256:[0-9a-f]{{64}}")
+
+    def test_unpinned_requirement_is_refused(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "requirements.in"
+            path.write_text("coremltools==8.3.0\nnumpy>=1.14.5\n")
+            with self.assertRaises(ValueError):
+                PROVISION.pinned_requirements(path)
+
+    def test_environment_drift_is_reported(self):
+        pins = {"numpy": "2.3.5", "torch": "2.5.0", "coremltools": "8.3.0"}
+        installed = {"numpy": "2.5.4", "torch": "2.5.0+cu124"}.get
+        self.assertEqual(PROVISION.environment_mismatches(pins, installed),
+                         ["coremltools==8.3.0 (installed: missing)", "numpy==2.3.5 (installed: 2.5.4)"])
+        self.assertEqual(PROVISION.environment_mismatches(pins, {**pins, "torch": "2.5.0+cpu"}.get), [])
+
+    def test_parity_fixture_records_encodings_vectors_and_tolerances(self):
+        spec = {"tolerances": {"coreMLCosineMinimum": 0.999}, "probes": ["eel"]}
+        encodings = [{"input_ids": [101, 102, 0], "attention_mask": [1, 1, 0]}]
+        report = {"rows": [{"probe": 0, "referenceTopK": ["a", "b"], "referenceTopKScores": [0.7, 0.5],
+                            "referenceTop1Margin": 0.2}]}
+        fixture = PROVISION.parity_fixture(spec, "f" * 64, encodings, [[0.6, 0.8]], report)
+        self.assertEqual(fixture["probes"], [{"text": "eel", "inputIDs": [101, 102, 0], "attentionMask": [1, 1, 0],
+                                              "referenceVector": [0.6, 0.8], "referenceTopK": ["a", "b"],
+                                              "referenceTopKScores": [0.7, 0.5], "referenceTop1Margin": 0.2}])
+        self.assertEqual(fixture["tolerances"], spec["tolerances"])
+        self.assertEqual(fixture["specSHA256"], "f" * 64)
+
     def test_incomplete_evidence_cannot_claim_compiled_success(self):
         evidence = {"schemaVersion": 2, "status": "incomplete",
                     "completion": {"conversion": True, "compilation": False, "packaging": False},

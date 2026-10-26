@@ -154,10 +154,44 @@ offline resource with:
 ```sh
 python3 -m venv .venv-real-encoder
 . .venv-real-encoder/bin/activate
-python3 -m pip install -r Tools/SemanticSearch/requirements-real-encoder.txt
+python3 -m pip install --require-hashes -r Tools/SemanticSearch/requirements-real-encoder.txt
 python3 Tools/SemanticSearch/provision_real_encoder.py \
   --package-resources DiveID/Resources/SemanticSearch
 ```
+
+### Conversion environment and Core ML parity (2026-10-24)
+
+- **Pinned environment.** `requirements-real-encoder.in` pins the direct packages;
+  `requirements-real-encoder.txt` is its hash-locked resolution for the macOS arm64
+  runner. The provisioner refuses to start when an installed direct package differs from
+  its pin.
+- **Why NumPy is held below 2.4.** coremltools converts a traced `aten::Int` on a
+  length-1 constant (BERT's position-ID slice) with Python `int(ndarray)`. NumPy 2.4
+  made that an error ("only 0-dimensional arrays can be converted to Python scalars"),
+  and the unpinned install had picked up NumPy 2.5.4. coremltools 8.3.0 and 9.0 both
+  fail with NumPy 2.4 or later; NumPy 2.3.5 converts. PyTorch is 2.5.0, the newest
+  release coremltools 8.3.0 is tested with.
+- **Conversion check.** `tests/test_coreml_conversion.py` converts a model with the
+  pinned revision's exact architecture and seeded random weights through
+  `provision_real_encoder.convert`. The workflow sets `DIVEID_REQUIRE_CONVERSION=1`, so
+  missing tooling fails there instead of skipping.
+- **Parity gate.** After conversion, provisioning compares Core ML vectors with the
+  float32 PyTorch reference on the probes in `coreml-parity.v1.json`, using the
+  tolerances frozen there before any genuine vector was produced:
+  - cosine at least 0.999;
+  - largest element difference at most 0.01;
+  - unit norm within 1e-4;
+  - padding invariance (cosine at least 0.99999);
+  - retrieval top-10 overlap at least 9;
+  - retrieval score difference at most 0.02;
+  - the same top-1 whenever the reference margin is at least 0.01.
+- **Failing closed.** Packaging is refused unless parity passes. Evidence schema 3
+  records the result and the package versions, and the validator rejects evidence
+  without a passing parity measured against the current tolerances.
+- **App-side check.** `Semantic-<pack>.parity.json` is packaged with the resources.
+  `SemanticEndToEndTests.testAppEncoderMatchesTheProvisioningReference` re-checks the
+  same tolerances through the app's own tokenizer, Core ML encoder, pooling and
+  retrieval, under SwiftPM and in the built app.
 
 The provisioner downloads only the pinned revision, requires the model, tokenizer,
 pooling configuration, and license files, tests five meaningful tokenizer cases against

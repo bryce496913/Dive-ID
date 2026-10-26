@@ -67,71 +67,78 @@ struct DescriptionSearchView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
-                ClueGuide()
-                if let pack = viewModel.pack {
-                    regionLayout {
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+        // Find Matches sits below the scroll view, not over it: the stack is raised by the keyboard,
+        // so the button stays above the keyboard however tall the editor, text or screen is, and the
+        // scroll view (which clips the editor) ends where the button begins, so nothing can cover it.
+        // One tap dismisses the keyboard and submits.
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
+                    ClueGuide()
+                    if let pack = viewModel.pack {
+                        regionLayout {
+                            if !dynamicTypeSize.isAccessibilitySize {
+                                Image(systemName: "map.fill").foregroundStyle(Color.appAccent).accessibilityHidden(true)
+                            }
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                                Text("Dive region: \(pack.displayName)").font(.headline)
+                                Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                            }
+                            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
+                            Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
                         }
-                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
-                            Text("Dive region: \(pack.displayName)").font(.headline)
-                            Text("\(pack.speciesCount) species available offline").font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                        }
-                        if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: AppTheme.Spacing.s) }
-                        Button("Change") { router.navigate(to: .offlineRegions) }.fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .appCard()
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                    else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
+                    ZStack(alignment: .topLeading) {
+                        if viewModel.descriptionText.isEmpty {
+                            Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
+                                .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
+                        }
+                        TextEditor(text: $viewModel.descriptionText)
+                            .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
+                            .focused($isEditorFocused)
+                            .accessibilityIdentifier("descriptionText")
+                    }
                     .appCard()
-                }
-                else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
-                ZStack(alignment: .topLeading) {
-                    if viewModel.descriptionText.isEmpty {
-                        Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")
-                            .foregroundStyle(Color.appTextSecondary.opacity(0.7)).padding(AppTheme.Spacing.m)
+                    // The editor's edge lights up with the brand gradient while typing.
+                    .overlay {
+                        RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
+                            .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
+                            .opacity(isEditorFocused ? 1 : 0)
+                            .animation(.easeOut(duration: 0.2), value: isEditorFocused)
+                            .allowsHitTesting(false)
                     }
-                    TextEditor(text: $viewModel.descriptionText)
-                        .frame(minHeight: 190).scrollContentBackground(.hidden).padding(AppTheme.Spacing.xs)
-                        .focused($isEditorFocused)
-                        .accessibilityIdentifier("descriptionText")
-                }
-                .appCard()
-                // The editor's edge lights up with the brand gradient while typing.
-                .overlay {
-                    RoundedRectangle(cornerRadius: AppTheme.radius, style: .continuous)
-                        .strokeBorder(LinearGradient.appBrand, lineWidth: 2)
-                        .opacity(isEditorFocused ? 1 : 0)
-                        .animation(.easeOut(duration: 0.2), value: isEditorFocused)
-                        .allowsHitTesting(false)
-                }
-                DescriptionLengthHint(count: viewModel.normalizedDescription.count)
-                if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
-                Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
-                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                    DescriptionLengthHint(count: viewModel.normalizedDescription.count)
+                    if let error = viewModel.errorMessage { Text(error).foregroundStyle(Color.appError) }
+                    Label("Processed on this device. Results cover only the species included with this version of Dive ID.", systemImage: "iphone")
+                        .font(.footnote).foregroundStyle(Color.appTextSecondary)
 #if DEBUG || DIVEID_INTERNAL
-                // Below the search controls, so it never moves or covers them.
-                if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
+                    // Below the search controls, so it never moves or covers them.
+                    if let pack = viewModel.pack { InternalSearchDiagnosticsView(packID: pack.id, diagnostics: viewModel.diagnostics) }
 #endif
+                }
+                .padding()
             }
-            .padding()
-        }
-        .scrollDismissesKeyboard(.interactively)
-        // Find Matches is pinned in the bottom safe area, which the keyboard raises, so it always sits
-        // above the keyboard however tall the editor, the text or the screen is; one tap dismisses the
-        // keyboard and submits. The scroll view's content ends above it, so nothing is hidden behind it.
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+            .scrollDismissesKeyboard(.interactively)
             findMatchesButton
                 .padding(.horizontal)
                 .padding(.vertical, AppTheme.Spacing.s)
-                .background(Color.appBackground.opacity(0.92).ignoresSafeArea(.container, edges: .bottom))
         }
         .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
+            // Done lives in the navigation bar, not a keyboard toolbar: on iOS 27 the keyboard
+            // toolbar's height stops being reserved after returning from the results a couple of
+            // times, which slid Find Matches under the keyboard's suggestion bar.
+            // Always present, hidden while the editor is not focused: adding the item on focus
+            // rebuilt the bar and could drop the focus that had just arrived.
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Done") { isEditorFocused = false }
                     .accessibilityIdentifier("dismissKeyboard")
+                    .opacity(isEditorFocused ? 1 : 0)
+                    .disabled(!isEditorFocused)
+                    .accessibilityHidden(!isEditorFocused)
             }
         }
         .appScreenBackground()

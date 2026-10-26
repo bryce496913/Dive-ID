@@ -1,6 +1,7 @@
 # Physical iPhone Release validation
 
-This procedure supplements V05CandidateValidation.md. Last commit-bound outcome:
+This procedure supplements V05CandidateValidation.md. The current, dated worksheet
+(expected versus observed, still unexecuted on a phone) is DeviceValidation-2026-10-24.md. Last commit-bound outcome:
 `Reports/InstalledReleaseValidation.json`, recorded before any Global approval.
 
 **Current publication subset (2026-10-23): 4,798 records in two packs.**

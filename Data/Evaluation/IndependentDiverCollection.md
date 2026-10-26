@@ -1,7 +1,10 @@
 # Independent diver-description collection (empty pilot)
 
-Collect 12 independently written observations after the v1 criteria are frozen:
-4 Caribbean and 8 Pacific, including short accounts and uncertain observations.
+Collect 12 independently written observations after the v1 criteria are frozen,
+all searched in the Global pack (revised 2026-10-25 from 4 Caribbean and 8 Pacific;
+see `IndependentProtocol.v1.json` `revisions`), including short accounts and
+uncertain observations. Divers may describe animals from any region; the broad dive
+region goes in private `observationContext`.
 Do not show contributors the catalogue, synthetic examples, engine results or
 expected species names before they submit their own unedited text. Obtain consent
 for evaluation use; use pseudonymous participant IDs and omit precise sensitive
@@ -59,7 +62,8 @@ an observation dataset. Each observation requires:
 
 - `observationID`: a UUID assigned at collection, retained across versions;
   `description`: original unedited English account; `collectionDate`: YYYY-MM-DD;
-  `region`: caribbean or tropical-pacific; `language`: en.
+  `region`: the pack searched (`global` for the pilot; `caribbean` or
+  `tropical-pacific` remain valid for later cohorts); `language`: en.
 - `author`: `{kind: "human", participantID: "<pseudonym>",
   attestsOwnUnpromptedWords: true}`; `consentForEvaluation`: boolean. Keep publication
   consent separately; evaluation consent never grants publication rights.
@@ -127,7 +131,7 @@ verifier independence or an undisclosed exposure history. Custodian review is re
 ## Twelve-case pilot operations (specified before receiving submissions)
 
 Reuse the form above and `independent-v1`; do not start another dataset format.
-The target remains 12 accounts: 4 Caribbean and 8 Pacific. Prefer one observation
+The target is 12 accounts, all searched in Global. Prefer one observation
 per diver and independent encounters. Retain linked submissions if necessary,
 record the contributor count and shared cohorts, and do not imply 12 independent
 participants when there are fewer. Recruitment must not select people based on
@@ -174,9 +178,10 @@ authorize an identified custodian and collection channel before outreach.
    checkout. Labels/criteria must be final before search runs. Retain immutable
    manifests, provenance, catalogue/code hashes, private ranks and abstentions.
    Inspect pilot failures only as development material. Do not enrich or tune in
-   this pass. Publish aggregate denominators separately for the complete 392-record
-   development pack and actual two-record Caribbean publication subset; rederive
-   sizes if the catalogue changes. Coverage blocks are not abstention successes.
+   this pass. Publish aggregate denominators separately for development access
+   (Global 4,798 records) and publication access (Global 4,796 approved); the runner
+   rederives pack sizes from the frozen catalogue. Coverage blocks are not
+   abstention successes.
 
 An empty private starting document is:
 
@@ -208,12 +213,63 @@ labels and add versioned adjudications rather than overwriting a frozen baseline
 Report candidate recall, displayed ranks/top-k, abstentions, ambiguity and confidence
 descriptively with denominators; 12 cases cannot establish identification accuracy.
 
+## Pilot status (2026-10-25)
+
+**Collected 0 / 12; verified 0; unresolved 0. No dataset is frozen and nothing was
+evaluated.** No genuine submission exists in the repository or on the custodian Mac,
+and no outreach is authorized. Preflight on the empty starting document reports 0
+collected, 12 remaining, target 12 Global; freeze refuses it ("No supplied
+descriptions").
+
+Outstanding input, all from the requesting user:
+
+1. Up to 12 genuine, consented diver accounts written before any catalogue, trait or
+   app exposure, with the Contributor form answers. Alternatively, explicit
+   authorization naming a custodian and a collection channel, so the custodian can
+   run intake.
+2. A named custodian and a separate verifier (pseudonymous codes are enough here).
+3. For each account, identity evidence the verifier can review without app output:
+   a photo or video, or a documented instructor assessment.
+
+Workflow issues found and fixed before collection:
+
+- Intake accepted only `caribbean` and `tropical-pacific`. Under Release access those
+  packs offer 2 and 0 species, so the planned 4 + 8 pilot would have measured
+  coverage blocks, not identification. Intake now accepts `global`, and the pilot
+  target comes from the protocol (12 Global).
+- Reports had no latency or abstention counts. The runner now times each service call
+  (`elapsedSeconds`), and the aggregate reports median, nearest-rank p95 and maximum
+  per split and access, plus abstentions per label kind. Both are descriptive, with no
+  gate. Candidate recall stays separate from displayed top-1/3/10.
+- The guide's pack sizes were stale (392-record development pack). It now gives the
+  current Global sizes, and the runner rederives them from the frozen catalogue.
+
+Still open, needed before any semantic comparison:
+
+- The custodian runner is fixed to `production-bm25-50-biological`. A genuine
+  semantic candidate exists locally (`Docs/RealEncoderLocalValidation-2026-10-25.md`),
+  but its artifacts are generated and git-ignored, so `lock_state` cannot hash them.
+  Before a comparison, freeze the encoder configuration as data: the model revision,
+  compiled-model, vocabulary, contract, corpus and index SHA-256 values; the
+  admission cosine (0.30, provisional and untuned); the merge rule; and
+  `DIVEID_SEMANTIC_RESOURCES`. Then run both engines on the same frozen cases and
+  catalogue. Do not tune either engine from the pilot.
+
+What the pilot is: a collection-workflow check and development evidence (every row
+`usedForDevelopment: true`). The committed 30/34 Global top-ten result is also
+development evidence. Neither estimates independent population accuracy.
+
 ## Proposed larger collection (not authorized or begun)
 
 Before recruitment, approve a versioned sampling manifest and independent custodian.
-Propose staged intake up to 400 new accounts, roughly balanced Caribbean/Pacific,
+Propose staged intake up to 400 new accounts across the oceans Global covers,
 across novice/experienced divers, different sites, depths, habitats and visibility.
 Prefer one independent author/encounter per account; keep all linked groups together.
+Track coverage strata at intake, without engine output: animal group (reef fish,
+pelagic fish, sharks and rays, invertebrates, turtles and mammals); ocean region;
+description quality (one-line recollection to detailed account, measured by trait
+count, not by wording); diver experience; and whether the verifier could reach species
+level. Report unfilled strata rather than filling them with generated text.
 Collect recollections prospectively without catalogue prompts; describe missing
 strata rather than manufacturing examples. A label-blind intake coordinator logs
 completion/exclusion before engine use. A separate verifier assigns labels.
@@ -237,7 +293,7 @@ With 400 rows these aims might yield roughly 40 positive and 13 cases per policy
 class in holdout, but group assignment, unresolved labels and publication coverage
 can reduce counts. This is a planning estimate, not a power calculation. Existing
 minimum denominators (30 positive and 10 per policy class per split/access) remain
-mandatory. The two-species publication subset may not meet them; report insufficient
+mandatory. Regional packs with few approved species may not meet them; report insufficient
 sample rather than changing thresholds or cherry-picking successful species.
 At predeclared 100-row intake checkpoints, audit completeness and strata without
 engine output. Any extension beyond 400 needs a new prospective collection decision;

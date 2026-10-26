@@ -11,6 +11,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL = ROOT / 'Data/Evaluation/IndependentProtocol.v1.json'
+REGIONS = ('global', 'caribbean', 'tropical-pacific')
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
@@ -36,7 +37,7 @@ def validate(document):
         text_key = digest(' '.join(description.casefold().split()).encode())
         require(text_key not in texts, 'Duplicate description requires adjudication'); texts.add(text_key)
         collected = dt.date.fromisoformat(row['collectionDate'])
-        require(row['region'] in ('caribbean', 'tropical-pacific'), 'Unsupported region')
+        require(row['region'] in REGIONS, 'Unsupported region')
         require(row['language'] == 'en', 'v1 evaluates English only; retain other languages outside this cohort')
         author = row['author']
         require(author['kind'] == 'human' and author['attestsOwnUnpromptedWords'] is True, 'Independent human authorship attestation required')
@@ -88,16 +89,17 @@ def pilot_readiness(document):
     """Schema preflight only: no engine, freeze, personal data or case-level output."""
     cases = validate(document)
     rows = document['observations']
-    regions = {region: sum(r['region'] == region for r in rows)
-               for region in ('caribbean', 'tropical-pacific')}
+    regions = {region: sum(r['region'] == region for r in rows) for region in REGIONS}
+    target = json.loads(PROTOCOL.read_text())['pilotTarget']
+    target_regions = {region: target['regions'].get(region, 0) for region in REGIONS}
     unresolved = sum(c['kind'] == 'unresolved' for c in cases)
     publication_missing = sum(not isinstance(r.get('consentForPublication'), bool) for r in rows)
     context_missing = sum(not isinstance(r.get('observationContext'), dict)
                           or not r['observationContext'] for r in rows)
     return {
         'purpose': 'Collection workflow preflight, not independent quality evidence',
-        'collected': len(rows), 'target': 12, 'remainingToCollect': max(0, 12-len(rows)),
-        'regions': regions, 'targetRegions': {'caribbean': 4, 'tropical-pacific': 8},
+        'collected': len(rows), 'target': target['total'], 'remainingToCollect': max(0, target['total']-len(rows)),
+        'regions': regions, 'targetRegions': target_regions,
         'verifiedLabelsDeclared': len(cases)-unresolved, 'unresolvedLabels': unresolved,
         'multipleIdentityLabels': sum(len(c['expectedSpeciesIDs']) > 1 for c in cases),
         'distinctContributors': len({r['author']['participantID'] for r in rows}),
@@ -105,7 +107,7 @@ def pilot_readiness(document):
         'observationContextNotRecorded': context_missing,
         'developmentCases': sum(c['split'] == 'development' for c in cases),
         'holdoutCases': sum(c['split'] == 'holdout' for c in cases),
-        'collectionTargetMet': len(rows) == 12 and regions == {'caribbean': 4, 'tropical-pacific': 8},
+        'collectionTargetMet': len(rows) == target['total'] and regions == target_regions,
         'allLabelsVerifiedDeclared': bool(rows) and unresolved == 0,
         'humanEvidenceAuditRequired': True,
         'baseline': 'not run', 'accuracyConclusion': 'unavailable',
@@ -159,7 +161,15 @@ def aggregate(rows):
             sufficient = len(positives)>=30 and all(metrics[k]['denominator']>=10 for k in ('noMatchCorrect','ambiguityCorrect','regionConflictCorrect'))
             criteria=json.loads(PROTOCOL.read_text())['minimumRates']
             passed=all(metrics[k]['rate'] is not None and metrics[k]['rate']>=v for k,v in criteria.items())
+            # Abstention: the engine ran, nothing was shown and no error occurred, per label kind.
+            abstentions={kind:sum(r['kind']==kind and r['returnedCount']==0 and not r['serviceError'] and r['engineInvoked'] for r in eligible)
+                         for kind in ('identification','ambiguous','noMatch','regionConflict')}
+            # Descriptive end-to-end service time for searches that ran; no latency gate.
+            times=sorted(r['elapsedSeconds'] for r in selected if r['engineInvoked'] and isinstance(r.get('elapsedSeconds'),(int,float)))
+            latency={'n':len(times),'medianSeconds':(times[(len(times)-1)//2]+times[len(times)//2])/2 if times else None,
+                     'p95NearestRankSeconds':times[-(-len(times)*95//100)-1] if times else None,'maxSeconds':times[-1] if times else None}
             groups.append({'access':access,'split':split,'submitted':len(selected),'coverageBlocked':sum(r['blocked'] for r in selected),
+                           'abstentions':abstentions,'latency':latency,
                            'unresolved':sum(r['kind']=='unresolved' for r in selected),
                            'noMatchFalsePositives':sum(r['kind']=='noMatch' and r['returnedCount']>0 for r in eligible),
                            'serviceErrors':sum(r['serviceError']=='serviceError' for r in eligible),'engineInvocations':sum(r['engineInvoked'] for r in selected),

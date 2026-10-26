@@ -62,12 +62,15 @@ struct DiveIDApp: App {
             .fontDesign(.rounded)
             .safeAreaInset(edge: .bottom, spacing: 0) {
 #if DEBUG
-                // Reserve space so diagnostics cannot cover or intercept search controls.
+                // Reserve space so diagnostics cannot cover or intercept search controls. Its text
+                // size is capped: at the largest accessibility sizes the strip grew to about 280 pt
+                // and squeezed the screen until Find Matches spilled underneath it.
                 DebugSemanticSearchStatusView(selection: retrievalEngine, reporter: semanticDiagnostics)
+                    .dynamicTypeSize(...DynamicTypeSize.large)
                     .allowsHitTesting(false)
 #elseif DIVEID_INTERNAL
                 // An Internal build must never be mistaken for Release on screen.
-                InternalBuildBanner().allowsHitTesting(false)
+                InternalBuildBanner().dynamicTypeSize(...DynamicTypeSize.large).allowsHitTesting(false)
 #endif
             }
         }

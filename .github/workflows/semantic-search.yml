@@ -53,12 +53,30 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.12.10'
           cache: pip
           cache-dependency-path: Tools/SemanticSearch/requirements-real-encoder.txt
 
-      - name: Install pinned encoder tooling
-        run: python3 -m pip install -r Tools/SemanticSearch/requirements-real-encoder.txt
+      # Every package, transitive ones included, is pinned and hash-checked: an unpinned
+      # NumPy 2.5 once broke conversion (see requirements-real-encoder.in).
+      - name: Install hash-locked encoder tooling
+        shell: bash
+        run: |
+          python3 -m pip install --require-hashes -r Tools/SemanticSearch/requirements-real-encoder.txt
+          {
+            echo '### Conversion environment'
+            echo '```'
+            sw_vers
+            xcodebuild -version
+            python3 --version
+            python3 -m pip freeze | grep -iE '^(coremltools|numpy|torch|transformers|tokenizers|safetensors|huggingface.hub|protobuf)=='
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Convert the encoder architecture with coremltools (integration check)
+        env:
+          DIVEID_REQUIRE_CONVERSION: '1'
+        run: python3 -m unittest -v Tools/SemanticSearch/tests/test_coreml_conversion.py
 
       - name: Provision, convert, compile and package the Global encoder
         id: provision
@@ -69,6 +87,17 @@ jobs:
             --pack DiveID/Resources/IdentificationPacks/Global \
             --package-resources "$RESOURCES" 2>&1 | tee "$RUNNER_TEMP/provision.log"
           ls -la "$RESOURCES"
+          python3 - "$RESOURCES/provisioning-evidence.json" >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, sys
+          evidence = json.load(open(sys.argv[1]))
+          parity = evidence["parity"]
+          print("### Core ML parity (frozen tolerances, Tools/SemanticSearch/coreml-parity.v1.json)")
+          print(f"- Status: {parity['status']} on {parity['report']['probes']} probes, compute units {parity['computeUnits']}")
+          print("```json"); print(json.dumps(parity["report"]["summary"], indent=2, sort_keys=True)); print("```")
+          print("### Artifact identities")
+          print("```json"); print(json.dumps(dict(evidence["identities"], compiledModelSHA256=evidence["compiledModel"]["sha256"],
+                                                  parityFixtureSHA256=parity["fixture"]["sha256"]), indent=2, sort_keys=True)); print("```")
+          PY
           {
             echo '### Packaged semantic resources'
             echo '```'
@@ -94,6 +123,10 @@ jobs:
         run: |
           set -o pipefail
           swift test --filter SemanticEndToEndTests 2>&1 | tee "$RUNNER_TEMP/swiftpm-semantic.log"
+          # A skipped test is not evidence: the parity and merge tests must have run and passed.
+          grep -q "testAppEncoderMatchesTheProvisioningReference\]' passed" "$RUNNER_TEMP/swiftpm-semantic.log"
+          grep -q "testProvisionedEncoderComplementsBM25OnGlobal\]' passed" "$RUNNER_TEMP/swiftpm-semantic.log"
+          grep -E '^SEMANTIC-PARITY' "$RUNNER_TEMP/swiftpm-semantic.log" >> "$GITHUB_STEP_SUMMARY"
       - name: Summarize calibration and merge reports
         if: ${{ always() && steps.provision.outcome == 'success' }}
         shell: bash
@@ -115,6 +148,20 @@ jobs:
           print(f"- Top result changed vs BM25: {report['top1Changed']}")
           print(f"- Cases showing a species BM25 did not retrieve: {report['casesWithSemanticOnlyResults']}")
           print(f"- No-match cases that gained results (must be 0): {report['noMatchCasesThatGainedResults']}")
+          print(f"- Requested engine: {report['requestedEngine']}; served by Core ML: {report['casesServedByCoreML']}/{report['cases']}; "
+                f"fallbacks: {report['fallbackCount']} {report['fallbackReasons']}")
+          print(f"- Abstention vs BM25: newly answered {report['newlyAnswered']}, newly abstained {report['newlyAbstained']}")
+          print(f"- Semantic-only results that are not the expected species: {report['addedUnexpectedResults']} "
+                f"by kind {report['addedUnexpectedResultsByKind']}; highest confidence shown for one: {report['maximumSemanticOnlyConfidence']}")
+          print(f"- Cases whose expected species came only from semantic retrieval: {report['casesWithExpectedOnlyFromSemantic']}")
+          kinds = sorted({row['kind'] for row in rows})
+          print("| Kind | Cases | Expected top-1 BM25 | Expected top-1 merged | Abstained BM25 | Abstained merged | Unexpected semantic-only |")
+          print("| --- | --- | --- | --- | --- | --- | --- |")
+          for kind in kinds:
+              subset = [row for row in rows if row['kind'] == kind]
+              print(f"| {kind} | {len(subset)} | {sum(r['expectedTop1BM25'] for r in subset)} | {sum(r['expectedTop1Merged'] for r in subset)} | "
+                    f"{sum(r['bm25Abstained'] for r in subset)} | {sum(r['mergedAbstained'] for r in subset)} | "
+                    f"{sum(r['semanticOnlyUnexpected'] for r in subset)} |")
           print(f"- macOS runner, Debug SwiftPM: embedding median {embedding[len(embedding) // 2]:.1f} ms, "
                 f"scoring median {retrieval[len(retrieval) // 2]:.1f} ms, first load {rows[0]['loadMilliseconds']:.0f} ms")
           PY
@@ -142,6 +189,7 @@ jobs:
           app="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/DiveID.app"
           test -d "$app/Semantic-global.mlmodelc"
           test -f "$app/Semantic-global.index.json"
+          test -f "$app/Semantic-global.parity.json"
           python3 Tools/SemanticSearch/validate_production_readiness.py \
             Tools/SemanticSearch/production-readiness.v1.json \
             --provisioning-evidence "$app/provisioning-evidence.json" --packaged-resources "$app"
@@ -150,7 +198,12 @@ jobs:
             -derivedDataPath "$DERIVED_DATA" -resultBundlePath "$RUNNER_TEMP/SemanticHosted.xcresult" \
             CODE_SIGNING_ALLOWED=NO -parallel-testing-enabled NO test-without-building \
             -only-testing:DiveIDTests/SemanticEndToEndTests/testBundledArtifactsServeTheExperimentalSelection \
+            -only-testing:DiveIDTests/SemanticEndToEndTests/testAppEncoderMatchesTheProvisioningReference \
             2>&1 | tee "$RUNNER_TEMP/hosted-test.log"
+          # A skipped test is not evidence: both hosted tests must have run and passed.
+          grep -q "testBundledArtifactsServeTheExperimentalSelection\]' passed" "$RUNNER_TEMP/hosted-test.log"
+          grep -q "testAppEncoderMatchesTheProvisioningReference\]' passed" "$RUNNER_TEMP/hosted-test.log"
+          grep -E '^SEMANTIC-(ENGINE|PARITY)' "$RUNNER_TEMP/hosted-test.log" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Summarize
         if: ${{ always() }}

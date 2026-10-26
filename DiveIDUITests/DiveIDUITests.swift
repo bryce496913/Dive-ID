@@ -11,11 +11,11 @@ final class DiveIDUITests: XCTestCase {
         XCTAssertTrue(app.buttons["describeAction"].exists)
         XCTAssertTrue(app.buttons["photoAction"].exists)
         XCTAssertFalse(app.staticTexts["configuration error"].exists)
-        app.buttons["describeAction"].tap()
+        tapSettled(app, app.buttons["describeAction"])
         XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2))
         let editor = app.textViews["descriptionText"]
         XCTAssertTrue(editor.waitForExistence(timeout: 2))
-        editor.tap()
+        tapSettled(app, editor)
         editor.typeText("Large flat eagle ray with white spots and a long tail over sand in the Caribbean.")
         XCTAssertTrue(app.buttons["findMatches"].isEnabled)
         app.buttons["findMatches"].tap()
@@ -37,7 +37,7 @@ final class DiveIDUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-uiTesting"]
         app.launch()
-        app.buttons["describeAction"].tap()
+        tapSettled(app, app.buttons["describeAction"])
         XCTAssertTrue(app.staticTexts["Dive region: Global"].waitForExistence(timeout: 5))
     }
 
@@ -57,11 +57,11 @@ final class DiveIDUITests: XCTestCase {
         // An existing user's stored Caribbean selection, as in the smoke flow; new installs start in Global.
         app.launchArguments = launchArguments + ["-selectedDiveRegion", "caribbean"]
         app.launch()
-        app.buttons["describeAction"].tap()
+        tapSettled(app, app.buttons["describeAction"])
         XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2), file: file, line: line)
         let editor = app.textViews["descriptionText"]
         XCTAssertTrue(editor.waitForExistence(timeout: 2), file: file, line: line)
-        editor.tap()
+        tapSettled(app, editor)
         editor.typeText("Large flat eagle ray with white spots and a long tail over sand in the Caribbean.")
         let findMatches = app.buttons["findMatches"]
         record(app, "keyboard-after-typing", elements: ["findMatches": findMatches, "editor": editor, "keyboard": app.keyboards.firstMatch])
@@ -78,7 +78,7 @@ final class DiveIDUITests: XCTestCase {
                 app.buttons["dismissKeyboard"].tap()
                 XCTAssertTrue(keyboard.waitForNonExistence(timeout: 3), file: file, line: line)
                 XCTAssertTrue(findMatches.isHittable, file: file, line: line)
-                editor.tap()
+                tapSettled(app, editor)
                 XCTAssertTrue(keyboard.waitForExistence(timeout: 3), file: file, line: line)
                 editor.typeText(" Seen gliding slowly along the reef edge at about ten metres, with a pointed snout, a dark back covered in pale rings and spots, and a white belly.")
                 record(app, "keyboard-round-\(round)", elements: ["findMatches": findMatches, "editor": editor, "keyboard": keyboard])
@@ -104,7 +104,7 @@ final class DiveIDUITests: XCTestCase {
         }
         // Scroll back to the top before opening Describe.
         for _ in 0..<8 where !app.buttons["describeAction"].isHittable { app.swipeDown() }
-        app.buttons["describeAction"].tap()
+        tapSettled(app, app.buttons["describeAction"])
         let editor = app.textViews["descriptionText"]
         XCTAssertTrue(editor.waitForExistence(timeout: 2))
         editor.tap()
@@ -124,6 +124,30 @@ final class DiveIDUITests: XCTestCase {
         record(app, "detail-opened", elements: ["toggleSaved": toggleSaved], hierarchy: true)
         assertFitsAndReachable(toggleSaved, in: app, named: "toggleSaved")
         record(app, "detail-after-scrolling", elements: ["toggleSaved": toggleSaved], hierarchy: !toggleSaved.isHittable)
+    }
+
+    /// At the largest text sizes the Describe card and the editor can be taller than the screen. XCUITest would
+    /// scroll it into view and tap during the scroll's momentum, which iOS treats as stopping
+    /// the scroll, not as a tap. Bring it into view first and let the scroll settle.
+    @MainActor
+    private func tapSettled(_ app: XCUIApplication, _ element: XCUIElement) {
+        XCTAssertTrue(element.waitForExistence(timeout: 10))
+        // Home enables Describe only once the catalogue has loaded; a tap before that does nothing.
+        let enabled = XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"), object: element)
+        XCTAssertEqual(XCTWaiter().wait(for: [enabled], timeout: 15), .completed, "\(element) never became enabled")
+        var scrolled = false
+        for _ in 0..<6 where !element.isHittable { app.swipeUp(velocity: .slow); scrolled = true }
+        if scrolled { Thread.sleep(forTimeInterval: 1) }
+        // A tap during a push transition or the keyboard's dismissal is dropped: wait until the
+        // element has stopped moving.
+        var frame = element.frame
+        for _ in 0..<12 {
+            Thread.sleep(forTimeInterval: 0.25)
+            let next = element.frame
+            if next == frame { break }
+            frame = next
+        }
+        element.tap()
     }
 
     /// Evidence for the result bundle: a screenshot, and optionally the accessibility hierarchy,

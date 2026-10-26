@@ -243,6 +243,26 @@ final class SemanticSearchTests: XCTestCase {
         }
     }
 
+    /// Swift's digests must equal Python's `canonical_json` byte for byte. The real MiniLM
+    /// vocabulary holds "/" and "##/", and its contract's tokenizer identifier holds "/", which
+    /// JSONEncoder escaped as "\/": every provisioned artifact was rejected as a malformed
+    /// vocabulary. The expected digests come from build_embedding_index.py.
+    func testFingerprintsMatchPythonForSlashesQuotesControlsAndNonASCII() throws {
+        let fixtureData = try Data(contentsOf: TestResources.fixture(named: "TokenizerParity.v2"))
+        var contractObject = try XCTUnwrap((try JSONSerialization.jsonObject(with: fixtureData) as? [String: Any])?["contract"] as? [String: Any])
+        contractObject["tokenizerIdentifier"] = "sentence-transformers/all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf:BertWordPiece"
+        let contract = try JSONDecoder().decode(SemanticModelArtifactContract.self,
+                                                from: try JSONSerialization.data(withJSONObject: contractObject))
+        let vocabulary: [String: Int] = [
+            "[PAD]": 0, "[UNK]": 1, "[CLS]": 2, "[SEP]": 3, "/": 4, "##/": 5, "a\"b": 6, "back\\slash": 7,
+            "\u{01}": 8, "\t": 9, "\u{7F}": 10, "é": 11, "\u{2028}": 12, "z": 13, "\u{1F420}": 14, "ﬁ": 15,
+        ]
+        let identities = try FingerprintContract.identities(contract: contract, vocabulary: vocabulary)
+        XCTAssertEqual(identities.vocabularySHA256, "29e930138c501460fdc5b8f35472cfa295cef49432c4606191cada6774095c7e")
+        XCTAssertEqual(identities.tokenizerFingerprint, "c2bc3531411bf13c15693cff7f0d865a5d6af029c9aa9218be1d39128001caf2")
+        XCTAssertEqual(FingerprintContract.pythonJSONString("a/b\"\\\n\u{01}é"), "\"a/b\\\"\\\\\\n\\u0001é\"")
+    }
+
     func testWordPieceTokenizerExactlyMatchesSharedPythonParityFixture() throws {
         let url = try TestResources.fixture(named: "TokenizerParity.v2")
         let fixture = try JSONDecoder().decode(TokenizerFixture.self, from: Data(contentsOf: url))

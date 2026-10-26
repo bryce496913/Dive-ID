@@ -46,7 +46,7 @@ class IndependentContracts(unittest.TestCase):
         for i in range(12):
             r=copy.deepcopy(base);r.update(observationID=str(uuid.UUID(int=i+1)),
                 description=f'Synthetic contract row {i}; never a collected observation.',
-                region='caribbean' if i<4 else 'tropical-pacific',
+                region='global',
                 consentForPublication=False, observationContext={'approximateDepth':'unknown'},
                 usedForDevelopment=True)
             d['observations'].append(r)
@@ -56,6 +56,20 @@ class IndependentContracts(unittest.TestCase):
         self.assertTrue(report['humanEvidenceAuditRequired'])
         self.assertEqual(report['developmentCases'],12)
         self.assertEqual(report['accuracyConclusion'],'unavailable')
+        self.assertEqual(report['regions']['global'],12)
+
+    def test_the_old_regional_mix_no_longer_meets_the_pilot_target(self):
+        d=payload();base=d['observations'][0];d['observations']=[]
+        for i in range(12):
+            r=copy.deepcopy(base);r.update(observationID=str(uuid.UUID(int=i+1)),
+                description=f'Synthetic contract row {i}; never a collected observation.',
+                region='caribbean' if i<4 else 'tropical-pacific')
+            d['observations'].append(r)
+        self.assertFalse(m.pilot_readiness(d)['collectionTargetMet'])
+
+    def test_unknown_region_rejected(self):
+        d=payload();d['observations'][0]['region']='red-sea'
+        with self.assertRaises(ValueError):m.validate(d)
 
     def test_authorship_and_identity_are_separate_and_required(self):
         for mutation in [lambda r:r['author'].update(kind='model'),lambda r:r['author'].update(attestsOwnUnpromptedWords=False),
@@ -107,5 +121,21 @@ class IndependentContracts(unittest.TestCase):
         self.assertNotIn('secret',encoded)
         group=next(x for x in report['groups'] if x['access']=='publication' and x['split']=='holdout')
         self.assertIsNone(group['metrics']['top1']['rate']);self.assertEqual(group['acceptance'],'insufficient sample')
+
+    def test_aggregate_reports_abstentions_and_latency_descriptively(self):
+        def row(kind,returned,seconds,invoked=True):
+            return {'id':'x','access':'experimentalDevelopment','split':'development','kind':kind,'blocked':False,
+                    'engineInvoked':invoked,'packSizes':{'global':4798},'recalled':returned>0,'rank':1 if returned else None,
+                    'outcomeCorrect':True,'confidenceOK':True,'serviceError':None,'returnedCount':returned,'elapsedSeconds':seconds}
+        rows=[row('identification',10,0.5),row('identification',0,0.7),row('noMatch',0,0.3),row('noMatch',2,0.9),
+              row('unresolved',0,None,invoked=False)]
+        group=next(g for g in m.aggregate(rows)['groups'] if g['access']=='experimentalDevelopment' and g['split']=='development')
+        self.assertEqual(group['abstentions'],{'identification':1,'ambiguous':0,'noMatch':1,'regionConflict':0})
+        self.assertEqual(group['noMatchFalsePositives'],1)
+        self.assertEqual(group['latency']['n'],4)
+        self.assertAlmostEqual(group['latency']['medianSeconds'],0.6)
+        self.assertEqual(group['latency']['p95NearestRankSeconds'],0.9)
+        empty=next(g for g in m.aggregate(rows)['groups'] if g['access']=='publication' and g['split']=='holdout')
+        self.assertEqual(empty['latency'],{'n':0,'medianSeconds':None,'p95NearestRankSeconds':None,'maxSeconds':None})
 
 if __name__=='__main__':unittest.main()

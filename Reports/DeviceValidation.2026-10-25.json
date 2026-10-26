@@ -1,0 +1,1425 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-10-25",
+ "candidate": {
+  "baseCommit": "00585dca3896dd2a6a03693de04e60bce5055b8d",
+  "sourceChange": "00585dc plus this commit: Done in the navigation bar, always present and hidden while the editor is unfocused (DescriptionSearch.swift); Debug/Internal strip text size capped (not in Release)",
+  "configuration": "Release",
+  "bundleIdentifier": "com.brycecameron.DiveID",
+  "version": "0.5",
+  "build": "2",
+  "team": "7ZAXQ2686Z",
+  "appBinarySHA256": "48db9e107aa5873bf82c69424097e9def0d468afa65075d4ecf2221101d31289",
+  "productCheck": "Tools/CI/validate_device_release.py passed: signed iphoneos Release, no DEBUG, no testability, no internal diagnostics; packaged catalogue IDs equal approvals",
+  "catalogues": {
+   "global": {
+    "bundled": 4798,
+    "searchable": 4796
+   },
+   "caribbean": {
+    "bundled": 8,
+    "searchable": 2
+   },
+   "tropical-pacific": {
+    "bundled": 1000,
+    "searchable": 0
+   }
+  },
+  "searchEngine": "productionBM25 (Release has no experimental switch)"
+ },
+ "device": {
+  "model": "iPhone 14 Pro (iPhone15,2)",
+  "iOS": "27.0.1 (24A446)",
+  "connection": "USB",
+  "xcode": "26.5 (17F42)",
+  "macOS": "26.5 (25F71)"
+ },
+ "radios": {
+  "automatedRows": "Wi-Fi on, cellular off. A developer-signed test runner is reinstalled by xcodebuild on every run and iOS 27 will not launch a new developer-signed install offline, so automated rows could not run in Airplane Mode.",
+  "manualOfflineCheck": "Airplane Mode on, Wi-Fi and cellular off; seven hand steps (Global search, Find Matches with keyboard open twice, no-match, save/force-quit/relaunch/reopen, remove/relaunch, largest text) all as expected, reported by the device owner"
+ },
+ "timing": {
+  "boundaries": "XCUITest clock: just before the triggering tap or launch to the first accessibility snapshot showing the end state",
+  "freshInstall": {
+   "launchToDescribeEnabledSeconds": {
+    "n": 5,
+    "values": [
+     1.937690019607544,
+     1.6692330837249756,
+     1.6275620460510254,
+     1.9799619913101196,
+     1.7504109144210815
+    ],
+    "median": 1.7504109144210815,
+    "min": 1.6275620460510254,
+    "max": 1.9799619913101196
+   },
+   "describeToEditorSeconds": {
+    "n": 5,
+    "values": [
+     0.9278849363327026,
+     0.9012030363082886,
+     0.906479001045227,
+     0.9266109466552734,
+     0.8907949924468994
+    ],
+    "median": 0.906479001045227,
+    "min": 0.8907949924468994,
+    "max": 0.9278849363327026
+   },
+   "firstQuerySeconds": {
+    "n": 5,
+    "values": [
+     5.998304009437561,
+     6.453863978385925,
+     6.231060981750488,
+     5.882771968841553,
+     6.539222002029419
+    ],
+    "median": 6.231060981750488,
+    "min": 5.882771968841553,
+    "max": 6.539222002029419
+   },
+   "firstQueryMaxPollSeconds": {
+    "n": 5,
+    "values": [
+     0.18960797786712646,
+     0.1611769199371338,
+     0.2631939649581909,
+     0.17201197147369385,
+     0.2659130096435547
+    ],
+    "median": 0.18960797786712646,
+    "min": 0.1611769199371338,
+    "max": 0.2659130096435547
+   }
+  },
+  "laterLaunch": {
+   "launchToDescribeEnabledSeconds": {
+    "n": 5,
+    "values": [
+     2.6280250549316406,
+     2.6928449869155884,
+     2.7384049892425537,
+     2.63470196723938,
+     2.5532710552215576
+    ],
+    "median": 2.63470196723938,
+    "min": 2.5532710552215576,
+    "max": 2.7384049892425537
+   },
+   "describeToEditorSeconds": {
+    "n": 5,
+    "values": [
+     0.8967150449752808,
+     0.9137769937515259,
+     0.8898800611495972,
+     0.8786270618438721,
+     0.8843579292297363
+    ],
+    "median": 0.8898800611495972,
+    "min": 0.8786270618438721,
+    "max": 0.9137769937515259
+   },
+   "firstQuerySeconds": {
+    "n": 5,
+    "values": [
+     0.8721250295639038,
+     1.0567610263824463,
+     0.8947579860687256,
+     0.876702070236206,
+     0.9690690040588379
+    ],
+    "median": 0.8947579860687256,
+    "min": 0.8721250295639038,
+    "max": 1.0567610263824463
+   },
+   "firstQueryMaxPollSeconds": {
+    "n": 5,
+    "values": [
+     0.02465498447418213,
+     0.024043917655944824,
+     0.023620963096618652,
+     0.02348792552947998,
+     0.12525606155395508
+    ],
+    "median": 0.024043917655944824,
+    "min": 0.02348792552947998,
+    "max": 0.12525606155395508
+   }
+  },
+  "warm": {
+   "n": 20,
+   "values": [
+    0.7622638940811157,
+    0.7751820087432861,
+    0.7796919345855713,
+    0.7806899547576904,
+    0.7809369564056396,
+    0.7830350399017334,
+    0.7837579250335693,
+    0.7849230766296387,
+    0.7849600315093994,
+    0.7858389616012573,
+    0.7883870601654053,
+    0.7888309955596924,
+    0.7888549566268921,
+    0.7890489101409912,
+    0.7900229692459106,
+    0.7914509773254395,
+    0.791985034942627,
+    0.8236780166625977,
+    0.9259190559387207,
+    1.031810998916626
+   ],
+   "median": 0.7871130108833313,
+   "p95NearestRank": 0.9259190559387207
+  }
+ },
+ "defects": [
+  {
+   "id": "find-matches-under-suggestion-bar",
+   "platform": "iOS 27.0.1",
+   "observed": "after two returns from Possible Matches, Find Matches moved 48 pt down (448 -> 496) under the keyboard suggestion bar; taps hit the keyboard",
+   "cause": "keyboard toolbar (Done) height no longer reserved in the bottom inset",
+   "fix": "Done moved to the navigation bar while the editor is focused",
+   "evidence": {
+    "before": [
+     {
+      "label": "kbdret-2-before-fix",
+      "buttonMaxY": 502,
+      "buttonMinY": 448,
+      "doneMinY": 482,
+      "editorMinY": 405.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 1,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-2-before-fix",
+      "buttonMaxY": 502,
+      "buttonMinY": 448,
+      "doneMinY": 482,
+      "editorMinY": 405.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 2,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-2-before-fix",
+      "buttonMaxY": 550,
+      "buttonMinY": 496,
+      "doneMinY": 482,
+      "editorMinY": 450,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 3,
+      "windowHeight": 852
+     }
+    ],
+    "after": [
+     {
+      "label": "kbdret-3-after-fix",
+      "buttonMaxY": 516,
+      "buttonMinY": 462,
+      "doneMinY": 63,
+      "editorMinY": 419.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 1,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-3-after-fix",
+      "buttonMaxY": 516,
+      "buttonMinY": 462,
+      "doneMinY": 63,
+      "editorMinY": 419.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 2,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-3-after-fix",
+      "buttonMaxY": 516,
+      "buttonMinY": 462,
+      "doneMinY": 63,
+      "editorMinY": 419.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 3,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-3-after-fix",
+      "buttonMaxY": 516,
+      "buttonMinY": 462,
+      "doneMinY": 63,
+      "editorMinY": 419.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 4,
+      "windowHeight": 852
+     },
+     {
+      "label": "kbdret-3-after-fix",
+      "buttonMaxY": 516,
+      "buttonMinY": 462,
+      "doneMinY": 63,
+      "editorMinY": 419.3333333333333,
+      "keyboardMinY": 568,
+      "kind": "keyboard-return",
+      "navigationBarMaxY": 165,
+      "round": 5,
+      "windowHeight": 852
+     }
+    ]
+   }
+  }
+ ],
+ "records": {
+  "release": [
+   {
+    "label": "c5-saved",
+    "count": 10,
+    "kind": "search",
+    "seconds": 5.332363963127136,
+    "state": "results",
+    "text": "Large flat eagle ray with white spots and a long tail over sand in the Caribbean."
+   },
+   {
+    "label": "c5-saved",
+    "kind": "save",
+    "toggleAfter": "Remove from Saved Identifications",
+    "toggleBefore": "Save Identification"
+   },
+   {
+    "label": "c5-saved",
+    "kind": "saved-after-relaunch",
+    "row": "Spotted Eagle Ray, Aetobatus narinari, Good match \u00b7 26 Oct 2026, Matched ray, geographic range, sand, spots, tail in the selected offline pack."
+   },
+   {
+    "label": "c5-saved",
+    "kind": "saved-reopened",
+    "texts": [
+     "Spotted Eagle Ray",
+     "Good match",
+     "Spotted Eagle Ray",
+     "Aetobatus narinari",
+     "Why it matched",
+     "Matched ray, geographic range, sand, spots, tail in the selected offline pack.",
+     "Cautions and missing evidence",
+     "Give rays room and avoid blocking their path",
+     "Original observation",
+     "Large flat eagle ray with white spots and a long tail over sand in the Caribbean.",
+     "Identification summary",
+     "A broad ray with pale spots and a long whip-like tail.",
+     "Visual characteristics",
+     "Dark back with white spots \u2022 Pointed wing tips \u2022 Long tail",
+     "Size / measurements",
+     "Typically 100\u2013300 cm \u2022 Maximum recorded: 300 cm \u2022 Disc Width",
+     "Typical habitat",
+     "Coastal reefs and sandy flats",
+     "General geographic range",
+     "Warm Atlantic waters",
+     "Regional occurrence",
+     "Regular",
+     "Dive region",
+     "Global",
+     "Source",
+     "Record review status",
+     "Approved for publication \u2014 individually reviewed",
+     "Accuracy",
+     "Possible matches are suggestions, not confirmed identifications. Compare distinguishing features and confirm important sightings with a qualified local guide or trusted reference.",
+     "Appearance"
+    ]
+   },
+   {
+    "label": "c5-saved",
+    "empty": true,
+    "kind": "removed-after-relaunch"
+   },
+   {
+    "label": "c5-flow-testFindMatchesWorksWithKeyboardAfterReturningFromResults",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "doneMinY": 63,
+    "editorMinY": 419.3333333333333,
+    "keyboardMinY": 568,
+    "kind": "keyboard-return",
+    "navigationBarMaxY": 165,
+    "round": 1,
+    "windowHeight": 852
+   },
+   {
+    "label": "c5-flow-testFindMatchesWorksWithKeyboardAfterReturningFromResults",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "doneMinY": 63,
+    "editorMinY": 419.3333333333333,
+    "keyboardMinY": 568,
+    "kind": "keyboard-return",
+    "navigationBarMaxY": 165,
+    "round": 2,
+    "windowHeight": 852
+   },
+   {
+    "label": "c5-flow-testFindMatchesWorksWithKeyboardAfterReturningFromResults",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "doneMinY": 63,
+    "editorMinY": 419.3333333333333,
+    "keyboardMinY": 568,
+    "kind": "keyboard-return",
+    "navigationBarMaxY": 165,
+    "round": 3,
+    "windowHeight": 852
+   },
+   {
+    "label": "c5-flow-testFindMatchesWorksWithKeyboardAfterReturningFromResults",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "doneMinY": 63,
+    "editorMinY": 419.3333333333333,
+    "keyboardMinY": 568,
+    "kind": "keyboard-return",
+    "navigationBarMaxY": 165,
+    "round": 4,
+    "windowHeight": 852
+   },
+   {
+    "label": "c5-flow-testFindMatchesWorksWithKeyboardAfterReturningFromResults",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "doneMinY": 63,
+    "editorMinY": 419.3333333333333,
+    "keyboardMinY": 568,
+    "kind": "keyboard-return",
+    "navigationBarMaxY": 165,
+    "round": 5,
+    "windowHeight": 852
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 0,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 0
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 47,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 1
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 94,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 2
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 141,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 3
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 188,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 4
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 235,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 5
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 282,
+    "editorMaxY": 524,
+    "editorMinY": 419.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "first-open",
+    "step": 6
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 282,
+    "editorMaxY": 499.3333333333333,
+    "editorMinY": 309.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "after-results",
+    "step": 7
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 329,
+    "editorMaxY": 499.3333333333333,
+    "editorMinY": 309.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "after-results",
+    "step": 8
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 376,
+    "editorMaxY": 501.3333333333333,
+    "editorMinY": 309.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "after-results",
+    "step": 9
+   },
+   {
+    "label": "c5-flow-testFindMatchesStaysAboveKeyboardAsTextGrows",
+    "buttonMaxY": 516,
+    "buttonMinY": 462,
+    "characters": 423,
+    "editorMaxY": 523.3333333333333,
+    "editorMinY": 309.3333333333333,
+    "hittable": true,
+    "keyboardMinY": 568,
+    "kind": "keyboard-layout",
+    "pass": "after-results",
+    "step": 10
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "count": 2,
+    "kind": "search",
+    "seconds": 0.892551064491272,
+    "state": "results",
+    "text": "Compressed blue reef fish with a yellow spine beside its tail."
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "expectedRank": 1,
+    "id": "v05-01-diagnostic",
+    "kind": "case",
+    "labels": [
+     "#1 \u00b7 Atlantic Blue Tang, Acanthurus coeruleus, Possible match, Matched fish, reef, tail, blue, yellow in the selected offline pack., Oval blue adult body, Small mouth low on the head",
+     "#2 \u00b7 Queen Angelfish, Holacanthus ciliaris, Possible match, Matched fish, reef, blue, yellow, compressed in the selected offline pack., Blue body with yellow-edged scales and yellow fins, Dark forehead spot ringed with bright blue, resembling a crown"
+    ],
+    "results": [
+     "result_00000000-0000-0000-0000-000000000003",
+     "result_FC213EFF-6BA6-53AB-B288-F6E654299E68"
+    ],
+    "state": "results"
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9237730503082275,
+    "state": "failure",
+    "text": "Blue and yellow striped surgeonfish on a reef in Fiji."
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "id": "v05-region-1",
+    "kind": "case",
+    "message": "Something went wrong Your description mentions Fiji, but the selected dive region covers the Caribbean. Choose another dive region and try again.",
+    "state": "failure"
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "count": 2,
+    "kind": "search",
+    "seconds": 0.8615059852600098,
+    "state": "results",
+    "text": "Dark angelfish near a Caribbean reef."
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "id": "v05-ambiguous-angelfish",
+    "kind": "case",
+    "labels": [
+     "#1 \u00b7 Queen Angelfish, Holacanthus ciliaris, Weak match, Matched geographic range, reef, angelfish in the selected offline pack., Blue body with yellow-edged scales and yellow fins, Dark forehead spot ringed with bright blue, resembling a crown",
+     "#2 \u00b7 Atlantic Blue Tang, Acanthurus coeruleus, Weak match, Matched geographic range, reef in the selected offline pack., Oval blue adult body, Small mouth low on the head"
+    ],
+    "results": [
+     "result_FC213EFF-6BA6-53AB-B288-F6E654299E68",
+     "result_00000000-0000-0000-0000-000000000003"
+    ],
+    "state": "results"
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9043630361557007,
+    "state": "empty",
+    "text": "A fish moved past me."
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "id": "v05-nomatch-vague",
+    "kind": "case",
+    "results": [],
+    "state": "empty"
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "count": 0,
+    "kind": "search",
+    "seconds": 1.033750057220459,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCaseKindsInCaribbean",
+    "id": "v05-nomatch-frog",
+    "kind": "case",
+    "results": [],
+    "state": "empty"
+   },
+   {
+    "label": "c5-flow-testResultsOpenTheTappedSpecies",
+    "count": 10,
+    "kind": "search",
+    "seconds": 0.8900929689407349,
+    "state": "results",
+    "text": "Large flat eagle ray with white spots and a long tail over sand in the Caribbean."
+   },
+   {
+    "label": "c5-flow-testResultsOpenTheTappedSpecies",
+    "detailTitle": "Spotted Eagle Ray",
+    "kind": "detail",
+    "result": "result_00000000-0000-0000-0000-000000000010"
+   },
+   {
+    "label": "c5-flow-testResultsOpenTheTappedSpecies",
+    "detailTitle": "Blonde ray",
+    "kind": "detail",
+    "result": "result_B8071E39-C47F-5D99-B621-26686A63A416"
+   },
+   {
+    "label": "c5-flow-testResultsOpenTheTappedSpecies",
+    "detailTitle": "Spotted ray",
+    "kind": "detail",
+    "result": "result_0CDEE643-AD05-5CF3-BEE2-E73D4A48B128"
+   },
+   {
+    "label": "c5-flow-testRegionSwitchingPersists",
+    "count": 10,
+    "kind": "search",
+    "seconds": 0.896981954574585,
+    "state": "results",
+    "text": "Large flat eagle ray with white spots and a long tail over sand in the Caribbean."
+   },
+   {
+    "label": "c5-flow-testRegionSwitchingPersists",
+    "count": 2,
+    "kind": "search",
+    "seconds": 0.8762938976287842,
+    "state": "results",
+    "text": "Compressed blue reef fish with a yellow spine beside its tail."
+   },
+   {
+    "label": "c5-flow-testRegionSwitchingPersists",
+    "caribbeanResults": [
+     "result_00000000-0000-0000-0000-000000000003",
+     "result_FC213EFF-6BA6-53AB-B288-F6E654299E68"
+    ],
+    "globalTop": "result_00000000-0000-0000-0000-000000000010",
+    "kind": "region"
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.8802120685577393,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 1
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.8990108966827393,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 2
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9167180061340332,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 3
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9058599472045898,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 4
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9082460403442383,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 5
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.880626916885376,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 6
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.8945909738540649,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 7
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.8888089656829834,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 8
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.9099799394607544,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 9
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "count": 0,
+    "kind": "search",
+    "seconds": 0.8844680786132812,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": false,
+    "kind": "cancel",
+    "newerState": "empty",
+    "trial": 10
+   },
+   {
+    "label": "c5-flow-testCancelledSearchCannotReplaceTheNextOne",
+    "abandonedWhileLoading": 0,
+    "kind": "cancel-summary",
+    "trials": 10
+   },
+   {
+    "label": "c5-fresh-1",
+    "describeToEditorSeconds": 0.9278849363327026,
+    "firstQueryMaxPollSeconds": 0.18960797786712646,
+    "firstQueryMeanPollSeconds": 0.05489346828866512,
+    "firstQueryPolls": 94,
+    "firstQuerySeconds": 5.998304009437561,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.18603003025054932,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 1.937690019607544,
+    "phase": "fresh-install"
+   },
+   {
+    "label": "c5-fresh-2",
+    "describeToEditorSeconds": 0.9012030363082886,
+    "firstQueryMaxPollSeconds": 0.1611769199371338,
+    "firstQueryMeanPollSeconds": 0.053292688333763265,
+    "firstQueryPolls": 106,
+    "firstQuerySeconds": 6.453863978385925,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.1681349277496338,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 1.6692330837249756,
+    "phase": "fresh-install"
+   },
+   {
+    "label": "c5-fresh-3",
+    "describeToEditorSeconds": 0.906479001045227,
+    "firstQueryMaxPollSeconds": 0.2631939649581909,
+    "firstQueryMeanPollSeconds": 0.05817700073283206,
+    "firstQueryPolls": 93,
+    "firstQuerySeconds": 6.231060981750488,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.15404105186462402,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 1.6275620460510254,
+    "phase": "fresh-install"
+   },
+   {
+    "label": "c5-fresh-4",
+    "describeToEditorSeconds": 0.9266109466552734,
+    "firstQueryMaxPollSeconds": 0.17201197147369385,
+    "firstQueryMeanPollSeconds": 0.05616137716505262,
+    "firstQueryPolls": 90,
+    "firstQuerySeconds": 5.882771968841553,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.19495999813079834,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 1.9799619913101196,
+    "phase": "fresh-install"
+   },
+   {
+    "label": "c5-fresh-5",
+    "describeToEditorSeconds": 0.8907949924468994,
+    "firstQueryMaxPollSeconds": 0.2659130096435547,
+    "firstQueryMeanPollSeconds": 0.06050714913834917,
+    "firstQueryPolls": 94,
+    "firstQuerySeconds": 6.539222002029419,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.1478099822998047,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 1.7504109144210815,
+    "phase": "fresh-install"
+   },
+   {
+    "label": "c5-later-1",
+    "describeToEditorSeconds": 0.8967150449752808,
+    "firstQueryMaxPollSeconds": 0.02465498447418213,
+    "firstQueryMeanPollSeconds": 0.02465498447418213,
+    "firstQueryPolls": 1,
+    "firstQuerySeconds": 0.8721250295639038,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.16969799995422363,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 2.6280250549316406,
+    "phase": "later-launch"
+   },
+   {
+    "label": "c5-later-2",
+    "describeToEditorSeconds": 0.9137769937515259,
+    "firstQueryMaxPollSeconds": 0.024043917655944824,
+    "firstQueryMeanPollSeconds": 0.024043917655944824,
+    "firstQueryPolls": 1,
+    "firstQuerySeconds": 1.0567610263824463,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.18545401096343994,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 2.6928449869155884,
+    "phase": "later-launch"
+   },
+   {
+    "label": "c5-later-3",
+    "describeToEditorSeconds": 0.8898800611495972,
+    "firstQueryMaxPollSeconds": 0.023620963096618652,
+    "firstQueryMeanPollSeconds": 0.023620963096618652,
+    "firstQueryPolls": 1,
+    "firstQuerySeconds": 0.8947579860687256,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.2559720277786255,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 2.7384049892425537,
+    "phase": "later-launch"
+   },
+   {
+    "label": "c5-later-4",
+    "describeToEditorSeconds": 0.8786270618438721,
+    "firstQueryMaxPollSeconds": 0.02348792552947998,
+    "firstQueryMeanPollSeconds": 0.02348792552947998,
+    "firstQueryPolls": 1,
+    "firstQuerySeconds": 0.876702070236206,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.17927098274230957,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 2.63470196723938,
+    "phase": "later-launch"
+   },
+   {
+    "label": "c5-later-5",
+    "describeToEditorSeconds": 0.8843579292297363,
+    "firstQueryMaxPollSeconds": 0.12525606155395508,
+    "firstQueryMeanPollSeconds": 0.12525606155395508,
+    "firstQueryPolls": 1,
+    "firstQuerySeconds": 0.9690690040588379,
+    "firstResult": "result_00000000-0000-0000-0000-000000000010",
+    "globalShownOnHome": true,
+    "kind": "launch",
+    "launchMeanPollSeconds": 0.13902795314788818,
+    "launchPolls": 1,
+    "launchToDescribeEnabledSeconds": 2.5532710552215576,
+    "phase": "later-launch"
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02719593048095703,
+    "meanPollSeconds": 0.02719593048095703,
+    "polls": 1,
+    "seconds": 0.7796919345855713,
+    "trial": 1
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02663707733154297,
+    "meanPollSeconds": 0.02663707733154297,
+    "polls": 1,
+    "seconds": 0.7806899547576904,
+    "trial": 2
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02783203125,
+    "meanPollSeconds": 0.02783203125,
+    "polls": 1,
+    "seconds": 1.031810998916626,
+    "trial": 3
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.026945948600769043,
+    "meanPollSeconds": 0.026945948600769043,
+    "polls": 1,
+    "seconds": 0.9259190559387207,
+    "trial": 4
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.027577996253967285,
+    "meanPollSeconds": 0.027577996253967285,
+    "polls": 1,
+    "seconds": 0.7883870601654053,
+    "trial": 5
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.029271960258483887,
+    "meanPollSeconds": 0.029271960258483887,
+    "polls": 1,
+    "seconds": 0.7830350399017334,
+    "trial": 6
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.03104102611541748,
+    "meanPollSeconds": 0.03104102611541748,
+    "polls": 1,
+    "seconds": 0.7858389616012573,
+    "trial": 7
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.03001701831817627,
+    "meanPollSeconds": 0.03001701831817627,
+    "polls": 1,
+    "seconds": 0.7837579250335693,
+    "trial": 8
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02875494956970215,
+    "meanPollSeconds": 0.02875494956970215,
+    "polls": 1,
+    "seconds": 0.7849230766296387,
+    "trial": 9
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02917301654815674,
+    "meanPollSeconds": 0.02917301654815674,
+    "polls": 1,
+    "seconds": 0.7890489101409912,
+    "trial": 10
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.025686025619506836,
+    "meanPollSeconds": 0.025686025619506836,
+    "polls": 1,
+    "seconds": 0.7809369564056396,
+    "trial": 11
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.028576016426086426,
+    "meanPollSeconds": 0.028576016426086426,
+    "polls": 1,
+    "seconds": 0.7751820087432861,
+    "trial": 12
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.028151988983154297,
+    "meanPollSeconds": 0.028151988983154297,
+    "polls": 1,
+    "seconds": 0.7849600315093994,
+    "trial": 13
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02898097038269043,
+    "meanPollSeconds": 0.02898097038269043,
+    "polls": 1,
+    "seconds": 0.7888309955596924,
+    "trial": 14
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02833700180053711,
+    "meanPollSeconds": 0.02833700180053711,
+    "polls": 1,
+    "seconds": 0.7914509773254395,
+    "trial": 15
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.03000199794769287,
+    "meanPollSeconds": 0.03000199794769287,
+    "polls": 1,
+    "seconds": 0.791985034942627,
+    "trial": 16
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.030244946479797363,
+    "meanPollSeconds": 0.030244946479797363,
+    "polls": 1,
+    "seconds": 0.7888549566268921,
+    "trial": 17
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.02747201919555664,
+    "meanPollSeconds": 0.02747201919555664,
+    "polls": 1,
+    "seconds": 0.7900229692459106,
+    "trial": 18
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.029618024826049805,
+    "meanPollSeconds": 0.029618024826049805,
+    "polls": 1,
+    "seconds": 0.7622638940811157,
+    "trial": 19
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm",
+    "maxPollSeconds": 0.07009196281433105,
+    "meanPollSeconds": 0.07009196281433105,
+    "polls": 1,
+    "seconds": 0.8236780166625977,
+    "trial": 20
+   },
+   {
+    "label": "c5-warm-1",
+    "kind": "warm-summary",
+    "maxSeconds": 1.031810998916626,
+    "medianSeconds": 0.7871130108833313,
+    "minSeconds": 0.7622638940811157,
+    "n": 20,
+    "p95NearestRankSeconds": 0.9259190559387207
+   },
+   {
+    "label": "c5-recovery-release",
+    "kind": "unavailable-region",
+    "persisted": true,
+    "recoveredTo": "global"
+   }
+  ]
+ },
+ "experimentalSemanticDevice": {
+  "configuration": "Debug with Semantic-global bundled, -DiveIDExperimentalSemanticSearch YES",
+  "records": [
+   {
+    "label": "semantic-debug",
+    "count": 10,
+    "kind": "search",
+    "seconds": 13.545759916305542,
+    "state": "results",
+    "text": "Large flat eagle ray with white spots and a long tail over sand in the Caribbean."
+   },
+   {
+    "label": "semantic-debug",
+    "case": "positive",
+    "diagnostics": [
+     "Requested engine: Core ML semantic + BM25",
+     "Actual engine: Core ML semantic + BM25"
+    ],
+    "kind": "semantic-device",
+    "results": [
+     "result_00000000-0000-0000-0000-000000000010",
+     "result_B8071E39-C47F-5D99-B621-26686A63A416",
+     "result_0CDEE643-AD05-5CF3-BEE2-E73D4A48B128",
+     "result_E0044D03-18E7-502E-96CA-C3B9A9130AC1",
+     "result_4262C2FB-0E5D-599D-B44B-79E68C215003",
+     "result_32B0D5BF-0D95-57AE-943E-0DBE3294675F",
+     "result_6EE2C5E0-5B9B-5AC0-86F4-1A7C2341690C",
+     "result_30D4A8C3-AFF3-583F-B08B-82D27D2A1C1B",
+     "result_F8DBD038-CE0B-5042-BA9C-FCD662952EAE",
+     "result_3C06E2E3-3EBA-5A31-9DC0-11A58960837B"
+    ],
+    "state": "results"
+   },
+   {
+    "label": "semantic-debug",
+    "count": 10,
+    "kind": "search",
+    "seconds": 1.6837530136108398,
+    "state": "results",
+    "text": "Dark angelfish near a reef."
+   },
+   {
+    "label": "semantic-debug",
+    "case": "ambiguous",
+    "diagnostics": [
+     "Requested engine: Core ML semantic + BM25",
+     "Actual engine: Core ML semantic + BM25"
+    ],
+    "kind": "semantic-device",
+    "results": [
+     "result_EFF286CC-2C87-5393-B00D-E158FD48E3AA",
+     "result_FC213EFF-6BA6-53AB-B288-F6E654299E68",
+     "result_00000000-0000-0000-0000-000000000010",
+     "result_D96D1881-3499-542D-85E4-16C718C2EBBA",
+     "result_1C610332-ADAB-512A-BDD5-D1C7669D50AA",
+     "result_73A903AE-9475-5188-9636-87FD4DB52B72",
+     "result_D582FB16-98F1-55BB-916D-03CCFCCB5E75",
+     "result_32E8CA4D-06E9-5215-AB84-2C75BE61DC0A",
+     "result_18621434-D2D3-5222-B97A-8ADC487A8E87",
+     "result_A6FA8F3D-5261-5225-9D0E-DA8768EDDF13"
+    ],
+    "state": "results"
+   },
+   {
+    "label": "semantic-debug",
+    "count": 0,
+    "kind": "search",
+    "seconds": 1.1572380065917969,
+    "state": "empty",
+    "text": "A spotted freshwater frog on sand, about 5 cm long."
+   },
+   {
+    "label": "semantic-debug",
+    "case": "no-match",
+    "diagnostics": [
+     "Requested engine: Core ML semantic + BM25",
+     "Actual engine: Core ML semantic + BM25"
+    ],
+    "kind": "semantic-device",
+    "results": [],
+    "state": "empty"
+   }
+  ]
+ },
+ "supersededRuns": "Runs that failed from test defects, auto-lock, a dropped USB connection or an untrusted runner, and runs on intermediate builds, are kept in the local evidence folder, not here",
+ "earlierCandidate": {
+  "appBinarySHA256": "38724975c984655b432bc25717bedef78dc7df991dba1f96306dd2891a071114",
+  "note": "Same rows on the previous build (Done added to the navigation bar only on focus); all passed. The manual offline check was performed on this build.",
+  "timing": {
+   "freshInstall": {
+    "launchToDescribeEnabledSeconds": {
+     "n": 5,
+     "values": [
+      1.7159329652786255,
+      1.6655809879302979,
+      1.6772929430007935,
+      1.6745480298995972,
+      1.6618210077285767
+     ],
+     "median": 1.6745480298995972,
+     "min": 1.6618210077285767,
+     "max": 1.7159329652786255
+    },
+    "describeToEditorSeconds": {
+     "n": 5,
+     "values": [
+      0.8640199899673462,
+      0.8698370456695557,
+      0.8695518970489502,
+      0.8589550256729126,
+      0.8579380512237549
+     ],
+     "median": 0.8640199899673462,
+     "min": 0.8579380512237549,
+     "max": 0.8698370456695557
+    },
+    "firstQuerySeconds": {
+     "n": 5,
+     "values": [
+      5.913869023323059,
+      6.153428077697754,
+      6.172994017601013,
+      6.390819072723389,
+      6.11722993850708
+     ],
+     "median": 6.153428077697754,
+     "min": 5.913869023323059,
+     "max": 6.390819072723389
+    },
+    "firstQueryMaxPollSeconds": {
+     "n": 5,
+     "values": [
+      0.1620699167251587,
+      0.15919291973114014,
+      0.1598759889602661,
+      0.2596549987792969,
+      0.15814101696014404
+     ],
+     "median": 0.1598759889602661,
+     "min": 0.15814101696014404,
+     "max": 0.2596549987792969
+    }
+   },
+   "laterLaunch": {
+    "launchToDescribeEnabledSeconds": {
+     "n": 5,
+     "values": [
+      2.720945954322815,
+      2.572052001953125,
+      2.593645930290222,
+      2.611598014831543,
+      2.607396960258484
+     ],
+     "median": 2.607396960258484,
+     "min": 2.572052001953125,
+     "max": 2.720945954322815
+    },
+    "describeToEditorSeconds": {
+     "n": 5,
+     "values": [
+      0.8653849363327026,
+      0.8707990646362305,
+      0.8573110103607178,
+      0.8644179105758667,
+      0.862900972366333
+     ],
+     "median": 0.8644179105758667,
+     "min": 0.8573110103607178,
+     "max": 0.8707990646362305
+    },
+    "firstQuerySeconds": {
+     "n": 5,
+     "values": [
+      0.8707159757614136,
+      0.870993971824646,
+      0.8888829946517944,
+      0.8728770017623901,
+      0.8637199401855469
+     ],
+     "median": 0.870993971824646,
+     "min": 0.8637199401855469,
+     "max": 0.8888829946517944
+    },
+    "firstQueryMaxPollSeconds": {
+     "n": 5,
+     "values": [
+      0.02392292022705078,
+      0.023687005043029785,
+      0.024178028106689453,
+      0.023067951202392578,
+      0.02494192123413086
+     ],
+     "median": 0.02392292022705078,
+     "min": 0.023067951202392578,
+     "max": 0.02494192123413086
+    }
+   },
+   "warm": {
+    "n": 20,
+    "values": [
+     0.7404299974441528,
+     0.7422609329223633,
+     0.7424370050430298,
+     0.7465269565582275,
+     0.7466669082641602,
+     0.7503379583358765,
+     0.7510908842086792,
+     0.7527689933776855,
+     0.7571190595626831,
+     0.7582889795303345,
+     0.7593170404434204,
+     0.7607359886169434,
+     0.7625550031661987,
+     0.7701818943023682,
+     0.7807940244674683,
+     0.7820559740066528,
+     0.7852960824966431,
+     0.897292971611023,
+     0.9011440277099609,
+     0.9293239116668701
+    ],
+    "median": 0.7588030099868774,
+    "p95NearestRank": 0.9011440277099609
+   }
+  }
+ }
+}
