@@ -105,12 +105,8 @@ struct StructuredDescriptionSearchEngine: DescriptionSearching {
 
 /// Retrieves a bounded lexical pool, then delegates every biological score,
 /// conflict, confidence cap, and explanation decision to the structured ranker.
-///
-/// An optional semantic complement adds species the primary retriever missed. Species
-/// the primary retriever found keep their own signal, so their scores are unchanged.
 struct HybridDescriptionSearchEngine: DescriptionSearching {
     let retriever: any SpeciesCandidateRetrieving
-    let semanticComplement: (any SpeciesCandidateRetrieving)?
     let documentBuilder: any SpeciesSearchDocumentBuilding
     let parser: any ObservationParsing
     let ranker: any SpeciesRanking
@@ -124,11 +120,9 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         parser: any ObservationParsing = LocalObservationParser(),
         ranker: any SpeciesRanking = LocalSpeciesRanker(),
         candidateLimit: Int = 50,
-        indexStore: SearchIndexStore = .shared,
-        semanticComplement: (any SpeciesCandidateRetrieving)? = nil
+        indexStore: SearchIndexStore = .shared
     ) {
         self.retriever = retriever
-        self.semanticComplement = semanticComplement
         self.documentBuilder = documentBuilder
         self.parser = parser
         self.ranker = ranker
@@ -137,27 +131,26 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
     }
 
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
+        try await searchWithObservation(description: description, pack: pack).result
+    }
+
+    /// The search plus the parsed observation, which the semantic fallback needs to tell an
+    /// empty result from a described subject the catalogue cannot contain.
+    func searchWithObservation(description: String, pack: OfflineIdentificationPack) async throws
+        -> (result: DescriptionSearchResult, observation: ParsedObservation) {
         try Task.checkCancellation()
-        let retrieved: [RetrievedSpeciesCandidate]
-        let observation: ParsedObservation
-        var semanticAdditions = 0
-        if let semanticComplement {
-            // The query embedding runs alongside parsing and BM25 instead of after them.
-            async let semantic = semanticCandidates(semanticComplement, description: description, pack: pack)
-            observation = await parser.parse(description)
-            try Task.checkCancellation()
-            let primary = try await primaryCandidates(description: description, pack: pack)
-            let primaryIDs = Set(primary.map(\.speciesID))
-            let similar = try await semantic
-            let additions = similar.filter { !primaryIDs.contains($0.speciesID) }
-            semanticAdditions = additions.count
-            retrieved = primary + additions
-        } else {
-            observation = await parser.parse(description)
-            try Task.checkCancellation()
-            retrieved = try await primaryCandidates(description: description, pack: pack)
-        }
+        let observation = await parser.parse(description)
         try Task.checkCancellation()
+        let retrieved = try await primaryCandidates(description: description, pack: pack)
+        try Task.checkCancellation()
+        let result = try await rank(description: description, observation: observation, retrieved: retrieved,
+                                    pack: pack, retrievalLimit: candidateLimit)
+        return (result, observation)
+    }
+
+    /// Ranks retrieved candidates in their retrieval order with the structured ranker.
+    func rank(description: String, observation: ParsedObservation, retrieved: [RetrievedSpeciesCandidate],
+              pack: OfflineIdentificationPack, retrievalLimit: Int) async throws -> DescriptionSearchResult {
         let profileByID = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         var included = Set<UUID>()
         let pool = retrieved.enumerated().compactMap { offset, item -> SpeciesRankingCandidate? in
@@ -198,9 +191,16 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
                 packRegionCompatibility: compatibility
             ),
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
-            // The pool bound actually searched: BM25's limit plus the species semantic added.
-            retrievalLimit: candidateLimit + semanticAdditions
+            retrievalLimit: retrievalLimit
         )
+    }
+
+    func documents(pack: OfflineIdentificationPack) async throws -> [SpeciesSearchDocument] {
+        try await indexStore.documents(pack: pack, builder: documentBuilder)
+    }
+
+    func contentKey(pack: OfflineIdentificationPack) -> String {
+        SearchIndexStore.contentKey(pack, documentBuilder)
     }
 
     private func primaryCandidates(description: String, pack: OfflineIdentificationPack) async throws -> [RetrievedSpeciesCandidate] {
@@ -212,54 +212,108 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
         return try await retriever.retrieve(query: description, documents: documents, limit: candidateLimit)
     }
-
-    private func semanticCandidates(_ complement: any SpeciesCandidateRetrieving, description: String,
-                                    pack: OfflineIdentificationPack) async throws -> [RetrievedSpeciesCandidate] {
-        let documents = try await indexStore.documents(pack: pack, builder: documentBuilder)
-        return try await complement.retrieve(query: description, documents: documents,
-                                             contentKey: SearchIndexStore.contentKey(pack, documentBuilder), limit: candidateLimit)
-    }
 }
 
+/// Production BM25, or (Debug, experimental) BM25 with a semantic fallback. The fallback
+/// runs only when BM25 ranks nothing; see Docs/HybridRankingContract.md#semantic-calibration.
 struct ConfiguredDescriptionSearchEngine: DescriptionSearching {
     let selection: DescriptionRetrievalEngine
     let bundle: Bundle
     let runtime: SemanticRetrievalRuntime
     let diagnostics: (any SemanticDiagnosticsReporting)?
+    let weights: LocalRankingWeights
+    /// Where a pack's semantic artifacts are; the app bundle unless a test supplies them.
+    let locateArtifacts: (@Sendable (OfflineIdentificationPackID) throws -> SemanticArtifactLocations)?
+
+    /// Fallback results shown at most; the pool is cut by cosine before ranking.
+    static let fallbackResultLimit = 10
 
     init(selection: DescriptionRetrievalEngine = .productionDefault, bundle: Bundle = .main,
-         runtime: SemanticRetrievalRuntime = SemanticRetrievalRuntime(), diagnostics: (any SemanticDiagnosticsReporting)? = nil) {
+         runtime: SemanticRetrievalRuntime = SemanticRetrievalRuntime(), diagnostics: (any SemanticDiagnosticsReporting)? = nil,
+         weights: LocalRankingWeights = LocalRankingWeights(),
+         locateArtifacts: (@Sendable (OfflineIdentificationPackID) throws -> SemanticArtifactLocations)? = nil) {
         self.selection = selection; self.bundle = bundle; self.runtime = runtime; self.diagnostics = diagnostics
+        self.weights = weights; self.locateArtifacts = locateArtifacts
     }
 
     func search(description: String, pack: OfflineIdentificationPack) async throws -> DescriptionSearchResult {
-        guard selection == .experimentalCoreML else { return try await HybridDescriptionSearchEngine().search(description: description, pack: pack) }
+        let bm25Engine = HybridDescriptionSearchEngine(ranker: LocalSpeciesRanker(weights: weights))
+        guard selection == .experimentalCoreML else { return try await bm25Engine.search(description: description, pack: pack) }
+        let start = ContinuousClock.now
+        let (bm25, observation) = try await bm25Engine.searchWithObservation(description: description, pack: pack)
+        let packIdentity = "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion)"
+        func recordBM25(_ outcome: SemanticFallbackOutcome, reason: SemanticArtifactDiagnostic? = nil) async {
+            let elapsed = Self.milliseconds(since: start)
+            await diagnostics?.record(.init(requestedEngine: .experimentalCoreML, actualEngine: .productionBM25,
+                modelIdentity: nil, tokenizerIdentity: nil, preprocessingIdentity: nil, packIdentity: packIdentity,
+                fallbackReason: reason, modelCacheHit: false, indexCacheHit: false, queryCacheHit: false,
+                loadMilliseconds: 0, embeddingMilliseconds: 0, retrievalMilliseconds: elapsed, totalMilliseconds: elapsed,
+                fallbackOutcome: outcome))
+        }
+        // BM25 ranked something: return it unchanged, without loading the model or embedding.
+        guard bm25.candidates.isEmpty else { await recordBM25(.notNeeded); return bm25 }
+        // A described subject the catalogue cannot contain (a frog, a bird) stays unanswered.
+        guard observation.domainContradiction == nil else { await recordBM25(.notAttempted); return bm25 }
         let locations: SemanticArtifactLocations
-        do { locations = try .bundled(packID: pack.metadata.id, bundle: bundle) }
+        do { locations = try locateArtifacts?(pack.metadata.id) ?? .bundled(packID: pack.metadata.id, bundle: bundle) }
         catch {
             try Task.checkCancellation()
-            let start = ContinuousClock.now
-            let result = try await HybridDescriptionSearchEngine().search(description: description, pack: pack)
-            let duration = start.duration(to: .now).components
-            await diagnostics?.record(.init(requestedEngine: .experimentalCoreML, actualEngine: .productionBM25,
-                modelIdentity: nil, tokenizerIdentity: nil, preprocessingIdentity: nil,
-                packIdentity: "\(pack.metadata.id.rawValue):\(pack.metadata.packVersion)",
-                fallbackReason: error as? SemanticArtifactDiagnostic ?? .malformedContract,
-                modelCacheHit: false, indexCacheHit: false, queryCacheHit: false, loadMilliseconds: 0,
-                embeddingMilliseconds: 0, retrievalMilliseconds: Double(duration.seconds) * 1_000 + Double(duration.attoseconds) / 1e15,
-                totalMilliseconds: Double(duration.seconds) * 1_000 + Double(duration.attoseconds) / 1e15))
-            return result
+            await recordBM25(.unavailable, reason: error as? SemanticArtifactDiagnostic ?? .malformedContract)
+            return bm25
         }
-        // BM25 always runs; semantic candidates are merged in. If the model fails, the
-        // complement contributes nothing and the result is exactly the BM25 result.
+        // The retriever records its own metrics (or a contained failure) here; the outcome is
+        // added before they are passed on.
+        let capture = SemanticDiagnosticsStore()
         let semantic = ExperimentalSemanticRetriever(pack: pack.metadata, locations: locations, runtime: runtime,
-                                                     fallback: NoCandidateRetriever(), diagnostics: diagnostics)
-        return try await HybridDescriptionSearchEngine(semanticComplement: semantic).search(description: description, pack: pack)
+                                                     fallback: NoCandidateRetriever(), diagnostics: capture)
+        let similar = try await semantic.retrieve(query: description, documents: try await bm25Engine.documents(pack: pack),
+                                                  contentKey: bm25Engine.contentKey(pack: pack), limit: bm25Engine.candidateLimit)
+        guard var metric = await capture.latest else { await recordBM25(.unavailable, reason: .semanticRuntimeFailure); return bm25 }
+        // Frozen cutoff above every development no-match description's best cosine.
+        let admitted = Array(similar.filter { $0.retrievalScore >= weights.semanticFallbackCosine }
+            .prefix(Self.fallbackResultLimit))
+        let fallback = admitted.isEmpty ? bm25 : try await bm25Engine.rank(
+            description: description, observation: observation, retrieved: admitted, pack: pack, retrievalLimit: admitted.count)
+        if metric.fallbackReason != nil {
+            metric.fallbackOutcome = .unavailable
+        } else if fallback.candidates.isEmpty {
+            metric.actualEngine = .productionBM25
+            metric.fallbackOutcome = .nothingAboveCutoff
+        } else {
+            metric.fallbackOutcome = .served
+        }
+        metric.totalMilliseconds = Self.milliseconds(since: start)
+        await diagnostics?.record(metric)
+        guard metric.fallbackOutcome == .served else { return bm25 }
+        return Self.similarityOnly(fallback)
+    }
+
+    /// Fallback candidates are ordered by cosine, the only signal that admitted them (the
+    /// ranker still applies its conflicts), and are always limited-information results.
+    static func similarityOnly(_ result: DescriptionSearchResult) -> DescriptionSearchResult {
+        let candidates = result.candidates.sorted {
+            if ($0.retrievalRelevance ?? 0) != ($1.retrievalRelevance ?? 0) { return ($0.retrievalRelevance ?? 0) > ($1.retrievalRelevance ?? 0) }
+            return $0.profile.id.uuidString < $1.profile.id.uuidString
+        }.map {
+            DescriptionSearchCandidate(profile: $0.profile, rawScore: $0.rawScore, retrievalRelevance: $0.retrievalRelevance,
+                                       orderingScore: $0.orderingScore, score: min($0.score, LocalRankingWeights.limitedConfidenceCap),
+                                       matchedEvidence: $0.matchedEvidence.contains(LocalRankingWeights.similarityClue)
+                                           ? $0.matchedEvidence : $0.matchedEvidence + [LocalRankingWeights.similarityClue],
+                                       conflictingEvidence: $0.conflictingEvidence, informationLevel: .limited,
+                                       matchedAppearanceVariant: $0.matchedAppearanceVariant)
+        }
+        return DescriptionSearchResult(candidates: candidates, queryAnalysis: result.queryAnalysis,
+                                       retrievedSpeciesIDs: result.retrievedSpeciesIDs, retrievalLimit: result.retrievalLimit)
+    }
+
+    private static func milliseconds(since start: ContinuousClock.Instant) -> Double {
+        let value = start.duration(to: .now).components
+        return Double(value.seconds) * 1_000 + Double(value.attoseconds) / 1e15
     }
 }
 
-/// Contributes no candidates. Used as the semantic complement's fallback, where BM25
-/// has already run and must not be counted twice.
+/// Contributes no candidates. The semantic fallback's own fallback: if the model fails,
+/// the search keeps the BM25 result rather than running BM25 a second time.
 struct NoCandidateRetriever: SpeciesCandidateRetrieving {
     func retrieve(query: String, documents: [SpeciesSearchDocument], limit: Int) async throws -> [RetrievedSpeciesCandidate] { [] }
 }

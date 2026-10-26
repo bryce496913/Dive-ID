@@ -10,9 +10,10 @@ struct DebugSemanticSearchStatusView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Semantic search diagnostics").font(.caption.bold())
-            Text("Requested engine: \(name(latest?.requestedEngine ?? selection))")
-            Text("Actual engine: \(latest.map { name($0.actualEngine) } ?? "Not run")")
-            if let reason = latest?.fallbackReason { Text("Fallback: \(reason.description)") }
+            Text("Requested engine: \(requested(latest?.requestedEngine ?? selection))")
+            Text("Actual engine: \(latest.map(actual) ?? "Not run")")
+            if latest?.fallbackOutcome == .nothingAboveCutoff { Text("Semantic fallback: nothing above the cutoff") }
+            if let reason = latest?.fallbackReason { Text("Semantic unavailable: \(reason.description)") }
         }
         .font(.caption2.monospaced())
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -26,11 +27,15 @@ struct DebugSemanticSearchStatusView: View {
         }
     }
 
-    private func name(_ engine: DescriptionRetrievalEngine) -> String {
+    private func requested(_ engine: DescriptionRetrievalEngine) -> String {
         switch engine {
-        case .experimentalCoreML: "Core ML semantic + BM25"
-        case .productionBM25: latest?.requestedEngine == .experimentalCoreML ? "BM25 only (semantic fallback)" : "BM25"
+        case .experimentalCoreML: "BM25, semantic fallback"
+        case .productionBM25: "BM25"
         }
+    }
+
+    private func actual(_ metrics: SemanticRetrievalMetrics) -> String {
+        metrics.fallbackOutcome == .served ? "Semantic fallback (BM25 found nothing)" : "BM25"
     }
 }
 #endif

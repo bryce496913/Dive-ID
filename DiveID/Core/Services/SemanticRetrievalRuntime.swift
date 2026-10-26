@@ -9,9 +9,24 @@ enum DescriptionRetrievalEngine: String, Sendable {
     static let productionDefault: Self = .productionBM25
 }
 
+/// What the experimental semantic fallback did for one search.
+enum SemanticFallbackOutcome: String, Sendable {
+    /// BM25 ranked candidates; the model was not loaded and the query not embedded.
+    case notNeeded
+    /// BM25 ranked nothing and the description contradicts the catalogue's domain.
+    case notAttempted
+    /// BM25 ranked nothing; semantic candidates at or above the cutoff were shown.
+    case served
+    /// BM25 ranked nothing; semantic ran but no candidate reached the cutoff.
+    case nothingAboveCutoff
+    /// BM25 ranked nothing; the semantic artifacts or runtime failed (see `fallbackReason`).
+    case unavailable
+}
+
 struct SemanticRetrievalMetrics: Sendable {
     let requestedEngine: DescriptionRetrievalEngine
-    let actualEngine: DescriptionRetrievalEngine
+    /// The engine whose candidates were shown: Core ML only when the fallback served results.
+    var actualEngine: DescriptionRetrievalEngine
     let modelIdentity: String?
     let tokenizerIdentity: String?
     let preprocessingIdentity: String?
@@ -23,7 +38,8 @@ struct SemanticRetrievalMetrics: Sendable {
     let loadMilliseconds: Double
     let embeddingMilliseconds: Double
     let retrievalMilliseconds: Double
-    let totalMilliseconds: Double
+    var totalMilliseconds: Double
+    var fallbackOutcome: SemanticFallbackOutcome = .served
 }
 
 protocol SemanticDiagnosticsReporting: Sendable { func record(_ metrics: SemanticRetrievalMetrics) async }
