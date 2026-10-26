@@ -374,7 +374,13 @@ actor CoreMLSemanticEmbeddingProvider: SemanticEmbeddingProviding {
     static func load(compiledModelURL: URL, contract: SemanticModelArtifactContract, vocabularyData: Data) async throws -> CoreMLSemanticEmbeddingProvider {
         try contract.validate()
         let tokenizer = try WordPieceTokenizer(data: vocabularyData, contract: contract)
-        let model = try MLModel(contentsOf: compiledModelURL)
+        let configuration = MLModelConfiguration()
+#if targetEnvironment(simulator)
+        // The iOS simulator's Core ML has no MPSGraph engine, yet with all compute units it still
+        // takes the GPU path and returns non-finite vectors; the CPU gives the real embedding.
+        configuration.computeUnits = .cpuOnly
+#endif
+        let model = try MLModel(contentsOf: compiledModelURL, configuration: configuration)
         let requiredInputs = [contract.inputIDsFeature, contract.attentionMaskFeature] + (contract.tokenTypeIDsFeature.map { [$0] } ?? [])
         for name in requiredInputs where model.modelDescription.inputDescriptionsByName[name] == nil {
             throw SemanticArtifactDiagnostic.modelInputMissing(name)
