@@ -71,8 +71,25 @@ def release_gated_directories():
     return gated
 
 
-def mismatches(readme, packs, release_gated=frozenset()):
-    """`packs` maps pack directory to manifest; `release_gated` names directories Release never loads."""
+def retired_directories():
+    """Pack directories whose region definition is retired: never listed, never opened in Release."""
+    retired = set()
+    for path in sorted(REGIONS.glob('*.swift')):
+        source = path.read_text()
+        directory = re.search(r'resourceDirectory:\s*"([^"]+)"', source)
+        if directory and re.search(r'retirement:\s*RegionRetirement\(', source):
+            retired.add(directory.group(1))
+    return retired
+
+
+def derived_directories(packs):
+    """Regions whose records are another pack's (a `Members` resource): counting them would count those records twice."""
+    return {directory for directory, manifest in packs.items() if manifest.get('speciesResourceName') == 'Members'}
+
+
+def mismatches(readme, packs, release_gated=frozenset(), retired=frozenset()):
+    """`packs` maps pack directory to manifest; `release_gated` names directories Release never loads;
+    `retired` names development fixtures no build lists. Regions drawn from another pack add no records."""
     section = catalogue_section(readme)
     header, rows = catalogue_table(section)
     problems = [f'README table lacks column "{column}"' for column in COLUMNS if column not in header]
@@ -95,9 +112,11 @@ def mismatches(readme, packs, release_gated=frozenset()):
 
     release = re.search(r'\*\*Release\*\* exposes ([\d,]+) records?', section)
     debug = re.search(r'\*\*Debug\*\* permits all ([\d,]+) development records', section)
+    counted = {directory: manifest for directory, manifest in packs.items()
+               if directory not in retired and directory not in derived_directories(packs)}
     eligible = sum(manifest['publicationEligibleRecordCount']
-                   for directory, manifest in packs.items() if directory not in release_gated)
-    included = sum(manifest['includedRecordCount'] for manifest in packs.values())
+                   for directory, manifest in counted.items() if directory not in release_gated)
+    included = sum(manifest['includedRecordCount'] for manifest in counted.values())
     if not release:
         problems.append('README lacks the "**Release** exposes N records" line')
     elif number(release.group(1)) != eligible:
@@ -227,6 +246,14 @@ class SyntheticReadmeTests(unittest.TestCase):
         self.assertNotIn('README Release exposes 1, manifests allow 6 publication-eligible records', problems)
         self.assertFalse([problem for problem in problems if problem.startswith('README Release')])
 
+    def test_retired_and_derived_packs_add_no_records(self):
+        packs = self.packs()
+        packs['Old'] = manifest('Old', 1, 50, 5, 5)
+        packs['Subset'] = dict(manifest('Subset', 1, 4, 1, 1), speciesResourceName='Members')
+        readme = TABLE.replace('| Beta (Experimental) |', '| Old | 1 | 50 | 5 | 5 | retired |\n| Subset | 1 | 4 | 1 | 1 | |\n| Beta (Experimental) |')
+        self.assertEqual(mismatches(readme, packs, retired={'Old'}), [])
+        self.assertIn('README Release exposes 1, manifests allow 6 publication-eligible records', mismatches(readme, packs))
+
     def test_missing_exposure_lines_fail(self):
         readme = TABLE.replace('- **Release** exposes 1 record.\n', '')
         self.assertIn('README lacks the "**Release** exposes N records" line',
@@ -310,7 +337,8 @@ class RepositoryReadmeTests(unittest.TestCase):
         self.assertTrue(packs, f'No PackManifest.json under {PACKS}')
         gated = release_gated_directories()
         self.assertNotIn('Global', gated, 'GlobalRegion.swift opens Global for Release (owner approval, 2026-10-23)')
-        problems = mismatches(README.read_text(), packs, gated)
+        self.assertEqual(retired_directories(), {'Caribbean', 'TropicalPacific'}, 'retired regions (owner decision, 2026-10-26)')
+        problems = mismatches(README.read_text(), packs, gated, retired_directories())
         self.assertEqual(problems, [], 'README.md disagrees with the pack manifests:\n' + '\n'.join(problems))
 
 

@@ -1,0 +1,27 @@
+{
+  "id": "indo-pacific",
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "displayName": "Indo-Pacific Regions",
+  "shortDescription": "Global species recorded from the Indian and western and central Pacific Oceans",
+  "geographicScope": "The Indian Ocean and western and central Pacific: the Red Sea, East Africa, Madagascar, the Maldives, Thailand, Indonesia, the Philippines, Papua New Guinea, Australia, Japan, Fiji, Hawaii and French Polynesia.",
+  "regionAliases": [
+    "Indo-Pacific",
+    "Indian",
+    "Pacific",
+    "Tropical Pacific",
+    "Australia",
+    "Philippines",
+    "Indonesia",
+    "Fiji",
+    "Hawaii"
+  ],
+  "speciesCount": 3592,
+  "speciesResourceName": "Members",
+  "imageSubdirectory": "Images",
+  "includedWithApp": true,
+  "lastDataReviewDate": null,
+  "includedRecordCount": 3592,
+  "humanReviewedRecordCount": 3590,
+  "publicationEligibleRecordCount": 3590
+}

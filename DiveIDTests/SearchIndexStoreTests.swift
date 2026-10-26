@@ -53,12 +53,17 @@ final class SearchIndexStoreTests: XCTestCase {
     }
 
     func testRepositoryPacksCarryAStableContentKey() async throws {
-        let first = try await repository().loadPack(id: .caribbean)
-        let second = try await repository().loadPack(id: .caribbean)
+        // Mediterranean is the smallest region drawn from Global: its key names Global's
+        // resource, the region and its membership.
+        let first = try await repository().loadPack(id: .mediterranean)
+        let second = try await repository().loadPack(id: .mediterranean)
         let key = try XCTUnwrap(first.persistentContentKey)
         XCTAssertTrue(key.hasPrefix("development-"))
+        XCTAssertTrue(key.contains("-mediterranean-"))
         XCTAssertEqual(key, second.persistentContentKey, "same resource, same key in a new repository")
-        let release = try await repository(.publication).loadPack(id: .caribbean)
+        let global = try await repository().loadPack(id: .global)
+        XCTAssertTrue(key.hasPrefix(try XCTUnwrap(global.persistentContentKey)))
+        let release = try await repository(.publication).loadPack(id: .mediterranean)
         XCTAssertEqual(release.persistentContentKey, "publication-" + key.dropFirst("development-".count))
         XCTAssertNil(OfflineIdentificationPack(metadata: first.metadata, profiles: first.profiles).persistentContentKey)
     }

@@ -45,10 +45,10 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     /// match the manifest's counts, runs once when a pack is first opened (`loadPack`),
     /// which fails closed exactly as before. A pack already opened is listed from its
     /// validated records. Release never lists a pack whose definition is not
-    /// `availableInRelease`.
+    /// `availableInRelease`, and no build lists a retired region.
     func availablePacks() async throws -> [OfflineIdentificationPackMetadata] {
         var available: [OfflineIdentificationPackMetadata] = []
-        for definition in registry.definitions {
+        for definition in registry.definitions where definition.isListed {
             if case .publication = access, !definition.availableInRelease { continue }
             if let raw = cachedRawPacks[definition.id] {
                 let metadata = try accountingMetadata(for: raw)
@@ -96,7 +96,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         let interval = SearchSignposts.begin(.catalogueLoad, id.rawValue)
         defer { SearchSignposts.end(interval) }
 #endif
-        if case .publication = access, registry.definition(for: id)?.availableInRelease == false {
+        if case .publication = access, let definition = registry.definition(for: id),
+           !definition.availableInRelease || !definition.isListed {
             throw failure(id, .publicationUnavailable, .publicationUnavailable, nil, .validation)
         }
         let raw = try loadRawPack(id: id)
@@ -132,6 +133,11 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         let data: Data
         do { data = try Data(contentsOf: url) }
         catch { throw failure(id, .speciesResourceMissing, .unreadableData, speciesResource, .speciesResource) }
+        if let sourceID = definition.derivedFrom {
+            let pack = try derivedPack(metadata: metadata, membershipData: data, membershipResource: speciesResource, sourceID: sourceID)
+            cachedRawPacks[id] = pack
+            return pack
+        }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let profiles: [LocalSpeciesProfile]
         do { profiles = try decoder.decode([LocalSpeciesProfile].self, from: data) }
@@ -152,6 +158,34 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                                              persistentContentKey: "development-" + StableDigest.fnv1a64Hex(data))
         cachedRawPacks[id] = pack
         return pack
+    }
+
+    /// A region drawn from another pack: the source pack's validated records whose IDs the
+    /// membership lists, in the source pack's order. Every listed ID must resolve, once.
+    /// The records are not revalidated as a pack of their own, because a similar-species
+    /// reference may name a record outside the region; it is shown as text only.
+    private func derivedPack(metadata: OfflineIdentificationPackMetadata, membershipData: Data, membershipResource: String,
+                             sourceID: OfflineIdentificationPackID) throws -> OfflineIdentificationPack {
+        let id = metadata.id
+        let membership: RegionMembership
+        do { membership = try JSONDecoder().decode(RegionMembership.self, from: membershipData) }
+        catch { throw failure(id, .decodeFailed, .invalidData, membershipResource, .decoding) }
+        guard membership.sourcePackID == sourceID, sourceID != id else {
+            throw failure(id, .unsupportedPack, .unsupportedPack, membershipResource, .validation)
+        }
+        let source = try loadRawPack(id: sourceID)
+        let members = Set(membership.speciesIDs)
+        let profiles = source.profiles.filter { members.contains($0.id) }
+        guard members.count == membership.speciesIDs.count, profiles.count == members.count,
+              metadata.speciesCount == profiles.count else {
+            throw failure(id, .countMismatch, .countMismatch(expected: metadata.speciesCount, actual: profiles.count), membershipResource, .validation)
+        }
+        guard metadata.schemaVersion == 1, metadata.packVersion > 0,
+              !metadata.displayName.isEmpty, !metadata.geographicScope.isEmpty else {
+            throw failure(id, .validationFailed, .invalidData, membershipResource, .validation)
+        }
+        let content = source.persistentContentKey.map { "\($0)-\(id.rawValue)-" + StableDigest.fnv1a64Hex(membershipData) }
+        return OfflineIdentificationPack(metadata: metadata, profiles: profiles, persistentContentKey: content)
     }
 
     private static func isPublicationEligible(_ profile: LocalSpeciesProfile) -> Bool {

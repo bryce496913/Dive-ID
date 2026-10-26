@@ -54,7 +54,8 @@ final class GlobalPackTests: XCTestCase {
                        "the drafts are the owner additions awaiting batch-21 review and the records awaiting re-review")
         XCTAssertEqual(global.isExperimental, approved.count < global.speciesCount, "Debug marks a pack holding drafts")
         XCTAssertTrue(global.regionAliases.isEmpty, "the global pack never conflicts with a described location")
-        XCTAssertEqual(Set(development.map(\.id)), [.caribbean, .tropicalPacific, .global], "existing packs stay in place")
+        XCTAssertEqual(development.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
+                       "Global and its regions; Caribbean and Tropical Pacific are retired")
         let pack = try await repository(.experimentalDevelopment).loadPack(id: .global)
         for profile in pack.profiles {
             if let method = approved[profile.id] {
@@ -108,7 +109,8 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertTrue(GlobalRegion.definition.availableInRelease)
         XCTAssertTrue(RegionCatalogRegistry.bundled.definitions.allSatisfy(\.availableInRelease), "no bundled pack is gated")
         let available = try await repository(.publication).availablePacks()
-        XCTAssertEqual(available.map(\.id), [.caribbean, .global], "Tropical Pacific has no approved record")
+        XCTAssertEqual(available.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
+                       "retired regions are never listed")
     }
 
     /// The gate mechanism still holds when closed: approved records alone never publish a
@@ -139,7 +141,7 @@ final class GlobalPackTests: XCTestCase {
         let approved = try appliedApprovals()
         let release = repository(.publication)
         let available = try await release.availablePacks()
-        XCTAssertTrue(available.contains { $0.id == .caribbean }, "approved Caribbean records stay available")
+        XCTAssertFalse(available.contains { $0.id == .caribbean }, "the retired Caribbean region is not offered; its species are in Global")
         let listed = try XCTUnwrap(available.first { $0.id == .global })
         XCTAssertEqual(listed.speciesCount, approved.count)
         XCTAssertFalse(listed.isExperimental, "Release lists only the approved records")

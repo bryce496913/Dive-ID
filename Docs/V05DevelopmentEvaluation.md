@@ -1,5 +1,26 @@
 # v0.5 development evaluation
 
+**Global regions (2026-10-26):** Caribbean and Tropical Pacific were retired as dive
+regions in favour of Global and four regions drawn from it (README, "Dive regions"). The
+v2 fixture is unchanged and still names `caribbean` and `tropical-pacific`:
+
+- **Development** opens each case's own pack by ID (the retired packs stay bundled as
+  evaluation fixtures). Its results are unchanged and every case and gate is asserted.
+- **Release** never opens a retired region, so each case runs in the region an existing
+  user of its pack is offered: Caribbean cases in Tropical Atlantic Regions (1,038 approved
+  records), Tropical Pacific cases in Indo-Pacific Regions (3,590). Every expected species
+  keeps its UUID there, so all 46 cases are eligible (before, 36 were blocked by coverage).
+  Production BM25: candidate recall 33/34, top1 19/34, top3 26/34, top10 30/34, no-match
+  6/6, region conflicts 4/4, confidence 46/46; every gate passes. By region, Tropical
+  Atlantic top10 15/16 and Indo-Pacific 15/18.
+- Release now asserts only the production engine's gates, as the Global evaluation does,
+  because individual cases miss in thousands of records: `v05-05-paraphrase`,
+  `v05-09-diagnostic`, `v05-09-paraphrase` and `v05-10-paraphrase` miss the top ten (the
+  same four as in Global), and `v05-15-diagnostic` and `v05-16-diagnostic` rank 4 and 7
+  against a limit of 3. The structured full-pack engine (top10 25/34, one ambiguous case
+  over its confidence limit) is reported, not asserted. No ranking, threshold or case was
+  changed.
+
 **Current state (2026-10-23):** the v2 evaluation now passes every gate. See
 [`Reports/V05DevelopmentEvaluation.json`](../Reports/V05DevelopmentEvaluation.json) and
 the README's [required portable checks](../README.md#required-portable-checks). The

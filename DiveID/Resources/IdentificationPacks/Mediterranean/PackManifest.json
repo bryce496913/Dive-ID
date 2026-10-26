@@ -1,0 +1,17 @@
+{
+  "id": "mediterranean",
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "displayName": "Mediterranean",
+  "shortDescription": "Global species recorded from the Mediterranean and Black Sea",
+  "geographicScope": "The Mediterranean Sea and Black Sea: Spain, France, Italy, Malta, Croatia, Greece, Türkiye, Cyprus, Israel, Egypt and Tunisia.",
+  "regionAliases": [],
+  "speciesCount": 330,
+  "speciesResourceName": "Members",
+  "imageSubdirectory": "Images",
+  "includedWithApp": true,
+  "lastDataReviewDate": null,
+  "includedRecordCount": 330,
+  "humanReviewedRecordCount": 329,
+  "publicationEligibleRecordCount": 329
+}

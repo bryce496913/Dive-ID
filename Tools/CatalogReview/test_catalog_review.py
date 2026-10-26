@@ -307,7 +307,8 @@ class BundledImageFileTests(unittest.TestCase):
             self.V.validate_catalogue([self.record], None, self.PACKS / "Caribbean")
 
     def test_every_bundled_pack_finds_its_images(self):
-        for pack in sorted(p for p in self.PACKS.iterdir() if (p / "PackManifest.json").is_file()):
+        # Regions drawn from Global list Global record IDs (Members.json) and hold no records of their own.
+        for pack in sorted(p for p in self.PACKS.iterdir() if (p / "Creatures.json").is_file()):
             with self.subTest(pack=pack.name):
                 self.V.validate_catalogue(json.loads((pack / "Creatures.json").read_text()),
                                           json.loads((pack / "PackManifest.json").read_text()), pack)

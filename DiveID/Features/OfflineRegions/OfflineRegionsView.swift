@@ -4,7 +4,7 @@ import SwiftUI
 @MainActor @Observable
 final class OfflineRegionsViewModel {
     var packs: [OfflineIdentificationPackMetadata] = []
-    var selected: OfflineIdentificationPackID = .caribbean
+    var selected: OfflineIdentificationPackID = DefaultDiveRegion.forNewInstalls
     var errorMessage: String?
     private let catalog: any MarineSpeciesCatalogRepository
     private let selection: any SelectedDiveRegionRepository

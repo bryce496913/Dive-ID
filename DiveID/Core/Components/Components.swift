@@ -68,6 +68,7 @@ struct SelectedPackStatusView: View {
     let state: SelectedPackState
     let retry: () -> Void
     let changeRegion: () -> Void
+    var chooseRegion: (OfflineIdentificationPackID) -> Void = { _ in }
 
     var body: some View {
         switch state {
@@ -75,6 +76,18 @@ struct SelectedPackStatusView: View {
             ErrorStateView(message: AppCopy.catalogueLoadFailed, retry: retry)
         case .selectedRegionUnavailable:
             EmptyStateView(title: AppCopy.diveRegionUnavailableTitle, message: AppCopy.diveRegionUnavailableMessage)
+            Button(action: changeRegion) {
+                Label("Change Dive Region", systemImage: "map.fill").frame(minHeight: 44)
+            }
+            .accessibilityIdentifier("changeRegionAction")
+        case .selectedRegionRetired(let recovery):
+            EmptyStateView(title: AppCopy.diveRegionUnavailableTitle, message: recovery.message)
+            if let suggestion = recovery.suggestion {
+                Button { chooseRegion(suggestion.id) } label: {
+                    Label(AppCopy.useSuggestedDiveRegion(suggestion.displayName), systemImage: "checkmark.circle.fill").frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("useSuggestedRegionAction")
+            }
             Button(action: changeRegion) {
                 Label("Change Dive Region", systemImage: "map.fill").frame(minHeight: 44)
             }

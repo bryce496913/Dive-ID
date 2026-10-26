@@ -30,7 +30,7 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
         case .description(let description):
             let trimmed = description.trimmingCharacters(in: .whitespacesAndNewlines)
             guard trimmed.count >= 3 else { throw LocalIdentificationError.invalidDescription }
-            let packID = request.context.region ?? .caribbean
+            let packID = request.context.region ?? DefaultDiveRegion.forNewInstalls
             let pack: OfflineIdentificationPack
             do {
                 pack = try await catalogRepository.loadPack(id: packID)

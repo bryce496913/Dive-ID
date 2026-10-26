@@ -176,7 +176,7 @@ final class DiveIDTests: XCTestCase {
     @MainActor
     func testEmptyApprovedCatalogueDisablesNewSearch() async {
         let catalog = ResultsCatalogRepository(metadata: [])
-        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .caribbean)
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .global)
         let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
         await home.load()
         XCTAssertTrue(home.catalogueLoaded)
@@ -196,10 +196,11 @@ final class DiveIDTests: XCTestCase {
     }
 
     @MainActor
-    func testUnavailablePersistedPacificCanChangeToAvailableCaribbeanAndSearch() async throws {
-        let caribbean = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
-        let catalog = ResultsCatalogRepository(metadata: [caribbean])
-        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .tropicalPacific)
+    func testRetiredPersistedCaribbeanCanChangeToAnAvailableRegionAndSearch() async throws {
+        let atlantic = resultPackMetadata(id: .tropicalAtlantic, displayName: "Tropical Atlantic Regions", speciesCount: 8)
+        let global = resultPackMetadata(id: .global, displayName: "Global", speciesCount: 8)
+        let catalog = ResultsCatalogRepository(metadata: [global, atlantic])
+        let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .caribbean)
         let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
 
         await home.load()
@@ -208,19 +209,20 @@ final class DiveIDTests: XCTestCase {
         XCTAssertFalse(home.canSearch)
         XCTAssertTrue(home.canChangeRegion)
         XCTAssertTrue(home.selectedRegionUnavailable)
+        XCTAssertEqual(home.packState, .selectedRegionRetired(RetiredRegionRecovery(retiredName: "Caribbean", suggestion: atlantic)))
 
         let chooser = OfflineRegionsViewModel(catalog: catalog, selection: regionRepository)
         await chooser.load()
-        XCTAssertEqual(chooser.selected, .tropicalPacific)
-        XCTAssertEqual(chooser.packs.map(\.id), [.caribbean])
+        XCTAssertEqual(chooser.selected, .caribbean, "the stored choice is shown as it is, never substituted")
+        XCTAssertEqual(chooser.packs.map(\.id), [.global, .tropicalAtlantic])
 
-        let didSelect = await chooser.select(.caribbean)
+        let didSelect = await chooser.select(.global)
         let persistedRegion = await regionRepository.selectedRegion()
         XCTAssertTrue(didSelect)
-        XCTAssertEqual(persistedRegion, .caribbean)
+        XCTAssertEqual(persistedRegion, .global)
 
         await home.load()
-        XCTAssertEqual(home.pack?.id, .caribbean)
+        XCTAssertEqual(home.pack?.id, .global)
         XCTAssertTrue(home.canSearch)
         XCTAssertFalse(home.selectedRegionUnavailable)
 
@@ -231,18 +233,39 @@ final class DiveIDTests: XCTestCase {
         )
         search.descriptionText = "striped reef fish"
         await search.load()
-        XCTAssertEqual(search.pack?.id, .caribbean)
+        XCTAssertEqual(search.pack?.id, .global)
         XCTAssertTrue(search.canSubmit)
     }
 
     @MainActor
+    func testChoosingTheSuggestedReplacementStoresAndLoadsIt() async throws {
+        let indoPacific = resultPackMetadata(id: .indoPacific, displayName: "Indo-Pacific Regions", speciesCount: 8)
+        let catalog = ResultsCatalogRepository(metadata: [indoPacific])
+        for chooseFromHome in [true, false] {
+            let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .tropicalPacific)
+            let home = HomeViewModel(catalog: catalog, regionRepository: regionRepository)
+            let search = DescriptionSearchViewModel(sessionStore: InMemoryIdentificationSessionStore(), catalog: catalog, regionRepository: regionRepository)
+            await home.load()
+            await search.load()
+            let offered = SelectedPackState.selectedRegionRetired(RetiredRegionRecovery(retiredName: "Tropical Pacific", suggestion: indoPacific))
+            XCTAssertEqual(home.packState, offered)
+            XCTAssertEqual(search.packState, offered)
+            if chooseFromHome { await home.chooseRegion(.indoPacific) } else { await search.chooseRegion(.indoPacific) }
+            let stored = await regionRepository.selectedRegion()
+            XCTAssertEqual(stored, .indoPacific)
+            XCTAssertEqual((chooseFromHome ? home.packState : search.packState), .loaded(indoPacific))
+        }
+    }
+
+    @MainActor
     func testHomeAndDescriptionPresentTheSameSelectedPackState() async {
-        let caribbean = resultPackMetadata(id: .caribbean, displayName: "Caribbean", speciesCount: 8)
+        let atlantic = resultPackMetadata(id: .tropicalAtlantic, displayName: "Tropical Atlantic Regions", speciesCount: 8)
         let cases: [(ResultsCatalogRepository, OfflineIdentificationPackID, SelectedPackState)] = [
-            (ResultsCatalogRepository(metadata: [caribbean]), .caribbean, .loaded(caribbean)),
-            (ResultsCatalogRepository(metadata: [caribbean], error: LocalCatalogError.unreadableData), .caribbean, .loadFailed),
-            (ResultsCatalogRepository(metadata: [caribbean]), .tropicalPacific, .selectedRegionUnavailable),
-            (ResultsCatalogRepository(metadata: []), .caribbean, .noReviewedCatalogue)
+            (ResultsCatalogRepository(metadata: [atlantic]), .tropicalAtlantic, .loaded(atlantic)),
+            (ResultsCatalogRepository(metadata: [atlantic], error: LocalCatalogError.unreadableData), .tropicalAtlantic, .loadFailed),
+            (ResultsCatalogRepository(metadata: [atlantic]), .mediterranean, .selectedRegionUnavailable),
+            (ResultsCatalogRepository(metadata: [atlantic]), .caribbean, .selectedRegionRetired(RetiredRegionRecovery(retiredName: "Caribbean", suggestion: atlantic))),
+            (ResultsCatalogRepository(metadata: []), .tropicalAtlantic, .noReviewedCatalogue)
         ]
         for (catalog, region, expected) in cases {
             let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: region)
@@ -492,8 +515,9 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     func testProductionCaribbeanPackLoadsAndValidates() async throws {
         let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
+        // Caribbean is a retired region: never listed, but Debug still opens it as a fixture.
         let manifests = try await repository.availablePacks()
-        let manifest = try XCTUnwrap(manifests.first { $0.id == .caribbean })
+        XCTAssertFalse(manifests.contains { $0.id == .caribbean })
         let pack: OfflineIdentificationPack
         do {
             pack = try await repository.loadPack(id: .caribbean)
@@ -501,10 +525,9 @@ final class LocalOfflineIdentificationTests: XCTestCase {
             XCTFail("Production Caribbean pack failed to load: \(error)")
             return
         }
-        XCTAssertEqual(manifest.speciesCount, 8)
+        XCTAssertEqual(pack.metadata.speciesCount, 8)
         XCTAssertEqual(pack.metadata.id, .caribbean)
         XCTAssertEqual(pack.profiles.count, 8)
-        XCTAssertEqual(pack.profiles.count, manifest.speciesCount)
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: pack, bundle: TestResources.productionBundle))
     }
 

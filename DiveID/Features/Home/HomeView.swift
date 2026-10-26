@@ -11,13 +11,14 @@ final class HomeViewModel {
     }
 
     func load() async { packState = await packLoader.load() }
+    func chooseRegion(_ id: OfflineIdentificationPackID) async { packState = await packLoader.choose(id) }
 
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
     var catalogueLoaded: Bool { packState != .notLoaded && packState != .loadFailed }
     var catalogueLoadFailed: Bool { packState == .loadFailed }
     var canSearch: Bool { pack != nil }
     var canChangeRegion: Bool { packState.canChangeRegion }
-    var selectedRegionUnavailable: Bool { packState == .selectedRegionUnavailable }
+    var selectedRegionUnavailable: Bool { packState.isSelectedRegionUnavailable }
 }
 
 struct HomeView: View {
@@ -34,7 +35,8 @@ struct HomeView: View {
                     SelectedPackStatusView(
                         state: viewModel.packState,
                         retry: { Task { await viewModel.load() } },
-                        changeRegion: { router.navigate(to: .offlineRegions) }
+                        changeRegion: { router.navigate(to: .offlineRegions) },
+                        chooseRegion: { id in Task { await viewModel.chooseRegion(id) } }
                     )
                 }
                 // The main task leads; photo and the secondary screens follow.

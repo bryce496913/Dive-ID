@@ -11,9 +11,28 @@ submitted or published by this repository workflow.
 
 | Pack | Version | Bundled records | Human-reviewed | Publication-eligible | V05 gates (development, top10) |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Caribbean | 3 | 8 | 2 | 2 | pass (16/16) |
-| Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18) |
+| Caribbean | 3 | 8 | 2 | 2 | pass (16/16); retired region, development fixture only |
+| Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18); retired region, development fixture only |
 | Global | 24 | 4798 | 4796 | 4796 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Tropical Atlantic Regions | 1 | 1039 | 1038 | 1038 | drawn from Global |
+| Indo-Pacific Regions | 1 | 3592 | 3590 | 3590 | drawn from Global |
+| Pacific Coast Regions | 1 | 566 | 565 | 565 | drawn from Global |
+| Mediterranean | 1 | 330 | 329 | 329 | drawn from Global |
+
+**Dive regions (owner decision, 2026-10-26).** The app offers Global and four regions
+drawn from it: Tropical Atlantic Regions, Indo-Pacific Regions, Pacific Coast Regions and
+Mediterranean. Each region lists Global record IDs (`Members.json`), so its records,
+review status and search data are Global's, unchanged; Release shows only their approved
+records, and a species that occurs in several regions is in each. Membership comes from
+each record's FAO areas plus FishBase's country records, which split the Eastern Central
+Pacific between Hawaii/Polynesia (Indo-Pacific) and the Americas' Pacific coast
+(`Tools/FishBaseIntake/derive_regions.py`; rerun it after `publish_global.py`). Species
+recorded only outside all four (for example the temperate North Atlantic) are in Global
+alone. Caribbean and Tropical Pacific are **retired**: no build lists them and Release
+never opens them; they stay bundled as development evaluation fixtures. An install whose
+stored region is retired sees "Dive region unavailable" with a one-tap suggestion
+(Caribbean → Tropical Atlantic Regions, Tropical Pacific → Indo-Pacific Regions); nothing
+changes until the person chooses.
 
 **Global is the default for new installs and is available in Release** (owner decision,
 2026-10-23), after every Global record was approved in batch review. Release shows only
@@ -52,13 +71,14 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
 - **Awaiting review (drafts, not in Release):** Graceful shark and Silky shark in
   batch-18-rereview, whose wrong "Grey/Gray reef shark" aliases were removed. The pack
   is named "Global" while they are drafts (Bryce, October 23, 2026).
-- **Release** exposes 4,798 records: the 2 approved Caribbean species in Caribbean and
-  4,796 in Global (which holds its own copies of the 8 Caribbean species). Tropical
-  Pacific is unavailable. Bryce opened Global's pack-level Release gate
-  (`GlobalRegion.swift`) on October 23, 2026. New installs start in Global; a stored
-  region selection is kept.
-- **Debug** permits all 5,806 development records: 8 Caribbean, 1,000 Tropical Pacific
-  and 4,798 Global (Global holds its own draft copies of the 8 Caribbean species).
+- **Release** exposes 4,796 records, all in Global; the four regions show subsets of
+  them. Tropical Pacific and Caribbean are retired regions. Bryce opened Global's
+  pack-level Release gate (`GlobalRegion.swift`) on October 23, 2026. New installs start
+  in Global; a stored region selection is kept, and a retired one is offered its
+  replacement.
+- **Debug** permits all 4,798 development records: Global's, including its 2 drafts,
+  listed in Global and its regions. Debug and tests can still open the retired Caribbean
+  (8) and Tropical Pacific (1,000) packs by ID as evaluation fixtures; no build lists them.
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).
@@ -147,15 +167,21 @@ their status; every command keeps a nonzero exit status on failure, and
 
 The 46-case v0.5 development evaluation (fixture v2) passes every gate on the
 regional packs ([report](Reports/V05DevelopmentEvaluation.json), refreshed
-2026-10-22; the 2026-10-23 Global rebuild left every regional case result unchanged).
+2026-10-26 for the Global regions; development results are unchanged since 2026-10-22).
 With the production engine:
 
-- **Development (8 Caribbean + 1,000 Tropical Pacific records):** candidate recall
+- **Development (the 8 Caribbean + 1,000 Tropical Pacific fixture records):** candidate recall
   34/34, top1 26/34, top3 33/34, top10 34/34, no-match 6/6, region conflicts 4/4,
   confidence 46/46.
-- **Release (2 approved Caribbean records):** the 4 positive cases whose species are
-  approved give candidate recall 4/4, top1 3/4, top3 4/4, top10 4/4, no-match 3/3,
-  region conflicts 2/2, confidence 10/10. The other 36 cases are blocked by coverage.
+- **Release (each case in its retired region's replacement: Caribbean cases in Tropical
+  Atlantic Regions, 1,038 approved records; Tropical Pacific cases in Indo-Pacific Regions,
+  3,590):** all 46 cases are eligible, giving candidate recall 33/34, top1 19/34,
+  top3 26/34, top10 30/34, no-match 6/6, region conflicts 4/4, confidence 46/46. Release
+  asserts the production engine's gates, not each case: six positive cases miss their rank
+  limit (`v05-05-paraphrase`, `v05-09-diagnostic`, `v05-09-paraphrase` and
+  `v05-10-paraphrase` miss the top ten, as in Global; `v05-15-diagnostic` and
+  `v05-16-diagnostic` rank 4 and 7 against a limit of 3). The structured full-pack
+  comparison engine is reported only.
 
 Its descriptions are synthetic and v2 was written after v1 results were seen, so
 this is development evidence, not independent diver holdout data or publication

@@ -14,11 +14,17 @@ final class DeviceValidationUITests: XCTestCase {
     static let globalQuery = "Large flat eagle ray with white spots and a long tail over sand in the Caribbean."
     static let spottedEagleRay = "result_00000000-0000-0000-0000-000000000010"
     static let atlanticBlueTang = "result_00000000-0000-0000-0000-000000000003"
-    static let caribbeanApproved: Set<String> = [atlanticBlueTang, "result_fc213eff-6ba6-53ab-b288-f6e654299e68"]
+    /// Indo-Pacific species (Reef manta ray, Achilles tang) that Tropical Atlantic Regions must
+    /// never show. GlobalSubregionTests checks every regional result against its membership.
+    static let outsideTropicalAtlantic = ["result_2b3c99d3-c4c5-5eb9-bf28-74a6b9c630cf", "result_0d174396-5637-5cad-bcc3-be7afcef66e1"]
+
+    static func onlyTropicalAtlantic(_ results: [String]) -> Bool {
+        outsideTropicalAtlantic.allSatisfy { rank(of: $0, in: results) == nil }
+    }
 
     /// The app writes UUID-based identifiers in upper case, so compare without case.
-    static func onlyCaribbeanApproved(_ results: [String]) -> Bool {
-        Set(results.map { $0.lowercased() }).isSubset(of: caribbeanApproved)
+    static func rank(of identifier: String, in results: [String]) -> Int? {
+        results.firstIndex { $0.lowercased() == identifier.lowercased() }.map { $0 + 1 }
     }
 
     /// The installed app, addressed by bundle identifier. Xcode 26.5 cannot launch a UI-test
@@ -101,33 +107,34 @@ final class DeviceValidationUITests: XCTestCase {
 
     // MARK: - Flows
 
-    /// Positive, region-conflict, ambiguous and no-match descriptions in Caribbean, whose
-    /// frozen cases target it (V05Development.v2.json).
+    /// Positive, region-conflict, ambiguous and no-match descriptions in Tropical Atlantic
+    /// Regions, the region offered to Caribbean users; the frozen V05 cases target Caribbean
+    /// (V05Development.v2.json), which Release evaluates in Tropical Atlantic Regions.
     @MainActor
-    func testCaseKindsInCaribbean() {
-        let app = launch(region: "caribbean")
+    func testCaseKindsInTropicalAtlantic() {
+        let app = launch(region: "tropical-atlantic")
         app.buttons["describeAction"].tap()
-        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 10))
 
         let positive = search(app, "Compressed blue reef fish with a yellow spine beside its tail.")
-        let tangRank = positive.results.firstIndex(of: Self.atlanticBlueTang).map { $0 + 1 }
+        let tangRank = Self.rank(of: Self.atlanticBlueTang, in: positive.results)
         XCTAssertNotNil(tangRank)
         XCTAssertLessThanOrEqual(tangRank ?? 99, 3, "v05-01-diagnostic allows rank 3 at most")
-        XCTAssertTrue(Self.onlyCaribbeanApproved(positive.results), "a draft was searchable: \(positive.results)")
+        XCTAssertTrue(Self.onlyTropicalAtlantic(positive.results), "a species outside the region was shown: \(positive.results)")
         report("case", ["id": "v05-01-diagnostic", "state": positive.state, "results": positive.results,
                         "labels": positive.labels, "expectedRank": tangRank ?? 0])
         attachScreenshot(app, "case-positive")
         goBack(app)
 
         let conflict = search(app, "Blue and yellow striped surgeonfish on a reef in Fiji.")
-        XCTAssertEqual(conflict.state, "failure", "a Fiji description in Caribbean must be a region mismatch")
+        XCTAssertEqual(conflict.state, "failure", "a Fiji description in Tropical Atlantic Regions must be a region mismatch")
         XCTAssertFalse(app.buttons["Try Again"].exists, "a region mismatch is not retryable")
         report("case", ["id": "v05-region-1", "state": conflict.state, "message": conflict.message])
         attachScreenshot(app, "case-region-conflict")
         goBack(app)
 
         let ambiguous = search(app, "Dark angelfish near a Caribbean reef.")
-        XCTAssertTrue(Self.onlyCaribbeanApproved(ambiguous.results))
+        XCTAssertTrue(Self.onlyTropicalAtlantic(ambiguous.results))
         for label in ambiguous.labels {
             XCTAssertFalse(label.contains("Strong match") || label.contains("Good match"),
                            "ambiguous case must stay at or below 0.64 confidence: \(label)")
@@ -174,8 +181,8 @@ final class DeviceValidationUITests: XCTestCase {
         }
     }
 
-    /// Global search, then a region change to Caribbean through the UI; Caribbean results
-    /// hold only its approved species, and the choice survives a relaunch.
+    /// Global search, then a region change to Tropical Atlantic Regions through the UI; its
+    /// results hold no species from outside the region, and the choice survives a relaunch.
     @MainActor
     func testRegionSwitchingPersists() {
         // Start from Global whatever an earlier test left selected.
@@ -185,16 +192,17 @@ final class DeviceValidationUITests: XCTestCase {
         let global = search(app, Self.globalQuery)
         XCTAssertEqual(global.results.first, Self.spottedEagleRay)
         goBack(app); goBack(app)
-        selectRegion(app, "caribbean")
+        selectRegion(app, "tropical-atlantic")
         app.buttons["describeAction"].tap()
-        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 10))
-        let caribbean = search(app, "Compressed blue reef fish with a yellow spine beside its tail.")
-        XCTAssertTrue(Self.onlyCaribbeanApproved(caribbean.results), "\(caribbean.results)")
-        report("region", ["globalTop": global.results.first ?? "none", "caribbeanResults": caribbean.results])
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 10))
+        let regional = search(app, "Compressed blue reef fish with a yellow spine beside its tail.")
+        XCTAssertTrue(Self.onlyTropicalAtlantic(regional.results), "\(regional.results)")
+        XCTAssertNotNil(Self.rank(of: Self.atlanticBlueTang, in: regional.results))
+        report("region", ["globalTop": global.results.first ?? "none", "tropicalAtlanticResults": regional.results])
         app.terminate()
         app.launch()
         app.buttons["describeAction"].tap()
-        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 10), "region choice was not kept")
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 10), "region choice was not kept")
         goBack(app)
         selectRegion(app, "global")
     }
@@ -378,35 +386,43 @@ final class DeviceValidationUITests: XCTestCase {
         }
     }
 
-    /// After a Debug install selected Tropical Pacific, the Release update reports the region
-    /// unavailable, offers the approved regions, and keeps the new choice after a relaunch.
+    /// After the previous build stored Caribbean (retired 2026-10-26), this build reports the
+    /// region unavailable, offers Tropical Atlantic Regions without switching, and keeps the
+    /// choice after a relaunch.
     @MainActor
-    func testRecoveryFromUnavailableSelectedRegion() throws {
-        try XCTSkipUnless(ProcessInfo.processInfo.environment["DIVEID_DEVICE_PHASE"] == "after-debug-tropical-pacific",
-                          "needs the Debug installation step first")
+    func testRecoveryFromRetiredSelectedRegion() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DIVEID_DEVICE_PHASE"] == "after-previous-build-caribbean",
+                          "needs the previous-build installation step first")
         let app = Self.makeApp()
         app.launch()
         XCTAssertTrue(app.staticTexts["Dive region unavailable"].waitForExistence(timeout: 10))
-        attachScreenshot(app, "region-unavailable")
-        selectRegion(app, "global")
+        XCTAssertFalse(app.buttons["describeAction"].isEnabled, "no region was substituted")
+        let suggestion = app.buttons["useSuggestedRegionAction"]
+        XCTAssertTrue(suggestion.exists)
+        XCTAssertTrue(suggestion.label.contains("Tropical Atlantic Regions"), suggestion.label)
+        attachScreenshot(app, "region-retired")
+        suggestion.tap()
+        XCTAssertTrue(waitUntil(timeout: 10) { app.buttons["describeAction"].isEnabled }.met)
         app.terminate()
         app.launch()
         XCTAssertFalse(app.staticTexts["Dive region unavailable"].waitForExistence(timeout: 3))
         app.buttons["describeAction"].tap()
-        XCTAssertTrue(app.staticTexts["Dive region: Global"].waitForExistence(timeout: 10))
-        report("unavailable-region", ["recoveredTo": "global", "persisted": true])
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 10))
+        report("retired-region", ["recoveredTo": "tropical-atlantic", "persisted": true])
+        goBack(app)
+        selectRegion(app, "global")
     }
 
-    /// The Debug half of the step above: choose Tropical Pacific, then the Release build is
-    /// installed over it without deleting the container.
+    /// The setup half of the step above, run against the previous build (which still offers
+    /// Caribbean): choose Caribbean, then this build is installed over it without deleting the container.
     @MainActor
-    func testSelectTropicalPacificInDebug() throws {
-        try XCTSkipUnless(ProcessInfo.processInfo.environment["DIVEID_DEVICE_PHASE"] == "debug-select-tropical-pacific")
+    func testSelectCaribbeanInPreviousBuild() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DIVEID_DEVICE_PHASE"] == "previous-build-select-caribbean")
         let app = Self.makeApp()
         app.launch()
-        selectRegion(app, "tropical-pacific")
-        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Tropical Pacific'")).firstMatch.waitForExistence(timeout: 5),
-                      "Tropical Pacific was not selected")
+        selectRegion(app, "caribbean")
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Caribbean'")).firstMatch.waitForExistence(timeout: 5),
+                      "Caribbean was not selected")
         Thread.sleep(forTimeInterval: 1)
         app.terminate()
     }

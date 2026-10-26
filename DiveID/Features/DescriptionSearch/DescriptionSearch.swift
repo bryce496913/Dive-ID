@@ -27,6 +27,12 @@ final class DescriptionSearchViewModel {
 #endif
     }
 
+    /// Stores a suggested replacement for a retired region, then loads it as `load` does.
+    func chooseRegion(_ id: OfflineIdentificationPackID) async {
+        await packLoader.regionRepository.setSelectedRegion(id)
+        await load()
+    }
+
     var pack: OfflineIdentificationPackMetadata? { packState.pack }
     var normalizedDescription: String { descriptionText.trimmingCharacters(in: .whitespacesAndNewlines) }
     /// Trimmed description lengths that can be searched.
@@ -91,7 +97,7 @@ struct DescriptionSearchView: View {
                         .padding()
                         .appCard()
                     }
-                    else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }) }
+                    else { SelectedPackStatusView(state: viewModel.packState, retry: { Task { await viewModel.load() } }, changeRegion: { router.navigate(to: .offlineRegions) }, chooseRegion: { id in Task { await viewModel.chooseRegion(id) } }) }
                     ZStack(alignment: .topLeading) {
                         if viewModel.descriptionText.isEmpty {
                             Text("Example: Small blue fish, approximately 20 cm, seen on a shallow reef in the selected region.")

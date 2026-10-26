@@ -47,9 +47,9 @@ final class PackListingTests: XCTestCase {
             XCTAssertEqual(lazy, fromRecords, "\(access)")
         }
         let release = try await production(.publication).availablePacks()
-        XCTAssertEqual(release.map(\.id), [.caribbean, .global], "Release lists only packs with approved records")
-        XCTAssertEqual(release.first?.speciesCount, 2)
-        XCTAssertEqual(release.last?.speciesCount, release.last?.publicationEligibleRecordCount)
+        XCTAssertEqual(release.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
+                       "Release lists Global and its regions; retired regions never")
+        XCTAssertTrue(release.allSatisfy { $0.speciesCount == $0.publicationEligibleRecordCount })
     }
 
     func testManifestAccountingProblemsStillFailTheListing() async throws {

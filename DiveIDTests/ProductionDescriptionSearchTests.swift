@@ -312,8 +312,10 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         manifest["publicationEligibleRecordCount"] = 1
         try JSONSerialization.data(withJSONObject: manifest).write(to: manifestURL)
 
+        // An unretired definition of the copied pack: the publication filter is what is under test.
         let publicationRepository = BundleMarineSpeciesCatalogRepository(
             bundle: Bundle(for: CatalogueDiagnosticsTests.self),
+            registry: RegionCatalogRegistry(definitions: [RegionCatalogDefinition(id: .caribbean, resourceDirectory: "Caribbean")]),
             resourceResolutionMode: .bundleThenDevelopmentSource,
             developmentSourceRoot: root,
             access: .publication

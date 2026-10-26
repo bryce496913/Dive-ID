@@ -251,14 +251,18 @@ none are listed as expectations.
 
 ### What this Release build contains
 
-- **Approved records:** Release exposes only approved records. At this commit those
-  are **2 Caribbean species** (Atlantic Blue Tang and Queen Angelfish) and **4,796 of the
-  4,798 Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`). The other 2
-  are drafts awaiting re-review (batch-18-rereview).
+- **Approved records:** Release exposes only approved records: **4,796 of the 4,798
+  Global records**, approved 2026-10-23 (`Docs/GlobalBatchReview.md`). The other 2 are
+  drafts awaiting re-review (batch-18-rereview).
 - **Global** is in Release and is the default region for new installs (owner decision,
   2026-10-23).
-- **Tropical Pacific** has 0 approved records and must not appear either.
-- **The region picker** therefore offers Caribbean only, showing 2 species.
+- **The region picker** offers Global and four regions drawn from it (owner decision,
+  2026-10-26): Tropical Atlantic Regions (1,038 approved), Indo-Pacific Regions (3,590),
+  Pacific Coast Regions (565) and Mediterranean (329), each with a description of the
+  places it covers.
+- **Caribbean and Tropical Pacific are retired** and must not appear. An install that
+  stored either sees "Dive region unavailable" with a one-tap suggestion of its replacement
+  (Tropical Atlantic Regions or Indo-Pacific Regions) and nothing changes until it is chosen.
 
 ### 1. Install
 
