@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-26",
+  "datePrecision": "day; overlay UTC midnight represents the supplied calendar date, not an asserted time of review",
+  "decision": "approved",
+  "provenance": "Recorded by Tools/CatalogReview/global_batches.py record from decision text the reviewer typed for this manifest hash; the tool never infers a decision.",
+  "reviewReference": "Data/CatalogReview/GlobalBatches/batch-18-rereview/ (manifest sha256:a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c)",
+  "verbatimDecision": "I reviewed Graceful shark and Silky shark in batch-18-rereview, including the removal of the wrong Grey/Gray reef shark aliases, and I approve both.",
+  "batchID": "batch-18-rereview",
+  "generation": 1,
+  "batchManifestSHA256": "a02ce879eca116d81fb3645f378f4d3f82aaa74e6bdd00ba912f7a549e2b460c",
+  "seed": 6703939030536056391,
+  "records": [
+    {
+      "speciesID": "3144c583-9cab-56a3-b061-f51da4564531",
+      "reviewedContentFingerprint": "sha256:9b78c232b4dcec33b2a62597abe2ef3fb16d91d76bd75f63ace36f5f8a7af052",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=860"
+      ]
+    },
+    {
+      "speciesID": "37b37357-b011-51c4-9ddd-d9465184bd4f",
+      "reviewedContentFingerprint": "sha256:9f1f2b140c12c4a20cd765abe1e235dcf6ac4ab7c5bc55a942e2c7759d675206",
+      "reviewMethod": "individually-reviewed",
+      "resolvedQuestions": [],
+      "sourceReferences": [
+        "https://www.fishbase.se/summary/SpeciesSummary.php?ID=868"
+      ]
+    }
+  ],
+  "heldRecords": [],
+  "rejection": null,
+  "reviewedCommit": "0b876bd7b07ff2f742aeb9947191591d3f8631f2",
+  "reviewMethodBasis": "all-individually-reviewed: the reviewer stated every record in the batch was reviewed, including the unread records the review page listed by name only"
+}

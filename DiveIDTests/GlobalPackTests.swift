@@ -50,9 +50,11 @@ final class GlobalPackTests: XCTestCase {
         XCTAssertGreaterThan(global.speciesCount, 4_000)
         XCTAssertEqual(global.includedRecordCount, global.speciesCount)
         XCTAssertEqual(global.publicationEligibleRecordCount, approved.count)
-        XCTAssertEqual(global.speciesCount - approved.count, global.draftRecordCount,
-                       "the drafts are the owner additions awaiting batch-21 review and the records awaiting re-review")
-        XCTAssertEqual(global.isExperimental, approved.count < global.speciesCount, "Debug marks a pack holding drafts")
+        XCTAssertEqual(global.speciesCount - approved.count, global.draftRecordCount)
+        // Every Global record is approved (batch-18-rereview, 2026-10-26): none awaits review.
+        XCTAssertEqual(global.draftRecordCount, 0, "no Global record is a draft")
+        XCTAssertEqual(approved.count, global.speciesCount)
+        XCTAssertFalse(global.isExperimental, "a pack with no drafts is not marked experimental")
         XCTAssertTrue(global.regionAliases.isEmpty, "the global pack never conflicts with a described location")
         XCTAssertEqual(development.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
                        "Global and its regions; Caribbean and Tropical Pacific are retired")
@@ -151,6 +153,7 @@ final class GlobalPackTests: XCTestCase {
         let full = try await repository(.experimentalDevelopment).loadPack(id: .global)
         let drafts = Set(full.profiles.filter { $0.review?.status != .verified }.map(\.id))
         XCTAssertEqual(pack.profiles.count + drafts.count, full.profiles.count)
+        XCTAssertTrue(drafts.isEmpty, "Release is the whole Global pack: every record is approved")
         XCTAssertTrue(drafts.isDisjoint(with: pack.profiles.map(\.id)), "no draft reaches Release")
         print("GLOBAL_RELEASE exposed=\(pack.profiles.count) individually=\(pack.profiles.filter { $0.review?.reviewMethod == .individuallyReviewed }.count) sample=\(pack.profiles.filter { $0.review?.reviewMethod == .sampleApproved }.count)")
     }

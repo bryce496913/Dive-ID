@@ -138,8 +138,11 @@ class OutputTests(unittest.TestCase):
         self.assertEqual(manifest, publish_global.manifest_for(records, manifest, report["approvalsRecorded"]))
         applied = publish_global.global_batches.BATCHES / "AppliedApprovals.json"
         self.assertEqual(applied.read_text(), publish_global.applied_approvals_text(reviews, report), "AppliedApprovals.json is current")
+        # A stale record's old approval no longer applies; it is verified only when a current
+        # approval covers its new content (as batch-18-rereview does for Graceful and Silky shark).
         stale = set(report["staleRecords"])
-        self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] in stale), "changed content keeps no approval")
+        self.assertTrue(all(r["review"]["status"] == ("verified" if r["id"] in reviews else "draft")
+                            for r in records if r["id"] in stale), "changed content keeps no approval")
         verified = {r["id"] for r in records if r["review"]["status"] == "verified"}
         self.assertEqual(verified, set(reviews), "only records an approval covers are verified")
         self.assertTrue(all(r["review"]["status"] == "draft" for r in records if r["id"] not in verified))
