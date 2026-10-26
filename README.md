@@ -104,9 +104,12 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
   memory-only success. Unreadable storage is not automatically reset.
 - **Photo identification is unavailable.** The home action is disabled and says
   “Coming later”; image preparation code is not an identification model.
-- **Core ML search is experimental**, Debug-only opt-in pending real-model
-  evaluation. The default remains BM25. Debug diagnostics distinguish requested
-  and actual engines and label a BM25 fallback explicitly.
+- **Core ML search is experimental** and Debug-only. It is a fallback used only when
+  BM25 finds nothing: BM25 results are never changed, and fallback results are
+  limited-information similarity matches above a frozen cutoff
+  ([calibration](Docs/HybridRankingContract.md#semantic-calibration)). The default
+  remains BM25. The Debug strip says whether a search was served by BM25 or by the
+  semantic fallback.
 - Artwork is a placeholder, not a verified species photograph. Caribbean SVG
   marker metadata is bundled, but the current iOS UI does not render those files.
 

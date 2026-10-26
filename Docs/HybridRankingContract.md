@@ -9,20 +9,74 @@ signal (source, score kind, raw score, retrieval rank, and source-backed evidenc
 ## Eligibility and fusion
 
 Structured candidates retain the existing evidence threshold and exact-name path.
-A semantic candidate can also be admitted provisionally when its normalized
-relevance is at least `0.65` and the description contains at least three meaningful
-non-generic terms. This is intentionally independent of parser vocabulary coverage:
+A semantic candidate (experimental fallback only; see below) can be admitted
+provisionally when its raw cosine is at least `semanticFallbackCosine` (0.55) and the
+description contains at least three meaningful non-generic terms. This is intentionally independent of parser vocabulary coverage:
 it permits useful paraphrases, while rejecting a high-similarity result for a query
 such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
 are still scored after provisional admission and can lower or remove a candidate.
 
-## Semantic complement (2026-10-23)
+## Semantic fallback (2026-10-26)
 
-With the Debug-only experimental engine switched on, semantic candidates are merged into
-the BM25 pool instead of replacing it. BM25 hits keep their BM25 signal and score;
-only species BM25 did not retrieve enter with a cosine signal, and they still need the
-0.65 relevance and three-term floor above for provisional admission. The production
-default (BM25 only) is unchanged.
+The Debug-only experimental engine no longer merges semantic candidates into every
+search (the 2026-10-23 "semantic complement"). It runs BM25 first and returns any ranked
+result unchanged, without loading the model or embedding the query. Only when BM25 ranks
+nothing, and the description does not contradict the catalogue's domain (a frog, a land
+animal), does it embed the query. It then keeps the ten best semantic candidates at or
+above `semanticFallbackCosine`, lets the ranker apply its conflicts, orders them by
+cosine, and shows them as `limited` information (confidence capped at 0.64) with the
+"catalogue description similarity" clue. The production default (BM25 only) is unchanged.
+
+## Semantic calibration
+
+`LocalRankingWeights.semanticFallbackCosine = 0.55`, frozen on 2026-10-26 from
+development cases only: V05Development.v2 and the CaribbeanIdentificationBenchmark
+development split (the benchmark holdout was not read). Pack: Global v25, 4,798 records,
+real encoder `sentence-transformers/all-MiniLM-L6-v2` at `c9745ed1`.
+
+**Rule:** the cutoff must sit above the best semantic cosine of every development
+no-match description, because BM25 abstains on all 20 of them and the fallback would
+otherwise answer them. That maximum is **0.5231** (a land-animal description, which the
+parser also rejects as a domain contradiction); the next highest no-match cosine is
+0.4445. 0.55 is that maximum rounded up to the next 0.05, a 0.027 margin over a
+20-case sample. The previous provisional 0.30 floor would have given 13 of the 20
+results. The cutoff was not tuned to any identification result.
+
+**Where BM25 abstains (28 of 116 cases):**
+
+| Case | Kind | Top cosine | Top is expected | Expected rank (semantic) | Fallback at 0.55 |
+| --- | --- | ---: | --- | ---: | --- |
+| realistic-016 | identification | 0.6378 | no | 9 | shown; expected 9th, 9 wrong |
+| realistic-011 | identification | 0.6257 | yes | 1 | shown; **expected first**, 9 wrong below it |
+| realistic-013 | identification | 0.6022 | yes | 1 | shown; **expected first**, 5 wrong below it |
+| realistic-026 | identification | 0.5576 | no | 8 | shown; 2 wrong, expected absent |
+| realistic-036 | identification | 0.5250 | no | 5 | abstains |
+| realistic-054 | identification | 0.4349 | no | 876 | abstains |
+| realistic-045 | identification | 0.3778 | no | 2,558 | abstains |
+| realistic-046 | identification | 0.2436 | no | 1,277 | abstains |
+| 20 no-match descriptions | noMatch | 0.1023–0.5231 | – | – | all abstain (4 are domain contradictions and never reach the model) |
+
+Of the 7 cases the merge "newly answered", 4 clear the cutoff; the merge showed the
+expected species in only one of the 7 (realistic-016, not first), while the fallback
+shows it in 3 and first in 2. Other cutoffs above the no-match maximum change only
+which identification cases fire: 0.53 adds realistic-036 (expected not first), 0.60
+drops realistic-016 and realistic-026.
+
+**Before and after on the same 116 cases:**
+
+| | Merge (cutoff 0.30) | Fallback (cutoff 0.55) |
+| --- | ---: | ---: |
+| Expected species first | 48 (BM25 alone: 52) | 54 |
+| BM25-answered results changed | 12 top results changed | 0 (88 returned unchanged; model not loaded) |
+| Cases where semantic ran | 116 | 24 (served 4, nothing above the cutoff 20) |
+| Wrong semantic results shown | 147 (143 identification, 3 region conflict, 1 ambiguous) | 25 (identification, in the 4 served cases) |
+| Highest confidence on a semantic result | 0.76 | 0.17 |
+| No-match descriptions that gained results | 0 | 0 (hard gate in SemanticEndToEndTests) |
+| Latency when semantic ran (Mac, Debug SwiftPM) | every search | median 0.57 s, maximum 1.25 s, only in the 24 cases |
+
+These are development results and not independent evidence. Re-measure, and record a new
+dated section rather than editing this one, before changing the cutoff or using it on
+another pack.
 
 ## Animal-group searches (2026-10-23)
 
@@ -134,8 +188,8 @@ candidate eligible.
 
 User-facing confidence is derived only from the structured evidence score and the
 observation information level, not from retrieval relevance or the occurrence prior.
-Semantic admission alone is `limited` information and cannot turn cosine similarity
-into an identification probability. Vague structured queries remain capped at the
+Semantic fallback results are always `limited` information and cannot turn cosine
+similarity into an identification probability. Vague structured queries remain capped at the
 existing limited-information ceiling.
 
 Structured explanations continue to name only catalogue-backed clue matches and
