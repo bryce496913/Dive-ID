@@ -343,7 +343,7 @@ extension V05DevelopmentEvaluationTests {
             for metadata in try await repository.availablePacks() {
                 packs[metadata.id] = try await repository.loadPack(id: metadata.id)
             }
-            let sizes = Dictionary(uniqueKeysWithValues: [OfflineIdentificationPackID.caribbean, .tropicalPacific].map {
+            let sizes = Dictionary(uniqueKeysWithValues: [OfflineIdentificationPackID.global, .caribbean, .tropicalPacific].map {
                 ($0.rawValue, packs[$0]?.profiles.count ?? 0)
             })
             let capture = V05Capture()
@@ -356,7 +356,10 @@ extension V05DevelopmentEvaluationTests {
                 let blocked = packs[item.selectedPackID] == nil || (!accepted.isEmpty && accepted.isDisjoint(with: known))
                 var matches: [IdentificationMatch] = []
                 var errorKind: String? = nil
+                var elapsed: Double? = nil
                 if !blocked && item.kind != "unresolved" {
+                    let started = ContinuousClock.now
+                    defer { let d = ContinuousClock.now - started; elapsed = Double(d.components.seconds) + Double(d.components.attoseconds) / 1e18 }
                     do {
                         matches = try await service.identify(request: .init(source: .description(item.description),
                             context: .init(region: item.selectedPackID)), processedPhoto: nil)
@@ -384,6 +387,7 @@ extension V05DevelopmentEvaluationTests {
                     "recalled":!accepted.isDisjoint(with: captured.result?.retrievedSpeciesIDs ?? []),
                     "rank":rank as Any? ?? NSNull(), "outcomeCorrect":!blocked && correct, "confidenceOK":confidenceOK,
                     "serviceError":errorKind as Any? ?? NSNull(), "returnedCount":matches.count,
+                    "elapsedSeconds":elapsed as Any? ?? NSNull(),
                     "relativeStrengths":matches.map(\.score),
                     "candidateRanks":Dictionary(uniqueKeysWithValues: accepted.compactMap { id in
                         captured.result?.retrievedSpeciesIDs.firstIndex(of: id).map { (id.uuidString, $0 + 1) }
