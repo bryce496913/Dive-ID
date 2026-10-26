@@ -1,5 +1,8 @@
 # Installed-app validation on a physical iPhone (2026-10-24)
 
+> Superseded: these rows were executed on an iPhone 14 Pro on 2026-10-25; see
+> `DeviceValidation-2026-10-25.md`.
+
 **Physical-device status: unexecuted.** This run was made from a Linux cloud container
 with no Mac, no Xcode, no paired iPhone and no remote device session, so nothing was
 built for, installed on, or observed on a phone. Every physical row below is
