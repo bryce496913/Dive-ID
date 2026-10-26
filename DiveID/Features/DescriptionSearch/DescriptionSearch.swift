@@ -128,10 +128,17 @@ struct DescriptionSearchView: View {
                 .padding(.vertical, AppTheme.Spacing.s)
         }
         .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
+            // Done lives in the navigation bar, not a keyboard toolbar: on iOS 27 the keyboard
+            // toolbar's height stops being reserved after returning from the results a couple of
+            // times, which slid Find Matches under the keyboard's suggestion bar.
+            // Always present, hidden while the editor is not focused: adding the item on focus
+            // rebuilt the bar and could drop the focus that had just arrived.
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Done") { isEditorFocused = false }
                     .accessibilityIdentifier("dismissKeyboard")
+                    .opacity(isEditorFocused ? 1 : 0)
+                    .disabled(!isEditorFocused)
+                    .accessibilityHidden(!isEditorFocused)
             }
         }
         .appScreenBackground()
