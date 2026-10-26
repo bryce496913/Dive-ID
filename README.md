@@ -94,7 +94,11 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
 
 Open **`DiveID.xcodeproj`**, select the shared **DiveID** scheme and an iOS 18+
 iPhone simulator or connected iPhone. Physical installation needs an authorized
-development team and provisioning. CI currently selects Xcode 16.4.
+development team and provisioning. GitHub CI does not build the app (its hosted Xcode
+could not); build and test it locally, and before merging app changes run
+`Tools/CI/local_xcode_checks.sh` on a Mac with Xcode. It validates Debug, Release and
+Internal settings, runs the unit and UI tests on a simulator, builds Release and
+Internal, and checks the instrumentation boundary.
 
 ```sh
 open DiveID.xcodeproj
@@ -114,7 +118,8 @@ Release-like speed. It installs beside the Release app, never replaces it, shows
 "Internal build" banner on every screen, uses the production BM25 engine and has no
 Core ML opt-in. It is not a distribution build and its results are not Release
 results. Select it with Product → Scheme → Edit Scheme… → Run → Build Configuration,
-or `xcodebuild -configuration Internal`. CI validates its settings and builds it.
+or `xcodebuild -configuration Internal`. CI checks its settings from the project file
+(`Tools/CI/static_xcode_settings.py`); `local_xcode_checks.sh` builds it.
 
 Do not open `Package.swift` expecting an app destination. SwiftPM builds the
 portable core and test resources, including the catalogues; it excludes the
@@ -140,8 +145,9 @@ swift test -c release
 python3 Tools/Evaluation/run_v05.py --configuration debug
 ```
 
-CI runs Python, Linux/macOS SwiftPM and hosted Xcode validation independently and
-requires every job to succeed. The shell loop runs all eight suites and aggregates
+GitHub CI runs the Python suites (including a project-file check that Release never
+defines `DEBUG` or `DIVEID_INTERNAL`) and Linux/macOS SwiftPM, and requires both to
+succeed. It does not build or test the iOS app; that is `Tools/CI/local_xcode_checks.sh`. The shell loop runs all eight suites and aggregates
 their status; every command keeps a nonzero exit status on failure, and
 `run_v05.py` returns the evaluation test's status.
 

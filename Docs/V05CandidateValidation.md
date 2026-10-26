@@ -421,7 +421,7 @@ the production BM25 engine with biological ranking; the Core ML opt-in is Debug-
    results, and Global's search quality on them is development evidence only.
 
 A Debug build also opens Global, but report Debug timings only as Debug: Debug keeps
-testability and `DEBUG`-only diagnostics and is unoptimized (`-Onone`, enforced in CI).
+testability and `DEBUG`-only diagnostics and is unoptimized (`-Onone`, checked in CI from the project file).
 
 ## Internal device performance test (prepared 2026-10-23)
 
@@ -436,8 +436,8 @@ checked in tests first (`FirstUsePerformanceTests`, `InternalInstrumentationTest
 
 All of it is compiled only under `DEBUG || DIVEID_INTERNAL`
 (`DiveID/Core/Services/SearchPerformanceInstrumentation.swift` and its call sites).
-CI builds the Release app and fails if any of its strings or the signpost API appear
-in it (`Tools/CI/check_internal_instrumentation.py`); it also checks that they are
+`Tools/CI/local_xcode_checks.sh` builds the Release app and fails if any of its strings or
+the signpost API appear in it (`Tools/CI/check_internal_instrumentation.py`); it also checks that they are
 present in the Internal and Debug apps, so the check is known to see them.
 `InternalInstrumentationTests` does the same for the SwiftPM test bundle on macOS in
 both `swift test` and `swift test -c release` (on Linux the test runner does not carry

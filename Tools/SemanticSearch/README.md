@@ -113,7 +113,7 @@ indexes are incompatible and therefore use the visible typed BM25 fallback; iden
 labels alone never establish compatibility. These two digests are also part of loaded
 provider, validated-index, and query-vector cache identities.
 
-## Building the encoder in CI (Global pack)
+## Building the encoder (Global pack)
 
 The app looks up `Semantic-<pack id>.*`, and new installs open the Global pack, so pass
 the pack to index with `--pack` (default: Caribbean, which reproduces the frozen
@@ -125,12 +125,11 @@ python3 Tools/SemanticSearch/provision_real_encoder.py \
   --package-resources DiveID/Resources/SemanticSearch
 ```
 
-`.github/workflows/semantic-search.yml` runs exactly this on a macOS runner (which can
-reach Hugging Face and has Xcode), verifies the evidence, runs
-`SemanticEndToEndTests` under SwiftPM and hosted in the built app, and uploads the
-packaged resources as the `semantic-global-resources` artifact. To try semantic search in
-a private Debug build, unzip that artifact's `.semantic-resources` contents into
-`DiveID/Resources/SemanticSearch/` (ignored by Git) before building. An index only
+Run it on a Mac that can reach Hugging Face and has Xcode. The former GitHub workflow
+(`semantic-search.yml`) was removed on 2026-10-26 because hosted runners could not build
+the app; nothing builds the encoder automatically now. To try semantic search in a
+private Debug build, package into `DiveID/Resources/SemanticSearch/` (ignored by Git)
+with the command above, then run `SemanticEndToEndTests` locally before building. An index only
 matches the exact catalogue it was built from: any Global record change makes it stale,
 and the app then falls back to BM25 with `incompatibleIndex`.
 
