@@ -30,14 +30,17 @@ final class BuildChannelTests: XCTestCase {
     /// The repository's default access (no `access:` argument) is the one the app uses.
     func testDefaultRepositoryAccessMatchesTheChannel() async throws {
         let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle)
-        let listed = Set(try await repository.availablePacks().map(\.id))
+        let listed = try await repository.availablePacks()
+        XCTAssertEqual(listed.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
+                       "every channel lists Global and its regions; retired regions never")
         switch BuildChannel.current {
         case .release:
-            // Only packs with approved records; Tropical Pacific has none.
-            XCTAssertTrue(listed.contains(.caribbean))
-            XCTAssertFalse(listed.contains(.tropicalPacific))
+            // Approved records only: Global's drafts stay out of every region.
+            XCTAssertTrue(listed.allSatisfy { $0.speciesCount == $0.publicationEligibleRecordCount })
         case .debug, .internal:
-            XCTAssertTrue(listed.isSuperset(of: [.caribbean, .tropicalPacific, .global]))
+            XCTAssertTrue(listed.allSatisfy { $0.speciesCount == $0.includedRecordCount })
+            let fixture = try await repository.loadPack(id: .caribbean)
+            XCTAssertFalse(fixture.profiles.isEmpty, "development builds still open a retired region by ID")
         }
     }
 }

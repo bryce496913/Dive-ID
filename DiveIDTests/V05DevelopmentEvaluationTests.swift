@@ -104,17 +104,35 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
             let repository = BundleMarineSpeciesCatalogRepository(
                 bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly,
                 access: publication ? .publication : .experimentalDevelopment)
+            // Development opens each case's own pack by ID: Caribbean and Tropical Pacific are
+            // retired as dive regions but remain development fixtures. Release never opens a
+            // retired region, so there a case runs in the region offered to an existing user of
+            // its pack (Caribbean -> Tropical Atlantic, Tropical Pacific -> Indo-Pacific), whose
+            // records are Global's; every expected species keeps its UUID there.
+            func evaluatedPackID(_ id: OfflineIdentificationPackID) -> OfflineIdentificationPackID {
+                guard publication, let replacement = RegionCatalogRegistry.bundled.definition(for: id)?.retirement?.suggestedReplacement else { return id }
+                return replacement
+            }
             let available = try await repository.availablePacks()
             var packs: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
-            for metadata in available { packs[metadata.id] = try await repository.loadPack(id: metadata.id) }
+            for id in Set(fixture.cases.map { evaluatedPackID($0.selectedPackID) }) {
+                guard publication ? available.contains(where: { $0.id == id }) : true else { continue }
+                packs[id] = try await repository.loadPack(id: id)
+            }
             let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]; encoder.dateEncodingStrategy = .iso8601
             let fingerprints = try Dictionary(uniqueKeysWithValues: packs.map { (id, pack) in
                 (id.rawValue, SHA256Digest.hex(try encoder.encode(pack.profiles)))
             })
-            let sizes = Dictionary(uniqueKeysWithValues: [OfflineIdentificationPackID.caribbean, .tropicalPacific].map { ($0.rawValue, packs[$0]?.profiles.count ?? 0) })
+            let sizes = Dictionary(uniqueKeysWithValues: packs.map { ($0.key.rawValue, $0.value.profiles.count) })
             for structured in [false, true] {
                 let engineName = structured ? "structured-full-pack" : "production-bm25-50-biological"
                 let access = publication ? "publication" : "experimentalDevelopment"
+                // Development asserts every case and gate on the fixture packs. In Release the
+                // regions hold hundreds to thousands of Global records, so, as in the Global
+                // evaluation, only the production engine's gates are asserted; per-case failures
+                // and the structured engine are reported (Docs/V05DevelopmentEvaluation.md).
+                let assertsCases = !publication
+                let assertsGates = !publication || !structured
                 let capture = V05Capture()
                 let base: any DescriptionSearching = structured ? StructuredDescriptionSearchEngine()
                     : ConfiguredDescriptionSearchEngine(selection: .productionDefault, bundle: TestResources.productionBundle)
@@ -123,17 +141,18 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
                 var counts = V05Counts(), byRegion: [String: V05Counts] = [:]
                 var rows: [[String: Any]] = []
                 for item in fixture.cases {
-                    let knownIDs = Set(packs[item.selectedPackID]?.profiles.map(\.id) ?? [])
+                    let packID = evaluatedPackID(item.selectedPackID)
+                    let knownIDs = Set(packs[packID]?.profiles.map(\.id) ?? [])
                     let accepted = Set(item.expectedSpeciesIDs + item.acceptableSpeciesIDs)
                     let targetUnavailable = !accepted.isEmpty && accepted.isDisjoint(with: knownIDs)
-                    let packUnavailable = packs[item.selectedPackID] == nil
+                    let packUnavailable = packs[packID] == nil
                     let coverageBlocked = targetUnavailable || packUnavailable
                     if !publication { XCTAssertFalse(coverageBlocked, "Development fixture has missing identity: \(item.id)") }
                     var matches: [IdentificationMatch] = []
                     var outcomeError: String? = nil
                     do {
                         matches = try await service.identify(request: .init(source: .description(item.description),
-                            context: .init(region: item.selectedPackID)), processedPhoto: nil)
+                            context: .init(region: packID)), processedPhoto: nil)
                     } catch let error as LocalIdentificationError {
                         switch error {
                         case .regionMismatch: outcomeError = "regionConflict"
@@ -177,9 +196,9 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
                         else if item.kind == "regionConflict" { c.conflict += 1; if conflictOK { c.conflictCorrect += 1 } }
                     }
                     accumulate(&counts)
-                    var regional = byRegion[item.selectedPackID.rawValue] ?? V05Counts()
-                    accumulate(&regional); byRegion[item.selectedPackID.rawValue] = regional
-                    rows.append(["id": item.id, "pack": item.selectedPackID.rawValue, "kind": item.kind,
+                    var regional = byRegion[packID.rawValue] ?? V05Counts()
+                    accumulate(&regional); byRegion[packID.rawValue] = regional
+                    rows.append(["id": item.id, "pack": packID.rawValue, "fixturePack": item.selectedPackID.rawValue, "kind": item.kind,
                         "coverageBlocked": coverageBlocked, "candidateRecalled": recalled,
                         "retrievedCandidateCount": retrieved.count,
                         "retrievedTargetRanks": Dictionary(uniqueKeysWithValues: accepted.compactMap { id in
@@ -194,7 +213,7 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
                         "diagnostic": captured?.diagnostics.disposition.rawValue ?? (invocation.started ? "engine-failed" : "engine-not-executed"),
                         "retrievalLimit": captured?.retrievalLimit as Any? ?? NSNull(),
                         "serviceError": outcomeError as Any? ?? NSNull(), "failures": failures])
-                    XCTAssertTrue(failures.isEmpty, "\(access) \(engineName) \(item.id): \(failures)")
+                    if assertsCases { XCTAssertTrue(failures.isEmpty, "\(access) \(engineName) \(item.id): \(failures)") }
                 }
                 var gates: [[String: Any]] = []
                 for key in contract.minimumRates.keys.sorted() {
@@ -203,9 +222,10 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
                     let passed = total > 0 && Double(hits) / Double(total) >= floor
                     gates.append(["metric": key, "hits": hits, "denominator": total, "minimumRate": floor,
                                   "status": total == 0 ? "not-evaluated" : (passed ? "passed" : "failed")])
-                    if total > 0 { XCTAssertTrue(passed, "\(access) \(engineName) \(key)=\(hits)/\(total), requires \(floor)") }
+                    if total > 0 && assertsGates { XCTAssertTrue(passed, "\(access) \(engineName) \(key)=\(hits)/\(total), requires \(floor)") }
                 }
                 groups.append(["access": access, "requestedEngine": engineName, "packSizes": sizes,
+                    "assertion": assertsCases ? "cases-and-gates" : assertsGates ? "gates-only" : "diagnostic",
                     "loadedProfileFingerprints": fingerprints, "counts": counts.json, "byRegion": byRegion.mapValues(\.json), "gates": gates, "cases": rows])
             }
         }

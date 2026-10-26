@@ -52,6 +52,23 @@ def validate_product(settings, app, expected, root=ROOT):
         if ids != expected[region]:
             raise ValueError(f'{region}: eligible IDs differ from valid approvals')
         counts[region] = {'bundled': len(records), 'publicationEligibleIDs': ids}
+    # Regions drawn from Global (Tools/FishBaseIntake/derive_regions.py): their membership
+    # lists and manifests must be packaged exactly as written; their records are Global's.
+    regions = {}
+    for manifest_path in sorted((root / 'DiveID/Resources/IdentificationPacks').glob('*/Members.json')):
+        relative = Path('IdentificationPacks') / manifest_path.parent.name
+        for filename in ('Members.json', 'PackManifest.json'):
+            built = json.loads((app / relative / filename).read_text())
+            source = json.loads((root / 'DiveID/Resources' / relative / filename).read_text())
+            if built != source:
+                raise ValueError(f'Packaged {manifest_path.parent.name}/{filename} differs from candidate')
+        manifest = json.loads((app / relative / 'PackManifest.json').read_text())
+        members = set(json.loads((app / relative / 'Members.json').read_text())['speciesIDs'])
+        eligible = sorted(members.intersection(expected['global']))
+        if len(eligible) != manifest['publicationEligibleRecordCount']:
+            raise ValueError(f'{manifest["id"]}: eligible members differ from valid Global approvals')
+        regions[manifest['id']] = {'members': len(members), 'publicationEligible': len(eligible)}
+    counts['regionsFromGlobal'] = regions
     return {'bundleIdentifier': info['CFBundleIdentifier'], 'version': info['CFBundleShortVersionString'],
             'build': info['CFBundleVersion'], 'packagedCatalogues': counts,
             'evidenceScope': 'Built device product only; installation, runtime access and engine remain unobserved'}

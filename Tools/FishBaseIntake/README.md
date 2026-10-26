@@ -182,3 +182,9 @@ English name in the source), `batch`, `speciesID` (uuid5 of the addition ID in t
   `global_batches.py prepare --batch N`; records whose content the addition changed (an
   alias dropped) need `prepare --batch M --rereview`.
 
+
+**Dive regions** (`derive_regions.py`). Writes the four regions drawn from Global
+(Tropical Atlantic, Indo-Pacific, Pacific Coast, Mediterranean) as Global record-ID
+lists plus manifests under `DiveID/Resources/IdentificationPacks/`, from each record's
+FAO areas and the staged distribution's counted country rows. Run it after
+`publish_global.py`; `--check` (and `test_derive_regions.py`) fails while they are stale.

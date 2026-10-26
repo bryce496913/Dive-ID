@@ -25,6 +25,7 @@ final class SelectedPackStateTests: XCTestCase {
         let state = await loader(packs: [packMetadata(id: .caribbean, displayName: "Caribbean")], selected: .tropicalPacific).load()
 
         XCTAssertEqual(state, .selectedRegionUnavailable)
+        XCTAssertTrue(state.isSelectedRegionUnavailable)
         XCTAssertNil(state.pack)
         XCTAssertTrue(state.canChangeRegion)
     }
@@ -45,7 +46,7 @@ final class SelectedPackStateTests: XCTestCase {
     func testEachLoadReadsTheCurrentSelection() async {
         let caribbean = packMetadata(id: .caribbean, displayName: "Caribbean")
         let regionRepository = MutableSelectedDiveRegionRepository(initialRegion: .tropicalPacific)
-        let packLoader = SelectedPackLoader(catalog: ResultsCatalogRepository(metadata: [caribbean]), regionRepository: regionRepository)
+        let packLoader = SelectedPackLoader(catalog: ResultsCatalogRepository(metadata: [caribbean]), regionRepository: regionRepository, registry: Self.noRetirements)
 
         let before = await packLoader.load()
         XCTAssertEqual(before, .selectedRegionUnavailable)
@@ -54,9 +55,13 @@ final class SelectedPackStateTests: XCTestCase {
         XCTAssertEqual(after, .loaded(caribbean))
     }
 
+    /// Loaders over an empty registry: these regions are plain IDs, none of them retired
+    /// (retired regions: GlobalSubregionTests).
     private func loader(packs: [OfflineIdentificationPackMetadata], selected: OfflineIdentificationPackID) -> SelectedPackLoader {
-        SelectedPackLoader(catalog: ResultsCatalogRepository(metadata: packs), regionRepository: MutableSelectedDiveRegionRepository(initialRegion: selected))
+        SelectedPackLoader(catalog: ResultsCatalogRepository(metadata: packs), regionRepository: MutableSelectedDiveRegionRepository(initialRegion: selected), registry: Self.noRetirements)
     }
+
+    private static let noRetirements = RegionCatalogRegistry(definitions: [])
 
     private func packMetadata(id: OfflineIdentificationPackID, displayName: String) -> OfflineIdentificationPackMetadata {
         OfflineIdentificationPackMetadata(

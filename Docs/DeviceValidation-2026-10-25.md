@@ -1,5 +1,13 @@
 # Installed-app validation on a physical iPhone (2026-10-25)
 
+> **Superseded regions (2026-10-26).** This record validated the build that still offered
+> Caribbean. Caribbean and Tropical Pacific have since been retired in favour of Global and
+> four regions drawn from it. The device tests now run D3 in Tropical Atlantic Regions
+> (`testCaseKindsInTropicalAtlantic`), switch D7 to Tropical Atlantic Regions, and replace the
+> Tropical Pacific recovery step with `testRecoveryFromRetiredSelectedRegion` (phases
+> `previous-build-select-caribbean`, then `after-previous-build-caribbean`). They have not been
+> run on the iPhone for the new regions; the rows below are kept as recorded.
+
 This record replaces the unexecuted rows of `DeviceValidation-2026-10-24.md`. The raw
 records are in `Reports/DeviceValidation.2026-10-25.json`. Physical-device, simulator
 and automated results are kept apart below.

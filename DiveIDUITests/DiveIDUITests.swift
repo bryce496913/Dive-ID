@@ -5,14 +5,18 @@ final class DiveIDUITests: XCTestCase {
     func testCoreOfflineNavigationSmokeFlow() {
         let spottedEagleRayResultIdentifier = "result_00000000-0000-0000-0000-000000000010"
         let app = XCUIApplication()
-        // An existing user's stored Caribbean selection (a launch-argument default, not persisted).
-        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "caribbean"]
+        // A stored Tropical Atlantic selection (a launch-argument default, not persisted).
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "tropical-atlantic"]
         app.launch()
-        XCTAssertTrue(app.buttons["describeAction"].exists)
-        XCTAssertTrue(app.buttons["photoAction"].exists)
+        XCTAssertTrue(app.buttons["describeAction"].waitForExistence(timeout: 10))
+        // On a small screen the longer region name pushes the lazily built tiles below the fold.
+        let photo = app.buttons["photoAction"]
+        for _ in 0..<4 where !photo.exists { app.swipeUp(velocity: .slow) }
+        XCTAssertTrue(photo.exists)
         XCTAssertFalse(app.staticTexts["configuration error"].exists)
+        for _ in 0..<4 where !app.buttons["describeAction"].isHittable { app.swipeDown(velocity: .slow) }
         tapSettled(app, app.buttons["describeAction"])
-        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 5))
         let editor = app.textViews["descriptionText"]
         XCTAssertTrue(editor.waitForExistence(timeout: 2))
         tapSettled(app, editor)
@@ -41,6 +45,62 @@ final class DiveIDUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Dive region: Global"].waitForExistence(timeout: 5))
     }
 
+    /// The region list offers Global and the four regions drawn from it, each describing the
+    /// places it covers; the retired Caribbean and Tropical Pacific regions are not offered.
+    @MainActor
+    func testRegionListOffersGlobalAndItsRegions() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting"]
+        app.launch()
+        tapSettled(app, app.buttons["offlinePackSummary"])
+        XCTAssertTrue(app.navigationBars["Dive Region"].waitForExistence(timeout: 5))
+        for id in ["global", "tropical-atlantic", "indo-pacific", "pacific-coast", "mediterranean"] {
+            let row = app.buttons["region_\(id)"]
+            for _ in 0..<4 where !row.exists { app.swipeUp(velocity: .slow) }
+            XCTAssertTrue(row.exists, "region \(id) is not offered")
+        }
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Mediterranean Sea and Black Sea'")).firstMatch.exists)
+        for _ in 0..<4 { app.swipeDown(velocity: .slow) }
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Caribbean Sea'")).firstMatch.exists)
+        XCTAssertFalse(app.buttons["region_caribbean"].exists)
+        XCTAssertFalse(app.buttons["region_tropical-pacific"].exists)
+        // Choosing a region is kept; choose Global again so later tests see the new-install region.
+        tapSettled(app, app.buttons["region_indo-pacific"])
+        // Choosing a region returns to Home.
+        tapSettled(app, app.buttons["describeAction"])
+        XCTAssertTrue(app.staticTexts["Dive region: Indo-Pacific Regions"].waitForExistence(timeout: 5))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapSettled(app, app.buttons["offlinePackSummary"])
+        tapSettled(app, app.buttons["region_global"])
+    }
+
+    /// A stored region that was retired (Caribbean) is reported unavailable with its suggested
+    /// replacement; nothing changes until the replacement is chosen, and the choice is kept.
+    @MainActor
+    func testRetiredRegionOffersItsReplacementWithoutSwitching() {
+        let app = XCUIApplication()
+        // The launch-argument default stands in for an existing install's stored "caribbean".
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "caribbean"]
+        app.launch()
+        XCTAssertTrue(app.staticTexts["Dive region unavailable"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Caribbean is no longer offered'")).firstMatch.exists)
+        XCTAssertFalse(app.buttons["describeAction"].isEnabled, "no region was substituted")
+        let suggestion = app.buttons["useSuggestedRegionAction"]
+        XCTAssertTrue(suggestion.exists)
+        XCTAssertTrue(suggestion.label.contains("Tropical Atlantic Regions"), suggestion.label)
+        XCTAssertTrue(app.buttons["changeRegionAction"].exists)
+        suggestion.tap()
+        // The choice is stored; relaunch without the launch-argument default to read it back.
+        app.terminate()
+        app.launchArguments = ["-uiTesting"]
+        app.launch()
+        tapSettled(app, app.buttons["describeAction"])
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 5))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        tapSettled(app, app.buttons["offlinePackSummary"])
+        tapSettled(app, app.buttons["region_global"])
+    }
+
     @MainActor
     func testFindMatchesStaysReachableWhileKeyboardIsShown() {
         assertFindMatchesReachableWithKeyboard(launchArguments: ["-uiTesting"])
@@ -54,11 +114,11 @@ final class DiveIDUITests: XCTestCase {
     @MainActor
     private func assertFindMatchesReachableWithKeyboard(launchArguments: [String], file: StaticString = #filePath, line: UInt = #line) {
         let app = XCUIApplication()
-        // An existing user's stored Caribbean selection, as in the smoke flow; new installs start in Global.
-        app.launchArguments = launchArguments + ["-selectedDiveRegion", "caribbean"]
+        // A stored Tropical Atlantic selection, as in the smoke flow; new installs start in Global.
+        app.launchArguments = launchArguments + ["-selectedDiveRegion", "tropical-atlantic"]
         app.launch()
         tapSettled(app, app.buttons["describeAction"])
-        XCTAssertTrue(app.staticTexts["Dive region: Caribbean"].waitForExistence(timeout: 2), file: file, line: line)
+        XCTAssertTrue(app.staticTexts["Dive region: Tropical Atlantic Regions"].waitForExistence(timeout: 5), file: file, line: line)
         let editor = app.textViews["descriptionText"]
         XCTAssertTrue(editor.waitForExistence(timeout: 2), file: file, line: line)
         tapSettled(app, editor)
@@ -97,7 +157,7 @@ final class DiveIDUITests: XCTestCase {
     @MainActor
     func testLayoutsFitAtLargestDynamicType() {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "caribbean", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "tropical-atlantic", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         app.launch()
         for identifier in ["offlinePackSummary", "describeAction", "photoAction", "savedAction", "creditsAction"] {
             assertFitsAndReachable(app.buttons[identifier], in: app, named: identifier)

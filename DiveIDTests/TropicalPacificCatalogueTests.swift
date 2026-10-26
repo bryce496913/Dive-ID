@@ -167,9 +167,9 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             access: .experimentalDevelopment
         )
         for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
+            // Retired regions are not listed; opening one still checks its accounting.
             let value = try await repository.loadPack(id: id)
-            let available = try await repository.availablePacks()
-            let metadata = try XCTUnwrap(available.first { $0.id == id })
+            let metadata = value.metadata
             let reviewed = value.profiles.filter { $0.review?.status == .sourceChecked || $0.review?.status == .verified }.count
             let approved = value.profiles.filter { $0.review?.status == .verified }.count
             XCTAssertEqual(metadata.includedRecordCount, value.profiles.count)
@@ -219,11 +219,14 @@ final class TropicalPacificCatalogueTests: XCTestCase {
             let expected = Set(try XCTUnwrap(expectedIDs[id.rawValue]))
             XCTAssertEqual(Set(approved.map(\.id)), expected)
             let drafts = Set(full.profiles.filter { $0.review?.status == .draft }.map(\.id))
-            XCTAssertEqual(available.contains { $0.id == id }, !approved.isEmpty)
-            if approved.isEmpty {
+            // Caribbean and Tropical Pacific are retired dive regions: Release never opens them,
+            // whatever their approvals (their species are in Global and its regions).
+            let releaseOpens = RegionCatalogRegistry.bundled.definition(for: id)?.isListed == true && !approved.isEmpty
+            XCTAssertEqual(available.contains { $0.id == id }, releaseOpens)
+            if !releaseOpens {
                 do {
                     _ = try await publication.loadPack(id: id)
-                    XCTFail("Publication exposed a pack with no approved records")
+                    XCTFail("Publication exposed a retired pack or one with no approved records")
                 } catch let failure as CatalogueLoadFailure {
                     XCTAssertEqual(failure.code, .publicationUnavailable)
                     XCTAssertEqual(failure.catalogError, .publicationUnavailable)
@@ -239,7 +242,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
                 let listed = try XCTUnwrap(available.first { $0.id == id })
                 XCTAssertEqual(listed.publicationStatusText, published.metadata.publicationStatusText)
             }
-            print("PUBLICATION_GATE pack=\(id.rawValue) approved=\(approved.count) available=\(!approved.isEmpty)")
+            print("PUBLICATION_GATE pack=\(id.rawValue) approved=\(approved.count) available=\(releaseOpens)")
         }
     }
 

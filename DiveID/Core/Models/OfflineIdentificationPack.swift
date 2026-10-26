@@ -16,6 +16,10 @@ struct OfflineIdentificationPackID: RawRepresentable, Codable, Hashable, Sendabl
     static let caribbean = Self(rawValue: "caribbean")
     static let tropicalPacific = Self(rawValue: "tropical-pacific")
     static let global = Self(rawValue: "global")
+    static let tropicalAtlantic = Self(rawValue: "tropical-atlantic")
+    static let indoPacific = Self(rawValue: "indo-pacific")
+    static let pacificCoast = Self(rawValue: "pacific-coast")
+    static let mediterranean = Self(rawValue: "mediterranean")
 }
 
 struct OfflineIdentificationPackMetadata: Identifiable, Codable, Hashable, Sendable {

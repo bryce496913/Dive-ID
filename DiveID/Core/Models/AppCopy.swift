@@ -18,6 +18,13 @@ enum AppCopy {
 
     static let diveRegionUnavailableTitle = "Dive region unavailable"
     static let diveRegionUnavailableMessage = "The selected dive region has no reviewed catalogue. Choose another dive region to continue."
+    static func retiredDiveRegionMessage(_ retired: String) -> String {
+        "\(retired) is no longer offered as a dive region. Choose another dive region to continue."
+    }
+    static func retiredDiveRegionMessage(_ retired: String, suggestion: String) -> String {
+        "\(retired) is no longer offered as a dive region. Its species are now in \(suggestion), or choose another dive region to continue."
+    }
+    static func useSuggestedDiveRegion(_ name: String) -> String { "Use \(name)" }
 
     static let sessionCapacityReached = "Finish an existing search by going back before starting another."
 

@@ -39,9 +39,13 @@ final class SearchGoldenOrderingTests: XCTestCase {
     }
 
     private func packs() async throws -> [(String, OfflineIdentificationPack)] {
-        func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) -> BundleMarineSpeciesCatalogRepository {
-            BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess,
+                        registry: RegionCatalogRegistry = .bundled) -> BundleMarineSpeciesCatalogRepository {
+            BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, registry: registry, resourceResolutionMode: .bundleOnly, access: access)
         }
+        // Caribbean is a retired region that Release never opens; its publication filter is
+        // still measured, through a definition that is not retired.
+        let unretiredCaribbean = RegionCatalogRegistry(definitions: [RegionCatalogDefinition(id: .caribbean, resourceDirectory: "Caribbean")])
         let global = try await repository(.experimentalDevelopment).loadPack(id: .global)
         // The 250 records of Global batch 1: the size of the approved Release subset.
         let manifests = try FileManager.default.contentsOfDirectory(at: root.appendingPathComponent("Data/CatalogReview/GlobalBatches/batch-01"), includingPropertiesForKeys: nil)
@@ -53,7 +57,7 @@ final class SearchGoldenOrderingTests: XCTestCase {
         subset.speciesCount = subsetProfiles.count
         return [
             ("caribbean", try await repository(.experimentalDevelopment).loadPack(id: .caribbean)),
-            ("caribbean-release", try await repository(.publication).loadPack(id: .caribbean)),
+            ("caribbean-release", try await repository(.publication, registry: unretiredCaribbean).loadPack(id: .caribbean)),
             ("tropical-pacific", try await repository(.experimentalDevelopment).loadPack(id: .tropicalPacific)),
             ("global", global),
             ("global-batch-01", OfflineIdentificationPack(metadata: subset, profiles: subsetProfiles))

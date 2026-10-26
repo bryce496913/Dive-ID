@@ -1,0 +1,19 @@
+{
+  "id": "pacific-coast",
+  "schemaVersion": 1,
+  "packVersion": 1,
+  "displayName": "Pacific Coast Regions",
+  "shortDescription": "Global species recorded from the Pacific coasts of the Americas",
+  "geographicScope": "The eastern Pacific coasts of the Americas: Alaska, Canada, the US West Coast, Pacific Mexico and the Gulf of California, Central America, Colombia, Ecuador, the Galápagos, Peru and Chile.",
+  "regionAliases": [
+    "Pacific"
+  ],
+  "speciesCount": 566,
+  "speciesResourceName": "Members",
+  "imageSubdirectory": "Images",
+  "includedWithApp": true,
+  "lastDataReviewDate": null,
+  "includedRecordCount": 566,
+  "humanReviewedRecordCount": 565,
+  "publicationEligibleRecordCount": 565
+}
