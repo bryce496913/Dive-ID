@@ -100,26 +100,34 @@ struct SelectedPackStatusView: View {
     }
 }
 
+/// The species' approved photo when one is bundled, otherwise a placeholder. Photos reach
+/// the pack only once approved in photo review, so whatever loads here may be shown.
 struct SpeciesArtwork: View {
     let species: Species
     /// Thumbnails sit next to the name already, so they leave the name caption off.
     var showsCaption = true
-    var showsPlaceholder: Bool { true }
-    var accessibilityDescription: String { "Species artwork unavailable" }
+    var loader: any SpeciesImageLoading = BundleSpeciesImageLoader.shared
+    @State private var photo: UIImage?
+
+    private var bundledPhoto: BundledSpeciesImage? { species.bundledImage.flatMap { $0.isPhoto ? $0 : nil } }
+    var showsPlaceholder: Bool { photo == nil }
+    var accessibilityDescription: String {
+        if photo != nil, let image = bundledPhoto { return image.alternativeText }
+        return "Species artwork unavailable"
+    }
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 14)
-                .fill(LinearGradient(colors: [Color.appAccentDeep.opacity(0.9), Color.appHighlightDeep.opacity(0.55), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
-            // Sized to the artwork's frame, so the symbol fits a thumbnail as well as the detail header.
-            Image(systemName: symbolName)
-                .resizable()
-                .scaledToFit()
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.appTextPrimary.opacity(0.85))
-                .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
-                .frame(maxWidth: 72, maxHeight: 72)
-                .padding(showsCaption ? AppTheme.Spacing.xxl : AppTheme.Spacing.m)
+            if let photo {
+                Color.appSurface
+                Image(uiImage: photo)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+            } else {
+                placeholder
+            }
             if showsCaption {
                 VStack {
                     Spacer()
@@ -133,7 +141,33 @@ struct SpeciesArtwork: View {
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityDescription)
+        .task(id: bundledPhoto?.fileName) { await loadPhoto() }
+    }
+
+    private var placeholder: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(LinearGradient(colors: [Color.appAccentDeep.opacity(0.9), Color.appHighlightDeep.opacity(0.55), Color.appSurface], startPoint: .topLeading, endPoint: .bottomTrailing))
+            // Sized to the artwork's frame, so the symbol fits a thumbnail as well as the detail header.
+            Image(systemName: symbolName)
+                .resizable()
+                .scaledToFit()
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.appTextPrimary.opacity(0.85))
+                .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
+                .frame(maxWidth: 72, maxHeight: 72)
+                .padding(showsCaption ? AppTheme.Spacing.xxl : AppTheme.Spacing.m)
+        }
+    }
+
+    /// A missing or unreadable file keeps the placeholder; the pack validated it at load.
+    private func loadPhoto() async {
+        guard let image = bundledPhoto else { photo = nil; return }
+        let data = try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .global)
+        guard !Task.isCancelled else { return }
+        photo = data.flatMap(UIImage.init(data:))
     }
 
     private var symbolName: String {

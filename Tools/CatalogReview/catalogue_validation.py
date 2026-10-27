@@ -34,7 +34,9 @@ MEASUREMENT_TYPES = {"totalLength", "standardLength", "forkLength", "discWidth",
 REVIEW_STATUSES = {"draft", "sourceChecked", "verified"}
 # How a verified record was approved; only "individually-reviewed" claims a person read it.
 REVIEW_METHODS = {"individually-reviewed", "sample-approved"}
-IMAGE_LICENSES = {"CC0", "Public Domain", "CC BY 4.0", "CC BY"}
+# Species photos (Tools/SpeciesPhotos/photo_policy.json) add CC0 1.0 and CC BY-NC 4.0: the app is non-commercial.
+IMAGE_LICENSES = {"CC0", "CC0 1.0", "Public Domain", "CC BY 4.0", "CC BY", "CC BY-NC 4.0"}
+IMAGE_OPTIONAL_FIELDS = ("photoURL", "photoID", "observationID", "retrievedDate")
 
 
 class CatalogueValidationError(ValueError):
@@ -174,6 +176,8 @@ def validate_record(record, position=1):
     if _object(errors, sid, "bundledImage", image):
         for field in ("fileName", "alternativeText", "creatorName", "sourceName", "sourceURL", "licenseName", "licenseURL"):
             _string(errors, sid, "bundledImage." + field, image.get(field))
+        for field in IMAGE_OPTIONAL_FIELDS:
+            _string(errors, sid, "bundledImage." + field, image.get(field), True)
     return errors
 
 
@@ -245,7 +249,9 @@ def validate_catalogue(records, manifest=None, pack_directory=None):
                 if isinstance(image.get(field), str) and not image[field].strip(): errors.append(f"speciesID {sid!r}, field bundledImage.{field}: expected nonempty attribution; actual {image[field]!r}")
             filename = image.get("fileName", "")
             if isinstance(filename, str) and (not filename.strip() or "/" in filename or "\\" in filename or filename.rsplit(".", 1)[-1].lower() not in {"svg", "png", "jpg", "jpeg"}): errors.append(f"speciesID {sid!r}, field bundledImage.fileName: expected safe supported image filename; actual {filename!r}")
-            for field in ("sourceURL", "licenseURL"):
+            for field in ("sourceURL", "licenseURL", "photoURL"):
+                if field == "photoURL" and image.get(field) is None:
+                    continue
                 value = image.get(field, "")
                 if isinstance(value, str) and not re.match(r"^https?://[^/]+", value, re.I): errors.append(f"speciesID {sid!r}, field bundledImage.{field}: expected HTTP(S) URL; actual {value!r}")
             if image.get("licenseName") not in IMAGE_LICENSES: _error(errors, sid, "bundledImage.licenseName", "supported image license", image.get("licenseName"))

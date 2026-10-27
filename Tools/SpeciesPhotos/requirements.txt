@@ -1,0 +1,2 @@
+pyarrow>=15   # FishBase/SeaLifeBase picture tables
+Pillow>=10    # thumbnails

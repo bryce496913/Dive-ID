@@ -156,6 +156,9 @@ struct SimilarSpeciesComparison: Codable, Hashable, Sendable {
     let distinguishingText: String
 }
 
+/// A bundled species image and its attribution. `sourceURL` is the photo's page at its
+/// source; the optional fields record where a species photo came from
+/// (Tools/SpeciesPhotos), and only photos approved in photo review are bundled.
 struct BundledSpeciesImage: Codable, Hashable, Sendable {
     let fileName: String
     let alternativeText: String
@@ -164,6 +167,25 @@ struct BundledSpeciesImage: Codable, Hashable, Sendable {
     let sourceURL: String
     let licenseName: String
     let licenseURL: String
+    var photoURL: String? = nil
+    var photoID: String? = nil
+    var observationID: String? = nil
+    /// The day the attribution was retrieved from the source, YYYY-MM-DD.
+    var retrievedDate: String? = nil
+
+    /// Licences a bundled image may carry. Species photos add CC0 1.0 and CC BY-NC 4.0
+    /// (the app is non-commercial); no-derivatives licences never qualify, because
+    /// thumbnails are resized.
+    static let supportedLicenses: Set<String> = ["CC0", "CC0 1.0", "Public Domain", "CC BY 4.0", "CC BY", "CC BY-NC 4.0"]
+
+    /// A raster photo the app can show; the Caribbean pack's SVG artwork is not one.
+    var isPhoto: Bool {
+        let ext = (fileName as NSString).pathExtension.lowercased()
+        return ext == "jpg" || ext == "jpeg" || ext == "png"
+    }
+
+    /// "Photographer · Licence · Source", as the species page and Credits show it.
+    var creditLine: String { "\(creatorName) · \(licenseName) · \(sourceName)" }
 }
 
 struct SpeciesDataSourceReference: Codable, Hashable, Sendable {

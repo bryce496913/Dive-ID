@@ -40,7 +40,7 @@ struct SpeciesDetailView: View {
                 }
                 // Source attribution stays expanded: the source licence asks for it on each record.
                 DetailCard {
-                    if let image = viewModel.species.bundledImage { DetailSection(title: "Image credit", text: "\(image.creatorName) — \(image.sourceName), \(image.licenseName) (\(image.licenseURL))") }
+                    if let image = viewModel.species.bundledImage { ImageCreditSection(image: image) }
                     if !viewModel.species.dataSources.isEmpty { SourceSection(sources: viewModel.species.dataSources) }
                     if let review = viewModel.species.review {
                         DetailSection(title: "Record review status", text: AppCopy.recordReviewStatus(review))
@@ -186,5 +186,25 @@ private struct SourceSection: View {
             }
         }
         .accessibilityIdentifier("speciesSources")
+    }
+}
+
+/// Who took the photo, under which licence, with links to the photo's page and the licence,
+/// as CC BY and CC BY-NC require.
+private struct ImageCreditSection: View {
+    let image: BundledSpeciesImage
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+            Text(image.isPhoto ? "Photo" : "Image credit").font(.headline)
+            Text("© \(image.creatorName)").foregroundStyle(Color.appTextSecondary)
+            Text("\(image.licenseName) · \(image.sourceName)").font(.subheadline).foregroundStyle(Color.appTextSecondary)
+            HStack(spacing: AppTheme.Spacing.l) {
+                if let url = URL(string: image.sourceURL) { Link("Photo page", destination: url).font(.subheadline) }
+                if let url = URL(string: image.licenseURL) { Link("Licence", destination: url).font(.subheadline) }
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("imageCredit")
     }
 }

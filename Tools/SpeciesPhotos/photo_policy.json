@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "note": "Owner policy, 2026-10-27. The app is non-commercial. ND licences forbid the cropping and resizing thumbnails need. SA licences are held for a later owner decision. All rights reserved or unknown licences are never used.",
+  "allowedLicences": ["cc0", "cc-by", "cc-by-nc"],
+  "laterDecisionLicences": ["cc-by-sa", "cc-by-nc-sa"],
+  "maximumPhotosPerSpecies": 2,
+  "minimumLongestSidePixels": 800,
+  "thumbnailLongestSidePixels": 400
+}

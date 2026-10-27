@@ -52,7 +52,7 @@ struct RootView: View {
                 selectionDidChange: { router.goBack() }
             )
         case .credits:
-            CreditsView()
+            CreditsView(catalog: catalogRepository)
         }
     }
 }
