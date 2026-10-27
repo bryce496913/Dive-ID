@@ -104,3 +104,72 @@ explanation.
 2. (b) Trait-plus-"fish" aliases are not names.
 3. (d) Parser vocabulary for the misread clues.
 4. (c) Record problems are listed for review, not edited here.
+
+## Changes and results
+
+Each change was rerun against the gates before it was committed. All gates hold after every
+commit: no-match 20/20 abstain; confidence compliance 116/116; region-conflict cases
+unchanged; V05 regional gates unchanged in kind (top-10 34/34 in development; no-match 6/6,
+region conflicts 4/4, ambiguous 2/2, confidence 46/46 in both access modes);
+`SearchGoldenOrderingTests` pass against a golden regenerated for each intended change (the
+header records what changed each time).
+
+| Commit | Rule | Top-1 | Top-3 | Top-10 | Pool recall | Abstained |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| `1627391` | Baseline | 52 | 61 | 69 | 82 | 8 |
+| `af70c27` | A named group ("parrotfish") is evidence for its members (+6, like a category); tang = surgeonfish, clownfish = anemonefish; "fish" is never a group | 58 | 67 | 73 | 82 | 3 |
+| `9921405` | A trait word plus "fish" ("Blue-fish") is not a species name | 60 | 67 | 73 | 82 | 3 |
+| `6ac88d4` | Parser: a shape/size word before a body part describes that part; "deep-bodied" is a body shape; toothy, fused teeth, reptile, carapace, flipper, winged, grass bed | 66 | 72 | 78 | 82 | 0 |
+| `3b13fdd` | BM25 also searches the catalogue terms the parser recognised ("beaked" → beak) | **69** | **75** | **81** | **85** | **0** |
+
+All counts are of the 90 identification cases. No-match stays 20/20 abstain throughout.
+
+**Behaviour changes outside identification**
+
+- The ambiguous case `v05-ambiguous-trigger` ("Dark triggerfish …") now shows a
+  triggerfish first instead of French Angelfish, because the description names the group.
+  It still passes the ambiguous gate (confidence ≤ 0.64, an acceptable species in the top ten).
+- One previously correct top-1 regressed, with this explanation: `realistic-009` ("reef
+  grazer that was blue except for its tail spine") loses Atlantic Blue Tang from the pool
+  after `3b13fdd`. "Grazer" now adds "grazing", which lifts the many grazing surgeonfishes,
+  while the carried Atlantic Blue Tang record lists only "swimming" and has no spine. That
+  record gap is listed below.
+
+**The four named misses**
+
+| Case | Before | After | Why |
+| --- | --- | --- | --- |
+| v05-05-paraphrase (Red Lionfish) | not in top 10 | not in top 10 | record has no spotted fins and no ledge/hovering clue matching "hanging motionless beneath a rocky ledge" |
+| v05-09-diagnostic (Bird wrasse) | not in top 10 | **rank 9** | record has no colours at all, so "green" cannot match |
+| v05-09-paraphrase (Bird wrasse) | not in top 10 | not in top 10 | same: no blue or green in the record |
+| v05-10-paraphrase (Black triggerfish) | not in top 10 | not in top 10 | record has no blue for its pale blue fin-base lines |
+
+None of the four can be fixed by a general ranking rule; each needs the record reviewed.
+
+**Remaining misses (21) by original class:** (b) 9, (c) 5 (including `realistic-009`),
+(a) 5, (d) 2. Fixed: (b) 10, (d) 5, (a) 3. The (b) misses left are mostly near-ties, where
+two species match every parsed clue equally (`v05-15-*`, `v05-17-paraphrase`), so there is no
+principled tie-breaker.
+
+## Catalogue records to review
+
+Listed for the owner's review; no generated record was edited. A fix should go through the
+validated overlay/import path (`Tools/FishBaseIntake`, then `publish_global.py` and
+`derive_regions.py`) and a batch review, so the change is recorded and approved.
+
+| Record | Problem | Cases affected |
+| --- | --- | --- |
+| The 8 carried Caribbean records (Atlantic Blue Tang, Stoplight Parrotfish, Red Lionfish, Great Barracuda, Green Sea Turtle, Spotted Eagle Ray, Queen Angelfish, French Angelfish) | No taxonomy (family/order null) and only slug aliases (`atlantic-blue-tang`), unlike the 4,790 FishBase-built records | many benchmark cases |
+| Atlantic Blue Tang | Behaviours list only "swimming" (it grazes); no caudal spine marking | realistic-009 |
+| Black triggerfish | No blue colour: pale blue lines along the dorsal and anal fin bases are diagnostic | v05-10-paraphrase |
+| Bird wrasse | No colours (males green to blue-green) | v05-09-diagnostic, v05-09-paraphrase |
+| Red Lionfish | No spots (spotted fin membranes); no tentacles above the eyes; no "wreck" habitat | v05-05-paraphrase, realistic-027, realistic-024 |
+| Green Sea Turtle | No "reef" habitat (rests under reef ledges) | realistic-044 |
+| Great Barracuda | No dark bars along the side; no open-water habitat | realistic-034, realistic-039 |
+| Stoplight Parrotfish | No orange among the terminal-phase colours | realistic-016 |
+
+## Caveat
+
+The 116 cases are development cases, and every rule above was chosen while looking at
+them, so the gains overstate what users will see. They are general rules, not per-case
+fixes, but only the independent diver pilot can show whether they generalise.
