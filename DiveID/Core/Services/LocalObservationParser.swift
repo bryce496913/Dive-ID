@@ -8,10 +8,10 @@ enum LocalObservationVocabulary {
     static let stopWords: Set<String> = ["a", "an", "and", "the", "with", "near", "on", "in", "at", "of", "to", "was", "it", "about", "approximately", "saw", "seen"]
     static let synonyms: [String: Set<String>] = [
         "blue": ["blue", "navy", "turquoise", "cyan"], "yellow": ["yellow", "gold", "golden"], "red": ["red", "reddish", "maroon"], "white": ["white"], "black": ["black", "dark"], "brown": ["brown"], "olive": ["olive"], "orange": ["orange"], "silver": ["silver", "silvery"], "green": ["green"], "gray": ["gray", "grey"],
-        "patches": ["patch", "patches"], "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines", "spiny", "spiky", "needles"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw"], "beak": ["beak", "beaked", "beak-like"],
-        "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
+        "patches": ["patch", "patches"], "spots": ["spot", "spots", "spotted", "dots", "dotted"], "stripes": ["stripe", "stripes", "striped", "band", "bands", "banded", "bar", "bars"], "spines": ["spine", "spines", "spiny", "spiky", "needles"], "tail": ["tail"], "shell": ["shell"], "teeth": ["teeth", "tooth", "jaw", "toothy"], "beak": ["beak", "beaked", "beak-like", "fused teeth"],
+        "reef": ["reef", "coral", "coral reef", "wall"], "sand": ["sand", "sandy", "sandy bottom"], "seagrass": ["seagrass", "sea grass", "grass bed", "grass flat"], "lagoon": ["lagoon"], "surface": ["surface"], "deep": ["deep"], "shallow": ["shallow", "near shore"],
         "flat": ["flat", "disc", "disc shaped", "broad"], "elongated": ["long", "elongated", "streamlined", "eel like"], "compressed": ["compressed", "oval", "round", "disk", "disk shaped"], "pointed": ["pointed"], "robust": ["robust"],
-        "fish": ["fish"], "ray": ["ray", "eagle ray", "stingray", "manta", "flat thing"], "turtle": ["turtle"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
+        "fish": ["fish"], "ray": ["ray", "eagle ray", "stingray", "manta", "flat thing", "wing", "winged"], "turtle": ["turtle", "reptile", "carapace", "flipper"], "shark": ["shark"], "eel": ["eel"], "octopus": ["octopus"], "squid": ["squid"], "crustacean": ["crab", "lobster", "shrimp", "crustacean"], "mollusk": ["mollusk", "conch"], "seahorse": ["seahorse"],
         "sea cucumber": ["sea cucumber", "sea cucumbers", "holothurian"], "sea urchin": ["sea urchin", "urchin"], "jellyfish": ["jellyfish", "sea jelly", "sea jellies", "medusa"], "worm": ["worm"], "sea squirt": ["sea squirt", "sea squirts", "tunicate", "ascidian"], "horseshoe crab": ["horseshoe crab", "horseshoe crabs"],
         "schooling": ["school", "schooling"], "solitary": ["alone", "solitary"], "hovering": ["hovering", "hover"], "bottom-swimming": ["bottom", "sand"], "feeding": ["feeding"], "grazing": ["grazer", "grazing", "graze"], "swimming": ["swimming", "cruising"],
         "squared head": ["squared head", "squared looking head", "square head", "square shaped head"]
@@ -22,7 +22,7 @@ struct LocalObservationParser: ObservationParsing {
     func parse(_ description: String) async -> ParsedObservation {
         let affirmative = Self.affirmativeEvidence(in: description)
         let normalized = Self.normalize(affirmative)
-        let traitText = Self.normalize(Self.withoutMeasurementRoleWords(in: affirmative))
+        let traitText = Self.normalize(Self.withoutMeasurementRoleWords(in: Self.bodyPartTraitsResolved(in: affirmative)))
         // Keep decimal punctuation in `normalized` for measurement parsing, but do
         // not let sentence punctuation become part of an observation token.
         let morphology = MorphologyVocabulary.concepts(in: traitText)
@@ -48,6 +48,19 @@ struct LocalObservationParser: ObservationParsing {
     static func affirmativeEvidence(in text: String) -> String {
         negatedPhrase.stringByReplacingMatches(in: text, range: NSRange(text.startIndex..., in: text), withTemplate: " ")
     }
+    /// A shape or size word directly before a body part describes that part, not the animal:
+    /// "small head", "pointed wings" and "long pointed nose" say nothing about body size or
+    /// body shape. "Deep-bodied" describes a deep, laterally compressed body, not deep water.
+    static func bodyPartTraitsResolved(in text: String) -> String {
+        let range = { (value: String) in NSRange(value.startIndex..., in: value) }
+        let deepBodied = deepBodiedPhrase.stringByReplacingMatches(in: text, range: range(text), withTemplate: "compressed")
+        return bodyPartModifier.stringByReplacingMatches(in: deepBodied, range: range(deepBodied), withTemplate: " ")
+    }
+    private static let deepBodiedPhrase = try! NSRegularExpression(pattern: #"\bdeep[\s-]*bod(?:y|ied)\b"#, options: [.caseInsensitive])
+    private static let bodyPartModifier = try! NSRegularExpression(
+        pattern: #"\b(?:small|large|big|tiny|little|long|short|pointed|round|broad|flat|wide|narrow)\b(?=[\s-]+(?:[a-z]+[\s-]+)?(?:heads?|mouths?|eyes?|snouts?|noses?|wings?|fins?|tails?|lobes?|jaws?)\b)"#,
+        options: [.caseInsensitive])
+
     // Compiled once: compiling per call dominated building the search index.
     private static let negatedPhrase = try! NSRegularExpression(
         pattern: #"\b(?:no|not(?!\s+only\b)|without)\b(?:(?!\b(?:but|and)\b)[^,;.!?])*"#, options: [.caseInsensitive])

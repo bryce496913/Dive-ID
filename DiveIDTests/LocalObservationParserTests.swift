@@ -23,6 +23,46 @@ final class LocalObservationParserMeasurementTests: XCTestCase {
         XCTAssertEqual(tokens.filter { $0 == "appearancebluestripes" }.count, 1)
     }
 
+    func testShapeAndSizeWordsBeforeABodyPartDescribeThatPart() async {
+        let parser = LocalObservationParser()
+        let head = await parser.parse("round smooth shell and a relatively small head")
+        XCTAssertNil(head.approximateSizeCentimeters, "a small head is not a small animal")
+        XCTAssertTrue(head.bodyShapes.contains("compressed"), "'round shell' still describes the body")
+        let wings = await parser.parse("Dark ray with white dots, pointed wings and a very long whip tail.")
+        XCTAssertFalse(wings.bodyShapes.contains("pointed"))
+        XCTAssertFalse(wings.bodyShapes.contains("elongated"))
+        let nose = await parser.parse("Slender blue-green wrasse, long pointed nose, at 10 m deep.")
+        XCTAssertTrue(nose.bodyShapes.isEmpty, "\(nose.bodyShapes)")
+        XCTAssertEqual(nose.approximateDepthMeters, 10)
+        // A body-size word on its own still sets a size.
+        let small = await parser.parse("small yellow fish on the reef")
+        XCTAssertEqual(small.approximateSizeCentimeters, 10)
+    }
+
+    func testDeepBodiedDescribesShapeNotDepth() async {
+        let observation = await LocalObservationParser().parse("Blue and yellow deep-bodied fish with a crown spot.")
+        XCTAssertTrue(observation.bodyShapes.contains("compressed"))
+        XCTAssertFalse(observation.habitats.contains("deep"))
+        XCTAssertNil(observation.approximateDepthMeters)
+        let deep = await LocalObservationParser().parse("Blue fish seen deep on the wall.")
+        XCTAssertTrue(deep.habitats.contains("deep"))
+    }
+
+    func testEverydayWordsForTurtlesRaysTeethAndBeaks() async {
+        let parser = LocalObservationParser()
+        let turtle = await parser.parse("large reptile using paddle flippers over a grass bed")
+        XCTAssertTrue(turtle.categories.contains("turtle"))
+        XCTAssertTrue(turtle.habitats.contains("seagrass"))
+        let carapace = await parser.parse("olive carapace with radiating streaks")
+        XCTAssertTrue(carapace.categories.contains("turtle"))
+        let ray = await parser.parse("wide winged animal, white rings across its black back")
+        XCTAssertTrue(ray.categories.contains("ray"))
+        let toothy = await parser.parse("big toothy fish beside a reef drop-off")
+        XCTAssertTrue(toothy.markings.contains("teeth"))
+        let beak = await parser.parse("thick-bodied reef fish with obvious fused teeth")
+        XCTAssertTrue(beak.markings.contains("beak"))
+    }
+
     func testSpineDescriptionsShareOneEvidenceGroupAndRespectWordBoundaries() async {
         for description in ["fish with dorsal needles", "spiny reef fish", "spiky fins", "fish with spines"] {
             let observation = await parser.parse(description)

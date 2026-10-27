@@ -134,7 +134,7 @@
         "parrotfish",
         "compatible size"
       ],
-      "expectedRank" : 2,
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000005"
       ],
@@ -145,35 +145,34 @@
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "V05Development.v2",
-      "top1" : "Carolines parrotfish",
-      "top1Confidence" : 0.52380952380952384,
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.45238095238095238,
       "top1Matched" : [
         "group: parrotfish",
-        "spots",
-        "brown",
         "red",
-        "compressed",
+        "juvenile appearance",
+        "parrotfish",
         "compatible size"
       ],
       "top3" : [
-        "Carolines parrotfish",
         "Stoplight Parrotfish",
-        "Viridescent parrotfish"
+        "Spotted parrotfish",
+        "Carolines parrotfish"
       ]
     },
     {
       "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : 0.35714285714285715,
+      "expectedConfidence" : 0.45238095238095238,
       "expectedInGlobal" : true,
       "expectedMatched" : [
         "fish",
         "spots",
         "blue",
         "yellow",
-        "compatible depth"
+        "compressed"
       ],
-      "expectedRank" : 10,
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "FC213EFF-6BA6-53AB-B288-F6E654299E68"
       ],
@@ -184,20 +183,19 @@
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "V05Development.v2",
-      "top1" : "Yellow-spotted triggerfish",
-      "top1Confidence" : 0.52380952380952384,
+      "top1" : "Queen Angelfish",
+      "top1Confidence" : 0.45238095238095238,
       "top1Matched" : [
         "fish",
-        "deep",
         "spots",
+        "blue",
         "yellow",
-        "juvenile appearance",
-        "compatible depth"
+        "compressed"
       ],
       "top3" : [
-        "Yellow-spotted triggerfish",
-        "Leopard sharpnose puffer",
-        "Minute goatfish"
+        "Queen Angelfish",
+        "Crowned puffer",
+        "Yellow-spotted triggerfish"
       ]
     },
     {
@@ -468,7 +466,7 @@
     {
       "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : 0.33333333333333331,
+      "expectedConfidence" : 0.42857142857142855,
       "expectedInGlobal" : true,
       "expectedMatched" : [
         "turtle",
@@ -488,7 +486,7 @@
       "recalledInPool" : true,
       "source" : "V05Development.v2",
       "top1" : "Green Sea Turtle",
-      "top1Confidence" : 0.33333333333333331,
+      "top1Confidence" : 0.42857142857142855,
       "top1Matched" : [
         "turtle",
         "seagrass",
@@ -573,7 +571,7 @@
       "top3" : [
         "Bull ray",
         "Spotted Eagle Ray",
-        "Great Barracuda"
+        "Long-barbel goatfish"
       ]
     },
     {
@@ -619,10 +617,15 @@
     {
       "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : null,
+      "expectedConfidence" : 0.30952380952380953,
       "expectedInGlobal" : true,
-      "expectedMatched" : null,
-      "expectedRank" : null,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "solitary",
+        "identity term: bird"
+      ],
+      "expectedRank" : 8,
       "expectedSpeciesIDs" : [
         "5AF89B7E-AC74-545C-9A78-CD3B0E91101B"
       ],
@@ -644,8 +647,8 @@
       ],
       "top3" : [
         "Roundhead parrotfish",
-        "Canary fangblenny",
-        "Bundoon blenny"
+        "Queen Angelfish",
+        "Tripletail wrasse"
       ]
     },
     {
@@ -659,25 +662,25 @@
         "5AF89B7E-AC74-545C-9A78-CD3B0E91101B"
       ],
       "id" : "v05-09-paraphrase",
-      "informationLevel" : "sufficient",
+      "informationLevel" : "limited",
       "kind" : "identification",
       "poolRank" : 21,
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "V05Development.v2",
-      "top1" : "Rainbow slender wrasse",
-      "top1Confidence" : 0.35714285714285715,
+      "top1" : "Oriental maori wrasse",
+      "top1Confidence" : 0.2857142857142857,
       "top1Matched" : [
         "group: wrasse",
         "blue",
-        "elongated",
+        "green",
         "identity term: slender",
         "compatible depth"
       ],
       "top3" : [
-        "Rainbow slender wrasse",
-        "Long green wrasse",
-        "Slender wrasse"
+        "Oriental maori wrasse",
+        "Ring wrasse",
+        "Rainbow slender wrasse"
       ]
     },
     {
@@ -1926,7 +1929,7 @@
       "top3" : [
         "Atlantic Blue Tang",
         "Short-tooth cardinal",
-        "Colin's fairygoby"
+        "Moon wrasse"
       ]
     },
     {
@@ -2712,12 +2715,11 @@
     {
       "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : 0.30952380952380953,
+      "expectedConfidence" : 0.23809523809523808,
       "expectedInGlobal" : true,
       "expectedMatched" : [
         "fish",
-        "teeth",
-        "pointed"
+        "teeth"
       ],
       "expectedRank" : 1,
       "expectedSpeciesIDs" : [
@@ -2731,16 +2733,15 @@
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
       "top1" : "Great Barracuda",
-      "top1Confidence" : 0.30952380952380953,
+      "top1Confidence" : 0.23809523809523808,
       "top1Matched" : [
         "fish",
-        "teeth",
-        "pointed"
+        "teeth"
       ],
       "top3" : [
         "Great Barracuda",
         "Midnight parrotfish",
-        "Gobioides africanus"
+        "Greensnout parrotfish"
       ]
     },
     {
@@ -2922,7 +2923,7 @@
         "00000000-0000-0000-0000-000000000008"
       ],
       "id" : "realistic-038",
-      "informationLevel" : "limited",
+      "informationLevel" : "sufficient",
       "kind" : "identification",
       "poolRank" : null,
       "poolSize" : 50,
@@ -3152,55 +3153,68 @@
       ]
     },
     {
-      "abstained" : true,
+      "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : null,
+      "expectedConfidence" : 0.33333333333333331,
       "expectedInGlobal" : true,
-      "expectedMatched" : null,
-      "expectedRank" : null,
+      "expectedMatched" : [
+        "turtle",
+        "seagrass",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000009"
       ],
       "id" : "realistic-045",
-      "informationLevel" : null,
+      "informationLevel" : "sufficient",
       "kind" : "identification",
       "poolRank" : 1,
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : null,
-      "top1Confidence" : null,
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.33333333333333331,
       "top1Matched" : [
-
+        "turtle",
+        "seagrass",
+        "compatible size"
       ],
       "top3" : [
-
+        "Green Sea Turtle",
+        "Malabar blood snapper"
       ]
     },
     {
-      "abstained" : true,
+      "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : null,
+      "expectedConfidence" : 0.23809523809523808,
       "expectedInGlobal" : true,
-      "expectedMatched" : null,
-      "expectedRank" : null,
+      "expectedMatched" : [
+        "turtle",
+        "olive"
+      ],
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000009"
       ],
       "id" : "realistic-046",
-      "informationLevel" : null,
+      "informationLevel" : "limited",
       "kind" : "identification",
       "poolRank" : 1,
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : null,
-      "top1Confidence" : null,
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.23809523809523808,
       "top1Matched" : [
-
+        "turtle",
+        "olive"
       ],
       "top3" : [
-
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Olive ridley turtle"
       ]
     },
     {
@@ -3238,30 +3252,33 @@
     {
       "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : null,
+      "expectedConfidence" : 0.16666666666666666,
       "expectedInGlobal" : true,
-      "expectedMatched" : null,
-      "expectedRank" : null,
+      "expectedMatched" : [
+        "shell",
+        "compressed"
+      ],
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000009"
       ],
       "id" : "realistic-048",
-      "informationLevel" : "sufficient",
+      "informationLevel" : "limited",
       "kind" : "identification",
       "poolRank" : 1,
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : "Atlantic Blue Tang",
-      "top1Confidence" : 0.14285714285714285,
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.16666666666666666,
       "top1Matched" : [
-        "compressed",
-        "compatible size"
+        "shell",
+        "compressed"
       ],
       "top3" : [
-        "Atlantic Blue Tang",
-        "French Angelfish",
-        "Smooth trunkfish"
+        "Green Sea Turtle",
+        "Smooth trunkfish",
+        "Smooth grouper"
       ]
     },
     {
@@ -3449,29 +3466,37 @@
       ]
     },
     {
-      "abstained" : true,
+      "abstained" : false,
       "confidenceCompliant" : true,
-      "expectedConfidence" : null,
+      "expectedConfidence" : 0.30952380952380953,
       "expectedInGlobal" : true,
-      "expectedMatched" : null,
-      "expectedRank" : null,
+      "expectedMatched" : [
+        "ray",
+        "black",
+        "white"
+      ],
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000010"
       ],
       "id" : "realistic-054",
-      "informationLevel" : null,
+      "informationLevel" : "limited",
       "kind" : "identification",
       "poolRank" : 6,
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : null,
-      "top1Confidence" : null,
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.30952380952380953,
       "top1Matched" : [
-
+        "ray",
+        "black",
+        "white"
       ],
       "top3" : [
-
+        "Spotted Eagle Ray",
+        "Saddleback clownfish",
+        "Whitemargin unicornfish"
       ]
     },
     {
@@ -3913,12 +3938,12 @@
     "cases" : 116,
     "confidenceCompliant" : 116,
     "identification" : 90,
-    "identificationAbstained" : 3,
+    "identificationAbstained" : 0,
     "noMatch" : 20,
     "noMatchAbstained" : 20,
     "regionConflictAbstained" : 0,
-    "top1" : 60,
-    "top3" : 67,
-    "top10" : 73
+    "top1" : 66,
+    "top3" : 72,
+    "top10" : 78
   }
 }

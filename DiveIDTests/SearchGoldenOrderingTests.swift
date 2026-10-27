@@ -11,7 +11,9 @@ import XCTest
 /// regional entry was unchanged. Regenerated again (2026-10-27) for the intended ranking
 /// change "named groups count as evidence" (Docs/GlobalRankingImprovement.md): only queries
 /// that name a group (angelfish, surgeonfish, triggerfish, ...) changed. And again for "a trait
-/// word plus 'fish' is not a name": only the three "blue fish" queries changed. Every development query of the
+/// word plus 'fish' is not a name": only the three "blue fish" queries changed. And for the parser
+/// rules (body-part modifiers, "deep-bodied", turtle/ray/teeth/beak words): only queries using
+/// them changed. Every development query of the
 /// evaluation fixtures (the frozen Caribbean holdout stays closed) is run against each
 /// pack; ranks and scores must match exactly, scores to 1e-9.
 /// Set DIVEID_WRITE_SEARCH_GOLDEN=<path> to write a new golden file instead of comparing.
