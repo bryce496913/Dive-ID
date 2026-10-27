@@ -83,8 +83,9 @@ def newest(manifests, batch_id):
 
 
 def prepare(batch_id, species_ids, root=BATCHES, pages=PAGES, photo_manifest=PHOTO_MANIFEST, thumbnails=THUMBNAILS, pack=PACK,
-            require_thumbnails=True):
-    """Write generation N+1 of a batch and its review page. Returns (manifest path, page path, manifest)."""
+            require_thumbnails=True, photo_ids=None):
+    """Write generation N+1 of a batch and its review page. Returns (manifest path, page path, manifest).
+    photo_ids, when given, limits the batch to those photos of the named species."""
     if not NAME.fullmatch(batch_id or ""):
         raise ReviewError("the batch ID must be lower-case words joined by hyphens, e.g. caribbean-8")
     wanted = {s.upper() for s in species_ids}
@@ -93,6 +94,11 @@ def prepare(batch_id, species_ids, root=BATCHES, pages=PAGES, photo_manifest=PHO
     document = json.loads(Path(photo_manifest).read_text())
     index = thumbnail_index(thumbnails)
     photos = sorted((p for p in document["photos"] if p["speciesID"].upper() in wanted), key=lambda p: (p["speciesID"], p["rank"]))
+    if photo_ids:
+        unknown = sorted(set(photo_ids) - {p["photoID"] for p in photos})
+        if unknown:
+            raise ReviewError(f"not a selected photo of these species: {', '.join(unknown)}")
+        photos = [p for p in photos if p["photoID"] in set(photo_ids)]
     missing = sorted(wanted - {p["speciesID"].upper() for p in photos})
     if missing:
         raise ReviewError(f"no selected photo for: {', '.join(missing)}")
@@ -261,6 +267,7 @@ def main(argv=None):
     p = commands.add_parser("prepare", help="write a photo batch manifest and its review page")
     p.add_argument("batch_id")
     p.add_argument("--species", nargs="+", required=True)
+    p.add_argument("--photos", nargs="+", metavar="PHOTOID", help="only these photos (default: every selected photo)")
     r = commands.add_parser("record", help="record the reviewer's decision for one manifest")
     r.add_argument("manifest_sha256")
     r.add_argument("--reviewer", required=True)
@@ -272,7 +279,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
-            path, page, manifest = prepare(args.batch_id, args.species)
+            path, page, manifest = prepare(args.batch_id, args.species, photo_ids=args.photos)
             print(json.dumps({"manifest": str(path.relative_to(REPO)), "page": str(page.relative_to(REPO)),
                               "manifestSHA256": manifest["manifestSHA256"], "photos": len(manifest["photos"])}, indent=2))
         else:

@@ -1077,6 +1077,21 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         XCTAssertTrue(String(decoding: data.prefix(100), as: UTF8.self).contains("<svg"))
     }
 
+    func testApprovedGlobalPhotosLoadInGlobalAndItsDerivedRegions() async throws {
+        let url = try XCTUnwrap(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json",
+                                                                  subdirectory: "IdentificationPacks/Global"))
+        struct Record: Decodable { let commonName: String; let bundledImage: BundledSpeciesImage? }
+        let photos = try JSONDecoder().decode([Record].self, from: Data(contentsOf: url)).filter { $0.bundledImage?.isPhoto == true }
+        XCTAssertFalse(photos.isEmpty, "approved photos are bundled")
+        let loader = BundleSpeciesImageLoader(bundle: TestResources.productionBundle)
+        for record in photos {
+            for packID in [OfflineIdentificationPackID.global, .tropicalAtlantic] {
+                let data = try await loader.imageData(for: try XCTUnwrap(record.bundledImage), packID: packID)
+                XCTAssertEqual(Array(data.prefix(2)), [0xFF, 0xD8], "\(record.commonName) in \(packID.rawValue) is a JPEG")
+            }
+        }
+    }
+
     @MainActor
     func testBundledSpeciesArtworkUsesAccessiblePlaceholderUntilSVGRenderingIsSupported() throws {
         let profile = try productionCaribbeanProfiles().first!

@@ -125,15 +125,20 @@ class OutputTests(unittest.TestCase):
         drafts += publish_global.carried_caribbean(drafts, caribbean)
         records, _, _ = publish_global.compose(drafts, json.loads((staging / "RiskReport.json").read_text())["records"])
         reviews, report = publish_global.apply_reviews(records, publish_global.global_batches.BATCHES)
+        photo_batches = publish_global.photo_batches
+        photo_files, _ = publish_global.apply_photos(records, photo_batches.PHOTO_MANIFEST, photo_batches.THUMBNAILS, photo_batches.BATCHES)
         # The Caribbean species are the regional pack's own records, last, with only the review changed.
         tail = records[-len(caribbean):]
         self.assertEqual([r["id"] for r in tail], [r["id"] for r in caribbean])
         for carried, regional in zip(tail, caribbean):
             ignored = ("review", "bundledImage", "similarSpecies", "dataSources")
             self.assertEqual({k: v for k, v in carried.items() if k not in ignored}, {k: v for k, v in regional.items() if k not in ignored})
-            self.assertIsNone(carried["bundledImage"])
+            self.assertEqual(carried["bundledImage"] is not None, f"{carried['id'].lower()}-inat-" in " ".join(photo_files),
+                             "only an approved photo is bundled")
             self.assertEqual(carried["review"]["status"], "verified" if carried["id"] in reviews else "draft")
         self.assertEqual((publish_global.PACK / "Creatures.json").read_text(), publish_global.creatures_text(records))
+        images = publish_global.PACK / "Images"
+        self.assertEqual(sorted(p.name for p in images.glob("*-inat-*.jpg")) if images.exists() else [], sorted(photo_files))
         manifest = json.loads((publish_global.PACK / "PackManifest.json").read_text())
         self.assertEqual(manifest, publish_global.manifest_for(records, manifest, report["approvalsRecorded"]))
         applied = publish_global.global_batches.BATCHES / "AppliedApprovals.json"

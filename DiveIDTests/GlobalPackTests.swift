@@ -98,6 +98,10 @@ final class GlobalPackTests: XCTestCase {
         manifest["humanReviewedRecordCount"] = approved
         manifest["publicationEligibleRecordCount"] = approved
         try JSONSerialization.data(withJSONObject: manifest).write(to: destination.appendingPathComponent("PackManifest.json"))
+        let images = source.appendingPathComponent("Images", isDirectory: true)
+        if FileManager.default.fileExists(atPath: images.path) {
+            try FileManager.default.copyItem(at: images, to: destination.appendingPathComponent("Images", isDirectory: true))
+        }
         return (root, ids)
     }
 
