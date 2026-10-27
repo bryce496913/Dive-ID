@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-27",
+  "decision": "approved",
+  "provenance": "Recorded by Tools/CatalogReview/photo_batches.py record from decision text the reviewer typed for this manifest hash; the tool never infers a decision.",
+  "verbatimDecision": "Spotted Eagle Ray and Red Lionfish have the wrong images. delete these images. You will have to find new ones tomorrow. All the other images are correct and they populated correctly from a search.",
+  "batchID": "caribbean-8",
+  "generation": 2,
+  "batchManifestSHA256": "160a57529f809fb1ff8ef73d7024431780d90d91e48223eb636505b002437bc3",
+  "photos": [
+    {
+      "photoID": "inaturalist:photo:164616342",
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "photoFingerprint": "sha256:ab85ee36a1c735a968f5c482bcddf0ce29d8186e021dfb3cc885209c2668b70c"
+    },
+    {
+      "photoID": "inaturalist:photo:176908174",
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "photoFingerprint": "sha256:c16b2b17be251a53f0f2a886a84ac08be449aa944b7cf79314d8c9356eb0bbd7"
+    },
+    {
+      "photoID": "inaturalist:photo:294595913",
+      "speciesID": "00000000-0000-0000-0000-000000000008",
+      "photoFingerprint": "sha256:22713a8ad82c1054c2b80331c47f70daa35e423ca6b5d0574e4b9124f7a5d72f"
+    },
+    {
+      "photoID": "inaturalist:photo:451417243",
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "photoFingerprint": "sha256:023cc75342cc41074894ae208c8f46d7f1f0b8c05a52a3d799772e4661254ef0"
+    },
+    {
+      "photoID": "inaturalist:photo:608289149",
+      "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+      "photoFingerprint": "sha256:e23b617e845243cfa32dafca35ee51c063cc517080035d515463bc5c9a030a67"
+    },
+    {
+      "photoID": "inaturalist:photo:6483342",
+      "speciesID": "00000000-0000-0000-0000-000000000009",
+      "photoFingerprint": "sha256:3b60559db193415b36ac9c2d9df39b56076e9a133174960680c1d294c3ffbbf0"
+    }
+  ],
+  "rejectedPhotos": [
+    {
+      "photoID": "inaturalist:photo:490576738",
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "note": "Spotted Eagle Ray: wrong image (on-device review)"
+    },
+    {
+      "photoID": "inaturalist:photo:574042798",
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "note": "Red Lionfish: wrong image (on-device review)"
+    }
+  ],
+  "rejection": null,
+  "reviewedCommit": "beef4c99399cafb5a6c75d3acbe695a4cee270d5"
+}
