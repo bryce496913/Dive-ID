@@ -1651,7 +1651,7 @@
         "juvenile appearance",
         "compressed"
       ],
-      "expectedRank" : 2,
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000003"
       ],
@@ -1662,17 +1662,19 @@
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : "Blue tuskfish",
-      "top1Confidence" : 0.69047619047619047,
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.47619047619047616,
       "top1Matched" : [
-        "Blue tuskfish",
         "fish",
-        "oval"
+        "tail",
+        "blue",
+        "juvenile appearance",
+        "compressed"
       ],
       "top3" : [
-        "Blue tuskfish",
         "Atlantic Blue Tang",
-        "Powderblue surgeonfish"
+        "Powderblue surgeonfish",
+        "Palette surgeonfish"
       ]
     },
     {
@@ -1903,7 +1905,7 @@
         "tail",
         "blue"
       ],
-      "expectedRank" : 2,
+      "expectedRank" : 1,
       "expectedSpeciesIDs" : [
         "00000000-0000-0000-0000-000000000003"
       ],
@@ -1914,16 +1916,17 @@
       "poolSize" : 50,
       "recalledInPool" : true,
       "source" : "CaribbeanIdentificationBenchmark (development)",
-      "top1" : "Blue tuskfish",
-      "top1Confidence" : 0.61904761904761907,
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.33333333333333331,
       "top1Matched" : [
-        "Blue tuskfish",
-        "fish"
+        "fish",
+        "tail",
+        "blue"
       ],
       "top3" : [
-        "Blue tuskfish",
         "Atlantic Blue Tang",
-        "Short-tooth cardinal"
+        "Short-tooth cardinal",
+        "Colin's fairygoby"
       ]
     },
     {
@@ -3914,7 +3917,7 @@
     "noMatch" : 20,
     "noMatchAbstained" : 20,
     "regionConflictAbstained" : 0,
-    "top1" : 58,
+    "top1" : 60,
     "top3" : 67,
     "top10" : 73
   }

@@ -122,9 +122,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             // name that other records' names end in ("Angelfish"). Scientific names always count.
             let commonName = LocalObservationParser.normalize(profile.commonName)
             let isGroupCommonName = !commonName.contains(" ") && input.groupNames.contains(commonName)
+            // "Blue-fish" is one trait word and the bare word "fish": a description, not a name, so it
+            // never counts as naming the species.
             let nameTerms = ([profile.scientificName] + (isGroupCommonName ? [] : [profile.commonName])
                              + profile.aliases.filter { !input.groupNames.contains(LocalObservationParser.normalize($0)) })
                 .map(LocalObservationParser.normalize)
+                .filter { !Self.isTraitPlusFish($0) }
             let hasExactName = nameTerms.contains {
                 LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
                     && Self.namesSubject($0, in: input.description)
@@ -251,6 +254,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if candidate.informationLevel == .limited { normalized = min(normalized, LocalRankingWeights.limitedConfidenceCap) }
             return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, retrievalRelevance: candidate.retrievalRelevance, orderingScore: candidate.orderingScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
         }
+    }
+
+    /// A two-word name made of one colour, marking, shape or habitat word and "fish".
+    static func isTraitPlusFish(_ normalizedName: String) -> Bool {
+        let words = normalizedName.split(separator: " ").map(String.init)
+        return words.count == 2 && words[1] == "fish" && nonIdentityTerms.contains(LocalObservationParser.singular(words[0]))
     }
 
     /// Group names that mean the same group of animals: tangs are surgeonfishes (Acanthuridae),

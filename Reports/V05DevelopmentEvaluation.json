@@ -7430,7 +7430,7 @@
           "positiveDenominator" : 18,
           "regionConflictDenominator" : 2,
           "top1" : 4,
-          "top3" : 12,
+          "top3" : 13,
           "top10" : 14
         },
         "tropical-atlantic" : {
@@ -8418,13 +8418,13 @@
           "actualEngine" : "structured-full-pack",
           "candidateRecalled" : true,
           "confidence" : [
-            0.6428571428571429,
             0.42857142857142855,
             0.42857142857142855,
             0.42857142857142855,
             0.42857142857142855,
             0.42857142857142855,
             0.42857142857142855,
+            0.38095238095238093,
             0.38095238095238093,
             0.38095238095238093,
             0.38095238095238093
@@ -8432,7 +8432,6 @@
           "coverageBlocked" : false,
           "diagnostic" : "rankedCandidates",
           "displayedIDs" : [
-            "335FCFE5-6ACB-5228-9D45-7EEBFE10EE00",
             "32B0D5BF-0D95-57AE-943E-0DBE3294675F",
             "91387CEF-9E00-514C-8B70-FF5B7D4A5070",
             "58018D66-9394-5982-84AA-F6E91E918838",
@@ -8441,7 +8440,8 @@
             "3F2C4104-972B-5406-8336-5330D6FD1BCC",
             "5B197D46-1490-54AC-9FFD-873CE00DBBA6",
             "C5E913B9-9045-595E-A56B-A05934265699",
-            "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD"
+            "B51C8FCB-AA78-5408-9DD5-4FF4EB8765FD",
+            "0BCBA079-2E28-5B38-BC7F-AAB8B80EA9C5"
           ],
           "displayedRank" : null,
           "failures" : [
@@ -9214,16 +9214,16 @@
           "displayedIDs" : [
             "D2AE5E83-B9C1-5336-A400-9C578D67FC50",
             "D6236911-480C-5612-A473-A7872F19838C",
-            "0786F546-3F5C-56FF-85C1-7DAB502EDBDD",
             "C059528C-F884-5B96-B67B-D912A33846B1",
             "8117323C-8543-56C3-B65C-1754F58C2849",
             "963E8B58-2834-5F5C-A668-AF3ADE719497",
             "96286484-6A1A-599A-AF20-AA32F53D780A",
             "EDE59589-A226-5D66-ABD3-54FE330DB542",
             "1A4D2ED5-661E-54EA-BABC-90346C70BD83",
-            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E"
+            "307D119A-C18F-5993-ACE3-ADE1A5CBFE7E",
+            "69AE86F1-EE85-570A-8231-05AFF7F0CA59"
           ],
-          "displayedRank" : 4,
+          "displayedRank" : 3,
           "failures" : [
 
           ],
@@ -9964,7 +9964,7 @@
         "positiveDenominator" : 34,
         "regionConflictDenominator" : 4,
         "top1" : 14,
-        "top3" : 26,
+        "top3" : 27,
         "top10" : 28
       },
       "gates" : [
@@ -10012,7 +10012,7 @@
         },
         {
           "denominator" : 34,
-          "hits" : 26,
+          "hits" : 27,
           "metric" : "top3",
           "minimumRate" : 0.59999999999999998,
           "status" : "passed"

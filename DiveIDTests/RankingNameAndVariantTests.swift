@@ -91,6 +91,18 @@ final class RankingNameAndVariantTests: XCTestCase {
         XCTAssertTrue(vague.isEmpty)
     }
 
+    func testATraitPlusFishAliasIsNotAName() async throws {
+        let tusk = try profile("Blue tuskfish", aliases: ["Blue-fish", "Blue groper"])
+        let tang = try profile("Atlantic blue tang", colors: ["blue"])
+        let ranked = try await rank("Oval blue fish with a spine beside its tail", [tusk, tang])
+        XCTAssertFalse(ranked.values.contains { $0.matchedClues.contains(tusk.commonName) }, "'Blue-fish' is a description, not a name")
+        // A distinctive alias still names the species.
+        let named = try await rank("Blue groper on the reef", [tusk, tang])
+        XCTAssertTrue(try XCTUnwrap(named[tusk.id]).matchedClues.contains(tusk.commonName))
+        XCTAssertFalse(LocalSpeciesRanker.isTraitPlusFish("green sea turtle"))
+        XCTAssertFalse(LocalSpeciesRanker.isTraitPlusFish("spotted ray"))
+    }
+
     func testAGenuineSpeciesNameKeepsExactCredit() async throws {
         let target = try profile("Twospot surgeonfish", scientificName: "Synthetica bipunctata", aliases: ["Surgeonfish", "Gendarmefish"])
         let other = try profile("Lined surgeonfish")
