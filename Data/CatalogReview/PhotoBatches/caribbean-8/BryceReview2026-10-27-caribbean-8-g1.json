@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-27",
+  "decision": "approved",
+  "provenance": "Recorded by Tools/CatalogReview/photo_batches.py record from decision text the reviewer typed for this manifest hash; the tool never infers a decision.",
+  "verbatimDecision": "The 8 Caribbean photos are good to push to the app, I will review them again on device to make sure they look good.",
+  "batchID": "caribbean-8",
+  "generation": 1,
+  "batchManifestSHA256": "02d49a83eb7af90e73082c4c3ad158a8b8b78d4d6542253a33d259ff0958b60c",
+  "photos": [
+    {
+      "photoID": "inaturalist:photo:164616342",
+      "speciesID": "00000000-0000-0000-0000-000000000003",
+      "photoFingerprint": "sha256:ab85ee36a1c735a968f5c482bcddf0ce29d8186e021dfb3cc885209c2668b70c"
+    },
+    {
+      "photoID": "inaturalist:photo:176908174",
+      "speciesID": "fc213eff-6ba6-53ab-b288-f6e654299e68",
+      "photoFingerprint": "sha256:c16b2b17be251a53f0f2a886a84ac08be449aa944b7cf79314d8c9356eb0bbd7"
+    },
+    {
+      "photoID": "inaturalist:photo:294595913",
+      "speciesID": "00000000-0000-0000-0000-000000000008",
+      "photoFingerprint": "sha256:22713a8ad82c1054c2b80331c47f70daa35e423ca6b5d0574e4b9124f7a5d72f"
+    },
+    {
+      "photoID": "inaturalist:photo:451417243",
+      "speciesID": "00000000-0000-0000-0000-000000000005",
+      "photoFingerprint": "sha256:023cc75342cc41074894ae208c8f46d7f1f0b8c05a52a3d799772e4661254ef0"
+    },
+    {
+      "photoID": "inaturalist:photo:490576738",
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "photoFingerprint": "sha256:1a43c687f83e1634ed6def81ec8d8b599a28f49feecfb54225385b3778d089de"
+    },
+    {
+      "photoID": "inaturalist:photo:574042798",
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "photoFingerprint": "sha256:80975312c424f8dad352280db3ea1a122b6168943672beec6579a94c7d8ed0c2"
+    },
+    {
+      "photoID": "inaturalist:photo:608289149",
+      "speciesID": "eff286cc-2c87-5393-b00d-e158fd48e3aa",
+      "photoFingerprint": "sha256:e23b617e845243cfa32dafca35ee51c063cc517080035d515463bc5c9a030a67"
+    },
+    {
+      "photoID": "inaturalist:photo:6483342",
+      "speciesID": "00000000-0000-0000-0000-000000000009",
+      "photoFingerprint": "sha256:3b60559db193415b36ac9c2d9df39b56076e9a133174960680c1d294c3ffbbf0"
+    }
+  ],
+  "rejectedPhotos": [],
+  "rejection": null,
+  "reviewedCommit": "56bf3a2b31fd4c1cbfc7f88da4c71e312f460729"
+}

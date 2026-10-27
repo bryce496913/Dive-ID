@@ -52,9 +52,9 @@ class Workspace:
     def write_photos(self):
         self.manifest.write_text(json.dumps({"schemaVersion": 1, "photos": self.photos}))
 
-    def prepare(self, batch="caribbean-8", species=SPECIES):
+    def prepare(self, batch="caribbean-8", species=SPECIES, photo_ids=None):
         return pb.prepare(batch, species, root=self.batches, pages=self.pages, photo_manifest=self.manifest,
-                          thumbnails=self.thumbs, pack=self.pack)
+                          thumbnails=self.thumbs, pack=self.pack, photo_ids=photo_ids)
 
     def record(self, key, outcome="approve", **kw):
         return pb.record(key, "Bryce", "I approve these photos.", outcome, review_date="2026-10-28", root=self.batches, commit="abc", **kw)
@@ -86,6 +86,15 @@ class PhotoBatchTests(unittest.TestCase):
         (self.w.thumbs / "Thumbnails.json").write_text("{}")
         with self.assertRaisesRegex(ReviewError, "make thumbnails first"):
             self.w.prepare()
+
+    def test_a_batch_can_be_limited_to_the_photos_the_reviewer_saw(self):
+        key = self.w.prepare(photo_ids=["inaturalist:photo:11", "inaturalist:photo:21"])[2]["manifestSHA256"]
+        self.w.record(key)
+        records, files, report = self.w.publish()
+        self.assertEqual(report["approvedPhotos"], 2, "the unseen second photo stays unreviewed")
+        self.assertEqual(sorted(files), [f"{SPECIES[0]}-inat-11.jpg", f"{SPECIES[1]}-inat-21.jpg"])
+        with self.assertRaisesRegex(ReviewError, "not a selected photo"):
+            self.w.prepare(photo_ids=["inaturalist:photo:99"])
 
     def test_nothing_is_approved_without_a_recorded_decision(self):
         self.w.prepare()
