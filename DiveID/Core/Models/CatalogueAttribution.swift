@@ -10,6 +10,13 @@ struct CatalogueCredit: Hashable, Sendable {
     let websiteURL: String
 }
 
+/// A species photo's credit for Data Sources and Credits.
+struct PhotoCredit: Hashable, Sendable {
+    let commonName: String
+    let scientificName: String
+    let image: BundledSpeciesImage
+}
+
 enum CatalogueAttribution {
     /// The pinned bulk-data release (Tools/FishBaseIntake/release_manifest.json).
     static let release = "v26.06"
@@ -37,6 +44,24 @@ enum CatalogueAttribution {
             if let reference = source.citationReference, !reference.isEmpty { parts.append("Reference: \(reference)") }
             if let license = source.sourceLicense, !license.isEmpty { parts.append(license) }
             return (parts.joined(separator: " — "), URL(string: source.sourceURL))
+        }
+    }
+
+    static let photoNotice = "Species photos are by the photographers named, from iNaturalist observations, under the licence shown with each. Dive ID resized them; the photographers do not endorse Dive ID."
+
+    /// One credit per bundled photo across the given packs, by species name. A region drawn
+    /// from Global repeats Global's records, so each photo is listed once. Packs exposed in a
+    /// Release build hold only approved records, and only approved photos are bundled.
+    static func photoCredits(in packs: [OfflineIdentificationPack]) -> [PhotoCredit] {
+        var seen = Set<String>()
+        var credits: [PhotoCredit] = []
+        for profile in packs.flatMap(\.profiles) {
+            guard let image = profile.bundledImage, image.isPhoto, seen.insert(image.fileName).inserted else { continue }
+            credits.append(PhotoCredit(commonName: profile.commonName, scientificName: profile.scientificName, image: image))
+        }
+        return credits.sorted {
+            let order = $0.commonName.localizedStandardCompare($1.commonName)
+            return order == .orderedSame ? $0.image.fileName < $1.image.fileName : order == .orderedAscending
         }
     }
 }

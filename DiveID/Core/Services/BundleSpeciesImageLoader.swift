@@ -7,6 +7,8 @@ protocol SpeciesImageLoading: Sendable {
 enum SpeciesImageLoadingError: Error, Equatable, Sendable { case missingFile(String), corruptFile(String) }
 
 actor BundleSpeciesImageLoader: SpeciesImageLoading {
+    /// Shared so results thumbnails and the species page reuse one small cache.
+    static let shared = BundleSpeciesImageLoader()
     private let bundle: Bundle
     private let registry: RegionCatalogRegistry
     private var cache: [String: Data] = [:]
@@ -19,7 +21,11 @@ actor BundleSpeciesImageLoader: SpeciesImageLoading {
         if let cached = cache[key] { return cached }
         let ext = URL(fileURLWithPath: image.fileName).pathExtension
         let name = image.fileName.replacingOccurrences(of: "." + ext, with: "")
-        guard let definition = registry.definition(for: packID) else { throw SpeciesImageLoadingError.missingFile(image.fileName) }
+        // A region drawn from another pack shows its records' images from that pack.
+        guard let listed = registry.definition(for: packID),
+              let definition = listed.derivedFrom.flatMap({ registry.definition(for: $0) }) ?? (listed.derivedFrom == nil ? listed : nil)
+        else { throw SpeciesImageLoadingError.missingFile(image.fileName) }
+        let imagePackID = definition.id
         let packDirectory = "IdentificationPacks/\(definition.resourceDirectory)"
         let imageDirectory: String
         if let cachedDirectory = imageDirectories[packID] {
@@ -27,7 +33,7 @@ actor BundleSpeciesImageLoader: SpeciesImageLoading {
         } else {
             guard let manifestURL = resourceURL(path: packDirectory + "/" + definition.manifestResourceName, withExtension: "json"),
                   let metadata = try? JSONDecoder().decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: manifestURL)),
-                  metadata.id == packID
+                  metadata.id == imagePackID
             else { throw SpeciesImageLoadingError.missingFile(image.fileName) }
             imageDirectory = metadata.imageSubdirectory
             imageDirectories[packID] = imageDirectory

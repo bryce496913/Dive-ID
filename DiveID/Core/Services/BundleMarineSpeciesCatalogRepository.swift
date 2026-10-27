@@ -347,9 +347,9 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
                 guard !image.alternativeText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !image.creatorName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       !image.sourceName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                      isWebURL(image.sourceURL), isWebURL(image.licenseURL)
+                      isWebURL(image.sourceURL), isWebURL(image.licenseURL), image.photoURL.map(isWebURL) ?? true
                 else { throw LocalCatalogError.emptyImageAttribution }
-                guard ["CC0", "Public Domain", "CC BY 4.0", "CC BY"].contains(image.licenseName) else { throw LocalCatalogError.unsupportedImageLicense(image.licenseName) }
+                guard BundledSpeciesImage.supportedLicenses.contains(image.licenseName) else { throw LocalCatalogError.unsupportedImageLicense(image.licenseName) }
                 if let metadata {
                     try validateImageFile(image, speciesID: p.id, metadata: metadata, bundle: bundle, resourceDirectory: resourceDirectory ?? metadata.id.rawValue, resourceResolver: resourceResolver)
                 }

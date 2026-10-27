@@ -18,3 +18,5 @@ __pycache__/
 
 # Pinned FishBase/SeaLifeBase Parquet downloads (CC BY-NC data; re-fetch with Tools/FishBaseIntake/fetch.py)
 Data/GlobalMarine/FishBase/cache/
+Data/SpeciesPhotos/cache/
+Data/SpeciesPhotos/fishbase-cache/

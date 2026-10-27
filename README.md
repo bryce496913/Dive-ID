@@ -167,7 +167,7 @@ worksheet. No actual iPhone latency or memory measurement is currently available
 python3 -m pip install -r Tools/TropicalPacificWorkbook/requirements.txt \
   -r Tools/CatalogImport/requirements.txt
 suite_failures=0
-for suite in TropicalPacificWorkbook CatalogImport CatalogReview GlobalMarineImport FishBaseIntake SemanticSearch/tests CI Evaluation; do
+for suite in TropicalPacificWorkbook CatalogImport CatalogReview GlobalMarineImport FishBaseIntake SpeciesPhotos SemanticSearch/tests CI Evaluation; do
   python3 -m unittest discover -s "Tools/$suite" -p 'test_*.py' -v || suite_failures=1
 done
 test "$suite_failures" = 0
@@ -178,7 +178,7 @@ python3 Tools/Evaluation/run_v05.py --configuration debug
 
 GitHub CI runs the Python suites (including a project-file check that Release never
 defines `DEBUG` or `DIVEID_INTERNAL`) and Linux/macOS SwiftPM, and requires both to
-succeed. It does not build or test the iOS app; that is `Tools/CI/local_xcode_checks.sh`. The shell loop runs all eight suites and aggregates
+succeed. It does not build or test the iOS app; that is `Tools/CI/local_xcode_checks.sh`. The shell loop runs all nine suites and aggregates
 their status; every command keeps a nonzero exit status on failure, and
 `run_v05.py` returns the evaluation test's status.
 

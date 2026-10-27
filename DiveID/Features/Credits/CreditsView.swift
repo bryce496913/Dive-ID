@@ -1,7 +1,11 @@
 import SwiftUI
 
-/// Catalogue-level credits and licence notice for FishBase and SeaLifeBase content.
+/// Catalogue-level credits and licence notice for FishBase and SeaLifeBase content, and a
+/// credit for every species photo in the packs this build offers.
 struct CreditsView: View {
+    let catalog: any MarineSpeciesCatalogRepository
+    @State private var photoCredits: [PhotoCredit] = []
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
@@ -23,6 +27,22 @@ struct CreditsView: View {
                     Text(CatalogueAttribution.modificationNotice).foregroundStyle(Color.appTextSecondary)
                     Text(CatalogueAttribution.perRecordNotice).foregroundStyle(Color.appTextSecondary)
                 }
+                if !photoCredits.isEmpty {
+                    CreditsCard {
+                        Text("Species photos").font(.headline)
+                        Text(CatalogueAttribution.photoNotice).foregroundStyle(Color.appTextSecondary)
+                        ForEach(photoCredits, id: \.image.fileName) { credit in
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                                Text(credit.commonName).font(.subheadline.bold())
+                                Text(credit.image.creditLine).font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                                if let url = URL(string: credit.image.sourceURL) { CreditsLink(text: "Photo page", url: url) }
+                            }
+                            .padding(.top, AppTheme.Spacing.s)
+                            .accessibilityElement(children: .combine)
+                        }
+                    }
+                    .accessibilityIdentifier("photoCredits")
+                }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -30,6 +50,17 @@ struct CreditsView: View {
         .appScreenBackground()
         .navigationTitle("Data Sources and Credits")
         .accessibilityIdentifier("creditsScreen")
+        .task { await loadPhotoCredits() }
+    }
+
+    /// A pack that fails to load contributes no credits; it also shows no photos.
+    private func loadPhotoCredits() async {
+        guard let metadata = try? await catalog.availablePacks() else { return }
+        var packs: [OfflineIdentificationPack] = []
+        for pack in metadata {
+            if let loaded = try? await catalog.loadPack(id: pack.id) { packs.append(loaded) }
+        }
+        photoCredits = CatalogueAttribution.photoCredits(in: packs)
     }
 }
 
