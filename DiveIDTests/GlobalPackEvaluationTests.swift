@@ -322,6 +322,8 @@ final class GlobalPackEvaluationTests: XCTestCase {
                 "abstained": result.candidates.isEmpty,
                 "top1": result.candidates.first?.profile.commonName ?? NSNull(),
                 "top1Confidence": result.candidates.first?.score ?? NSNull(),
+                "top1Matched": result.candidates.first?.matchedEvidence ?? [],
+                "expectedMatched": rank.map { result.candidates[$0 - 1].matchedEvidence as Any } ?? NSNull(),
                 "top3": result.candidates.prefix(3).map(\.profile.commonName),
                 "expectedConfidence": rank.map { scores[$0 - 1] as Any } ?? NSNull(),
                 "informationLevel": result.candidates.first?.informationLevel.rawValue ?? NSNull(),

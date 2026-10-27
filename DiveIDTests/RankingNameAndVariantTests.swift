@@ -56,14 +56,39 @@ final class RankingNameAndVariantTests: XCTestCase {
     func testAGenericGroupAliasIsNotAnExactName() async throws {
         let generic = try profile("Twospot surgeonfish", aliases: ["Surgeonfish"])
         let other = try profile("Lined surgeonfish")
-        // A group word alone no longer makes a vague description identifying.
+        // A group word alone is not an exact name: both members come back on the group alone,
+        // as limited information, with neither ahead on identity.
         let bare = try await rank("Surgeonfish on the reef", [generic, other])
-        XCTAssertNil(bare[generic.id])
+        let member = try XCTUnwrap(bare[generic.id])
+        XCTAssertFalse(member.matchedClues.contains(generic.commonName))
+        XCTAssertEqual(member.informationLevel, .limited)
+        XCTAssertLessThanOrEqual(member.score, LocalRankingWeights.limitedConfidenceCap)
+        XCTAssertEqual(member.rawScore, bare[other.id]?.rawScore)
         let ranked = try await rank("Blue surgeonfish on the reef", [generic, other])
         let entry = try XCTUnwrap(ranked[generic.id])
         XCTAssertFalse(entry.matchedClues.contains(generic.commonName))
         // Both carry the group word in their names, so neither is ahead on identity.
         XCTAssertEqual(entry.rawScore, ranked[other.id]?.rawScore)
+    }
+
+    func testANamedGroupIsEvidenceForItsMembersOnly() async throws {
+        let parrot = try profile("Stoplight parrotfish", colors: ["red"])
+        let otherParrot = try profile("Queen parrotfish", colors: ["blue"])
+        let tang = try profile("Atlantic blue tang", colors: ["blue"])
+        let surgeon = try profile("Lined surgeonfish", colors: ["blue"])
+        let wrasse = try profile("Bird wrasse", colors: ["red"])
+        let all = [parrot, otherParrot, tang, surgeon, wrasse]
+        // Only colours, which alone are too little information: the group admits its members.
+        let parrotfish = try await rank("Heavy reddish parrotfish", all)
+        XCTAssertEqual(Set(parrotfish.keys), [parrot.id, otherParrot.id])
+        XCTAssertTrue(try XCTUnwrap(parrotfish[parrot.id]).matchedClues.contains("group: parrotfish"))
+        XCTAssertGreaterThan(try XCTUnwrap(parrotfish[parrot.id]).rawScore, try XCTUnwrap(parrotfish[otherParrot.id]).rawScore)
+        // Tangs are surgeonfishes.
+        let surgeonfish = try await rank("Blue surgeonfish", all)
+        XCTAssertEqual(Set(surgeonfish.keys), [tang.id, surgeon.id])
+        // "Fish" is a generic word, never a group, so a vague description still abstains.
+        let vague = try await rank("A fish moved past me.", all)
+        XCTAssertTrue(vague.isEmpty)
     }
 
     func testAGenuineSpeciesNameKeepsExactCredit() async throws {
@@ -89,7 +114,10 @@ final class RankingNameAndVariantTests: XCTestCase {
         let french = try profile("French angelfish")
         let hogfish = try profile("Hogfish")
         let bare = try await rank("Angelfish on the reef", [group, french, hogfish])
-        XCTAssertNil(bare[group.id])
+        // The group word names both angelfish records, as limited information, and no exact name.
+        XCTAssertFalse(try XCTUnwrap(bare[group.id]).matchedClues.contains("Angelfish"))
+        XCTAssertEqual(try XCTUnwrap(bare[french.id]).informationLevel, .limited)
+        XCTAssertNil(bare[hogfish.id], "a hogfish is not an angelfish")
         let ranked = try await rank("Blue angelfish on the reef", [group, french, hogfish])
         XCTAssertFalse(try XCTUnwrap(ranked[group.id]).matchedClues.contains("Angelfish"))
         // A one-word name nothing else ends in still names its species.

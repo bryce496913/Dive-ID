@@ -8,7 +8,9 @@ import XCTest
 /// ("Group names and appearance variants") and the builder v4 Global content; the
 /// change is described in Docs/GlobalPackEvaluation.md. Its "global" entries were
 /// regenerated again when the Caribbean pack's 8 records were added to Global; every
-/// regional entry was unchanged. Every development query of the
+/// regional entry was unchanged. Regenerated again (2026-10-27) for the intended ranking
+/// change "named groups count as evidence" (Docs/GlobalRankingImprovement.md): only queries
+/// that name a group (angelfish, surgeonfish, triggerfish, ...) changed. Every development query of the
 /// evaluation fixtures (the frozen Caribbean holdout stays closed) is run against each
 /// pack; ranks and scores must match exactly, scores to 1e-9.
 /// Set DIVEID_WRITE_SEARCH_GOLDEN=<path> to write a new golden file instead of comparing.
