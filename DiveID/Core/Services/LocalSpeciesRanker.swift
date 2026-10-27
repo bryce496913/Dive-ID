@@ -122,9 +122,12 @@ struct LocalSpeciesRanker: SpeciesRanking {
             // name that other records' names end in ("Angelfish"). Scientific names always count.
             let commonName = LocalObservationParser.normalize(profile.commonName)
             let isGroupCommonName = !commonName.contains(" ") && input.groupNames.contains(commonName)
+            // "Blue-fish" is one trait word and the bare word "fish": a description, not a name, so it
+            // never counts as naming the species.
             let nameTerms = ([profile.scientificName] + (isGroupCommonName ? [] : [profile.commonName])
                              + profile.aliases.filter { !input.groupNames.contains(LocalObservationParser.normalize($0)) })
                 .map(LocalObservationParser.normalize)
+                .filter { !Self.isTraitPlusFish($0) }
             let hasExactName = nameTerms.contains {
                 LocalObservationParser.matches($0, inTokens: observation.tokens, normalizedText: observation.normalizedText)
                     && Self.namesSubject($0, in: input.description)
@@ -132,11 +135,16 @@ struct LocalSpeciesRanker: SpeciesRanking {
             let retrievalRelevance = candidate.retrieval.map(normalizedRelevance)
             let provisionalSemantic = candidate.retrieval?.scoreKind == .cosineSimilarity
                 && (candidate.retrieval?.score ?? -1) >= weights.semanticFallbackCosine && meaningfulTermCount >= 3
-            guard observationInformation != .insufficient || hasExactName || provisionalSemantic else { return nil }
+            // A group the description names ("parrotfish") that this species belongs to: the
+            // family-level identity a diver usually knows. It counts like an animal category.
+            let namedGroups: Set<String> = hasExactName ? [] : Self.namedGroups(observation.tokens, of: profile, groupNames: input.groupNames)
+            guard observationInformation != .insufficient || hasExactName || provisionalSemantic || !namedGroups.isEmpty else { return nil }
+            // Naming only the group, with too little else, is still limited information.
             let informationLevel: ObservationInformationLevel = hasExactName ? .sufficient
-                : (provisionalSemantic && observationInformation == .insufficient ? .limited : observationInformation)
+                : ((provisionalSemantic || !namedGroups.isEmpty) && observationInformation == .insufficient ? .limited : observationInformation)
             if hasExactName { score += weights.exactName; matched.append(profile.commonName) }
             add(observation.categories, profile.categories, weights.category, &score, &matched)
+            if !namedGroups.isEmpty { score += weights.category; matched.append("group: " + namedGroups.sorted().joined(separator: ", ")) }
             let described = regionCompatibility(observedRegions: observation.regions, supportedRegions: Set(profile.regions))
             switch described {
             case .compatible:
@@ -183,11 +191,13 @@ struct LocalSpeciesRanker: SpeciesRanking {
             // empty. They are weak identity evidence, not an exact-name match
             // or inferred anatomy. Do not count trait words a second time.
             if !hasExactName {
-                let identityWords = Set(([profile.commonName, profile.scientificName] + profile.aliases)
+                let nameWords: Set<String> = Set(([profile.commonName, profile.scientificName] + profile.aliases)
                     .flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }
                     .map(LocalObservationParser.singular))
-                    .subtracting(Self.nonIdentityTerms)
-                    .subtracting(profile.keywords.flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }.map(LocalObservationParser.singular))
+                let keywordWords: Set<String> = Set(profile.keywords
+                    .flatMap { LocalObservationParser.normalize($0).split(separator: " ").map(String.init) }
+                    .map(LocalObservationParser.singular))
+                let identityWords = nameWords.subtracting(Self.nonIdentityTerms).subtracting(keywordWords).subtracting(namedGroups)
                 let hits = observation.tokens.intersection(identityWords).filter { $0.count > 2 }.sorted()
                 score += Double(hits.count) * weights.keyword
                 matched.append(contentsOf: hits.map { "identity term: " + $0 })
@@ -244,6 +254,34 @@ struct LocalSpeciesRanker: SpeciesRanking {
             if candidate.informationLevel == .limited { normalized = min(normalized, LocalRankingWeights.limitedConfidenceCap) }
             return RankedLocalSpecies(profile: candidate.profile, rawScore: candidate.rawScore, retrievalRelevance: candidate.retrievalRelevance, orderingScore: candidate.orderingScore, score: normalized, matchedClues: candidate.matchedClues, conflictingClues: candidate.conflictingClues, matchedAppearanceVariant: candidate.matchedAppearanceVariant, informationLevel: candidate.informationLevel)
         }
+    }
+
+    /// A two-word name made of one colour, marking, shape or habitat word and "fish".
+    static func isTraitPlusFish(_ normalizedName: String) -> Bool {
+        let words = normalizedName.split(separator: " ").map(String.init)
+        return words.count == 2 && words[1] == "fish" && nonIdentityTerms.contains(LocalObservationParser.singular(words[0]))
+    }
+
+    /// Group names that mean the same group of animals: tangs are surgeonfishes (Acanthuridae),
+    /// and clownfishes are the anemonefishes (Amphiprion).
+    private static let groupSynonyms: [String: Set<String>] = [
+        "tang": ["surgeonfish"], "surgeonfish": ["tang"],
+        "clownfish": ["anemonefish"], "anemonefish": ["clownfish"],
+    ]
+
+    /// The pack's group names (head nouns shared by several records) that the description uses
+    /// and this species carries as the head noun of its common name or an alias.
+    static func namedGroups(_ tokens: Set<String>, of profile: LocalSpeciesProfile, groupNames: Set<String>) -> Set<String> {
+        let described = Set(tokens.map(LocalObservationParser.singular)).union(tokens)
+            .filter { (groupNames.contains($0) || groupSynonyms[$0] != nil) && !nonIdentityTerms.contains($0) }
+        guard !described.isEmpty else { return [] }
+        var own = Set<String>()
+        for name in [profile.commonName] + profile.aliases {
+            guard let head = LocalObservationParser.normalize(name).split(separator: " ").last.map(String.init) else { continue }
+            own.insert(LocalObservationParser.singular(head)); own.insert(head)
+        }
+        own.formUnion(own.flatMap { groupSynonyms[$0] ?? [] })
+        return described.intersection(own)
     }
 
     private static let nonIdentityTerms: Set<String> = {

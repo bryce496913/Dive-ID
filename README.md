@@ -13,7 +13,7 @@ submitted or published by this repository workflow.
 | --- | ---: | ---: | ---: | ---: | --- |
 | Caribbean | 3 | 8 | 2 | 2 | pass (16/16); retired region, development fixture only |
 | Tropical Pacific (Experimental) | 3 | 1000 | 0 | 0 | pass (18/18); retired region, development fixture only |
-| Global | 25 | 4798 | 4798 | 4798 | pass, opt-in (30/34; four positive cases miss the top ten) |
+| Global | 25 | 4798 | 4798 | 4798 | pass, opt-in (31/34; three positive cases miss the top ten) |
 | Tropical Atlantic Regions | 1 | 1039 | 1039 | 1039 | drawn from Global |
 | Indo-Pacific Regions | 1 | 3592 | 3592 | 3592 | drawn from Global |
 | Pacific Coast Regions | 1 | 566 | 566 | 566 | drawn from Global |
@@ -43,13 +43,21 @@ evidence is unchanged: its latest opt-in evaluation runs the 34 positive V05 cas
 
 | Global, 4,798 records | Candidate recall | First | Top three | Top ten | No-match | Confidence compliance |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| As written | 33/34 | 18/34 | 24/34 | 30/34 | 6/6 | 46/46 |
+| As written | 33/34 | 24/34 | 28/34 | 31/34 | 6/6 | 46/46 |
 
 All applicable aggregate gates pass (region conflict does not apply to a single
-worldwide pack). Four positive descriptions still miss the top ten:
-`v05-05-paraphrase` (Red Lionfish, Caribbean), `v05-09-diagnostic` and
-`v05-09-paraphrase` (Bird Wrasse, Tropical Pacific), and `v05-10-paraphrase`
-(Black Triggerfish, Tropical Pacific).
+worldwide pack). Three positive descriptions still miss the top ten, each because the
+record lacks the described trait (listed for review in
+[GlobalRankingImprovement.md](Docs/GlobalRankingImprovement.md#catalogue-records-to-review)):
+`v05-05-paraphrase` (Red Lionfish, Caribbean), `v05-09-paraphrase` (Bird Wrasse,
+Tropical Pacific) and `v05-10-paraphrase` (Black Triggerfish, Tropical Pacific).
+
+On all 116 development cases (the V05 cases plus the benchmark's development split),
+production ranking on Global puts the expected species first in 69 of 90 identification
+cases, up from 52 before the 2026-10-27 changes
+([GlobalRankingImprovement.md](Docs/GlobalRankingImprovement.md),
+[raw results](Reports/GlobalProductionRankingDevelopment.json)). Those changes were made
+while looking at these cases, so the independent diver pilot remains the real test.
 
 > **These results are not independent evidence and not publication approval.**
 > The 34 cases are development cases that influenced the implementation, not a
@@ -180,16 +188,15 @@ regional packs ([report](Reports/V05DevelopmentEvaluation.json), refreshed
 With the production engine:
 
 - **Development (the 8 Caribbean + 1,000 Tropical Pacific fixture records):** candidate recall
-  34/34, top1 26/34, top3 33/34, top10 34/34, no-match 6/6, region conflicts 4/4,
+  34/34, top1 28/34, top3 33/34, top10 34/34, no-match 6/6, region conflicts 4/4,
   confidence 46/46.
 - **Release (each case in its retired region's replacement: Caribbean cases in Tropical
-  Atlantic Regions, 1,038 approved records; Tropical Pacific cases in Indo-Pacific Regions,
-  3,590):** all 46 cases are eligible, giving candidate recall 33/34, top1 19/34,
-  top3 26/34, top10 30/34, no-match 6/6, region conflicts 4/4, confidence 46/46. Release
-  asserts the production engine's gates, not each case: six positive cases miss their rank
-  limit (`v05-05-paraphrase`, `v05-09-diagnostic`, `v05-09-paraphrase` and
-  `v05-10-paraphrase` miss the top ten, as in Global; `v05-15-diagnostic` and
-  `v05-16-diagnostic` rank 4 and 7 against a limit of 3). The structured full-pack
+  Atlantic Regions, 1,039 approved records; Tropical Pacific cases in Indo-Pacific Regions,
+  3,592):** all 46 cases are eligible, giving candidate recall 33/34, top1 22/34,
+  top3 29/34, top10 31/34, no-match 6/6, region conflicts 4/4, confidence 46/46. Release
+  asserts the production engine's gates, not each case: four positive cases miss their rank
+  limit (`v05-05-paraphrase`, `v05-09-paraphrase` and `v05-10-paraphrase` miss the top
+  ten, as in Global; `v05-09-diagnostic` ranks 9 against a limit of 3). The structured full-pack
   comparison engine is reported only.
 
 Its descriptions are synthetic and v2 was written after v1 results were seen, so

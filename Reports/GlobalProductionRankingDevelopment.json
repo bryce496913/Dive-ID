@@ -1,0 +1,3966 @@
+{
+  "engine" : "production BM25 (50 candidates) + LocalSpeciesRanker",
+  "fixtures" : [
+    "V05Development.v2",
+    "CaribbeanIdentificationBenchmark (development split only)"
+  ],
+  "pack" : "global:25",
+  "rows" : [
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.5714285714285714,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "tail",
+        "blue",
+        "yellow",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "v05-01-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 6,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.5714285714285714,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "tail",
+        "blue",
+        "yellow",
+        "compressed"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Powderblue surgeonfish",
+        "Palette surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: surgeonfish",
+        "geographic range",
+        "reef",
+        "yellow"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "v05-01-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "group: surgeonfish",
+        "geographic range",
+        "reef",
+        "yellow"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Convict surgeonfish",
+        "Palette surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "reef",
+        "beak",
+        "green",
+        "yellow",
+        "juvenile appearance",
+        "grazing"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "v05-02-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "reef",
+        "beak",
+        "green",
+        "yellow",
+        "juvenile appearance",
+        "grazing"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "White-spotted spinefoot",
+        "Eye-spot blenny"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.45238095238095238,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: parrotfish",
+        "red",
+        "juvenile appearance",
+        "parrotfish",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "v05-02-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "group: parrotfish",
+        "red",
+        "juvenile appearance",
+        "parrotfish",
+        "compatible size"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Spotted parrotfish",
+        "Carolines parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.45238095238095238,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "spots",
+        "blue",
+        "yellow",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "FC213EFF-6BA6-53AB-B288-F6E654299E68"
+      ],
+      "id" : "v05-03-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Queen Angelfish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "fish",
+        "spots",
+        "blue",
+        "yellow",
+        "compressed"
+      ],
+      "top3" : [
+        "Queen Angelfish",
+        "Crowned puffer",
+        "Yellow-spotted triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.40476190476190477,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "blue",
+        "yellow",
+        "compressed",
+        "compatible depth"
+      ],
+      "expectedRank" : 5,
+      "expectedSpeciesIDs" : [
+        "FC213EFF-6BA6-53AB-B288-F6E654299E68"
+      ],
+      "id" : "v05-03-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Mauritian gregory",
+      "top1Confidence" : 0.54761904761904767,
+      "top1Matched" : [
+        "fish",
+        "black",
+        "blue",
+        "yellow",
+        "compressed",
+        "oval",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Mauritian gregory",
+        "Island gregory",
+        "Golden gregory"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: angelfish",
+        "black",
+        "yellow",
+        "angelfish"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
+      ],
+      "id" : "v05-04-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "French Angelfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "group: angelfish",
+        "black",
+        "yellow",
+        "angelfish"
+      ],
+      "top3" : [
+        "French Angelfish",
+        "Queen Angelfish",
+        "Emperor angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.35714285714285715,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "black",
+        "yellow",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "EFF286CC-2C87-5393-B00D-E158FD48E3AA"
+      ],
+      "id" : "v05-04-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "French Angelfish",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "fish",
+        "black",
+        "yellow",
+        "compressed"
+      ],
+      "top3" : [
+        "French Angelfish",
+        "Whitecheek surgeonfish",
+        "Paletail chromis"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.7142857142857143,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "spines",
+        "stripes",
+        "red",
+        "white",
+        "red stripes",
+        "white stripes",
+        "elongated"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "v05-05-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.7142857142857143,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "spines",
+        "stripes",
+        "red",
+        "white",
+        "red stripes",
+        "white stripes",
+        "elongated"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Samurai squirrelfish",
+        "Smallmouth squirrelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "v05-05-paraphrase",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Striped rockskipper",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "fish",
+        "spots",
+        "stripes"
+      ],
+      "top3" : [
+        "Striped rockskipper",
+        "Many-lined cardinalfish",
+        "Broadstriped cardinalfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "spots",
+        "teeth",
+        "silver",
+        "elongated"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "v05-06-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "fish",
+        "spots",
+        "teeth",
+        "silver",
+        "elongated"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Mahogany snapper",
+        "Sand grey mullet"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.52380952380952384,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "surface",
+        "teeth",
+        "silver",
+        "compatible size",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "v05-06-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.52380952380952384,
+      "top1Matched" : [
+        "fish",
+        "surface",
+        "teeth",
+        "silver",
+        "compatible size",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Trumpet emperor",
+        "Hound needlefish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "seagrass",
+        "shell",
+        "olive"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "v05-07-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "turtle",
+        "seagrass",
+        "shell",
+        "olive"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Hawksbill turtle",
+        "Greenblotch parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.5,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "geographic range",
+        "shallow",
+        "compatible size",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "v05-07-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.5,
+      "top1Matched" : [
+        "turtle",
+        "geographic range",
+        "shallow",
+        "compatible size",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Kemp's ridley turtle",
+        "Olive ridley turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.54761904761904767,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "spots",
+        "tail",
+        "black",
+        "white",
+        "white spots"
+      ],
+      "expectedRank" : 2,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "v05-08-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Bull ray",
+      "top1Confidence" : 0.69047619047619047,
+      "top1Matched" : [
+        "Bull ray",
+        "ray",
+        "white"
+      ],
+      "top3" : [
+        "Bull ray",
+        "Spotted Eagle Ray",
+        "Giant guitarfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.59523809523809523,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "geographic range",
+        "reef",
+        "spots",
+        "tail",
+        "spotted"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "v05-08-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.59523809523809523,
+      "top1Matched" : [
+        "ray",
+        "geographic range",
+        "reef",
+        "spots",
+        "tail",
+        "spotted"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Great Barracuda",
+        "Oriental flying gurnard"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "solitary",
+        "identity term: bird"
+      ],
+      "expectedRank" : 9,
+      "expectedSpeciesIDs" : [
+        "5AF89B7E-AC74-545C-9A78-CD3B0E91101B"
+      ],
+      "id" : "v05-09-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 2,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Roundhead parrotfish",
+      "top1Confidence" : 0.38095238095238093,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "male appearance",
+        "solitary",
+        "identity term: snout"
+      ],
+      "top3" : [
+        "Roundhead parrotfish",
+        "Queen Angelfish",
+        "Tripletail wrasse"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "5AF89B7E-AC74-545C-9A78-CD3B0E91101B"
+      ],
+      "id" : "v05-09-paraphrase",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 21,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Oriental maori wrasse",
+      "top1Confidence" : 0.2857142857142857,
+      "top1Matched" : [
+        "group: wrasse",
+        "blue",
+        "green",
+        "identity term: slender",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Oriental maori wrasse",
+        "Ring wrasse",
+        "Rainbow slender wrasse"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.54761904761904767,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Black triggerfish",
+        "black"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "DED990CC-3044-5F31-98D4-D388267B0167"
+      ],
+      "id" : "v05-10-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 29,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Black triggerfish",
+      "top1Confidence" : 0.54761904761904767,
+      "top1Matched" : [
+        "Black triggerfish",
+        "black"
+      ],
+      "top3" : [
+        "Black triggerfish",
+        "Pinktail triggerfish",
+        "Orange-lined triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "DED990CC-3044-5F31-98D4-D388267B0167"
+      ],
+      "id" : "v05-10-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Paletail chromis",
+      "top1Confidence" : 0.40476190476190477,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "black",
+        "juvenile appearance",
+        "identity term: pale"
+      ],
+      "top3" : [
+        "Paletail chromis",
+        "Palelipped surgeonfish",
+        "Atlantic Blue Tang"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: triggerfish",
+        "black",
+        "brown",
+        "yellow",
+        "identity term: pink",
+        "fin and spine clues"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "12135912-59AF-5B63-9015-67E636BEEA7C"
+      ],
+      "id" : "v05-11-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Pinktail triggerfish",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "group: triggerfish",
+        "black",
+        "brown",
+        "yellow",
+        "identity term: pink",
+        "fin and spine clues"
+      ],
+      "top3" : [
+        "Pinktail triggerfish",
+        "Blackbelly triggerfish",
+        "White-banded triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.35714285714285715,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: triggerfish",
+        "black",
+        "identity term: pink",
+        "compatible size",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "12135912-59AF-5B63-9015-67E636BEEA7C"
+      ],
+      "id" : "v05-11-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Pinktail triggerfish",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "group: triggerfish",
+        "black",
+        "identity term: pink",
+        "compatible size",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Pinktail triggerfish",
+        "Gilded triggerfish",
+        "Wedgetail triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.35714285714285715,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: triggerfish",
+        "reef",
+        "blue",
+        "schooling"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "987B3653-D83F-54A0-AFCF-0B48C75C635E"
+      ],
+      "id" : "v05-12-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Red-toothed triggerfish",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "group: triggerfish",
+        "reef",
+        "blue",
+        "schooling"
+      ],
+      "top3" : [
+        "Red-toothed triggerfish",
+        "Redtail triggerfish",
+        "Blackbelly triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.38095238095238093,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: triggerfish",
+        "blue",
+        "fin and spine clues",
+        "compatible size",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "987B3653-D83F-54A0-AFCF-0B48C75C635E"
+      ],
+      "id" : "v05-12-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Red-toothed triggerfish",
+      "top1Confidence" : 0.38095238095238093,
+      "top1Matched" : [
+        "group: triggerfish",
+        "blue",
+        "fin and spine clues",
+        "compatible size",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Red-toothed triggerfish",
+        "Blackbelly triggerfish",
+        "Gilded triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: surgeonfish",
+        "gray",
+        "orange",
+        "paler front"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "B932EA57-BE9A-54C9-9036-656DC49E5E2E"
+      ],
+      "id" : "v05-13-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Orangespot surgeonfish",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "group: surgeonfish",
+        "gray",
+        "orange",
+        "paler front"
+      ],
+      "top3" : [
+        "Orangespot surgeonfish",
+        "Whitecheek surgeonfish",
+        "Mimic surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.59523809523809523,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "sand",
+        "orange",
+        "compressed"
+      ],
+      "expectedRank" : 4,
+      "expectedSpeciesIDs" : [
+        "B932EA57-BE9A-54C9-9036-656DC49E5E2E"
+      ],
+      "id" : "v05-13-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 7,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Orange-lined triggerfish",
+      "top1Confidence" : 0.66666666666666663,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "sand",
+        "orange",
+        "compressed",
+        "oval"
+      ],
+      "top3" : [
+        "Orange-lined triggerfish",
+        "Bluestripe herring",
+        "Eyestripe surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.5,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: surgeonfish",
+        "stripes",
+        "black",
+        "blue",
+        "yellow",
+        "blue stripes",
+        "yellow stripes"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4"
+      ],
+      "id" : "v05-14-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Lined surgeonfish",
+      "top1Confidence" : 0.5,
+      "top1Matched" : [
+        "group: surgeonfish",
+        "stripes",
+        "black",
+        "blue",
+        "yellow",
+        "blue stripes",
+        "yellow stripes"
+      ],
+      "top3" : [
+        "Lined surgeonfish",
+        "Yellowspotted sawtail",
+        "Powderblue surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.61904761904761907,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "stripes",
+        "black",
+        "blue",
+        "yellow",
+        "blue stripes",
+        "compressed",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "9353EE92-EAA7-5BCB-B2F8-8B3A0577D5B4"
+      ],
+      "id" : "v05-14-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Lined surgeonfish",
+      "top1Confidence" : 0.61904761904761907,
+      "top1Matched" : [
+        "fish",
+        "stripes",
+        "black",
+        "blue",
+        "yellow",
+        "blue stripes",
+        "compressed",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Lined surgeonfish",
+        "Splendid dottyback",
+        "Bluering angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.45238095238095238,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: anemonefish",
+        "stripes",
+        "black",
+        "orange",
+        "white"
+      ],
+      "expectedRank" : 3,
+      "expectedSpeciesIDs" : [
+        "C059528C-F884-5B96-B67B-D912A33846B1"
+      ],
+      "id" : "v05-15-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 3,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Barrier reef anemonefish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "group: anemonefish",
+        "stripes",
+        "black",
+        "orange",
+        "white"
+      ],
+      "top3" : [
+        "Barrier reef anemonefish",
+        "Saddleback clownfish",
+        "Fire clownfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "anemone",
+        "stripes",
+        "black",
+        "orange"
+      ],
+      "expectedRank" : 2,
+      "expectedSpeciesIDs" : [
+        "C059528C-F884-5B96-B67B-D912A33846B1"
+      ],
+      "id" : "v05-15-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 4,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Barrier reef anemonefish",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "fish",
+        "anemone",
+        "stripes",
+        "black",
+        "orange"
+      ],
+      "top3" : [
+        "Barrier reef anemonefish",
+        "Fire clownfish",
+        "Maroon clownfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: anemonefish",
+        "spines",
+        "stripes",
+        "juvenile appearance",
+        "identity term: cheek"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "87727436-CAFC-58B3-8818-F77FCBF554B7"
+      ],
+      "id" : "v05-16-diagnostic",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 3,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Spinecheek anemonefish",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "group: anemonefish",
+        "spines",
+        "stripes",
+        "juvenile appearance",
+        "identity term: cheek"
+      ],
+      "top3" : [
+        "Spinecheek anemonefish",
+        "Fire clownfish",
+        "Red Lionfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.52380952380952384,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "anemone",
+        "spines",
+        "stripes",
+        "juvenile appearance",
+        "identity term: cheek"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "87727436-CAFC-58B3-8818-F77FCBF554B7"
+      ],
+      "id" : "v05-16-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 2,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Spinecheek anemonefish",
+      "top1Confidence" : 0.52380952380952384,
+      "top1Matched" : [
+        "fish",
+        "anemone",
+        "spines",
+        "stripes",
+        "juvenile appearance",
+        "identity term: cheek"
+      ],
+      "top3" : [
+        "Spinecheek anemonefish",
+        "Amphiprion barberi",
+        "Lined seahorse"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.45238095238095238,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "rubble",
+        "brown",
+        "compressed",
+        "identity term: leaf",
+        "tall dorsal fin"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "5F4D48F4-6556-50F3-95AF-A4D28635F4BB"
+      ],
+      "id" : "v05-17-diagnostic",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Cockatoo waspfish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "fish",
+        "rubble",
+        "brown",
+        "compressed",
+        "identity term: leaf",
+        "tall dorsal fin"
+      ],
+      "top3" : [
+        "Cockatoo waspfish",
+        "Seychelles shrimpgoby",
+        "Tapertail shrimpgoby"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "identity term: leaf",
+        "tall dorsal fin",
+        "compatible size",
+        "compatible depth"
+      ],
+      "expectedRank" : 2,
+      "expectedSpeciesIDs" : [
+        "5F4D48F4-6556-50F3-95AF-A4D28635F4BB"
+      ],
+      "id" : "v05-17-paraphrase",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 4,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "V05Development.v2",
+      "top1" : "Leaf scorpionfish",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "fish",
+        "identity term: leaf",
+        "tall dorsal fin",
+        "compatible size",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Leaf scorpionfish",
+        "Cockatoo waspfish",
+        "Spiny waspfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-ambiguous-angelfish",
+      "informationLevel" : "sufficient",
+      "kind" : "ambiguous",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "French Angelfish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "group: angelfish",
+        "geographic range",
+        "reef",
+        "black",
+        "angelfish"
+      ],
+      "top3" : [
+        "French Angelfish",
+        "Queen Angelfish",
+        "Flameback angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-ambiguous-trigger",
+      "informationLevel" : "limited",
+      "kind" : "ambiguous",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Pinktail triggerfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "group: triggerfish",
+        "reef",
+        "black"
+      ],
+      "top3" : [
+        "Pinktail triggerfish",
+        "Redtail triggerfish",
+        "Blackbelly triggerfish"
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-caribbean-frog",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 11,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-caribbean-vague",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-caribbean-terrestrial",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-tropical-pacific-frog",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 11,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-tropical-pacific-vague",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-tropical-pacific-terrestrial",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-region-1",
+      "informationLevel" : "sufficient",
+      "kind" : "regionConflict",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Lined surgeonfish",
+      "top1Confidence" : 0.6428571428571429,
+      "top1Matched" : [
+        "group: surgeonfish",
+        "geographic range",
+        "reef",
+        "stripes",
+        "blue",
+        "yellow",
+        "blue stripes",
+        "yellow stripes"
+      ],
+      "top3" : [
+        "Lined surgeonfish",
+        "Striated surgeonfish",
+        "Elongate surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-region-2",
+      "informationLevel" : "sufficient",
+      "kind" : "regionConflict",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Leaf scorpionfish",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "brown",
+        "identity term: leaf"
+      ],
+      "top3" : [
+        "Leaf scorpionfish",
+        "Cockatoo waspfish",
+        "Philippines chromis"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-region-3",
+      "informationLevel" : "sufficient",
+      "kind" : "regionConflict",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Queen Angelfish",
+      "top1Confidence" : 0.52380952380952384,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "spots",
+        "blue"
+      ],
+      "top3" : [
+        "Queen Angelfish",
+        "Green razorfish",
+        "Angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "v05-region-4",
+      "informationLevel" : "sufficient",
+      "kind" : "regionConflict",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "V05Development.v2",
+      "top1" : "Spotted ray",
+      "top1Confidence" : 0.9285714285714286,
+      "top1Matched" : [
+        "Spotted ray",
+        "ray",
+        "geographic range",
+        "sand",
+        "spots"
+      ],
+      "top3" : [
+        "Spotted ray",
+        "Spotted Eagle Ray",
+        "Corocoro grunt"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "tail",
+        "blue",
+        "juvenile appearance",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-001",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 2,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "fish",
+        "tail",
+        "blue",
+        "juvenile appearance",
+        "compressed"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Powderblue surgeonfish",
+        "Palette surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "blue",
+        "yellow",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-002",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "blue",
+        "yellow",
+        "compatible size"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Queen Angelfish",
+        "Small toothed jobfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.26190476190476192,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "reef",
+        "blue",
+        "yellow"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-003",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.26190476190476192,
+      "top1Matched" : [
+        "reef",
+        "blue",
+        "yellow"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Queen Angelfish",
+        "Gold-saddle goatfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-004",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Blue swimming crab",
+      "top1Confidence" : 0.6428571428571429,
+      "top1Matched" : [
+        "Blue swimming crab",
+        "reef",
+        "male appearance"
+      ],
+      "top3" : [
+        "Blue swimming crab",
+        "Girella freminvillii",
+        "Yellowbarred parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: surgeonfish",
+        "blue"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-005",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 25,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "group: surgeonfish",
+        "blue"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Spotted surgeonfish",
+        "Lined surgeonfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.5714285714285714,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "seagrass",
+        "tail",
+        "blue",
+        "juvenile appearance",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-006",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.5714285714285714,
+      "top1Matched" : [
+        "fish",
+        "seagrass",
+        "tail",
+        "blue",
+        "juvenile appearance",
+        "compressed"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Common bluestripe snapper",
+        "Purple tuskfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.7142857142857143,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "shallow",
+        "yellow",
+        "juvenile appearance",
+        "compressed",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-007",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 5,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.7142857142857143,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "shallow",
+        "yellow",
+        "juvenile appearance",
+        "compressed",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Longsnout butterflyfish",
+        "Yellowtail snapper"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "tail",
+        "blue"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-008",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 31,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "fish",
+        "tail",
+        "blue"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Short-tooth cardinal",
+        "Moon wrasse"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-009",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Elongate surgeonfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "reef",
+        "spines",
+        "blue",
+        "grazing"
+      ],
+      "top3" : [
+        "Elongate surgeonfish",
+        "Doubleband surgeonfish",
+        "Achilles tang"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.73809523809523814,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Atlantic Blue Tang",
+        "geographic range",
+        "blue",
+        "atlantic",
+        "tang"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "id" : "realistic-010",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Atlantic Blue Tang",
+      "top1Confidence" : 0.73809523809523814,
+      "top1Matched" : [
+        "Atlantic Blue Tang",
+        "geographic range",
+        "blue",
+        "atlantic",
+        "tang"
+      ],
+      "top3" : [
+        "Atlantic Blue Tang",
+        "Palette surgeonfish",
+        "Queen Angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: parrotfish",
+        "red",
+        "juvenile appearance",
+        "parrotfish"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-011",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "group: parrotfish",
+        "red",
+        "juvenile appearance",
+        "parrotfish"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Palecheek parrotfish",
+        "Ember parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "reef",
+        "beak",
+        "grazing"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-012",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "reef",
+        "beak",
+        "grazing"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Ballyhoo halfbeak",
+        "Tailspot coralblenny"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.16666666666666666,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: parrotfish",
+        "parrotfish"
+      ],
+      "expectedRank" : 9,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-013",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Pacific steephead parrotfish",
+      "top1Confidence" : 0.2857142857142857,
+      "top1Matched" : [
+        "group: parrotfish",
+        "juvenile appearance"
+      ],
+      "top3" : [
+        "Pacific steephead parrotfish",
+        "Spotted parrotfish",
+        "Redband parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "beak",
+        "juvenile appearance"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-014",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "beak",
+        "juvenile appearance"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Great Barracuda",
+        "Blue-lined large-eye bream"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.19047619047619047,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "juvenile appearance",
+        "elongated",
+        "grazing"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-015",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.19047619047619047,
+      "top1Matched" : [
+        "juvenile appearance",
+        "elongated",
+        "grazing"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Eye-spot blenny",
+        "Cornelia's rockskipper"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-016",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Rivulated parrotfish",
+      "top1Confidence" : 0.2857142857142857,
+      "top1Matched" : [
+        "group: parrotfish",
+        "male appearance"
+      ],
+      "top3" : [
+        "Rivulated parrotfish",
+        "Darktail parrotfish",
+        "Spotted parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "beak"
+      ],
+      "expectedRank" : 2,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-017",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 5,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "teeth"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Stoplight Parrotfish",
+        "Red-toothed triggerfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.21428571428571427,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "reef",
+        "red",
+        "grazing"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-018",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.21428571428571427,
+      "top1Matched" : [
+        "reef",
+        "red",
+        "grazing"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Palecheek parrotfish",
+        "Scarface blenny"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.45238095238095238,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "beak"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-019",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 2,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.45238095238095238,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "reef",
+        "beak"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Atlantic bigeye",
+        "Bigeye scad"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.61904761904761907,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Stoplight Parrotfish",
+        "reef",
+        "parrotfish",
+        "stoplight"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "id" : "realistic-020",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Stoplight Parrotfish",
+      "top1Confidence" : 0.61904761904761907,
+      "top1Matched" : [
+        "Stoplight Parrotfish",
+        "reef",
+        "parrotfish",
+        "stoplight"
+      ],
+      "top3" : [
+        "Stoplight Parrotfish",
+        "Bicolour parrotfish",
+        "Great Barracuda"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "stripes",
+        "red",
+        "red stripes",
+        "hovering"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-021",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "fish",
+        "stripes",
+        "red",
+        "red stripes",
+        "hovering"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Orange-striped shrimpgoby",
+        "Buan goby"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.47619047619047616,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "spines",
+        "stripes",
+        "red",
+        "white",
+        "red stripes",
+        "white stripes",
+        "elongated"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-022",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.47619047619047616,
+      "top1Matched" : [
+        "spines",
+        "stripes",
+        "red",
+        "white",
+        "red stripes",
+        "white stripes",
+        "elongated"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Candystripe cardinalfish",
+        "Redbarred sandperch"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.2857142857142857,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "hovering"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-023",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 7,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.2857142857142857,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "hovering"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Hovering goby",
+        "Narrow-headed puffer"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.2857142857142857,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "geographic range",
+        "spines"
+      ],
+      "expectedRank" : 7,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-024",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Knobbed porgy",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "fish",
+        "geographic range",
+        "wreck"
+      ],
+      "top3" : [
+        "Knobbed porgy",
+        "Black margate",
+        "White margate"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.19047619047619047,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "stripes",
+        "red"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-025",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.19047619047619047,
+      "top1Matched" : [
+        "stripes",
+        "red"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Pectoral podge",
+        "Ornate emperor"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.26190476190476192,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: lionfish",
+        "reef",
+        "lionfish"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-026",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.26190476190476192,
+      "top1Matched" : [
+        "group: lionfish",
+        "reef",
+        "lionfish"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Hawaiian lionfish",
+        "Radial firefish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-027",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red bigeye",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "fish",
+        "spines"
+      ],
+      "top3" : [
+        "Red bigeye",
+        "Pinktail triggerfish",
+        "Spotted sharpnose"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "stripes",
+        "red",
+        "white",
+        "white stripes"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-028",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 17,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "stripes",
+        "red",
+        "white",
+        "white stripes"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Twospot turkeyfish",
+        "Radial leatherjacket"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.40476190476190477,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "spines",
+        "elongated"
+      ],
+      "expectedRank" : 2,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-029",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 7,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "elongated",
+        "solitary"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Red Lionfish",
+        "Tassled scorpionfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.59523809523809523,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Red Lionfish",
+        "red",
+        "lionfish"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "id" : "realistic-030",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Red Lionfish",
+      "top1Confidence" : 0.59523809523809523,
+      "top1Matched" : [
+        "Red Lionfish",
+        "red",
+        "lionfish"
+      ],
+      "top3" : [
+        "Red Lionfish",
+        "Plaintail turkeyfish",
+        "Twospot turkeyfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.14285714285714285,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "silver",
+        "elongated"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-031",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.14285714285714285,
+      "top1Matched" : [
+        "silver",
+        "elongated"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Sumatran silverside",
+        "Tenpounder"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "teeth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-032",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "fish",
+        "teeth"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Midnight parrotfish",
+        "Greensnout parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.40476190476190477,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "solitary",
+        "swimming",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-033",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.40476190476190477,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "solitary",
+        "swimming",
+        "compatible size"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Blue-lined large-eye bream",
+        "Malabar blood snapper"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-034",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 6,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Hartzfeld's cardinalfish",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "stripes",
+        "black",
+        "silver",
+        "black stripes",
+        "elongated"
+      ],
+      "top3" : [
+        "Hartzfeld's cardinalfish",
+        "Darkcap parrotfish",
+        "Humpnose big-eye bream"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "teeth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-035",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 7,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "fish",
+        "teeth"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Midnight parrotfish",
+        "Greensnout parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "group: barracuda",
+        "elongated",
+        "barracuda"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-036",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "group: barracuda",
+        "elongated",
+        "barracuda"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Blackfin barracuda",
+        "Wahoo"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.21428571428571427,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "elongated"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-037",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.21428571428571427,
+      "top1Matched" : [
+        "fish",
+        "elongated"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Wide-barred shrimpgoby",
+        "Barfin goby"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "fish",
+        "reef",
+        "teeth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-038",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 11,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "fish",
+        "reef",
+        "teeth"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Midnight parrotfish",
+        "Greensnout parrotfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : true,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-039",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 2,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Flathead cardinalfish",
+      "top1Confidence" : 0.11904761904761904,
+      "top1Matched" : [
+        "gray",
+        "tail shape"
+      ],
+      "top3" : [
+        "Flathead cardinalfish",
+        "Shortfin pompano",
+        "Longfin crevalle jack"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.73809523809523814,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Great Barracuda",
+        "geographic range",
+        "reef",
+        "barracuda",
+        "great"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000008"
+      ],
+      "id" : "realistic-040",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Great Barracuda",
+      "top1Confidence" : 0.73809523809523814,
+      "top1Matched" : [
+        "Great Barracuda",
+        "geographic range",
+        "reef",
+        "barracuda",
+        "great"
+      ],
+      "top3" : [
+        "Great Barracuda",
+        "Blackfin barracuda",
+        "Queen Angelfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.54761904761904767,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "shell",
+        "brown",
+        "olive",
+        "compressed",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-041",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.54761904761904767,
+      "top1Matched" : [
+        "turtle",
+        "shell",
+        "brown",
+        "olive",
+        "compressed",
+        "compatible size"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Hawksbill turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.42857142857142855,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "seagrass",
+        "shallow",
+        "sea",
+        "compatible depth"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-042",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.42857142857142855,
+      "top1Matched" : [
+        "turtle",
+        "seagrass",
+        "shallow",
+        "sea",
+        "compatible depth"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Hawksbill turtle",
+        "Kemp's ridley turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.16666666666666666,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-043",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.16666666666666666,
+      "top1Matched" : [
+        "turtle"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Kemp's ridley turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.16666666666666666,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "brown",
+        "gray"
+      ],
+      "expectedRank" : 4,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-044",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Flatback turtle",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "turtle",
+        "reef",
+        "brown",
+        "gray"
+      ],
+      "top3" : [
+        "Flatback turtle",
+        "Hawksbill turtle",
+        "Loggerhead turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "seagrass",
+        "compatible size"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-045",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "turtle",
+        "seagrass",
+        "compatible size"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Hawksbill turtle",
+        "Malabar blood snapper"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.23809523809523808,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "olive"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-046",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.23809523809523808,
+      "top1Matched" : [
+        "turtle",
+        "olive"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Olive ridley turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.21428571428571427,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "feeding"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-047",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 9,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.21428571428571427,
+      "top1Matched" : [
+        "turtle",
+        "feeding"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Kemp's ridley turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.16666666666666666,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "shell",
+        "compressed"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-048",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.16666666666666666,
+      "top1Matched" : [
+        "shell",
+        "compressed"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Smooth trunkfish",
+        "Smooth grouper"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.35714285714285715,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "turtle",
+        "shell",
+        "brown",
+        "sea"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-049",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.35714285714285715,
+      "top1Matched" : [
+        "turtle",
+        "shell",
+        "brown",
+        "sea"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Flatback turtle",
+        "Hawksbill turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.80952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "Green Sea Turtle",
+        "turtle",
+        "geographic range",
+        "green",
+        "sea"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000009"
+      ],
+      "id" : "realistic-050",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Green Sea Turtle",
+      "top1Confidence" : 0.80952380952380953,
+      "top1Matched" : [
+        "Green Sea Turtle",
+        "turtle",
+        "geographic range",
+        "green",
+        "sea"
+      ],
+      "top3" : [
+        "Green Sea Turtle",
+        "Hawksbill turtle",
+        "Leatherback turtle"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.59523809523809523,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "sand",
+        "spots",
+        "white",
+        "white spots",
+        "flat",
+        "bottom-swimming"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-051",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.59523809523809523,
+      "top1Matched" : [
+        "ray",
+        "sand",
+        "spots",
+        "white",
+        "white spots",
+        "flat",
+        "bottom-swimming"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Yellownose skate",
+        "Bering skate"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.33333333333333331,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "tail",
+        "black"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-052",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.33333333333333331,
+      "top1Matched" : [
+        "ray",
+        "tail",
+        "black"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Diamond stingray",
+        "Smooth butterfly ray"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.2857142857142857,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "spots",
+        "spotted"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-053",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 3,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.2857142857142857,
+      "top1Matched" : [
+        "ray",
+        "spots",
+        "spotted"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Blue-spotted stingray",
+        "Ribbontail stingray"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.30952380952380953,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "black",
+        "white"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-054",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 5,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.30952380952380953,
+      "top1Matched" : [
+        "ray",
+        "black",
+        "white"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Spiny butterfly ray",
+        "Saddleback clownfish"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.21428571428571427,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "swimming"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-055",
+      "informationLevel" : "limited",
+      "kind" : "identification",
+      "poolRank" : 14,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.21428571428571427,
+      "top1Matched" : [
+        "ray",
+        "swimming"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray"
+      ]
+    },
+    {
+      "abstained" : false,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : 0.38095238095238093,
+      "expectedInGlobal" : true,
+      "expectedMatched" : [
+        "ray",
+        "sand",
+        "spots",
+        "spotted"
+      ],
+      "expectedRank" : 1,
+      "expectedSpeciesIDs" : [
+        "00000000-0000-0000-0000-000000000010"
+      ],
+      "id" : "realistic-056",
+      "informationLevel" : "sufficient",
+      "kind" : "identification",
+      "poolRank" : 1,
+      "poolSize" : 50,
+      "recalledInPool" : true,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : "Spotted Eagle Ray",
+      "top1Confidence" : 0.38095238095238093,
+      "top1Matched" : [
+        "ray",
+        "sand",
+        "spots",
+        "spotted"
+      ],
+      "top3" : [
+        "Spotted Eagle Ray",
+        "Giant guitarfish",
+        "Cuckoo ray"
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-001",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-002",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-003",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-004",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 1,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-005",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-006",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-007",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-008",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 1,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-009",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-010",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-011",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-012",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 2,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-013",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 50,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    },
+    {
+      "abstained" : true,
+      "confidenceCompliant" : true,
+      "expectedConfidence" : null,
+      "expectedInGlobal" : false,
+      "expectedMatched" : null,
+      "expectedRank" : null,
+      "expectedSpeciesIDs" : [
+
+      ],
+      "id" : "no-signal-014",
+      "informationLevel" : null,
+      "kind" : "noMatch",
+      "poolRank" : null,
+      "poolSize" : 0,
+      "recalledInPool" : false,
+      "source" : "CaribbeanIdentificationBenchmark (development)",
+      "top1" : null,
+      "top1Confidence" : null,
+      "top1Matched" : [
+
+      ],
+      "top3" : [
+
+      ]
+    }
+  ],
+  "schemaVersion" : 1,
+  "speciesCount" : 4798,
+  "summary" : {
+    "ambiguousAbstained" : 0,
+    "candidateRecall" : 85,
+    "cases" : 116,
+    "confidenceCompliant" : 116,
+    "identification" : 90,
+    "identificationAbstained" : 0,
+    "noMatch" : 20,
+    "noMatchAbstained" : 20,
+    "regionConflictAbstained" : 0,
+    "top1" : 69,
+    "top3" : 75,
+    "top10" : 81
+  }
+}

@@ -275,4 +275,82 @@ final class GlobalPackEvaluationTests: XCTestCase {
         for line in inapplicable { print("GLOBAL_LOCATION_INAPPLICABLE \(line)") }
         XCTAssertGreaterThanOrEqual(display.count, 4, "too few cases can test location: \(inapplicable)")
     }
+
+    /// Production BM25 + biological ranking on all Global records over the 116 development
+    /// cases: the V05 v2 cases and the benchmark's development split (its holdout rows are
+    /// dropped as soon as the fixture is decoded and never searched). Writes a per-case report
+    /// when DIVEID_GLOBAL_DEV_RANKING_REPORT names a file. Quality is reported, not asserted;
+    /// no-match abstention and confidence compliance are hard gates.
+    func testProductionRankingOnGlobalDevelopmentCases() async throws {
+        guard let path = ProcessInfo.processInfo.environment["DIVEID_GLOBAL_DEV_RANKING_REPORT"] else {
+            throw XCTSkip("Set DIVEID_GLOBAL_DEV_RANKING_REPORT to evaluate production ranking on Global.")
+        }
+        struct DevCase { let id: String; let source: String; let description: String; let kind: String; let expected: [UUID]; let maximumConfidence: Double }
+        let v05 = try JSONDecoder().decode(Fixture.self, from: Data(contentsOf: TestResources.fixture(named: "V05Development.v2")))
+        let benchmark = try JSONDecoder().decode([IdentificationBenchmarkCase].self,
+            from: Data(contentsOf: TestResources.fixture(named: "CaribbeanIdentificationBenchmark"))).filter { $0.split == "development" }
+        let cases = v05.cases.map { DevCase(id: $0.id, source: "V05Development.v2", description: $0.description, kind: $0.kind,
+                                            expected: $0.expectedSpeciesIDs, maximumConfidence: $0.maximumConfidence) }
+            + benchmark.map { DevCase(id: $0.id, source: "CaribbeanIdentificationBenchmark (development)", description: $0.description,
+                                      kind: $0.expectedNoUsefulMatch ? "noMatch" : "identification", expected: $0.expectedSpeciesIDs,
+                                      maximumConfidence: $0.informationLevel == .limited ? 0.64 : 1) }
+        let global = try await repository().loadPack(id: .global)
+        let globalIDs = Set(global.profiles.map(\.id))
+        let engine = HybridDescriptionSearchEngine()
+        var rows: [[String: Any]] = []
+        var compliant = 0
+        for item in cases {
+            let result = try await engine.search(description: item.description, pack: global)
+            let expected = Set(item.expected)
+            let rank = result.candidates.firstIndex { expected.contains($0.profile.id) }.map { $0 + 1 }
+            let poolRank = result.retrievedSpeciesIDs.firstIndex { expected.contains($0) }.map { $0 + 1 }
+            let scores = result.candidates.map(\.score)
+            let isCompliant = result.candidates.allSatisfy {
+                $0.score.isFinite && $0.score >= 0 && $0.score <= item.maximumConfidence
+                    && ($0.informationLevel != .limited || $0.score <= LocalRankingWeights.limitedConfidenceCap)
+            }
+            if isCompliant { compliant += 1 }
+            if item.kind == "noMatch" { XCTAssertTrue(result.candidates.isEmpty, "\(item.id) must abstain") }
+            XCTAssertTrue(isCompliant, "\(item.id) confidence: \(scores)")
+            rows.append([
+                "id": item.id, "source": item.source, "kind": item.kind,
+                "expectedSpeciesIDs": item.expected.map(\.uuidString),
+                "expectedInGlobal": !expected.isDisjoint(with: globalIDs),
+                "expectedRank": rank.map { $0 as Any } ?? NSNull(),
+                "recalledInPool": poolRank != nil, "poolRank": poolRank.map { $0 as Any } ?? NSNull(),
+                "poolSize": result.retrievedSpeciesIDs.count,
+                "abstained": result.candidates.isEmpty,
+                "top1": result.candidates.first?.profile.commonName ?? NSNull(),
+                "top1Confidence": result.candidates.first?.score ?? NSNull(),
+                "top1Matched": result.candidates.first?.matchedEvidence ?? [],
+                "expectedMatched": rank.map { result.candidates[$0 - 1].matchedEvidence as Any } ?? NSNull(),
+                "top3": result.candidates.prefix(3).map(\.profile.commonName),
+                "expectedConfidence": rank.map { scores[$0 - 1] as Any } ?? NSNull(),
+                "informationLevel": result.candidates.first?.informationLevel.rawValue ?? NSNull(),
+                "confidenceCompliant": isCompliant,
+            ])
+        }
+        func count(_ kind: String, _ test: ([String: Any]) -> Bool) -> Int { rows.filter { $0["kind"] as? String == kind && test($0) }.count }
+        func within(_ k: Int) -> ([String: Any]) -> Bool { { ($0["expectedRank"] as? Int).map { $0 <= k } ?? false } }
+        let identification = count("identification") { _ in true }
+        let summary: [String: Any] = [
+            "cases": rows.count, "identification": identification,
+            "top1": count("identification", within(1)), "top3": count("identification", within(3)),
+            "top10": count("identification", within(10)),
+            "candidateRecall": count("identification") { $0["recalledInPool"] as? Bool == true },
+            "identificationAbstained": count("identification") { $0["abstained"] as? Bool == true },
+            "noMatch": count("noMatch") { _ in true }, "noMatchAbstained": count("noMatch") { $0["abstained"] as? Bool == true },
+            "ambiguousAbstained": count("ambiguous") { $0["abstained"] as? Bool == true },
+            "regionConflictAbstained": count("regionConflict") { $0["abstained"] as? Bool == true },
+            "confidenceCompliant": compliant,
+        ]
+        print("GLOBAL-DEV-RANKING " + String(decoding: try JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys]), as: UTF8.self))
+        let report: [String: Any] = [
+            "schemaVersion": 1, "engine": "production BM25 (50 candidates) + LocalSpeciesRanker",
+            "pack": "\(global.metadata.id.rawValue):\(global.metadata.packVersion)", "speciesCount": global.profiles.count,
+            "fixtures": ["V05Development.v2", "CaribbeanIdentificationBenchmark (development split only)"],
+            "summary": summary, "rows": rows,
+        ]
+        try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys]).write(to: URL(fileURLWithPath: path))
+    }
 }
