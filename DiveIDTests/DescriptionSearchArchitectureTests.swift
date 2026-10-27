@@ -13,6 +13,19 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
     }
 
     // Synthetic profiles isolate evidence relationships, not species identity.
+    func testRetrievalQueryAddsRecognisedTermsOnceWithoutChangingTheDescription() async {
+        let parser = LocalObservationParser()
+        let beaked = await parser.parse("big beaked fish taking bites from a reef")
+        let query = HybridDescriptionSearchEngine.retrievalQuery("big beaked fish taking bites from a reef", beaked)
+        XCTAssertTrue(query.hasPrefix("big beaked fish taking bites from a reef"))
+        XCTAssertTrue(query.split(separator: " ").contains("beak"), query)
+        // A term already in the text, singular or plural, is not added again.
+        let spine = await parser.parse("blue fish with a tail spine")
+        let spineQuery = HybridDescriptionSearchEngine.retrievalQuery("blue fish with a tail spine", spine)
+        XCTAssertFalse(spineQuery.split(separator: " ").contains("spines"), spineQuery)
+        XCTAssertEqual(spineQuery.split(separator: " ").filter { $0 == "blue" }.count, 1)
+    }
+
     func testCompoundHueDoesNotRewardAnUnorderedColorListTwice() async throws {
         let seed = try await pack().profiles[0]
         func profile(_ name: String, _ colors: [String], _ prose: String) throws -> LocalSpeciesProfile {

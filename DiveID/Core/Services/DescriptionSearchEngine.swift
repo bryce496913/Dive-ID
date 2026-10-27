@@ -141,7 +141,7 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
         try Task.checkCancellation()
         let observation = await parser.parse(description)
         try Task.checkCancellation()
-        let retrieved = try await primaryCandidates(description: description, pack: pack)
+        let retrieved = try await primaryCandidates(description: Self.retrievalQuery(description, observation), pack: pack)
         try Task.checkCancellation()
         let result = try await rank(description: description, observation: observation, retrieved: retrieved,
                                     pack: pack, retrievalLimit: candidateLimit)
@@ -193,6 +193,21 @@ struct HybridDescriptionSearchEngine: DescriptionSearching {
             retrievedSpeciesIDs: retrieved.map(\.speciesID),
             retrievalLimit: retrievalLimit
         )
+    }
+
+    /// The description plus the catalogue terms the parser recognised in it that it does not
+    /// already contain, so retrieval matches "beaked" to beak and "toothy" to teeth as the
+    /// ranker does. Recognised terms are added once each; the description is unchanged.
+    static func retrievalQuery(_ description: String, _ observation: ParsedObservation) -> String {
+        let canonical = observation.colors.union(observation.markings).union(observation.bodyShapes)
+            .union(observation.habitats).union(observation.categories).union(observation.behaviors)
+        // Compared in the singular, so "spine" in the text does not add "spines" a second time.
+        let present = Set(LocalObservationParser.normalize(description).split { !$0.isLetter && !$0.isNumber }
+            .map { LocalObservationParser.singular(String($0)) })
+        let added = canonical.filter { term in
+            !term.split(separator: " ").allSatisfy { present.contains(LocalObservationParser.singular(String($0))) }
+        }.sorted()
+        return added.isEmpty ? description : description + " " + added.joined(separator: " ")
     }
 
     func documents(pack: OfflineIdentificationPack) async throws -> [SpeciesSearchDocument] {
