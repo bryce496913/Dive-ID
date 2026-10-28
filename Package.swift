@@ -14,7 +14,8 @@ let package = Package(
                 "App/DebugSemanticSearchStatusView.swift", "App/DiveIDApp.swift", "App/RootView.swift", "App/FeatureAvailability.swift", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/PhotoProcessingService.swift",
-                "Info.plist"
+                "Info.plist",
+                "PrivacyInfo.xcprivacy"
             ],
             sources: [
                 "Core/Catalog/Schema/CatalogueVocabulary.swift",

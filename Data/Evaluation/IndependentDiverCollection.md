@@ -213,6 +213,45 @@ labels and add versioned adjudications rather than overwriting a frozen baseline
 Report candidate recall, displayed ranks/top-k, abstentions, ambiguity and confidence
 descriptively with denominators; 12 cases cannot establish identification accuracy.
 
+## In-app collection (revision 2026-10-28)
+
+Pilot accounts may also arrive as **Share my feedback** files from the Dive ID app
+(format in `DiverFeedbackExport.v1.md`). A record qualifies only when it is the
+**first search of that install** (so the diver had seen no catalogue text or results
+when writing it), was **not an edited re-search** after results were shown, carries
+**consentForEvaluation = true**, and was searched in **Global**. The description is
+used exactly as stored: untrimmed and unedited.
+
+The diver's tapped answer, "Yes — this one" or "This is what I saw" (with the species)
+or "None of these" or "Not sure", is stored as **contributorClaimedIdentity** in
+private provenance. It was given after seeing engine results, so it is **never** the
+expected species, never label evidence, and is not shown to the curator. A curator
+who has not seen engine output assigns `expectedSpeciesIDs` from independent evidence
+(the diver's own photo or video, or a field guide or documented instructor assessment),
+or leaves the label unresolved.
+
+"None of these" and "Not sure" records are kept exactly like the rest. No record is
+chosen, dropped or reordered because of how the engine ranked it or what the diver
+answered. `Tools/Evaluation/import_feedback.py` applies these rules. It writes
+qualifying records and a curator worksheet (description and the diver's optional
+details only, no engine results or claims) to a private holdout directory outside the
+repository.
+
+The app does not collect the authorship attestation. The custodian obtains
+`attestsOwnUnpromptedWords` from each diver before freeze. App collection uses the
+same 12-case target; it is not a separate cohort format.
+
+```sh
+python3 Tools/Evaluation/import_feedback.py --holdout ~/DiveID-holdout/diver-pilot-v1 \
+  ~/Downloads/DiveID-feedback-*.json
+```
+
+The holdout directory must be outside the repository; the importer creates it with
+mode 0700 and refuses a path inside the checkout. It holds `submissions.json` (qualifying
+records, keyed by feedbackID, with contributorClaimedIdentity and shownResults kept
+privately), `curator-worksheet.csv` (no engine output or claims) and `intake-log.json`
+(every record seen, with its import decision and reason, and no descriptions).
+
 ## Pilot status (2026-10-25)
 
 **Collected 0 / 12; verified 0; unresolved 0. No dataset is frozen and nothing was

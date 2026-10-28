@@ -44,6 +44,25 @@
   "holdoutDisclosure": "Only custodian sees wording, identities, case-level ranks/errors and raw logs. Development output receives aggregate numerators/denominators only. Do not enrich or tune from held-out cases; move the entire exposed cohort to development in a new dataset version and retain the old frozen baseline.",
   "independence": "Authorship attestation and separate identity verification are required, but software cannot prove human independence. No model-authored examples are accepted as independent data. No collection outreach is authorized by this protocol.",
   "revisions": [
-    "2026-10-25, before any collection or freeze: pilot target changed from 4 Caribbean + 8 Tropical Pacific to 12 Global, and 'global' accepted as a region, because Release access offers 2 Caribbean and 0 Tropical Pacific species. Rank bounds, confidence caps, minimum rates, sample minimums and the assignment rule are unchanged. Latency and abstentions are reported descriptively, with no gate."
-  ]
+    "2026-10-25, before any collection or freeze: pilot target changed from 4 Caribbean + 8 Tropical Pacific to 12 Global, and 'global' accepted as a region, because Release access offers 2 Caribbean and 0 Tropical Pacific species. Rank bounds, confidence caps, minimum rates, sample minimums and the assignment rule are unchanged. Latency and abstentions are reported descriptively, with no gate.",
+    "2026-10-28, before any collection or freeze: in-app collection added as an intake source (inAppCollection), approved by Bryce. Rank bounds, confidence caps, minimum rates, sample minimums, the pilot target and the assignment rule are unchanged."
+  ],
+  "inAppCollection": {
+    "source": "Dive ID 'Share my feedback' files: format diveid-diver-feedback, schemaVersion 1 (Data/Evaluation/DiverFeedbackExport.v1.md)",
+    "qualifies": {
+      "consentForEvaluation": true,
+      "firstSearchOfInstall": true,
+      "priorExposure": false,
+      "researchOfAttemptID": null,
+      "editedAfterSeeingResults": false,
+      "packID": "global"
+    },
+    "contributorClaimedIdentity": "The diver's tapped answer (claimedSpecies with claimedSpeciesID, none, or notSure) is kept in private provenance as contributorClaimedIdentity. It was given after seeing engine results, so it is engine-exposed: it is never copied to expectedSpeciesIDs, acceptableSpeciesIDs or label evidence, and it is withheld from the curator.",
+    "labels": "A curator who has not seen engine output, shownResults or contributorClaimedIdentity assigns expectedSpeciesIDs/acceptableSpeciesIDs from independent evidence: the diver's own photo or video, or an authoritative field guide or documented instructor assessment. Otherwise the label stays unresolved.",
+    "retention": "Qualifying records answered 'None of these' or 'Not sure' are imported like any other. No record is selected, rejected or reordered by engine success, rank or the diver's answer.",
+    "nonQualifying": "Records that fail a qualifying rule are not imported. Each is listed with its reason in the private intake log; descriptions are not copied there.",
+    "deduplication": "feedbackID; the same record in several shared files is imported once.",
+    "attestation": "The app does not ask the diver to attest that the words are their own and unprompted (author.attestsOwnUnpromptedWords). The custodian must obtain that attestation before freeze.",
+    "importer": "Tools/Evaluation/import_feedback.py"
+  }
 }
