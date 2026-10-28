@@ -133,6 +133,22 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual([p["photoID"] for p in selected[0]["photos"]], ["inaturalist:photo:31", "inaturalist:photo:21"],
                          "chosen first; the excluded photo is gone; a chosen ND photo still fails the licence filter")
 
+    def test_cached_only_skips_species_not_yet_fetched(self):
+        class PartlyCached(FakeClient):
+            def observations(self, taxon_id, licence_codes, per_page=30):
+                if taxon_id == 8:
+                    raise inat.Offline("not cached")
+                return super().observations(taxon_id, licence_codes, per_page)
+        client = PartlyCached(
+            taxa={"Pterois volitans": [{"id": 7, "name": "Pterois volitans", "rank": "species"}],
+                  "Aetobatus narinari": [{"id": 8, "name": "Aetobatus narinari", "rank": "species"}]},
+            observations={(7, ("cc0", "cc-by", "cc-by-nc")): {"results": [observation(1, [photo(11)])]}})
+        rows = [{"speciesID": "a", "commonName": "Red Lionfish", "scientificName": "Pterois volitans", "sourceCode": None},
+                {"speciesID": "b", "commonName": "Spotted Eagle Ray", "scientificName": "Aetobatus narinari", "sourceCode": None}]
+        selected, pending = sp.select_cached(client, rows, POLICY)
+        self.assertEqual(([r["speciesID"] for r in selected], pending), (["a"], 1))
+        self.assertEqual(sp.coverage(selected, [], pending)["notYetFetched"], 1)
+
     def test_a_flagged_taxon_is_never_searched_for_photos(self):
         client = FakeClient(taxa={"Aetobatis narinari": [{"id": 2, "name": "Aetobatus narinari", "rank": "species",
                                                           "matched_term": "Aetobatis narinari"}]})
@@ -253,6 +269,22 @@ class ClientTests(unittest.TestCase):
 
 
 class ThumbnailTests(unittest.TestCase):
+    def test_a_failed_download_is_skipped_and_recorded(self):
+        def fetch(url):
+            if "/2/" in url:
+                raise OSError("404")
+            return b"jpeg"
+        photos = [{"photoID": f"inaturalist:photo:{n}", "speciesID": "S", "licenceCode": "cc-by",
+                   "photoURL": f"https://inaturalist-open-data.s3.amazonaws.com/photos/{n}/large.jpg"} for n in (1, 2, 3)]
+        failures = []
+        with tempfile.TemporaryDirectory() as tmp:
+            index = thumbnails.make(photos, tmp, POLICY, fetch=fetch, sleep=lambda s: None,
+                                    resize=lambda d, n: (d, (400, 300)), failures=failures, save_every=1)
+            saved = json.loads((Path(tmp) / thumbnails.INDEX).read_text())
+        self.assertEqual(sorted(index), ["inaturalist:photo:1", "inaturalist:photo:3"])
+        self.assertEqual(saved, index)
+        self.assertEqual([f["photoID"] for f in failures], ["inaturalist:photo:2"])
+
     def test_only_allowed_photos_are_downloaded_once_and_indexed(self):
         with tempfile.TemporaryDirectory() as tmp:
             fetched = []

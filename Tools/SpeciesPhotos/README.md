@@ -10,7 +10,9 @@ python3 Tools/SpeciesPhotos/fetch_fishbase_pictures.py         # pinned FishBase
 python3 Tools/SpeciesPhotos/species_photos.py                  # resolve -> select -> manifest (about 3 h uncached)
 python3 Tools/SpeciesPhotos/species_photos.py --offline        # rerun from the cache: no requests, same manifest
 python3 Tools/SpeciesPhotos/species_photos.py --interval 5     # slower, if iNaturalist answers 429 (rate limited)
+python3 Tools/SpeciesPhotos/species_photos.py --cached-only    # no requests: every species already cached; the rest counted as notYetFetched
 python3 Tools/SpeciesPhotos/thumbnails.py --species <id> ...   # 400 px thumbnails for the photos to review
+python3 Tools/SpeciesPhotos/thumbnails.py --all --first-only   # the photo the app shows, for every species in the manifest
 python3 Tools/CatalogReview/photo_batches.py prepare <batch-id> --species <id> ...
 python3 -m unittest discover -s Tools/SpeciesPhotos -p 'test_*.py' -v   # no network, pyarrow or Pillow needed
 ```
@@ -98,7 +100,12 @@ served from the cache. The outputs to commit are:
 - `Data/SpeciesPhotos/PhotoManifest.json`;
 - `Data/SpeciesPhotos/PermissionNeeded.csv`;
 - `Reports/SpeciesPhotoCoverage.json`;
-- thumbnails under review in `Data/SpeciesPhotos/Thumbnails/`.
+- `Data/SpeciesPhotos/Thumbnails/Thumbnails.json`, the thumbnail index.
+
+Staging thumbnails (`Data/SpeciesPhotos/Thumbnails/*.jpg`) aren't committed: an approved
+photo's committed copy is the one in `Global/Images/`. On a fresh checkout `publish_global.py`
+keeps a pack image whose SHA-256 matches the index; to change photos, remake the thumbnails
+first. A thumbnail run saves its index as it goes and lists any photo that failed to download.
 
 ## Size
 

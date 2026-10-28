@@ -246,7 +246,19 @@ def manifest(selected, policy):
     return {"schemaVersion": 1, "policy": {k: policy[k] for k in sorted(policy) if k != "note"}, "photos": entries}
 
 
-def coverage(selected, permission):
+def select_cached(client, rows, policy, choices=({}, set())):
+    """(selected, pending): every species whose responses are all cached, and the number left
+    for a later online run. Uses no network, so it works while the API is rate limiting."""
+    selected, pending = [], 0
+    for row in rows:
+        try:
+            selected += select(client, resolve(client, [row]), policy, choices)
+        except inat.Offline:
+            pending += 1
+    return selected, pending
+
+
+def coverage(selected, permission, pending=0):
     with_inat = {r["speciesID"] for r in selected if r["photos"]}
     with_fishbase = set()  # allowed FishBase photos: none state an allowed licence
     needed = {p["speciesID"] for p in permission}
@@ -255,7 +267,7 @@ def coverage(selected, permission):
         statuses[r["status"]] = statuses.get(r["status"], 0) + 1
     no_photo = [r for r in selected if r["speciesID"] not in with_inat | with_fishbase | needed]
     return {
-        "schemaVersion": 1, "species": len(selected),
+        "schemaVersion": 1, "species": len(selected), "notYetFetched": pending,
         "withINaturalistPhoto": len(with_inat), "withFishBasePhoto": len(with_fishbase),
         "permissionNeeded": sum(p["action"] == "permission needed" for p in permission),
         "confirmPublicDomain": sum(p["action"] == "confirm public domain" for p in permission),
@@ -291,6 +303,8 @@ def main():
     parser.add_argument("--output", default=OUT)
     parser.add_argument("--report", default=REPORT)
     parser.add_argument("--fishbase-cache", default=OUT / "fishbase-cache")
+    parser.add_argument("--cached-only", action="store_true",
+                        help="no requests: process the species whose responses are cached and count the rest as not yet fetched")
     parser.add_argument("--choices", default=CHOICES, help="the reviewer's chosen and excluded photos")
     parser.add_argument("--interval", type=float, default=1.0,
                         help="seconds between iNaturalist requests; raise it if the API answers 429")
@@ -300,14 +314,17 @@ def main():
     if args.species:
         wanted = {s.lower() for s in args.species}
         rows = [r for r in rows if r["speciesID"] in wanted]
-    client = inat.Client(CACHE, offline=args.offline, minimum_interval=args.interval)
-    selected = select(client, resolve(client, rows), policy, load_choices(args.choices))
+    client = inat.Client(CACHE, offline=args.offline or args.cached_only, minimum_interval=args.interval)
+    if args.cached_only:
+        selected, pending = select_cached(client, rows, policy, load_choices(args.choices))
+    else:
+        selected, pending = select(client, resolve(client, rows), policy, load_choices(args.choices)), 0
     missing = [r for r in selected if not r["photos"]]
     permission = fishbase_fallback(missing, load_fishbase_pictures(args.fishbase_cache)) if missing else []
     output = Path(args.output)
     write_json(output / "PhotoManifest.json", manifest(selected, policy))
     (output / "PermissionNeeded.csv").write_text(permission_csv(permission))
-    report = coverage(selected, permission)
+    report = coverage(selected, permission, pending)
     write_json(args.report, report)
     print(json.dumps({k: v for k, v in report.items() if k != "flaggedTaxa"}, sort_keys=True), f"requests={client.requests}")
 

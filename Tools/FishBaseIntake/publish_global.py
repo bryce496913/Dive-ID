@@ -31,6 +31,7 @@ DiveID/Resources/IdentificationPacks/Global/Creatures.json and its PackManifest.
 """
 import argparse
 import glob
+import hashlib
 import json
 import re
 import shutil
@@ -136,12 +137,19 @@ def apply_photos(records, photo_manifest, thumbnails, batches):
     return files, dict(report, bundledPhotos=len(files))
 
 
-def sync_images(image_dir, files):
+def sync_images(image_dir, files, expected_sha256=None):
     """Copy the approved thumbnails into the pack and remove photo files no longer approved.
-    Only files named like intake photos are ever removed."""
+    Only files named like intake photos are ever removed. Staging thumbnails aren't committed,
+    so on a fresh checkout a pack image already in place is kept when its SHA-256 matches the
+    thumbnail index (expected_sha256: {fileName: sha256})."""
     image_dir = Path(image_dir)
     for name, source in sorted(files.items()):
         target = image_dir / name
+        if not Path(source).exists():
+            expected = (expected_sha256 or {}).get(name)
+            if target.exists() and expected and hashlib.sha256(target.read_bytes()).hexdigest() == expected:
+                continue
+            raise FileNotFoundError(f"{name}: no staging thumbnail and no matching pack image; run Tools/SpeciesPhotos/thumbnails.py")
         if not (target.exists() and target.read_bytes() == Path(source).read_bytes()):
             image_dir.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
@@ -203,7 +211,8 @@ def main(argv=None):
     photo_files, photo_report = apply_photos(records, args.photo_manifest, args.thumbnails, args.photo_batches)
     manifest = manifest_for(records, json.loads((pack / "PackManifest.json").read_text()), review_report["approvalsRecorded"])
     image_dir = pack / manifest["imageSubdirectory"]
-    sync_images(image_dir, photo_files)  # copies approved thumbnails before validation checks they exist
+    hashes = {e["fileName"]: e["sha256"] for e in photo_batches.thumbnail_index(args.thumbnails).values()}
+    sync_images(image_dir, photo_files, hashes)  # copies approved thumbnails before validation checks they exist
     catalogue_validation.validate_catalogue(records, manifest, pack)  # raises on any error; pack files not written
     action = write_pack(pack, creatures_text(records), json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     applied = Path(args.batches) / "AppliedApprovals.json"

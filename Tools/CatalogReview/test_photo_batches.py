@@ -161,6 +161,16 @@ class PhotoBatchTests(unittest.TestCase):
         self.assertEqual(removed, [old])
         self.assertEqual(sorted(p.name for p in images.iterdir()), [name, "keep-artwork.svg"])
 
+    def test_sync_keeps_a_matching_pack_image_when_the_staging_copy_is_absent(self):
+        images = self.w.pack / "Images"
+        name = f"{SPECIES[0]}-inat-11.jpg"
+        publish_global.sync_images(images, {name: self.w.thumbs / name})
+        (self.w.thumbs / name).unlink()
+        sha = publish_global.hashlib.sha256((images / name).read_bytes()).hexdigest()
+        self.assertEqual(publish_global.sync_images(images, {name: self.w.thumbs / name}, {name: sha}), [])
+        with self.assertRaisesRegex(FileNotFoundError, "run Tools/SpeciesPhotos/thumbnails.py"):
+            publish_global.sync_images(images, {name: self.w.thumbs / name}, {name: "0" * 64})
+
 
 if __name__ == "__main__":
     unittest.main()

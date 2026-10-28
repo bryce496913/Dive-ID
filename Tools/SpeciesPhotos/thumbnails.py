@@ -53,8 +53,10 @@ def download(url, opener=urllib.request.urlopen):
         return response.read()
 
 
-def make(photos, out_dir, policy, fetch=download, sleep=time.sleep, resize=thumbnail):
-    """Write a thumbnail for each photo not already indexed; return the updated index."""
+def make(photos, out_dir, policy, fetch=download, sleep=time.sleep, resize=thumbnail, failures=None, save_every=50):
+    """Write a thumbnail for each photo not already indexed; return the updated index. A photo
+    that fails to download or decode is listed in failures (when given) and skipped; the index
+    is saved every save_every thumbnails, so a long run that stops keeps what it made."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     index_path = out_dir / INDEX
@@ -70,29 +72,43 @@ def make(photos, out_dir, policy, fetch=download, sleep=time.sleep, resize=thumb
         if not first:
             sleep(1.0)
         first = False
-        data, (width, height) = resize(fetch(photo["photoURL"]), policy["thumbnailLongestSidePixels"])
+        try:
+            data, (width, height) = resize(fetch(photo["photoURL"]), policy["thumbnailLongestSidePixels"])
+        except Exception as error:  # noqa: BLE001 - one bad file must not stop a long run
+            if failures is None:
+                raise
+            failures.append({"photoID": photo["photoID"], "error": f"{type(error).__name__}: {error}"})
+            continue
         (out_dir / name).write_bytes(data)
         index[photo["photoID"]] = {"fileName": name, "speciesID": photo["speciesID"], "sha256": hashlib.sha256(data).hexdigest(),
                                    "bytes": len(data), "width": width, "height": height}
+        if len(index) % save_every == 0:
+            index_path.write_text(json.dumps(index, indent=1, sort_keys=True) + "\n")
     index_path.write_text(json.dumps(index, indent=1, sort_keys=True) + "\n")
     return index
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--species", nargs="+", required=True, help="species IDs to make thumbnails for")
+    parser.add_argument("--species", nargs="+", help="species IDs to make thumbnails for")
+    parser.add_argument("--all", action="store_true", help="every species in the manifest")
+    parser.add_argument("--first-only", action="store_true", help="only each species' first-ranked photo (the one the app shows)")
     parser.add_argument("--manifest", default=MANIFEST)
     parser.add_argument("--output", default=THUMBNAILS)
     parser.add_argument("--policy", default=licences.POLICY_PATH)
     args = parser.parse_args(argv)
     policy = licences.load_policy(args.policy)
-    wanted = {s.upper() for s in args.species}
-    photos = [p for p in json.loads(Path(args.manifest).read_text())["photos"] if p["speciesID"].upper() in wanted]
+    if not args.all and not args.species:
+        parser.error("name --species or pass --all")
+    photos = json.loads(Path(args.manifest).read_text())["photos"]
+    wanted = {p["speciesID"].upper() for p in photos} if args.all else {s.upper() for s in args.species}
+    photos = [p for p in photos if p["speciesID"].upper() in wanted and (p["rank"] == 1 or not args.first_only)]
     missing = wanted - {p["speciesID"].upper() for p in photos}
     if missing:
         print(f"no selected photo for: {', '.join(sorted(missing))}", file=sys.stderr)
-    index = make(photos, args.output, policy)
-    print(json.dumps({"thumbnails": len(index), "bytes": sum(e["bytes"] for e in index.values())}))
+    failures = []
+    index = make(photos, args.output, policy, failures=failures)
+    print(json.dumps({"thumbnails": len(index), "bytes": sum(e["bytes"] for e in index.values()), "failed": failures}))
     return 0
 
 
