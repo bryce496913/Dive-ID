@@ -4,11 +4,14 @@ import SwiftUI
 /// credit for every species photo in the packs this build offers.
 struct CreditsView: View {
     let catalog: any MarineSpeciesCatalogRepository
+    /// Consent and Share my feedback; nil in previews.
+    @State var feedback: FeedbackSharingViewModel? = nil
     @State private var photoCredits: [PhotoCredit] = []
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
+                if let feedback { FeedbackSharingCard(model: feedback) }
                 ForEach(CatalogueAttribution.credits, id: \.name) { credit in
                     CreditsCard {
                         Text(credit.name).font(.headline)

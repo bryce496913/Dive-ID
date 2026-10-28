@@ -3,6 +3,8 @@ import SwiftUI
 struct IdentificationResultsView: View {
     @State var viewModel: IdentificationResultsViewModel
     let router: AppRouter
+    /// "Was this right?" for this search; nil where feedback is unavailable (previews, tests).
+    @State var feedback: FeedbackPromptViewModel? = nil
 
     private var hasResults: Bool {
         if case .loaded(_) = viewModel.state { return true }
@@ -55,9 +57,15 @@ struct IdentificationResultsView: View {
                         }
                         Text(AppCopy.accuracyDisclaimer)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary).padding(.top)
+                        // Below the matches, after the diver has seen them all.
+                        if let feedback, feedback.isAvailable {
+                            FeedbackPrompt(model: feedback, matches: matches)
+                        }
                     }
                     .padding()
                 }
+                // Records the results as displayed; it never changes them.
+                .task(id: matches.map(\.id)) { feedback?.recordShown(matches) }
 #if DEBUG || DIVEID_INTERNAL
                 .onAppear { InternalSearchDiagnostics.shared.queryFinished(.results) }
 #endif

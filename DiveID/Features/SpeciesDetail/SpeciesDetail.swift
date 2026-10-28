@@ -2,6 +2,8 @@ import SwiftUI
 
 struct SpeciesDetailView: View {
     @State var viewModel: SpeciesDetailViewModel
+    /// Set only when the page was reached from a search's results.
+    @State var feedback: FeedbackPromptViewModel? = nil
     @State private var showsAppearance = true
     @State private var showsHabitat = false
     @State private var showsTaxonomy = false
@@ -30,6 +32,9 @@ struct SpeciesDetailView: View {
                 // What a diver needs to judge the match comes first: why it matched, what is
                 // missing, and how to tell it apart from look-alikes.
                 matchEvidence
+                if let feedback, feedback.isAvailable {
+                    FeedbackThisIsWhatISawButton(model: feedback, species: viewModel.species)
+                }
                 if !viewModel.species.similarSpecies.isEmpty {
                     DetailCard { DetailSection(title: "Similar species", text: viewModel.species.similarSpecies.map { $0.distinguishingText }.joined(separator: " • ")) }
                 }
