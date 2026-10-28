@@ -115,9 +115,26 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
 - Region selection chooses an available local pack; there are no pack downloads.
 - Results/details retain their temporary session during detail/back navigation;
   finished flows release it. Remaining temporary sessions have a hard limit of 16.
-- Saved sightings use persistent JSON storage and include a species snapshot.
-  Initialization/write failures expose an error and retry path, never a silent
-  memory-only success. Unreadable storage is not automatically reset.
+- **Dive Log** (Home → Dive Log, formerly Saved Identifications): dives newest first
+  (date, site, region, maximum depth, sighting count, first photo), then unassigned
+  sightings. Add or edit a dive; only the date is required, and depth, temperature and
+  visibility are entered in metres/°C or feet/°F (a setting that defaults from the
+  locale) and stored with their units. Deleting a dive keeps its sightings unassigned
+  unless you choose to delete them too. Opening a sighting shows the saved detail.
+- **Add to dive:** after saving an identification from search or the field guide, add
+  it to today's dive, pick another dive, create a new one, or skip.
+- **Export** the whole log or one dive through the share sheet, after a preview of the
+  row count: CSV with one row per sighting and its dive's fields (RFC 4180 quoting;
+  fields that would start a spreadsheet formula get a leading apostrophe) or JSON
+  with every field.
+- **Field Guide:** browse the catalogue by animal group and ocean region, with a name
+  filter and a Has photo switch; saving from a species page needs no search.
+- **"Was this right?"** after a search saves the diver's answer on the device, with
+  separate optional consents; Share my feedback (Data Sources and Credits) exports
+  consented records only. Nothing is sent automatically.
+- Saved sightings and dives use one persistent JSON file (schema 3) and include a
+  species snapshot. Initialization/write failures expose an error and retry path,
+  never a silent memory-only success. Unreadable storage is not automatically reset.
 - **Photo identification is unavailable.** The home action is disabled and says
   “Coming later”; image preparation code is not an identification model.
 - **Core ML search is experimental** and Debug-only. It is a fallback used only when

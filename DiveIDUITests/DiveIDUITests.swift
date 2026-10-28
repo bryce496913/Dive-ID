@@ -259,6 +259,6 @@ final class DiveIDUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Coming later"].exists)
         XCTAssertFalse(app.buttons["photoAction"].isEnabled)
         app.buttons["savedAction"].tap()
-        XCTAssertTrue(app.navigationBars["Saved Identifications"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Dive Log"].waitForExistence(timeout: 2))
     }
 }

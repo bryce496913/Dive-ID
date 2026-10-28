@@ -13,6 +13,7 @@ enum AppRoute: Hashable {
     case speciesCatalogue
     case fieldGuide
     case fieldGuideGroup(id: String)
+    case dive(id: UUID)
 }
 
 @MainActor @Observable
@@ -25,6 +26,8 @@ final class AppRouter {
     @ObservationIgnored private var sessionUpdateTask: Task<Void, Never>?
     /// One field guide per visit, shared by its group screens; dropped when the guide closes.
     @ObservationIgnored private var fieldGuide: FieldGuideViewModel?
+    /// One Dive Log per visit, shared by its dive pages; dropped when the log closes.
+    @ObservationIgnored private var diveLog: DiveLogViewModel?
 
     init(sessionStore: any IdentificationSessionStore = InMemoryIdentificationSessionStore()) {
         self.sessionStore = sessionStore
@@ -49,6 +52,13 @@ final class AppRouter {
         return model
     }
 
+    func diveLogModel(repository: any SavedLogRepository, catalog: any MarineSpeciesCatalogRepository) -> DiveLogViewModel {
+        if let diveLog { return diveLog }
+        let model = DiveLogViewModel(repository: repository, catalog: catalog)
+        diveLog = model
+        return model
+    }
+
     private static func sessions(in path: [AppRoute]) -> Set<UUID> {
         Set(path.compactMap { route in
             switch route {
@@ -61,6 +71,7 @@ final class AppRouter {
 
     private func reconcileSessions(previous: [AppRoute]) {
         if !path.contains(.fieldGuide) { fieldGuide = nil }
+        if !path.contains(.savedIdentifications) { diveLog = nil }
         let active = Self.sessions(in: path)
         let removed = Self.sessions(in: previous).subtracting(active)
         for id in removed {
