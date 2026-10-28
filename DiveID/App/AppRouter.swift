@@ -11,6 +11,8 @@ enum AppRoute: Hashable {
     case offlineRegions
     case credits
     case speciesCatalogue
+    case fieldGuide
+    case fieldGuideGroup(id: String)
 }
 
 @MainActor @Observable
@@ -21,6 +23,8 @@ final class AppRouter {
     private let sessionStore: any IdentificationSessionStore
     @ObservationIgnored private var resultsModels: [UUID: IdentificationResultsViewModel] = [:]
     @ObservationIgnored private var sessionUpdateTask: Task<Void, Never>?
+    /// One field guide per visit, shared by its group screens; dropped when the guide closes.
+    @ObservationIgnored private var fieldGuide: FieldGuideViewModel?
 
     init(sessionStore: any IdentificationSessionStore = InMemoryIdentificationSessionStore()) {
         self.sessionStore = sessionStore
@@ -38,6 +42,13 @@ final class AppRouter {
         return model
     }
 
+    func fieldGuideModel(catalog: any MarineSpeciesCatalogRepository) -> FieldGuideViewModel {
+        if let fieldGuide { return fieldGuide }
+        let model = FieldGuideViewModel(catalog: catalog)
+        fieldGuide = model
+        return model
+    }
+
     private static func sessions(in path: [AppRoute]) -> Set<UUID> {
         Set(path.compactMap { route in
             switch route {
@@ -49,6 +60,7 @@ final class AppRouter {
     }
 
     private func reconcileSessions(previous: [AppRoute]) {
+        if !path.contains(.fieldGuide) { fieldGuide = nil }
         let active = Self.sessions(in: path)
         let removed = Self.sessions(in: previous).subtracting(active)
         for id in removed {

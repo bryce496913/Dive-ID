@@ -56,6 +56,10 @@ struct RootView: View {
             )
         case .credits:
             CreditsView(catalog: catalogRepository, feedback: FeedbackSharingViewModel(service: feedback))
+        case .fieldGuide:
+            FieldGuideView(viewModel: router.fieldGuideModel(catalog: catalogRepository), router: router)
+        case .fieldGuideGroup(let id):
+            FieldGuideGroupView(viewModel: router.fieldGuideModel(catalog: catalogRepository), groupID: id, router: router)
         case .speciesCatalogue:
             SpeciesCatalogueView(viewModel: .init(catalog: catalogRepository, regionRepository: regionRepository), router: router)
         }

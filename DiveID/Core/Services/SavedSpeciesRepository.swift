@@ -11,12 +11,20 @@ actor InMemorySavedIdentificationRepository: SavedIdentificationRepository {
     private var values: [UUID: SavedIdentification] = [:]
     init(initial: [SavedIdentification] = []) { values = Dictionary(uniqueKeysWithValues: initial.map { ($0.id, $0) }) }
     func fetchAll() -> [SavedIdentification] { values.values.sorted { $0.identifiedAt > $1.identifiedAt } }
-    func save(_ value: SavedIdentification) -> SavedIdentification { if let session = value.sourceSessionID, let existing = values.values.first(where: { $0.sourceSessionID == session && $0.species.id == value.species.id }) { return existing }; values[value.id] = value; return value }
+    func save(_ value: SavedIdentification) -> SavedIdentification { if let existing = values.values.first(where: { SavedIdentificationFile.isSame($0, value) }) { return existing }; values[value.id] = value; return value }
     func remove(id: UUID) { values.removeValue(forKey: id) }
     func savedIdentification(sourceSessionID: UUID, speciesID: UUID) -> SavedIdentification? { values.values.first { $0.sourceSessionID == sourceSessionID && $0.species.id == speciesID } }
 }
 
-struct SavedIdentificationFile: Codable, Sendable { let schemaVersion: Int; var identifications: [SavedIdentification] }
+struct SavedIdentificationFile: Codable, Sendable {
+    let schemaVersion: Int; var identifications: [SavedIdentification]
+
+    /// A save that already exists: the same search's species, or the same species saved from the field guide.
+    static func isSame(_ existing: SavedIdentification, _ new: SavedIdentification) -> Bool {
+        if let session = new.sourceSessionID { return existing.sourceSessionID == session && existing.species.id == new.species.id }
+        return new.isFromFieldGuide && existing.isFromFieldGuide && existing.species.id == new.species.id
+    }
+}
 private struct LegacySavedSpeciesFile: Codable { let schemaVersion: Int; let species: [Species] }
 enum SavedIdentificationRepositoryError: Error, LocalizedError {
     case unsupportedSchema, corruptData, storageUnavailable
@@ -96,7 +104,7 @@ actor JSONSavedIdentificationRepository: SavedIdentificationRepository {
         self.legacyFileURL = appDirectory.appendingPathComponent("saved-species.json")
     }
     func fetchAll() throws -> [SavedIdentification] { try read().sorted { $0.identifiedAt > $1.identifiedAt } }
-    func save(_ value: SavedIdentification) throws -> SavedIdentification { var values = try read(); if let session = value.sourceSessionID, let existing = values.first(where: { $0.sourceSessionID == session && $0.species.id == value.species.id }) { return existing }; values.append(value); try write(values); return value }
+    func save(_ value: SavedIdentification) throws -> SavedIdentification { var values = try read(); if let existing = values.first(where: { SavedIdentificationFile.isSame($0, value) }) { return existing }; values.append(value); try write(values); return value }
     func remove(id: UUID) throws { var values = try read(); values.removeAll { $0.id == id }; try write(values) }
     func savedIdentification(sourceSessionID: UUID, speciesID: UUID) throws -> SavedIdentification? { try read().first { $0.sourceSessionID == sourceSessionID && $0.species.id == speciesID } }
     private func read() throws -> [SavedIdentification] {

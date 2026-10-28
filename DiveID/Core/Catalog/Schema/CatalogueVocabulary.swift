@@ -17,6 +17,11 @@ enum CatalogueVocabulary {
     static let categories: Set<String> = [
         "crustacean", "eel", "fish", "horseshoe crab", "jellyfish", "mollusk", "octopus", "ray", "sea cucumber", "sea squirt", "sea urchin", "seahorse", "shark", "squid", "turtle", "worm"
     ]
+    /// The categories that are invertebrates. The field guide buckets them into one group;
+    /// every other category is a group of its own.
+    static let invertebrateCategories: Set<String> = [
+        "crustacean", "horseshoe crab", "jellyfish", "mollusk", "octopus", "sea cucumber", "sea squirt", "sea urchin", "squid", "worm"
+    ]
     static let behaviors: Set<String> = [
         "anemone association", "bottom-swimming", "burrowing", "cleaning", "feeding", "grazing", "hiding", "hovering", "open-water cruising", "resting", "schooling", "solitary", "swimming"
     ]
