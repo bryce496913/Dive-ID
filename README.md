@@ -59,6 +59,14 @@ cases, up from 52 before the 2026-10-27 changes
 [raw results](Reports/GlobalProductionRankingDevelopment.json)). Those changes were made
 while looking at these cases, so the independent diver pilot remains the real test.
 
+**Independent diver pilot: 0 collected / 0 curated / 0 evaluated** (target 12 Global
+accounts). *Collected* counts qualifying submissions imported by
+`Tools/Evaluation/import_feedback.py` into the private holdout; *curated* counts those
+with a curator label from independent evidence; *evaluated* counts those in a frozen
+evaluation run. Update these numbers by hand from the importer's counts and the
+custodian's records; never from engine results. In-app collection is described in
+[IndependentDiverCollection.md](Data/Evaluation/IndependentDiverCollection.md#in-app-collection-revision-2026-10-28).
+
 > **These results are not independent evidence and not publication approval.**
 > The 34 cases are development cases that influenced the implementation, not a
 > holdout; independent diver testing is still needed. Passing the search gates
@@ -122,6 +130,8 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
   marker metadata is bundled, but the current iOS UI does not render those files.
 
 ## Build an iPhone app
+
+To send a Release build to testers, see [TestFlight.md](Docs/TestFlight.md).
 
 Open **`DiveID.xcodeproj`**, select the shared **DiveID** scheme and an iOS 18+
 iPhone simulator or connected iPhone. Physical installation needs an authorized

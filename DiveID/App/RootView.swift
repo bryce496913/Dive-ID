@@ -9,6 +9,7 @@ struct RootView: View {
     let catalogRepository: any MarineSpeciesCatalogRepository
     let regionRepository: any SelectedDiveRegionRepository
     let features: FeatureAvailability
+    let feedback: DiverFeedbackService
 
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -22,7 +23,7 @@ struct RootView: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .descriptionSearch:
-            DescriptionSearchView(viewModel: .init(sessionStore: sessionStore, catalog: catalogRepository, regionRepository: regionRepository), router: router)
+            DescriptionSearchView(viewModel: .init(sessionStore: sessionStore, catalog: catalogRepository, regionRepository: regionRepository, feedback: feedback), router: router)
         case .photoIdentification:
             // Guard the route itself so a programmatic push cannot open a disabled feature.
             if features.photoIdentificationEnabled {
@@ -38,10 +39,12 @@ struct RootView: View {
         case .identificationResults(let sessionID):
             IdentificationResultsView(
                 viewModel: router.resultsModel(sessionID: sessionID, service: identificationService, catalog: catalogRepository),
-                router: router
+                router: router,
+                feedback: FeedbackPromptViewModel(sessionID: sessionID, service: feedback)
             )
         case .speciesDetail(let species, let match):
-            SpeciesDetailView(viewModel: .init(species: species, match: match, repository: savedRepository))
+            SpeciesDetailView(viewModel: .init(species: species, match: match, repository: savedRepository),
+                              feedback: match?.sourceSessionID.map { FeedbackPromptViewModel(sessionID: $0, service: feedback) })
         case .savedIdentification(let saved):
             SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
         case .savedIdentifications:
@@ -52,7 +55,9 @@ struct RootView: View {
                 selectionDidChange: { router.goBack() }
             )
         case .credits:
-            CreditsView(catalog: catalogRepository)
+            CreditsView(catalog: catalogRepository, feedback: FeedbackSharingViewModel(service: feedback))
+        case .speciesCatalogue:
+            SpeciesCatalogueView(viewModel: .init(catalog: catalogRepository, regionRepository: regionRepository), router: router)
         }
     }
 }
@@ -67,6 +72,7 @@ struct RootView: View {
         photoProcessor: DefaultPhotoProcessingService(),
         catalogRepository: BundleMarineSpeciesCatalogRepository(),
         regionRepository: UserDefaultsSelectedDiveRegionRepository(),
-        features: .init(photoIdentificationEnabled: false)
+        features: .init(photoIdentificationEnabled: false),
+        feedback: DiverFeedbackService(repository: InMemoryDiverFeedbackRepository(), settings: InMemoryFeedbackSettings())
     )
 }

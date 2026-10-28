@@ -10,11 +10,17 @@ final class DescriptionSearchViewModel {
     var packState: SelectedPackState = .notLoaded
     private let sessionStore: any IdentificationSessionStore
     private let packLoader: SelectedPackLoader
+    /// Records each search for diver feedback; it never changes the search itself.
+    private let feedback: DiverFeedbackService?
+    private var lastFeedbackAttempt: FeedbackSearchAttempt?
 #if DEBUG || DIVEID_INTERNAL
     let diagnostics = InternalSearchDiagnostics.shared
 #endif
 
-    init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository) { self.sessionStore = sessionStore; packLoader = SelectedPackLoader(catalog: catalog, regionRepository: regionRepository) }
+    init(sessionStore: any IdentificationSessionStore, catalog: any MarineSpeciesCatalogRepository, regionRepository: any SelectedDiveRegionRepository,
+         feedback: DiverFeedbackService? = nil) {
+        self.sessionStore = sessionStore; packLoader = SelectedPackLoader(catalog: catalog, regionRepository: regionRepository); self.feedback = feedback
+    }
 
     /// Loads the selected pack's metadata, then starts preparing its search index in the
     /// background (off the main thread), so the first search usually finds it ready.
@@ -47,7 +53,11 @@ final class DescriptionSearchViewModel {
         defer { isCreatingSession = false }
         do {
             let request = IdentificationRequest(source: .description(normalizedDescription), context: IdentificationContext(region: pack.id))
-            return try await sessionStore.createSession(for: request, photo: nil)
+            let sessionID = try await sessionStore.createSession(for: request, photo: nil)
+            // The text exactly as typed, kept for feedback only; the search uses the trimmed request above.
+            lastFeedbackAttempt = feedback?.beginAttempt(sessionID: sessionID, rawDescription: descriptionText, pack: pack,
+                                                         previous: lastFeedbackAttempt) ?? lastFeedbackAttempt
+            return sessionID
         } catch IdentificationSessionStoreError.capacityReached {
             errorMessage = AppCopy.sessionCapacityReached
             return nil

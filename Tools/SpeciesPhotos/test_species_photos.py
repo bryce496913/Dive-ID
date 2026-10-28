@@ -254,6 +254,29 @@ class ClientTests(unittest.TestCase):
                 offline.taxa("Genus three")
         self.assertIn("DiveID-SpeciesPhotos", inat.USER_AGENT)
 
+    def test_a_429_slows_the_client_for_the_rest_of_the_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            now = [0.0]; slept = []; answers = [inat.Throttled(30.0), inat.Throttled(None), {"results": []}, {"results": []}]
+            def opener(url):
+                answer = answers.pop(0)
+                if isinstance(answer, Exception):
+                    raise answer
+                return answer
+            client = inat.Client(tmp, opener=opener, clock=lambda: now[0], sleep=lambda s: (slept.append(s), now.__setitem__(0, now[0] + s)))
+            client.taxa("Genus one")
+            self.assertEqual((client.throttled, client.minimum_interval), (2, 4.0), "each 429 doubles the gap, from at least 2 s")
+            self.assertEqual(slept, [30.0, 4.0], "Retry-After is honoured, otherwise the new gap is waited")
+            client.taxa("Genus two")
+            self.assertEqual(slept[-1], 4.0, "the slower pace holds for later requests")
+            failing = inat.Client(tmp, opener=lambda url: (_ for _ in ()).throw(inat.Throttled()), sleep=lambda s: None)
+            with self.assertRaises(inat.Throttled):
+                failing.taxa("Genus three")
+            self.assertEqual(failing.minimum_interval, 64.0, "six refusals: 1 s doubled six times, then it gives up")
+            capped = inat.Client(tmp, minimum_interval=100.0, opener=lambda url: (_ for _ in ()).throw(inat.Throttled()), sleep=lambda s: None)
+            with self.assertRaises(inat.Throttled):
+                capped.taxa("Genus four")
+            self.assertEqual(capped.minimum_interval, inat.MAX_INTERVAL)
+
     def test_a_dropped_connection_is_retried(self):
         import http.client, io
         from unittest import mock

@@ -11,6 +11,7 @@ struct DiveIDApp: App {
     private let regionRepository: any SelectedDiveRegionRepository
     private let features = FeatureAvailability.current
     private let retrievalEngine: DescriptionRetrievalEngine
+    private let feedback: DiverFeedbackService
 #if DEBUG
     private let semanticDiagnostics: DebugSemanticDiagnosticsReporter
 #endif
@@ -44,6 +45,24 @@ struct DiveIDApp: App {
         self.sessionStore = sessionStore
         self.router = AppRouter(sessionStore: sessionStore)
         photoProcessor = DefaultPhotoProcessingService()
+        feedback = Self.makeFeedbackService()
+    }
+
+    /// Feedback is stored only on this device. UI tests pass -resetFeedbackForUITests for a
+    /// fresh install's feedback state (Debug only), without touching real feedback.
+    @MainActor private static func makeFeedbackService() -> DiverFeedbackService {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-resetFeedbackForUITests") {
+            let suite = "DiveIDUITestFeedback"
+            UserDefaults().removePersistentDomain(forName: suite)
+            let file = FileManager.default.temporaryDirectory.appendingPathComponent("uitest-diver-feedback.json")
+            try? FileManager.default.removeItem(at: file)
+            return DiverFeedbackService(
+                repository: PersistentDiverFeedbackRepository(makeRepository: { try JSONDiverFeedbackRepository(fileURL: file) }),
+                settings: UserDefaultsFeedbackSettings(defaults: UserDefaults(suiteName: suite) ?? .standard))
+        }
+#endif
+        return DiverFeedbackService(repository: PersistentDiverFeedbackRepository(), settings: UserDefaultsFeedbackSettings())
     }
 
     var body: some Scene {
@@ -56,7 +75,8 @@ struct DiveIDApp: App {
                 photoProcessor: photoProcessor,
                 catalogRepository: catalogRepository,
                 regionRepository: regionRepository,
-                features: features
+                features: features,
+                feedback: feedback
             )
             .preferredColorScheme(.dark)
             .fontDesign(.rounded)

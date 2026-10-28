@@ -1,0 +1,55 @@
+{
+  "schemaVersion" : 1,
+  "records" : [
+    {
+      "answer" : "claimedSpecies",
+      "appBuild" : "2",
+      "appVersion" : "0.5",
+      "approximateDepth" : { "unit" : "metres", "value" : 12 },
+      "attemptID" : "0F4C2B8E-1A2B-4C3D-8E9F-000000000001",
+      "broadRegion" : "SYNTHETIC TEST REGION",
+      "buildChannel" : "debug",
+      "catalogueVersion" : 25,
+      "claimedSpeciesID" : "00000000-0000-0000-0000-000000000010",
+      "consentForEvaluation" : true,
+      "consentForPublication" : false,
+      "createdAt" : "2026-10-28T12:00:00Z",
+      "editedAfterSeeingResults" : false,
+      "feedbackID" : "0F4C2B8E-1A2B-4C3D-8E9F-0000000000A1",
+      "firstSearchOfInstall" : true,
+      "hasPhotoToSend" : false,
+      "originalDescription" : "  SYNTHETIC TEST TEXT, not a diver account: flat ray with white spots.  ",
+      "packID" : "global",
+      "participantCode" : "DIVER-TEST0001",
+      "priorExposure" : false,
+      "shownResults" : [
+        { "rank" : 1, "speciesID" : "00000000-0000-0000-0000-000000000010" },
+        { "rank" : 2, "speciesID" : "00000000-0000-0000-0000-000000000003" }
+      ],
+      "updatedAt" : "2026-10-28T12:00:00Z"
+    },
+    {
+      "answer" : "none",
+      "appBuild" : "2",
+      "appVersion" : "0.5",
+      "attemptID" : "0F4C2B8E-1A2B-4C3D-8E9F-000000000002",
+      "buildChannel" : "debug",
+      "catalogueVersion" : 25,
+      "consentForEvaluation" : false,
+      "consentForPublication" : false,
+      "createdAt" : "2026-10-28T12:05:00Z",
+      "editedAfterSeeingResults" : true,
+      "feedbackID" : "0F4C2B8E-1A2B-4C3D-8E9F-0000000000A2",
+      "firstSearchOfInstall" : false,
+      "hasPhotoToSend" : true,
+      "originalDescription" : "SYNTHETIC TEST TEXT, not a diver account: small blue fish",
+      "packID" : "global",
+      "participantCode" : "DIVER-TEST0001",
+      "priorExposure" : true,
+      "researchOfAttemptID" : "0F4C2B8E-1A2B-4C3D-8E9F-000000000001",
+      "shownResults" : [ ],
+      "uncertainty" : "SYNTHETIC: could not see the tail",
+      "updatedAt" : "2026-10-28T12:06:00Z"
+    }
+  ]
+}

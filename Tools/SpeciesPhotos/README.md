@@ -9,7 +9,7 @@ python3 -m pip install -r Tools/SpeciesPhotos/requirements.txt   # pyarrow, Pill
 python3 Tools/SpeciesPhotos/fetch_fishbase_pictures.py         # pinned FishBase/SeaLifeBase picture tables (~3 MB)
 python3 Tools/SpeciesPhotos/species_photos.py                  # resolve -> select -> manifest (about 3 h uncached)
 python3 Tools/SpeciesPhotos/species_photos.py --offline        # rerun from the cache: no requests, same manifest
-python3 Tools/SpeciesPhotos/species_photos.py --interval 5     # slower, if iNaturalist answers 429 (rate limited)
+python3 Tools/SpeciesPhotos/species_photos.py --interval 9     # a full refetch: about 9,600 requests a day, under the ~10,000 limit
 python3 Tools/SpeciesPhotos/species_photos.py --cached-only    # no requests: every species already cached; the rest counted as notYetFetched
 python3 Tools/SpeciesPhotos/thumbnails.py --species <id> ...   # 400 px thumbnails for the photos to review
 python3 Tools/SpeciesPhotos/thumbnails.py --all --first-only   # the photo the app shows, for every species in the manifest
@@ -34,8 +34,9 @@ later, and an unknown licence code is an error.
 ## Sources
 
 **iNaturalist (primary).** `species_photos.py` uses the public API through `inat.py`. The
-client sends at most one request per second, identifies the app in its User-Agent, retries
-429/5xx with back-off and caches every response under `Data/SpeciesPhotos/cache/`
+client sends at most one request per second (or the --interval you set), identifies the app
+in its User-Agent, slows down for the rest of the run whenever it gets a 429 (doubling the
+gap, honouring Retry-After), retries 5xx with back-off and caches every response under `Data/SpeciesPhotos/cache/`
 (git-ignored). Cached responses keep only the fields the pipeline reads; a full page is about
 1.5 MB, so untrimmed the cache wouldn't fit on disk. The open-data metadata export would
 avoid the API, but it's several gigabytes to download and unpack. That doesn't fit the build
