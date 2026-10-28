@@ -83,6 +83,12 @@ struct DescriptionSearchView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
+                        // The large title is drawn here, not by the navigation bar, so it wraps
+                        // instead of running off narrow screens and large text sizes.
+                        Text("Describe What You Saw")
+                            .font(.largeTitle.bold())
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
                         ClueGuide()
                         if let pack = viewModel.pack {
                             regionLayout {
@@ -146,6 +152,9 @@ struct DescriptionSearchView: View {
                 .padding(.vertical, AppTheme.Spacing.s)
         }
         .toolbar {
+            // The heading in the content is the title; an empty principal item keeps the bar from
+            // repeating it truncated, while navigationTitle still names the screen for Back.
+            ToolbarItem(placement: .principal) { Color.clear.frame(width: 1, height: 1).accessibilityHidden(true) }
             // Done lives in the navigation bar, not a keyboard toolbar: on iOS 27 the keyboard
             // toolbar's height stops being reserved after returning from the results a couple of
             // times, which slid Find Matches under the keyboard's suggestion bar.
@@ -161,6 +170,7 @@ struct DescriptionSearchView: View {
         }
         .appScreenBackground()
         .navigationTitle("Describe What You Saw")
+        .navigationBarTitleDisplayMode(.inline)
         .task(id: router.path) { await viewModel.load() }
     }
 
