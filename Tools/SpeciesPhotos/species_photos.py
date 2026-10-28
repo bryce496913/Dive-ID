@@ -16,6 +16,7 @@ import argparse
 import csv
 import io
 import json
+import sys
 from pathlib import Path
 
 import inat
@@ -314,7 +315,8 @@ def main():
     if args.species:
         wanted = {s.lower() for s in args.species}
         rows = [r for r in rows if r["speciesID"] in wanted]
-    client = inat.Client(CACHE, offline=args.offline or args.cached_only, minimum_interval=args.interval)
+    log = lambda message: print(message, file=sys.stderr, flush=True)  # noqa: E731
+    client = inat.Client(CACHE, offline=args.offline or args.cached_only, minimum_interval=args.interval, log=log)
     if args.cached_only:
         selected, pending = select_cached(client, rows, policy, load_choices(args.choices))
     else:
