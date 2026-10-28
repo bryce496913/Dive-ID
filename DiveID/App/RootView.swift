@@ -53,6 +53,8 @@ struct RootView: View {
             )
         case .credits:
             CreditsView(catalog: catalogRepository)
+        case .speciesCatalogue:
+            SpeciesCatalogueView(viewModel: .init(catalog: catalogRepository, regionRepository: regionRepository), router: router)
         }
     }
 }

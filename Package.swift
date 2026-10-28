@@ -33,6 +33,7 @@ let package = Package(
                 "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
                 "Core/Models/SelectedPackState.swift",
+                "Core/Models/SpeciesCatalogueViewModel.swift",
                 "Core/Models/AppCopy.swift",
                 "Core/Models/CatalogueAttribution.swift",
                 "Core/Services/SelectedDiveRegionRepository.swift",
@@ -64,7 +65,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

@@ -65,6 +65,12 @@ struct HomeView: View {
                     }
                     .accessibilityIdentifier("savedAction")
                 }
+                HomeLinkRow(title: "Browse All Species", symbol: "list.bullet.rectangle") {
+                    if viewModel.canSearch { router.navigate(to: .speciesCatalogue) }
+                }
+                .disabled(!viewModel.canSearch)
+                .accessibilityIdentifier("browseAction")
+                .appCard()
                 HomeLinkRow(title: "Data Sources and Credits", symbol: "info.circle") { router.navigate(to: .credits) }
                     .accessibilityIdentifier("creditsAction")
                     .appCard()

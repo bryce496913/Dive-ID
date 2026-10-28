@@ -11,12 +11,15 @@ struct SpeciesDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
                 hero
-                PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved Identifications" : "Save Identification") {
-                    Task { await viewModel.toggleSaved() }
+                // Opened from Browse All Species there is no match to save, so no Save button.
+                if viewModel.match != nil || viewModel.isSaved {
+                    PrimaryActionButton(title: viewModel.isSaved ? "Remove from Saved Identifications" : "Save Identification") {
+                        Task { await viewModel.toggleSaved() }
+                    }
+                    .accessibilityIdentifier("toggleSaved")
+                    .disabled(viewModel.isUpdatingSavedState)
+                    .sensoryFeedback(.success, trigger: viewModel.isSaved) { _, isSaved in isSaved }
                 }
-                .accessibilityIdentifier("toggleSaved")
-                .disabled(viewModel.isUpdatingSavedState)
-                .sensoryFeedback(.success, trigger: viewModel.isSaved) { _, isSaved in isSaved }
                 if let error = viewModel.errorMessage {
                     VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
                         Label(error, systemImage: "exclamationmark.triangle.fill").foregroundStyle(Color.appError)

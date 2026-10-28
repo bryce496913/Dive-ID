@@ -10,6 +10,7 @@ enum AppRoute: Hashable {
     case savedIdentifications
     case offlineRegions
     case credits
+    case speciesCatalogue
 }
 
 @MainActor @Observable
