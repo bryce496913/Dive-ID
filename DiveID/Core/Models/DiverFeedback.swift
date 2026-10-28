@@ -160,15 +160,19 @@ struct DiverFeedbackExport: Codable, Hashable, Sendable {
 
     static let evidenceNote = "Diver feedback from the Dive ID app. claimedSpeciesID is the diver's own answer after seeing app results; it is not identity verification evidence. Only records with consentForEvaluation = true are included."
 
-    /// Only records the diver consented to evaluation use; oldest first.
-    init(records: [DiverFeedbackRecord], participantCode: String, now: Date = Date()) {
+    /// Only records the diver consented to evaluation use; oldest first. Each record's own
+    /// flag isn't enough: with `evaluationConsent` (the current setting) off, nothing is
+    /// included, even if an earlier withdrawal didn't reach every stored record.
+    init(records: [DiverFeedbackRecord], evaluationConsent: Bool, participantCode: String, now: Date = Date()) {
         schemaVersion = Self.currentSchemaVersion
         format = Self.formatName
         exportedAt = now
         self.participantCode = participantCode
         note = Self.evidenceNote
-        self.records = records.filter(\.consentForEvaluation).sorted { $0.createdAt < $1.createdAt }
+        self.records = evaluationConsent ? Self.shareable(records).sorted { $0.createdAt < $1.createdAt } : []
     }
+
+    static func shareable(_ records: [DiverFeedbackRecord]) -> [DiverFeedbackRecord] { records.filter(\.consentForEvaluation) }
 
     static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()

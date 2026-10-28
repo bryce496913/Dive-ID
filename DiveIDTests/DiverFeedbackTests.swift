@@ -135,9 +135,45 @@ final class DiverFeedbackTests: XCTestCase {
         XCTAssertTrue(export.records.isEmpty)
     }
 
+    func testWithdrawalThatFailsToRewriteRecordsStillExportsNothing() async throws {
+        let consented = try record(answer: .notSure, consent: .init(forEvaluation: true, forPublication: false))
+        let repository = ConsentFailingRepository(records: [consented])
+        let settings = InMemoryFeedbackSettings(consentDecided: true, consent: .init(forEvaluation: true, forPublication: false))
+        let feedback = service(repository, settings: settings)
+        let sharing = FeedbackSharingViewModel(service: feedback)
+        await sharing.load()
+        await sharing.updateConsent(FeedbackConsent(forEvaluation: false, forPublication: false))
+        XCTAssertNotNil(sharing.errorMessage, "the failed rewrite is reported")
+        let stored = try await repository.fetchAll()
+        XCTAssertTrue(stored[0].consentForEvaluation, "the stored record still says consented")
+        XCTAssertEqual(sharing.shareableCount, 0)
+        let export = try await feedback.makeExport()
+        XCTAssertTrue(export.records.isEmpty, "the current setting wins")
+    }
+
+    func testOnlyTheLatestSearchesStayInMemory() {
+        let feedback = service()
+        let sessions = (0...DiverFeedbackService.maximumAttempts).map { _ in UUID() }
+        for session in sessions { feedback.beginAttempt(sessionID: session, rawDescription: "SYNTHETIC", pack: pack, previous: nil) }
+        XCTAssertNil(feedback.attempt(for: sessions[0]), "the oldest search is dropped")
+        XCTAssertNotNil(feedback.attempt(for: sessions[1]))
+        XCTAssertNotNil(feedback.attempt(for: sessions.last!))
+    }
+
+    func testEachExportReplacesTheEarlierFile() throws {
+        let feedback = service()
+        let base = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: base) }
+        let directory = ExportFiles.directory(base: base)
+        let first = try feedback.writeExport(DiverFeedbackExport(records: [], evaluationConsent: true, participantCode: "DIVER-OLD00001"), directory: directory)
+        let second = try feedback.writeExport(DiverFeedbackExport(records: [], evaluationConsent: true, participantCode: "DIVER-NEW00001"), directory: directory)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: first.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: second.path))
+    }
+
     func testExportFileRoundTripsWithTheDocumentedShape() async throws {
         let original = DiverFeedbackExport(records: [try record(answer: .claimed(speciesID: UUID()), consent: .init(forEvaluation: true, forPublication: false))],
-                                           participantCode: "DIVER-TEST0001", now: Date(timeIntervalSince1970: 1_800_000_000))
+                                           evaluationConsent: true, participantCode: "DIVER-TEST0001", now: Date(timeIntervalSince1970: 1_800_000_000))
         let feedback = service()
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -164,8 +200,10 @@ final class DiverFeedbackTests: XCTestCase {
         XCTAssertEqual(records.count, 2)
         let consented = try XCTUnwrap(records.first { $0.consentForEvaluation })
         XCTAssertEqual(consented.originalDescription, "  SYNTHETIC TEST TEXT, not a diver account: flat ray with white spots.  ")
-        let export = DiverFeedbackExport(records: records, participantCode: "DIVER-TEST0001")
+        let export = DiverFeedbackExport(records: records, evaluationConsent: true, participantCode: "DIVER-TEST0001")
         XCTAssertEqual(export.records.map(\.feedbackID), [consented.feedbackID])
+        let withdrawn = DiverFeedbackExport(records: records, evaluationConsent: false, participantCode: "DIVER-TEST0001")
+        XCTAssertTrue(withdrawn.records.isEmpty, "a record still marked consented is left out once the setting is off")
     }
 
     // MARK: Storage failures (same pattern as saved identifications)
@@ -235,6 +273,16 @@ final class DiverFeedbackTests: XCTestCase {
     }
 
     // MARK: Helpers
+
+    /// Saves and reads, but rewriting records for a consent change always fails.
+    private actor ConsentFailingRepository: DiverFeedbackRepository {
+        struct Failure: Error {}
+        private var records: [DiverFeedbackRecord]
+        init(records: [DiverFeedbackRecord]) { self.records = records }
+        func fetchAll() -> [DiverFeedbackRecord] { records }
+        func save(_ record: DiverFeedbackRecord) -> DiverFeedbackRecord { records.append(record); return record }
+        func applyConsent(_ consent: FeedbackConsent) throws { throw Failure() }
+    }
 
     private func record(answer: FeedbackAnswer, consent: FeedbackConsent) throws -> DiverFeedbackRecord {
         let attempt = FeedbackSearchAttempt(attemptID: UUID(), sessionID: UUID(), originalDescription: "SYNTHETIC text", firstSearchOfInstall: true,
