@@ -4,7 +4,7 @@ import SwiftUI
 struct DiveIDApp: App {
     @State private var router: AppRouter
     private let identificationService: any MarineLifeIdentificationService
-    private let savedRepository: any SavedIdentificationRepository
+    private let savedRepository: any SavedLogRepository
     private let sessionStore: any IdentificationSessionStore
     private let photoProcessor: any PhotoProcessingService
     private let catalogRepository: any MarineSpeciesCatalogRepository
@@ -40,12 +40,25 @@ struct DiveIDApp: App {
             catalogRepository: catalogRepository,
             searchEngine: searchEngine
         )
-        savedRepository = PersistentSavedIdentificationRepository()
+        savedRepository = Self.makeSavedRepository()
         let sessionStore = InMemoryIdentificationSessionStore()
         self.sessionStore = sessionStore
         self.router = AppRouter(sessionStore: sessionStore)
         photoProcessor = DefaultPhotoProcessingService()
         feedback = Self.makeFeedbackService()
+    }
+
+    /// UI tests pass -resetDiveLogForUITests for an empty dive log in a temporary file (Debug
+    /// only), so real saved identifications are never touched.
+    private static func makeSavedRepository() -> PersistentSavedIdentificationRepository {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-resetDiveLogForUITests") {
+            let file = FileManager.default.temporaryDirectory.appendingPathComponent("uitest-saved-identifications.json")
+            try? FileManager.default.removeItem(at: file)
+            return PersistentSavedIdentificationRepository { try JSONSavedIdentificationRepository(fileURL: file) }
+        }
+#endif
+        return PersistentSavedIdentificationRepository()
     }
 
     /// Feedback is stored only on this device. UI tests pass -resetFeedbackForUITests for a

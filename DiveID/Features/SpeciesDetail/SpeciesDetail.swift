@@ -7,6 +7,9 @@ struct SpeciesDetailView: View {
     @State private var showsAppearance = true
     @State private var showsHabitat = false
     @State private var showsTaxonomy = false
+    @State private var showsAddToDive = false
+    @State private var choosingDive = false
+    @State private var creatingDive = false
     @ScaledMetric(relativeTo: .largeTitle) private var artworkHeight: CGFloat = 280
 
     var body: some View {
@@ -57,6 +60,29 @@ struct SpeciesDetailView: View {
             .padding()
         }
         .appScreenBackground()
+        // "Add to dive" after a new save. Skip is one tap; tapping outside also skips.
+        .onChange(of: viewModel.addToDiveOffer) { _, offer in showsAddToDive = offer != nil && !choosingDive && !creatingDive }
+        .confirmationDialog("Add to a dive?", isPresented: $showsAddToDive, titleVisibility: .visible, presenting: viewModel.addToDiveOffer) { offer in
+            if let today = offer.todaysDive {
+                Button("Add to Today's Dive" + (today.siteName.map { " (\($0))" } ?? "")) { Task { await viewModel.addToDive(today) } }
+                    .accessibilityIdentifier("addToTodaysDive")
+            }
+            if offer.dives.contains(where: { $0.id != offer.todaysDive?.id }) {
+                Button("Choose Another Dive…") { choosingDive = true }.accessibilityIdentifier("chooseDive")
+            }
+            Button("New Dive…") { creatingDive = true }.accessibilityIdentifier("newDiveForSighting")
+            Button("Skip", role: .cancel) { viewModel.skipAddToDive() }.accessibilityIdentifier("skipAddToDive")
+        }
+        .sheet(isPresented: $choosingDive, onDismiss: { viewModel.skipAddToDive() }) {
+            DivePicker(dives: viewModel.addToDiveOffer?.dives ?? [], regionName: { $0?.rawValue }) { dive in
+                Task { await viewModel.addToDive(dive); choosingDive = false }
+            }
+        }
+        .sheet(isPresented: $creatingDive, onDismiss: { viewModel.skipAddToDive() }) {
+            DiveFormView(title: "New Dive", form: DiveLogView.newForm(), regions: []) { form in
+                await viewModel.createDiveAndAdd(form)
+            }
+        }
         .navigationTitle(viewModel.species.commonName)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }

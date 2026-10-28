@@ -11,6 +11,9 @@ final class SpeciesDetailViewModel {
     private(set) var savedIdentificationID: UUID?
     private(set) var isUpdatingSavedState = false
     private let repository: any SavedIdentificationRepository
+    /// Shown after a new save: today's dive (if any), another dive, a new dive, or skip.
+    var addToDiveOffer: AddToDiveOffer?
+    private var diveLog: (any DiveLogRepository)? { repository as? any DiveLogRepository }
 
     init(species: Species, match: IdentificationMatch?, repository: any SavedIdentificationRepository) {
         self.species = species
@@ -65,6 +68,7 @@ final class SpeciesDetailViewModel {
                 let persisted = try await repository.save(value)
                 savedIdentificationID = persisted.id
                 isSaved = true
+                await offerAddToDive(sightingID: persisted.id)
             }
             errorMessage = nil
         } catch {
@@ -73,6 +77,55 @@ final class SpeciesDetailViewModel {
                 + SavedIdentificationRepositoryError.message(for: error)
         }
     }
+}
+
+extension SpeciesDetailViewModel {
+    /// Offers "Add to dive" once the save is confirmed. A store without dives offers nothing,
+    /// and a dive list that can't be read still offers a new dive or skip.
+    func offerAddToDive(sightingID: UUID, today: Date = Date(), calendar: Calendar = .current) async {
+        guard let diveLog else { return }
+        let dives = ((try? await diveLog.dives()) ?? []).map(\.dive)
+        let day = calendar.dateComponents([.year, .month, .day], from: today)
+        let todayDate = LocalDate(year: day.year ?? 0, month: day.month ?? 0, day: day.day ?? 0)
+        addToDiveOffer = AddToDiveOffer(sightingID: sightingID, todaysDive: dives.first { $0.date == todayDate }, dives: dives)
+    }
+
+    /// Skip: one tap, nothing changes.
+    func skipAddToDive() { addToDiveOffer = nil }
+
+    func addToDive(_ dive: Dive) async {
+        guard let offer = addToDiveOffer, let diveLog else { return }
+        do {
+            try await diveLog.assign(sightingIDs: [offer.sightingID], toDive: dive.id)
+            addToDiveOffer = nil
+            errorMessage = nil
+        } catch {
+            errorMessage = "The identification is saved, but couldn't be added to the dive. " + SavedIdentificationRepositoryError.message(for: error)
+        }
+    }
+
+    /// Creates the dive from the form, then adds this sighting to it.
+    @discardableResult
+    func createDiveAndAdd(_ form: DiveForm) async -> Bool {
+        guard let diveLog, let dive = form.makeDive() else { return false }
+        do {
+            let created = try await diveLog.createDive(dive)
+            await addToDive(created)
+            return addToDiveOffer == nil
+        } catch {
+            errorMessage = "The identification is saved, but the dive couldn't be created. " + SavedIdentificationRepositoryError.message(for: error)
+            return false
+        }
+    }
+}
+
+/// What "Add to dive" can offer for one saved sighting.
+struct AddToDiveOffer: Identifiable, Hashable, Sendable {
+    var id: UUID { sightingID }
+    let sightingID: UUID
+    let todaysDive: Dive?
+    /// Every dive, newest first, to pick another.
+    let dives: [Dive]
 }
 
 @MainActor @Observable

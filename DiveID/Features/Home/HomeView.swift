@@ -60,7 +60,7 @@ struct HomeView: View {
                     .disabled(!features.photoIdentificationEnabled)
                     .accessibilityHint(features.photoIdentificationEnabled ? "Opens the development photo preparation flow." : "Photo identification is not yet available.")
                     .accessibilityIdentifier("photoAction")
-                    HomeTile(title: "Saved Identifications", subtitle: "Your kept matches", symbol: "bookmark.fill") {
+                    HomeTile(title: "Dive Log", subtitle: "Your dives and sightings", symbol: "book.fill") {
                         router.navigate(to: .savedIdentifications)
                     }
                     .accessibilityIdentifier("savedAction")

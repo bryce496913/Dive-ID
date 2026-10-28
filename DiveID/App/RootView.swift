@@ -3,7 +3,7 @@ import SwiftUI
 struct RootView: View {
     @Bindable var router: AppRouter
     let identificationService: any MarineLifeIdentificationService
-    let savedRepository: any SavedIdentificationRepository
+    let savedRepository: any SavedLogRepository
     let sessionStore: any IdentificationSessionStore
     let photoProcessor: any PhotoProcessingService
     let catalogRepository: any MarineSpeciesCatalogRepository
@@ -48,7 +48,9 @@ struct RootView: View {
         case .savedIdentification(let saved):
             SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
         case .savedIdentifications:
-            SavedIdentificationsView(viewModel: .init(repository: savedRepository), router: router)
+            DiveLogView(viewModel: router.diveLogModel(repository: savedRepository, catalog: catalogRepository), router: router)
+        case .dive(let id):
+            DiveDetailView(viewModel: router.diveLogModel(repository: savedRepository, catalog: catalogRepository), diveID: id, router: router)
         case .offlineRegions:
             OfflineRegionsView(
                 viewModel: .init(catalog: catalogRepository, selection: regionRepository),

@@ -38,6 +38,7 @@ let package = Package(
                 "Core/Models/SpeciesCatalogueViewModel.swift",
                 "Core/Models/FieldGuide.swift",
                 "Core/Models/DiveLog.swift",
+                "Core/Models/DiveLogScreens.swift",
                 "Core/Models/DiverFeedback.swift",
                 "Core/Services/DiverFeedbackRepository.swift",
                 "Core/Services/DiverFeedbackService.swift",
@@ -72,7 +73,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DiveLogScreenTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift"],
             resources: [.copy("Fixtures")]
         )
     ]
