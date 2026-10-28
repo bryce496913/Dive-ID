@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 3,
+  "dives": [
+    {
+      "id": "AAAAAAAA-0000-0000-0000-000000000002",
+      "date": "2026-03-14",
+      "siteName": "Afternoon shore dive",
+      "createdAt": 800001000,
+      "updatedAt": 800001000
+    },
+    {
+      "id": "AAAAAAAA-0000-0000-0000-000000000001",
+      "date": "2026-03-14",
+      "startTime": "09:30",
+      "siteName": "Salt Pier",
+      "regionID": "tropical-atlantic",
+      "maximumDepth": {
+        "value": 21.5,
+        "unit": "metres"
+      },
+      "durationMinutes": 52,
+      "waterTemperature": {
+        "value": 27,
+        "unit": "celsius"
+      },
+      "visibility": {
+        "value": 60,
+        "unit": "feet"
+      },
+      "notes": "Strong current at the end",
+      "createdAt": 800000000,
+      "updatedAt": 800000500
+    },
+    {
+      "id": "AAAAAAAA-0000-0000-0000-000000000003",
+      "date": "2026-03-15",
+      "startTime": "07:00",
+      "createdAt": 800002000,
+      "updatedAt": 800002000
+    }
+  ],
+  "identifications": [
+    {
+      "id": "55555555-5555-5555-5555-555555555555",
+      "species": {
+        "id": "66666666-6666-6666-6666-666666666666",
+        "commonName": "Caribbean Reef Shark",
+        "scientificName": "Carcharhinus perezi",
+        "summary": "A robust requiem shark associated with coral reefs.",
+        "visualCharacteristics": [
+          "Streamlined gray body"
+        ],
+        "habitat": "Coral reefs",
+        "geographicRange": "Western Atlantic",
+        "imageAssetName": null,
+        "bundledImage": null,
+        "packContext": null,
+        "regionalOccurrence": null,
+        "regionalOccurrenceNotes": null,
+        "subregions": [],
+        "appearanceVariants": [],
+        "similarSpecies": [],
+        "aliases": [],
+        "categories": [
+          "shark"
+        ],
+        "colors": [
+          "gray"
+        ],
+        "markings": [],
+        "bodyShapes": [
+          "streamlined"
+        ],
+        "habitats": [
+          "coral reef"
+        ],
+        "regions": [
+          "Caribbean"
+        ],
+        "behaviors": [],
+        "keywords": [],
+        "minimumSizeCentimeters": null,
+        "maximumSizeCentimeters": null,
+        "minimumDepthMeters": null,
+        "maximumDepthMeters": null,
+        "cautions": [],
+        "dataSources": [],
+        "review": null,
+        "taxonomy": {
+          "wormsAphiaID": 105367,
+          "scientificNameAuthority": "Poey, 1876",
+          "taxonomicClass": "Elasmobranchii",
+          "order": "Carcharhiniformes",
+          "family": "Carcharhinidae",
+          "genus": "Carcharhinus",
+          "acceptedScientificName": "Carcharhinus perezi",
+          "sourceScientificName": "Carcharhinus perezi"
+        },
+        "measurements": {
+          "typicalObservedMinimumCentimeters": 150,
+          "typicalObservedMaximumCentimeters": 200,
+          "maximumRecordedCentimeters": 295,
+          "type": "totalLength"
+        },
+        "tailShape": "heterocercal tail",
+        "mouthAndHeadShape": [
+          "short rounded snout"
+        ],
+        "finAndSpineClues": [
+          "low interdorsal ridge"
+        ]
+      },
+      "matchRank": 1,
+      "matchStrength": "strong",
+      "relativeScore": 0.91,
+      "explanation": "Body profile and reef habitat support this match.",
+      "distinguishingFeatures": [
+        "Short rounded snout"
+      ],
+      "cautions": [],
+      "taxonomicResolution": "species",
+      "observationDescription": "Gray shark cruising beside a coral wall",
+      "identifiedAt": 800000000,
+      "diveNotes": "Patrolling the edge of the wall",
+      "sourceSessionID": "77777777-7777-7777-7777-777777777777",
+      "packContext": null,
+      "matchedLifeStage": null,
+      "diveID": "AAAAAAAA-0000-0000-0000-000000000001",
+      "depth": {
+        "value": 18,
+        "unit": "metres"
+      }
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222222",
+      "species": {
+        "id": "33333333-3333-3333-3333-333333333333",
+        "commonName": "Spotted Eagle Ray",
+        "scientificName": "Aetobatus narinari",
+        "summary": "A ray with pale spots across its dark dorsal surface.",
+        "visualCharacteristics": [
+          "White spots",
+          "Long whip-like tail"
+        ],
+        "habitat": "Reefs and sandy flats",
+        "geographicRange": "Western Atlantic",
+        "imageAssetName": null,
+        "packContext": {
+          "packID": "caribbean",
+          "displayName": "Caribbean",
+          "packVersion": 1
+        }
+      },
+      "matchRank": 2,
+      "matchStrength": "good",
+      "relativeScore": 0.74,
+      "explanation": "The spots and wing-shaped body support this match.",
+      "distinguishingFeatures": [
+        "Rows of white dorsal spots",
+        "Flattened duckbill snout"
+      ],
+      "cautions": [
+        "Do not touch or chase wildlife"
+      ],
+      "taxonomicResolution": "species",
+      "observationDescription": "Large dark ray with white spots swimming over sand",
+      "identifiedAt": 700000000,
+      "diveNotes": "Observed near the reef edge.",
+      "sourceSessionID": "44444444-4444-4444-4444-444444444444",
+      "packContext": {
+        "packID": "caribbean",
+        "displayName": "Caribbean",
+        "packVersion": 1
+      }
+    }
+  ]
+}
