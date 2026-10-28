@@ -1,7 +1,4 @@
 import Foundation
-#if canImport(ImageIO)
-import ImageIO
-#endif
 
 actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
     enum CatalogueAccess: Sendable { case publication, experimentalDevelopment }
@@ -367,30 +364,28 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             subdirectory: "IdentificationPacks/\(resourceDirectory)/\(metadata.imageSubdirectory)"
         )
         else { throw LocalCatalogError.missingImage(speciesID) }
+        // Photos (JPEG, PNG) are checked here by size only, without reading them: the Global
+        // pack has ~2,000, and decoding each on every launch slowed the first search. Their
+        // format and dimensions are checked when the pack is built
+        // (Tools/CatalogReview/catalogue_validation.py), and the image loader handles a bad file.
+        guard !image.fileName.lowercased().hasSuffix(".svg") else {
+            try validateSVGFile(url, speciesID: speciesID)
+            return
+        }
+        guard let size = try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize, size > 0
+        else { throw LocalCatalogError.invalidImage(speciesID) }
+        guard size <= maximumImageByteCount else { throw LocalCatalogError.imageTooLarge(speciesID) }
+    }
+
+    private static func validateSVGFile(_ url: URL, speciesID: UUID) throws {
         guard let data = try? Data(contentsOf: url), !data.isEmpty else { throw LocalCatalogError.invalidImage(speciesID) }
         guard data.count <= maximumImageByteCount else { throw LocalCatalogError.imageTooLarge(speciesID) }
-
-        if image.fileName.lowercased().hasSuffix(".svg") {
-            guard let source = String(data: data, encoding: .utf8),
-                  source.range(of: #"<svg\b"#, options: .regularExpression) != nil,
-                  let dimensions = svgDimensions(source)
-            else { throw LocalCatalogError.invalidImage(speciesID) }
-            guard dimensions.width <= maximumImageDimension, dimensions.height <= maximumImageDimension
-            else { throw LocalCatalogError.imageTooLarge(speciesID) }
-        } else {
-#if canImport(ImageIO)
-            guard let source = CGImageSourceCreateWithData(data as CFData, nil),
-                  CGImageSourceGetCount(source) > 0,
-                  let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
-                  let width = properties[kCGImagePropertyPixelWidth] as? Int,
-                  let height = properties[kCGImagePropertyPixelHeight] as? Int
-            else { throw LocalCatalogError.invalidImage(speciesID) }
-            guard width <= maximumImageDimension, height <= maximumImageDimension
-            else { throw LocalCatalogError.imageTooLarge(speciesID) }
-#else
-            throw LocalCatalogError.invalidImage(speciesID)
-#endif
-        }
+        guard let source = String(data: data, encoding: .utf8),
+              source.range(of: #"<svg\b"#, options: .regularExpression) != nil,
+              let dimensions = svgDimensions(source)
+        else { throw LocalCatalogError.invalidImage(speciesID) }
+        guard dimensions.width <= maximumImageDimension, dimensions.height <= maximumImageDimension
+        else { throw LocalCatalogError.imageTooLarge(speciesID) }
     }
 
     private static func svgDimensions(_ source: String) -> (width: Int, height: Int)? {

@@ -223,6 +223,10 @@ final class DiveLogScreenTests: XCTestCase {
         XCTAssertEqual(DiveLogExport.escape("cr\r\nlf"), "\"cr\r\nlf\"")
         XCTAssertEqual(DiveLogExport.escape("=SUM(A1)"), "'=SUM(A1)")
         XCTAssertEqual(DiveLogExport.escape("-3 m"), "'-3 m")
+        XCTAssertEqual(DiveLogExport.escape("-1"), "-1", "negative numbers stay numbers")
+        XCTAssertEqual(DiveLogExport.escape("-1.5"), "-1.5")
+        XCTAssertEqual(DiveLogExport.escape("+2"), "+2")
+        XCTAssertEqual(DiveLogExport.escape("-1+A1"), "'-1+A1")
 
         var item = sighting("Queen Angelfish", notes: "Two of them, \"huge\"\nnear the wall")
         item.depth = Depth(value: 12.5, unit: .metres)

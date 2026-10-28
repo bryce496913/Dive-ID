@@ -42,6 +42,7 @@ let package = Package(
                 "Core/Models/DiverFeedback.swift",
                 "Core/Services/DiverFeedbackRepository.swift",
                 "Core/Services/DiverFeedbackService.swift",
+                "Core/Services/ExportFiles.swift",
                 "Core/Models/AppCopy.swift",
                 "Core/Models/CatalogueAttribution.swift",
                 "Core/Services/SelectedDiveRegionRepository.swift",

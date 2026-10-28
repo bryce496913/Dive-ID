@@ -10,6 +10,9 @@ final class DiverFeedbackService {
     let settings: any FeedbackSettings
     let app: AppInfo
     private var attempts: [UUID: FeedbackSearchAttempt] = [:]
+    /// Session IDs oldest first, so only the latest `maximumAttempts` searches stay in memory.
+    private var attemptOrder: [UUID] = []
+    static let maximumAttempts = 20
 
     init(repository: any DiverFeedbackRepository, settings: any FeedbackSettings, app: AppInfo = .current) {
         self.repository = repository
@@ -30,6 +33,9 @@ final class DiverFeedbackService {
             editedAfterSeeingResults: previous.map { $0.originalDescription != rawDescription } ?? false,
             packID: pack.id.rawValue, catalogueVersion: pack.packVersion)
         attempts[sessionID] = attempt
+        attemptOrder.removeAll { $0 == sessionID }
+        attemptOrder.append(sessionID)
+        while attemptOrder.count > Self.maximumAttempts { attempts[attemptOrder.removeFirst()] = nil }
         return attempt
     }
 
@@ -64,13 +70,16 @@ final class DiverFeedbackService {
         return try await repository.fetchAll().first { $0.attemptID == attempt.attemptID }
     }
 
-    /// The export of every evaluation-consented record.
+    /// The export of every evaluation-consented record, and none while the current
+    /// setting is off.
     func makeExport(now: Date = Date()) async throws -> DiverFeedbackExport {
-        DiverFeedbackExport(records: try await repository.fetchAll(), participantCode: settings.participantCode, now: now)
+        DiverFeedbackExport(records: try await repository.fetchAll(), evaluationConsent: settings.consent.forEvaluation,
+                            participantCode: settings.participantCode, now: now)
     }
 
     /// Writes the export to a temporary file for the share sheet.
-    func writeExport(_ export: DiverFeedbackExport, directory: URL = FileManager.default.temporaryDirectory) throws -> URL {
+    func writeExport(_ export: DiverFeedbackExport, directory: URL = ExportFiles.directory()) throws -> URL {
+        ExportFiles.removeAll(in: directory)
         let day = ISO8601DateFormatter.string(from: export.exportedAt, timeZone: .current, formatOptions: [.withFullDate])
         let url = directory.appendingPathComponent("DiveID-feedback-\(export.participantCode)-\(day).json")
         try export.encoded().write(to: url, options: .atomic)
@@ -193,7 +202,7 @@ final class FeedbackSharingViewModel {
 
     var participantCode: String { service.settings.participantCode }
     var savedCount: Int { records.count }
-    var shareableCount: Int { records.filter(\.consentForEvaluation).count }
+    var shareableCount: Int { consent.forEvaluation ? DiverFeedbackExport.shareable(records).count : 0 }
 
     func load() async {
         do {

@@ -181,6 +181,43 @@ def validate_record(record, position=1):
     return errors
 
 
+# The app checks only that a photo exists and its byte size at launch, so format and
+# dimensions are checked here. Limits match BundleMarineSpeciesCatalogRepository.
+MAXIMUM_IMAGE_BYTES = 5_000_000
+MAXIMUM_IMAGE_DIMENSION = 4_096
+
+
+def raster_dimensions(data):
+    """(width, height) from a PNG or baseline/progressive JPEG header, or None."""
+    if data[:8] == b"\x89PNG\r\n\x1a\n" and data[12:16] == b"IHDR":
+        return int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+    if data[:2] != b"\xff\xd8": return None
+    i = 2
+    while i + 9 < len(data):
+        if data[i] != 0xFF: return None
+        marker = data[i + 1]
+        if marker == 0xFF: i += 1; continue
+        if marker in (0xD8, 0x01) or 0xD0 <= marker <= 0xD7: i += 2; continue
+        length = int.from_bytes(data[i + 2:i + 4], "big")
+        if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+            return int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big")
+        i += 2 + length
+    return None
+
+
+def image_file_problem(path):
+    """(expected, actual) for a bundled image file the app would reject, or None. SVG
+    artwork is fully checked by the app, which reads those few files at launch."""
+    data = path.read_bytes()
+    if not data: return ("nonempty image file", "is empty")
+    if len(data) > MAXIMUM_IMAGE_BYTES: return (f"at most {MAXIMUM_IMAGE_BYTES:,} bytes", f"is {len(data):,} bytes")
+    if path.suffix.lower() == ".svg": return None
+    dimensions = raster_dimensions(data)
+    if dimensions is None or 0 in dimensions: return ("readable PNG or JPEG", "is not")
+    if max(dimensions) > MAXIMUM_IMAGE_DIMENSION: return (f"at most {MAXIMUM_IMAGE_DIMENSION} px per side", f"is {dimensions[0]}x{dimensions[1]}")
+    return None
+
+
 def validate_catalogue(records, manifest=None, pack_directory=None):
     """Raise CatalogueValidationError listing every problem. With pack_directory (which
     needs manifest), every bundledImage must also exist as a file in the pack's
@@ -258,6 +295,7 @@ def validate_catalogue(records, manifest=None, pack_directory=None):
             if pack_directory is not None and isinstance(filename, str) and filename.strip() and isinstance(manifest, dict) and isinstance(manifest.get("imageSubdirectory"), str):
                 path = Path(pack_directory) / manifest["imageSubdirectory"] / filename
                 if not path.is_file(): errors.append(f"speciesID {sid!r}, field bundledImage.fileName: expected file in the pack's {manifest['imageSubdirectory']}/ directory; actual {filename!r} not found")
+                elif (problem := image_file_problem(path)): errors.append(f"speciesID {sid!r}, field bundledImage.fileName: expected {problem[0]}; actual {filename!r} {problem[1]}")
     if pack_directory is not None and manifest is None: errors.append("field manifest: expected object to locate the pack's images; actual null")
     if manifest is not None:
         if not isinstance(manifest, dict): errors.append(f"field manifest: expected object; actual {_actual(manifest)}")

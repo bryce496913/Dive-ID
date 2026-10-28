@@ -299,6 +299,23 @@ class BundledImageFileTests(unittest.TestCase):
             with self.assertRaisesRegex(self.V.CatalogueValidationError, r"bundledImage.fileName.*not found"):
                 self.V.validate_catalogue([self.record], self.manifest, other)
 
+    def test_an_unreadable_or_oversized_photo_is_rejected(self):
+        record = json.loads(json.dumps(self.record)); record["bundledImage"]["fileName"] = "photo.jpg"
+        png = b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0dIHDR"
+        for content, pattern in ((b"", "is empty"), (b"not an image", "readable PNG or JPEG"),
+                                 (png + (5000).to_bytes(4, "big") + (10).to_bytes(4, "big"), "4096 px")):
+            with self.subTest(pattern=pattern), tempfile.TemporaryDirectory() as directory:
+                images = Path(directory) / self.manifest["imageSubdirectory"]; images.mkdir(parents=True)
+                (images / "photo.jpg").write_bytes(content)
+                with self.assertRaisesRegex(self.V.CatalogueValidationError, pattern):
+                    self.V.validate_catalogue([record], self.manifest, directory)
+
+    def test_jpeg_and_png_headers_give_their_dimensions(self):
+        jpeg = b"\xff\xd8" + b"\xff\xe0\x00\x04ab" + b"\xff\xc0\x00\x11\x08" + (300).to_bytes(2, "big") + (400).to_bytes(2, "big") + b"\x03"
+        self.assertEqual(self.V.raster_dimensions(jpeg), (400, 300))
+        png = b"\x89PNG\r\n\x1a\n\x00\x00\x00\x0dIHDR" + (64).to_bytes(4, "big") + (32).to_bytes(4, "big")
+        self.assertEqual(self.V.raster_dimensions(png), (64, 32))
+
     def test_without_a_pack_directory_files_are_not_checked(self):
         self.V.validate_catalogue([self.record], self.manifest)
 

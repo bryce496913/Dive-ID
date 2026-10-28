@@ -290,13 +290,18 @@ struct DiveLogExport: Sendable {
     }
 
     /// RFC 4180: a field with a comma, quote, or line break is quoted, quotes doubled. A field
-    /// a spreadsheet would run as a formula (=, +, -, @ first) gets a leading apostrophe.
+    /// a spreadsheet would run as a formula (=, +, -, @ first) gets a leading apostrophe,
+    /// unless it is a plain number such as a -1 °C water temperature.
     static func escape(_ value: String) -> String {
         var value = value
-        if let first = value.first, "=+-@".contains(first) { value = "'" + value }
+        if let first = value.first, "=+-@".contains(first), !isPlainNumber(value) { value = "'" + value }
         // isNewline also catches "\r\n", which Swift treats as one character.
         guard value.contains(where: { $0 == "," || $0 == "\"" || $0.isNewline }) else { return value }
         return "\"" + value.replacingOccurrences(of: "\"", with: "\"\"") + "\""
+    }
+
+    private static func isPlainNumber(_ value: String) -> Bool {
+        value.range(of: #"^[-+]?[0-9]+(\.[0-9]+)?$"#, options: .regularExpression) != nil
     }
 
     // MARK: JSON
@@ -345,7 +350,8 @@ struct DiveLogExport: Sendable {
     }
 
     /// Writes the chosen format to a temporary file for the share sheet.
-    func write(_ format: Format, name: String, directory: URL = FileManager.default.temporaryDirectory) throws -> URL {
+    func write(_ format: Format, name: String, directory: URL = ExportFiles.directory()) throws -> URL {
+        ExportFiles.removeAll(in: directory)
         let day = ISO8601DateFormatter.string(from: exportedAt, timeZone: .current, formatOptions: [.withFullDate])
         let safe = name.components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }.joined(separator: "-")
         let url = directory.appendingPathComponent("DiveID-\(safe.isEmpty ? "dive-log" : safe)-\(day).\(format.rawValue)")
