@@ -107,6 +107,10 @@ struct SpeciesArtwork: View {
     /// Thumbnails sit next to the name already, so they leave the name caption off.
     var showsCaption = true
     var loader: any SpeciesImageLoading = BundleSpeciesImageLoader.shared
+    /// Set for list rows: the photo is decoded at this size (points) and cached, not decoded
+    /// full-size each time the row appears.
+    var thumbnailSize: CGFloat? = nil
+    @Environment(\.displayScale) private var displayScale
     @State private var photo: UIImage?
 
     private var bundledPhoto: BundledSpeciesImage? { species.bundledImage.flatMap { $0.isPhoto ? $0 : nil } }
@@ -165,7 +169,14 @@ struct SpeciesArtwork: View {
     /// A missing or unreadable file keeps the placeholder; the pack validated it at load.
     private func loadPhoto() async {
         guard let image = bundledPhoto else { photo = nil; return }
-        let data = try? await loader.imageData(for: image, packID: species.packContext?.packID ?? .global)
+        let packID = species.packContext?.packID ?? .global
+        if let thumbnailSize {
+            let decoded = await SpeciesThumbnailCache.shared.thumbnail(for: image, packID: packID, maxPixelSize: Int((thumbnailSize * displayScale).rounded(.up)))
+            guard !Task.isCancelled else { return }
+            photo = decoded
+            return
+        }
+        let data = try? await loader.imageData(for: image, packID: packID)
         guard !Task.isCancelled else { return }
         photo = data.flatMap(UIImage.init(data:))
     }

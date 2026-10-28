@@ -19,7 +19,10 @@ final class SpeciesDetailViewModel {
         savedIdentificationID = nil
     }
 
-    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) { species = saved.species; match = saved.match; self.repository = repository; savedIdentificationID = saved.id; isSaved = true }
+    init(saved: SavedIdentification, repository: any SavedIdentificationRepository) {
+        species = saved.species; match = saved.isFromFieldGuide ? nil : saved.match  // no strength or evidence was ever shown
+        self.repository = repository; savedIdentificationID = saved.id; isSaved = true
+    }
 
     func load() async {
         guard !isUpdatingSavedState else { return }
@@ -29,7 +32,8 @@ final class SpeciesDetailViewModel {
             let values = try await repository.fetchAll()
             let saved = values.first { value in
                 if let savedIdentificationID { return value.id == savedIdentificationID }
-                guard let session = match?.sourceSessionID else { return false }
+                guard let match else { return value.isFromFieldGuide && value.species.id == species.id }
+                guard let session = match.sourceSessionID else { return false }
                 return value.sourceSessionID == session && value.species.id == species.id
             }
             savedIdentificationID = saved?.id
@@ -55,8 +59,10 @@ final class SpeciesDetailViewModel {
                 try await repository.remove(id: id)
                 savedIdentificationID = nil
                 isSaved = false
-            } else if let match {
-                let persisted = try await repository.save(SavedIdentification(match: match))
+            } else {
+                // From a search, the match; from the field guide, the species alone.
+                let value = match.map { SavedIdentification(match: $0) } ?? SavedIdentification(fieldGuideSpecies: species)
+                let persisted = try await repository.save(value)
                 savedIdentificationID = persisted.id
                 isSaved = true
             }

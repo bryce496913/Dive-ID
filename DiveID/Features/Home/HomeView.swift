@@ -65,6 +65,9 @@ struct HomeView: View {
                     }
                     .accessibilityIdentifier("savedAction")
                 }
+                HomeLinkRow(title: "Field Guide", symbol: "book.closed.fill") { router.navigate(to: .fieldGuide) }
+                    .accessibilityIdentifier("fieldGuideAction")
+                    .appCard()
                 HomeLinkRow(title: "Browse All Species", symbol: "list.bullet.rectangle") {
                     if viewModel.canSearch { router.navigate(to: .speciesCatalogue) }
                 }

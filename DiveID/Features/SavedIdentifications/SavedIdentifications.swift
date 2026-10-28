@@ -36,7 +36,7 @@ struct SavedIdentificationsView: View {
                                 VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                                     Text(item.species.commonName).font(.headline)
                                     Text(item.species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                                    Text("\(item.matchStrength.displayName) · \(item.identifiedAt.formatted(date: .abbreviated, time: .omitted))").font(.caption)
+                                    Text("\(item.isFromFieldGuide ? "Saved from the field guide" : item.matchStrength.displayName) · \(item.identifiedAt.formatted(date: .abbreviated, time: .omitted))").font(.caption)
                                     Text(item.explanation.isEmpty ? item.observationDescription : item.explanation)
                                         .lineLimit(2).font(.caption).foregroundStyle(Color.appTextSecondary)
                                 }
