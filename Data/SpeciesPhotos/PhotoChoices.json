@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "note": "The reviewer's own photo choices. A chosen photo ranks first if it passes every filter; an excluded photo is never selected again. Approval still happens in Tools/CatalogReview/photo_batches.py.",
+  "chosen": [
+    {"speciesID": "00000000-0000-0000-0000-000000000006", "commonName": "Red Lionfish", "photoID": "inaturalist:photo:552844590",
+     "chosenBy": "Bryce", "date": "2026-10-28", "note": "Picked L9 from Reports/PhotoReview/candidates-lionfish-eagle-ray.html: \"L9 and E2\""},
+    {"speciesID": "00000000-0000-0000-0000-000000000010", "commonName": "Spotted Eagle Ray", "photoID": "inaturalist:photo:186469999",
+     "chosenBy": "Bryce", "date": "2026-10-28", "note": "Picked E2 from Reports/PhotoReview/candidates-lionfish-eagle-ray.html: \"L9 and E2\""}
+  ],
+  "excluded": [
+    {"speciesID": "00000000-0000-0000-0000-000000000006", "commonName": "Red Lionfish", "photoID": "inaturalist:photo:574042798",
+     "note": "Rejected on device 2026-10-27 (caribbean-8 g2): wrong image, a larval lionfish"},
+    {"speciesID": "00000000-0000-0000-0000-000000000010", "commonName": "Spotted Eagle Ray", "photoID": "inaturalist:photo:490576738",
+     "note": "Rejected on device 2026-10-27 (caribbean-8 g2): wrong image, a surface splash with no ray visible"}
+  ]
+}

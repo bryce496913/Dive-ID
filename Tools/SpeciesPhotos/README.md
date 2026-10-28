@@ -9,6 +9,7 @@ python3 -m pip install -r Tools/SpeciesPhotos/requirements.txt   # pyarrow, Pill
 python3 Tools/SpeciesPhotos/fetch_fishbase_pictures.py         # pinned FishBase/SeaLifeBase picture tables (~3 MB)
 python3 Tools/SpeciesPhotos/species_photos.py                  # resolve -> select -> manifest (about 3 h uncached)
 python3 Tools/SpeciesPhotos/species_photos.py --offline        # rerun from the cache: no requests, same manifest
+python3 Tools/SpeciesPhotos/species_photos.py --interval 5     # slower, if iNaturalist answers 429 (rate limited)
 python3 Tools/SpeciesPhotos/thumbnails.py --species <id> ...   # 400 px thumbnails for the photos to review
 python3 Tools/CatalogReview/photo_batches.py prepare <batch-id> --species <id> ...
 python3 -m unittest discover -s Tools/SpeciesPhotos -p 'test_*.py' -v   # no network, pyarrow or Pillow needed
@@ -47,7 +48,9 @@ Mac either, so the throttled, cached API is used instead.
    flagged, at least 800 px on the longest side and from a named creator. Landscape
    photos come first (`width >= 1.1 x height`), as a stand-in for a lateral, whole-animal
    view. The final choice of view is the reviewer's. Each species keeps at most two photos,
-   from different observers.
+   from different observers. `Data/SpeciesPhotos/PhotoChoices.json` records the reviewer's
+   own picks, which rank first if they pass every filter, and rejected photos, which are
+   never selected again. Choosing a photo there doesn't approve it; review still does.
 3. **Manifest.** The pipeline writes `Data/SpeciesPhotos/PhotoManifest.json`, sorted with
    fixed keys. Each photo records:
    - creator name;

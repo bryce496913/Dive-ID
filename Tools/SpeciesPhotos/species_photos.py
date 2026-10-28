@@ -3,7 +3,9 @@
 
   resolve   match each Global species to one iNaturalist taxon by scientific name
             (synonyms, ambiguous and unmatched names are flagged, never guessed)
-  select    pick at most N allowed-licence, research-grade photos per resolved taxon
+  select    pick at most N allowed-licence, research-grade photos per resolved taxon; a photo
+            the reviewer chose (Data/SpeciesPhotos/PhotoChoices.json) comes first, and one they
+            excluded is never picked again
   manifest  write the deterministic photo manifest, the coverage report and the
             FishBase/SeaLifeBase "permission needed" list
 
@@ -24,6 +26,7 @@ GLOBAL = ROOT / "DiveID/Resources/IdentificationPacks/Global/Creatures.json"
 OUT = ROOT / "Data/SpeciesPhotos"
 CACHE = OUT / "cache"
 REPORT = ROOT / "Reports/SpeciesPhotoCoverage.json"
+CHOICES = OUT / "PhotoChoices.json"
 
 RESOLVED, SYNONYM, AMBIGUOUS, UNMATCHED = "resolved", "synonym", "ambiguous", "unmatched"
 
@@ -114,7 +117,21 @@ def candidates(observations, policy):
     return [item[1:] for item in sorted(found, key=lambda item: item[0])]
 
 
-def select(client, resolved, policy):
+def load_choices(path=CHOICES):
+    """({speciesID: [chosen photo IDs]}, {excluded photo IDs}). A choice still has to pass every
+    filter; it only moves to the front. Excluding a photo is how a rejection sticks across runs."""
+    path = Path(path)
+    if not path.exists():
+        return {}, set()
+    document = json.loads(path.read_text())
+    chosen = {}
+    for entry in document.get("chosen", []):
+        chosen.setdefault(entry["speciesID"].lower(), []).append(entry["photoID"])
+    return chosen, {entry["photoID"] for entry in document.get("excluded", [])}
+
+
+def select(client, resolved, policy, choices=({}, set())):
+    chosen_ids, excluded = choices
     out = []
     for row in resolved:
         if row["status"] != RESOLVED:
@@ -122,7 +139,11 @@ def select(client, resolved, policy):
             continue
         body, fetched = client.observations(row["taxonID"], policy["allowedLicences"])
         chosen, observers = [], set()
-        for observation, photo, name, width, height in candidates(body.get("results", []), policy):
+        preferred = chosen_ids.get(row["speciesID"].lower(), [])
+        ranked = [c for c in candidates(body.get("results", []), policy) if f"inaturalist:photo:{c[1]['id']}" not in excluded]
+        ranked.sort(key=lambda c: preferred.index(f"inaturalist:photo:{c[1]['id']}") if f"inaturalist:photo:{c[1]['id']}" in preferred
+                    else len(preferred))
+        for observation, photo, name, width, height in ranked:
             observer = (observation.get("user") or {}).get("id")
             if observer in observers:
                 continue  # at most one photo per observer, for variety
@@ -270,14 +291,17 @@ def main():
     parser.add_argument("--output", default=OUT)
     parser.add_argument("--report", default=REPORT)
     parser.add_argument("--fishbase-cache", default=OUT / "fishbase-cache")
+    parser.add_argument("--choices", default=CHOICES, help="the reviewer's chosen and excluded photos")
+    parser.add_argument("--interval", type=float, default=1.0,
+                        help="seconds between iNaturalist requests; raise it if the API answers 429")
     args = parser.parse_args()
     policy = licences.load_policy(args.policy)
     rows = species()
     if args.species:
         wanted = {s.lower() for s in args.species}
         rows = [r for r in rows if r["speciesID"] in wanted]
-    client = inat.Client(CACHE, offline=args.offline)
-    selected = select(client, resolve(client, rows), policy)
+    client = inat.Client(CACHE, offline=args.offline, minimum_interval=args.interval)
+    selected = select(client, resolve(client, rows), policy, load_choices(args.choices))
     missing = [r for r in selected if not r["photos"]]
     permission = fishbase_fallback(missing, load_fishbase_pictures(args.fishbase_cache)) if missing else []
     output = Path(args.output)

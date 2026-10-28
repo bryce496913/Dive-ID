@@ -113,6 +113,26 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual([p["photoID"] for p in photos], ["inaturalist:photo:21", "inaturalist:photo:31"])
         self.assertEqual(photos[0]["photoURL"], "https://inaturalist-open-data.s3.amazonaws.com/photos/21/large.jpg")
 
+    def test_a_chosen_photo_comes_first_and_an_excluded_one_never_returns(self):
+        client = FakeClient(
+            taxa={"Pterois volitans": [{"id": 7, "name": "Pterois volitans", "rank": "species"}]},
+            observations={(7, ("cc0", "cc-by", "cc-by-nc")): {"results": [
+                observation(1, [photo(11)], user=1),
+                observation(2, [photo(21)], user=2, name="Ann Reef"),
+                observation(3, [photo(31)], user=3, name="Bo Sea"),
+                observation(4, [photo(41, licence="cc-by-nd")], user=4, name="Cy Deep"),
+            ]}})
+        rows = [{"speciesID": "A", "commonName": "Red Lionfish", "scientificName": "Pterois volitans", "sourceCode": None}]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "PhotoChoices.json"
+            path.write_text(json.dumps({"chosen": [{"speciesID": "a", "photoID": "inaturalist:photo:31"},
+                                                   {"speciesID": "a", "photoID": "inaturalist:photo:41"}],
+                                        "excluded": [{"speciesID": "a", "photoID": "inaturalist:photo:11"}]}))
+            selected = sp.select(client, sp.resolve(client, rows), POLICY, sp.load_choices(path))
+            self.assertEqual(sp.load_choices(Path(tmp) / "missing.json"), ({}, set()))
+        self.assertEqual([p["photoID"] for p in selected[0]["photos"]], ["inaturalist:photo:31", "inaturalist:photo:21"],
+                         "chosen first; the excluded photo is gone; a chosen ND photo still fails the licence filter")
+
     def test_a_flagged_taxon_is_never_searched_for_photos(self):
         client = FakeClient(taxa={"Aetobatis narinari": [{"id": 2, "name": "Aetobatus narinari", "rank": "species",
                                                           "matched_term": "Aetobatis narinari"}]})

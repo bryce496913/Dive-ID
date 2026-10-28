@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "batchID": "caribbean-replacements",
+  "generation": 1,
+  "photoManifestSHA256": "16d1ea9b2aaec66d6022f2653810a47f847d84e61d4ddef7deb6a8c9ce8f6cff",
+  "photos": [
+    {
+      "photoID": "inaturalist:photo:552844590",
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "commonName": "Red Lionfish",
+      "scientificName": "Pterois volitans",
+      "rank": 1,
+      "thumbnail": "00000000-0000-0000-0000-000000000006-inat-552844590.jpg",
+      "photoFingerprint": "sha256:2a8e01fb9db978c1e9629882955cb1edcecdc16b4b00ac0ea6f58cdeae37d8e5"
+    },
+    {
+      "photoID": "inaturalist:photo:186469999",
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "commonName": "Spotted Eagle Ray",
+      "scientificName": "Aetobatus narinari",
+      "rank": 1,
+      "thumbnail": "00000000-0000-0000-0000-000000000010-inat-186469999.jpg",
+      "photoFingerprint": "sha256:4b8c73df5419973d954ebf843d177715a9553a0bd2e86f977f35201ba94bd576"
+    }
+  ],
+  "manifestSHA256": "bf08e651d64de9e77887d4dd02227a3aa1b90f32f26dabc189f0c7c5dd1c8570"
+}
