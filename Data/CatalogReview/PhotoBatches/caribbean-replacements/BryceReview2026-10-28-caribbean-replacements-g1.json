@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "reviewerIdentity": "Bryce",
+  "reviewDate": "2026-10-28",
+  "decision": "approved",
+  "provenance": "Recorded by Tools/CatalogReview/photo_batches.py record from decision text the reviewer typed for this manifest hash; the tool never infers a decision.",
+  "verbatimDecision": "L9 and E2",
+  "batchID": "caribbean-replacements",
+  "generation": 1,
+  "batchManifestSHA256": "bf08e651d64de9e77887d4dd02227a3aa1b90f32f26dabc189f0c7c5dd1c8570",
+  "photos": [
+    {
+      "photoID": "inaturalist:photo:186469999",
+      "speciesID": "00000000-0000-0000-0000-000000000010",
+      "photoFingerprint": "sha256:4b8c73df5419973d954ebf843d177715a9553a0bd2e86f977f35201ba94bd576"
+    },
+    {
+      "photoID": "inaturalist:photo:552844590",
+      "speciesID": "00000000-0000-0000-0000-000000000006",
+      "photoFingerprint": "sha256:2a8e01fb9db978c1e9629882955cb1edcecdc16b4b00ac0ea6f58cdeae37d8e5"
+    }
+  ],
+  "rejectedPhotos": [],
+  "rejection": null,
+  "reviewedCommit": "408e2a2635b7f604b14dfbce33213ac948182340"
+}
