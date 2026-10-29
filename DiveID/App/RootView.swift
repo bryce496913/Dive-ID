@@ -28,7 +28,9 @@ struct RootView: View {
             // Guard the route itself so a programmatic push cannot open a disabled feature.
             if features.photoIdentificationEnabled {
                 PhotoIdentificationView(
-                    viewModel: .init(sessionStore: sessionStore, photoProcessor: photoProcessor),
+                    viewModel: .init(sessionStore: sessionStore, photoProcessor: photoProcessor,
+                                     packLoader: SelectedPackLoader(catalog: catalogRepository, regionRepository: regionRepository),
+                                     feedback: feedback),
                     router: router
                 )
             } else {

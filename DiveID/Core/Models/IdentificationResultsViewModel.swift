@@ -6,6 +6,8 @@ final class IdentificationResultsViewModel {
     let sessionID: UUID
     private(set) var state: LoadState<[IdentificationMatch]> = .idle
     private(set) var packMetadata: OfflineIdentificationPackMetadata?
+    /// Set for a photo search once it has run.
+    private(set) var photoSummary: PhotoMatchSummary?
     private let service: any MarineLifeIdentificationService
     private let sessionStore: any IdentificationSessionStore
     private let catalog: any MarineSpeciesCatalogRepository
@@ -22,6 +24,19 @@ final class IdentificationResultsViewModel {
     var loadingMessage: String {
         guard let packMetadata else { return "Searching the selected dive region…" }
         return "Searching the \(packMetadata.displayName) dive region…"
+    }
+
+    var isPhotoSearch: Bool { photoSummary != nil }
+
+    /// "Photo matching covers N of M species…", for photo searches.
+    var photoCoverageText: String? {
+        photoSummary.map { AppCopy.photoCoverage(covered: $0.coveredSpeciesCount, total: $0.catalogueSpeciesCount) }
+    }
+
+    /// No confident photo match, and nothing from the diver's text either.
+    var isPhotoAbstention: Bool {
+        guard let photoSummary, photoSummary.abstained, case .empty = state else { return false }
+        return true
     }
 
     var resultsSummary: String {
@@ -60,6 +75,7 @@ final class IdentificationResultsViewModel {
                 try checkOwnership(id)
                 if let cached = try await sessionStore.result(for: sessionID) {
                     try checkOwnership(id)
+                    photoSummary = cached.photoSummary
                     apply(cached.matches)
                     return
                 }
@@ -71,21 +87,22 @@ final class IdentificationResultsViewModel {
                     photo = nil
                 }
                 try checkOwnership(id)
-                let matches = try await service.identify(request: request, processedPhoto: photo)
+                let outcome = try await service.identifyOutcome(request: request, processedPhoto: photo)
                 try checkOwnership(id)
-                let displayed = normalized(matches).map { value in
+                let displayed = normalized(outcome.matches).map { value in
                     var value = value; value.sourceSessionID = sessionID
                     if case .description(let description) = request.source { value.observationDescription = description }
                     return value
                 }
-                try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date()), for: sessionID)
+                try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date(), photoSummary: outcome.photoSummary), for: sessionID)
                 try checkOwnership(id)
+                photoSummary = outcome.photoSummary
                 apply(displayed)
             } catch is CancellationError {
                 if loadID == id { state = .idle }
             } catch let error as LocalIdentificationError {
                 guard loadID == id, !Task.isCancelled else { return }
-                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && { if case .regionMismatch = error { return false }; return true }())
+                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && error != .photoRecognizerUnavailable && { if case .regionMismatch = error { return false }; return true }())
             } catch {
                 guard loadID == id, !Task.isCancelled else { return }
                 state = .failed("Identification could not be completed locally. Please try again.", retryable: true)
@@ -112,6 +129,8 @@ final class IdentificationResultsViewModel {
                 : AppCopy.catalogueLoadFailed
         case .unsupportedSource:
             "Photo identification is not available in this offline version yet."
+        case .photoRecognizerUnavailable:
+            "Photo matching isn't available for this dive region yet. Try describing the animal instead."
         case .regionMismatch(let selected, let mentioned):
             "Your description mentions \(mentioned), but the selected dive region covers the \(selected.rawValue.capitalized). Choose another dive region and try again."
         }

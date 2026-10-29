@@ -24,14 +24,14 @@ final class DiverFeedbackService {
     /// whose results the diver has seen, so this one is a re-search of it.
     @discardableResult
     func beginAttempt(sessionID: UUID, rawDescription: String, pack: OfflineIdentificationPackMetadata,
-                      previous: FeedbackSearchAttempt?) -> FeedbackSearchAttempt {
+                      previous: FeedbackSearchAttempt?, source: FeedbackSearchSource = .description) -> FeedbackSearchAttempt {
         let first = !settings.hasSearchedBefore
         settings.hasSearchedBefore = true
         let attempt = FeedbackSearchAttempt(
             attemptID: UUID(), sessionID: sessionID, originalDescription: rawDescription,
             firstSearchOfInstall: first, researchOfAttemptID: previous?.attemptID,
             editedAfterSeeingResults: previous.map { $0.originalDescription != rawDescription } ?? false,
-            packID: pack.id.rawValue, catalogueVersion: pack.packVersion)
+            packID: pack.id.rawValue, catalogueVersion: pack.packVersion, source: source)
         attempts[sessionID] = attempt
         attemptOrder.removeAll { $0 == sessionID }
         attemptOrder.append(sessionID)
@@ -40,9 +40,13 @@ final class DiverFeedbackService {
     }
 
     /// The results as displayed (top ten, rank order). Called by the results screen.
-    func recordShown(sessionID: UUID, matches: [IdentificationMatch]) {
+    func recordShown(sessionID: UUID, matches: [IdentificationMatch], photo: PhotoMatchSummary? = nil) {
         guard var attempt = attempts[sessionID] else { return }
         attempt.shownResults = matches.prefix(10).map { FeedbackShownResult(rank: $0.rank, speciesID: $0.species.id) }
+        if let photo {
+            attempt.recognizerID = photo.recognizerID
+            attempt.recognizerVersion = photo.recognizerVersion
+        }
         attempts[sessionID] = attempt
     }
 
@@ -124,7 +128,7 @@ final class FeedbackPromptViewModel {
         }
     }
 
-    func recordShown(_ matches: [IdentificationMatch]) { service.recordShown(sessionID: sessionID, matches: matches) }
+    func recordShown(_ matches: [IdentificationMatch], photo: PhotoMatchSummary? = nil) { service.recordShown(sessionID: sessionID, matches: matches, photo: photo) }
 
     /// "Yes — this one" first asks which match.
     func chooseYes() { errorMessage = nil; activeStep = .pickMatch }

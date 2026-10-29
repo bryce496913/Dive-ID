@@ -55,6 +55,9 @@ struct FeedbackDetails: Hashable, Sendable {
     }
 }
 
+/// What a search started from. Stored in feedback as `source`.
+enum FeedbackSearchSource: String, Codable, Hashable, Sendable { case description, photo }
+
 /// One search, recorded when Find Matches is pressed. It never feeds back into search.
 struct FeedbackSearchAttempt: Hashable, Sendable {
     let attemptID: UUID
@@ -69,6 +72,10 @@ struct FeedbackSearchAttempt: Hashable, Sendable {
     let packID: String
     let catalogueVersion: Int
     var shownResults: [FeedbackShownResult] = []
+    var source: FeedbackSearchSource = .description
+    /// For a photo search: the recognizer that ran. The photo itself is never stored.
+    var recognizerID: String? = nil
+    var recognizerVersion: String? = nil
 }
 
 /// A diver's feedback on one search, stored only on this device.
@@ -99,6 +106,10 @@ struct DiverFeedbackRecord: Codable, Identifiable, Hashable, Sendable {
     var consentForPublication: Bool
     /// True once the diver has seen app results: every search after the first of the install.
     let priorExposure: Bool
+    /// `description` or `photo`; nil on records saved before photo search existed (descriptions).
+    var source: FeedbackSearchSource?
+    var recognizerID: String?
+    var recognizerVersion: String?
 
     init(attempt: FeedbackSearchAttempt, answer: FeedbackAnswer, details: FeedbackDetails, consent: FeedbackConsent,
          participantCode: String, app: AppInfo, feedbackID: UUID = UUID(), now: Date = Date()) {
@@ -126,6 +137,9 @@ struct DiverFeedbackRecord: Codable, Identifiable, Hashable, Sendable {
         consentForEvaluation = consent.forEvaluation
         consentForPublication = consent.forPublication
         priorExposure = !attempt.firstSearchOfInstall
+        source = attempt.source
+        recognizerID = attempt.recognizerID
+        recognizerVersion = attempt.recognizerVersion
     }
 }
 

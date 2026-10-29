@@ -22,15 +22,32 @@ final class PhotoIdentificationViewModel {
     private(set) var isLoadingSelection = false
     private(set) var isCreatingSession = false
     var selectionError: PhotoSelectionError?
+    /// Optional "anything else you noticed". Searched with the existing description ranker.
+    var notesText = ""
+    private(set) var packState: SelectedPackState = .notLoaded
     private let sessionStore: any IdentificationSessionStore
     private let photoProcessor: any PhotoProcessingService
+    private let packLoader: SelectedPackLoader?
+    /// Records the search for "Was this right?". Never the photo itself.
+    private let feedback: DiverFeedbackService?
     private var selectionTask: Task<Void, Never>?
     private var generation = 0
 
-    init(sessionStore: any IdentificationSessionStore, photoProcessor: any PhotoProcessingService) {
+    init(sessionStore: any IdentificationSessionStore, photoProcessor: any PhotoProcessingService,
+         packLoader: SelectedPackLoader? = nil, feedback: DiverFeedbackService? = nil) {
         self.sessionStore = sessionStore
         self.photoProcessor = photoProcessor
+        self.packLoader = packLoader
+        self.feedback = feedback
     }
+
+    /// Loads the selected dive region, which the photo is matched in.
+    func load() async {
+        guard let packLoader else { return }
+        packState = await packLoader.load()
+    }
+
+    var pack: OfflineIdentificationPackMetadata? { packState.pack }
 
     var canSubmit: Bool { processedPhoto != nil && !isLoadingSelection && !isCreatingSession }
 
@@ -81,8 +98,12 @@ final class PhotoIdentificationViewModel {
         isCreatingSession = true
         defer { isCreatingSession = false }
         do {
-            let request = IdentificationRequest(source: .processedPhoto(processedPhoto.reference))
-            return try await sessionStore.createSession(for: request, photo: processedPhoto)
+            let notes = notesText.trimmingCharacters(in: .whitespacesAndNewlines)
+            let request = IdentificationRequest(source: .processedPhoto(processedPhoto.reference),
+                                                context: IdentificationContext(region: pack?.id, additionalDescription: notes.isEmpty ? nil : notes))
+            let sessionID = try await sessionStore.createSession(for: request, photo: processedPhoto)
+            if let pack { feedback?.beginAttempt(sessionID: sessionID, rawDescription: notesText, pack: pack, previous: nil, source: .photo) }
+            return sessionID
         } catch IdentificationSessionStoreError.capacityReached {
             selectionError = .sessionLimitReached
             return nil
@@ -103,8 +124,12 @@ struct PhotoIdentificationView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
-                Text("Choose a clear photo of one marine animal. It stays on this device for the current session.")
+                Text("Choose a clear photo of one marine animal. It stays on this device and is never uploaded.")
                     .foregroundStyle(Color.appTextSecondary)
+                if let pack = viewModel.pack {
+                    Text("Dive region: \(pack.displayName)").font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 preview
                 PhotosPicker(selection: $pickerItem, matching: .images) {
                     Label("Choose From Library", systemImage: "photo.on.rectangle")
@@ -119,8 +144,25 @@ struct PhotoIdentificationView: View {
                         return data
                     }
                 }
+#if DEBUG
+                // UI tests can't drive the system photo picker reliably, so they use a generated photo.
+                if ProcessInfo.processInfo.arguments.contains("-uiTestingSamplePhoto") {
+                    Button("Use Test Photo") { viewModel.selectPhoto { Self.testPhotoData() } }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("useTestPhoto")
+                }
+#endif
                 Button("Take Photo (coming later)", systemImage: "camera") {}.buttonStyle(.bordered).disabled(true)
-                Text("Photo identification is not available yet. Photo selection and on-device preparation are retained for future development.")
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                    Text("Anything else you noticed? (optional)").font(.subheadline.weight(.semibold))
+                    TextField("For example: about 30 cm, seen at night on a wreck", text: $viewModel.notesText, axis: .vertical)
+                        .lineLimit(2...4)
+                        .accessibilityIdentifier("photoNotes")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .appCard()
+                Text("Development builds only. Photo matching uses a test recognizer, so results are placeholders.")
                     .font(.footnote).foregroundStyle(Color.appTextSecondary)
                 if let error = viewModel.selectionError { Text(error.message).foregroundStyle(Color.appError) }
                 PrimaryActionButton(title: "Identify Photo", isLoading: viewModel.isCreatingSession, disabled: !viewModel.canSubmit) {
@@ -137,7 +179,18 @@ struct PhotoIdentificationView: View {
         }
         .appScreenBackground()
         .navigationTitle("Identify From Photo")
+        .task { await viewModel.load() }
     }
+
+#if DEBUG
+    /// A plain 64 × 64 PNG, made on the device.
+    nonisolated private static func testPhotoData() -> Data {
+        UIGraphicsImageRenderer(size: CGSize(width: 64, height: 64)).pngData { context in
+            UIColor.systemTeal.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 64, height: 64))
+        }
+    }
+#endif
 
     @ViewBuilder private var preview: some View {
         Group {

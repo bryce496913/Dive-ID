@@ -129,6 +129,8 @@ struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     var packContext: PackContext? = nil
     var matchedLifeStage: SpeciesLifeStage? = nil
     var informationLevel: ObservationInformationLevel? = nil
+    /// The reference photo a photo search matched; nil for description-only results.
+    var photoEvidence: PhotoMatchEvidence? = nil
 
     var matchStrength: MatchStrength { strength ?? .band(for: score) }
 }
@@ -196,6 +198,8 @@ struct IdentificationContext: Hashable, Codable, Sendable {
     var approximateSize: String?
     var behavior: String?
     var observedAt: Date?
+    /// A photo search's optional "anything else you noticed" text. Unused by description searches.
+    var additionalDescription: String?
 
     static let empty = IdentificationContext()
 }
@@ -239,6 +243,8 @@ struct IdentificationRequest: Identifiable, Hashable, Sendable {
 struct IdentificationSessionResult: Sendable {
     let matches: [IdentificationMatch]
     let completedAt: Date
+    /// Set for photo searches: which recognizer ran, its coverage, and whether it abstained.
+    var photoSummary: PhotoMatchSummary? = nil
 }
 
 enum LoadState<Value> {

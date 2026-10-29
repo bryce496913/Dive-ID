@@ -52,13 +52,13 @@ struct HomeView: View {
                 LazyVGrid(columns: gridColumns, spacing: AppTheme.Spacing.m) {
                     HomeTile(
                         title: "Identify From Photo",
-                        subtitle: features.photoIdentificationEnabled ? "Development photo preparation" : "Coming later",
+                        subtitle: features.photoIdentificationEnabled ? "Development build · test recognizer" : "Coming later",
                         symbol: "camera.fill"
                     ) {
                         if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) }
                     }
                     .disabled(!features.photoIdentificationEnabled)
-                    .accessibilityHint(features.photoIdentificationEnabled ? "Opens the development photo preparation flow." : "Photo identification is not yet available.")
+                    .accessibilityHint(features.photoIdentificationEnabled ? "Opens photo identification. Development builds only." : "Photo identification is not yet available.")
                     .accessibilityIdentifier("photoAction")
                     HomeTile(title: "Dive Log", subtitle: "Your dives and sightings", symbol: "book.fill") {
                         router.navigate(to: .savedIdentifications)

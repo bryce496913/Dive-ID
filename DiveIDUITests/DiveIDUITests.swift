@@ -254,6 +254,8 @@ final class DiveIDUITests: XCTestCase {
     @MainActor
     func testPhotoCardIsDisabledAndSavedScreenOpens() {
         let app = XCUIApplication()
+        // Release has photo identification off; Debug turns it off for this check.
+        app.launchArguments = ["-photoIdentificationDisabled"]
         app.launch()
         XCTAssertTrue(app.buttons["photoAction"].exists)
         XCTAssertTrue(app.staticTexts["Coming later"].exists)

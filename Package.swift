@@ -11,7 +11,7 @@ let package = Package(
             name: "DiveID",
             path: "DiveID",
             exclude: [
-                "App/DebugSemanticSearchStatusView.swift", "App/DiveIDApp.swift", "App/RootView.swift", "App/FeatureAvailability.swift", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
+                "App/DebugSemanticSearchStatusView.swift", "App/DiveIDApp.swift", "App/RootView.swift", "Features", "Resources/Assets.xcassets", "Core/Components", "Core/Theme",
                 "Core/Services/BundleSpeciesImageLoader.swift",
                 "Core/Services/SpeciesThumbnailCache.swift",
                 "Core/Services/PhotoProcessingService.swift",
@@ -31,6 +31,7 @@ let package = Package(
                 "Core/Models/Models.swift",
                 "Core/Models/IdentificationResultsViewModel.swift",
                 "App/AppRouter.swift",
+                "App/FeatureAvailability.swift",
                 "Core/Models/SavedIdentificationViewModels.swift",
                 "Core/Services/SavedSpeciesRepository.swift",
                 "Core/Models/OfflineIdentificationPack.swift",
@@ -52,6 +53,8 @@ let package = Package(
                 "Core/Services/IdentificationSessionStore.swift",
                 "Core/Services/BundleMarineSpeciesCatalogRepository.swift",
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
+                "Core/Services/PhotoRecognition.swift",
+                "Core/Services/PhotoIdentificationService.swift",
                 "Core/Services/DescriptionSearchEngine.swift",
                 "Core/Services/SpeciesCandidateRetriever.swift",
                 "Core/Services/SearchIndexStore.swift",
@@ -74,7 +77,7 @@ let package = Package(
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DiveLogScreenTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DiveLogScreenTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift", "PhotoIdentificationTests.swift"],
             resources: [.copy("Fixtures")]
         )
     ]

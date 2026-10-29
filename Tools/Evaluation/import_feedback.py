@@ -102,6 +102,9 @@ def qualification(record, rules):
     """None when the record qualifies, else the reason. Never looks at results or the answer."""
     if record['consentForEvaluation'] is not rules['consentForEvaluation']:
         return 'no evaluation consent'
+    # The description pilot measures descriptions; photo searches (Debug/Internal only) never qualify.
+    if record.get('source', 'description') != 'description':
+        return 'photo search, not a description'
     if record['firstSearchOfInstall'] is not rules['firstSearchOfInstall'] or record['priorExposure'] is not rules['priorExposure']:
         return 'not the first search of the install (prior exposure)'
     if record.get('researchOfAttemptID') != rules['researchOfAttemptID'] or record['editedAfterSeeingResults'] is not rules['editedAfterSeeingResults']:
