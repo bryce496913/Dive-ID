@@ -58,6 +58,8 @@ Dates are ISO 8601 (UTC). Keys are sorted. Only records with
 | `consentForEvaluation` | bool | "Use my descriptions to test Dive ID". Always true in an export. |
 | `consentForPublication` | bool | "Dive ID may quote my wording". Separate; evaluation consent never implies it. |
 | `priorExposure` | bool | True for every search after the install's first, since the diver has seen results. |
+| `source` | string? | `description` or `photo`. Absent on records saved before photo search existed: those are descriptions. Photo search runs only in Debug and Internal builds. |
+| `recognizerID`, `recognizerVersion` | string? | Photo searches only: the recognizer that ran. The diver's photo is never stored in feedback or exported. For a photo search, `originalDescription` is the optional "anything else you noticed" text. |
 
 Collected nowhere: location data, contacts, names, device identifiers or advertising
 identifiers. Consent is per install. Changing it in Data Sources and Credits applies to

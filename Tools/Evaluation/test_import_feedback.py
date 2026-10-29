@@ -64,6 +64,12 @@ class ImportFeedbackTests(unittest.TestCase):
         self.assertEqual([r['feedbackID'] for r in self.stored()], [str(uuid.UUID(int=1))])
         self.assertIn('no evaluation consent', [e['reason'] for e in self.log()])
 
+    def test_photo_searches_never_qualify(self):
+        photo = record(2, source='photo', recognizerID='stub-deterministic', recognizerVersion='1')
+        counts = self.run_import(self.write('a.json', export(record(1, source='description'), photo)))
+        self.assertEqual((counts['imported'], counts['rejected']), (1, 1))
+        self.assertIn('photo search, not a description', [e['reason'] for e in self.log()])
+
     def test_rejects_edited_researches_and_later_searches(self):
         first = record(1)
         cases = [

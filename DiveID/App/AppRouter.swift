@@ -19,8 +19,15 @@ enum AppRoute: Hashable {
 @MainActor @Observable
 final class AppRouter {
     var path: [AppRoute] = [] {
-        didSet { reconcileSessions(previous: oldValue) }
+        didSet {
+            // A disabled feature is never reachable, even by a programmatic push.
+            if !features.photoIdentificationEnabled, path.contains(.photoIdentification) {
+                path.removeAll { $0 == .photoIdentification }
+            }
+            reconcileSessions(previous: oldValue)
+        }
     }
+    let features: FeatureAvailability
     private let sessionStore: any IdentificationSessionStore
     @ObservationIgnored private var resultsModels: [UUID: IdentificationResultsViewModel] = [:]
     @ObservationIgnored private var sessionUpdateTask: Task<Void, Never>?
@@ -29,8 +36,9 @@ final class AppRouter {
     /// One Dive Log per visit, shared by its dive pages; dropped when the log closes.
     @ObservationIgnored private var diveLog: DiveLogViewModel?
 
-    init(sessionStore: any IdentificationSessionStore = InMemoryIdentificationSessionStore()) {
+    init(sessionStore: any IdentificationSessionStore = InMemoryIdentificationSessionStore(), features: FeatureAvailability = .current) {
         self.sessionStore = sessionStore
+        self.features = features
     }
 
     func navigate(to route: AppRoute) { path.append(route) }

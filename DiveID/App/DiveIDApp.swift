@@ -36,14 +36,26 @@ struct DiveIDApp: App {
         #else
         let searchEngine = ConfiguredDescriptionSearchEngine(selection: retrievalEngine)
         #endif
+        let features = FeatureAvailability.current
+        // Photo identification: Debug and Internal only, with the test recognizer until a
+        // real model ships. Release never builds the photo service.
+#if DEBUG || DIVEID_INTERNAL
+        let photoIdentification = PhotoIdentificationService.forApp(
+            features: features, searchEngine: searchEngine,
+            recognizers: ConfiguredPhotoRecognizerProvider(bundled: nil, fallback: StubPhotoRecognizerProvider()))
+#else
+        let photoIdentification: PhotoIdentificationService? = nil
+#endif
         identificationService = LocalMarineLifeIdentificationService(
             catalogRepository: catalogRepository,
-            searchEngine: searchEngine
+            searchEngine: searchEngine,
+            photoIdentification: photoIdentification,
+            features: features
         )
         savedRepository = Self.makeSavedRepository()
         let sessionStore = InMemoryIdentificationSessionStore()
         self.sessionStore = sessionStore
-        self.router = AppRouter(sessionStore: sessionStore)
+        self.router = AppRouter(sessionStore: sessionStore, features: features)
         photoProcessor = DefaultPhotoProcessingService()
         feedback = Self.makeFeedbackService()
     }

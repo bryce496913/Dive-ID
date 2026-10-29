@@ -16,6 +16,15 @@ struct IdentificationResultsView: View {
             switch viewModel.state {
             case .idle, .loading:
                 LoadingStateView(message: viewModel.loadingMessage).accessibilityIdentifier("resultsLoading")
+            case .empty where viewModel.isPhotoAbstention:
+                ScrollView {
+                    VStack(spacing: AppTheme.Spacing.l) {
+                        EmptyStateView(title: AppCopy.noConfidentPhotoMatchTitle, message: AppCopy.noConfidentPhotoMatchMessage, systemImage: "photo")
+                        photoFooter
+                    }
+                    .padding()
+                }
+                .accessibilityIdentifier("photoNoConfidentMatch")
             case .empty:
                 EmptyStateView(title: "No useful matches", message: "No useful match was found in the offline catalogue. Add more detail about color, shape, markings, size, habitat, behavior, depth, or location and try again.", systemImage: "magnifyingglass")
                     .accessibilityIdentifier("resultsEmpty")
@@ -42,8 +51,22 @@ struct IdentificationResultsView: View {
                                     .labelStyle(CompactLabelStyle())
                                     .font(.footnote.bold()).foregroundStyle(Color.appWarning)
                             }
-                            Text(AppCopy.matchStrengthDisclaimer)
-                                .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                            if let photo = viewModel.photoSummary {
+                                if photo.isPlaceholder {
+                                    Label(AppCopy.placeholderRecognizerWarning, systemImage: "exclamationmark.triangle.fill")
+                                        .labelStyle(CompactLabelStyle())
+                                        .font(.footnote.bold()).foregroundStyle(Color.appWarning)
+                                        .accessibilityIdentifier("photoPlaceholderWarning")
+                                }
+                                if photo.abstained {
+                                    Text(AppCopy.photoResultsFromDescription).font(.footnote.bold())
+                                }
+                                Text(AppCopy.photoMatchStrengthDisclaimer)
+                                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                            } else {
+                                Text(AppCopy.matchStrengthDisclaimer)
+                                    .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                            }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
@@ -57,6 +80,7 @@ struct IdentificationResultsView: View {
                         }
                         Text(AppCopy.accuracyDisclaimer)
                             .font(.footnote).foregroundStyle(Color.appTextSecondary).padding(.top)
+                        if viewModel.isPhotoSearch { photoFooter }
                         // Below the matches, after the diver has seen them all.
                         if let feedback, feedback.isAvailable {
                             FeedbackPrompt(model: feedback, matches: matches)
@@ -65,7 +89,7 @@ struct IdentificationResultsView: View {
                     .padding()
                 }
                 // Records the results as displayed; it never changes them.
-                .task(id: matches.map(\.id)) { feedback?.recordShown(matches) }
+                .task(id: matches.map(\.id)) { feedback?.recordShown(matches, photo: viewModel.photoSummary) }
 #if DEBUG || DIVEID_INTERNAL
                 .onAppear { InternalSearchDiagnostics.shared.queryFinished(.results) }
 #endif
@@ -80,5 +104,19 @@ struct IdentificationResultsView: View {
             guard !Task.isCancelled else { return }
             await viewModel.loadIfNeeded()
         }
+    }
+
+    /// Photo searches: what the recognizer covers, and the way back to describing.
+    @ViewBuilder private var photoFooter: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
+            if let coverage = viewModel.photoCoverageText {
+                Text(coverage).font(.footnote).foregroundStyle(Color.appTextSecondary)
+                    .accessibilityIdentifier("photoCoverage")
+            }
+            Button(AppCopy.describeItInstead, systemImage: "text.bubble") { router.navigate(to: .descriptionSearch) }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("describeInstead")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

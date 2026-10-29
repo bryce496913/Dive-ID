@@ -16,6 +16,59 @@ it permits useful paraphrases, while rejecting a high-similarity result for a qu
 such as “a fish on the reef.” Structured animal-group, size, and habitat conflicts
 are still scored after provisional admission and can lower or remove a candidate.
 
+## Photo evidence (2026-10-29, Debug and Internal only)
+
+A photo search runs a swappable `PhotoRecognizer` on the diver's prepared photo (EXIF
+stripped, on the device). It returns ranked species candidates, each with a similarity on
+a declared scale and the reference photo it matched, or it abstains. This pass ships only
+a deterministic test recognizer (`StubPhotoRecognizer`); there is no real model or
+reference index yet, and Release never runs photo recognition.
+
+**Eligibility.**
+- Candidates outside the searched pack are dropped. The pack is loaded with the build's
+  catalogue access exactly as for a description search, so Release-style publication
+  filtering applies to photo candidates too.
+- Similarities are normalized to 0–1 before use: cosine with `clamp((s + 1) / 2, 0, 1)`
+  (as for semantic retrieval); a 0–1 scale is clamped as is.
+- `PhotoMatchingWeights.abstainSimilarity` (provisional 0.5, to be set from development
+  data before any evaluation) is the only threshold. The photo **abstains** when the
+  recognizer abstains or the best normalized similarity is below it. Otherwise
+  candidates below it are dropped.
+
+**Photo only** (no extra text):
+- Ordered by normalized similarity, then name and ID; at most ten.
+- Every result is `limited` information. Confidence is the normalized similarity capped
+  at `LocalRankingWeights.limitedConfidenceCap` (0.64), so a photo alone shows at most
+  "Possible match".
+- Explanation: "Looks similar to the reference photo."
+- When the photo abstains, the screen says there's no confident photo match and offers
+  "Describe it instead". Nothing is guessed.
+
+**Photo plus text** ("anything else you noticed"):
+- The text goes through the production description search, unchanged (BM25 and
+  `LocalSpeciesRanker`, same parse, conflicts and region rules; a region conflict in the
+  text is reported as for a description).
+- **Tier 1:** species the description search ranked. Ordering score is the description
+  ordering score plus `8 × normalized photo similarity` (the same weight as normalized
+  retrieval relevance; 0 when the photo didn't propose the species). Confidence, match
+  strength, information level and the description's explanation are the description
+  search's, unchanged. The photo adds "Looks similar to the reference photo." in front
+  of the explanation; it never raises confidence.
+- **Tier 2:** species only the photo proposed, ordered after every tier-1 result, scored
+  as photo-only results (limited, capped at 0.64). Because the ranker doesn't report
+  which species it rejected, a species the text contradicts can still appear here, but
+  only below everything the text supports.
+- If the photo abstains, the results are the description's alone, with "No confident
+  photo match" shown above them.
+- Deduplicated by species ID, sorted by tier, ordering score, name and ID, capped at ten.
+
+**Coverage.** Each photo result screen says "Photo matching covers N of M species", where
+N is the recognizer's covered species that are in the searched pack and M is the pack's
+species count. Species without a reference photo can still be found by describing them.
+
+Description-only searches are unchanged: none of this runs without a photo, and the
+golden-ordering fixtures are not regenerated.
+
 ## Semantic fallback (2026-10-26)
 
 The Debug-only experimental engine no longer merges semantic candidates into every
