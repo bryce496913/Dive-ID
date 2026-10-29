@@ -18,6 +18,8 @@ are still scored after provisional admission and can lower or remove a candidate
 
 ## Photo evidence (2026-10-29, Debug and Internal only)
 
+Fusion rule approved by the owner on 2026-10-29.
+
 A photo search runs a swappable `PhotoRecognizer` on the diver's prepared photo (EXIF
 stripped, on the device). It returns ranked species candidates, each with a similarity on
 a declared scale and the reference photo it matched, or it abstains. This pass ships only
