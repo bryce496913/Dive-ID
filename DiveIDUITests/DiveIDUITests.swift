@@ -257,8 +257,8 @@ final class DiveIDUITests: XCTestCase {
         // Release has photo identification off; Debug turns it off for this check.
         app.launchArguments = ["-photoIdentificationDisabled"]
         app.launch()
-        XCTAssertTrue(app.buttons["photoAction"].exists)
-        XCTAssertTrue(app.staticTexts["Coming later"].exists)
+        XCTAssertTrue(app.buttons["photoAction"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Coming later"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["photoAction"].isEnabled)
         app.buttons["savedAction"].tap()
         XCTAssertTrue(app.navigationBars["Dive Log"].waitForExistence(timeout: 2))

@@ -114,3 +114,28 @@ first. A thumbnail run saves its index as it goes and lists any photo that faile
 (HEAD requests only) to project the Global pack's photo size. The results and the
 recommendation are in `Reports/SpeciesPhotoSizeProjection.json` and
 [the plan](../../Docs/SpeciesPhotos.md).
+
+## Holdout mode (photo evaluation)
+
+`holdout.py` picks photos for evaluating photo identification
+([Docs/PhotoEvaluation.md](../../Docs/PhotoEvaluation.md)). They are never references,
+training data or tuning data.
+
+```sh
+python3 Tools/SpeciesPhotos/holdout.py select     # cached listings only, no requests
+python3 Tools/SpeciesPhotos/holdout.py nomatch    # a handful of requests
+python3 Tools/SpeciesPhotos/holdout.py download   # photo files, about 1 per second
+python3 Tools/SpeciesPhotos/holdout.py freeze     # once, before the first held-out run
+```
+
+- Up to 3 held-out and 2 development photos per Global species, including species without
+  a reference photo. Each comes from an observation and an observer different from the
+  species' bundled photo, passes the same licence and quality filters, and was not
+  rejected in photo review. One photo per observation and per observer.
+- Observers are split by a fixed hash: an observer's photos are all held-out or all
+  development, never both.
+- Underwater is recorded as unknown (`null`): iNaturalist's observation data doesn't say.
+- No-match photos: freshwater fish, corals, dolphins, seals and water birds. There is no
+  diver set, because iNaturalist doesn't record people.
+- Manifests with hashes are committed in `Data/PhotoEvaluation/`. The photos (iNaturalist's
+  500 px "medium" rendition) live in `Data/PhotoEvaluation/cache/`, which is git-ignored.

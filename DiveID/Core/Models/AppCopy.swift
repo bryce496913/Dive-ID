@@ -42,6 +42,7 @@ enum AppCopy {
     static let photoResultsFromDescription = "No confident photo match. These results come from what you described."
     static let placeholderRecognizerWarning = "Test recognizer: these photo results are placeholders, not real matches"
     static let describeItInstead = "Describe It Instead"
+    static let photoMatchingUnavailable = "Photo matching is unavailable in this build. Try describing the animal instead."
     /// Draft records have not been human-verified.
     static let draftCatalogueWarning = "Draft catalogue — identities and biological details have not been verified"
     static func draftRecordStatus(_ status: String) -> String {

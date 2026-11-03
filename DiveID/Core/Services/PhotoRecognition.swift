@@ -60,7 +60,14 @@ protocol PhotoRecognizer: Sendable {
     var coveredSpeciesIDs: Set<UUID> { get }
     /// True for test and preview recognizers whose results are placeholders.
     var isPlaceholder: Bool { get }
+    /// Normalized similarity below which the photo abstains. Each recognizer's own, set from
+    /// development data (Data/Evaluation/PhotoProtocol.v1.json); the shared provisional value otherwise.
+    var abstainSimilarity: Double { get }
     func recognize(_ photo: ProcessedPhoto, catalogueContentVersion: String) async throws -> PhotoRecognition
+}
+
+extension PhotoRecognizer {
+    var abstainSimilarity: Double { PhotoMatchingWeights.abstainSimilarity }
 }
 
 /// Supplies a recognizer for a loaded pack, or nil when none is available for it.
@@ -69,10 +76,10 @@ protocol PhotoRecognizerProviding: Sendable {
 }
 
 extension OfflineIdentificationPack {
-    /// Identifies the catalogue content a reference index must match: the content key for
-    /// a loaded pack file, otherwise its ID and version.
+    /// Identifies the catalogue content a reference index must match: the species file the
+    /// pack (or its source pack) was loaded from; for packs built in memory, its ID and version.
     var photoCatalogueContentVersion: String {
-        persistentContentKey ?? "\(metadata.id.rawValue)-v\(metadata.packVersion)"
+        photoReferenceVersion ?? persistentContentKey ?? "\(metadata.id.rawValue)-v\(metadata.packVersion)"
     }
 }
 
@@ -144,15 +151,16 @@ struct StubPhotoRecognizerProvider: PhotoRecognizerProviding {
     }
 }
 
-/// Follows the optional-model pattern of the semantic encoder: try a bundled recognizer
-/// for the pack, and fall back when none is installed. No model ships in this pass, so
-/// `bundled` is nil in the app and the fallback (the stub, Debug and Internal only) is used.
+/// Follows the optional-model pattern of the semantic encoder: the bundled recognizer
+/// when one is configured, otherwise the fallback. A bundled recognizer that is present
+/// but rejected (stale index, other request revision) throws: it never falls back to
+/// other results.
 struct ConfiguredPhotoRecognizerProvider: PhotoRecognizerProviding {
     let bundled: (any PhotoRecognizerProviding)?
     let fallback: (any PhotoRecognizerProviding)?
 
     func recognizer(for pack: OfflineIdentificationPack) async throws -> (any PhotoRecognizer)? {
-        if let bundled, let recognizer = try? await bundled.recognizer(for: pack) { return recognizer }
+        if let bundled { return try await bundled.recognizer(for: pack) }
         return try await fallback?.recognizer(for: pack)
     }
 }

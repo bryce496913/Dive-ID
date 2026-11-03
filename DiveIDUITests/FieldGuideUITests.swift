@@ -61,7 +61,8 @@ final class FieldGuideUITests: XCTestCase {
     @MainActor
     private func openGuide() -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting"]
+        // A temporary dive log (Debug only), so saving never touches real saved identifications.
+        app.launchArguments = ["-uiTesting", "-resetDiveLogForUITests"]
         app.launch()
         let entry = app.buttons["fieldGuideAction"]
         XCTAssertTrue(entry.waitForExistence(timeout: 10))

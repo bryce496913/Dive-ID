@@ -241,6 +241,7 @@ python3 Tools/CatalogReview/prepare_source_review_pass.py
 python3 Tools/CatalogReview/prepare_review_batch.py
 python3 Tools/CatalogReview/verify_source_review_reproducibility.py
 python3 Tools/FishBaseIntake/publish_global.py   # Global: drafts plus recorded batch approvals
+swift run -c release photo-index                  # Global photo index (Mac only); rerun after Global or its photos change
 ```
 
 Global approvals come only from batch decisions recorded with

@@ -118,6 +118,10 @@ class Client:
     def taxa(self, scientific_name):
         return self.get("/taxa", {"q": scientific_name, "rank": "species", "per_page": 10}, trim=trim_taxa)
 
+    def taxon_by_name(self, name):
+        """Any rank (a family or order, for the holdout's no-match subjects)."""
+        return self.get("/taxa", {"q": name, "per_page": 10}, trim=trim_taxa)
+
     def observations(self, taxon_id, licences, per_page=30):
         return self.get("/observations", {
             "taxon_id": taxon_id, "quality_grade": "research", "photos": "true",

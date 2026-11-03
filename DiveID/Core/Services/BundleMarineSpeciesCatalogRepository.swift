@@ -152,7 +152,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         }
         let sorted = profiles.sorted { $0.commonName.localizedStandardCompare($1.commonName) == .orderedAscending }
         let pack = OfflineIdentificationPack(metadata: metadata, profiles: sorted,
-                                             persistentContentKey: "development-" + StableDigest.fnv1a64Hex(data))
+                                             persistentContentKey: "development-" + StableDigest.fnv1a64Hex(data),
+                                             photoReferenceVersion: PhotoReferenceIndex.catalogueContentVersion(packID: id.rawValue, speciesData: data))
         cachedRawPacks[id] = pack
         return pack
     }
@@ -182,7 +183,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
             throw failure(id, .validationFailed, .invalidData, membershipResource, .validation)
         }
         let content = source.persistentContentKey.map { "\($0)-\(id.rawValue)-" + StableDigest.fnv1a64Hex(membershipData) }
-        return OfflineIdentificationPack(metadata: metadata, profiles: profiles, persistentContentKey: content)
+        return OfflineIdentificationPack(metadata: metadata, profiles: profiles, persistentContentKey: content,
+                                         photoReferenceVersion: source.photoReferenceVersion)
     }
 
     private static func isPublicationEligible(_ profile: LocalSpeciesProfile) -> Bool {
@@ -224,7 +226,8 @@ actor BundleMarineSpeciesCatalogRepository: MarineSpeciesCatalogRepository {
         metadata.speciesCount = eligible.count
         // The same resource filtered by review status, so the same digest under its own name.
         let exposed = OfflineIdentificationPack(metadata: metadata, profiles: eligible,
-                                                persistentContentKey: pack.persistentContentKey.map { "publication-" + $0.replacingOccurrences(of: "development-", with: "") })
+                                                persistentContentKey: pack.persistentContentKey.map { "publication-" + $0.replacingOccurrences(of: "development-", with: "") },
+                                                photoReferenceVersion: pack.photoReferenceVersion)
         guard exposed.profiles.count == exposed.metadata.speciesCount else {
             throw failure(pack.metadata.id, .reviewAccountingInvalid, .reviewAccountingInvalid,
                           "IdentificationPacks/\(pack.metadata.id.rawValue)/PackManifest.json", .validation)
