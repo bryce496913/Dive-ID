@@ -37,12 +37,10 @@ struct DiveIDApp: App {
         let searchEngine = ConfiguredDescriptionSearchEngine(selection: retrievalEngine)
         #endif
         let features = FeatureAvailability.current
-        // Photo identification: Debug and Internal only, with the test recognizer until a
-        // real model ships. Release never builds the photo service.
+        // Photo identification: Debug and Internal only. Release never builds the photo service.
 #if DEBUG || DIVEID_INTERNAL
         let photoIdentification = PhotoIdentificationService.forApp(
-            features: features, searchEngine: searchEngine,
-            recognizers: ConfiguredPhotoRecognizerProvider(bundled: nil, fallback: StubPhotoRecognizerProvider()))
+            features: features, searchEngine: searchEngine, recognizers: Self.makePhotoRecognizers())
 #else
         let photoIdentification: PhotoIdentificationService? = nil
 #endif
@@ -59,6 +57,18 @@ struct DiveIDApp: App {
         photoProcessor = DefaultPhotoProcessingService()
         feedback = Self.makeFeedbackService()
     }
+
+#if DEBUG || DIVEID_INTERNAL
+    /// Vision feature prints against the bundled reference index, loaded on first use. A
+    /// missing or stale index is reported, never replaced by other results. UI tests use
+    /// the deterministic test recognizer (-uiTestingSamplePhoto, Debug only).
+    private static func makePhotoRecognizers() -> any PhotoRecognizerProviding {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingSamplePhoto") { return StubPhotoRecognizerProvider() }
+#endif
+        return ConfiguredPhotoRecognizerProvider(bundled: BundledPhotoIndexProvider.bundled(), fallback: nil)
+    }
+#endif
 
     /// UI tests pass -resetDiveLogForUITests for an empty dive log in a temporary file (Debug
     /// only), so real saved identifications are never touched.

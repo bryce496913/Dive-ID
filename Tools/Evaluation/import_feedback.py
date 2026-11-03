@@ -43,8 +43,12 @@ REQUIRED = {
     'hasPhotoToSend': bool, 'consentForEvaluation': bool, 'consentForPublication': bool, 'priorExposure': bool,
 }
 WORKSHEET_COLUMNS = ['feedbackID', 'participantID', 'collectionDate', 'description', 'broadRegion', 'approximateDepth',
-                     'uncertainty', 'hasPhotoToSend', 'expectedSpeciesIDs', 'acceptableSpeciesIDs', 'evidenceReferences',
-                     'curatorID', 'adjudicationDate', 'notes']
+                     'uncertainty', 'hasPhotoToSend', 'suppliedPhotoFile', 'suppliedPhotoSHA256', 'expectedSpeciesIDs',
+                     'acceptableSpeciesIDs', 'evidenceReferences', 'curatorID', 'adjudicationDate', 'notes']
+# A photo the diver sends separately (never through the app) is filed in the private holdout
+# and named here by the custodian. These photos become the real-diver photo set, held out
+# like Data/PhotoEvaluation/Holdout.v1.json: never references, training or tuning.
+NO_PHOTO_OFFERED = 'not offered'
 
 
 class ImportError_(Exception):
@@ -145,6 +149,9 @@ def worksheet_csv(submissions):
             'description': row['description'], 'broadRegion': context.get('broadRegion') or '',
             'approximateDepth': f'{depth["value"]:g} {depth["unit"]}' if depth else '',
             'uncertainty': context.get('uncertainty') or '', 'hasPhotoToSend': 'yes' if context.get('hasPhotoToSend') else 'no',
+            # Blank for the custodian to fill when the photo arrives; nothing to fill otherwise.
+            'suppliedPhotoFile': '' if context.get('hasPhotoToSend') else NO_PHOTO_OFFERED,
+            'suppliedPhotoSHA256': '' if context.get('hasPhotoToSend') else NO_PHOTO_OFFERED,
         })
     return out.getvalue()
 

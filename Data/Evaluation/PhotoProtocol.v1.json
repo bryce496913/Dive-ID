@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "suiteID": "photo-holdout-v1",
+  "status": "approved by the owner on 2026-10-29, as proposed, before any held-out run",
+  "proposedOn": "2026-10-29",
+  "approvedOn": "2026-10-29",
+  "heldOutManifest": "Data/PhotoEvaluation/Holdout.v1.json (hash frozen in Data/PhotoEvaluation/Freeze.json before the first run)",
+  "minimumRates": {
+    "coveredTop1": 0.4,
+    "coveredTop3": 0.6,
+    "coveredTop10": 0.8,
+    "noMatchCorrect": 1.0,
+    "confidenceCompliant": 1.0
+  },
+  "minimumSamples": {
+    "covered": 30,
+    "noMatch": 10
+  },
+  "rationale": {
+    "coveredTop1": "Same floor as description search (V05Protocol.v2 top1 0.4), on species with a bundled reference photo. An abstention counts as a miss.",
+    "coveredTop3": "Same as description top3 0.6.",
+    "coveredTop10": "Same as description top10 0.8: the right species within the ten results shown.",
+    "noMatchCorrect": "Same as description noMatchCorrect 1.0: a photo of something outside the catalogue must give 'No confident photo match', never a species. Correct means the photo abstained.",
+    "confidenceCompliant": "Same as description confidenceCompliant 1.0: no photo-only result above the limited cap (0.64), so a photo alone never shows more than 'Possible match'.",
+    "uncovered": "Species without a reference photo can't be matched; they are reported (abstain rate, what was shown) and must be confidence compliant, but have no accuracy floor.",
+    "groups": "Animal groups and underwater versus not are reported, not gated: most groups are too small for a floor, and underwater is unknown for iNaturalist photos.",
+    "samples": "A gate with fewer cases than minimumSamples fails as not evaluated; 0/0 is never a pass (as in V05Protocol.v2)."
+  },
+  "thresholdRule": "The abstain threshold is set from the development split only: the smallest normalized similarity at which the development no-match photos meet noMatchCorrect. Never from the held-out set.",
+  "rules": [
+    "Floors are fixed before the first held-out run and are not changed after seeing held-out results without the owner's approval.",
+    "Held-out photos are never used as references, for training or for tuning.",
+    "Photo identification stays off in Release whatever the results."
+  ]
+}

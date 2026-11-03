@@ -5,7 +5,7 @@ let package = Package(
     name: "DiveIDBenchmark",
     // Observation-backed saved-state models require macOS 14 in the portable test harness.
     platforms: [.macOS(.v14)],
-    products: [.library(name: "DiveID", targets: ["DiveID"])],
+    products: [.library(name: "DiveID", targets: ["DiveID"]), .executable(name: "photo-index", targets: ["photo-index"])],
     targets: [
         .target(
             name: "DiveID",
@@ -55,6 +55,9 @@ let package = Package(
                 "Core/Services/LocalMarineLifeIdentificationService.swift",
                 "Core/Services/PhotoRecognition.swift",
                 "Core/Services/PhotoIdentificationService.swift",
+                "Core/Services/PhotoReferenceIndex.swift",
+                "Core/Services/VisionPhotoRecognizer.swift",
+                "Core/Services/PhotoImageTools.swift",
                 "Core/Services/DescriptionSearchEngine.swift",
                 "Core/Services/SpeciesCandidateRetriever.swift",
                 "Core/Services/SearchIndexStore.swift",
@@ -72,13 +75,17 @@ let package = Package(
         ),
         .testTarget(
             name: "IdentificationBenchmarkTests",
-            dependencies: ["DiveID"],
+            dependencies: ["DiveID", "PhotoIndexBuilder"],
             path: "DiveIDTests",
             exclude: [
                 "CanonicalSpeciesSchemaTests.swift", "DiveIDTests.swift", "OfflineIdentificationPackTests.swift"
             ],
-            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DiveLogScreenTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift", "PhotoIdentificationTests.swift"],
+            sources: ["V05DevelopmentEvaluationTests.swift", "IdentificationLifecycleTests.swift", "SavedIdentificationPersistenceTests.swift", "SavedIdentificationCompatibilityTests.swift", "IdentificationBenchmarkTests.swift", "ProductionDescriptionSearchTests.swift", "DescriptionSearchArchitectureTests.swift", "SemanticSearchTests.swift", "SemanticEndToEndTests.swift", "TropicalPacificCatalogueTests.swift", "LocalObservationParserTests.swift", "TestResources.swift", "CatalogTestDoubles.swift", "SelectedPackStateTests.swift", "AppCopyTests.swift", "GlobalCatalogueSchemaTests.swift", "GlobalDraftCatalogueTests.swift", "GlobalPackTests.swift", "GlobalSubregionTests.swift", "GlobalPackEvaluationTests.swift", "GlobalPackPerformanceTests.swift", "RecordReviewMethodTests.swift", "CatalogueAttributionTests.swift", "SpeciesCatalogueTests.swift", "DiverFeedbackTests.swift", "FieldGuideTests.swift", "DiveLogTests.swift", "DiveLogScreenTests.swift", "DefaultDiveRegionTests.swift", "GlobalEvidenceTests.swift", "SizeEvidenceTests.swift", "SearchGoldenOrderingTests.swift", "PackListingTests.swift", "RankingNameAndVariantTests.swift", "SearchIndexStoreTests.swift", "BuildChannelTests.swift", "FirstUsePerformanceTests.swift", "InternalInstrumentationTests.swift", "PhotoIdentificationTests.swift", "PhotoIndexTests.swift", "PhotoEvaluationTests.swift", "PhotoImageToolsTests.swift", "PhotoModelCandidates.swift"],
             resources: [.copy("Fixtures")]
-        )
+        ),
+        // Builds the photo reference index on a Mac (Tools/PhotoIndex/README.md).
+        .target(name: "PhotoIndexBuilder", dependencies: ["DiveID"], path: "Tools/PhotoIndex/Sources/PhotoIndexBuilder"),
+        .executableTarget(name: "photo-index", dependencies: ["DiveID", "PhotoIndexBuilder"], path: "Tools/PhotoIndex/Sources/photo-index"),
+        .testTarget(name: "PhotoIndexBuilderTests", dependencies: ["DiveID", "PhotoIndexBuilder"], path: "Tools/PhotoIndex/Tests/PhotoIndexBuilderTests")
     ]
 )

@@ -7,6 +7,8 @@ enum LocalIdentificationError: Error, Equatable, Sendable {
     case unsupportedSource
     /// Photo identification is on, but no recognizer is available for the searched pack.
     case photoRecognizerUnavailable
+    /// The photo index is missing or doesn't match this app (diagnostic code attached).
+    case photoMatchingUnavailable(String)
     case regionMismatch(selected: OfflineIdentificationPackID, mentionedRegion: String)
 }
 

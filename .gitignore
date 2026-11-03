@@ -19,9 +19,14 @@ __pycache__/
 # Pinned FishBase/SeaLifeBase Parquet downloads (CC BY-NC data; re-fetch with Tools/FishBaseIntake/fetch.py)
 Data/GlobalMarine/FishBase/cache/
 Data/SpeciesPhotos/cache/
+# Photo evaluation images (Tools/SpeciesPhotos/holdout.py); the manifests with hashes are committed
+Data/PhotoEvaluation/cache/
 Data/SpeciesPhotos/fishbase-cache/
 Data/SpeciesPhotos/Thumbnails/*.jpg
 Data/SpeciesPhotos/intake.log
 # Shared diver feedback and pilot holdouts never go into Git (Data/Evaluation/IndependentDiverCollection.md)
 DiveID-feedback-*.json
 *holdout*/
+
+# Converted candidate models copied in for on-device measurement (Docs/PhotoModelCandidates.md); never committed
+DiveIDTests/CandidateModels/

@@ -71,7 +71,14 @@ struct SpeciesDetailView: View {
                 Button("Choose Another Dive…") { choosingDive = true }.accessibilityIdentifier("chooseDive")
             }
             Button("New Dive…") { creatingDive = true }.accessibilityIdentifier("newDiveForSighting")
-            Button("Skip", role: .cancel) { viewModel.skipAddToDive() }.accessibilityIdentifier("skipAddToDive")
+            // iOS 26 doesn't show a cancel-role button in an iPhone action sheet (only tapping
+            // outside dismisses it), so Skip is a plain button there. Earlier versions would add
+            // their own Cancel next to a plain one, so it keeps the cancel role.
+            if #available(iOS 26, *) {
+                Button("Skip") { viewModel.skipAddToDive() }.accessibilityIdentifier("skipAddToDive")
+            } else {
+                Button("Skip", role: .cancel) { viewModel.skipAddToDive() }.accessibilityIdentifier("skipAddToDive")
+            }
         }
         .sheet(isPresented: $choosingDive, onDismiss: { viewModel.skipAddToDive() }) {
             DivePicker(dives: viewModel.addToDiveOffer?.dives ?? [], regionName: { $0?.rawValue }) { dive in

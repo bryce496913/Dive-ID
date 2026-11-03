@@ -99,11 +99,17 @@ struct OfflineIdentificationPack: Sendable, Hashable {
     /// per-process seeded `Hasher`). Set by the catalogue repository; nil for packs
     /// assembled in memory, whose search index is then never persisted.
     let persistentContentKey: String?
+    /// The species file the pack's records and photos come from, as "<source pack>-<FNV-1a 64
+    /// of its bytes>": the same for a pack, its regions and its Release subset. A photo
+    /// reference index records the value it was built from (Tools/PhotoIndex).
+    let photoReferenceVersion: String?
 
-    init(metadata: OfflineIdentificationPackMetadata, profiles: [LocalSpeciesProfile], persistentContentKey: String? = nil) {
+    init(metadata: OfflineIdentificationPackMetadata, profiles: [LocalSpeciesProfile], persistentContentKey: String? = nil,
+         photoReferenceVersion: String? = nil) {
         self.metadata = metadata
         self.profiles = profiles
         self.persistentContentKey = persistentContentKey
+        self.photoReferenceVersion = photoReferenceVersion
         var hasher = Hasher()
         hasher.combine(profiles)
         contentFingerprint = hasher.finalize()

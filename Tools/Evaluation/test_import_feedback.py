@@ -107,6 +107,13 @@ class ImportFeedbackTests(unittest.TestCase):
         self.assertEqual(rows[0]['description'], '  SYNTHETIC 1: flat fish, blue spots  ')
         self.assertEqual((rows[0]['broadRegion'], rows[0]['approximateDepth'], rows[0]['hasPhotoToSend']), ('Synthetic Sea', '12 metres', 'yes'))
         self.assertEqual(rows[0]['expectedSpeciesIDs'], '', 'left for the curator')
+        self.assertEqual((rows[0]['suppliedPhotoFile'], rows[0]['suppliedPhotoSHA256']), ('', ''), 'blank: the photo arrives separately')
+
+    def test_photo_columns_only_for_divers_who_offered_a_photo(self):
+        self.run_import(self.write('a.json', export(record(1, hasPhotoToSend=True), record(2, hasPhotoToSend=False))))
+        rows = {r['feedbackID']: r for r in csv.DictReader(io.StringIO((self.holdout / 'curator-worksheet.csv').read_text()))}
+        self.assertEqual(rows[str(uuid.UUID(int=1))]['suppliedPhotoFile'], '')
+        self.assertEqual(rows[str(uuid.UUID(int=2))]['suppliedPhotoFile'], m.NO_PHOTO_OFFERED)
 
     def test_duplicate_files_and_records_import_once(self):
         file = self.write('a.json', export(record(1), record(2)))

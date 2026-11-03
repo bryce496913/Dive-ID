@@ -33,7 +33,10 @@ RESOLVED, SYNONYM, AMBIGUOUS, UNMATCHED = "resolved", "synonym", "ambiguous", "u
 
 
 def species(path=GLOBAL):
-    records = json.loads(Path(path).read_text())
+    return species_from(json.loads(Path(path).read_text()))
+
+
+def species_from(records):
     rows = []
     for r in records:
         codes = [d.get("stableSourceID", "") for d in r.get("dataSources", [])]

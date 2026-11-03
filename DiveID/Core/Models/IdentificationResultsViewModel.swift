@@ -102,7 +102,7 @@ final class IdentificationResultsViewModel {
                 if loadID == id { state = .idle }
             } catch let error as LocalIdentificationError {
                 guard loadID == id, !Task.isCancelled else { return }
-                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && error != .photoRecognizerUnavailable && { if case .regionMismatch = error { return false }; return true }())
+                state = .failed(Self.message(for: error), retryable: error != .unsupportedSource && error != .photoRecognizerUnavailable && { if case .photoMatchingUnavailable = error { return false }; return true }() && { if case .regionMismatch = error { return false }; return true }())
             } catch {
                 guard loadID == id, !Task.isCancelled else { return }
                 state = .failed("Identification could not be completed locally. Please try again.", retryable: true)
@@ -131,6 +131,10 @@ final class IdentificationResultsViewModel {
             "Photo identification is not available in this offline version yet."
         case .photoRecognizerUnavailable:
             "Photo matching isn't available for this dive region yet. Try describing the animal instead."
+        case .photoMatchingUnavailable(let code):
+            includesDiagnostics
+                ? "\(AppCopy.photoMatchingUnavailable)\nDiagnostic: \(code)"
+                : AppCopy.photoMatchingUnavailable
         case .regionMismatch(let selected, let mentioned):
             "Your description mentions \(mentioned), but the selected dive region covers the \(selected.rawValue.capitalized). Choose another dive region and try again."
         }

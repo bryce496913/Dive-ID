@@ -52,7 +52,7 @@ struct HomeView: View {
                 LazyVGrid(columns: gridColumns, spacing: AppTheme.Spacing.m) {
                     HomeTile(
                         title: "Identify From Photo",
-                        subtitle: features.photoIdentificationEnabled ? "Development build · test recognizer" : "Coming later",
+                        subtitle: features.photoIdentificationEnabled ? "Development builds only" : "Coming later",
                         symbol: "camera.fill"
                     ) {
                         if features.photoIdentificationEnabled { router.navigate(to: .photoIdentification) }

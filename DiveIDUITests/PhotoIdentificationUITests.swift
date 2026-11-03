@@ -16,7 +16,17 @@ final class PhotoIdentificationUITests: XCTestCase {
         XCTAssertTrue(photo.isEnabled, "photo identification is on in Debug")
         tap(app, photo)
         XCTAssertTrue(app.navigationBars["Identify From Photo"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["photoGuidance"].exists, "photo guidance is shown")
         tap(app, app.buttons["useTestPhoto"])
+        // The crop step: a box (Vision's suggestion, or the whole photo), adjustable or reset.
+        let crop = app.descendants(matching: .any)["cropEditor"]
+        XCTAssertTrue(crop.waitForExistence(timeout: 10), "the crop step appears once the photo is ready")
+        let whole = app.buttons["useWholePhoto"]
+        XCTAssertTrue(whole.exists)
+        if whole.isEnabled {
+            whole.tap()
+            XCTAssertEqual(crop.value as? String, "Whole photo")
+        }
         let identify = app.buttons["identifyPhoto"]
         XCTAssertTrue(identify.waitForExistence(timeout: 5))
         XCTAssertTrue(NSPredicate(format: "isEnabled == true").evaluate(with: identify) || waitEnabled(identify), "the test photo is prepared")
@@ -62,6 +72,27 @@ final class PhotoIdentificationUITests: XCTestCase {
         let sightings = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'sighting_'"))
         XCTAssertTrue(sightings.firstMatch.waitForExistence(timeout: 5))
         XCTAssertEqual(sightings.count, 1)
+    }
+
+    /// Camera access denied: the explanation shows and the library still works.
+    @MainActor
+    func testCameraDeniedExplainsAndKeepsTheLibrary() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-selectedDiveRegion", "tropical-atlantic", "-uiTestingCameraDenied", "-uiTestingSamplePhoto"]
+        app.launch()
+        let photo = app.buttons["photoAction"]
+        for _ in 0..<4 where !photo.isHittable { app.swipeUp(velocity: .slow) }
+        tap(app, photo)
+        let explanation = app.descendants(matching: .any)["cameraUnavailable"]
+        XCTAssertTrue(explanation.waitForExistence(timeout: 5), "denied access is explained up front")
+        tap(app, app.buttons["takePhoto"])
+        XCTAssertTrue(explanation.exists)
+        XCTAssertTrue(app.buttons["openCameraSettings"].exists)
+        let library = app.buttons["Choose From Library"]
+        XCTAssertTrue(library.exists && library.isEnabled, "the library option keeps working")
+        tap(app, app.buttons["useTestPhoto"])
+        XCTAssertTrue(app.descendants(matching: .any)["cropEditor"].waitForExistence(timeout: 10))
+        XCTAssertTrue(waitEnabled(app.buttons["identifyPhoto"]))
     }
 
     /// Release behaviour, simulated in Debug: the photo card is disabled and says "Coming later".

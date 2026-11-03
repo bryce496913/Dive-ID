@@ -2,8 +2,8 @@ import Foundation
 
 /// Photo-matching constants (Docs/HybridRankingContract.md#photo-evidence).
 enum PhotoMatchingWeights {
-    /// Normalized similarity the best photo candidate needs, and every kept candidate needs.
-    /// Provisional: to be set from development data before any evaluation.
+    /// Normalized similarity the best photo candidate needs, and every kept candidate needs,
+    /// for recognizers without their own (`PhotoRecognizer.abstainSimilarity`).
     static let abstainSimilarity = 0.5
     /// Weight of normalized photo similarity in the ordering score, the same as normalized
     /// retrieval relevance. Ordering only: it never changes confidence.
@@ -30,9 +30,17 @@ struct PhotoIdentificationService: Sendable {
     /// `pack` is loaded by the caller with the build's catalogue access, as for a description.
     func identify(photo: ProcessedPhoto, additionalDescription: String?, pack: OfflineIdentificationPack) async throws -> IdentificationOutcome {
         try Task.checkCancellation()
-        guard let recognizer = try await recognizers.recognizer(for: pack) else { throw LocalIdentificationError.photoRecognizerUnavailable }
-        let version = pack.photoCatalogueContentVersion
-        let recognition = try await Self.offMainActor { try await recognizer.recognize(photo, catalogueContentVersion: version) }
+        let recognition: PhotoRecognition
+        let recognizer: any PhotoRecognizer
+        do {
+            guard let available = try await recognizers.recognizer(for: pack) else { throw LocalIdentificationError.photoRecognizerUnavailable }
+            recognizer = available
+            let version = pack.photoCatalogueContentVersion
+            recognition = try await Self.offMainActor { try await available.recognize(photo, catalogueContentVersion: version) }
+        } catch let error as PhotoIndexError {
+            // A missing, stale or mismatched index: say so, never fall back to other results.
+            throw LocalIdentificationError.photoMatchingUnavailable(error.description)
+        }
         try Task.checkCancellation()
 
         var text: DescriptionSearchResult?
@@ -46,7 +54,8 @@ struct PhotoIdentificationService: Sendable {
             }
             text = result
         }
-        let fused = PhotoEvidenceFusion.fuse(recognition: recognition, text: text, pack: pack, observationDescription: text == nil ? "" : trimmed)
+        let fused = PhotoEvidenceFusion.fuse(recognition: recognition, text: text, pack: pack, observationDescription: text == nil ? "" : trimmed,
+                                             abstainSimilarity: recognizer.abstainSimilarity)
         let packIDs = Set(pack.profiles.map(\.id))
         let summary = PhotoMatchSummary(
             recognizerID: recognizer.recognizerID, recognizerVersion: recognizer.version,
@@ -71,7 +80,7 @@ enum PhotoEvidenceFusion {
     }
 
     static func fuse(recognition: PhotoRecognition, text: DescriptionSearchResult?, pack: OfflineIdentificationPack,
-                     observationDescription: String = "") -> Result {
+                     observationDescription: String = "", abstainSimilarity: Double = PhotoMatchingWeights.abstainSimilarity) -> Result {
         let profiles = Dictionary(pack.profiles.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         // In-pack candidates only (publication filtering), best similarity per species.
         var photo: [UUID: (similarity: Double, evidence: PhotoMatchEvidence)] = [:]
@@ -80,8 +89,8 @@ enum PhotoEvidenceFusion {
             if similarity > (photo[candidate.speciesID]?.similarity ?? -1) { photo[candidate.speciesID] = (similarity, candidate.evidence) }
         }
         let best = photo.values.map(\.similarity).max() ?? 0
-        let abstained = recognition.abstained || best < PhotoMatchingWeights.abstainSimilarity
-        if abstained { photo = [:] } else { photo = photo.filter { $0.value.similarity >= PhotoMatchingWeights.abstainSimilarity } }
+        let abstained = recognition.abstained || best < abstainSimilarity
+        if abstained { photo = [:] } else { photo = photo.filter { $0.value.similarity >= abstainSimilarity } }
 
         struct Scored { let tier: Int; let ordering: Double; let match: IdentificationMatch }
         var scored: [Scored] = []

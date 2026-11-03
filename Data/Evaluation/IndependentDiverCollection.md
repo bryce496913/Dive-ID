@@ -230,6 +230,14 @@ who has not seen engine output assigns `expectedSpeciesIDs` from independent evi
 (the diver's own photo or video, or a field guide or documented instructor assessment),
 or leaves the label unresolved.
 
+**Diver photos.** When a record says "I have a photo I can send", the worksheet's
+`suppliedPhotoFile` and `suppliedPhotoSHA256` columns are left blank. The diver sends the
+photo separately, never through the app. The custodian files it in the private holdout
+directory and records its file name and SHA-256 there; records without an offered photo
+say "not offered". These photos become the real-diver photo set for photo
+identification. They are held out the same way as `Data/PhotoEvaluation/Holdout.v1.json`:
+never references, training or threshold tuning, and frozen before they are first evaluated.
+
 "None of these" and "Not sure" records are kept exactly like the rest. No record is
 chosen, dropped or reordered because of how the engine ranked it or what the diver
 answered. `Tools/Evaluation/import_feedback.py` applies these rules. It writes
