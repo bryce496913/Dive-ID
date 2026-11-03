@@ -62,7 +62,13 @@ struct PhotoIdentificationService: Sendable {
             coveredSpeciesCount: recognizer.coveredSpeciesIDs.intersection(packIDs).count,
             catalogueSpeciesCount: pack.profiles.count, abstained: fused.photoAbstained,
             isPlaceholder: recognizer.isPlaceholder, usedDescription: text != nil)
-        return IdentificationOutcome(matches: fused.matches, photoSummary: summary)
+        let source = PhotoRecognizerInfo(recognizerID: recognizer.recognizerID, recognizerVersion: recognizer.version, isPlaceholder: recognizer.isPlaceholder)
+        let matches = fused.matches.map { match in
+            var match = match
+            match.photoRecognizer = source  // every result of a photo search, so saving keeps where it came from
+            return match
+        }
+        return IdentificationOutcome(matches: matches, photoSummary: summary)
     }
 
     /// Runs recognizer work in a detached task, never on the main actor, and passes cancellation on.

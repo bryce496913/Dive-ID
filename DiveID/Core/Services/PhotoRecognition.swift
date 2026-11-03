@@ -33,6 +33,14 @@ struct PhotoMatchEvidence: Codable, Hashable, Sendable {
     var referenceFileName: String? = nil
 }
 
+/// Which recognizer produced a photo result, kept with the result and with a saved sighting.
+struct PhotoRecognizerInfo: Codable, Hashable, Sendable {
+    let recognizerID: String
+    let recognizerVersion: String
+    /// A test recognizer: the result is a placeholder, not a real match.
+    let isPlaceholder: Bool
+}
+
 struct PhotoRecognitionCandidate: Hashable, Sendable {
     let speciesID: UUID
     let similarity: PhotoSimilarity

@@ -60,7 +60,8 @@ struct SpeciesCatalogueView: View {
 
     private func row(_ species: Species) -> some View {
         HStack(spacing: AppTheme.Spacing.m) {
-            SpeciesArtwork(species: species, showsCaption: false)
+            // Decoded at row size and cached, as in the field guide, not full size per row.
+            SpeciesArtwork(species: species, showsCaption: false, thumbnailSize: 64)
                 .frame(width: 64, height: 64)
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .accessibilityHidden(true)

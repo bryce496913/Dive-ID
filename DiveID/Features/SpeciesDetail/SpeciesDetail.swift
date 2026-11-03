@@ -23,6 +23,17 @@ struct SpeciesDetailView: View {
                 .accessibilityIdentifier("toggleSaved")
                 .disabled(viewModel.isUpdatingSavedState)
                 .sensoryFeedback(.success, trigger: viewModel.isSaved) { _, isSaved in isSaved }
+                // A field-guide species can be logged on many dives: each tap is a new sighting
+                // with its own time, and Remove above only removes the species' bookmark.
+                if viewModel.canLogAnotherSighting && viewModel.isSaved {
+                    Button { Task { await viewModel.logAnotherSighting() } } label: {
+                        Label("Log Another Sighting", systemImage: "plus.circle").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(viewModel.isUpdatingSavedState)
+                    .accessibilityHint("Adds a new sighting of this species, for example on another dive.")
+                    .accessibilityIdentifier("logAnotherSighting")
+                }
                 if let error = viewModel.errorMessage {
                     VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
                         Label(error, systemImage: "exclamationmark.triangle.fill").foregroundStyle(Color.appError)
@@ -121,6 +132,17 @@ struct SpeciesDetailView: View {
 
     @ViewBuilder
     private var matchEvidence: some View {
+        if let recognizer = viewModel.match?.photoRecognizer {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                if recognizer.isPlaceholder {
+                    Label(AppCopy.savedPlaceholderWarning, systemImage: "exclamationmark.triangle.fill")
+                        .labelStyle(CompactLabelStyle())
+                        .font(.footnote.bold()).foregroundStyle(Color.appWarning)
+                        .accessibilityIdentifier("placeholderPhotoResult")
+                }
+                Text(AppCopy.savedPhotoSource(recognizer)).font(.footnote).foregroundStyle(Color.appTextSecondary)
+            }
+        }
         if let match = viewModel.match, !match.explanation.isEmpty || !match.cautions.isEmpty || !match.observationDescription.isEmpty {
             DetailCard {
                 if !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
