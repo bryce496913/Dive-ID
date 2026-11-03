@@ -43,7 +43,7 @@ struct DiveLogView: View {
                 Button { exporting = .wholeLog(viewModel.dives, unassigned: viewModel.unassigned, regionNames: viewModel.regionNames) } label: {
                     Label("Export", systemImage: "square.and.arrow.up")
                 }
-                .disabled(viewModel.sightingCount == 0)
+                .disabled(!viewModel.canExport)
                 .accessibilityIdentifier("exportLog")
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -166,7 +166,7 @@ struct SightingRow: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
                 Text(item.species.commonName).font(.headline)
                 Text(item.species.scientificName).italic().font(.subheadline).foregroundStyle(Color.appTextSecondary)
-                Text("\(item.isFromFieldGuide ? "Saved from the field guide" : item.matchStrength.displayName) · \(item.identifiedAt.formatted(date: .abbreviated, time: .omitted))").font(.caption)
+                Text("\(item.isFromFieldGuide ? "Saved from the field guide" : item.matchStrength.displayName)\(item.isFromPhoto ? (item.isPlaceholderPhotoResult ? " · test photo result" : " · from a photo") : "") · \(item.identifiedAt.formatted(date: .abbreviated, time: .omitted))").font(.caption)
                 let detail = item.notes ?? (item.explanation.isEmpty ? item.observationDescription : item.explanation)
                 if !detail.isEmpty {
                     Text(detail).lineLimit(2).font(.caption).foregroundStyle(Color.appTextSecondary)
@@ -448,7 +448,14 @@ private struct SightingPicker: View {
 struct DiveLogExportSheet: View {
     let export: DiveLogExport
     let name: String
-    @State private var format: DiveLogExport.Format = .csv
+    @State private var format: DiveLogExport.Format
+
+    /// A log of dives with no sightings starts on JSON, since its CSV would be a header alone.
+    init(export: DiveLogExport, name: String) {
+        self.export = export
+        self.name = name
+        _format = State(initialValue: export.rowCount == 0 ? .json : .csv)
+    }
     @State private var fileURL: URL?
     @State private var errorMessage: String?
     @Environment(\.dismiss) private var dismiss
@@ -466,7 +473,9 @@ struct DiveLogExportSheet: View {
                     Text("\(export.rowCount) \(export.rowCount == 1 ? "sighting" : "sightings") in \(export.dives.count) \(export.dives.count == 1 ? "dive" : "dives")"
                          + (export.unassigned.isEmpty ? "" : ", including \(export.unassigned.count) on no dive"))
                         .accessibilityIdentifier("exportRowCount")
-                    Text(format == .csv ? "One row per sighting, with its dive's details." : "Every field of every dive and sighting.")
+                    Text(format == .csv
+                         ? "One row per sighting, with its dive's details. Dives with no sightings aren't in the CSV; choose JSON to keep them."
+                         : "Every field of every dive and sighting, including dives with no sightings yet.")
                         .font(.footnote).foregroundStyle(Color.appTextSecondary)
                     if let errorMessage { Text(errorMessage).foregroundStyle(Color.appError) }
                 }

@@ -46,10 +46,11 @@ struct SavedIdentificationFile: Codable, Sendable {
         dives = try c.decodeIfPresent([Dive].self, forKey: .dives) ?? []
     }
 
-    /// A save that already exists: the same search's species, or the same species saved from the field guide.
+    /// A save that already exists: the same search's species, or the species' one field-guide
+    /// bookmark. A separately logged sighting is never the same as anything else.
     static func isSame(_ existing: SavedIdentification, _ new: SavedIdentification) -> Bool {
         if let session = new.sourceSessionID { return existing.sourceSessionID == session && existing.species.id == new.species.id }
-        return new.isFromFieldGuide && existing.isFromFieldGuide && existing.species.id == new.species.id
+        return new.isFieldGuideBookmark && existing.isFieldGuideBookmark && existing.species.id == new.species.id
     }
 }
 private struct LegacySavedSpeciesFile: Codable { let schemaVersion: Int; let species: [Species] }

@@ -157,6 +157,8 @@ final class DiveLogViewModel {
 
     var isEmpty: Bool { dives.isEmpty && unassigned.isEmpty }
     var sightingCount: Int { dives.reduce(0) { $0 + $1.sightings.count } + unassigned.count }
+    /// Any dive or sighting: a log of dives alone exports too (JSON keeps empty dives).
+    var canExport: Bool { !isEmpty }
 
     func regionName(_ id: OfflineIdentificationPackID?) -> String? { id.map { regionNames[$0] ?? $0.rawValue } }
     func dive(_ id: UUID) -> DiveWithSightings? { dives.first { $0.dive.id == id } }
@@ -262,8 +264,15 @@ struct DiveLogExport: Sendable {
         "dive_id", "dive_date", "dive_start_time", "dive_site", "dive_region", "dive_max_depth", "dive_max_depth_unit",
         "dive_duration_minutes", "dive_water_temperature", "dive_water_temperature_unit", "dive_visibility", "dive_visibility_unit",
         "dive_notes", "sighting_id", "identified_at", "common_name", "scientific_name", "sighting_depth", "sighting_depth_unit",
-        "sighting_notes", "saved_from", "match_strength", "observation_description",
+        "sighting_notes", "saved_from", "match_strength", "observation_description", "photo_recognizer", "photo_reference",
     ]
+
+    /// fieldGuide, search, photo, or photoPlaceholder (a test recognizer's placeholder result).
+    static func savedFrom(_ sighting: SavedIdentification) -> String {
+        if sighting.isFromFieldGuide { return "fieldGuide" }
+        guard sighting.isFromPhoto else { return "search" }
+        return sighting.isPlaceholderPhotoResult ? "photoPlaceholder" : "photo"
+    }
 
     func csv() -> String {
         var lines = [Self.columns.joined(separator: ",")]
@@ -279,8 +288,10 @@ struct DiveLogExport: Sendable {
                 dive?.notes ?? "",
                 sighting.id.uuidString, iso.string(from: sighting.identifiedAt), sighting.species.commonName, sighting.species.scientificName,
                 sighting.depth.map { DiveForm.format($0.value) } ?? "", sighting.depth?.unit.rawValue ?? "",
-                sighting.notes ?? "", sighting.isFromFieldGuide ? "fieldGuide" : "search",
+                sighting.notes ?? "", Self.savedFrom(sighting),
                 sighting.isFromFieldGuide ? "" : sighting.matchStrength.rawValue, sighting.observationDescription,
+                sighting.photoRecognizer.map { "\($0.recognizerID) \($0.recognizerVersion)" } ?? "",
+                sighting.photoEvidence?.referenceFileName ?? sighting.photoEvidence?.referenceID ?? "",
             ]
             return values.map(Self.escape).joined(separator: ",")
         }

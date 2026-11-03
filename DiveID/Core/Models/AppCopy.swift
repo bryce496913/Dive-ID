@@ -41,6 +41,8 @@ enum AppCopy {
     static let noConfidentPhotoMatchMessage = "The photo didn't look similar enough to any reference photo to suggest a species. Try another photo, or describe what you saw."
     static let photoResultsFromDescription = "No confident photo match. These results come from what you described."
     static let placeholderRecognizerWarning = "Test recognizer: these photo results are placeholders, not real matches"
+    static let savedPlaceholderWarning = "Saved from a test recognizer: a placeholder photo result, not a real match"
+    static func savedPhotoSource(_ recognizer: PhotoRecognizerInfo) -> String { "From photo identification (\(recognizer.recognizerID), \(recognizer.recognizerVersion))" }
     static let describeItInstead = "Describe It Instead"
     static let photoMatchingUnavailable = "Photo matching is unavailable in this build. Try describing the animal instead."
     /// Draft records have not been human-verified.

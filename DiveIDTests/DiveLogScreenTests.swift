@@ -209,7 +209,7 @@ final class DiveLogScreenTests: XCTestCase {
             "dive_id", "dive_date", "dive_start_time", "dive_site", "dive_region", "dive_max_depth", "dive_max_depth_unit",
             "dive_duration_minutes", "dive_water_temperature", "dive_water_temperature_unit", "dive_visibility", "dive_visibility_unit",
             "dive_notes", "sighting_id", "identified_at", "common_name", "scientific_name", "sighting_depth", "sighting_depth_unit",
-            "sighting_notes", "saved_from", "match_strength", "observation_description",
+            "sighting_notes", "saved_from", "match_strength", "observation_description", "photo_recognizer", "photo_reference",
         ])
         let header = DiveLogExport.wholeLog([], unassigned: []).csv().components(separatedBy: "\r\n").first
         XCTAssertEqual(header, DiveLogExport.columns.joined(separator: ","))

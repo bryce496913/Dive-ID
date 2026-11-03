@@ -279,6 +279,8 @@ final class PhotoIdentificationTests: XCTestCase {
         let outcome = try await identificationService(stub([candidate(ids[0], 0.9)], covering: [ids[0], ids[1], UUID()]), features: debug)
             .identifyOutcome(request: photoRequest(), processedPhoto: photo)
         XCTAssertEqual(outcome.photoSummary?.coveredSpeciesCount, 2, "species outside the pack don't count")
+        XCTAssertTrue(outcome.matches.allSatisfy { $0.photoRecognizer == PhotoRecognizerInfo(recognizerID: "stub", recognizerVersion: "1", isPlaceholder: true) },
+                      "every photo result says which recognizer made it")
         XCTAssertEqual(outcome.photoSummary?.catalogueSpeciesCount, pack.profiles.count)
     }
 

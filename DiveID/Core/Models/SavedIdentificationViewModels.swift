@@ -35,7 +35,7 @@ final class SpeciesDetailViewModel {
             let values = try await repository.fetchAll()
             let saved = values.first { value in
                 if let savedIdentificationID { return value.id == savedIdentificationID }
-                guard let match else { return value.isFromFieldGuide && value.species.id == species.id }
+                guard let match else { return value.isFieldGuideBookmark && value.species.id == species.id }
                 guard let session = match.sourceSessionID else { return false }
                 return value.sourceSessionID == session && value.species.id == species.id
             }
@@ -75,6 +75,25 @@ final class SpeciesDetailViewModel {
             retrySaveChange = true
             errorMessage = "The identification could not be " + (isSaved ? "removed. " : "saved. ")
                 + SavedIdentificationRepositoryError.message(for: error)
+        }
+    }
+
+    /// Field-guide species only: whether "Log Another Sighting" is offered.
+    var canLogAnotherSighting: Bool { match == nil }
+
+    /// A new sighting of this species with its own ID and time, separate from the species'
+    /// bookmark and from earlier sightings, then the "Add to a dive?" offer for it. Nothing
+    /// is removed, so earlier sightings keep their dives.
+    func logAnotherSighting(now: Date = Date()) async {
+        guard canLogAnotherSighting, !isUpdatingSavedState else { return }
+        isUpdatingSavedState = true
+        defer { isUpdatingSavedState = false }
+        do {
+            let persisted = try await repository.save(SavedIdentification(fieldGuideSpecies: species, identifiedAt: now, separateSighting: true))
+            errorMessage = nil
+            await offerAddToDive(sightingID: persisted.id)
+        } catch {
+            errorMessage = "The sighting could not be saved. " + SavedIdentificationRepositoryError.message(for: error)
         }
     }
 }

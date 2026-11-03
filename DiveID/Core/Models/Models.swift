@@ -131,6 +131,8 @@ struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     var informationLevel: ObservationInformationLevel? = nil
     /// The reference photo a photo search matched; nil for description-only results.
     var photoEvidence: PhotoMatchEvidence? = nil
+    /// Set on every result of a photo search: the recognizer, and whether it is a placeholder.
+    var photoRecognizer: PhotoRecognizerInfo? = nil
 
     var matchStrength: MatchStrength { strength ?? .band(for: score) }
 }
@@ -159,9 +161,21 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
     var diveID: UUID? = nil
     /// The sighting's own depth, if logged.
     var depth: Depth? = nil
+    /// A sighting logged with "Log Another Sighting": never merged with the species'
+    /// field-guide save (the bookmark) or with other sightings, so one species can be on many dives.
+    var isSeparateSighting = false
+    /// From a photo search: the recognizer and the reference photo it matched. Never the diver's photo.
+    var photoRecognizer: PhotoRecognizerInfo? = nil
+    var photoEvidence: PhotoMatchEvidence? = nil
+
+    var isFromPhoto: Bool { photoRecognizer != nil }
+    /// Saved from a test recognizer's placeholder result, not a real match.
+    var isPlaceholderPhotoResult: Bool { photoRecognizer?.isPlaceholder == true }
 
     /// A save with no search behind it: no match strength, rank or explanation is implied.
     var isFromFieldGuide: Bool { savedFrom == .fieldGuide }
+    /// The species' one field-guide save, which Save and Remove toggle.
+    var isFieldGuideBookmark: Bool { isFromFieldGuide && !isSeparateSighting }
 
     init(id: UUID = UUID(), match: IdentificationMatch, identifiedAt: Date = Date(), notes: String? = nil) {
         self.id = id; species = match.species; matchRank = match.rank; matchStrength = match.matchStrength
@@ -170,19 +184,22 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
         taxonomicResolution = match.taxonomicResolution; observationDescription = match.observationDescription
         self.identifiedAt = identifiedAt; self.notes = notes; sourceSessionID = match.sourceSessionID; packContext = match.packContext; matchedLifeStage = match.matchedLifeStage
         savedFrom = .search
+        photoRecognizer = match.photoRecognizer; photoEvidence = match.photoEvidence
     }
 
     /// Saved from the field guide (or Browse All Species): the species only, no match.
-    init(id: UUID = UUID(), fieldGuideSpecies species: Species, identifiedAt: Date = Date()) {
+    /// `separateSighting` logs another sighting instead of the species' one bookmark.
+    init(id: UUID = UUID(), fieldGuideSpecies species: Species, identifiedAt: Date = Date(), separateSighting: Bool = false) {
         self.id = id; self.species = species; matchRank = 0; matchStrength = .weak; relativeScore = nil
         explanation = ""; distinguishingFeatures = []; cautions = []; taxonomicResolution = .species
         observationDescription = ""; self.identifiedAt = identifiedAt; notes = nil; sourceSessionID = nil
-        packContext = species.packContext; matchedLifeStage = nil; savedFrom = .fieldGuide
+        packContext = species.packContext; matchedLifeStage = nil; savedFrom = .fieldGuide; isSeparateSighting = separateSighting
     }
 
     var match: IdentificationMatch {
         var value = IdentificationMatch(id: species.id, species: species, rank: matchRank, score: relativeScore ?? 0, scoreKind: .relativeMatch, strength: matchStrength, explanation: explanation, distinguishingFeatures: distinguishingFeatures, cautions: cautions, taxonomicResolution: taxonomicResolution)
-        value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; value.packContext = packContext; value.matchedLifeStage = matchedLifeStage; return value
+        value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; value.packContext = packContext; value.matchedLifeStage = matchedLifeStage
+        value.photoRecognizer = photoRecognizer; value.photoEvidence = photoEvidence; return value
     }
 }
 
@@ -254,7 +271,7 @@ enum LoadState<Value> {
 enum SavedSource: String, Codable, Sendable { case search, fieldGuide }
 
 extension SavedIdentification {
-    enum CodingKeys: String, CodingKey { case id, species, matchRank, matchStrength, relativeScore, explanation, distinguishingFeatures, cautions, taxonomicResolution, observationDescription, identifiedAt, sourceSessionID, packContext, matchedLifeStage, savedFrom, diveID, depth
+    enum CodingKeys: String, CodingKey { case id, species, matchRank, matchStrength, relativeScore, explanation, distinguishingFeatures, cautions, taxonomicResolution, observationDescription, identifiedAt, sourceSessionID, packContext, matchedLifeStage, savedFrom, diveID, depth, isSeparateSighting, photoRecognizer, photoEvidence
         case notes = "diveNotes"
     }
     init(from decoder: Decoder) throws {
@@ -263,5 +280,8 @@ extension SavedIdentification {
         savedFrom = try c.decodeIfPresent(SavedSource.self, forKey: .savedFrom)
         diveID = try c.decodeIfPresent(UUID.self, forKey: .diveID)
         depth = try c.decodeIfPresent(Depth.self, forKey: .depth)
+        isSeparateSighting = try c.decodeIfPresent(Bool.self, forKey: .isSeparateSighting) ?? false
+        photoRecognizer = try c.decodeIfPresent(PhotoRecognizerInfo.self, forKey: .photoRecognizer)
+        photoEvidence = try c.decodeIfPresent(PhotoMatchEvidence.self, forKey: .photoEvidence)
     }
 }
