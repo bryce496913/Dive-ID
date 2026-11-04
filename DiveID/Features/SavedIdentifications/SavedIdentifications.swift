@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The Dive Log (formerly Saved Identifications): dives newest first, each with its
 /// sightings, then the sightings on no dive. Opening a sighting shows the existing
@@ -10,6 +11,7 @@ struct DiveLogView: View {
     @State private var exporting: DiveLogExport?
     @State private var confirmingRemoval: SavedIdentification?
     @State private var assigning: SavedIdentification?
+    @State private var choosingBackup = false
     @ScaledMetric(relativeTo: .body) private var thumbnail: CGFloat = 58
 
     var body: some View {
@@ -30,7 +32,7 @@ struct DiveLogView: View {
             } else if viewModel.isEmpty {
                 if viewModel.errorMessage == nil {
                     // Same title as before, so saved-list checks keep working.
-                    EmptyStateView(title: "No saved identifications", message: "Save a possible match, or add a dive, to start your dive log.", systemImage: "book")
+                    EmptyStateView(title: "No saved identifications", message: "Save a possible match, add a dive, or import a backup to start your dive log.", systemImage: "book")
                 }
             } else {
                 list
@@ -47,6 +49,12 @@ struct DiveLogView: View {
                 .accessibilityIdentifier("exportLog")
             }
             ToolbarItem(placement: .topBarTrailing) {
+                Button { choosingBackup = true } label: { Label("Import Backup", systemImage: "square.and.arrow.down") }
+                    .disabled(viewModel.importer.isWorking)
+                    .accessibilityHint("Adds dives and sightings from a JSON backup. Nothing in your log is replaced.")
+                    .accessibilityIdentifier("importBackup")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Button { showsNewDive = true } label: { Label("New Dive", systemImage: "plus") }
                     .accessibilityIdentifier("addDive")
             }
@@ -57,6 +65,22 @@ struct DiveLogView: View {
             }
         }
         .sheet(item: $exporting) { export in DiveLogExportSheet(export: export, name: "dive-log") }
+        .fileImporter(isPresented: $choosingBackup, allowedContentTypes: [.json], allowsMultipleSelection: false) { result in
+            Task { await viewModel.importer.fileChosen(result) }
+        }
+        .sheet(item: Binding(get: { viewModel.importer.preview }, set: { if $0 == nil { viewModel.importer.cancel() } })) { preview in
+            DiveLogImportPreviewView(preview: preview, importer: viewModel.importer)
+        }
+        .alert("Can't Import This File", isPresented: Binding(get: { viewModel.importer.problem != nil }, set: { if !$0 { viewModel.importer.problem = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.importer.problem ?? "")
+        }
+        .alert("Import Complete", isPresented: Binding(get: { viewModel.importer.result != nil }, set: { if !$0 { viewModel.importer.result = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.importer.result ?? "")
+        }
         .sheet(item: $assigning) { sighting in
             DivePicker(dives: viewModel.dives.map(\.dive), regionName: viewModel.regionName) { dive in
                 Task { await viewModel.assign([sighting.id], to: dive); assigning = nil }
@@ -597,4 +621,90 @@ struct SightingEditorView: View {
     }
 
     static func label(_ dive: Dive) -> String { "\(dive.siteName ?? "Unnamed site") · \(DiveText.dateLine(dive))" }
+}
+
+/// What importing a backup would do, before anything is written. Import is the only action
+/// that changes the log; existing records are never replaced.
+struct DiveLogImportPreviewView: View {
+    let preview: DiveLogImportPreview
+    @Bindable var importer: DiveLogImportViewModel
+    @Environment(\.dismiss) private var dismiss
+    private let shownConflicts = 50
+
+    var body: some View {
+        let plan = preview.plan
+        NavigationStack {
+            Form {
+                Section {
+                    LabeledContent("File", value: preview.fileName)
+                    LabeledContent("Exported", value: preview.document.exportedAt.formatted(date: .abbreviated, time: .shortened))
+                }
+                .listRowBackground(Color.appSurface)
+                Section {
+                    LabeledContent("New dives", value: "\(plan.newDives.count)").accessibilityIdentifier("importNewDives")
+                    LabeledContent("New sightings", value: "\(plan.newSightings.count)").accessibilityIdentifier("importNewSightings")
+                } header: {
+                    Text("Will be added")
+                } footer: {
+                    Text(plan.hasChanges ? "Added alongside your log. Nothing already in it is changed or removed." : "Nothing new to import: everything in this backup is already in your log or conflicts with it.")
+                }
+                .listRowBackground(Color.appSurface)
+                Section {
+                    LabeledContent("Already in your log", value: "\(plan.alreadyPresent)").accessibilityIdentifier("importAlreadyPresent")
+                } footer: {
+                    Text("Identical dives and sightings are skipped, so importing the same backup again adds nothing.")
+                }
+                .listRowBackground(Color.appSurface)
+                if !plan.conflicts.isEmpty {
+                    Section {
+                        ForEach(plan.conflicts.prefix(shownConflicts)) { conflict in
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                                Text("\(conflict.kind == .dive ? "Dive" : "Sighting"): \(conflict.title)").font(.subheadline.bold())
+                                Text(conflict.reason).font(.caption).foregroundStyle(Color.appTextSecondary)
+                            }
+                            .accessibilityElement(children: .combine)
+                        }
+                        if plan.conflicts.count > shownConflicts {
+                            Text("and \(plan.conflicts.count - shownConflicts) more").font(.caption).foregroundStyle(Color.appTextSecondary)
+                        }
+                    } header: {
+                        Text("Conflicts: \(plan.conflicts.count)").accessibilityIdentifier("importConflicts")
+                    } footer: {
+                        Text("These aren't imported. Your existing records are kept as they are.")
+                    }
+                    .listRowBackground(Color.appSurface)
+                }
+                Section("Photos") {
+                    Text("Backups don't contain photos. Species pictures come from this version of Dive ID and appear only when it includes them. A sighting from a photo search keeps which reference photo it matched, not the photo you took.")
+                        .font(.footnote).foregroundStyle(Color.appTextSecondary)
+                    if plan.newSightingsWithPictures > 0 {
+                        LabeledContent("New sightings naming a picture", value: "\(plan.newSightingsWithPictures)")
+                    }
+                }
+                .listRowBackground(Color.appSurface)
+                if let error = importer.importError {
+                    Section {
+                        Label(error, systemImage: "exclamationmark.triangle.fill").foregroundStyle(Color.appError)
+                            .accessibilityIdentifier("importError")
+                    }
+                    .listRowBackground(Color.appSurface)
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .appScreenBackground()
+            .navigationTitle("Import Backup")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { importer.cancel(); dismiss() }.accessibilityIdentifier("cancelImport")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Import") { Task { await importer.confirm() } }
+                        .disabled(!plan.hasChanges || importer.isWorking)
+                        .accessibilityIdentifier("confirmImport")
+                }
+            }
+            .interactiveDismissDisabled(importer.isWorking)
+        }
+    }
 }

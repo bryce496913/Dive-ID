@@ -237,10 +237,14 @@ final class DiveLogViewModel {
     private var retryAction: (@MainActor () async -> Void)?
     let repository: any SavedLogRepository
     private let catalog: (any MarineSpeciesCatalogRepository)?
+    /// Import Backup; a successful import reloads this log.
+    let importer: DiveLogImportViewModel
 
     init(repository: any SavedLogRepository, catalog: (any MarineSpeciesCatalogRepository)? = nil) {
         self.repository = repository
         self.catalog = catalog
+        importer = DiveLogImportViewModel(repository: repository)
+        importer.onImported = { [weak self] in await self?.load() }
     }
 
     var isEmpty: Bool { dives.isEmpty && unassigned.isEmpty }
@@ -438,15 +442,19 @@ struct DiveLogExport: Sendable {
         return decoder
     }()
 
-    func json() throws -> Data {
+    /// The export's encoding: ISO 8601 dates with milliseconds, sorted keys. Import compares
+    /// records in this form, so a record that only went through an export still matches.
+    static func jsonEncoder() -> JSONEncoder {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .custom { date, encoder in
             var container = encoder.singleValueContainer()
             try container.encode(Self.isoFormatter().string(from: date))
         }
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        return try encoder.encode(document)
+        return encoder
     }
+
+    func json() throws -> Data { try Self.jsonEncoder().encode(document) }
 
     /// Writes the chosen format to a temporary file for the share sheet.
     func write(_ format: Format, name: String, directory: URL = ExportFiles.directory()) throws -> URL {

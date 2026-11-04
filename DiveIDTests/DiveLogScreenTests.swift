@@ -312,6 +312,7 @@ private actor FlakyLogRepository: SavedIdentificationRepository, DiveLogReposito
     func unassign(sightingIDs: [UUID]) async throws { try check(); try await base.unassign(sightingIDs: sightingIDs) }
     func updateSighting(id: UUID, depth: Depth?, notes: String?) async throws { try check(); try await base.updateSighting(id: id, depth: depth, notes: notes) }
     func editSighting(id: UUID, _ edit: SightingEdit) async throws -> SavedIdentification { try check(); return try await base.editSighting(id: id, edit) }
+    func importBackup(_ document: DiveLogExport.Document) async throws -> DiveLogImportPlan { try check(); return try await base.importBackup(document) }
 }
 
 private actor SightingsOnlyRepository: SavedIdentificationRepository {

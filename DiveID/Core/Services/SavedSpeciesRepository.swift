@@ -26,6 +26,7 @@ actor InMemorySavedIdentificationRepository: SavedIdentificationRepository, Dive
     func unassign(sightingIDs: [UUID]) throws { try store.assign(sightingIDs: sightingIDs, toDive: nil) }
     func updateSighting(id: UUID, depth: Depth?, notes: String?) throws { try store.updateSighting(id: id, depth: depth, notes: notes) }
     func editSighting(id: UUID, _ edit: SightingEdit) throws -> SavedIdentification { try store.editSighting(id: id, edit) }
+    func importBackup(_ document: DiveLogExport.Document) throws -> DiveLogImportPlan { try store.importBackup(document) }
 }
 
 /// The saved file. Schema 3 adds `dives`; a schema 2 file has none and decodes with an
@@ -126,6 +127,9 @@ actor PersistentSavedIdentificationRepository: SavedIdentificationRepository, Di
     func editSighting(id: UUID, _ edit: SightingEdit) async throws -> SavedIdentification {
         try await persistentRepository().editSighting(id: id, edit)
     }
+    func importBackup(_ document: DiveLogExport.Document) async throws -> DiveLogImportPlan {
+        try await persistentRepository().importBackup(document)
+    }
 }
 
 actor JSONSavedIdentificationRepository: SavedIdentificationRepository, DiveLogRepository {
@@ -166,6 +170,14 @@ actor JSONSavedIdentificationRepository: SavedIdentificationRepository, DiveLogR
     func unassign(sightingIDs: [UUID]) throws { try change { try $0.assign(sightingIDs: sightingIDs, toDive: nil) } }
     func updateSighting(id: UUID, depth: Depth?, notes: String?) throws { try change { try $0.updateSighting(id: id, depth: depth, notes: notes) } }
     func editSighting(id: UUID, _ edit: SightingEdit) throws -> SavedIdentification { try change { try $0.editSighting(id: id, edit) } }
+    /// One read, the whole import planned against it, one atomic write: a failed write leaves the
+    /// file as it was. A backup with nothing new writes nothing.
+    func importBackup(_ document: DiveLogExport.Document) throws -> DiveLogImportPlan {
+        var store = try read()
+        let plan = try store.importBackup(document)
+        if plan.hasChanges { try write(store) }
+        return plan
+    }
 
     private func change<T>(_ body: (inout SavedStore) throws -> T) throws -> T {
         var store = try read()

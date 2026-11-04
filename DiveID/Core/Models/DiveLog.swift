@@ -156,6 +156,8 @@ protocol DiveLogRepository: Sendable {
     func updateSighting(id: UUID, depth: Depth?, notes: String?) async throws
     /// Notes, depth and dive in one checked change; returns the stored sighting.
     func editSighting(id: UUID, _ edit: SightingEdit) async throws -> SavedIdentification
+    /// Adds a checked backup's new records in one change; returns what was done.
+    func importBackup(_ document: DiveLogExport.Document) async throws -> DiveLogImportPlan
 }
 
 extension DiveLogRepository {
