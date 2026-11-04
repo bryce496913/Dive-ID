@@ -131,6 +131,17 @@ struct DiveWithSightings: Hashable, Sendable {
     let sightings: [SavedIdentification]
 }
 
+/// A sighting's editable fields, saved together. Nil depth means unknown (zero is a real
+/// depth); nil dive means the sighting is on no dive (Unassigned sightings).
+struct SightingEdit: Hashable, Sendable {
+    var notes: String?
+    var depth: Depth?
+    var diveID: UUID?
+
+    init(notes: String?, depth: Depth?, diveID: UUID?) { self.notes = notes; self.depth = depth; self.diveID = diveID }
+    init(_ sighting: SavedIdentification) { self.init(notes: sighting.notes, depth: sighting.depth, diveID: sighting.diveID) }
+}
+
 /// What happens to a dive's sightings when the dive is deleted. Keeping them is the default.
 enum DiveDeletion: Sendable { case keepUnassigned, deleteSightings }
 
@@ -143,6 +154,8 @@ protocol DiveLogRepository: Sendable {
     func assign(sightingIDs: [UUID], toDive diveID: UUID) async throws
     func unassign(sightingIDs: [UUID]) async throws
     func updateSighting(id: UUID, depth: Depth?, notes: String?) async throws
+    /// Notes, depth and dive in one checked change; returns the stored sighting.
+    func editSighting(id: UUID, _ edit: SightingEdit) async throws -> SavedIdentification
 }
 
 extension DiveLogRepository {
@@ -206,5 +219,18 @@ struct SavedStore: Hashable, Sendable {
         guard let index = identifications.firstIndex(where: { $0.id == id }) else { throw SavedIdentificationRepositoryError.sightingNotFound }
         identifications[index].depth = depth
         identifications[index].notes = notes
+    }
+
+    /// Changes only the sighting's notes, depth and dive. Its ID, species snapshot, time,
+    /// photo references, provenance and cautions are untouched, and no sighting is added or
+    /// merged. Everything is checked first, so a missing sighting or dive changes nothing.
+    mutating func editSighting(id: UUID, _ edit: SightingEdit) throws -> SavedIdentification {
+        if let depth = edit.depth, !depth.isValid { throw SavedIdentificationRepositoryError.invalidDive("Depth must be zero or more.") }
+        guard let index = identifications.firstIndex(where: { $0.id == id }) else { throw SavedIdentificationRepositoryError.sightingNotFound }
+        if let diveID = edit.diveID, !dives.contains(where: { $0.id == diveID }) { throw SavedIdentificationRepositoryError.diveNotFound }
+        identifications[index].notes = edit.notes
+        identifications[index].depth = edit.depth
+        identifications[index].diveID = edit.diveID
+        return identifications[index]
     }
 }
