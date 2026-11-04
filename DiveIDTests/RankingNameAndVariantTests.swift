@@ -8,7 +8,7 @@ final class RankingNameAndVariantTests: XCTestCase {
     private var seed: LocalSpeciesProfile!
 
     override func setUp() async throws {
-        seed = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
+        seed = try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
             .loadPack(id: .caribbean).profiles[0]
     }
 

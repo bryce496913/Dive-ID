@@ -514,7 +514,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     private let parser = LocalObservationParser()
 
     func testProductionCaribbeanPackLoadsAndValidates() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource)
         // Caribbean is a retired region: never listed, but Debug still opens it as a fixture.
         let manifests = try await repository.availablePacks()
         XCTAssertFalse(manifests.contains { $0.id == .caribbean })
@@ -585,7 +585,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
     }
 
     func testCatalogRepositoryCachesProductionPack() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource)
         let first = try await repository.loadProfiles()
         let second = try await repository.loadProfiles()
         XCTAssertEqual(first, second)
@@ -746,7 +746,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     func testCaribbeanServiceRegionValidationUsesSharedCompatibility() async throws {
         let service = LocalMarineLifeIdentificationService(
-            catalogRepository: BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource),
+            catalogRepository: TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource),
             parser: parser,
             ranker: LocalSpeciesRanker()
         )
@@ -786,10 +786,10 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         }
     }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
 
     private func productionProfile(named name: String, overrides: [String: [String]] = [:]) throws -> LocalSpeciesProfile {
-        let url = try XCTUnwrap(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
+        let url = try XCTUnwrap(TestResources.fixturePackFile("Caribbean", "Creatures.json"))
         let records = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [[String: Any]])
         var record = try XCTUnwrap(records.first { $0["commonName"] as? String == name })
         // Construct a new decoded fixture; production profile fields remain immutable.
@@ -1176,14 +1176,14 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
     ] }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
     private func productionCaribbeanProfiles() throws -> [LocalSpeciesProfile] {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode([LocalSpeciesProfile].self, from: Data(contentsOf: url))
     }
     private func productionCaribbeanMetadata(speciesCount: Int) throws -> OfflineIdentificationPackMetadata {
-        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json").standardizedFileURL
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/IdentificationPacks/Caribbean/PackManifest.json").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let value = try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: url))
         return OfflineIdentificationPackMetadata(id: value.id, schemaVersion: value.schemaVersion, packVersion: value.packVersion, displayName: value.displayName, shortDescription: value.shortDescription, geographicScope: value.geographicScope, regionAliases: value.regionAliases, speciesCount: speciesCount, speciesResourceName: value.speciesResourceName, imageSubdirectory: value.imageSubdirectory, includedWithApp: value.includedWithApp, lastDataReviewDate: value.lastDataReviewDate)

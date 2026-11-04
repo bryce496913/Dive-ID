@@ -7,7 +7,7 @@ import XCTest
 @MainActor
 final class FieldGuideTests: XCTestCase {
     private func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess = .publication) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access)
     }
 
     private func globalCatalogue() async throws -> (FieldGuideCatalogue, OfflineIdentificationPack) {

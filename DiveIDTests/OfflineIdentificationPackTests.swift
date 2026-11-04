@@ -25,7 +25,7 @@ final class OfflineIdentificationPackTests: XCTestCase {
         XCTAssertEqual(selected, futureID)
     }
     func testCaribbeanFixtureCounts() throws {
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/../../DiveID/Resources/IdentificationPacks/Caribbean").standardizedFileURL
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/IdentificationPacks/Caribbean").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let manifest = try decoder.decode(OfflineIdentificationPackMetadata.self, from: Data(contentsOf: root.appendingPathComponent("PackManifest.json")))
         XCTAssertEqual(manifest.id, .caribbean)

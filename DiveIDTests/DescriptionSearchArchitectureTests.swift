@@ -98,7 +98,7 @@ final class DescriptionSearchArchitectureTests: XCTestCase {
     ]
 
     private func pack() async throws -> OfflineIdentificationPack {
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment).loadPack(id: .caribbean)
+        try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment).loadPack(id: .caribbean)
     }
 
     func testStructuredEnginePreservesLegacyOrderingScoresAndEvidence() async throws {

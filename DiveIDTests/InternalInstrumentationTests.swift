@@ -57,7 +57,7 @@ final class InternalInstrumentationTests: XCTestCase {
     }
 
     private func pack() async throws -> OfflineIdentificationPack {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let full = try await repository.loadPack(id: .tropicalPacific)
         var metadata = full.metadata
         let profiles = Array(full.profiles.prefix(40))

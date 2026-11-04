@@ -8,9 +8,9 @@ final class ProductionDescriptionSearchTests: XCTestCase {
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
 #if SWIFT_PACKAGE
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
 #else
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
 #endif
     }
 
@@ -34,8 +34,8 @@ final class ProductionDescriptionSearchTests: XCTestCase {
 
     func testProductionCaribbeanPackLoadsWithExpectedRecords() async throws {
 #if !SWIFT_PACKAGE
-        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
-        XCTAssertNotNil(TestResources.productionBundle.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean"))
+        XCTAssertNotNil(TestResources.fixturePackFile("Caribbean", "PackManifest.json"))
+        XCTAssertNotNil(TestResources.fixturePackFile("Caribbean", "Creatures.json"))
 #endif
         let pack = try await repository().loadPack(id: .caribbean)
 
@@ -46,7 +46,7 @@ final class ProductionDescriptionSearchTests: XCTestCase {
 #if !SWIFT_PACKAGE
         for profile in pack.profiles {
             if let image = profile.bundledImage {
-                XCTAssertNotNil(TestResources.productionBundle.url(forResource: image.fileName, withExtension: nil, subdirectory: "IdentificationPacks/Caribbean/Images"))
+                XCTAssertNotNil(TestResources.fixturePackFile("Caribbean", "Images/" + image.fileName))
             }
         }
 #endif
@@ -181,7 +181,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
     }
 
     private func copyProductionResources(to root: URL, includeImages: Bool = false) throws -> URL {
-        let source = try XCTUnwrap(TestResources.productionBundle.resourceURL).appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
+        let source = TestResources.fixturePack("Caribbean")
         let destination = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
         for name in ["PackManifest.json", "Creatures.json"] {
@@ -225,7 +225,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         let root = try temporaryRoot()
         let directory = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean")))
+        try Data(contentsOf: try XCTUnwrap(TestResources.fixturePackFile("Caribbean", "PackManifest.json")))
             .write(to: directory.appendingPathComponent("PackManifest.json"))
         await assertFailure(root: root, code: .speciesResourceMissing, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .speciesResource)
     }
@@ -234,7 +234,7 @@ final class CatalogueDiagnosticsTests: XCTestCase {
         let root = try temporaryRoot()
         let directory = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/Caribbean")))
+        try Data(contentsOf: try XCTUnwrap(TestResources.fixturePackFile("Caribbean", "PackManifest.json")))
             .write(to: directory.appendingPathComponent("PackManifest.json"))
         try Data("not json".utf8).write(to: directory.appendingPathComponent("Creatures.json"))
         await assertFailure(root: root, code: .decodeFailed, resource: "IdentificationPacks/Caribbean/Creatures.json", phase: .decoding)
@@ -450,7 +450,7 @@ private struct FailingCatalogueRepository: MarineSpeciesCatalogRepository {
 
 final class DomainEligibilityTests: XCTestCase {
     private func repository() -> BundleMarineSpeciesCatalogRepository {
-        .init(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
     }
 
     func testDomainContradictionRejectsCandidatesInBothEnginesAndPacks() async throws {
@@ -525,7 +525,7 @@ private struct UnreadableDomainTestRepository: MarineSpeciesCatalogRepository {
 /// the Release Global pack, at limited confidence. "Fish" and vague phrases still list nothing.
 final class AnimalGroupSearchTests: XCTestCase {
     private func releaseGlobal() async throws -> OfflineIdentificationPack {
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
+        try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
     }
 
     private func search(_ description: String, in pack: OfflineIdentificationPack) async throws -> [IdentificationMatch] {
@@ -591,7 +591,7 @@ final class AnimalGroupSearchTests: XCTestCase {
 /// "Grey reef shark" was an alias on Graceful shark and Silky shark; it now names only the real species.
 final class OwnerAddedSpeciesSearchTests: XCTestCase {
     private func global(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) async throws -> OfflineIdentificationPack {
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access).loadPack(id: .global)
+        try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access).loadPack(id: .global)
     }
 
     private func search(_ description: String, in pack: OfflineIdentificationPack) async throws -> [IdentificationMatch] {

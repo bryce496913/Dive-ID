@@ -101,8 +101,8 @@ final class V05DevelopmentEvaluationTests: XCTestCase {
         }
         var groups: [[String: Any]] = []
         for publication in [false, true] {
-            let repository = BundleMarineSpeciesCatalogRepository(
-                bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly,
+            let repository = TestResources.catalogRepository(
+                resourceResolutionMode: .bundleOnly,
                 access: publication ? .publication : .experimentalDevelopment)
             // Development opens each case's own pack by ID: Caribbean and Tropical Pacific are
             // retired as dive regions but remain development fixtures. Release never opens a
@@ -256,7 +256,7 @@ extension V05DevelopmentEvaluationTests {
             ($0["failures"] as? [String] ?? []).contains("rankRequirement")
         }.compactMap { $0["id"] as? String })
         let fixture = try JSONDecoder().decode(V05Fixture.self, from: Data(contentsOf: TestResources.fixture(named: "V05Development.v2")))
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         var rows: [[String: Any]] = []
         for item in fixture.cases where failedIDs.contains(item.id) {
             let pack = try await repository.loadPack(id: item.selectedPackID)
@@ -357,8 +357,7 @@ extension V05DevelopmentEvaluationTests {
         let fixture = try JSONDecoder().decode(V05Fixture.self, from: Data(contentsOf: URL(fileURLWithPath: input)))
         var rows: [[String: Any]] = []
         for publication in [false, true] {
-            let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
-                resourceResolutionMode: .bundleOnly, access: publication ? .publication : .experimentalDevelopment)
+            let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: publication ? .publication : .experimentalDevelopment)
             var packs: [OfflineIdentificationPackID: OfflineIdentificationPack] = [:]
             for metadata in try await repository.availablePacks() {
                 packs[metadata.id] = try await repository.loadPack(id: metadata.id)

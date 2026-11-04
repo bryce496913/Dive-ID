@@ -31,7 +31,7 @@ final class RecordReviewMethodTests: XCTestCase {
     }
 
     func testCatalogueRejectsAReviewMethodOnAnUnapprovedRecord() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let profiles = try await repository.loadPack(id: .caribbean).profiles
         var approved = try XCTUnwrap(profiles.first { $0.review?.status == .verified })
         approved.review?.reviewMethod = .individuallyReviewed

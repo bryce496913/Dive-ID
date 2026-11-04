@@ -186,7 +186,7 @@ final class PhotoEvaluationTests: XCTestCase {
         let manifest = try JSONDecoder().decode(Manifest.self, from: manifestData)
         let rules = try JSONDecoder().decode(GateProtocol.self, from: Data(contentsOf: root.appendingPathComponent("Data/Evaluation/PhotoProtocol.v1.json")))
 
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .publication)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: .publication)
         let pack = try await repository.loadPack(id: .global)
         let environment = ProcessInfo.processInfo.environment
         let provider: any PhotoRecognizerProviding

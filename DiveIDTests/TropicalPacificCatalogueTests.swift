@@ -67,7 +67,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     }
 
     private let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent("DiveID/Resources/IdentificationPacks/TropicalPacific")
+        .appendingPathComponent("DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific")
 
     private func pack() throws -> OfflineIdentificationPack {
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
@@ -147,8 +147,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     func testProductionRepositoryLoadsTropicalPacificFromExplicitPortableBundle() async throws {
         // Bundle-only is deliberate: SwiftPM must package the catalogue rather than
         // allowing this portable assertion to pass through a checkout fallback.
-        let repository = BundleMarineSpeciesCatalogRepository(
-            bundle: TestResources.productionBundle,
+        let repository = TestResources.catalogRepository(
             resourceResolutionMode: .bundleOnly,
             access: .experimentalDevelopment
         )
@@ -161,8 +160,7 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     }
 
     func testDevelopmentAccessPreservesCurrentReviewAccounting() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(
-            bundle: TestResources.productionBundle,
+        let repository = TestResources.catalogRepository(
             resourceResolutionMode: .bundleOnly,
             access: .experimentalDevelopment
         )
@@ -208,10 +206,10 @@ final class TropicalPacificCatalogueTests: XCTestCase {
         // every overlay and fingerprint, independently of catalogue status flags.
         let expectedURL = try TestResources.fixture(named: "PublicationApprovedIDs")
         let expectedIDs = try JSONDecoder().decode([String: [UUID]].self, from: Data(contentsOf: expectedURL))
-        let publication = BundleMarineSpeciesCatalogRepository(
-            bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
-        let development = BundleMarineSpeciesCatalogRepository(
-            bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let publication = TestResources.catalogRepository(
+            resourceResolutionMode: .bundleOnly, access: .publication)
+        let development = TestResources.catalogRepository(
+            resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let available = try await publication.availablePacks()
         for id in [OfflineIdentificationPackID.caribbean, .tropicalPacific, .global] {
             let full = try await development.loadPack(id: id)

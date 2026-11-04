@@ -7,7 +7,7 @@ import XCTest
 final class SpeciesCatalogueTests: XCTestCase {
     private func model(region: OfflineIdentificationPackID) -> SpeciesCatalogueViewModel {
         SpeciesCatalogueViewModel(
-            catalog: BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication),
+            catalog: TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication),
             regionRepository: MutableSelectedDiveRegionRepository(initialRegion: region))
     }
 
@@ -40,7 +40,7 @@ final class SpeciesCatalogueTests: XCTestCase {
     }
 
     func testAFailedLoadShowsAnErrorAndNoSpecies() async throws {
-        let real = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
+        let real = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication)
         let packs = try await real.availablePacks()
         let global = try XCTUnwrap(packs.first { $0.id == .global })
         // Lists the pack, but loading it fails.

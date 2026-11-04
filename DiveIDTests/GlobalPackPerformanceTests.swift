@@ -38,7 +38,7 @@ final class GlobalPackPerformanceTests: XCTestCase {
     }
 
     private func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access)
     }
 
     func testCatalogueAndSearchCostsPerPack() async throws {

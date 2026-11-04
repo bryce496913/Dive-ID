@@ -47,7 +47,7 @@ final class SearchGoldenOrderingTests: XCTestCase {
     private func packs() async throws -> [(String, OfflineIdentificationPack)] {
         func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess,
                         registry: RegionCatalogRegistry = .bundled) -> BundleMarineSpeciesCatalogRepository {
-            BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, registry: registry, resourceResolutionMode: .bundleOnly, access: access)
+            TestResources.catalogRepository(registry: registry, resourceResolutionMode: .bundleOnly, access: access)
         }
         // Caribbean is a retired region that Release never opens; its publication filter is
         // still measured, through a definition that is not retired.

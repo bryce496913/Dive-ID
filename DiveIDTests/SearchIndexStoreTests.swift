@@ -16,7 +16,7 @@ final class SearchIndexStoreTests: XCTestCase {
     }
 
     private func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess = .experimentalDevelopment) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access)
     }
 
     /// A small slice of the Tropical Pacific pack, keyed like a repository-loaded pack.

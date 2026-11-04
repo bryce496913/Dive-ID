@@ -18,7 +18,7 @@ final class SemanticEndToEndTests: XCTestCase {
 
     private func globalPack() async throws -> OfflineIdentificationPack {
         // Debug and Internal open the development catalogue; the encoder is indexed against it.
-        try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly,
+        try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly,
                                                        access: .experimentalDevelopment).loadPack(id: .global)
     }
 

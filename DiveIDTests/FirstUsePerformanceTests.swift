@@ -36,7 +36,7 @@ final class FirstUsePerformanceTests: XCTestCase {
 
     /// A slice of the Tropical Pacific pack, keyed like a repository-loaded pack.
     private func slicePack(count: Int = 60, key: String = "content-current", packVersion: Int? = nil) async throws -> OfflineIdentificationPack {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let full = try await repository.loadPack(id: .tropicalPacific)
         var metadata = full.metadata
         if let packVersion {

@@ -125,7 +125,7 @@ private struct PerfectSimilarityRetriever: SpeciesCandidateRetrieving {
 }
 
 final class IdentificationBenchmarkTests: XCTestCase {
-    private let catalogDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("DiveID/Resources/IdentificationPacks/Caribbean")
+    private let catalogDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("DiveIDTests/Fixtures/IdentificationPacks/Caribbean")
 
     private func fixture(named name: String = "CaribbeanIdentificationBenchmark") throws -> [IdentificationBenchmarkCase] {
         try JSONDecoder().decode([IdentificationBenchmarkCase].self, from: Data(contentsOf: TestResources.fixture(named: name)))

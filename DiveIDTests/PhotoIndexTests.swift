@@ -21,11 +21,7 @@ final class PhotoIndexTests: XCTestCase {
     }
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
-#if SWIFT_PACKAGE
-        BundleMarineSpeciesCatalogRepository(bundle: bundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: .experimentalDevelopment)
-#else
-        BundleMarineSpeciesCatalogRepository(bundle: bundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
-#endif
+        TestResources.catalogRepository(access: .experimentalDevelopment)
     }
 
     private func indexData() throws -> Data {

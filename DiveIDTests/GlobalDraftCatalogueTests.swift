@@ -35,7 +35,7 @@ final class GlobalDraftCatalogueTests: XCTestCase {
         let complete = profiles.filter { !incomplete.contains($0.id.uuidString.lowercased()) }
         XCTAssertEqual(profiles.count - complete.count, incomplete.count, "only flagged records are set aside")
         XCTAssertLessThan(incomplete.count, 10)
-        let caribbean = try decode(repository.appendingPathComponent("DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json"))
+        let caribbean = try decode(repository.appendingPathComponent("DiveIDTests/Fixtures/IdentificationPacks/Caribbean/Creatures.json"))
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(complete + caribbean.map(withoutBundledImage)))
         XCTAssertTrue(profiles.allSatisfy { $0.review?.status == .draft && $0.bundledImage == nil })
         XCTAssertTrue(profiles.allSatisfy { $0.dataSources.first?.sourceLicense == "CC BY-NC 4.0" && !($0.dataSources.first?.reviewedFields.isEmpty ?? true) })

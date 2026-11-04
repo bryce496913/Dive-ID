@@ -12,7 +12,7 @@ final class CatalogueAttributionTests: XCTestCase {
 
     /// Every Global record, approved or not, links to its source page and licence.
     func testEveryGlobalRecordLinksToItsSourcePage() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let pack = try await repository.loadPack(id: .global)
         XCTAssertFalse(pack.profiles.isEmpty)
         // The 8 Caribbean species are the Caribbean pack's own records, carried into Global
@@ -45,7 +45,7 @@ final class CatalogueAttributionTests: XCTestCase {
     }
 
     private func globalProfiles(_ count: Int) async throws -> [LocalSpeciesProfile] {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         return Array(try await repository.loadPack(id: .global).profiles.prefix(count))
     }
 
@@ -94,7 +94,7 @@ final class CatalogueAttributionTests: XCTestCase {
         profiles[2].bundledImage = BundledSpeciesImage(fileName: "art.svg", alternativeText: "A", creatorName: "Dive ID", sourceName: "Dive ID",
                                                        sourceURL: "https://example.org", licenseName: "CC0",
                                                        licenseURL: "https://creativecommons.org/publicdomain/zero/1.0/")
-        let metadata = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment).loadPack(id: .global).metadata
+        let metadata = try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment).loadPack(id: .global).metadata
         let global = OfflineIdentificationPack(metadata: metadata, profiles: profiles)
         let region = OfflineIdentificationPack(metadata: metadata, profiles: [profiles[0]])
         let credits = CatalogueAttribution.photoCredits(in: [global, region])

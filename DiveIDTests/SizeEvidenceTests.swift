@@ -7,7 +7,7 @@ import XCTest
 /// no minimum or typical range is invented; a width is never compared as a length.
 final class SizeEvidenceTests: XCTestCase {
     private func profile(minimum: Double?, maximum: Double?, measurements: [String: Any]?) async throws -> LocalSpeciesProfile {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let base = try await repository.loadPack(id: .caribbean).profiles[0]
         var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(base)) as? [String: Any])
         object["minimumSizeCentimeters"] = minimum ?? NSNull()

@@ -9,9 +9,9 @@ final class PhotoIdentificationTests: XCTestCase {
 
     private func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess = .experimentalDevelopment) -> BundleMarineSpeciesCatalogRepository {
 #if SWIFT_PACKAGE
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
 #else
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access)
 #endif
     }
 

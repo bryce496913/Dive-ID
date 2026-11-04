@@ -105,8 +105,7 @@ final class SavedIdentificationCompatibilityTests: XCTestCase {
         XCTAssertEqual(restored.sourceSessionID, UUID(uuidString: "44444444-4444-4444-4444-444444444444"))
         // The actual publication repository must not become a dependency for
         // opening a historical snapshot whose identity is absent from new search.
-        let publication = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
-            resourceResolutionMode: .bundleOnly, access: .publication)
+        let publication = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication)
         var searchable = Set<UUID>()
         for metadata in try await publication.availablePacks() {
             let pack = try await publication.loadPack(id: metadata.id)

@@ -37,7 +37,7 @@ final class GlobalEvidenceTests: XCTestCase {
 
     func testSourceSupportedEvidenceIsPresentInGlobalRecords() async throws {
         let fixture = try JSONDecoder().decode(Fixture.self, from: Data(contentsOf: TestResources.fixture(named: "GlobalEvidence.v1")))
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let profiles = Dictionary(uniqueKeysWithValues: try await repository.loadPack(id: .global).profiles.map { ($0.id, $0) })
         for species in fixture.species {
             let profile = try XCTUnwrap(profiles[species.speciesID], "\(species.name) missing from Global")

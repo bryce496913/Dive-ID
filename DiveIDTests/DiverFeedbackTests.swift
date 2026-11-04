@@ -8,7 +8,7 @@ final class DiverFeedbackTests: XCTestCase {
     private var pack: OfflineIdentificationPackMetadata!
 
     override func setUp() async throws {
-        let catalog = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication)
+        let catalog = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication)
         let packs = try await catalog.availablePacks()
         pack = try XCTUnwrap(packs.first { $0.id == .global })
     }

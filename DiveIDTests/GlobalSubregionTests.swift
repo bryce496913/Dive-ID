@@ -11,7 +11,7 @@ final class GlobalSubregionTests: XCTestCase {
     private static let derived: [OfflineIdentificationPackID] = [.tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean]
 
     private func repository(_ access: Access) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
     }
 
     private func membership(_ id: OfflineIdentificationPackID) throws -> Set<UUID> {
@@ -125,7 +125,7 @@ final class GlobalSubregionTests: XCTestCase {
     /// A derived region over a copy of the Caribbean pack, whose membership a test may edit.
     private func derivedCopy(members: (Set<String>) -> [String]) throws -> BundleMarineSpeciesCatalogRepository {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
-        let source = try XCTUnwrap(TestResources.productionBundle.resourceURL).appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
+        let source = TestResources.fixturePack("Caribbean")
         try FileManager.default.createDirectory(at: root.appendingPathComponent("IdentificationPacks"), withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: source, to: root.appendingPathComponent("IdentificationPacks/Caribbean"))
         addTeardownBlock { try? FileManager.default.removeItem(at: root) }

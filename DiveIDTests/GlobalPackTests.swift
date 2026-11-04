@@ -5,7 +5,7 @@ import XCTest
 /// The Global pack ranks by location without excluding anyone (Docs/HybridRankingContract.md, "Location").
 final class GlobalPackTests: XCTestCase {
     private func repository(_ access: BundleMarineSpeciesCatalogRepository.CatalogueAccess) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource, access: access)
     }
 
     private func copy(_ profile: LocalSpeciesProfile, id: String, name: String, regions: [String]) throws -> LocalSpeciesProfile {

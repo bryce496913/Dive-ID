@@ -29,7 +29,7 @@ final class BuildChannelTests: XCTestCase {
 
     /// The repository's default access (no `access:` argument) is the one the app uses.
     func testDefaultRepositoryAccessMatchesTheChannel() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle)
+        let repository = TestResources.catalogRepository()
         let listed = try await repository.availablePacks()
         XCTAssertEqual(listed.map(\.id), [.global, .tropicalAtlantic, .indoPacific, .pacificCoast, .mediterranean],
                        "every channel lists Global and its regions; retired regions never")

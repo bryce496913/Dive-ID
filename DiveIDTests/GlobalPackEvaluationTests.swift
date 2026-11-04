@@ -59,7 +59,7 @@ final class GlobalPackEvaluationTests: XCTestCase {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent() }
 
     private func repository() -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
     }
 
     /// Retired UUID -> kept UUID, from the merge plan.
@@ -114,7 +114,7 @@ final class GlobalPackEvaluationTests: XCTestCase {
         // gated out of Release (GlobalRegion.definition) or has no approved record, so the subset is empty.
         let release: OfflineIdentificationPack
         do {
-            release = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
+            release = try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .publication).loadPack(id: .global)
         } catch let failure as CatalogueLoadFailure where failure.code == .publicationUnavailable {
             var empty = global.metadata
             empty.speciesCount = 0

@@ -9,13 +9,13 @@ final class PackListingTests: XCTestCase {
     private typealias Access = BundleMarineSpeciesCatalogRepository.CatalogueAccess
 
     private func production(_ access: Access) -> BundleMarineSpeciesCatalogRepository {
-        BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: access)
+        TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: access)
     }
 
     /// A copy of the Caribbean pack whose files a test may break.
     private func caribbeanCopy(_ access: Access, edit: (URL) throws -> Void) throws -> BundleMarineSpeciesCatalogRepository {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
-        let source = try XCTUnwrap(TestResources.productionBundle.resourceURL).appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
+        let source = TestResources.fixturePack("Caribbean")
         let destination = root.appendingPathComponent("IdentificationPacks/Caribbean", isDirectory: true)
         try FileManager.default.createDirectory(at: root.appendingPathComponent("IdentificationPacks"), withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: source, to: destination)

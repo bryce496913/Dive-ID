@@ -149,7 +149,7 @@ final class LocationRecognitionTests: XCTestCase {
     }
 
     func testEveryBundledAliasIsRecognizedAndCompatibleOnlyWithItsPack() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         for packID in [OfflineIdentificationPackID.caribbean, .tropicalPacific] {
             let pack = try await repository.loadPack(id: packID)
             let other = try await repository.loadPack(id: packID == .caribbean ? .tropicalPacific : .caribbean)
@@ -164,7 +164,7 @@ final class LocationRecognitionTests: XCTestCase {
     }
 
     func testServiceRejectsRecognizedWrongPackButNotUnknownLocation() async throws {
-        let repository = BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
         let service = LocalMarineLifeIdentificationService(catalogRepository: repository)
         for location in ["Gulf of Mexico", "Curaçao", "Turks and Caicos"] {
             do {
@@ -285,8 +285,7 @@ final class MorphologyConceptTests: XCTestCase {
 
 extension MorphologyConceptTests {
     func testMultipleSpeciesFinEvidenceAliasesAndUnknownNeutrality() async throws {
-        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
-            access: .experimentalDevelopment).loadPack(id: .tropicalPacific)
+        let pack = try await TestResources.catalogRepository(access: .experimentalDevelopment).loadPack(id: .tropicalPacific)
         let observation = await LocalObservationParser().parse("fish with a tall dorsal fin")
         for name in ["Cockatoo Waspfish", "Fire Dartfish"] {
             let original = try XCTUnwrap(pack.profiles.first { $0.commonName == name })
@@ -315,8 +314,7 @@ extension MorphologyConceptTests {
 
 extension MorphologyConceptTests {
     func testLeafBodyRanksAsBodyEvidenceWithoutInferringFinOrContradiction() async throws {
-        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle,
-            access: .experimentalDevelopment).loadPack(id: .caribbean)
+        let pack = try await TestResources.catalogRepository(access: .experimentalDevelopment).loadPack(id: .caribbean)
         // Synthetic morphology fixtures, not source claims or publication approval.
         for base in pack.profiles.prefix(2) {
             var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(base)) as? [String: Any])
@@ -351,7 +349,7 @@ extension MorphologyConceptTests {
             "\u{00A0}non-breaking\u{00A0}", "İstanbul", "Kelvin \u{212A} sign", "ÉCOLE élève", "e\u{0301}clair", "🐠 fish 🐟", "x\u{2028}y",
             "-leading", "trailing-", "Ünïcödé–mixed / ASCII", "\u{3000}ideographic space\u{3000}", "100 × 20 cm", "ﬁsh ligature", "ß STRASSE"
         ]
-        let pack = try await BundleMarineSpeciesCatalogRepository(bundle: TestResources.productionBundle, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
+        let pack = try await TestResources.catalogRepository(resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
             .loadPack(id: .tropicalPacific)
         for profile in pack.profiles.prefix(400) {
             samples += [profile.commonName, profile.scientificName, profile.summary] + profile.aliases + profile.distinguishingFeatures
