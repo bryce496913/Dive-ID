@@ -62,8 +62,10 @@ an observation dataset. Each observation requires:
 
 - `observationID`: a UUID assigned at collection, retained across versions;
   `description`: original unedited English account; `collectionDate`: YYYY-MM-DD;
-  `region`: the pack searched (`global` for the pilot; `caribbean` or
-  `tropical-pacific` remain valid for later cohorts); `language`: en.
+  `region`: the pack searched (`global` for the pilot); `language`: en. The protocol
+  still lists `caribbean` and `tropical-pacific`, but those packs are retired and no
+  longer ship in the app (they are test fixtures), so a cohort searched there would
+  be coverage-blocked. Do not use them for new cohorts.
 - `author`: `{kind: "human", participantID: "<pseudonym>",
   attestsOwnUnpromptedWords: true}`; `consentForEvaluation`: boolean. Keep publication
   consent separately; evaluation consent never grants publication rights.
@@ -260,7 +262,54 @@ records, keyed by feedbackID, with contributorClaimedIdentity and shownResults k
 privately), `curator-worksheet.csv` (no engine output or claims) and `intake-log.json`
 (every record seen, with its import decision and reason, and no descriptions).
 
-## Pilot status (2026-10-25)
+## From the curator worksheet to a frozen source (2026-11-04)
+
+`import_feedback.py` writes the holdout; the curator fills `curator-worksheet.csv`
+without seeing engine output; `build_independent_source.py` turns the two into the
+independent-v1 source that `preflight` and `freeze` read. Run every step from the
+custodian's machine; all outputs stay in the holdout directory.
+
+```sh
+python3 Tools/Evaluation/import_feedback.py --holdout ~/DiveID-holdout/diver-pilot-v1 \
+  ~/Downloads/DiveID-feedback-*.json
+# curator fills curator-worksheet.csv (columns below)
+python3 Tools/Evaluation/build_independent_source.py --holdout ~/DiveID-holdout/diver-pilot-v1 \
+  --dataset-version diver-pilot-v1 --pilot
+python3 Tools/Evaluation/independent_divers.py preflight --source ~/DiveID-holdout/diver-pilot-v1/source.json
+python3 Tools/Evaluation/independent_divers.py freeze \
+  --source ~/DiveID-holdout/diver-pilot-v1/source.json --private-dir ~/DiveID-holdout/diver-pilot-v1-frozen
+python3 Tools/Evaluation/independent_divers.py evaluate \
+  --private-dir ~/DiveID-holdout/diver-pilot-v1-frozen --swift "$(xcrun -f swift)"
+```
+
+Curator columns (blank means not yet done; lists are separated by `;`):
+
+| Column | Meaning |
+|---|---|
+| `labelKind` | `identification`, `ambiguous`, `noMatch`, `regionConflict` or `unresolved`. Blank is unresolved. |
+| `expectedSpeciesIDs`, `acceptableSpeciesIDs` | Global catalogue UUIDs, established from the evidence. Alternatives go in `acceptableSpeciesIDs`. |
+| `scientificNames` | The scientific name of every listed species. The build checks each UUID exists in Global and that the names match, so a wrong UUID cannot pass. |
+| `outOfCatalogue` | `yes` when the curator verified a species Global does not have. Keep `labelKind` unresolved and give the name; it is counted apart, never turned into `noMatch`. |
+| `curatorID`, `adjudicationDate`, `verifiedWithoutAppResults`, `evidenceReferences`, `notes` | The verifier, the date, a yes that no app results were seen, durable evidence locators and the rationale. |
+| `language` | `en` once the curator confirms English. Other languages are left out of v1 and counted. |
+| `attestsOwnUnpromptedWords` | `yes` once the custodian has the diver's own-words attestation (the app does not collect it). Without it the row is left out and counted. |
+| `encounterID`, `cohortID` | Optional. Defaults: one encounter per record, one cohort per participant. Linked divers or a shared encounter must share a cohort. |
+| `usedForDevelopment` | `yes`/`no`; `--pilot` sets every row to yes, as the pilot procedure requires. |
+
+The build takes wording from `submissions.json`, never from the worksheet, and stops
+without writing anything if a worksheet description differs from it. The diver's
+tapped answer and the shown results stay in private provenance and never reach a
+label. Its output is counts only: identifiable, ambiguous, no-match, region-conflict,
+unresolved, out-of-catalogue, contributors and cohorts. A later import of new
+feedback files keeps every entry the curator has already made (before 2026-11-04 a
+re-import rewrote the worksheet and erased them).
+
+## Pilot status (2026-10-25; checked again 2026-11-04)
+
+On 2026-11-04 there were still no submissions: none in the repository, no private
+holdout directory and no shared feedback files on the custodian Mac. Nothing was
+labelled, frozen or evaluated. The missing input is unchanged (below).
+
 
 **Collected 0 / 12; verified 0; unresolved 0. No dataset is frozen and nothing was
 evaluated.** No genuine submission exists in the repository or on the custodian Mac,

@@ -1,5 +1,50 @@
 # Independent diver evaluation preparation
 
+## Real diver descriptions — November 4, 2026
+
+Checked `claude/retire-legacy-packs` at `1de0d81` (equal to main). No genuine diver
+submission exists: none in the repository, no private holdout directory and no
+shared `diveid-diver-feedback` files on the custodian Mac. No outreach was made and
+nothing was fabricated.
+
+| Measure | Actual status |
+| --- | --- |
+| Collected / imported / verified | 0 / 0 / 0 |
+| Identifiable / ambiguous / out-of-catalogue | 0 / 0 / 0 |
+| Frozen dataset, baseline, revised run | None: no cases to freeze |
+| Top-1, top-3, candidate recall, abstentions, false positives | Unavailable; every denominator is 0 |
+| Failure diagnoses, ranking or catalogue fixes | None: no development failures exist to diagnose |
+
+The engine, catalogue, protocol, frozen descriptions, rank bounds, thresholds and
+split rules are unchanged. Production stays on `production-bm25-50-biological`.
+
+Ingestion work completed:
+
+- **Defect fixed:** every `import_feedback.py` run rewrote `curator-worksheet.csv`
+  and erased labels the curator had already entered. Re-imports now keep the
+  curator's columns. Reproduced on the old code; a regression test covers it.
+- **Missing step added:** nothing turned the filled-in worksheet into the
+  independent-v1 source that `preflight` and `freeze` read.
+  `build_independent_source.py` does it. It takes wording only from
+  `submissions.json` and refuses an edited worksheet description. It checks every
+  label UUID against the Global catalogue and the curator's scientific name, keeps
+  the diver's tapped answer out of labels, and counts excluded rows.
+- **Out-of-catalogue accounting:** a verified species Global lacks is kept
+  `unresolved` with `outOfCatalogue: true`, as the protocol forbids inferring
+  `noMatch` from absence. Preflight now reports it and every label kind separately.
+
+Validation: Evaluation suite 35 tests pass, including 9 new source-builder tests and
+1 new importer regression test (all synthetic rows, never used to measure search);
+CI suite 51 tests pass. No search code changed, so the Swift search evaluation was
+not rerun.
+
+Missing input (unchanged): up to 12 genuine, consented, first-search diver accounts
+(Share my feedback files or Contributor form answers), the divers' own-words
+attestations, a named custodian and a separate verifier, and identity evidence the
+verifier can review without app output (photo, video or documented instructor
+assessment). Whether a verified out-of-catalogue species should count as a required
+abstention is a protocol decision for Bryce; v1 keeps it unresolved.
+
 ## Twelve-case pilot status — October 14, 2026
 
 Inspected main `e3f1237ef7d89b80ef73518d97078f76d02b98f8` and the existing
