@@ -38,6 +38,17 @@ class RetiredPacksTests(unittest.TestCase):
         self.assertIn('path = DiveID;', app_group)
         self.assertNotIn('DiveIDTests', app_group)
 
+    def test_xcode_test_target_lists_every_fixture_pack_file_as_an_exception(self):
+        # Xcode copies test resources flat, so the packs' same-named files (Creatures.json,
+        # PackManifest.json, images) would collide; tests read them from the source tree.
+        project = (ROOT / 'DiveID.xcodeproj/project.pbxproj').read_text()
+        exceptions = project[project.index('Exceptions for "DiveIDTests" folder'):]
+        exceptions = exceptions[:exceptions.index('target = ')]
+        listed = set(re.findall(r'Fixtures/IdentificationPacks/[^,\n"]+', exceptions))
+        on_disk = {str(path.relative_to(ROOT / 'DiveIDTests')) for path in FIXTURE_PACKS.rglob('*')
+                   if path.is_file() and path.name != '.DS_Store'}
+        self.assertEqual(on_disk - listed, set(), 'add these to the DiveIDTests exceptions in project.pbxproj')
+
     def test_the_check_finds_a_retired_pack(self):
         import shutil
         import tempfile

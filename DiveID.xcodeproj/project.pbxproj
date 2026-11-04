@@ -37,6 +37,30 @@
 			);
 			target = B1 /* DiveID */;
 		};
+		E2 /* Exceptions for "DiveIDTests" folder in "DiveIDTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Fixtures/IdentificationPacks/Caribbean/Creatures.json,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000003.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000005.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000006.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000008.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000009.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/00000000-0000-0000-0000-000000000010.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/eff286cc-2c87-5393-b00d-e158fd48e3aa.svg,
+				Fixtures/IdentificationPacks/Caribbean/Images/fc213eff-6ba6-53ab-b288-f6e654299e68.svg,
+				Fixtures/IdentificationPacks/Caribbean/PackManifest.json,
+				Fixtures/IdentificationPacks/PartialApproval/Creatures.json,
+				Fixtures/IdentificationPacks/PartialApproval/Images/00000000-0000-0000-0000-000000000003.svg,
+				Fixtures/IdentificationPacks/PartialApproval/Images/00000000-0000-0000-0000-000000000005.svg,
+				Fixtures/IdentificationPacks/PartialApproval/Images/00000000-0000-0000-0000-000000000006.svg,
+				Fixtures/IdentificationPacks/PartialApproval/Images/00000000-0000-0000-0000-000000000008.svg,
+				Fixtures/IdentificationPacks/PartialApproval/PackManifest.json,
+				Fixtures/IdentificationPacks/TropicalPacific/Creatures.json,
+				Fixtures/IdentificationPacks/TropicalPacific/PackManifest.json,
+			);
+			target = B2 /* DiveIDTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -53,8 +77,8 @@
 		};
 		G3 /* DiveIDTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			explicitFolders = (
-				Fixtures/IdentificationPacks,
+			exceptions = (
+				E2 /* Exceptions for "DiveIDTests" folder in "DiveIDTests" target */,
 			);
 			path = DiveIDTests;
 			sourceTree = "<group>";

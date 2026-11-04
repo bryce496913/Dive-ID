@@ -255,17 +255,24 @@ final class TropicalPacificCatalogueTests: XCTestCase {
     }
 
 #if DIVEID_XCODE_HOSTED_TEST
-    func testProductionRepositoryLoadsTropicalPacificFromBuiltApplicationBundle() async throws {
-        // This test exists only in the Xcode-hosted iOS test target. A missing app
-        // resource is a test failure, never a signal that the test is "not hosted".
+    func testBuiltApplicationBundleNoLongerContainsTropicalPacific() async throws {
+        // This test exists only in the Xcode-hosted iOS test target: it checks the real app.
+        // The retired pack is a test fixture (DiveIDTests/Fixtures/IdentificationPacks) only.
         XCTAssertEqual(Bundle.main.infoDictionary?["CFBundlePackageType"] as? String, "APPL", "This packaging assertion requires the actual application test host")
+        for directory in ["TropicalPacific", "Caribbean"] {
+            XCTAssertNil(Bundle.main.url(forResource: "Creatures", withExtension: "json", subdirectory: "IdentificationPacks/\(directory)"), "\(directory) is in the app")
+            XCTAssertNil(Bundle.main.url(forResource: "PackManifest", withExtension: "json", subdirectory: "IdentificationPacks/\(directory)"), "\(directory) is in the app")
+        }
         let repository = BundleMarineSpeciesCatalogRepository(bundle: .main, resourceResolutionMode: .bundleOnly, access: .experimentalDevelopment)
-        let value = try await repository.loadPack(id: .tropicalPacific)
-        XCTAssertEqual(value.metadata.id, .tropicalPacific)
-        XCTAssertEqual(value.metadata.packVersion, 3)
-        XCTAssertEqual(value.metadata.speciesCount, 1000)
-        XCTAssertEqual(value.profiles.count, value.metadata.speciesCount)
-        XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(pack: value))
+        do {
+            _ = try await repository.loadPack(id: .tropicalPacific)
+            XCTFail("the app opened the retired Tropical Pacific pack")
+        } catch let failure as CatalogueLoadFailure {
+            XCTAssertEqual(failure.code, .manifestMissing)
+        }
+        let fixture = try pack()
+        XCTAssertEqual(fixture.metadata.packVersion, 3)
+        XCTAssertEqual(fixture.profiles.count, 1000, "the fixture is intact")
     }
 #endif
 

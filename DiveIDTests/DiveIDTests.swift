@@ -586,8 +586,8 @@ final class LocalOfflineIdentificationTests: XCTestCase {
 
     func testCatalogRepositoryCachesProductionPack() async throws {
         let repository = TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource)
-        let first = try await repository.loadProfiles()
-        let second = try await repository.loadProfiles()
+        let first = try await repository.loadPack(id: .caribbean).profiles
+        let second = try await repository.loadPack(id: .caribbean).profiles
         XCTAssertEqual(first, second)
     }
 
@@ -786,7 +786,7 @@ final class LocalOfflineIdentificationTests: XCTestCase {
         }
     }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadPack(id: .caribbean).profiles }
 
     private func productionProfile(named name: String, overrides: [String: [String]] = [:]) throws -> LocalSpeciesProfile {
         let url = try XCTUnwrap(TestResources.fixturePackFile("Caribbean", "Creatures.json"))
@@ -1176,7 +1176,7 @@ final class OfflineCatalogHardeningTests: XCTestCase {
         .init(description: "brown dog on beach", expectedSpeciesID: nil, expectedRegion: nil, requirement: .top10, notes: "non-marine", mustNotRankSpeciesIDs: [])
     ] }
 
-    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadProfiles() }
+    private func catalogProfiles() async throws -> [LocalSpeciesProfile] { try await TestResources.catalogRepository(resourceResolutionMode: .bundleThenDevelopmentSource).loadPack(id: .caribbean).profiles }
     private func productionCaribbeanProfiles() throws -> [LocalSpeciesProfile] {
         let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Fixtures/IdentificationPacks/Caribbean/Creatures.json").standardizedFileURL
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601

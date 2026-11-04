@@ -47,8 +47,14 @@ final class OfflineIdentificationPackTests: XCTestCase {
             .map(\.lastPathComponent))
         XCTAssertEqual(speciesImageNames, bundledImageNames)
 
+        // The retired pack is a test fixture: its artwork resolves there, not in the app.
         XCTAssertNoThrow(try BundleMarineSpeciesCatalogRepository.validate(
-            pack: OfflineIdentificationPack(metadata: manifest, profiles: profiles)
+            pack: OfflineIdentificationPack(metadata: manifest, profiles: profiles),
+            resourceDirectory: "Caribbean",
+            resourceResolver: { path, _ in
+                let url = TestResources.fixturePacksRoot.appendingPathComponent(path)
+                return FileManager.default.fileExists(atPath: url.path) ? url : nil
+            }
         ))
     }
 }
