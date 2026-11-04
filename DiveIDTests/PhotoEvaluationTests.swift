@@ -3,6 +3,9 @@ import XCTest
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
+#if canImport(CoreImage)
+import CoreImage
+#endif
 
 /// Photo identification against held-out photos (Data/PhotoEvaluation), through the real
 /// service path, with the gates in Data/Evaluation/PhotoProtocol.v1.json. Opt-in, like the
@@ -18,6 +21,11 @@ import CryptoKit
 /// matcher (Docs/PhotoModelCandidates.md).
 /// DIVEID_PHOTO_EVAL_COLOUR=1 applies the experimental underwater colour correction to every
 /// photo first, as the Internal toggle does in the app.
+/// DIVEID_PHOTO_EVAL_CALIBRATION=<development report> (held-out runs) reports every measure at
+/// the threshold that development run chose for the same recognizer; it is never set here.
+/// DIVEID_PHOTO_EVAL_UNUSABLE=1 adds unusable photos derived from the split's own species
+/// photos (heavily blurred, nearly black) and a blank-water frame, which should all be
+/// rejected. They are reported apart and never enter the approved gates.
 final class PhotoEvaluationTests: XCTestCase {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent() }
 
@@ -55,6 +63,8 @@ final class PhotoEvaluationTests: XCTestCase {
         let topSimilarity: Double
         /// The expected species' rank among the recognizer's raw candidates (before abstaining).
         let rawRank: Int?
+        /// A wrong raw top-1 that the expected species' record lists as a similar species.
+        var lookalikeConfusion = false
     }
 
     // MARK: Metrics and gates (always tested)
@@ -78,6 +88,10 @@ final class PhotoEvaluationTests: XCTestCase {
         var out: [String: Bucket] = [:]
         for o in outcomes {
             var keys: [String]
+            if o.expected == "unusable" {
+                out["unusable", default: Bucket()].add(o)
+                continue  // reported apart: never in "all" or any gate
+            }
             if o.expected == "noMatch" {
                 keys = ["noMatch"]
             } else {
@@ -123,9 +137,73 @@ final class PhotoEvaluationTests: XCTestCase {
                     "coveredTop1": rate(covered) { answered($0) && ($0.rawRank ?? .max) <= 1 } as Any,
                     "coveredTop3": rate(covered) { answered($0) && ($0.rawRank ?? .max) <= 3 } as Any,
                     "coveredTop10": rate(covered) { answered($0) && ($0.rawRank ?? .max) <= 10 } as Any,
-                    "noMatchCorrect": rate(noMatch) { !answered($0) } as Any]
+                    "noMatchCorrect": rate(noMatch) { !answered($0) } as Any,
+                    "unusableRejected": rate(outcomes.filter { $0.expected == "unusable" }) { !answered($0) } as Any]
         }
     }
+
+    /// Every measure at one threshold (from the development split), from the raw output: a
+    /// photo is answered when its best similarity reaches the threshold.
+    static func atThreshold(_ outcomes: [Outcome], _ threshold: Double) -> [String: Any] {
+        let answered = { (o: Outcome) in o.topSimilarity >= threshold }
+        func rate(_ cases: [Outcome], _ hit: (Outcome) -> Bool) -> [String: Any] {
+            let hits = cases.filter(hit).count
+            return ["hits": hits, "cases": cases.count, "rate": cases.isEmpty ? NSNull() : Double(hits) / Double(cases.count) as Any]
+        }
+        let covered = outcomes.filter { $0.expected == "species" && $0.covered }
+        let uncovered = outcomes.filter { $0.expected == "species" && !$0.covered }
+        let noMatch = outcomes.filter { $0.expected == "noMatch" }
+        let unusable = outcomes.filter { $0.expected == "unusable" }
+        let coveredAnswered = covered.filter(answered)
+        var groups: [String: Any] = [:]
+        for group in Set(covered.map(\.group)).sorted() {
+            let cases = covered.filter { $0.group == group }
+            groups[group] = ["top1": rate(cases) { answered($0) && ($0.rawRank ?? .max) <= 1 }, "top3": rate(cases) { answered($0) && ($0.rawRank ?? .max) <= 3 }]
+        }
+        return [
+            "threshold": threshold,
+            "coverage": rate(covered, answered),
+            "coveredTop1": rate(covered) { answered($0) && ($0.rawRank ?? .max) <= 1 },
+            "coveredTop3": rate(covered) { answered($0) && ($0.rawRank ?? .max) <= 3 },
+            "selectiveTop1": rate(coveredAnswered) { ($0.rawRank ?? .max) <= 1 },
+            "lookalikeConfusions": rate(coveredAnswered) { $0.lookalikeConfusion },
+            "uncoveredAnswered": rate(uncovered, answered),
+            "noMatchCorrectRejection": rate(noMatch) { !answered($0) },
+            "noMatchFalseAcceptance": rate(noMatch, answered),
+            "unusableRejected": rate(unusable) { !answered($0) },
+            "coveredByGroup": groups,
+        ]
+    }
+
+    /// Calibration: how often the raw top-1 is right within each band of best similarity, over
+    /// every photo (a no-match or unusable photo is never right). Similarities are not
+    /// probabilities; this shows how far they are from behaving like one.
+    static func reliability(_ outcomes: [Outcome], width: Double = 0.05) -> [[String: Any]] {
+        var bands: [Int: (cases: Int, right: Int, similarity: Double)] = [:]
+        for o in outcomes {
+            let band = Int((o.topSimilarity / width).rounded(.down))
+            let right = o.expected == "species" && o.covered && (o.rawRank ?? .max) <= 1
+            let current = bands[band] ?? (0, 0, 0)
+            bands[band] = (current.cases + 1, current.right + (right ? 1 : 0), current.similarity + o.topSimilarity)
+        }
+        return bands.keys.sorted().map { band in
+            let value = bands[band]!
+            return ["from": Double(band) * width, "to": Double(band + 1) * width, "cases": value.cases,
+                    "meanSimilarity": value.similarity / Double(value.cases), "top1Right": Double(value.right) / Double(value.cases)]
+        }
+    }
+
+    /// The threshold a development report chose, refused unless it was for this recognizer.
+    static func calibratedThreshold(report data: Data, recognizer: String, version: String, colourCorrected: Bool) throws -> Double {
+        let report = try XCTUnwrap(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        guard report["split"] as? String == "development" else { throw CalibrationError.notDevelopment }
+        guard report["recognizer"] as? String == recognizer, report["recognizerVersion"] as? String == version,
+              report["colourCorrected"] as? Bool == colourCorrected else { throw CalibrationError.otherRecognizer }
+        guard let threshold = report["chosenThreshold"] as? Double else { throw CalibrationError.noThreshold }
+        return threshold
+    }
+
+    enum CalibrationError: Error, Equatable { case notDevelopment, otherRecognizer, noThreshold }
 
     /// The threshold rule: the smallest threshold at which development no-match photos meet the floor.
     static func chosenThreshold(_ sweep: [[String: Any]], noMatchFloor: Double) -> Double? {
@@ -160,6 +238,61 @@ final class PhotoEvaluationTests: XCTestCase {
         XCTAssertEqual(Self.chosenThreshold(table, noMatchFloor: 0.5), 0.75)
         XCTAssertNil(Self.chosenThreshold(Self.sweep(outcomes, thresholds: [0.5]), noMatchFloor: 1))
     }
+
+    func testMeasuresAtACalibratedThresholdAndCalibrationTable() throws {
+        func o(_ expected: String, covered: Bool = true, top: Double, raw: Int?, group: String = "fish", lookalike: Bool = false) -> Outcome {
+            var outcome = Outcome(photoID: UUID().uuidString, expected: expected, group: group, covered: covered, underwater: nil, rank: nil,
+                                  abstained: false, compliant: true, topSimilarity: top, rawRank: raw)
+            outcome.lookalikeConfusion = lookalike
+            return outcome
+        }
+        let outcomes = [o("species", top: 0.95, raw: 1), o("species", top: 0.91, raw: 2, lookalike: true), o("species", top: 0.80, raw: 1, group: "ray"),
+                        o("species", covered: false, top: 0.92, raw: nil), o("noMatch", covered: false, top: 0.93, raw: nil),
+                        o("noMatch", covered: false, top: 0.70, raw: nil), o("unusable", covered: false, top: 0.60, raw: nil)]
+        let m = Self.atThreshold(outcomes, 0.9)
+        func rate(_ key: String) -> Double? { (m[key] as? [String: Any])?["rate"] as? Double }
+        XCTAssertEqual(rate("coverage"), 2.0 / 3.0, "two of three covered photos answered")
+        XCTAssertEqual(rate("coveredTop1"), 1.0 / 3.0, "an unanswered photo counts as a miss")
+        XCTAssertEqual(rate("selectiveTop1"), 0.5, "right among the answered")
+        XCTAssertEqual(rate("lookalikeConfusions"), 0.5)
+        XCTAssertEqual(rate("uncoveredAnswered"), 1)
+        XCTAssertEqual(rate("noMatchCorrectRejection"), 0.5)
+        XCTAssertEqual(rate("noMatchFalseAcceptance"), 0.5)
+        XCTAssertEqual(rate("unusableRejected"), 1)
+        XCTAssertNotNil((m["coveredByGroup"] as? [String: Any])?["ray"])
+
+        let table = Self.reliability(outcomes, width: 0.1)
+        let top = try XCTUnwrap(table.last)
+        XCTAssertEqual(top["cases"] as? Int, 4, "0.9 to 1.0: three answered species-or-not plus the false acceptance")
+        XCTAssertEqual(top["top1Right"] as? Double, 0.25)
+
+        let buckets = Self.buckets(outcomes)
+        XCTAssertEqual(buckets["unusable"]?.cases, 1)
+        XCTAssertEqual(buckets["all"]?.cases, 6, "unusable photos never enter \"all\", so the approved gates are unchanged")
+    }
+
+    func testAHeldOutRunOnlyAcceptsTheThresholdItsOwnDevelopmentRunChose() throws {
+        func report(_ fields: [String: Any]) throws -> Data { try JSONSerialization.data(withJSONObject: fields) }
+        let good: [String: Any] = ["split": "development", "recognizer": "bioclip-photos", "recognizerVersion": "v1", "colourCorrected": false, "chosenThreshold": 0.87]
+        XCTAssertEqual(try Self.calibratedThreshold(report: report(good), recognizer: "bioclip-photos", version: "v1", colourCorrected: false), 0.87)
+        var held = good; held["split"] = "holdout"
+        XCTAssertThrowsError(try Self.calibratedThreshold(report: report(held), recognizer: "bioclip-photos", version: "v1", colourCorrected: false))
+        XCTAssertThrowsError(try Self.calibratedThreshold(report: report(good), recognizer: "dinov2-photos", version: "v1", colourCorrected: false))
+        XCTAssertThrowsError(try Self.calibratedThreshold(report: report(good), recognizer: "bioclip-photos", version: "v1", colourCorrected: true))
+        var none = good; none.removeValue(forKey: "chosenThreshold")
+        XCTAssertThrowsError(try Self.calibratedThreshold(report: report(none), recognizer: "bioclip-photos", version: "v1", colourCorrected: false))
+    }
+
+#if canImport(CoreImage)
+    func testUnusablePhotosAreDerivedAndLabelledAsSuch() throws {
+        let image = try XCTUnwrap(TestResources.productionBundle.urls(forResourcesWithExtension: "jpg", subdirectory: "IdentificationPacks/Global/Images")?.first)
+        let data = try Data(contentsOf: image)
+        let derived = Self.unusablePhotos(from: [data, data, data, data, data])
+        XCTAssertEqual(derived.count, 5, "two variants each of photos 1 and 5, and blank water")
+        XCTAssertTrue(derived.allSatisfy { $0.photo.expected == "unusable" && $0.photo.speciesID == nil && $0.photo.photoID.hasPrefix("derived:") })
+        XCTAssertTrue(derived.allSatisfy { $0.data != data })
+    }
+#endif
 
     // MARK: The evaluation (opt-in)
 
@@ -208,13 +341,21 @@ final class PhotoEvaluationTests: XCTestCase {
                                                            photoIdentification: PhotoIdentificationService(recognizers: provider),
                                                            features: .forChannel(.debug))
         var outcomes: [Outcome] = [], missing: [String] = []
-        let start = ContinuousClock.now
+        let similar = Dictionary(pack.profiles.map { ($0.id, Set($0.similarSpecies.map(\.speciesID))) }, uniquingKeysWith: { first, _ in first })
+        var inputs: [(photo: Photo, data: Data)] = []
         for photo in manifest.photos {
             let file = directory.appendingPathComponent("cache/inat-\(photo.photoID.split(separator: ":").last ?? "").jpg")
             guard let data = try? Data(contentsOf: file), let expectedHash = photo.sha256, Self.sha256(data) == expectedHash else {
                 missing.append(photo.photoID)
                 continue
             }
+            inputs.append((photo, data))
+        }
+        if environment["DIVEID_PHOTO_EVAL_UNUSABLE"] == "1" {
+            inputs += Self.unusablePhotos(from: inputs.filter { $0.photo.expected == "species" }.map(\.data))
+        }
+        let start = ContinuousClock.now
+        for (photo, data) in inputs {
             let processed = try ProcessedPhoto(id: UUID(), previewData: data, uploadData: data, pixelWidth: 0, pixelHeight: 0, format: .jpeg)
                 .preparedForRecognition(region: .full, colourCorrected: colourCorrected)
             let raw = try await recognizer.recognize(processed, catalogueContentVersion: pack.photoCatalogueContentVersion)
@@ -224,9 +365,13 @@ final class PhotoEvaluationTests: XCTestCase {
             let rawRank = photo.speciesID.flatMap { id in raw.candidates.firstIndex { $0.speciesID == id }.map { $0 + 1 } }
             let compliant = result.matches.allSatisfy { $0.score <= LocalRankingWeights.limitedConfidenceCap && $0.score.isFinite
                 && $0.matchStrength != .strong && $0.matchStrength != .good }
-            outcomes.append(Outcome(photoID: photo.photoID, expected: photo.expected, group: photo.group, covered: photo.covered,
-                                    underwater: photo.underwater, rank: rank, abstained: result.photoSummary?.abstained ?? true,
-                                    compliant: compliant, topSimilarity: raw.candidates.first?.similarity.normalized ?? 0, rawRank: rawRank))
+            var outcome = Outcome(photoID: photo.photoID, expected: photo.expected, group: photo.group, covered: photo.covered,
+                                  underwater: photo.underwater, rank: rank, abstained: result.photoSummary?.abstained ?? true,
+                                  compliant: compliant, topSimilarity: raw.candidates.first?.similarity.normalized ?? 0, rawRank: rawRank)
+            if let expected = photo.speciesID, let top = raw.candidates.first?.speciesID, top != expected {
+                outcome.lookalikeConfusion = similar[expected]?.contains(top) == true
+            }
+            outcomes.append(outcome)
         }
         let elapsed = ContinuousClock.now - start
         let buckets = Self.buckets(outcomes)
@@ -236,7 +381,18 @@ final class PhotoEvaluationTests: XCTestCase {
             "abstainSimilarity": recognizer.abstainSimilarity, "colourCorrected": colourCorrected, "photos": manifest.photos.count, "evaluated": outcomes.count,
             "missingPhotos": missing.count, "platform": "host (Mac); phone feature prints differ slightly (Tools/PhotoIndex/README.md)",
             "seconds": Double(elapsed.components.seconds), "buckets": buckets.mapValues(\.summary),
+            "reliability": Self.reliability(outcomes),
+            "unusablePhotos": outcomes.filter { $0.expected == "unusable" }.count,
+            "scoreMeaning": "Normalized cosine similarity to the nearest reference photo. Not a probability; see reliability.",
         ]
+        if let calibration = environment["DIVEID_PHOTO_EVAL_CALIBRATION"] {
+            guard split == "holdout" else { return XCTFail("DIVEID_PHOTO_EVAL_CALIBRATION is for held-out runs; the development run chooses the threshold") }
+            let url = calibration.hasPrefix("/") ? URL(fileURLWithPath: calibration) : root.appendingPathComponent(calibration)
+            let threshold = try Self.calibratedThreshold(report: Data(contentsOf: url), recognizer: recognizer.recognizerID,
+                                                         version: recognizer.version, colourCorrected: colourCorrected)
+            report["calibration"] = ["developmentReport": url.lastPathComponent, "developmentReportSHA256": Self.sha256(try Data(contentsOf: url))]
+            report["atCalibratedThreshold"] = Self.atThreshold(outcomes, threshold)
+        }
         if split == "holdout" {
             let results = Self.gates(buckets, rules)
             report["gates"] = results.map { ["gate": $0.name, "passed": $0.passed, "detail": $0.detail] }
@@ -245,12 +401,40 @@ final class PhotoEvaluationTests: XCTestCase {
         } else {
             let table = Self.sweep(outcomes)
             report["thresholdSweep"] = table
-            report["chosenThreshold"] = Self.chosenThreshold(table, noMatchFloor: rules.minimumRates["noMatchCorrect"] ?? 1) as Any
+            let chosen = Self.chosenThreshold(table, noMatchFloor: rules.minimumRates["noMatchCorrect"] ?? 1)
+            report["chosenThreshold"] = chosen as Any
+            if let chosen { report["atChosenThreshold"] = Self.atThreshold(outcomes, chosen) }
         }
         let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
         let url = reportPath.hasPrefix("/") ? URL(fileURLWithPath: reportPath) : root.appendingPathComponent(reportPath)
         try data.write(to: url, options: .atomic)
         print("PHOTOEVAL \(split): \(outcomes.count) photos, covered \(buckets["covered"]?.summary ?? [:]), noMatch \(buckets["noMatch"]?.summary ?? [:])")
+    }
+
+    /// Photos a recognizer should reject: every fourth species photo heavily blurred and nearly
+    /// black (derived from the same split, so nothing leaks between splits), and blank water.
+    static func unusablePhotos(from species: [Data]) -> [(photo: Photo, data: Data)] {
+#if canImport(CoreImage)
+        let context = CIContext()
+        func jpeg(_ image: CIImage) -> Data? {
+            context.jpegRepresentation(of: image, colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!, options: [:])
+        }
+        func photo(_ name: String, _ data: Data) -> (photo: Photo, data: Data) {
+            (Photo(speciesID: nil, scientificName: name, group: "unusable", covered: false, expected: "unusable",
+                   photoID: "derived:\(name):\(sha256(data).prefix(12))", underwater: nil, sha256: sha256(data)), data)
+        }
+        var out: [(photo: Photo, data: Data)] = []
+        for data in species.enumerated().filter({ $0.offset % 4 == 0 }).map(\.element) {
+            guard let image = CIImage(data: data) else { continue }
+            if let blurred = jpeg(image.clampedToExtent().applyingGaussianBlur(sigma: 40).cropped(to: image.extent)) { out.append(photo("blurred", blurred)) }
+            if let dark = jpeg(image.applyingFilter("CIExposureAdjust", parameters: [kCIInputEVKey: -6])) { out.append(photo("nearly black", dark)) }
+        }
+        let water = CIImage(color: CIColor(red: 0.05, green: 0.35, blue: 0.45)).cropped(to: CGRect(x: 0, y: 0, width: 640, height: 480))
+        if let blank = jpeg(water) { out.append(photo("blank water", blank)) }
+        return out
+#else
+        return []
+#endif
     }
 
     static func sha256(_ data: Data) -> String {
