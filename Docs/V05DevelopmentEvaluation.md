@@ -178,8 +178,8 @@ profile fingerprints, pool sizes, target retrieval positions, displayed IDs/rank
 confidence values, region analysis, actual engine execution and per-case failures.
 Do not interpret “rankedCandidates” as proof that the expected identity survived.
 
-CI's existing SwiftPM jobs run the new test as a mandatory check and always retain
-its JSON report alongside the log. Python contract tests run in their own job.
+This evaluation runs with `swift test` on a Mac (GitHub CI's SwiftPM jobs were removed
+on 2026-11-04 and no longer run it). Python contract tests still run in CI.
 `Reports/V05Validation.json` records reproduction hashes and test totals; the
 committed result is `Reports/V05DevelopmentEvaluation.json`.
 

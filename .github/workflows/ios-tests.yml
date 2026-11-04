@@ -34,47 +34,17 @@ jobs:
           path: ${{ runner.temp }}/python-tests.log
           retention-days: 14
 
-  swiftpm-tests:
-    name: SwiftPM (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-15]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Select Xcode 16.4
-        if: ${{ runner.os == 'macOS' }}
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
-      - name: Run SwiftPM tests
-        env:
-          DIVEID_V05_REPORT: ${{ runner.temp }}/v05-evaluation.json
-        shell: bash
-        run: |
-          set -o pipefail
-          swift --version
-          swift test 2>&1 | tee "$RUNNER_TEMP/swiftpm-tests.log"
-      - name: Retain SwiftPM log
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: swiftpm-${{ matrix.os }}-logs
-          path: |
-            ${{ runner.temp }}/swiftpm-tests.log
-            ${{ runner.temp }}/v05-evaluation.json
-          retention-days: 14
-
   validation:
     name: Required validation
     if: ${{ always() }}
-    needs: [python-tests, swiftpm-tests]
+    needs: [python-tests]
     runs-on: ubuntu-latest
     steps:
+      # SwiftPM jobs were removed on 2026-11-04 (Bryce's decision): Swift tests run on a Mac
+      # and a device, as described in README "Required portable checks".
       - name: Require every validation job to succeed
         env:
           PYTHON_RESULT: ${{ needs.python-tests.result }}
-          SWIFTPM_RESULT: ${{ needs.swiftpm-tests.result }}
         run: |
-          printf 'Python: %s\nSwiftPM: %s\n' "$PYTHON_RESULT" "$SWIFTPM_RESULT" >> "$GITHUB_STEP_SUMMARY"
+          printf 'Python: %s\n' "$PYTHON_RESULT" >> "$GITHUB_STEP_SUMMARY"
           test "$PYTHON_RESULT" = success
-          test "$SWIFTPM_RESULT" = success
