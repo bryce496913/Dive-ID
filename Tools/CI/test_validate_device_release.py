@@ -24,10 +24,15 @@ class DeviceReleaseSettingsTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_product(settings, app, generate())
             (app / 'Info.plist').write_bytes(plistlib.dumps(info))
-            path = app / 'IdentificationPacks/Caribbean/Creatures.json'
-            records = json.loads(path.read_text()); records[0]['summary'] = 'Wrong build'
-            path.write_text(json.dumps(records))
+            path = app / 'IdentificationPacks/Global/PackManifest.json'
+            manifest = json.loads(path.read_text()); manifest['displayName'] = 'Wrong build'
+            path.write_text(json.dumps(manifest))
             with self.assertRaisesRegex(ValueError, 'differs from candidate'):
+                validate_product(settings, app, generate())
+            path.write_text((ROOT / 'DiveID/Resources/IdentificationPacks/Global/PackManifest.json').read_text())
+            # A retired pack must never be packaged.
+            shutil.copytree(ROOT / 'DiveIDTests/Fixtures/IdentificationPacks/Caribbean', app / 'IdentificationPacks/Caribbean')
+            with self.assertRaisesRegex(ValueError, 'Retired pack files are in the app'):
                 validate_product(settings, app, generate())
 
     def settings(self, **changes):

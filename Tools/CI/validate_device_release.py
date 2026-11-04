@@ -11,6 +11,16 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'Tools/CatalogReview'))
 from publication_expectations import generate
 
+# Retired regions: test fixtures only (DiveIDTests/Fixtures/IdentificationPacks), never in the app.
+RETIRED_PACKS = ('Caribbean', 'TropicalPacific')
+
+
+def retired_packs_in(packs_directory):
+    """Retired pack files found in an app's (or the app source's) IdentificationPacks directory."""
+    packs_directory = Path(packs_directory)
+    return sorted(str(path.relative_to(packs_directory)) for name in RETIRED_PACKS
+                  for path in (packs_directory / name).rglob('*') if path.is_file())
+
 
 def validate_settings(entries):
     settings = next(entry['buildSettings'] for entry in entries if entry['target'] == 'DiveID')
@@ -39,8 +49,11 @@ def validate_product(settings, app, expected, root=ROOT):
                            ('CFBundleVersion', 'CURRENT_PROJECT_VERSION')]:
         if str(info.get(field)) != str(settings.get(setting)):
             raise ValueError(f'Built {field} differs from resolved {setting}')
+    retired = retired_packs_in(app / 'IdentificationPacks')
+    if retired:
+        raise ValueError(f'Retired pack files are in the app: {", ".join(retired[:5])}')
     counts = {}
-    for region, directory in [('caribbean', 'Caribbean'), ('tropical-pacific', 'TropicalPacific'), ('global', 'Global')]:
+    for region, directory in [('global', 'Global')]:
         relative = Path('IdentificationPacks') / directory
         for filename in ('Creatures.json', 'PackManifest.json'):
             built = json.loads((app / relative / filename).read_text())

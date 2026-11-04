@@ -7,6 +7,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 README = ROOT / 'README.md'
 PACKS = ROOT / 'DiveID/Resources/IdentificationPacks'
+# The retired Caribbean and Tropical Pacific packs: test fixtures, no longer in the app.
+FIXTURE_PACKS = ROOT / 'DiveIDTests/Fixtures/IdentificationPacks'
 REGIONS = ROOT / 'DiveID/Core/Catalog/Regions'
 SECTION = '## Current catalogue and availability'
 V05_REPORT = ROOT / 'Reports/V05DevelopmentEvaluation.json'
@@ -54,10 +56,8 @@ def catalogue_table(section):
 
 
 def manifests():
-    return {
-        path.parent.name: json.loads(path.read_text())
-        for path in sorted(PACKS.glob('*/PackManifest.json'))
-    }
+    paths = [*PACKS.glob('*/PackManifest.json'), *(FIXTURE_PACKS / name / 'PackManifest.json' for name in ('Caribbean', 'TropicalPacific'))]
+    return {path.parent.name: json.loads(path.read_text()) for path in sorted(paths)}
 
 
 def release_gated_directories():
