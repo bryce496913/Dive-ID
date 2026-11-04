@@ -44,7 +44,11 @@ REQUIRED = {
 }
 WORKSHEET_COLUMNS = ['feedbackID', 'participantID', 'collectionDate', 'description', 'broadRegion', 'approximateDepth',
                      'uncertainty', 'hasPhotoToSend', 'suppliedPhotoFile', 'suppliedPhotoSHA256', 'expectedSpeciesIDs',
-                     'acceptableSpeciesIDs', 'evidenceReferences', 'curatorID', 'adjudicationDate', 'notes']
+                     'acceptableSpeciesIDs', 'evidenceReferences', 'curatorID', 'adjudicationDate', 'notes',
+                     'labelKind', 'scientificNames', 'outOfCatalogue', 'verifiedWithoutAppResults', 'language',
+                     'attestsOwnUnpromptedWords', 'encounterID', 'cohortID', 'usedForDevelopment']
+# Filled by the custodian or curator. A re-import keeps whatever they have entered.
+CURATOR_COLUMNS = WORKSHEET_COLUMNS[WORKSHEET_COLUMNS.index('suppliedPhotoFile'):]
 # A photo the diver sends separately (never through the app) is filed in the private holdout
 # and named here by the custodian. These photos become the real-diver photo set, held out
 # like Data/PhotoEvaluation/Holdout.v1.json: never references, training or tuning.
@@ -136,8 +140,18 @@ def submission(record, source_sha, imported_at):
     }
 
 
-def worksheet_csv(submissions):
-    """Description and the diver's own optional details only: no engine output or claims."""
+def read_worksheet(path):
+    """The curator's entries by feedbackID, from an existing worksheet (empty when there is none)."""
+    if not Path(path).exists():
+        return {}
+    with open(path, newline='') as handle:
+        return {row['feedbackID']: row for row in csv.DictReader(handle) if row.get('feedbackID')}
+
+
+def worksheet_csv(submissions, existing=None):
+    """Description and the diver's own optional details only: no engine output or claims.
+    `existing` is the curator's earlier worksheet: their non-empty entries are carried over."""
+    existing = existing or {}
     out = io.StringIO()
     writer = csv.DictWriter(out, fieldnames=WORKSHEET_COLUMNS, lineterminator='\n')
     writer.writeheader()
@@ -152,6 +166,8 @@ def worksheet_csv(submissions):
             # Blank for the custodian to fill when the photo arrives; nothing to fill otherwise.
             'suppliedPhotoFile': '' if context.get('hasPhotoToSend') else NO_PHOTO_OFFERED,
             'suppliedPhotoSHA256': '' if context.get('hasPhotoToSend') else NO_PHOTO_OFFERED,
+            **{column: value for column, value in existing.get(row['feedbackID'], {}).items()
+               if column in CURATOR_COLUMNS and value},
         })
     return out.getvalue()
 
@@ -212,7 +228,8 @@ def run(files, holdout, rules, now=None, root=ROOT):
             log['entries'].append({**entry, 'decision': 'imported', 'reason': 'qualifies'})
     write_private(store_path, json.dumps(store, indent=2, ensure_ascii=False) + '\n')
     write_private(log_path, json.dumps(log, indent=2, ensure_ascii=False) + '\n')
-    write_private(directory / 'curator-worksheet.csv', worksheet_csv(store['submissions']))
+    worksheet = directory / 'curator-worksheet.csv'
+    write_private(worksheet, worksheet_csv(store['submissions'], read_worksheet(worksheet)))
     counts['inHoldout'] = len(store['submissions'])
     return counts
 

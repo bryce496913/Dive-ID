@@ -101,6 +101,10 @@ def pilot_readiness(document):
         'collected': len(rows), 'target': target['total'], 'remainingToCollect': max(0, target['total']-len(rows)),
         'regions': regions, 'targetRegions': target_regions,
         'verifiedLabelsDeclared': len(cases)-unresolved, 'unresolvedLabels': unresolved,
+        # Verified species the catalogue lacks: kept unresolved (no noMatch from absence), counted apart.
+        'outOfCatalogueLabels': sum(r['label'].get('outOfCatalogue') is True for r in rows),
+        'labelKinds': {kind: sum(c['kind'] == kind for c in cases)
+                       for kind in ('identification', 'ambiguous', 'noMatch', 'regionConflict', 'unresolved')},
         'multipleIdentityLabels': sum(len(c['expectedSpeciesIDs']) > 1 for c in cases),
         'distinctContributors': len({r['author']['participantID'] for r in rows}),
         'publicationConsentNotRecorded': publication_missing,
