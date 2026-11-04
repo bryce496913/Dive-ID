@@ -136,6 +136,16 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
   row count: CSV with one row per sighting and its dive's fields (RFC 4180 quoting;
   fields that would start a spreadsheet formula get a leading apostrophe) or JSON
   with every field.
+- **Import Backup** (Dive Log toolbar) restores a JSON export (format `diveid-dive-log`,
+  schema 1). The whole file is checked first (version, fields, IDs, dates, depths, each
+  sighting filed under the dive it names, plain picture file names, 50 MB at most);
+  any problem imports nothing and says why. A preview lists new dives and sightings,
+  records already in the log, and conflicts; nothing is written until Import. Records
+  match by ID only: identical ones are skipped, so a repeat import adds nothing; an ID
+  already in the log with different details keeps the log's record and is reported,
+  and a conflicting dive's sightings are not added. Different IDs are never merged.
+  The import is one atomic write. Backups carry no photos: species pictures come from
+  the installed app, and photo-search sightings keep only which reference matched.
 - **Field Guide:** browse the catalogue by animal group and ocean region, with a name
   filter and a Has photo switch; saving from a species page needs no search.
 - **"Was this right?"** after a search saves the diver's answer on the device, with
