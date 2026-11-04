@@ -28,11 +28,14 @@ each record's FAO areas plus FishBase's country records, which split the Eastern
 Pacific between Hawaii/Polynesia (Indo-Pacific) and the Americas' Pacific coast
 (`Tools/FishBaseIntake/derive_regions.py`; rerun it after `publish_global.py`). Species
 recorded only outside all four (for example the temperate North Atlantic) are in Global
-alone. Caribbean and Tropical Pacific are **retired**: no build lists them and Release
-never opens them; they stay bundled as development evaluation fixtures. An install whose
+alone. Caribbean and Tropical Pacific are **retired**: no build lists or opens them, and
+their records are no longer in the app. They are development evaluation fixtures in
+`DiveIDTests/Fixtures/IdentificationPacks/`, the source the catalogue tools read and write
+(`Tools/CI/test_retired_packs.py` fails if either returns to the app). An install whose
 stored region is retired sees "Dive region unavailable" with a one-tap suggestion
 (Caribbean → Tropical Atlantic Regions, Tropical Pacific → Indo-Pacific Regions); nothing
-changes until the person chooses.
+changes until the person chooses. Saved identifications made in those regions keep
+opening from their own snapshots.
 
 **Global is the default for new installs and is available in Release** (owner decision,
 2026-10-23), after every Global record was approved in batch review. Every Global record
@@ -93,8 +96,8 @@ The iPhone checklist is in [V05CandidateValidation.md](Docs/V05CandidateValidati
   in Global; a stored region selection is kept, and a retired one is offered its
   replacement.
 - **Debug** permits all 4,798 development records: Global's, which has no drafts,
-  listed in Global and its regions. Debug and tests can still open the retired Caribbean
-  (8) and Tropical Pacific (1,000) packs by ID as evaluation fixtures; no build lists them.
+  listed in Global and its regions. Only tests open the retired Caribbean (8) and
+  Tropical Pacific (1,000) packs, from their fixtures; no build lists or bundles them.
 
 Saved identifications remain accessible independently of search access.
 Global species text comes from FishBase and SeaLifeBase (release v26.06, CC BY-NC 4.0).

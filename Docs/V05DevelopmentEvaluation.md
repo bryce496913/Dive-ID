@@ -4,8 +4,9 @@
 regions in favour of Global and four regions drawn from it (README, "Dive regions"). The
 v2 fixture is unchanged and still names `caribbean` and `tropical-pacific`:
 
-- **Development** opens each case's own pack by ID (the retired packs stay bundled as
-  evaluation fixtures). Its results are unchanged and every case and gate is asserted.
+- **Development** opens each case's own pack by ID (the retired packs are test fixtures in
+  `DiveIDTests/Fixtures/IdentificationPacks/`, no longer in the app). Its results are
+  unchanged and every case and gate is asserted.
 - **Release** never opens a retired region, so each case runs in the region an existing
   user of its pack is offered: Caribbean cases in Tropical Atlantic Regions (1,038 approved
   records), Tropical Pacific cases in Indo-Pacific Regions (3,590). Every expected species

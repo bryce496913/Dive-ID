@@ -1,5 +1,9 @@
 # Tropical Pacific catalogue
 
+Retired as a dive region on 2026-10-26. Since 2026-11-03 the pack is a test fixture only,
+in `DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific/`, where the importer writes
+it; it is not in the app.
+
 The pack is generated from all 1,650 creature rows in `DiveID_Tropical_Pacific_Internal_Consistency_Cleaned.xlsx`; do not hand-edit its JSON or reports. Run:
 
 ```sh
@@ -86,8 +90,8 @@ xcodebuild -project "$PROJECT" -scheme "$SCHEME" \
 
 SIM_APP="$SIM_DERIVED/Build/Products/Debug-iphonesimulator/DiveID.app"
 test -d "$SIM_APP"
-test -f "$SIM_APP/IdentificationPacks/TropicalPacific/PackManifest.json"
-test -f "$SIM_APP/IdentificationPacks/TropicalPacific/Creatures.json"
+# Retired (2026-11-03): the pack is a test fixture and must not be in the app.
+test ! -e "$SIM_APP/IdentificationPacks/TropicalPacific"
 BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$SIM_APP/Info.plist")
 test "$BUNDLE_ID" = com.brycecameron.DiveID
 xcrun simctl install "$SIM_UDID" "$SIM_APP"
@@ -118,8 +122,7 @@ xcodebuild -project "$PROJECT" -scheme "$SCHEME" \
   -derivedDataPath "$DEVICE_DERIVED" -allowProvisioningUpdates build
 DEVICE_APP="$DEVICE_DERIVED/Build/Products/Debug-iphoneos/DiveID.app"
 test -d "$DEVICE_APP"
-test -f "$DEVICE_APP/IdentificationPacks/TropicalPacific/PackManifest.json"
-test -f "$DEVICE_APP/IdentificationPacks/TropicalPacific/Creatures.json"
+test ! -e "$DEVICE_APP/IdentificationPacks/TropicalPacific"
 BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$DEVICE_APP/Info.plist")
 test "$BUNDLE_ID" = com.brycecameron.DiveID
 xcrun devicectl device install app --device "$DEVICE_ID" "$DEVICE_APP"

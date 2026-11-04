@@ -65,7 +65,8 @@ printf 'Evidence directory: %s\n' "$OUT"
 If signing fails, resolve that account/profile/device issue in Xcode and rerun
 in a new directory. Do not work around it with `CODE_SIGNING_ALLOWED=NO`. Never
 define DEBUG, inject experimental settings, or enable testability in this product.
-The checker verifies full packaged catalogue content (drafts remain bundled),
+The checker verifies full packaged catalogue content, fails if a retired pack (Caribbean,
+Tropical Pacific) is packaged at all,
 then verifies the eligible ID set against valid decisions. The installed app must
 expose only those eligible IDs; packaged drafts alone are not a gate failure.
 Fill the copied device-observations.json with the actual installed SHA, device
