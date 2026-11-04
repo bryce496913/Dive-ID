@@ -321,7 +321,7 @@ def package_resources(package, resources, stem, copy_files, evidence_builder,
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=TOOLS / "generated" / "real-encoder")
-    parser.add_argument("--pack", type=Path, default=ROOT / "DiveID/Resources/IdentificationPacks/Caribbean",
+    parser.add_argument("--pack", type=Path, default=ROOT / "DiveIDTests/Fixtures/IdentificationPacks/Caribbean",
                         help="identification pack to index; the app looks up Semantic-<pack id>.*")
     parser.add_argument("--skip-conversion", action="store_true")
     parser.add_argument("--package-resources", type=Path,

@@ -1,11 +1,11 @@
 {
   "identicalRegenerationPasses": 2,
   "sha256": {
-    "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json": "3806279e35c92777d009904f82c0541d29384ecf1813bfea44588f76be7247c5",
-    "DiveID/Resources/IdentificationPacks/Caribbean/PackManifest.json": "6ff988905dce0849b4d1a343c0bc459ae8f342958210b642a864d6abfb08da6a",
-    "DiveID/Resources/IdentificationPacks/TropicalPacific/Creatures.json": "bd230f0e7aa580afe9e68a08373b3503a776fe3d735a3b866495174f2e281920",
-    "DiveID/Resources/IdentificationPacks/TropicalPacific/PackManifest.json": "1735fa89f27ee943fa3a2ad6984f668e8decea10dc3538c5caa7703098accb42",
-    "DiveIDTests/Fixtures/PublicationApprovedIDs.json": "52e61291374a225f8e0dae46bfee1c20c23c145c6fc8a6e14862d6792868ebea",
+    "DiveIDTests/Fixtures/IdentificationPacks/Caribbean/Creatures.json": "3806279e35c92777d009904f82c0541d29384ecf1813bfea44588f76be7247c5",
+    "DiveIDTests/Fixtures/IdentificationPacks/Caribbean/PackManifest.json": "6ff988905dce0849b4d1a343c0bc459ae8f342958210b642a864d6abfb08da6a",
+    "DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific/Creatures.json": "bd230f0e7aa580afe9e68a08373b3503a776fe3d735a3b866495174f2e281920",
+    "DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific/PackManifest.json": "1735fa89f27ee943fa3a2ad6984f668e8decea10dc3538c5caa7703098accb42",
+    "DiveIDTests/Fixtures/PublicationApprovedIDs.json": "49e1f05cccba7faee3faca881c5425a0750640bc0400cebf8127cd622a2d7ed1",
     "Reports/CatalogueSourceReviewPass.json": "8cfa29f5801864b416cb9ec4408098ffff31bb7343c702f241c8113b6a1ef978",
     "Reports/FirstCatalogueReviewBatch.json": "49bc37cfcfd94a3732d15d975e559d893ec0784973742f6cf31376dc328e8790",
     "Reports/TropicalPacificImportReport.json": "7cc47b81a65c9181ec99392f594ddbecaabd6815e2a0ed1dd2a96f1c2605e726",

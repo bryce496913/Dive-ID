@@ -145,7 +145,7 @@ class PartitionTests(unittest.TestCase):
     def test_the_real_pack_is_covered_exactly_once_with_the_caribbean_records_in_the_last_build_batch(self):
         records = json.loads((G.PACK / "Creatures.json").read_text())
         risk = json.loads(G.RISK_REPORT.read_text())["records"]
-        caribbean = {r["id"] for r in json.loads((G.REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json").read_text())}
+        caribbean = {r["id"] for r in json.loads((G.REPO / "DiveIDTests/Fixtures/IdentificationPacks/Caribbean/Creatures.json").read_text())}
         numbers = G.batch_assignments(records, risk)
         self.assertEqual(set(numbers), {r["id"] for r in records})
         last = max(numbers.values())

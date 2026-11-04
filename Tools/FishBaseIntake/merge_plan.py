@@ -131,7 +131,7 @@ def main(argv=None):
     existing = []
     for pack in ("Caribbean", "TropicalPacific"):
         existing += [{"id": r["id"], "pack": pack, "scientificName": r["scientificName"]}
-                     for r in json.loads((REPO / "DiveID/Resources/IdentificationPacks" / pack / "Creatures.json").read_text())]
+                     for r in json.loads((REPO / "DiveIDTests/Fixtures/IdentificationPacks" / pack / "Creatures.json").read_text())]
     with open(REPO / "Data/GlobalMarine/IntakeCrosswalk.csv", newline="") as f:
         crosswalk = {r["candidateID"]: r for r in csv.DictReader(f) if r["queue"] == "primary"}
     with open(REPO / "Data/GlobalMarine/OriginalNameCrosswalk.csv", newline="") as f:

@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 def main():
     paths = [
         ROOT / 'DiveIDTests/Fixtures/PublicationApprovedIDs.json',
-        *ROOT.glob('DiveID/Resources/IdentificationPacks/Caribbean/*.json'),
-        *ROOT.glob('DiveID/Resources/IdentificationPacks/TropicalPacific/*.json'),
+        *ROOT.glob('DiveIDTests/Fixtures/IdentificationPacks/Caribbean/*.json'),
+        *ROOT.glob('DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific/*.json'),
         *(ROOT / 'Reports' / name for name in (
             'TropicalPacificImportReport.json', 'TropicalPacificOutcomes.csv',
             'TropicalPacificReviewQueue.csv', 'FirstCatalogueReviewBatch.json',

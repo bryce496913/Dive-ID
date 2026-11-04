@@ -146,12 +146,13 @@ class NameIndex:
 
 # The regional packs whose records feed the global merge. Global itself is this
 # pipeline's output, so reading it back as input would be circular.
+# The retired Caribbean and Tropical Pacific packs: test fixtures now, no longer in the app.
 SOURCE_PACKS = ("Caribbean", "TropicalPacific")
 
 
 def load_inputs(repo=REPO):
     inputs = []
-    for pack_dir in [repo / "DiveID/Resources/IdentificationPacks" / name for name in SOURCE_PACKS]:
+    for pack_dir in [repo / "DiveIDTests/Fixtures/IdentificationPacks" / name for name in SOURCE_PACKS]:
         path = pack_dir / "Creatures.json"
         if not path.exists():
             continue

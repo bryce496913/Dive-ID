@@ -160,7 +160,7 @@ def export_pack(pack_directory: Path, output: Path) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pack", type=Path, default=Path("DiveID/Resources/IdentificationPacks/Caribbean"))
+    parser.add_argument("--pack", type=Path, default=Path("DiveIDTests/Fixtures/IdentificationPacks/Caribbean"))
     parser.add_argument("--output", type=Path, default=Path("Tools/SemanticSearch/generated/caribbean-search-corpus.jsonl"))
     args = parser.parse_args(argv)
     try:

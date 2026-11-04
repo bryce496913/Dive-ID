@@ -45,8 +45,12 @@ class InputSnapshot:
             'Expansion4000_Audit.json', 'Sources/reef.csv', 'Sources/asfis.csv')]]
         # The Global pack is this pipeline's output (Tools/FishBaseIntake/publish_global.py),
         # so it is never an input: reading it would turn every candidate into an existing identity.
+        # The retired Caribbean and Tropical Pacific packs are test fixtures now, outside the app.
         pack_paths = {p.relative_to(self.root).as_posix()
-                      for p in self.root.glob('DiveID/Resources/IdentificationPacks/*/*.json')
+                      for pattern in ('DiveID/Resources/IdentificationPacks/*/*.json',
+                                      'DiveIDTests/Fixtures/IdentificationPacks/Caribbean/*.json',
+                                      'DiveIDTests/Fixtures/IdentificationPacks/TropicalPacific/*.json')
+                      for p in self.root.glob(pattern)
                       if p.parent.name != 'Global'}
         # The supplement and pack membership are optional, but their presence is
         # part of the baseline. Missing required inputs fail before any writes.

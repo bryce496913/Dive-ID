@@ -47,7 +47,7 @@ import paired_write  # noqa: E402
 import photo_batches  # noqa: E402
 
 PACK = REPO / "DiveID/Resources/IdentificationPacks/Global"
-CARIBBEAN = REPO / "DiveID/Resources/IdentificationPacks/Caribbean/Creatures.json"
+CARIBBEAN = REPO / "DiveIDTests/Fixtures/IdentificationPacks/Caribbean/Creatures.json"
 CARIBBEAN_REVIEW = {"status": "draft", "reviewDate": None, "verifiedBy": None,
                     "reviewerNotes": "Caribbean pack record (field-guide text), carried into Global unchanged; "
                                      "awaiting Global batch review."}

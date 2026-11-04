@@ -37,7 +37,7 @@ def generate():
         ('caribbean', 'Caribbean', 'CaribbeanReviewDecisions.json'),
         ('tropical-pacific', 'TropicalPacific', 'ReviewDecisions.json')
     ]:
-        records = json.loads((ROOT / f'DiveID/Resources/IdentificationPacks/{directory}/Creatures.json').read_text())
+        records = json.loads((ROOT / f'DiveIDTests/Fixtures/IdentificationPacks/{directory}/Creatures.json').read_text())
         document = json.loads((ROOT / 'Data/CatalogReview' / decisions).read_text())
         result[catalogue] = approved_ids(records, document, catalogue)
     result['global'] = global_approved_ids()

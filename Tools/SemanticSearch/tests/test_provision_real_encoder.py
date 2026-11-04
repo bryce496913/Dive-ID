@@ -31,7 +31,9 @@ class RealEncoderProvisioningTests(unittest.TestCase):
     def test_artifact_stem_follows_the_pack_the_app_searches(self):
         packs = PROVISION.ROOT / "DiveID/Resources/IdentificationPacks"
         lock = json.loads((PROVISION.TOOLS / "real-encoder.v1.json").read_text())
-        self.assertEqual(PROVISION.pack_identity(packs / "Caribbean"), ("caribbean", lock["artifactStem"]))
+        # The retired Caribbean pack is a test fixture now, outside the app.
+        caribbean = PROVISION.ROOT / "DiveIDTests/Fixtures/IdentificationPacks/Caribbean"
+        self.assertEqual(PROVISION.pack_identity(caribbean), ("caribbean", lock["artifactStem"]))
         self.assertEqual(PROVISION.pack_identity(packs / "Global"), ("global", "Semantic-global"))
 
     def test_sha256_records_exact_bytes(self):

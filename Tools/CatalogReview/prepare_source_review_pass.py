@@ -14,7 +14,7 @@ def generate():
     packs = {}
     counts = {}
     for key, directory in [('caribbean', 'Caribbean'), ('tropical-pacific', 'TropicalPacific')]:
-        records = json.loads((ROOT / f'DiveID/Resources/IdentificationPacks/{directory}/Creatures.json').read_text())
+        records = json.loads((ROOT / f'DiveIDTests/Fixtures/IdentificationPacks/{directory}/Creatures.json').read_text())
         packs[key] = {r['id']: r for r in records}
         counts[key] = {'included': len(records),
                       'humanReviewed': sum(r['review']['status'] in ('sourceChecked', 'verified') for r in records),

@@ -280,11 +280,13 @@ class GlobalSchemaVocabularyTests(unittest.TestCase):
 class BundledImageFileTests(unittest.TestCase):
     """A record's bundledImage must name a file in its own pack, as the app's loader requires."""
     PACKS = Path(__file__).parents[2] / "DiveID/Resources/IdentificationPacks"
+    # The retired Caribbean pack (a test fixture now) supplies the sample record and its image.
+    CARIBBEAN = Path(__file__).parents[2] / "DiveIDTests/Fixtures/IdentificationPacks/Caribbean"
 
     def setUp(self):
         spec = importlib.util.spec_from_file_location("catalogue_validation", Path(__file__).with_name("catalogue_validation.py"))
         self.V = importlib.util.module_from_spec(spec); spec.loader.exec_module(self.V)
-        caribbean = self.PACKS / "Caribbean"
+        caribbean = self.CARIBBEAN
         self.record = next(r for r in json.loads((caribbean / "Creatures.json").read_text()) if r.get("bundledImage"))
         self.manifest = json.loads((caribbean / "PackManifest.json").read_text())
         self.manifest.update(speciesCount=1, includedRecordCount=1,
@@ -292,7 +294,7 @@ class BundledImageFileTests(unittest.TestCase):
                              publicationEligibleRecordCount=int(self.record["review"]["status"] == "verified" and bool(self.record["categories"])))
 
     def test_an_image_in_the_pack_is_accepted(self):
-        self.V.validate_catalogue([self.record], self.manifest, self.PACKS / "Caribbean")
+        self.V.validate_catalogue([self.record], self.manifest, self.CARIBBEAN)
 
     def test_an_image_outside_the_pack_is_rejected(self):
         with tempfile.TemporaryDirectory() as other:
@@ -321,7 +323,7 @@ class BundledImageFileTests(unittest.TestCase):
 
     def test_a_pack_directory_needs_the_manifest(self):
         with self.assertRaisesRegex(self.V.CatalogueValidationError, r"locate the pack's images"):
-            self.V.validate_catalogue([self.record], None, self.PACKS / "Caribbean")
+            self.V.validate_catalogue([self.record], None, self.CARIBBEAN)
 
     def test_every_bundled_pack_finds_its_images(self):
         # Regions drawn from Global list Global record IDs (Members.json) and hold no records of their own.
