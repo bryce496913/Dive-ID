@@ -124,6 +124,12 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
   visibility are entered in metres/°C or feet/°F (a setting that defaults from the
   locale) and stored with their units. Deleting a dive keeps its sightings unassigned
   unless you choose to delete them too. Opening a sighting shows the saved detail.
+- **Edit a sighting:** a sighting opened from the Dive Log shows Your sighting (dive,
+  depth, notes) with Edit. Change the notes, set or clear the depth (blank is unknown;
+  0 is the surface; stored in the units entered), or move it to another dive or to no
+  dive. The change is checked and written in one step: a failed save keeps the edits
+  on screen, a dive deleted meanwhile is reported, and nothing else about the
+  sighting (ID, species snapshot, time, photo references, cautions) changes.
 - **Add to dive:** after saving an identification from search or the field guide, add
   it to today's dive, pick another dive, create a new one, or skip.
 - **Export** the whole log or one dive through the share sheet, after a preview of the

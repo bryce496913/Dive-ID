@@ -122,7 +122,7 @@ struct DiveForm: Equatable, Sendable {
         return value
     }
 
-    private static func check(_ text: String, _ range: ClosedRange<Double>, _ name: String, _ unit: String) -> String? {
+    static func check(_ text: String, _ range: ClosedRange<Double>, _ name: String, _ unit: String) -> String? {
         guard !text.trimmingCharacters(in: .whitespaces).isEmpty else { return nil }
         guard let value = number(text) else { return "\(name) must be a number." }
         guard range.contains(value) else { return "\(name) must be between \(format(range.lowerBound)) and \(format(range.upperBound)) \(unit)." }
@@ -133,6 +133,94 @@ struct DiveForm: Equatable, Sendable {
         value.rounded() == value ? String(Int(value)) : String(format: "%g", value)
     }
 }
+
+// MARK: Editing a sighting
+
+/// The edit form for one sighting's notes, depth and dive. Blank depth is unknown; "0" is a
+/// real depth (at the surface). Depth keeps the units it was stored in, so nothing is converted.
+struct SightingEditForm: Equatable, Sendable {
+    var notes: String
+    var depthText: String
+    var depthUnit: DepthUnit
+    var diveID: UUID?
+
+    init(editing sighting: SavedIdentification, preferredUnit: DepthUnit) {
+        notes = sighting.notes ?? ""
+        depthText = sighting.depth.map { DiveForm.format($0.value) } ?? ""
+        depthUnit = sighting.depth?.unit ?? preferredUnit
+        diveID = sighting.diveID
+    }
+
+    /// Zero (the surface) up to the dive form's plausible maximum, in the entered units.
+    static func depthRange(_ unit: DepthUnit) -> ClosedRange<Double> { 0...DiveForm.depthRange(unit).upperBound }
+
+    var depthError: String? { DiveForm.check(depthText, Self.depthRange(depthUnit), "Depth", depthUnit.symbol) }
+    var isValid: Bool { depthError == nil }
+
+    /// What to store, or nil while the depth is invalid. Blank notes are stored as none.
+    var edit: SightingEdit? {
+        guard isValid else { return nil }
+        let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        return SightingEdit(notes: trimmedNotes.isEmpty ? nil : notes,
+                            depth: DiveForm.number(depthText).map { Depth(value: $0, unit: depthUnit) },
+                            diveID: diveID)
+    }
+}
+
+/// Edit one saved sighting. A failed save keeps every edit and says why; Cancel saves nothing.
+@MainActor @Observable
+final class SightingEditorViewModel {
+    /// The sighting as last stored.
+    private(set) var sighting: SavedIdentification
+    var form: SightingEditForm
+    /// Dives to choose from, newest first.
+    private(set) var dives: [Dive] = []
+    private(set) var isSaving = false
+    private(set) var errorMessage: String?
+    private let repository: any DiveLogRepository
+
+    init(sighting: SavedIdentification, repository: any DiveLogRepository, preferredUnit: DepthUnit) {
+        self.sighting = sighting
+        self.repository = repository
+        form = SightingEditForm(editing: sighting, preferredUnit: preferredUnit)
+    }
+
+    /// Whether Save would change anything. Invalid input counts as a change, so it isn't lost.
+    var hasChanges: Bool { form.edit.map { $0 != SightingEdit(sighting) } ?? true }
+    var canSave: Bool { form.isValid && !isSaving }
+
+    /// The dive the form names but the list doesn't have (the list couldn't load, or the dive is gone).
+    var chosenDiveIsUnlisted: Bool { form.diveID.map { id in !dives.contains { $0.id == id } } ?? false }
+
+    func loadDives() async {
+        do { dives = try await repository.dives().map(\.dive) }
+        catch { errorMessage = "Your dives couldn't be loaded. " + SavedIdentificationRepositoryError.message(for: error) }
+    }
+
+    /// The stored sighting, or nil when the save failed (the form keeps the edits).
+    func save() async -> SavedIdentification? {
+        guard let edit = form.edit, !isSaving else { return nil }
+        isSaving = true
+        defer { isSaving = false }
+        do {
+            let stored = try await repository.editSighting(id: sighting.id, edit)
+            sighting = stored
+            errorMessage = nil
+            return stored
+        } catch SavedIdentificationRepositoryError.diveNotFound {
+            // The chosen dive was deleted while editing (the sighting itself is checked first).
+            // Storage is unchanged; offer the dives that still exist, with No dive chosen.
+            await loadDives()
+            form.diveID = nil
+            errorMessage = "The dive you chose no longer exists, so nothing was saved. The sighting is set to No dive here: choose a dive or keep No dive, then save again. Your other changes are kept."
+        } catch {
+            errorMessage = "Your changes weren't saved. " + SavedIdentificationRepositoryError.message(for: error) + " Your edits are still here."
+        }
+        return nil
+    }
+}
+
+extension SightingEditorViewModel: Identifiable {}
 
 // MARK: The Dive Log screen
 

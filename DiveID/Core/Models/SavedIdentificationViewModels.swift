@@ -14,17 +14,23 @@ final class SpeciesDetailViewModel {
     /// Shown after a new save: today's dive (if any), another dive, a new dive, or skip.
     var addToDiveOffer: AddToDiveOffer?
     private var diveLog: (any DiveLogRepository)? { repository as? any DiveLogRepository }
+    /// Opened from the Dive Log: the saved sighting as last stored, and its dive.
+    private(set) var sighting: SavedIdentification?
+    private(set) var sightingDive: Dive?
+    private let opensSavedSighting: Bool
 
     init(species: Species, match: IdentificationMatch?, repository: any SavedIdentificationRepository) {
         self.species = species
         self.match = match
         self.repository = repository
         savedIdentificationID = nil
+        opensSavedSighting = false
     }
 
     init(saved: SavedIdentification, repository: any SavedIdentificationRepository) {
         species = saved.species; match = saved.isFromFieldGuide ? nil : saved.match  // no strength or evidence was ever shown
         self.repository = repository; savedIdentificationID = saved.id; isSaved = true
+        sighting = saved; opensSavedSighting = true
     }
 
     func load() async {
@@ -41,6 +47,7 @@ final class SpeciesDetailViewModel {
             }
             savedIdentificationID = saved?.id
             isSaved = saved != nil
+            if opensSavedSighting, let saved { sighting = saved; await loadSightingDive() }
             errorMessage = nil
         } catch {
             retrySaveChange = false
@@ -135,6 +142,28 @@ extension SpeciesDetailViewModel {
             errorMessage = "The identification is saved, but the dive couldn't be created. " + SavedIdentificationRepositoryError.message(for: error)
             return false
         }
+    }
+}
+
+extension SpeciesDetailViewModel {
+    /// The sighting's notes, depth and dive are shown and editable on a page opened from the
+    /// Dive Log, while it is still saved, in a store that has dives.
+    var canEditSighting: Bool { opensSavedSighting && isSaved && sighting != nil && diveLog != nil }
+
+    func makeSightingEditor(preferredUnit: DepthUnit = MeasurementPreference().depthUnit) -> SightingEditorViewModel? {
+        guard canEditSighting, let sighting, let diveLog else { return nil }
+        return SightingEditorViewModel(sighting: sighting, repository: diveLog, preferredUnit: preferredUnit)
+    }
+
+    /// After a confirmed save: show the stored values and the new dive.
+    func sightingEdited(_ stored: SavedIdentification) async {
+        sighting = stored
+        await loadSightingDive()
+    }
+
+    private func loadSightingDive() async {
+        guard let diveID = sighting?.diveID, let diveLog else { sightingDive = nil; return }
+        sightingDive = (try? await diveLog.dives())?.first { $0.dive.id == diveID }?.dive
     }
 }
 

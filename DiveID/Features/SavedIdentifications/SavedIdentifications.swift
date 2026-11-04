@@ -499,3 +499,102 @@ struct DiveLogExportSheet: View {
 extension DiveLogExport: Identifiable {
     var id: String { "\(dives.map(\.dive.id)) \(unassigned.count) \(exportedAt.timeIntervalSince1970)" }
 }
+
+/// Edit one sighting's dive, depth and notes. Cancel saves nothing; a failed save keeps the
+/// edits on screen with the reason.
+struct SightingEditorView: View {
+    @State var model: SightingEditorViewModel
+    let onSaved: (SavedIdentification) async -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                if let error = model.errorMessage {
+                    Section {
+                        Label(error, systemImage: "exclamationmark.triangle.fill")
+                            .foregroundStyle(Color.appError)
+                            .accessibilityIdentifier("sightingEditError")
+                    }
+                    .listRowBackground(Color.appSurface)
+                }
+                Section {
+                    Picker("Dive", selection: $model.form.diveID) {
+                        Text("No dive").tag(UUID?.none)
+                        ForEach(model.dives) { dive in Text(Self.label(dive)).tag(Optional(dive.id)) }
+                        if model.chosenDiveIsUnlisted, let id = model.form.diveID { Text("Current dive").tag(Optional(id)) }
+                    }
+                    .accessibilityIdentifier("sightingDive")
+                } header: {
+                    Text("Dive")
+                } footer: {
+                    Text("No dive moves this sighting to Unassigned sightings.")
+                }
+                .listRowBackground(Color.appSurface)
+                Section {
+                    Picker("Depth units", selection: $model.form.depthUnit) {
+                        Text("Metres").tag(DepthUnit.metres)
+                        Text("Feet").tag(DepthUnit.feet)
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityIdentifier("sightingDepthUnits")
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                        HStack {
+                            TextField("Depth", text: $model.form.depthText)
+                                .keyboardType(.decimalPad)
+                                .accessibilityLabel("Depth in \(model.form.depthUnit == .metres ? "metres" : "feet")")
+                                .accessibilityValue(model.form.depthText.isEmpty ? "Not recorded" : model.form.depthText)
+                                .accessibilityIdentifier("sightingDepth")
+                            Text(model.form.depthUnit.symbol).foregroundStyle(Color.appTextSecondary).accessibilityHidden(true)
+                        }
+                        if let error = model.form.depthError {
+                            Text(error).font(.caption).foregroundStyle(Color.appError).accessibilityIdentifier("sightingDepthError")
+                        }
+                    }
+                    if !model.form.depthText.isEmpty {
+                        Button("Clear Depth") { model.form.depthText = "" }
+                            .accessibilityHint("Marks the depth as not recorded.")
+                            .accessibilityIdentifier("clearSightingDepth")
+                    }
+                } header: {
+                    Text("Depth")
+                } footer: {
+                    Text("Leave blank if you don't know. 0 means at the surface.")
+                }
+                .listRowBackground(Color.appSurface)
+                Section("Notes") {
+                    TextField("Notes", text: $model.form.notes, axis: .vertical)
+                        .lineLimit(3...10)
+                        .accessibilityIdentifier("sightingNotes")
+                }
+                .listRowBackground(Color.appSurface)
+            }
+            .scrollContentBackground(.hidden)
+            .appScreenBackground()
+            .navigationTitle("Edit Sighting")
+            .navigationBarTitleDisplayMode(.inline)
+            // Swiping down could discard edits by accident; Cancel discards them on purpose.
+            .interactiveDismissDisabled(model.hasChanges)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }.accessibilityIdentifier("cancelSightingEdit")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Task {
+                            if let stored = await model.save() {
+                                await onSaved(stored)
+                                dismiss()
+                            }
+                        }
+                    }
+                    .disabled(!model.canSave)
+                    .accessibilityIdentifier("saveSightingEdit")
+                }
+            }
+            .task { await model.loadDives() }
+        }
+    }
+
+    static func label(_ dive: Dive) -> String { "\(dive.siteName ?? "Unnamed site") · \(DiveText.dateLine(dive))" }
+}

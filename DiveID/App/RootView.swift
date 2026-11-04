@@ -48,7 +48,9 @@ struct RootView: View {
             SpeciesDetailView(viewModel: .init(species: species, match: match, repository: savedRepository),
                               feedback: match?.sourceSessionID.map { FeedbackPromptViewModel(sessionID: $0, service: feedback) })
         case .savedIdentification(let saved):
-            SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository))
+            SpeciesDetailView(viewModel: .init(saved: saved, repository: savedRepository), onSightingChanged: {
+                await router.diveLogModel(repository: savedRepository, catalog: catalogRepository).load()
+            })
         case .savedIdentifications:
             DiveLogView(viewModel: router.diveLogModel(repository: savedRepository, catalog: catalogRepository), router: router)
         case .dive(let id):

@@ -10,6 +10,9 @@ struct SpeciesDetailView: View {
     @State private var showsAddToDive = false
     @State private var choosingDive = false
     @State private var creatingDive = false
+    @State private var sightingEditor: SightingEditorViewModel?
+    /// Called after a sighting edit is saved, so the Dive Log and dive pages refresh.
+    var onSightingChanged: (() async -> Void)? = nil
     @ScaledMetric(relativeTo: .largeTitle) private var artworkHeight: CGFloat = 280
 
     var body: some View {
@@ -40,6 +43,9 @@ struct SpeciesDetailView: View {
                         Button(AppCopy.tryAgain) { Task { await viewModel.retry() } }
                             .disabled(viewModel.isUpdatingSavedState)
                     }
+                }
+                if viewModel.canEditSighting, let sighting = viewModel.sighting {
+                    sightingCard(sighting)
                 }
                 // What a diver needs to judge the match comes first: why it matched, what is
                 // missing, and how to tell it apart from look-alikes.
@@ -101,9 +107,44 @@ struct SpeciesDetailView: View {
                 await viewModel.createDiveAndAdd(form)
             }
         }
+        .sheet(item: $sightingEditor) { editor in
+            SightingEditorView(model: editor) { stored in
+                await viewModel.sightingEdited(stored)
+                await onSightingChanged?()
+            }
+        }
         .navigationTitle(viewModel.species.commonName)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+    }
+
+    /// The diver's own record of this sighting: its dive, depth and notes, with Edit.
+    private func sightingCard(_ sighting: SavedIdentification) -> some View {
+        DetailCard {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Your sighting").font(.headline)
+                Spacer(minLength: AppTheme.Spacing.s)
+                Button("Edit") { sightingEditor = viewModel.makeSightingEditor() }
+                    .accessibilityLabel("Edit sighting")
+                    .accessibilityHint("Change the dive, depth or notes.")
+                    .accessibilityIdentifier("editSighting")
+            }
+            LabeledContent("Dive", value: Self.diveText(sighting, viewModel.sightingDive))
+                .accessibilityIdentifier("sightingDiveValue")
+            LabeledContent("Depth", value: sighting.depth.map { "\(DiveForm.format($0.value)) \($0.unit.symbol)" } ?? "Not recorded")
+                .accessibilityIdentifier("sightingDepthValue")
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxs) {
+                Text("Notes").font(.subheadline).foregroundStyle(Color.appTextSecondary)
+                Text(sighting.notes ?? "None")
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("sightingNotesValue")
+        }
+    }
+
+    static func diveText(_ sighting: SavedIdentification, _ dive: Dive?) -> String {
+        if let dive { return SightingEditorView.label(dive) }
+        return sighting.diveID == nil ? "No dive" : "On a dive (details unavailable)"
     }
 
     /// The artwork with the name, scientific name and match strength set over its lower edge.
