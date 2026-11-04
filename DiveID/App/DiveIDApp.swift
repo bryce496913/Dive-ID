@@ -71,12 +71,14 @@ struct DiveIDApp: App {
 #endif
 
     /// UI tests pass -resetDiveLogForUITests for an empty dive log in a temporary file (Debug
-    /// only), so real saved identifications are never touched.
+    /// only), so real saved identifications are never touched. -keepDiveLogForUITests reopens
+    /// that same file without emptying it, to check what survives a relaunch.
     private static func makeSavedRepository() -> PersistentSavedIdentificationRepository {
 #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-resetDiveLogForUITests") {
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-resetDiveLogForUITests") || arguments.contains("-keepDiveLogForUITests") {
             let file = FileManager.default.temporaryDirectory.appendingPathComponent("uitest-saved-identifications.json")
-            try? FileManager.default.removeItem(at: file)
+            if arguments.contains("-resetDiveLogForUITests") { try? FileManager.default.removeItem(at: file) }
             return PersistentSavedIdentificationRepository { try JSONSavedIdentificationRepository(fileURL: file) }
         }
 #endif
