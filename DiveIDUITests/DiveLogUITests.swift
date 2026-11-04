@@ -93,8 +93,13 @@ final class DiveLogUITests: XCTestCase {
         tap(app, app.buttons["editSighting"])
         XCTAssertTrue(app.navigationBars["Edit Sighting"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: [.dynamicType, .sufficientElementDescription]) { issue in
+            let identifier = issue.element?.identifier ?? ""
             // Only this form is checked; the page behind the sheet is not part of this change.
-            !(issue.element?.identifier.hasPrefix("sighting") ?? false) && !(issue.element?.identifier.hasSuffix("SightingEdit") ?? false)
+            let mine = identifier.hasPrefix("sighting") || identifier.hasSuffix("SightingEdit")
+            // Save and Cancel are system navigation-bar buttons: iOS keeps them at a fixed size and
+            // shows them in the Large Content Viewer instead (the dive form's are the same).
+            let systemBarButton = issue.auditType == .dynamicType && ["saveSightingEdit", "cancelSightingEdit"].contains(identifier)
+            return !mine || systemBarButton
         }
         let depth = app.textFields["sightingDepth"]
         tap(app, depth)
