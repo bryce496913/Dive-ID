@@ -40,6 +40,7 @@ let package = Package(
                 "Core/Models/FieldGuide.swift",
                 "Core/Models/DiveLog.swift",
                 "Core/Models/DiveLogScreens.swift",
+                "Core/Models/DiveLogImport.swift",
                 "Core/Models/DiverFeedback.swift",
                 "Core/Services/DiverFeedbackRepository.swift",
                 "Core/Services/DiverFeedbackService.swift",
