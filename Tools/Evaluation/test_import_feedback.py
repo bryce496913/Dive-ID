@@ -115,6 +115,26 @@ class ImportFeedbackTests(unittest.TestCase):
         self.assertEqual(rows[str(uuid.UUID(int=1))]['suppliedPhotoFile'], '')
         self.assertEqual(rows[str(uuid.UUID(int=2))]['suppliedPhotoFile'], m.NO_PHOTO_OFFERED)
 
+    def test_a_later_import_keeps_the_curators_entries(self):
+        # Regression: every import rewrote the worksheet and erased labels already entered.
+        self.run_import(self.write('a.json', export(record(1))))
+        path = self.holdout / 'curator-worksheet.csv'
+        rows = list(csv.DictReader(io.StringIO(path.read_text())))
+        rows[0].update(expectedSpeciesIDs=str(uuid.UUID(int=77)), curatorID='CURATOR-SYNTH', labelKind='identification',
+                       suppliedPhotoFile='photo-1.jpg', notes='synthetic adjudication')
+        out = io.StringIO()
+        writer = csv.DictWriter(out, fieldnames=m.WORKSHEET_COLUMNS, lineterminator='\n')
+        writer.writeheader()
+        writer.writerows(rows)
+        path.write_text(out.getvalue())
+        self.run_import(self.write('b.json', export(record(2))))
+        after = {r['feedbackID']: r for r in csv.DictReader(io.StringIO(path.read_text()))}
+        kept = after[str(uuid.UUID(int=1))]
+        self.assertEqual((kept['expectedSpeciesIDs'], kept['curatorID'], kept['labelKind'], kept['suppliedPhotoFile'], kept['notes']),
+                         (str(uuid.UUID(int=77)), 'CURATOR-SYNTH', 'identification', 'photo-1.jpg', 'synthetic adjudication'))
+        self.assertEqual(kept['description'], '  SYNTHETIC 1: flat fish, blue spots  ', 'wording still comes from the import')
+        self.assertEqual(after[str(uuid.UUID(int=2))]['labelKind'], '', 'the new record is left for the curator')
+
     def test_duplicate_files_and_records_import_once(self):
         file = self.write('a.json', export(record(1), record(2)))
         copy = self.write('b.json', export(record(2), record(3)))
