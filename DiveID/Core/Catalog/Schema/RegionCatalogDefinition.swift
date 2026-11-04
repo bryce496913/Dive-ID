@@ -12,8 +12,9 @@ struct RegionCatalogDefinition: Hashable, Sendable {
     /// this region's species resource (`RegionMembership`). The records, their review
     /// status and their search data are the source pack's, unchanged.
     let derivedFrom: OfflineIdentificationPackID?
-    /// A region no longer offered. It is never listed in any build and never opens in
-    /// Release; Debug, Internal and tests can still open it by ID as an evaluation fixture.
+    /// A region no longer offered. It is never listed in any build, and its records are not
+    /// in the app: only tests open it, from their fixtures. Its ID stays for the recovery
+    /// screen and for saved identifications made in it.
     let retirement: RegionRetirement?
 
     init(id: OfflineIdentificationPackID, resourceDirectory: String,

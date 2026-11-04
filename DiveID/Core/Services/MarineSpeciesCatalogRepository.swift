@@ -80,6 +80,3 @@ actor LocalCatalogueDiagnosticsReporter: CatalogueDiagnosticsReporting {
     }
 }
 
-extension MarineSpeciesCatalogRepository {
-    func loadProfiles() async throws -> [LocalSpeciesProfile] { try await loadPack(id: .caribbean).profiles }
-}

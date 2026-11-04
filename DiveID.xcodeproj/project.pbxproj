@@ -53,6 +53,9 @@
 		};
 		G3 /* DiveIDTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFolders = (
+				Fixtures/IdentificationPacks,
+			);
 			path = DiveIDTests;
 			sourceTree = "<group>";
 		};
