@@ -222,9 +222,10 @@ swift test -c release
 python3 Tools/Evaluation/run_v05.py --configuration debug
 ```
 
-GitHub CI runs the Python suites (including a project-file check that Release never
-defines `DEBUG` or `DIVEID_INTERNAL`) and Linux/macOS SwiftPM, and requires both to
-succeed. It does not build or test the iOS app; that is `Tools/CI/local_xcode_checks.sh`. The shell loop runs all nine suites and aggregates
+GitHub CI runs only the Python suites (including a project-file check that Release never
+defines `DEBUG` or `DIVEID_INTERNAL`) and requires them to succeed. Since 2026-11-04 it
+runs no Swift: run `swift test` here and `Tools/CI/local_xcode_checks.sh` on a Mac with
+Xcode before merging, since nothing on GitHub will catch a Swift failure. The shell loop runs all nine suites and aggregates
 their status; every command keeps a nonzero exit status on failure, and
 `run_v05.py` returns the evaluation test's status.
 
