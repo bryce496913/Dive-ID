@@ -8,6 +8,11 @@ final class IdentificationResultsViewModel {
     private(set) var packMetadata: OfflineIdentificationPackMetadata?
     /// Set for a photo search once it has run.
     private(set) var photoSummary: PhotoMatchSummary?
+    /// The search as asked: its unchanged description and any clues added to it.
+    private(set) var request: IdentificationRequest?
+    /// What the added clues did, for a refined search once it has run.
+    private(set) var refinedText: RefinedSearchText?
+    private(set) var isStartingRefinedSearch = false
     private let service: any MarineLifeIdentificationService
     private let sessionStore: any IdentificationSessionStore
     private let catalog: any MarineSpeciesCatalogRepository
@@ -63,6 +68,11 @@ final class IdentificationResultsViewModel {
             do {
                 let request = try await sessionStore.request(for: sessionID)
                 try checkOwnership(id)
+                self.request = request
+                if case .description(let description) = request.source, request.context.refinement != nil {
+                    refinedText = await RefinedSearchText.compose(original: description, refinement: request.context.refinement)
+                    try checkOwnership(id)
+                }
                 if let packID = request.context.region {
                     if let packs = try? await catalog.availablePacks() {
                         try checkOwnership(id)
@@ -91,7 +101,10 @@ final class IdentificationResultsViewModel {
                 try checkOwnership(id)
                 let displayed = normalized(outcome.matches).map { value in
                     var value = value; value.sourceSessionID = sessionID
-                    if case .description(let description) = request.source { value.observationDescription = description }
+                    if case .description(let description) = request.source {
+                        value.observationDescription = description  // as written, never with the added clues
+                        value.refinement = request.context.refinement
+                    }
                     return value
                 }
                 try await sessionStore.saveResult(.init(matches: displayed, completedAt: Date(), photoSummary: outcome.photoSummary), for: sessionID)
@@ -138,6 +151,56 @@ final class IdentificationResultsViewModel {
         case .regionMismatch(let selected, let mentioned):
             "Your description mentions \(mentioned), but the selected dive region covers the \(selected.rawValue.capitalized). Choose another dive region and try again."
         }
+    }
+
+    // MARK: Refining a description search
+
+    /// Description searches can always be refined, whatever the results.
+    var canRefine: Bool {
+        guard let request, case .description = request.source else { return false }
+        switch state { case .loaded, .empty: return true; default: return false }
+    }
+
+    /// The clues this search already used (empty for the first search).
+    var currentRefinement: SearchRefinement { request?.context.refinement ?? SearchRefinement() }
+    var isRefined: Bool { request?.context.refinement != nil }
+    /// The first, unrefined search in this chain.
+    var rootSessionID: UUID { request?.context.refinesSessionID ?? sessionID }
+
+    /// The results are close or thin: worth inviting the diver to add details.
+    var isAmbiguous: Bool {
+        switch state {
+        case .empty: return true
+        case .loaded(let matches):
+            guard let first = matches.first else { return true }
+            if first.informationLevel == .limited || first.informationLevel == .insufficient { return true }
+            if first.matchStrength != .strong && first.matchStrength != .good { return true }
+            if matches.count > 1, first.score - matches[1].score < 0.08 { return true }
+            return false
+        default: return false
+        }
+    }
+
+    /// The questions to ask, most useful first (RefinementQuestions.order).
+    func refinementQuestions(parser: some ObservationParsing = LocalObservationParser()) async -> [SearchRefinement.Dimension] {
+        guard let request, case .description(let description) = request.source else { return SearchRefinement.Dimension.allCases }
+        let candidates: [Species]
+        if case .loaded(let matches) = state { candidates = matches.map(\.species) } else { candidates = [] }
+        return RefinementQuestions.order(observation: await parser.parse(description), candidates: candidates)
+    }
+
+    /// A new search: the same description, region and context, with these clues. Returns its
+    /// session; nil when nothing would change or a refined search is already starting.
+    func startRefinedSearch(_ refinement: SearchRefinement) async -> UUID? {
+        let wanted = refinement.isEmpty ? nil : refinement
+        guard !isStartingRefinedSearch, let request, case .description = request.source, wanted != request.context.refinement else { return nil }
+        isStartingRefinedSearch = true
+        defer { isStartingRefinedSearch = false }
+        var context = request.context
+        context.refinement = wanted
+        context.refinesSessionID = rootSessionID
+        let refined = IdentificationRequest(source: request.source, context: context)
+        return try? await sessionStore.createSession(for: refined, photo: nil)
     }
 
     private func apply(_ matches: [IdentificationMatch]) {

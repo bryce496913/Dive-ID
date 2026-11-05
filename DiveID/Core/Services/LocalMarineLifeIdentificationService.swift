@@ -43,7 +43,11 @@ struct LocalMarineLifeIdentificationService: MarineLifeIdentificationService {
             let packID = request.context.region ?? DefaultDiveRegion.forNewInstalls
             let pack = try await loadPack(packID)
             try Task.checkCancellation()
-            let result = try await searchEngine.search(description: trimmed, pack: pack)
+            // Added clues go after the unchanged description, through the same engine, ranking,
+            // confidence and region rules as any description.
+            let query = await RefinedSearchText.compose(original: trimmed, refinement: request.context.refinement).searchText
+            try Task.checkCancellation()
+            let result = try await searchEngine.search(description: query, pack: pack)
             try Task.checkCancellation()
             if result.queryAnalysis.packRegionCompatibility == .conflicting,
                let outside = result.queryAnalysis.observedRegions.sorted().first {

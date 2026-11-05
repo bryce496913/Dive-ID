@@ -118,6 +118,19 @@ need review. See [source review](Docs/CataloguePublicationReview.md).
 - Region selection chooses an available local pack; there are no pack downloads.
 - Results/details retain their temporary session during detail/back navigation;
   finished flows release it. Remaining temporary sessions have a hard limit of 16.
+- **Add details** (on description results, prominent when results are close, limited or
+  empty) asks optional, neutral questions about body shape, markings, size, where it was
+  and what it was doing, each with Not sure and Clear. Options are the same fixed list
+  for every search, and each one is a word the parser reads as that trait. Questions the
+  current candidates differ on come first; ones the description already answers come
+  last. The description is never edited: answers are stored separately
+  (`IdentificationContext.refinement`) and appended for the same engine, ranking,
+  confidence cap, region and abstention rules. An answer the description already gives
+  isn't added again. One that disagrees is kept and flagged, and the description's own
+  measurement stays the one used. A refined search is a new session. Refining again
+  replaces it (the older request is cancelled), and Back returns to the first results.
+  Saved sightings keep the refinement, and so do exports (CSV column
+  `observation_details_added`) and backups.
 - **Dive Log** (Home → Dive Log, formerly Saved Identifications): dives newest first
   (date, site, region, maximum depth, sighting count, first photo), then unassigned
   sightings. Add or edit a dive; only the date is required, and depth, temperature and
