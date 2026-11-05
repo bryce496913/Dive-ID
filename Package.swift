@@ -41,6 +41,7 @@ let package = Package(
                 "Core/Models/DiveLog.swift",
                 "Core/Models/DiveLogScreens.swift",
                 "Core/Models/DiveLogImport.swift",
+                "Core/Models/SearchRefinement.swift",
                 "Core/Models/DiverFeedback.swift",
                 "Core/Services/DiverFeedbackRepository.swift",
                 "Core/Services/DiverFeedbackService.swift",

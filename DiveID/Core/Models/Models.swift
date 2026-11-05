@@ -133,6 +133,8 @@ struct IdentificationMatch: Identifiable, Hashable, Codable, Sendable {
     var photoEvidence: PhotoMatchEvidence? = nil
     /// Set on every result of a photo search: the recognizer, and whether it is a placeholder.
     var photoRecognizer: PhotoRecognizerInfo? = nil
+    /// Clues the diver added to the description for this search (`observationDescription` stays as written).
+    var refinement: SearchRefinement? = nil
 
     var matchStrength: MatchStrength { strength ?? .band(for: score) }
 }
@@ -167,6 +169,8 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
     /// From a photo search: the recognizer and the reference photo it matched. Never the diver's photo.
     var photoRecognizer: PhotoRecognizerInfo? = nil
     var photoEvidence: PhotoMatchEvidence? = nil
+    /// Clues added after the search, kept apart from `observationDescription`, which is as written.
+    var refinement: SearchRefinement? = nil
 
     var isFromPhoto: Bool { photoRecognizer != nil }
     /// Saved from a test recognizer's placeholder result, not a real match.
@@ -185,6 +189,7 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
         self.identifiedAt = identifiedAt; self.notes = notes; sourceSessionID = match.sourceSessionID; packContext = match.packContext; matchedLifeStage = match.matchedLifeStage
         savedFrom = .search
         photoRecognizer = match.photoRecognizer; photoEvidence = match.photoEvidence
+        refinement = match.refinement
     }
 
     /// Saved from the field guide (or Browse All Species): the species only, no match.
@@ -199,7 +204,7 @@ struct SavedIdentification: Identifiable, Hashable, Codable, Sendable {
     var match: IdentificationMatch {
         var value = IdentificationMatch(id: species.id, species: species, rank: matchRank, score: relativeScore ?? 0, scoreKind: .relativeMatch, strength: matchStrength, explanation: explanation, distinguishingFeatures: distinguishingFeatures, cautions: cautions, taxonomicResolution: taxonomicResolution)
         value.observationDescription = observationDescription; value.sourceSessionID = sourceSessionID; value.packContext = packContext; value.matchedLifeStage = matchedLifeStage
-        value.photoRecognizer = photoRecognizer; value.photoEvidence = photoEvidence; return value
+        value.photoRecognizer = photoRecognizer; value.photoEvidence = photoEvidence; value.refinement = refinement; return value
     }
 }
 
@@ -217,6 +222,11 @@ struct IdentificationContext: Hashable, Codable, Sendable {
     var observedAt: Date?
     /// A photo search's optional "anything else you noticed" text. Unused by description searches.
     var additionalDescription: String?
+    /// Description searches: clues the diver added after a search. The description itself
+    /// (the request's source) is never changed.
+    var refinement: SearchRefinement?
+    /// The first, unrefined search these clues refine.
+    var refinesSessionID: UUID?
 
     static let empty = IdentificationContext()
 }
@@ -271,7 +281,7 @@ enum LoadState<Value> {
 enum SavedSource: String, Codable, Sendable { case search, fieldGuide }
 
 extension SavedIdentification {
-    enum CodingKeys: String, CodingKey { case id, species, matchRank, matchStrength, relativeScore, explanation, distinguishingFeatures, cautions, taxonomicResolution, observationDescription, identifiedAt, sourceSessionID, packContext, matchedLifeStage, savedFrom, diveID, depth, isSeparateSighting, photoRecognizer, photoEvidence
+    enum CodingKeys: String, CodingKey { case id, species, matchRank, matchStrength, relativeScore, explanation, distinguishingFeatures, cautions, taxonomicResolution, observationDescription, identifiedAt, sourceSessionID, packContext, matchedLifeStage, savedFrom, diveID, depth, isSeparateSighting, photoRecognizer, photoEvidence, refinement
         case notes = "diveNotes"
     }
     init(from decoder: Decoder) throws {
@@ -283,5 +293,6 @@ extension SavedIdentification {
         isSeparateSighting = try c.decodeIfPresent(Bool.self, forKey: .isSeparateSighting) ?? false
         photoRecognizer = try c.decodeIfPresent(PhotoRecognizerInfo.self, forKey: .photoRecognizer)
         photoEvidence = try c.decodeIfPresent(PhotoMatchEvidence.self, forKey: .photoEvidence)
+        refinement = try c.decodeIfPresent(SearchRefinement.self, forKey: .refinement)
     }
 }
