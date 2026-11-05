@@ -189,6 +189,9 @@ struct SpeciesDetailView: View {
                 if !match.explanation.isEmpty { DetailSection(title: "Why it matched", text: match.explanation) }
                 if !match.cautions.isEmpty { DetailSection(title: "Cautions and missing evidence", text: match.cautions.joined(separator: " • ")) }
                 if !match.observationDescription.isEmpty { DetailSection(title: "Original observation", text: match.observationDescription) }
+                if let refinement = match.refinement, !refinement.isEmpty {
+                    DetailSection(title: "Details added after the search", text: refinement.summaryLines.joined(separator: " • "))
+                }
             }
         }
     }

@@ -42,6 +42,21 @@ final class AppRouter {
     }
 
     func navigate(to route: AppRoute) { path.append(route) }
+
+    /// The clues last applied to each first search, so reopening "Add details" shows them.
+    @ObservationIgnored private(set) var latestRefinements: [UUID: SearchRefinement] = [:]
+
+    /// Shows a refined search. It replaces a refined results page on top (the newer request
+    /// supersedes it, and the old one is cancelled with its session), so Back always returns
+    /// to the first search's results.
+    func showRefinedResults(_ sessionID: UUID, refinement: SearchRefinement, root: UUID, replacingRefined current: UUID?) {
+        latestRefinements[root] = refinement
+        if let current, path.last == .identificationResults(sessionID: current) {
+            path[path.count - 1] = .identificationResults(sessionID: sessionID)
+        } else {
+            path.append(.identificationResults(sessionID: sessionID))
+        }
+    }
     func goBack() { if !path.isEmpty { path.removeLast() } }
 
     func resultsModel(sessionID: UUID, service: any MarineLifeIdentificationService,
@@ -81,6 +96,7 @@ final class AppRouter {
         if !path.contains(.fieldGuide) { fieldGuide = nil }
         if !path.contains(.savedIdentifications) { diveLog = nil }
         let active = Self.sessions(in: path)
+        latestRefinements = latestRefinements.filter { active.contains($0.key) }
         let removed = Self.sessions(in: previous).subtracting(active)
         for id in removed {
             resultsModels.removeValue(forKey: id)?.cancel()
