@@ -35,10 +35,32 @@ use the same mapping, so only the embedding differs:
 | Gallery | `PhotoIndex.bin`, 6.1 MB | 4.1 MB index | 3.1 MB index |
 | Variant | – | **photos + text**: the 2,864 species without a reference photo get a text vector from BioCLIP's text tower ("a photo of {class order family genus species} with common name {name}."). 10.1 MB. Only the vectors ship, not the text model. | – |
 
-The model revisions are pinned in `Tools/PhotoModels/convert.py` (`PINS`). It now records
-each weight file's SHA-256 in `parity.json`. The October conversion predates the pins:
-DINOv2's repository hasn't changed since 2023, so it used this revision. BioCLIP's last
-changed in February 2026, so it almost certainly did too, but that wasn't recorded.
+The model revisions are pinned in `Tools/PhotoModels/convert.py` (`PINS`), and
+`parity.json` records each weight file's SHA-256.
+
+**Re-converted 2026-11-04 at the pins.** The downloaded weights match the SHA-256 that
+Hugging Face publishes for each pinned file:
+- BioCLIP `open_clip_pytorch_model.bin` `e380384f…0ef4`, 598.6 MB
+- DINOv2 `model.safetensors` `ae1e99fc…4be1`, 88.2 MB
+
+Parity reproduced October's figures exactly, which confirms October used the same
+revisions:
+
+| | float16 parity | 8-bit parity |
+|---|---:|---:|
+| BioCLIP | 0.99968 | 0.99904 |
+| DINOv2 | 0.99974 | 0.99809 |
+
+The rebuilt indexes match October's sizes:
+
+| Index | Size | SHA-256 |
+|---|---:|---|
+| BioCLIP photos | 4,101,581 bytes | `af1770f6…dc09` |
+| BioCLIP photos + text | 10,136,029 bytes | `e013ca77…5bfa` |
+| DINOv2 photos | 3,111,373 bytes | `7a84e7d2…e28f` |
+
+Model weights and spec checksums: BioCLIP `985c4c87…1b04`, DINOv2 `291a96df…1ecf`.
+The artifacts are kept outside git.
 
 ## 2. Data
 
@@ -137,9 +159,9 @@ Calibration table (top-1 right per band): 0.80–0.85: 0 of 7, 0.85–0.90: 0 of
 | Missing | Why | Next step |
 |---|---|---|
 | Species photos in both splits | `holdout.py select` uses the cached iNaturalist observation listings. The photo intake is fetching them (restarted 2026-11-04, about 11 hours to finish). Selecting from a partial cache would favour the species fetched first. | When the intake finishes: run `holdout.py select`, then `nomatch` (it picks up the new subjects), then `download`. |
-| Converted candidate models | The October artifacts were deleted with an old scratch folder | Re-download at the pinned revisions (BioCLIP 599 MB, DINOv2 88 MB, plus the pinned PyTorch toolchain) and convert. Needs the owner's OK to download. |
+| Converted candidate models | Done 2026-11-04 (Section 1) | – |
 | Approval of the proposed selection rules | They are new | The owner approves or changes them before the held-out run |
-| Warm load and peak memory on the phone | Newly added to the measurement | `testMeasureCandidates` on the iPhone, with the models in `DiveIDTests/CandidateModels/` (git-ignored) |
+| Warm load and peak memory on the phone | The models are in `DiveIDTests/CandidateModels/` (git-ignored) and the device build succeeded. All three runs on 2026-11-05 stopped before starting: "Unlock iPhone to Continue". | Rerun `testMeasureCandidates` with the iPhone unlocked |
 | Divers' photos | None received | Optional; held out the same way |
 
 Commands, in order:
