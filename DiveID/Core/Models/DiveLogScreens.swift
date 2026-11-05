@@ -357,6 +357,7 @@ struct DiveLogExport: Sendable {
         "dive_duration_minutes", "dive_water_temperature", "dive_water_temperature_unit", "dive_visibility", "dive_visibility_unit",
         "dive_notes", "sighting_id", "identified_at", "common_name", "scientific_name", "sighting_depth", "sighting_depth_unit",
         "sighting_notes", "saved_from", "match_strength", "observation_description", "photo_recognizer", "photo_reference",
+        "observation_details_added",
     ]
 
     /// fieldGuide, search, photo, or photoPlaceholder (a test recognizer's placeholder result).
@@ -384,6 +385,7 @@ struct DiveLogExport: Sendable {
                 sighting.isFromFieldGuide ? "" : sighting.matchStrength.rawValue, sighting.observationDescription,
                 sighting.photoRecognizer.map { "\($0.recognizerID) \($0.recognizerVersion)" } ?? "",
                 sighting.photoEvidence?.referenceFileName ?? sighting.photoEvidence?.referenceID ?? "",
+                sighting.refinement?.summaryLines.joined(separator: "; ") ?? "",
             ]
             return values.map(Self.escape).joined(separator: ",")
         }

@@ -210,6 +210,7 @@ final class DiveLogScreenTests: XCTestCase {
             "dive_duration_minutes", "dive_water_temperature", "dive_water_temperature_unit", "dive_visibility", "dive_visibility_unit",
             "dive_notes", "sighting_id", "identified_at", "common_name", "scientific_name", "sighting_depth", "sighting_depth_unit",
             "sighting_notes", "saved_from", "match_strength", "observation_description", "photo_recognizer", "photo_reference",
+            "observation_details_added",  // appended at the end, so existing columns keep their positions
         ])
         let header = DiveLogExport.wholeLog([], unassigned: []).csv().components(separatedBy: "\r\n").first
         XCTAssertEqual(header, DiveLogExport.columns.joined(separator: ","))
