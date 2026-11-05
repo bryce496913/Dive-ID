@@ -146,4 +146,6 @@ DIVEID_PHOTO_CANDIDATES=<candidates> DIVEID_PHOTO_EVAL_CANDIDATE=bioclip \
   swift test -c release --filter PhotoEvaluationTests/testPhotoEvaluation
 ```
 
-Nothing is recommended until those results exist.
+Nothing is recommended until those results exist. The selection report, with the exact
+candidates, pinned revisions, proposed selection rules and remaining steps, is
+[PhotoModelSelection.md](PhotoModelSelection.md).

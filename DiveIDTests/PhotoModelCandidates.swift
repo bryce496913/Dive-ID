@@ -187,19 +187,48 @@ final class PhotoModelCandidateTests: XCTestCase {
             "host"
 #endif
         }()
+        func ms(_ d: Duration) -> String { String(format: "%.1f ms", Double(d.components.seconds) * 1000 + Double(d.components.attoseconds) / 1e15) }
+        func record(_ line: String) {
+            print(line)
+            let report = FileManager.default.temporaryDirectory.appendingPathComponent("CANDIDATES.txt")
+            try? (((try? String(contentsOf: report, encoding: .utf8)) ?? "") + line + "\n").write(to: report, atomically: true, encoding: .utf8)
+        }
+        // The built-in baseline on the same device and run: its index load, then a query each.
+        if VisionFeaturePrint.isAvailable {
+            let start = ContinuousClock.now
+            let index = try PhotoReferenceIndex.decode(Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(
+                forResource: "PhotoIndex", withExtension: "bin", subdirectory: "IdentificationPacks/Global"))))
+            let load = ContinuousClock.now - start
+            var times: [Duration] = []
+            for position in Array(stride(from: 3, to: index.entries.count, by: index.entries.count / 10).prefix(10)) {
+                let data = try Data(contentsOf: try XCTUnwrap(TestResources.productionBundle.url(
+                    forResource: index.entries[position].fileName, withExtension: nil, subdirectory: "IdentificationPacks/Global/Images")))
+                let t = ContinuousClock.now
+                _ = index.nearestSpecies(to: try VisionFeaturePrint.vector(imageData: data), limit: 20)
+                times.append(ContinuousClock.now - t)
+            }
+            record("CANDIDATE \(platform) vision: model 0 bytes, index load \(ms(load)); query median \(ms(times.sorted()[times.count / 2])) max \(ms(times.max()!)); "
+                   + "peak footprint \(Self.peakFootprint().map { String(format: "%.0f MiB", Double($0) / 1_048_576) } ?? "unavailable")")
+        }
         for candidate in PhotoModelCandidate.allCases {
             let before = Self.footprint()
-            let start = ContinuousClock.now
-            let loaded: CandidateProvider?
-            if let directory {
-                let folder = directory.appendingPathComponent(candidate.rawValue)
-                loaded = FileManager.default.fileExists(atPath: folder.appendingPathComponent("index.bin").path)
-                    ? try await CandidateProvider.load(directory: directory, candidate: candidate) : nil
-            } else {
-                loaded = try CandidateProvider.loadFromTestBundle(testBundle, candidate: candidate)
+            func loadOnce() async throws -> (CandidateProvider?, Duration) {
+                let start = ContinuousClock.now
+                let loaded: CandidateProvider?
+                if let directory {
+                    let folder = directory.appendingPathComponent(candidate.rawValue)
+                    loaded = FileManager.default.fileExists(atPath: folder.appendingPathComponent("index.bin").path)
+                        ? try await CandidateProvider.load(directory: directory, candidate: candidate) : nil
+                } else {
+                    loaded = try CandidateProvider.loadFromTestBundle(testBundle, candidate: candidate)
+                }
+                return (loaded, ContinuousClock.now - start)
             }
+            // First load in this process (the first ever on a device also prepares the model for
+            // its Neural Engine), then a second load: what the app pays when it loads again.
+            let (loaded, load) = try await loadOnce()
             guard let provider = loaded else { continue }
-            let load = ContinuousClock.now - start
+            let (_, warmLoad) = try await loadOnce()
             let index = provider.recognizer.index
             var times: [Duration] = [], cosines: [Float] = [], own = 0
             let sample = Array(stride(from: 3, to: index.entries.count, by: index.entries.count / 10).prefix(10))
@@ -216,15 +245,13 @@ final class PhotoModelCandidateTests: XCTestCase {
                 own += matches.first?.speciesID == entry.speciesID ? 1 : 0
             }
             let after = Self.footprint()
-            func ms(_ d: Duration) -> String { String(format: "%.1f ms", Double(d.components.seconds) * 1000 + Double(d.components.attoseconds) / 1e15) }
             let modelBytes = directory.map { Self.size($0.appendingPathComponent(candidate.rawValue).appendingPathComponent("model.mlpackage")) }
                 ?? testBundle.url(forResource: candidate.bundledName, withExtension: "mlmodelc").map(Self.size) ?? 0
             let line = "CANDIDATE \(platform) \(candidate.rawValue): model \(modelBytes) bytes, index \(index.encoded().count) bytes; "
-                + "load \(ms(load)); footprint change \(before.flatMap { b in after.map { String(format: "%.0f MiB", Double($0 - b) / 1_048_576) } } ?? "unavailable"); "
-                + "query median \(ms(times.sorted()[times.count / 2])) max \(ms(times.max()!)); parity min cosine \(cosines.min() ?? 0), own species first \(own)/\(sample.count)"
-            print(line)
-            let report = FileManager.default.temporaryDirectory.appendingPathComponent("CANDIDATES.txt")
-            try? (((try? String(contentsOf: report, encoding: .utf8)) ?? "") + line + "\n").write(to: report, atomically: true, encoding: .utf8)
+                + "load \(ms(load)), warm load \(ms(warmLoad)); footprint change \(before.flatMap { b in after.map { String(format: "%.0f MiB", Double($0 - b) / 1_048_576) } } ?? "unavailable"); "
+                + "query median \(ms(times.sorted()[times.count / 2])) max \(ms(times.max()!)); parity min cosine \(cosines.min() ?? 0), own species first \(own)/\(sample.count); "
+                + "peak footprint so far \(Self.peakFootprint().map { String(format: "%.0f MiB", Double($0) / 1_048_576) } ?? "unavailable")"
+            record(line)
         }
     }
 
@@ -232,6 +259,16 @@ final class PhotoModelCandidateTests: XCTestCase {
         let files = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey])?.compactMap { $0 as? URL } ?? []
         if files.isEmpty { return (try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0 }
         return files.reduce(0) { $0 + ((try? $1.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0) }
+    }
+
+    /// The process's highest physical footprint so far (the figure iOS limits apps by).
+    private static func peakFootprint() -> Int? {
+        var info = task_vm_info_data_t()
+        var count = mach_msg_type_number_t(MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<natural_t>.size)
+        let result = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { task_info(mach_task_self_, task_flavor_t(TASK_VM_INFO), $0, &count) }
+        }
+        return result == KERN_SUCCESS ? Int(info.ledger_phys_footprint_peak) : nil
     }
 
     private static func footprint() -> Int? {

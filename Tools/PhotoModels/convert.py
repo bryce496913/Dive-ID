@@ -5,11 +5,14 @@ species-name text vectors. Evaluation only: nothing here goes into the app.
 
   python -I Tools/PhotoModels/convert.py --models <downloads> --out <dir> [--fixtures N]
 
-<downloads> holds bioclip/ (imageomics/bioclip) and dinov2-small/ (facebook/dinov2-small).
+<downloads> holds bioclip/ (imageomics/bioclip) and dinov2-small/ (facebook/dinov2-small),
+downloaded at the revisions pinned in PINS (Docs/PhotoModelSelection.md has the commands).
+parity.json records each weight file's SHA-256 and the pinned revision.
 For each model, <out>/<name>/ gets model.mlpackage (float16), model-8bit.mlpackage (8-bit
 weights), parity.json and, for BioCLIP, text-vectors.json. Versions: requirements.txt.
 """
 import argparse
+import hashlib
 import json
 import math
 import sys
@@ -21,6 +24,13 @@ import torch
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
+# Hugging Face revisions (commit SHAs) and the weight file converted from each, pinned 2026-11-04.
+PINS = {
+    "bioclip": {"repository": "imageomics/bioclip", "revision": "ce901ab3c6a913f9e9ef94ce6d27761069f4f01c",
+                "weights": "bioclip/open_clip_pytorch_model.bin", "licence": "MIT"},
+    "dinov2": {"repository": "facebook/dinov2-small", "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+               "weights": "dinov2-small/model.safetensors", "licence": "Apache-2.0"},
+}
 GLOBAL = ROOT / "DiveID/Resources/IdentificationPacks/Global"
 SIZE = 224
 CLIP_MEAN, CLIP_STD = [0.48145466, 0.4578275, 0.40821073], [0.26862954, 0.26130258, 0.27577711]
@@ -131,6 +141,14 @@ def text_vectors(model, records, batch=256):
     return out
 
 
+def sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--models", type=Path, required=True)
@@ -156,7 +174,8 @@ def main(argv=None):
         report = parity(tower, {"float16": mlmodel, "8bit": small}, images)
         report |= {"bytes": {"float16": size(out / "model.mlpackage"), "8bit": size(out / "model-8bit.mlpackage")},
                    "parameters": sum(p.numel() for p in (tower.model.visual.parameters() if name == "bioclip" else tower.parameters())), "versions": {
-                       "torch": torch.__version__, "coremltools": ct.__version__, "numpy": np.__version__}}
+                       "torch": torch.__version__, "coremltools": ct.__version__, "numpy": np.__version__},
+                   "source": {**PINS[name], "weightsSHA256": sha256(args.models / PINS[name]["weights"])}}
         (out / "parity.json").write_text(json.dumps(report, indent=1) + "\n")
         print(name, json.dumps({k: report[k] for k in ("float16", "8bit", "bytes", "parameters")}), flush=True)
         if name == "bioclip":

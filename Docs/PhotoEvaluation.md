@@ -49,6 +49,12 @@ confidence compliance for:
 The development run adds the threshold sweep. The phone's feature prints differ slightly
 from the Mac's (median cosine 0.992), so phone results may differ a little.
 
+Since 2026-11-04 the report also gives, at a calibrated threshold, coverage, selective
+top-1, false acceptance, lookalike confusions and a calibration table. Unusable photos
+can be added with `DIVEID_PHOTO_EVAL_UNUSABLE=1`. A held-out run takes its threshold only
+from its own development report (`DIVEID_PHOTO_EVAL_CALIBRATION`). See
+[PhotoModelSelection.md](PhotoModelSelection.md).
+
 ## Gates (approved 2026-10-29)
 
 From `Data/Evaluation/PhotoProtocol.v1.json`, written and approved by the owner as proposed

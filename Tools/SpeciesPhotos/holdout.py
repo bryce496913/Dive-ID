@@ -47,6 +47,10 @@ NO_MATCH_TAXA = {
     "Cichlidae": "freshwater fish", "Centrarchidae": "freshwater fish", "Cyprinidae": "freshwater fish",
     "Scleractinia": "coral reef without a catalogue animal", "Delphinidae": "dolphin", "Phocidae": "seal",
     "Anatidae": "water bird",
+    # Added 2026-11-04, before any species photo was selected or the set frozen: subjects that
+    # aren't marine at all, and another marine animal outside the catalogue.
+    "Canidae": "land animal", "Felidae": "land animal", "Passeriformes": "land bird",
+    "Spheniscidae": "penguin",
 }
 NO_MATCH_PER_TAXON = 6
 
