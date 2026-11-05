@@ -143,6 +143,34 @@ builds, 10 bundled photos each; these check speed and parity, not accuracy.
 | Footprint change on load | – | 0–1 MiB (weights memory-mapped) | 0–1 MiB |
 | Development: threshold rejecting all 17 no-match photos | 0.93 | 0.87 | 0.91 |
 
+**On the iPhone 14 Pro, 2026-11-05.** Debug test build, three runs in fresh processes,
+with all three recognizers measured in the same process each run. 10 bundled photos per
+model; a query is the embedding plus a brute-force search. Ranges are across the runs.
+
+| | Vision | BioCLIP | DINOv2-small |
+|---|---:|---:|---:|
+| Model / index | 0 / 6.1 MB | 172.6 MB / 4.1 MB | 43.4 MB / 3.1 MB |
+| First load in a new process | 0.32–0.41 s (index) | 7.8–9.7 s | 5.0–5.6 s |
+| Warm load (second load, same process) | – | 0.25–0.27 s | 0.20 s |
+| Query median | 249–251 ms | 180 ms | 132–134 ms |
+| Query max | 321–368 ms | 187–246 ms | 135–136 ms |
+| Footprint change on load | – | 8–13 MiB | 0 MiB |
+| Peak footprint of the whole test process | 44 MiB | 49–50 MiB | 49–50 MiB |
+| Parity with the Mac index (min cosine) | – | 0.99999 | 0.99986 |
+| Own species first | – | 10/10 | 10/10 |
+
+What this shows:
+- **First load is slow on every new launch,** not only the first after install: 5–10 s in
+  all three runs, each a fresh process. A second load in the same process is 0.2–0.27 s.
+  Shipping either model would need it loaded in the background before the photo screen
+  is used. The proposed rules gate only the warm load, so this needs its own decision.
+- **Queries:** all three met the proposed 300 ms median, and DINOv2 was the fastest. Every
+  query here was slower than in October's run (BioCLIP 99.5 ms then, Vision 132 ms then)
+  on the same phone and build type, so the phone's state matters. The comparison within
+  one run is the fair one.
+- **Memory:** well under the proposed 300 MiB for all three. Core ML maps the weights
+  rather than copying them into memory.
+
 Re-run on 2026-11-04, Vision on the development split, with blank water: 18 photos.
 Chosen threshold 0.93, at which all 17 no-match photos and the blank frame are rejected.
 Calibration table (top-1 right per band): 0.80–0.85: 0 of 7, 0.85–0.90: 0 of 7,
@@ -151,8 +179,8 @@ Calibration table (top-1 right per band): 0.80–0.85: 0 of 7, 0.85–0.90: 0 of
 **Not measured:**
 - top-1 and top-3, coverage, per-group results, lookalikes, and false acceptance at a
   calibrated threshold, for any candidate;
-- warm load and peak memory on the phone;
-- the "photos + text" variant on the phone.
+- the "photos + text" variant on the phone;
+- a Release build on the phone.
 
 ## 5. Missing evidence and how to finish
 
@@ -161,7 +189,7 @@ Calibration table (top-1 right per band): 0.80–0.85: 0 of 7, 0.85–0.90: 0 of
 | Species photos in both splits | `holdout.py select` uses the cached iNaturalist observation listings. The photo intake is fetching them (restarted 2026-11-04, about 11 hours to finish). Selecting from a partial cache would favour the species fetched first. | When the intake finishes: run `holdout.py select`, then `nomatch` (it picks up the new subjects), then `download`. |
 | Converted candidate models | Done 2026-11-04 (Section 1) | – |
 | Approval of the proposed selection rules | They are new | The owner approves or changes them before the held-out run |
-| Warm load and peak memory on the phone | The models are in `DiveIDTests/CandidateModels/` (git-ignored) and the device build succeeded. All three runs on 2026-11-05 stopped before starting: "Unlock iPhone to Continue". | Rerun `testMeasureCandidates` with the iPhone unlocked |
+| Warm load and peak memory on the phone | Done 2026-11-05 (Section 4) | – |
 | Divers' photos | None received | Optional; held out the same way |
 
 Commands, in order:
