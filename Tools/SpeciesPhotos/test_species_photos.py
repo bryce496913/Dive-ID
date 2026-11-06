@@ -207,6 +207,22 @@ class ManifestTests(unittest.TestCase):
     def test_coverage_counts(self):
         report = sp.coverage(selected_fixture(), [])
         self.assertEqual((report["species"], report["withINaturalistPhoto"], report["noPhoto"], report["photosSelected"]), (5, 4, 1, 8))
+        self.assertEqual(report["sharedPhotosDropped"], [])
+
+    def test_a_photo_selected_for_two_species_is_given_to_neither(self):
+        # One frame recorded as two animals (a puffer and a flounder on 2026-11-05).
+        photo = lambda n: {"photoID": f"inaturalist:photo:{n}"}  # noqa: E731
+        selected = [{"speciesID": "a", "photos": [photo(1), photo(2)]},
+                    {"speciesID": "b", "photos": [photo(1)]},
+                    {"speciesID": "c", "photos": [photo(3)]}]
+        kept, shared = sp.drop_shared_photos(selected)
+        self.assertEqual([[p["photoID"] for p in r["photos"]] for r in kept],
+                         [["inaturalist:photo:2"], [], ["inaturalist:photo:3"]])
+        self.assertEqual(shared, [{"photoID": "inaturalist:photo:1", "speciesIDs": ["a", "b"]}])
+        ranks = {(e["speciesID"], e["photoID"]): e["rank"] for e in sp.manifest(
+            [{**r, "scientificName": "", "commonName": "", "taxonID": 1} for r in kept], POLICY)["photos"]}
+        self.assertEqual(ranks[("a", "inaturalist:photo:2")], 1, "the species' next photo moves up")
+        self.assertEqual(sp.drop_shared_photos(selected_fixture())[1], [])
 
 
 class FishBaseFallbackTests(unittest.TestCase):
