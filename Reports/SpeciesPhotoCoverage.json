@@ -586,18 +586,27 @@
    "status": "synonym"
   }
  ],
- "laterDecisionOnly": 10,
- "noPhoto": 158,
- "notYetFetched": 2393,
- "permissionNeeded": 313,
- "photosSelected": 3706,
+ "laterDecisionOnly": 15,
+ "noPhoto": 323,
+ "notYetFetched": 0,
+ "permissionNeeded": 547,
+ "photosSelected": 7560,
  "schemaVersion": 1,
- "species": 2405,
+ "sharedPhotosDropped": [
+  {
+   "photoID": "inaturalist:photo:3416255",
+   "speciesIDs": [
+    "75f90e35-0db5-5472-9462-01d52f47399d",
+    "a57a88c6-faa4-584b-9df4-2e9b133f81eb"
+   ]
+  }
+ ],
+ "species": 4798,
  "taxonMatch": {
-  "resolved": 2313,
+  "resolved": 4706,
   "synonym": 73,
   "unmatched": 19
  },
  "withFishBasePhoto": 0,
- "withINaturalistPhoto": 1934
+ "withINaturalistPhoto": 3928
 }

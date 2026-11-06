@@ -205,7 +205,7 @@ final class PhotoIndexTests: XCTestCase {
               + "decode \(ms(load)); vectors in memory \(arrays); footprint change on load \(memory); "
               + "feature print median \(ms(median(printTimes))) max \(ms(printTimes.max()!)); "
               + "search median \(ms(median(searchTimes))) max \(ms(searchTimes.max()!)) over \(queries.count) queries")
-        XCTAssertEqual(index.entries.count, 1934)
+        XCTAssertEqual(index.entries.count, 3926)
     }
 
     /// Printed, and appended to PHOTOINDEX.txt in the test's temporary directory (the

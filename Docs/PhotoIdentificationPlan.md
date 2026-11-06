@@ -17,13 +17,11 @@ none has been measured for this app.
   camera data. The photo lives only in the in-memory search session.
   `LocalMarineLifeIdentificationService` rejects `.processedPhoto` requests
   (`unsupportedSource`), and "Take Photo" is a disabled placeholder.
-- **Reference photos.** 1,934 of 4,798 Global species have one approved, bundled
-  thumbnail (400 px, about 26 KB). **2,864 have none.** By group, that's 2,368 fish, 229
-  eels, 93 crustaceans, 45 molluscs, 39 sharks, 28 rays, 20 seahorses and 15 sea
-  cucumbers. The iNaturalist re-fetch now running covers the 2,393 species not yet
-  fetched. At the rate seen so far (80% of fetched species had an allowed photo), roughly
-  1,000 species should still have no photo afterwards. That's an extrapolation, not a
-  count.
+- **Reference photos.** 3,926 of 4,798 Global species have one approved, bundled
+  thumbnail (400 px, about 26 KB; 105 MB in all). **872 have none**: 547 have only
+  FishBase/SeaLifeBase photos that need the photographer's permission, 323 have no usable
+  photo at all, and 2 lost a photo that was recorded as two species and await review of
+  their next one. The iNaturalist fetch finished on 2026-11-05 and covers every species.
 - **Licences.** `Tools/SpeciesPhotos/photo_policy.json` allows CC0, CC BY and CC BY-NC.
   ND, all-rights-reserved and unknown licences are excluded; SA is held for your decision.
   FishBase/SeaLifeBase photos are never used without written permission. The current

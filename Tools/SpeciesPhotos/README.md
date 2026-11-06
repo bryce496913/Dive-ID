@@ -54,6 +54,8 @@ Mac either, so the throttled, cached API is used instead.
    from different observers. `Data/SpeciesPhotos/PhotoChoices.json` records the reviewer's
    own picks, which rank first if they pass every filter, and rejected photos, which are
    never selected again. Choosing a photo there doesn't approve it; review still does.
+   A photo attached to observations of two different species (one frame recorded as two
+   animals) is given to neither; the coverage report lists it under `sharedPhotosDropped`.
 3. **Manifest.** The pipeline writes `Data/SpeciesPhotos/PhotoManifest.json`, sorted with
    fixed keys. Each photo records:
    - creator name;

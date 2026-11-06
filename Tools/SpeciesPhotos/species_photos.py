@@ -237,6 +237,22 @@ def load_fishbase_pictures(cache_dir):
     return rows
 
 
+def drop_shared_photos(selected):
+    """(selected, shared): a photo attached to observations of more than one species (one
+    frame recorded as two animals) is removed from every species, not given to one of them.
+    It isn't a clean picture of either, and the app refuses two species with the same image.
+    The species' other photos move up; shared is [{photoID, speciesIDs}] for the report."""
+    owners = {}
+    for row in selected:
+        for photo in row["photos"]:
+            owners.setdefault(photo["photoID"], set()).add(row["speciesID"])
+    duplicated = {photo_id for photo_id, species in owners.items() if len(species) > 1}
+    if not duplicated:
+        return selected, []
+    kept = [{**row, "photos": [p for p in row["photos"] if p["photoID"] not in duplicated]} for row in selected]
+    return kept, [{"photoID": photo_id, "speciesIDs": sorted(owners[photo_id])} for photo_id in sorted(duplicated)]
+
+
 # --- manifest and coverage -------------------------------------------------------------
 
 def manifest(selected, policy):
@@ -262,7 +278,7 @@ def select_cached(client, rows, policy, choices=({}, set())):
     return selected, pending
 
 
-def coverage(selected, permission, pending=0):
+def coverage(selected, permission, pending=0, shared=()):
     with_inat = {r["speciesID"] for r in selected if r["photos"]}
     with_fishbase = set()  # allowed FishBase photos: none state an allowed licence
     needed = {p["speciesID"] for p in permission}
@@ -281,6 +297,7 @@ def coverage(selected, permission, pending=0):
         "laterDecisionOnly": sum(1 for r in selected if not r["photos"] and (r.get("laterDecisionPhotoObservations") or 0) > 0),
         "flaggedTaxa": [{"speciesID": r["speciesID"], "scientificName": r["scientificName"], "status": r["status"],
                          "candidates": r.get("candidates", [])} for r in selected if r["status"] in (SYNONYM, AMBIGUOUS)],
+        "sharedPhotosDropped": list(shared),
     }
 
 
@@ -324,12 +341,13 @@ def main():
         selected, pending = select_cached(client, rows, policy, load_choices(args.choices))
     else:
         selected, pending = select(client, resolve(client, rows), policy, load_choices(args.choices)), 0
+    selected, shared = drop_shared_photos(selected)
     missing = [r for r in selected if not r["photos"]]
     permission = fishbase_fallback(missing, load_fishbase_pictures(args.fishbase_cache)) if missing else []
     output = Path(args.output)
     write_json(output / "PhotoManifest.json", manifest(selected, policy))
     (output / "PermissionNeeded.csv").write_text(permission_csv(permission))
-    report = coverage(selected, permission, pending)
+    report = coverage(selected, permission, pending, shared)
     write_json(args.report, report)
     print(json.dumps({k: v for k, v in report.items() if k != "flaggedTaxa"}, sort_keys=True), f"requests={client.requests}")
 
