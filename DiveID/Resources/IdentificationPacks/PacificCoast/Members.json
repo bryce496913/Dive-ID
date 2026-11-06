@@ -1,7 +1,7 @@
 {
   "sourcePackID": "global",
   "sourcePackVersion": 25,
-  "sourceSHA256": "ed224402d52902f698a9d72f652b1d4213ef7d59ba4839132e6da2de4131e3d7",
+  "sourceSHA256": "15621eeb83396e3f17f1685dcf91ae7cbdcdba873a5374b0323d5440ef2961c1",
   "rule": "FAO 67, 77 or 87 with an Americas Pacific coast country (two-coast countries: FAO 67/87, or FAO 77 without an Atlantic FAO area or Pacific island record)",
   "speciesIDs": [
     "00a92661-752c-58c7-b4bf-cc43d31bca2b",
